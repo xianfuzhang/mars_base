@@ -1,0 +1,12 @@
+$color-orange: #888;
+
+.nav {
+    background: $color-orange;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    height: 300px;
+}

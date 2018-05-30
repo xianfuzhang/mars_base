@@ -1,0 +1,16 @@
+logs/*
+!.gitkeep
+node_modules/
+bower_components/
+public/
+vendor/
+tmp
+.DS_Store
+.idea
+.bowerrc
+.jshintrc
+.travis.yml
+nocsys-mars.iml
+bower.json
+karma.conf.js
+e2e-tests
