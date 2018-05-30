@@ -11,13 +11,13 @@ class AliasProvider {
 
   static getComponents() {
     return {
-
+      'nav': path.resolve('src/components/nav')
     };
   }
 
   static getServices() {
     return {
-      lodashService: path.resolve('src/libs/lodash/'),
+      'lodashService': path.resolve('src/libs/lodash/'),
     };
   }
 }

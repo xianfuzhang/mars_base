@@ -6,8 +6,8 @@
   "repository": "https://github.com/angular/angular-seed",
   "license": "MIT",
   "scripts": {
-    "prebuild:dev": "webpack --config tools/webpack/webpack.config",
-    "build:dev": "webpack-dev-server --config tools/webpack/webpack.config",
+    "prebuild:dev": "webpack --config devtools/webpack/webpack.config",
+    "build:dev": "webpack-dev-server --config devtools/webpack/webpack.config",
     "prestart": "npm install",
     "start": "http-server -a localhost -p 8000 -c-1 ./app",
     "pretest": "npm install",

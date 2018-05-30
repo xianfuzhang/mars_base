@@ -7,6 +7,8 @@ import 'angular-material';
 import 'login';
 import 'dashboard';
 
+import 'nav';
+
 import 'lodashService';
 
 angular
@@ -17,7 +19,8 @@ angular
     'pascalprecht.translate',
     '_',
     'dashboard',
-    'login'
+    'login',
+    'nav'
   ])
   .config(function ($routeProvider) {
     $routeProvider

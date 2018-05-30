@@ -74,7 +74,11 @@ module.exports = function (config) {
             {
               loader: "sass-loader",
               options: {
-                includePaths: ["node_modules/angular-material"]
+                includePaths: [
+                  "node_modules/angular-material",
+                  path.resolve('src/themes/shared'),
+                  path.resolve('src/themes/' + config.theme)
+                ]
               }
             }
           ]
