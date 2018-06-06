@@ -28,6 +28,7 @@ export class mdlSwitch {
     }
     scope.onLabel = (scope.displayLabel && scope.displayLabel.on) || 'on';
     scope.offLabel = (scope.displayLabel && scope.displayLabel.off) || 'off';
+    scope.switchId = scope.displayLabel && scope.displayLabel.id;
 
     scope.clicked = () => {
       scope.data = !scope.data;
