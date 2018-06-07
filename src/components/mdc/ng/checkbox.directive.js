@@ -20,7 +20,7 @@ export class mdlCheckbox {
   }
 
   _link (scope, element, attrs, ngModel) {
-    scope.name = scope.displayLabel && scope.displayLabel.name;
+    scope.label = scope.displayLabel && scope.displayLabel.label;
     scope.id = scope.displayLabel && scope.displayLabel.id;
 
     if (scope.disable) {   //scope.$eval(attrs.status)
