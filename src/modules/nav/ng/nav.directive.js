@@ -1,6 +1,9 @@
 export class Nav {
   static getDI() {
-    return [];
+    return [
+      '$location',
+      'navService'
+    ];
   }
   constructor(...args) {
     this.di = {};
@@ -9,13 +12,21 @@ export class Nav {
     });
     this.replace = true;
     this.restrict = 'E';
+    this.controller = 'NavController';
     this.template = require('../template/nav.html');
-    this.scope = {};
+    this.scope = {
+      menus: '='
+    };
     this.link = (...args) => this._link.apply(this, args);
   }
 
   _link (scope) {
-
+    scope.model = {
+      menus: this.di.navService.getNavigationLinks()
+    };
+    scope.location =  (path) => {
+      this.di.$location.path(path);
+    }
   }
 }
 

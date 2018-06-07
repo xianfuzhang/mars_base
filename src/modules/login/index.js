@@ -1,4 +1,4 @@
-import {LoginController} from './controller/login.controller'
+import {LoginController} from './ng/login.controller'
 
 export default angular
   .module('login', [])
