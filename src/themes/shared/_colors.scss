@@ -1,0 +1,276 @@
+$scrollbar-width: 10px;
+$default-font-size: 12px;
+$title-font-size: 15px;
+$default-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+$gutter-width: 10px;
+
+$default-white: #fff;
+$default-offwhite: hsla(299, 6%, 93%, 1);
+$default-black: #000;
+$default-purple: #7b568a;
+$default-placeholder: hsl(0, 0%, 50%);
+
+$search-hit-color: #ECF0F0;
+
+$primary-color-1: #ccc;
+$primary-color-2: hsla(0, 0%, 30%, 1);
+$primary-color-3: hsla(0, 0%, 70%, 1);
+$primary-color-4: hsla(0, 0%, 33%, 1);
+
+$alternate-selected-color: #0365c0;
+$tabs-selected-blue-color: $alternate-selected-color;
+$edit-heatmapsetting-color: $search-hit-color;
+
+$primary-hover-1: hsla(0, 0%, 28%, 1.0);
+$primary-hover-2: hsla(0, 0%, 20%, 1.0);
+$hover-color: hsla(0, 0%, 15%, 1.0); // TODO: refactor
+
+$secondary-header-text: hsla(0, 0%, 80%, 1.0);
+
+$alert-dimmed: hsla(356, 71%, 48%, 1);
+$alert-highlighted: hsla(356, 71%, 48%, 1); // TODO
+$warning-dimmed: hsla(47, 67%, 51%, 1);
+$warning-highlighted: hsla(47, 67%, 51%, 1); // TODO
+$info: hsla(216, 68%, 54%, 1);
+$success: hsla(136, 100%, 31%, 1); // #009D2B
+$active: hsla(211, 100, 38, 1);
+
+$primary-background-1: #000;
+$primary-background-2: #1d1d1d;//#2e2e2e;
+$light-background: hsla(0, 0%, 100%, 0.07);
+
+$form-error: hsla(0, 64%, 53%, 1.0);
+
+$selected-blue: hsla(198, 59%, 51%, 1.0);
+$selected-color: $selected-blue;
+$square-grid-selected-color: $selected-blue;
+$square-grid-parent-hover-color: $hover-color;
+$background-user-select: $selected-blue;
+$background-user-select-text: $default-white;
+
+$selected-color-1: $default-white;
+$selected-color-2: hsl(0, 0%, 35%);
+$selected-background-2: hsl(211, 96%, 79%);
+$selected-background-1: hsl(0, 0%, 30%);
+$transparent-black: hsla(0, 0%, 0%, 0.5);
+
+$button-background: hsl(0, 0%, 30%);
+$button-border: hsla(0, 0%, 100%, 0.4);
+$button-confirm-color: #ABABAB;
+
+$default-border-color: hsla(0, 0%, 100%, 0.3);
+$scrollbar-thumb-color: #434343; //hsl(0,0%,45%);
+$scrollbar-thumb-color-hover: #4a4a4a;
+$scrollbar-thumb-color-active: #7c7c7c;
+$scrollbar-track-color: -webkit-linear-gradient(left, $default-black 0%, lighten($default-black, 8.3%) 30%, lighten($default-black, 16%) 100%);
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+//HEADER
+$header-background: $primary-background-1;
+$header-text-color: $primary-color-1;
+$navmenu-border-color:  hsla(0, 0%, 25%, 1);
+
+// Virtual Network Topology
+
+
+// Panel Details
+$infopanel-heading-color: hsla(0, 0%, 55%, 1.0);
+$infopanel-subsection-mod-color: $primary-hover-1;
+$infopanel-subsection-mod-border-color: $primary-hover-1;
+$infopanel-subsection-name-color: hsla(0, 0%, 65%, 1.0);
+$infopanel-pair-grid-mod-color: $secondary-header-text;
+$infopanel-pair-grid-mod-cell-color: hsla(0, 0%, 50%, 1.0);
+
+// Resource map
+$resourcemap-hover-color: #000;
+$resourcemap-font-color: $primary-color-3;
+$resourcemap-parent-hover-color: $hover-color;
+$resourcemap-highlight-color: $search-hit-color;
+
+// Tooltip
+
+$custom-tooltip-background:  hsla(0, 0%, 100%, 1);
+$custom-tooltip-color: #555;//hsla(0, 0%, 100%, 1.0);
+$custom-tooltip-overview-color: #555;//hsla(0,0%,100%,1.0);
+$custom-tooltip-overview-label-color: #333;//hsla(160, 2%, 66%, 1.0);
+$tooltip-overview-border: 1px solid hsla(0, 1%, 34%, .7);
+// Search
+$search-placeholder-color: $default-placeholder;
+$search-background: $light-background;
+$search-token-background: hsla(0, 0%, 50%, 1.0);
+$search-border: hsla(150, 1%, 51%, 1.0);
+$search-color: hsla(0,0%,100%,1);
+$search-color-2: hsla(0, 0%, 70%, 1.0);
+$search-hover-background: $hover-color;
+
+// Nav Menu
+$navmenu-separator-color: $primary-color-2;
+$navmenu-section-color: $resourcemap-font-color;
+$navmenu-menu-text-color: $default-white;
+$navmenu-menu-image-width: 23px;
+$navmenu-height: 30px;
+$navmenu-menu-hover-color: #1167BD;
+$navmenu-menu-1stlevel-hover-color: $primary-hover-1;
+$navmenu-background-color: $default-black;
+
+// Notification Toast
+$toast-background: hsla(300, 1%, 18%, 0.88);
+$toast-success: #3da34b;
+$toast-error: #ff0000;
+$toast-warning: #efe234;
+$toast-information: #acacac;
+$toast-text-white: $default-white;
+
+$mid-font-size: 12px;
+$small-font-size: 10px;
+// Modal
+$modal-background: hsl(0, 0, 19%);
+$modal-title-size: 14px;
+$modal-text-color: $primary-color-1;
+$modal-border-color: $selected-background-1;
+$modal-error-color: #ff0000;
+
+// Tabs
+$tabs-border-color: #515151;
+$tabs-background-color: #303030;
+$tabs-hover-color: #393939;
+$tabs-selected-text-color: $default-white;
+$tabs-selected-background-color: #3D3D3D;
+
+// Indicators
+$indicators-default-text-color: $default-black;
+$indicators-alert-text-color: $default-white;
+$indicators-alert-background: $alert-dimmed;
+$indicators-warning-background: $warning-dimmed;
+$indicators-success-background: $success;
+
+// Health Log
+$healthlog-alert-text-color: rgba(255, 255, 255, 0.8);
+$healthlog-warning-text-color: rgba(255, 255, 255, 0.8);
+$healthlog-alert:  hsl(0, 81%, 30%);
+$healthlog-warning: hsl(47, 76%, 31%);
+$healthlog-info: transparent; // $info; <-- looks really weird with blue background
+$healthlog-hover-color: $light-background;
+$health-log-header-color: $secondary-header-text;
+
+
+//tables
+$table-font-color: $primary-color-3;
+
+
+// Search
+$search-placeholder-color: $default-placeholder;
+$search-background: $light-background;
+$search-token-background: hsla(0, 0%, 50%, 1.0);
+$search-border: hsla(150, 1%, 51%, 1.0);
+$search-color: hsla(0,0%,100%,1);
+$search-color-2: hsla(0, 0%, 70%, 1.0);
+$search-hover-background: $hover-color;
+$searching-outline-color: $resourcemap-highlight-color;
+
+
+$vds-name-color: $primary-color-3;
+$vds-border-color: #636060;
+
+//checkbox
+$checkbox-border-color: #85888D;
+$checkbox-border-color-invalid: #C82506;
+
+
+$colors: (
+  white: #fff,
+  black: #000,
+  grey: grey,
+  grey-primary: #9D9D9D,
+  grey-secondary: #ccc,
+  grey-complementary: #767676,
+  grey-basic: #4D4D4D,
+  grey-fill: #212121,
+  grey-system: #808080,
+  border:      #808080,
+  blue-selection: #38a0cc,
+  blue-active: #005EC2,
+  blue-info: #005EC2,
+  red-alert: #D1232F,
+  yellow-warning: #D6B12E,
+  green-ok: #009E2A,
+
+  red-highlight-border-hover: rgba(249, 255, 253, 0.2),
+  log-alert-hover-background: #9B3231,
+  log-info-hover-background: #4a4a4a,
+  log-warning-hover-background: #998822,
+  log-alert-active-background: #750C0B,
+  log-info-active-background: #242424,
+  log-warning-active-background: #6b5e1b,
+
+  // TODO: NEW COLOR IN STYLESHEET
+  grey-background: #1D1D1D,
+  grey-input: #262626,
+  border-light: #404040,
+  grey-hover: #333,
+  grey-login: #111,
+  grey-login-border: #585858,
+  grey-zone-label: #b3b3b3,
+  grey-checkbox-border: #85888D, // Login page
+  grey-button-border: #A6AAA9,
+  blue-metatable-highlight: #208BF6,
+  grey-metatable-even-row-background: #444444,
+  grey-arrow: #BFBFBF,
+  grey-pause-button: #545454,
+  grey-text-selectbox-modalheader: #B7BBC0,
+  grey-modal-header-background: #303030,
+  grey-modal-body-background: #353535,
+
+  grey-simple: grey,
+  grey-temp1: #B1B5B9,
+  grey-temp2: #707070,
+  grey-temp3: #515151,
+  grey-temp4: #3D3D3D,
+  grey-temp5: #B6BABF,
+  grey-temp6: #898989,
+  grey-temp7: #3A3C41,
+  grey-temp8: #2e2e2e,
+  grey-temp9: #636060,
+  grey-temp10: hsla(0, 0%, 55%, 1.0), // used in txrx-chart
+  grey-temp11: hsla(0, 0%, 80%, 1.0), // used in txrx-chart
+  grey-temp12: #363A3E,  // used in txrx-chart
+  grey-temp13: rgba(136, 151, 180, 1), // used in txrx-chart
+  grey-temp14: rgba(87, 88, 91, 1), // used in txrx-chart
+  grey-temp15: rgba(56, 58, 62, 1), // used in txrx-chart
+  grey-temp16: rgba(29, 29, 29, 1), // used in txrx-chart
+  grey-temp17: #383A3E, // used in txrx-chart
+  grey-temp18: #919191, // used in txrx-chart
+  grey-temp19: #222222, // used in txrx-chart
+  grey-temp20: rgb(235,235,244), // used in txrx-chart
+  grey-temp21: #303131, // used in txrx-chart
+  grey-temp22: rgb(128,128,128), // used in memory-chart
+  grey-temp23: #222222,
+  grey-temp24: hsla(0, 0%, 100%, 1), // used in custom tooltip
+  grey-temp25: hsla(160, 2%, 66%, 1), // used in custom tooltip
+  grey-temp26: rgba(0, 0, 0, .5), // used in custom tooltip
+  grey-temp27: hsla(0, 0%, 22%, .8), //used in custom tooptip
+  grey-temp28: #ddd,
+  grey-temp29: hsla(0, 0%, 30%, 1), //used in resource Map Menu
+  grey-temp30: hsla(0, 0%, 70%, 1), //used in resource Map Menu
+  grey-temp31: #4C4C4C, //used in resource Map Menu
+  grey-temp32: hsla(0, 1%, 34%, .7), // used in custom tooltip
+  grey-temp33: #555, // used in custom tooltip
+  grey-temp34: #333, // used in custom tooltip
+  grey-temp35: #B1B1B1, // used in custom tooltip
+  grey-temp36: #222427,
+  grey-temp37: #2f2f2f, // used in settingsTable, spinner bg
+  grey-temp38: #232323,
+  grey-temp39: #C1C1C1,
+  blue-temp1: #1167BD,
+  blue-temp2: #0365C0,
+  yellow-temp1: #8b7113,
+  yellow-temp2: #483a0a,
+  yellow-temp3: #a28316,
+  yellow-temp4: rgb(255,212,72),
+  red-temp1: #8a0f0f,
+  red-temp2: #450707,
+  red-temp3: #a21111,
+  red-temp4: rgb(229,10,29),
+);

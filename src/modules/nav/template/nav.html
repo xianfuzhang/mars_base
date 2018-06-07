@@ -1,0 +1,22 @@
+<div class="nav" ng-cloak layout="row">
+  <div flex="66" layout="row">
+    <div class="nav_logo" ng-click="location('/')"></div>
+    <md-menu-bar class="nav_menus" layout="row" layout-align="center center">
+      <md-menu ng-repeat="menu in model.menus" ng-mouseenter="$mdMenu.open()">
+        <button ng-click="location(menu.path)">
+          {{menu.label}}
+        </button>
+        <md-menu-content  width="2" ng-mouseleave="$mdMenu.close()">
+          <md-menu-item ng-repeat="item in menu.items">
+            <md-button class="md-primary" ng-click="location(item.path)">
+              {{item.label}}
+            </md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </md-menu-bar>
+  </div>
+  <div flex="33">
+    <mdl-button></mdl-button>
+  </div>
+</div>

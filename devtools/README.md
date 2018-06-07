@@ -42,5 +42,28 @@ Options
     display-label:必选项。label显示checkbox的label，id为了区分页面不同checkbox的label for属性
                         name表示radio组名
     ng-model：必选项。radio组绑定，值为radio 被checked value
-    disable: 可选项。如果为true，switch会被禁用, 默认switch可用
+    disable: 可选项。如果为true，switch会被禁用, 默认可用
+```
+
+## mdl-text
+```
+<mdl-text ng-model="dashModel.text" 
+            disable="true"
+            display-label="{id: 'text1', hint: 'name', type: 'text', required: false}"
+            helper="">
+</mdl-text>
+```
+DEMO: 
+https://material-components.github.io/material-components-web-catalog/#/component/text-field
+
+支持class: https://github.com/material-components/material-components-web/tree/master/packages/mdc-textfield
+
+Options
+```
+    display-label:必选项。id为了区分页面不同text的label for属性
+                        type支持的input类型，支持text，number， password; 默认text
+                        hint表示提示内容
+                        required为true表示必填项,默认为false
+    ng-model：必选项。text绑定value
+    disable: 可选项。如果为true，text会被禁用, 默认可用。
 ```
