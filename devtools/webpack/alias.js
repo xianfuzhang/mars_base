@@ -25,6 +25,13 @@ class AliasProvider {
       'mdc': path.resolve('src/components/mdc/')
     };
   }
+
+  static getTest(){
+    return {
+      'test': path.resolve('src/test/component/')
+    }
+  }
+
 }
 
 module.exports = AliasProvider;

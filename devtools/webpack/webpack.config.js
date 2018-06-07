@@ -20,7 +20,8 @@ module.exports = function (config) {
       alias: Object.assign({},
         AliasProvider.getComponents(),
         AliasProvider.getModules(),
-        AliasProvider.getServices()
+        AliasProvider.getServices(),
+        AliasProvider.getTest()
       )
     },
     resolveLoader: {
