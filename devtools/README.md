@@ -50,7 +50,7 @@ Options
 <mdl-text ng-model="dashModel.text" 
             disable="true"
             display-label="{id: 'text1', hint: 'name', type: 'text', required: false}"
-            helper="">
+            helper="{id: 'help1', persistent: true, validation: false, content: 'i am a helper.'}">
 </mdl-text>
 ```
 DEMO: 
@@ -61,9 +61,13 @@ https://material-components.github.io/material-components-web-catalog/#/componen
 Options
 ```
     display-label:必选项。id为了区分页面不同text的label for属性
-                        type支持的input类型，支持text，number， password; 默认text
-                        hint表示提示内容
-                        required为true表示必填项,默认为false
+                         type支持的input类型，支持text，number， password; 默认text
+                         hint表示提示内容
+                         required为true表示必填项,默认为false
     ng-model：必选项。text绑定value
+    helper: 可选项。 id表示helper唯一标识
+                    content表示helper显示的内容
+                    persistent：一直显示content。默认为false不显示
+                    validation：为true时验证失败显示content，修改后验证成功把状态改为false就不会显示；默认为false不显示
     disable: 可选项。如果为true，text会被禁用, 默认可用。
 ```
