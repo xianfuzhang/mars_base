@@ -1,8 +1,11 @@
+import './scss/mdc.scss';
+
 import {mdlButton} from './ng/button.directive';
 import {mdlCheckbox} from './ng/checkbox.directive';
 import {mdlSwitch} from './ng/switch.directive';
 import {mdlRadio} from './ng/radio.directive';
 import {mdlText} from './ng/text.directive';
+import {mdlSelect} from './ng/select.directive';
 
 export default angular
   .module('mdc', [])
@@ -11,4 +14,5 @@ export default angular
   .directive('mdlSwitch', mdlSwitch)
   .directive('mdlRadio', mdlRadio)
   .directive('mdlText', mdlText)
+  .directive('mdlSelect', mdlSelect)
   .name;
