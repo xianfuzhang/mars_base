@@ -1,0 +1,11 @@
+<div class="select-field-container">
+  <div class="mdc-select">
+    <select class="mdc-select__native-control"
+            ng-change="selectChange()"
+            ng-model="value" ng-options="obj.label for obj in options track by obj.label">
+      <!--<option value="" disabled selected></option>-->
+    </select>
+    <label class="mdc-floating-label">{{hint}}</label>
+    <div class="mdc-line-ripple"></div>
+  </div>
+</div>
