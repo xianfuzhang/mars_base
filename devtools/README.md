@@ -72,6 +72,23 @@ Options
     disable: 可选项。如果为true，text会被禁用, 默认可用。
 ```
 
+## mdl-textarea
+```
+<mdl-textarea ng-model="dashModel.textarea" 
+            disable="false"
+            display-label="{hint: 'description', resize: false}">
+</mdl-textarea>
+```
+Options
+```
+    ng-model：必选项。textarea绑定value
+    display-label:可选项。hint表示提示内容
+                        resize 为true表示可调整大小，默认为false不可调整
+                        rows:可指定textarea可见行数，默认不指定
+                        cols:可指定textarea可见宽度，默认不指定
+    disable: 可选项。如果为true，select会被禁用, 默认可用。
+```
+
 ## mdl-select
 ```
 <mdl-select ng-model="dashModel.select" 
