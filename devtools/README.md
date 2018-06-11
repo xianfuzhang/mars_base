@@ -105,3 +105,38 @@ Options
     helper: 可选项。 content表示helper显示的内容
     disable: 可选项。如果为true，select会被禁用, 默认可用。
 ```
+
+## dialog
+```
+this.di.$uibModal.open({
+          template: require('../../../components/mdc/templates/dialog.html'),
+          controller: 'dialogCtrl',
+          backdrop: true,
+          resolve: {
+            dataModel: () => {
+              return {
+                type: 'warning',
+                headerText: 'header',
+                contentText: 'content',
+                cancelText: 'cancel',
+                confirmationText: 'yes'
+              };
+            }
+          }
+        })
+        .result.then((data) => {
+          if(data) {
+            console.log('data handle');
+          }
+      });
+```
+在controller中点击button实现以上代码，contoller需要注入'$uibModal'依赖。
+
+Options
+```
+    headerText: 必选项。弹出框的标题
+    contentText： 必选项。弹出框的内容
+    type: 可选项。默认warning，有cancel，confirm两个确定按钮；当值为notification时只有一个confirm按钮
+    confirmationText: 可选项。 默认值为"确定"
+    cancelText: 可选项。 默认值为"取消"
+```

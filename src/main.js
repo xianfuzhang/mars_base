@@ -2,7 +2,7 @@ import 'angular';
 import 'angular-cookies';
 import 'angular-route';
 import 'angular-translate';
-//import 'angular-material';
+import 'angular-ui-bootstrap';
 
 import 'lodashService';
 
@@ -20,7 +20,7 @@ angular
   .module('marsApp', [
     'ngRoute',
     'ngCookies',
-    //'ngMaterial',
+    'ui.bootstrap',
     'pascalprecht.translate',
     '_',
     'dashboard',
