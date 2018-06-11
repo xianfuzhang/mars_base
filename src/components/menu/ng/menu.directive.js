@@ -23,8 +23,9 @@ export class Menu {
 
   _link (scope, element) {
     (function init () {
-      scope.showUser = () => {
-        alert(1);
+      var el = element[0];
+      scope.show = () => {
+        element.addClass('act');
         // var eles = document.getElementsByClassName('sign-in');
         // for(let i = 0 ; i < eles.length; i++){
         //   let ele = eles[i];
@@ -32,13 +33,8 @@ export class Menu {
         // }
       };
 
-      scope.hideUser = () => {
-        var eles = document.getElementsByClassName('sign-in');
-        for (let i = 0; i < eles.length; i++) {
-          let ele = eles[i];
-
-          ele.className = 'tab sign-in';
-        }
+      scope.hide = () => {
+        element.removeClass('act');
       };
     }).call(this);
   }

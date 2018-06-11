@@ -8,11 +8,12 @@ import 'lodashService';
 
 import 'login';
 import 'nav';
-import 'dashboard';
+import 'test';
 import 'fabric';
 import 'switches';
 import 'logical';
 import 'tenants';
+import 'menu';
 
 import 'mdc';
 
@@ -23,14 +24,15 @@ angular
     //'ngMaterial',
     'pascalprecht.translate',
     '_',
-    'dashboard',
+    'test',
     'login',
     'nav',
     'fabric',
     'switches',
     'logical',
     'tenants',
-    'mdc'
+    'mdc',
+    'menu'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {

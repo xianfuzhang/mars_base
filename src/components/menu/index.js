@@ -1,7 +1,7 @@
 /**
  * Created by wls on 2018/6/7.
  */
-// import './scss/menu';
+import './scss/menu';
 
 import { Menu } from './ng/menu.directive';
 

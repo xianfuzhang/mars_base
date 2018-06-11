@@ -1,38 +1,10 @@
-<div class="dashboard">
-  component test:
-  <div style="margin-top: 50px; margin-left: 200px;">
-    <mdl-switch ng-model="dashModel.switch"
-                disable="false"></mdl-switch>
-    <hr>
-    <mdl-checkbox display-label="{id: 'ccc', label: 'ccc'}" ng-model="dashModel.checkbox.state1"></mdl-checkbox>
-    <mdl-checkbox display-label="{id: 'bbb', label: 'bbb'}" ng-model="dashModel.checkbox.state2"></mdl-checkbox>
-    <mdl-checkbox disable="true" display-label="{id: 'aaa', label: 'aaa'}" ng-model="dashModel.checkbox.state3">
-    </mdl-checkbox>
-    <br>
-    {{dashModel.checkbox|json}}
-    <hr>
-    <mdl-radio class="custom" display-label="{id: 'rad', label: 'AA', name: 'name1', value: 'AA'}" disable="true"
-               ng-model="dashModel.radio"></mdl-radio>
-    <mdl-radio display-label="{id: 'green', name: 'name1', label: 'BB',  value: 'BB'}" disable="true"
-               ng-model="dashModel.radio"></mdl-radio>
-    <br>
-    {{dashModel.radio}}
-    <br>
-    <mdl-radio class="custom" display-label="{id: 'red1', label: 'CC', name: 'name2', value: 'CC'}"
-               ng-model="dashModel.radio1"></mdl-radio>
-    <mdl-radio display-label="{id: 'green1', name: 'name2', label: 'DD', value: 'DD'}"
-               ng-model="dashModel.radio1"></mdl-radio>
-    <br>
-    {{dashModel.radio1}}
-    <hr>
-    <mdl-text display-label="{id: 'label1', required: true}"
-              ng-model="dashModel.text1"></mdl-text>
-    <br>
-    {{dashModel.text1}}
-    <br>
-    <mdl-text display-label="{id: 'label1', hint: 'name'}" disable="true"
-              ng-model="dashModel.text2"></mdl-text>
-    <br>
-    {{dashModel.text2}}
+
+<div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">
+  <header></header>
+
+  <div style="flex-grow: 2;flex-basis:auto;background-color: white">
+
   </div>
+
+  <footer></footer>
 </div>

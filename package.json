@@ -10,7 +10,7 @@
     "build:dev": "webpack-dev-server --config devtools/webpack/webpack.config",
     "prestart": "npm install",
     "build:component": "webpack --config devtools/webpack/webpack.config --env.environment=component",
-    "postbuild:component": "webpack-dev-server --config devtools/webpack/webpack.config",
+    "postbuild:component": "webpack-dev-server --config devtools/webpack/webpack.config --env.environment=component",
     "start": "http-server -a localhost -p 8000 -c-1 ./app",
     "pretest": "npm install",
     "test": "karma start karma.conf.js",

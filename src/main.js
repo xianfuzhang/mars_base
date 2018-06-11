@@ -7,7 +7,6 @@ import 'angular-translate';
 import 'lodashService';
 
 import 'login';
-import 'nav';
 import 'dashboard';
 import 'fabric';
 import 'switches';
@@ -15,6 +14,9 @@ import 'logical';
 import 'tenants';
 
 import 'mdc';
+import 'menu';
+import 'header'
+import 'footer'
 
 angular
   .module('marsApp', [
@@ -25,12 +27,14 @@ angular
     '_',
     'dashboard',
     'login',
-    'nav',
     'fabric',
     'switches',
     'logical',
     'tenants',
-    'mdc'
+    'mdc',
+    'menu',
+    'header',
+    'footer'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {
