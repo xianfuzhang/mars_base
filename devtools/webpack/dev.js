@@ -76,6 +76,7 @@ module.exports = function (config) {
               options: {
                 includePaths: [
                   "node_modules",
+                  path.resolve('node_modules/xbem/src/'),
                   path.resolve('src/themes/shared'),
                   path.resolve('src/themes/' + config.theme)
                 ]
