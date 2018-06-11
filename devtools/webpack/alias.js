@@ -11,7 +11,6 @@ class AliasProvider {
   static getModules(){
     return {
       'login': path.resolve('src/modules/login/'),
-      'nav': path.resolve('src/modules/nav'),
       'dashboard': path.resolve('src/modules/dashboard/'),
       'fabric': path.resolve('src/modules/fabric/'),
       'switches': path.resolve('src/modules/fabric_switch/'),
@@ -22,7 +21,10 @@ class AliasProvider {
 
   static getComponents() {
     return {
-      'mdc': path.resolve('src/components/mdc/')
+      'mdc': path.resolve('src/components/mdc/'),
+      'menu': path.resolve('src/components/menu/'),
+      'header': path.resolve('src/components/header/'),
+      'footer': path.resolve('src/components/footer/'),
     };
   }
 

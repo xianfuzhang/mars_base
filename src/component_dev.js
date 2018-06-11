@@ -7,7 +7,6 @@ import 'angular-translate';
 import 'lodashService';
 
 import 'login';
-import 'nav';
 import 'test';
 import 'fabric';
 import 'switches';
@@ -26,7 +25,6 @@ angular
     '_',
     'test',
     'login',
-    'nav',
     'fabric',
     'switches',
     'logical',
