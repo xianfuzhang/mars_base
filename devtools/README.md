@@ -71,3 +71,37 @@ Options
                     validation：为true时验证失败显示content，修改后验证成功把状态改为false就不会显示；默认为false不显示
     disable: 可选项。如果为true，text会被禁用, 默认可用。
 ```
+
+## mdl-textarea
+```
+<mdl-textarea ng-model="dashModel.textarea" 
+            disable="false"
+            display-label="{hint: 'description', resize: false}">
+</mdl-textarea>
+```
+Options
+```
+    ng-model：必选项。textarea绑定value
+    display-label:可选项。hint表示提示内容
+                        resize 为true表示可调整大小，默认为false不可调整
+                        rows:可指定textarea可见行数，默认不指定
+                        cols:可指定textarea可见宽度，默认不指定
+    disable: 可选项。如果为true，select会被禁用, 默认可用。
+```
+
+## mdl-select
+```
+<mdl-select ng-model="dashModel.select" 
+            disable="false"
+            display-label="{hint: 'name', options: [{label: '男1', value: '0'}, {label: '男2', value: '1'}]}"
+            helper="{content: 'i am a helper.'}">
+</mdl-select>
+```
+Options
+```
+    display-label:必选项。hint表示提示内容
+                        options 显示select的内容
+    ng-model：必选项。select绑定option对象
+    helper: 可选项。 content表示helper显示的内容
+    disable: 可选项。如果为true，select会被禁用, 默认可用。
+```
