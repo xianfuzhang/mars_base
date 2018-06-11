@@ -7,6 +7,7 @@ import {mdlRadio} from './ng/radio.directive';
 import {mdlText} from './ng/text.directive';
 import {mdlSelect} from './ng/select.directive';
 import {mdlTextarea} from './ng/textarea.directive';
+import {dialogCtrl} from './ng/dialog.controller';
 
 export default angular
   .module('mdc', [])
@@ -17,4 +18,5 @@ export default angular
   .directive('mdlText', mdlText)
   .directive('mdlSelect', mdlSelect)
   .directive('mdlTextarea', mdlTextarea)
+  .controller('dialogCtrl', dialogCtrl)
   .name;
