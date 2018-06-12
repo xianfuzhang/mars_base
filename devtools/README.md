@@ -106,6 +106,20 @@ Options
     disable: 可选项。如果为true，select会被禁用, 默认可用。
 ```
 
+## mdl-tab
+```
+<mdl-tabs ng-model="dashModel.tabSelected" options="dashModel.tabs"
+              on-select="onTabChange($value)">
+</mdl-tabs>
+```
+用法跟cloudview类似，css的样式采用material design。
+Options
+```
+    ng-model: 必选项。表示选中的tab对象
+    options： 必选项。tabs的对象列表
+    on-select 必选项。在controller中实现一个事件当选中tab以后执行的动作
+```
+
 ## dialog
 ```
 this.di.$uibModal.open({
