@@ -1,3 +1,12 @@
-<div style="flex-grow:0;height:40px;background-color: gray">
+<div class="header">
+    <div class="header__logo">
+    </div>
+    <div class="header__menu">
+        <menu is-user=false group-url="item" ng-repeat="item in headers.menu"></menu>
+    </div>
+    <div class="header__tools">
+        <mdl-button></mdl-button>
 
+        <menu is-user=true group-url="headers.user"></menu>
+    </div>
 </div>

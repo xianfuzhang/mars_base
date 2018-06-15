@@ -5,7 +5,7 @@
 export class Header {
   static getDI () {
     return [
-      '$document'
+      '$rootScope'
     ];
   }
 
@@ -18,11 +18,39 @@ export class Header {
     this.replace = true;
     this.restrict = 'E';
     this.template = require('../template/header');
+
+    this.scope = {
+      headers : '=',
+      // headerModel : '=headers'
+    },
     this.link = (...args) => this._link.apply(this, args);
   }
 
   _link (scope, element) {
     (function init () {
+      // this.scope.headerModel = {
+      //   'menuStaticUrl':{
+      //     'fabric':[
+      //       {'label':'HEADER.SWITCH', 'url':'switch'},
+      //       {'label':'HEADER.INTERFACE', 'url':'interface'}
+      //     ],
+      //     'logical': [
+      //       {'label':'HEADER.TENANT', 'url':'tenant'},
+      //       {'label':'HEADER.SEGMENT', 'url':'segment'}
+      //     ]
+      //   }
+      // }
+
+      //   menuStaticUrl = {
+      //   'fabric':[
+      //     {'label':'HEADER.SWITCH', 'url':'switch'},
+      //     {'label':'HEADER.INTERFACE', 'url':'interface'}
+      //   ],
+      //   'logical': [
+      //     {'label':'HEADER.TENANT', 'url':'tenant'},
+      //     {'label':'HEADER.SEGMENT', 'url':'segment'}
+      //   ]
+      // }
       // var el = element[0];
       // scope.show = () => {
       //   element.addClass('act');
@@ -36,6 +64,11 @@ export class Header {
       // scope.hide = () => {
       //   element.removeClass('act');
       // };
+      scope.headerModel = {
+        'menu': scope.headers.menu,
+        'user': scope.headers.user
+      };
+
     }).call(this);
   }
 }

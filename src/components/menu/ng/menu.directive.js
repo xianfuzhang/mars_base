@@ -5,7 +5,7 @@
 export class Menu {
   static getDI () {
     return [
-      '$document'
+      '$rootScope'
     ];
   }
 
@@ -18,27 +18,42 @@ export class Menu {
     this.replace = true;
     this.restrict = 'E';
     this.template = require('../template/menu');
+
+    this.scope={
+      groupUrl:'=',
+      // isMenu: '=',
+      isUser: '='
+    };
     this.link = (...args) => this._link.apply(this, args);
   }
 
   _link (scope, element) {
     (function init () {
-      var el = element[0];
-      scope.show = () => {
-        element.addClass('act');
-        // var eles = document.getElementsByClassName('sign-in');
-        // for(let i = 0 ; i < eles.length; i++){
-        //   let ele = eles[i];
-        //   ele.className += ' act';
-        // }
+
+      scope.show = (ele) => {
+        scope.menuModel.isAct = true;
       };
 
-      scope.hide = () => {
-        element.removeClass('act');
+      scope.hide = (ele) => {
+        scope.menuModel.isAct = false;
       };
+
+
+      scope.menuModel = {
+        // isMenu: scope.isMenu,
+        isUser: scope.isUser,
+        urls : scope.groupUrl.items,
+        groupName: scope.groupUrl.group,
+        isAct: false
+      };
+      if(scope.menuModel.isUser){
+        scope.menuModel.groupName = "Nocsys";
+      }
+
+
     }).call(this);
   }
 }
 
-Menu.$injector = ['$document'];
+Menu.$injector = Menu.getDI();
 Menu.$$ngIsClass = true;
