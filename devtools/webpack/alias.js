@@ -23,7 +23,8 @@ class AliasProvider {
     return {
       'mdc': path.resolve('src/components/mdc/'),
       'menu': path.resolve('src/components/menu/'),
-      'header': path.resolve('src/components/header/'),
+      'marHeader': path.resolve('src/components/mar-header/'),
+      'marDrawer': path.resolve('src/components/mar-drawer/'),
       'footer': path.resolve('src/components/footer/'),
     };
   }

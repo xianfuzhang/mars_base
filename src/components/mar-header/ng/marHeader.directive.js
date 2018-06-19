@@ -1,8 +1,9 @@
 /**
  * Created by wls on 2018/6/7.
  */
+import {MDCTemporaryDrawer} from '@material/drawer';
 
-export class Header {
+export class marHeader {
   static getDI () {
     return [
       '$rootScope'
@@ -11,13 +12,13 @@ export class Header {
 
   constructor (...args) {
     this.di = [];
-    Header.getDI().forEach((value, index) => {
+    marHeader.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     }, this);
 
     this.replace = true;
     this.restrict = 'E';
-    this.template = require('../template/header');
+    this.template = require('../template/mar_header');
 
     this.scope = {
       headers : '=',
@@ -69,9 +70,16 @@ export class Header {
         'user': scope.headers.user
       };
 
+
+      scope.showDrawer = () =>{
+        scope.$emit('drawer-redraw',"<div>aaaa</div>");
+        let drawer = new MDCTemporaryDrawer(document.querySelector('.mdc-drawer--temporary'));
+        drawer.open = true;
+      }
+
     }).call(this);
   }
 }
 
-Header.$injector = ['$document'];
-Header.$$ngIsClass = true;
+marHeader.$inject = marHeader.getDI();
+marHeader.$$ngIsClass = true;

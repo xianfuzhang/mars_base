@@ -55,5 +55,5 @@ export class Menu {
   }
 }
 
-Menu.$injector = Menu.getDI();
+Menu.$inject = Menu.getDI();
 Menu.$$ngIsClass = true;

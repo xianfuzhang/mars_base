@@ -27,7 +27,7 @@
       color:map_get($colors, second_color);
       height:map_get($sizes, header-height)-2px;
       line-height: map_get($sizes, header-height)-2px;
-      z-index:10;
+      z-index:map_get($z-indexes, z2);
     }
 
     @include element(arrow){
