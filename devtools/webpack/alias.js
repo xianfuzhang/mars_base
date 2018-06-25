@@ -25,6 +25,7 @@ class AliasProvider {
       'menu': path.resolve('src/components/menu/'),
       'header': path.resolve('src/components/header/'),
       'footer': path.resolve('src/components/footer/'),
+      'wizard': path.resolve('src/components/wizard')
     };
   }
 

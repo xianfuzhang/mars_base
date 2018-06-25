@@ -10,7 +10,7 @@ const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const hostname = process.env.HOSTNAME || 'localhost';
 const host = 'http://' + hostname + ':' + port;
 const assetHost = process.env.ASSET_HOST || host + '/';
