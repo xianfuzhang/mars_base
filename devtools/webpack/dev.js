@@ -16,7 +16,7 @@ module.exports = function (config) {
   return {
     mode: "none",
     entry: {
-      app: [path.resolve('src/main.js')],
+      app: [path.resolve('src/main.js'), path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js')],
     },
     plugins: [
       new HtmlWebpackPlugin({

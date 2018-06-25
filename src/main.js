@@ -18,6 +18,7 @@ import 'menu';
 import 'marDrawer';
 import 'marHeader';
 import 'footer';
+import 'topo';
 
 angular
   .module('marsApp', [
@@ -36,7 +37,8 @@ angular
     'menu',
     'marDrawer',
     'marHeader',
-    'footer'
+    'footer',
+    'topo'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {

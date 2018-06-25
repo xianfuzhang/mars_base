@@ -2,7 +2,7 @@ export class DashboardController {
   static getDI() {
     return [
       '$scope',
-      '_'
+      '_',
     ];
   }
 
@@ -51,8 +51,14 @@ export class DashboardController {
             {'label': 'logout', 'url': 'logout'}
           ]
         }
-      }
+      },
+      deSpines:[{'id':'11_spine'}, {'id':'22_spine'}, {'id':'33_spine'}],
+      deLeafs:[{'id':'11_leaf','leaf_group':"1"}, {'id':'22_leaf','leaf_group':"1"},{'id':'33_leaf','leaf_group':"2"}, {'id':'44_leaf','leaf_group':"3"},{'id':'55_leaf','leaf_group':"3"}, {'id':'66_leaf','leaf_group':"4"}],
+      deOthers:[{'id':'11_other'}, {'id':'22_other'}, {'id':'33_other'}]
     }
+
+
+
   }
 }
 

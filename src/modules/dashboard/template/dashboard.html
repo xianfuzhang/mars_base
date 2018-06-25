@@ -1,10 +1,15 @@
 
 <div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">
-  <header headers="dashModel.headers"></header>
+  <mar-header headers="dashModel.headers"></mar-header>
 
-  <div style="flex-grow: 2;flex-basis:auto;background-color: white">
-
+  <div style="flex-grow: 2;
+              flex-basis:auto;
+              flex-shrink: 1;background-color: white;overflow: hidden;">
+    <!--<canvas width="850px" height="800px" id="canvas" style="background-color: #00D3FF"></canvas>-->
+    <topo spines="dashModel.deSpines" leafs="dashModel.deLeafs" others="dashModel.deOthers"></topo>
   </div>
 
   <footer></footer>
+
+  <mar-drawer is-right=true></mar-drawer>
 </div>
