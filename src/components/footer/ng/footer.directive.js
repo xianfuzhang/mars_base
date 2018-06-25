@@ -40,5 +40,5 @@ export class Footer {
   }
 }
 
-Footer.$injector = ['$document'];
+Footer.$inject = ['$document'];
 Footer.$$ngIsClass = true;

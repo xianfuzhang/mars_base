@@ -1,5 +1,5 @@
 @import "material-components-web/material-components-web";
-
+@import 'xbem';
 @import 'colors';
 
 
@@ -15,4 +15,19 @@ html{
     background-color: #282828;
     margin: 0;
   };
+}
+
+a {
+  text-decoration: none;
+}
+
+i {
+  font-style: normal;
+}
+
+@mixin keyframes($animationName) {
+  @-webkit-keyframes #{$animationName} { @content; }
+  @-moz-keyframes #{$animationName} { @content; }
+  @-o-keyframes #{$animationName} { @content; }
+  @keyframes #{$animationName} { @content; }
 }
