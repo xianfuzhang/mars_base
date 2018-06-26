@@ -26,6 +26,7 @@ class AliasProvider {
       'marHeader': path.resolve('src/components/mar-header/'),
       'marDrawer': path.resolve('src/components/mar-drawer/'),
       'footer': path.resolve('src/components/footer/'),
+      'wizard': path.resolve('src/components/wizard'),
       'topo': path.resolve('src/components/topo/'),
     };
   }
