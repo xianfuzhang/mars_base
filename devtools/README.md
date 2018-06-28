@@ -162,3 +162,39 @@ css使用说明：https://github.com/material-components/material-components-web
   <span class="mdc-fab__icon material-icons">favorite</span>
 </button>
 ```
+
+##mars组件说明
+### `wizard组件`
+```
+<wizard title="title" steps="steps" show-wizard="false|true" before-cancel="cancel(formData)" before-submit="submit(formData)"></wizard>
+```
+**``title:``** 设置`wizard`对话框的标题
+
+**``steps:``** 设置wizard步骤的内容  
+例子：
+```
+$scope.steps = [
+  {
+    id: 'first',
+    title: 'first step',
+    content: require('../template/form1.html')
+  },
+  {
+    id: 'second',
+    title: 'second step',
+    content: require('../template/form2.html')
+  },
+  {
+    id: 'third',
+    title: 'third step',
+    content: require('../template/form3.html')
+  },
+];
+```
+**``id:``**步骤id；**``title``**步骤标题；**``content``** 步骤内容，使用``require``引入文件内容。
+
+**``show-wizard:``** 控制``wizard``对话框的展示和隐藏
+
+**``before-cancel:``** 点击``wizard``对话框中**``取消``**按钮，会先调用这个方法，并将表单内容传递给此方法。当此方法返回**``true``**时，``wizard``对话框才会关闭，否则不会关闭。**``注意：``**``cancel(formData)``参数名``formData``不能修改。  
+
+**``before-submit:``** 点击``wizard``对话框中**``确定``**按钮，会先调用这个方法，并将表单内容传递给此方法。当此方法返回**``true``**时，``wizard``对话框才会关闭，否则不会关闭。**``注意：``**``submit(formData)``参数名``formData``不能修改。  

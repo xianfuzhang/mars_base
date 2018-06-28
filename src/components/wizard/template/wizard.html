@@ -1,0 +1,36 @@
+<div class="wizard" ng-show="showWizard">
+    <div class="wizard__dialog" ng-if="showWizard">
+        <div class="wizard__header">
+            <div class="wizard__header__title">
+                {{title}}
+            </div>
+
+            <div class="wizard__header__dismiss" ng-click="cancel()"></div>
+        </div>
+
+        <div class="wizard__body">
+            <div class="wizard__body__left">
+                <div ng-repeat="step in steps track by $index" class="wizard__body__left__step" ng-class="{'+active': curIndex === $index }" ng-click="allowSkip === false ? false : switchTo($index)">{{step.title}}</div>
+            </div>
+
+            <div class="wizard__body__right">
+                <form name="wizardForm">
+                    <div ng-show="curIndex == $index" ng-repeat="step in steps track by $index" class="wizard__body__right__content">
+                        <ng-bind-html ng-bind-html="trustAsHtml(step.content)" init-bind></ng-bind-html>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="wizard__footer">
+            <div class="wizard__footer__btn-group">
+                <button class="wizard__footer__btn" ng-class="{'+disabled': curIndex == 0}" ng-click="preStep()" ng-disabled="curIndex == 0" ng-bind="::'COMPONENT.WIZARD.BUTTON.BACK' | translate"></button>
+                <button class="wizard__footer__btn" ng-class="{'+disabled': curIndex == steps.length - 1}" ng-click="nextStep()" ng-disabled="curIndex == steps.length - 1" ng-bind="::'COMPONENT.WIZARD.BUTTON.NEXT' | translate"></button>
+
+                <button class="wizard__footer__btn" ng-click="cancel()" ng-bind="::'COMPONENT.WIZARD.BUTTON.CANCEL' | translate"></button>
+                <button class="wizard__footer__btn" type="submit" ng-class="{'+disabled': wizardForm.$invalid}" ng-click="submit()" ng-disabled="wizardForm.$invalid" ng-bind="::'COMPONENT.WIZARD.BUTTON.SUBMIT' | translate"></button>
+            </div>
+        </div>
+
+    </div>
+</div>
