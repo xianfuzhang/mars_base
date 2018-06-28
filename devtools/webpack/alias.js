@@ -5,6 +5,7 @@ class AliasProvider {
   static getServices() {
     return {
       'lodashService': path.resolve('src/libs/lodash/'),
+      'easing': path.resolve('src/libs/easing/'),
     };
   }
 

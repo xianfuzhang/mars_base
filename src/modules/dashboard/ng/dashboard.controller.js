@@ -54,7 +54,45 @@ export class DashboardController {
       },
       deSpines:[{'id':'11_spine'}, {'id':'22_spine'}, {'id':'33_spine'}],
       deLeafs:[{'id':'11_leaf','leaf_group':"1"}, {'id':'22_leaf','leaf_group':"1"},{'id':'33_leaf','leaf_group':"2"}, {'id':'44_leaf','leaf_group':"3"},{'id':'55_leaf','leaf_group':"3"}, {'id':'66_leaf','leaf_group':"4"}],
-      deOthers:[{'id':'11_other'}, {'id':'22_other'}, {'id':'33_other'}]
+      deOthers:[{'id':'11_other'}, {'id':'22_other'}, {'id':'33_other'}],
+      deLinks: [
+        {
+          "src": {
+            "port": "1",
+            "device": "11_spine"
+          },
+          "dst": {
+            "port": "3",
+            "device": "11_leaf"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },
+        {
+          "src": {
+            "port": "3",
+            "device": "22_spine"
+          },
+          "dst": {
+            "port": "2",
+            "device": "22_leaf"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },
+        {
+          "src": {
+            "port": "3",
+            "device": "11_leaf"
+          },
+          "dst": {
+            "port": "2",
+            "device": "22_leaf"
+          },
+          "type": "DIRECT",
+          "state": "DOWN"
+        }
+      ]
     }
 
 

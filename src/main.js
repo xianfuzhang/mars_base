@@ -5,6 +5,7 @@ import 'angular-translate';
 import 'angular-ui-bootstrap';
 
 import 'lodashService';
+import 'easing';
 
 import 'login';
 import 'dashboard';
@@ -27,6 +28,7 @@ angular
     'ui.bootstrap',
     'pascalprecht.translate',
     '_',
+    'easing',
     'dashboard',
     'login',
     'fabric',

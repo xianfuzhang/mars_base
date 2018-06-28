@@ -6,6 +6,6 @@ import './scss/topo';
 import { Topo } from './ng/topo.directive';
 
 export default angular
-  .module('topo', [])
+  .module('topo', ['easing'])
   .directive('topo', Topo)
   .name;
