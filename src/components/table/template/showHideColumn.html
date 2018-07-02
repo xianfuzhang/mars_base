@@ -1,0 +1,30 @@
+<div class="column-manipulation-field">
+  <div class="column-manipulation-field__header">
+    <span class="column-manipulation-field__title"
+          ng-bind="'MODULES.TABLE.COLUMN.CONFIGURATION'|translate"></span>
+  </div>
+  <div class="column-manipulation-field__content">
+    <div class="column-manipulation-field__column">
+      <div ng-repeat="item in columns_1 track by $index">
+        <mdl-checkbox ng-model="item.visible"
+                      display-label="item.ui">
+        </mdl-checkbox>
+      </div>
+    </div>
+    <div class="column-manipulation-field__column">
+      <div ng-repeat="item in columns_2 track by $index">
+        <mdl-checkbox ng-model="item.visible"
+                      display-label="item.ui">
+        </mdl-checkbox>
+      </div>
+    </div>
+  </div>
+  <div class="column-manipulation-field__footer">
+    <button class="mdc-button mdc-ripple-upgraded right"
+            ng-click="save($event)"
+            ng-bind="'MODULES.TABLE.COLUMN.SAVE'|translate"></button>
+    <button class="mdc-button mdc-ripple-upgraded right"
+            ng-click="cancel($event)"
+            ng-bind="'MODULES.TABLE.COLUMN.CANCEL'|translate"></button>
+  </div>
+</div>

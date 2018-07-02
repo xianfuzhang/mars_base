@@ -1,0 +1,14 @@
+  <!--<button class="mdc-icon-button material-icons">menu</button>-->
+<div class="table-td-field mdc-menu-anchor">
+  <button id="menu-button" class="mdc-icon-button material-icons"
+          ng-click="_menuToggle($event)" >menu</button>
+  <div class="mdc-menu table-row-action-list">
+    <ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">
+      <li class="mdc-list-item" role="menuitem" tabindex="0"
+          ng-click="clickItem(item, $event)"
+          ng-repeat="item in actionItems track by $index">
+        {{item.label}}
+      </li>
+    </ul>
+  </div>
+</div>

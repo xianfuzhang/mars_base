@@ -1,0 +1,123 @@
+<div class="mdl-table-field">
+  <div class="mdl-card mdl-table-field">
+    <!--<table-action></table-action>-->
+    <div class="mdl-table-field__actions">
+      <mdl-button ng-click="_menu($event)" ng-if="actionsShow.menu" icon-name="menu"></mdl-button>
+      <mdl-button ng-click="_add($event)" ng-if="actionsShow.add" icon-name="add"></mdl-button>
+      <mdl-button ng-click="_remove($event)"
+                  disabled="tableModel.removeItems.length === 0"
+                  ng-if="actionsShow.remove" icon-name="remove"></mdl-button>
+      <mdl-button ng-click="_refresh($event)" ng-if="actionsShow.refresh" icon-name="refresh"></mdl-button>
+      <div class="mdl-table-action__search" ng-if="actionsShow.search">
+        <div class="mdl-table-action__search-body">
+          <input type="text" placeholder="{{placeholder}}"
+                 ng-model="tableModel.searchResult" ng-model-options="{debounce: 1000}"
+                 ng-change="_search()"
+                 class="mdc-text-field__input mdl-table-action__search-body__input">
+        </div>
+        <mdl-button ng-click="_clearSearch($event)" ng-show="tableModel.searchResult" icon-name="close"></mdl-button>
+        <div class="mdl-table-action__search-filter">
+          <mdl-button ng-click="_filter($event)" icon-name="filter_list" class_list="search-filter-button"></mdl-button>
+          <!--<div class="mdc-menu search-filter-list">
+            <ul class="mdc-menu__items mdc-list" role="menu">
+              <li class="mdc-list-item" role="menuitem"
+                  ng-repeat="item in filterItems track by $index"
+                  tabindex="{{$index}}">
+                <div class="mdc-radio">
+                  <input class="mdc-radio__native-control" type="radio"
+                         ng-click="_select(item, $event)"
+                         ng-checked="{{item.checked}}"
+                         id="{{item.id}}" name="{{item.name}}">
+                  <div class="mdc-radio__background">
+                    <div class="mdc-radio__outer-circle"></div>
+                    <div class="mdc-radio__inner-circle"></div>
+                  </div>
+                </div>
+                <label for="{{item.id}}" >{{item.label}}</label>
+              </li>
+            </ul>
+          </div>-->
+        </div>
+      </div>
+    </div>
+
+    <div class="mdl-table-field__content">
+      <div class="mdl-table-header">
+        <table>
+          <thead>
+          <tr class="mdl-table-header__row">
+            <th ng-if="tableModel.rowCheckboxSupport" style="width: 5%;">
+              <div class="mdc-checkbox" ng-click="_selectAll($event)">
+                <input type="checkbox"
+                       ng-checked="_isSelectedAll()"
+                       class="mdc-checkbox__native-control"/>
+                <div class="mdc-checkbox__background table-checkbox__modify" style="border-color: rgba(255, 255, 255, 0.6)">
+                  <svg class="mdc-checkbox__checkmark"
+                       viewBox="0 0 24 24">
+                    <path class="mdc-checkbox__checkmark-path"
+                          fill="none"
+                          stroke="white"
+                          d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
+                  </svg>
+                  <div class="mdc-checkbox__mixedmark"></div>
+                </div>
+              </div>
+            </th>
+            <th ng-if="tableModel.rowActionsSupport"  style="width: 5%;">
+              <span><button class="mdc-icon-button material-icons" disabled>menu</button></span>
+            </th>
+            <th ng-repeat="$col in tableModel.columns track by $index"
+                ng-click="_onHeaderClick($col, $event)"
+                ng-show="_isColumnDisplayable($col)"
+                ng-class="{
+                  'sortable': $col.sortable,
+                  'sort-asc': $col.sortable && (_getColumnSortMode($col) === tableModel.CONST_SORT_ASC),
+                  'sort-desc': $col.sortable && (_getColumnSortMode($col) === tableModel.CONST_SORT_DESC)
+                 }"
+            >
+              <span ng-bind="$col.def.label"></span>
+              <span ng-class="{
+                    'icon-sort': !(_getColumnSortMode($col) === tableModel.CONST_SORT_ASC
+                      || _getColumnSortMode($col) === tableModel.CONST_SORT_DESC),
+                    'icon-sort-asc': (_getColumnSortMode($col) === tableModel.CONST_SORT_ASC),
+                    'icon-sort-desc': (_getColumnSortMode($col) === tableModel.CONST_SORT_DESC)
+                  }">&nbsp;&nbsp;&nbsp;</span>
+            </th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="mdl-table-body">
+        <table>
+          <tbody ng-if="tableModel.filteredData.length===0">
+            <tr class="mdl-table-body__row"><td>没数据</td></tr>
+          </tbody>
+          <tbody ng-if="tableModel.filteredData.length>0">
+            <tr class="mdl-table-body__row"
+                ng-repeat="$data in tableModel.filteredData track by $index"
+                ng-class="{'mdl-table-body__row__highlight': _isSelected($data[tableModel.index_name])}"
+                ng-click="_onRowClick($data, $index, $event)"
+                metarow>
+              <td ng-if="tableModel.rowCheckboxSupport" style="width: 5%;" data="$data" row-checkbox></td>
+              <td ng-if="tableModel.rowActionsSupport"  style="width: 5%;"
+                  action-items="tableModel.rowActions"
+                  data="$data"
+                  row-actions></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mdl-table-footer">
+        <table>
+          <tfoot>
+            <tr>
+              <td>
+                <table-pagination></table-pagination>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
