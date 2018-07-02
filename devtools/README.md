@@ -106,6 +106,40 @@ Options
     disable: 可选项。如果为true，select会被禁用, 默认可用。
 ```
 
+## mdl-tab
+```
+<mdl-tabs ng-model="dashModel.tabSelected" options="dashModel.tabs"
+              on-select="onTabChange($value)">
+</mdl-tabs>
+```
+用法跟cloudview类似，css的样式采用material design。
+Options
+```
+    ng-model: 必选项。表示选中的tab对象
+    options： 必选项。tabs的对象列表
+    on-select 必选项。在controller中实现一个事件当选中tab以后执行的动作
+```
+
+## mdl-table
+template 引入
+```
+<mdl-table actions-show="dashModel.actionsShow"
+            row-click="onTableRowClick($event)"
+             provider="dashModel.provider" api-ready="onApiReady($api)"
+             on-add="addSwitch()" on-remove="removeSwitch($value)"></mdl-table>
+```
+Options 可参考test.html以及controller使用说明
+```
+    actionsShow 对table操作的actions是否显示，目前支持table的增加、删除、刷新、搜索、列显示隐藏
+                如果没有指定action对应的状态，默认隐藏
+    row-click   点击table row执行的动作
+    provider    数据准备的provider table根据provider获取数据
+    api-ready   table 提供给外部使用接口   
+    on-add      增加数据
+    on-remove    删除数据          
+```
+
+
 ## dialog
 ```
 this.di.$uibModal.open({

@@ -8,6 +8,10 @@ import {mdlText} from './ng/text.directive';
 import {mdlSelect} from './ng/select.directive';
 import {mdlTextarea} from './ng/textarea.directive';
 import {dialogCtrl} from './ng/dialog.controller';
+import {TabsController} from './ng/tabs.controller';
+import {mdlTabs} from './ng/tabs.directive';
+import {tabItem} from './ng/tabItem.directive';
+
 
 export default angular
   .module('mdc', [])
@@ -19,4 +23,7 @@ export default angular
   .directive('mdlSelect', mdlSelect)
   .directive('mdlTextarea', mdlTextarea)
   .controller('dialogCtrl', dialogCtrl)
+  .controller('TabsController', TabsController)
+  .directive('mdlTabs', mdlTabs)
+  .directive('tabItem', tabItem)
   .name;

@@ -1,41 +1,131 @@
-<div class="dashboard">
-  component test:
-  <div style="margin-top: 50px; margin-left: 200px;">
-    <!--<mdl-switch ng-model="dashModel.switch"-->
-                <!--disable="false"></mdl-switch>-->
-    <!--<hr>-->
-    <!--<mdl-checkbox display-label="{id: 'ccc', label: 'ccc'}" ng-model="dashModel.checkbox.state1"></mdl-checkbox>-->
-    <!--<mdl-checkbox display-label="{id: 'bbb', label: 'bbb'}" ng-model="dashModel.checkbox.state2"></mdl-checkbox>-->
-    <!--<mdl-checkbox disable="true" display-label="{id: 'aaa', label: 'aaa'}" ng-model="dashModel.checkbox.state3">-->
-    <!--</mdl-checkbox>-->
-    <!--<br>-->
-    <!--{{dashModel.checkbox|json}}-->
-    <!--<hr>-->
-    <!--<mdl-radio class="custom" display-label="{id: 'rad', label: 'AA', name: 'name1', value: 'AA'}" disable="true"-->
-               <!--ng-model="dashModel.radio"></mdl-radio>-->
-    <!--<mdl-radio display-label="{id: 'green', name: 'name1', label: 'BB',  value: 'BB'}" disable="true"-->
-               <!--ng-model="dashModel.radio"></mdl-radio>-->
-    <!--<br>-->
-    <!--{{dashModel.radio}}-->
-    <!--<br>-->
-    <!--<mdl-radio class="custom" display-label="{id: 'red1', label: 'CC', name: 'name2', value: 'CC'}"-->
-               <!--ng-model="dashModel.radio1"></mdl-radio>-->
-    <!--<mdl-radio display-label="{id: 'green1', name: 'name2', label: 'DD', value: 'DD'}"-->
-               <!--ng-model="dashModel.radio1"></mdl-radio>-->
-    <!--<br>-->
-    <!--{{dashModel.radio1}}-->
-    <!--<hr>-->
-    <!--<mdl-text display-label="{id: 'label1', required: true}"-->
-              <!--ng-model="dashModel.text1"></mdl-text>-->
-    <!--<br>-->
-    <!--{{dashModel.text1}}-->
-    <!--<br>-->
-    <!--<mdl-text display-label="{id: 'label1', hint: 'name'}" disable="true"-->
-              <!--ng-model="dashModel.text2"></mdl-text>-->
-    <!--<br>-->
-    <!--{{dashModel.text2}}-->
+<div class="dashboard" style="height: 100%; overflow-y: auto; display: flex;flex-wrap: wrap;">
+<!--
 
-    <menu> </menu>
+  <div style="margin-top: 20px; margin-left: 50px; width: 500px;">
+    <div class="mdc-card" style="padding: 20px;">
+      <mdl-text ng-model="dashModel.text1"
+                display-label="{id: 'text1', hint: 'name', type: 'text', required: false}"
+                helper="{id: 'help1', persistent: true, validation: false, content: 'i am a helper.'}">
+      </mdl-text>
+      <div>text value is {{dashModel.text1}}</div>
+    </div>
+    <div class="mdc-card" style="padding: 20px;">
+      <mdl-textarea ng-model="dashModel.textarea"
+                    disable="false"
+                    display-label="{hint: 'description', resize: false}">
+      </mdl-textarea>
+      <mdl-textarea ng-model="dashModel.textarea1"
+                    display-label="{hint: 'resize column height', resize: true}">
+      </mdl-textarea>
 
+    </div>
   </div>
+  <div style="margin-top: 20px; margin-left: 50px; width: 500px;">
+    <div class="mdc-card" style="padding: 20px;">
+      <mdl-checkbox ng-model="dashModel.checkbox.aaa"
+                    display-label="{id: 'aaa', label: 'aaa'}">
+      </mdl-checkbox>
+      <mdl-checkbox ng-model="dashModel.checkbox.bbb"
+                    display-label="{id: 'bbb', label: 'bbb'}">
+      </mdl-checkbox>
+      <mdl-checkbox ng-model="dashModel.checkbox.ccc"
+                    display-label="{id: 'ccc', label: 'ccc'}">
+      </mdl-checkbox>
+      <div>checkbox value is {{dashModel.checkbox|json}}</div>
+    </div>
+    <div class="mdc-card" style="padding: 20px;">
+      <mdl-checkbox ng-model="dashModel.checkbox1.ddd"  disable="true"
+                    display-label="{id: 'ddd', label: 'ddd'}">
+      </mdl-checkbox>
+      <mdl-checkbox ng-model="dashModel.checkbox1.eee"  disable="true"
+                    display-label="{id: 'eee', label: 'eee'}">
+      </mdl-checkbox>
+      <mdl-checkbox ng-model="dashModel.checkbox1.fff"  disable="true"
+                    display-label="{id: 'fff', label: 'fff'}">
+      </mdl-checkbox>
+      <div>checkbox is disabled, and value is {{dashModel.checkbox1|json}}</div>
+    </div>
+  </div>
+  <div style="margin-top: 20px; margin-left: 50px; width: 500px;">
+    <div class="mdc-card" style="padding: 20px;">
+      <mdl-radio ng-model="dashModel.radio"
+                 display-label="{id: 'check_1', label: 'aaa', name: 'radio_1', value:  'aaa'}">
+      </mdl-radio>
+      <mdl-radio ng-model="dashModel.radio"
+                 display-label="{id: 'check_2', label: 'bbb', name: 'radio_1', value:  'bbb'}">
+      </mdl-radio>
+      <div>radio value is {{dashModel.radio}}</div>
+    </div>
+    <div class="mdc-card" style="padding: 20px;">
+      <mdl-radio ng-model="dashModel.radio1"  disable="true"
+                 display-label="{id: 'check_3', label: 'ccc', name: 'radio_2', value:  'ccc'}">
+      </mdl-radio>
+      <mdl-radio ng-model="dashModel.radio1"  disable="true"
+                 display-label="{id: 'check_4', label: 'ddd', name: 'radio_2', value:  'ddd'}">
+      </mdl-radio>
+      <div>radio is disabled, and  value is {{dashModel.radio1}}</div>
+    </div>
+  </div>
+  <div style="margin-top: 20px; margin-left: 50px; width: 500px;">
+    <div class="mdc-card" style="padding: 20px;">
+      <mdl-switch ng-model="dashModel.switch" disable="false"></mdl-switch>
+      <div>switch value is {{dashModel.switch}}</div>
+      <br>
+      <mdl-switch ng-model="dashModel.switch1" disable="true"></mdl-switch>
+      <div>switch is disabled, and value is {{dashModel.switch1}}</div>
+    </div>
+  </div>
+  <div style="margin-top: 20px; margin-left: 50px; width: 500px;">
+    <div class="mdc-card" style="padding: 20px;">
+      <mdl-tabs ng-model="dashModel.tabSelected" options="dashModel.tabs"
+                on-select="onTabChange($value)"></mdl-tabs>
+      <div class="mdc-card__primary-action">
+        <section>
+          <div class="tabs__content" ng-if="dashModel.tabSelected.type == 'vm'">
+            VM content
+            <br>
+            <br>
+            <br>
+            <br>
+          </div>
+          <div class="tabs__content" ng-if="dashModel.tabSelected.type == 'server'">
+            Host content
+            <br>
+            <br>
+            <br>
+            <br>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top: 20px; margin-left: 50px; width: 500px;">
+    <div class="mdc-card" style="padding: 20px;">
+      <mdl-select ng-model="dashModel.select"
+                  display-label="{hint: 'interface', options:
+                   [{label: 'sw1-eth0', value: '0'},
+                   {label: 'sw1-eth1', value: '1'},
+                   {label: 'sw1-eth2', value: '2'},
+                   {label: 'sw1-eth3', value: '3'}]}"
+                  helper="{content: 'i am a helper.'}">
+      </mdl-select>
+      <div>select value is {{dashModel.select}}</div>
+
+      <mdl-select ng-model="dashModel.select1"
+                  display-label="{hint: 'interface', options:
+                   [{label: 'sw2-eth0', value: '5'},
+                   {label: 'sw2-eth1', value: '6'},
+                   {label: 'sw2-eth2', value: '7'},
+                   {label: 'sw2-eth3', value: '8'}]}"
+                  helper="{content: 'i am a helper.'}">
+      </mdl-select>
+      <div>select value is {{dashModel.select1}}</div>
+    </div>
+  </div>
+-->
+
+  <mdl-table actions-show="dashModel.actionsShow"
+             row-click="onTableRowClick($event)"
+             provider="dashModel.provider" api-ready="onApiReady($api)"
+             on-add="addSwitch()" on-remove="removeSwitch($value)"></mdl-table>
 </div>

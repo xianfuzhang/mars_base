@@ -1,0 +1,44 @@
+<div class="mdl-table-action">
+  <button class="material-icons mdc-icon-button mdc-card__action--icon"
+          ng-show="menuShow" ng-click="menu()">menu</button>
+  <button class="material-icons mdc-icon-button mdc-card__action--icon"
+          ng-show="addShow" ng-click="add()">add</button>
+  <button class="material-icons mdc-icon-button mdc-card__action--icon"
+          ng-show="removeShow" ng-click="remove()">remove</button>
+  <button class="material-icons mdc-icon-button mdc-card__action--icon"
+          ng-show="refreshShow" ng-click="refresh()">refresh</button>
+  <div class="mdl-table-action__search">
+    <div class="mdl-table-action__search-body">
+      <input type="text" placeholder="搜索"
+             ng-model="search" ng-model-options="{debounce: 1000}"
+             ng-change="_search()"
+             class="mdc-text-field__input mdl-table-action__search-body__input">
+    </div>
+    <button class="material-icons mdc-icon-button mdc-card__action--icon"
+            ng-show="search"
+            ng-click="_clearSearch($event)">close</button>
+    <div class="mdl-table-action__search-filter">
+      <button class="material-icons mdc-icon-button mdc-card__action--icon search-filter-button"
+              ng-click="_menuToggle($event)">filter_list</button>
+      <div class="mdc-menu search-filter-list">
+        <ul class="mdc-menu__items mdc-list" role="menu">
+          <li class="mdc-list-item" role="menuitem"
+              ng-repeat="item in filterItems track by $index"
+              tabindex="{{$index}}">
+            <div class="mdc-radio">
+              <input class="mdc-radio__native-control" type="radio"
+                     ng-click="_select(item, $event)"
+                     ng-checked="{{item.checked}}"
+                     id="{{item.id}}" name="{{item.name}}">
+              <div class="mdc-radio__background">
+                <div class="mdc-radio__outer-circle"></div>
+                <div class="mdc-radio__inner-circle"></div>
+              </div>
+            </div>
+            <label for="{{item.id}}" >{{item.label}}</label>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
