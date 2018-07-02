@@ -25,6 +25,7 @@ export class mdlCheckbox {
 
     if (scope.disable) {   //scope.$eval(attrs.status)
       element.addClass('mdc-checkbox--disabled');
+      element.find('input').attr('disabled', true);
     }
     if (scope.data) {
       element.find('input').attr('checked' ,true);

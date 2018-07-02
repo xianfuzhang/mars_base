@@ -2,7 +2,7 @@ import 'angular';
 import 'angular-cookies';
 import 'angular-route';
 import 'angular-translate';
-//import 'angular-material';
+import 'angular-ui-bootstrap';
 
 import 'lodashService';
 
@@ -15,12 +15,14 @@ import 'tenants';
 import 'menu';
 
 import 'mdc';
+import 'mdlTable';
+import 'modal';
 
 angular
   .module('marsApp', [
     'ngRoute',
     'ngCookies',
-    //'ngMaterial',
+    'ui.bootstrap',
     'pascalprecht.translate',
     '_',
     'test',
@@ -30,7 +32,9 @@ angular
     'logical',
     'tenants',
     'mdc',
-    'menu'
+    'menu',
+    'mdlTable',
+    'modal'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {

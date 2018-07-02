@@ -1,8 +1,6 @@
-import {MDCRipple} from '@material/ripple';
-
 export class mdlButton {
   static getDI() {
-    return [];
+    return ['$log', '$compile'];
   }
   constructor(...args){
     this.di = {};
@@ -11,16 +9,35 @@ export class mdlButton {
     });
     this.replace = true;
     this.restrict = 'E';
-    this.mdcRipple = MDCRipple;
+    this.scope = {
+      disabled: '=',
+      ngClick: '&'
+    };
+    this.template = require('../templates/button.html');
     this.link = (...args) => this._link.apply(this, args);
   }
 
-  _link (scope, elem) {
-    elem.addClass('mdc-button mdc-ripple-surface');
-    const ripple = this.mdcRipple.attachTo(elem[0]);
-    scope.$on('destroy', function() {
-      ripple.destroy();
-    });
+  _link (scope, element, attr) {
+    scope.name = attr.iconName;
+    let disabled = scope.disabled || false;
+    if (disabled) {
+      element.attr('disabled', true);
+    }
+    if (attr.classList) {
+      let classList = attr.classList.split(" ");
+      classList.forEach((cls) => {
+        element.addClass(cls);
+      });
+    }
+
+    scope.$watch('disabled', () => {
+      if (scope.disabled) {
+        element.attr('disabled', true);
+      }
+      else{
+        element.attr('disabled', false);
+      }
+    }, true);
   }
 }
 

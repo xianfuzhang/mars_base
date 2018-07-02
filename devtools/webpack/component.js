@@ -52,6 +52,7 @@ module.exports = function (config) {
       contentBase: "./public",
       publicPath: assetHost,
       inline: true,
+      host: '0.0.0.0',
       port: port,
     },
     module: {
@@ -79,6 +80,7 @@ module.exports = function (config) {
               options: {
                 includePaths: [
                   "node_modules",
+                  path.resolve('node_modules/xbem/src/'),
                   path.resolve('src/themes/shared'),
                   path.resolve('src/themes/' + config.theme)
                 ]

@@ -15,8 +15,10 @@ import 'tenants';
 
 import 'mdc';
 import 'menu';
-import 'header'
-import 'footer'
+import 'header';
+import 'footer';
+import 'mdlTable';
+import 'modal';
 
 angular
   .module('marsApp', [
@@ -34,7 +36,9 @@ angular
     'mdc',
     'menu',
     'header',
-    'footer'
+    'footer',
+    'mdlTable',
+    'modal'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {

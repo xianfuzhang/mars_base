@@ -25,6 +25,8 @@ class AliasProvider {
       'menu': path.resolve('src/components/menu/'),
       'header': path.resolve('src/components/header/'),
       'footer': path.resolve('src/components/footer/'),
+      'mdlTable': path.resolve('src/components/table'),
+      'modal': path.resolve('src/components/modal'),
     };
   }
 
