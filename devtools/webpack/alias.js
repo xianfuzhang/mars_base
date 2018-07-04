@@ -5,6 +5,8 @@ class AliasProvider {
   static getServices() {
     return {
       'lodashService': path.resolve('src/libs/lodash/'),
+      'easing': path.resolve('src/libs/easing/'),
+      'apis': path.resolve('src/apis/')
     };
   }
 
@@ -23,10 +25,14 @@ class AliasProvider {
     return {
       'mdc': path.resolve('src/components/mdc/'),
       'menu': path.resolve('src/components/menu/'),
-      'header': path.resolve('src/components/header/'),
+      'marHeader': path.resolve('src/components/mar-header/'),
+      'marDrawer': path.resolve('src/components/mar-drawer/'),
       'footer': path.resolve('src/components/footer/'),
+      'wizard': path.resolve('src/components/wizard'),
       'mdlTable': path.resolve('src/components/table'),
-      'modal': path.resolve('src/components/modal'),
+      'modal': path.resolve('src/components/modal'),     
+      'topo': path.resolve('src/components/topo/'),
+      'resize': path.resolve('src/components/resize')
     };
   }
 

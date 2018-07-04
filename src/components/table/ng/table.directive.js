@@ -37,6 +37,7 @@ export class mdlTable {
     let renders =  [];
     scope.placeholder = this.di.$filter('translate')('MODULES.TABLE.SEARCH.PLACEHOLDER');
     scope.renderService = this.di.renderService.render();
+    scope.log = this.di.$log;
 
     scope.tableModel = {
       'CONST_SORT_ASC': this.di.tableConsts.CONST.SORT_ASC,
@@ -415,8 +416,6 @@ export class mdlTable {
         }
       },
       (newVal, oldVal) => {
-        this.di.$log.info('table directive watch columns visibility, new value '
-          +JSON.stringify(newVal) + ' ,old value' +JSON.stringify(oldVal));
         if (oldVal && newVal.visibility.length === oldVal.visibility.length) {
           scope.tableModel.listeners.notify('table.columns.visibility', {
             oldCols: oldVal.visibility,

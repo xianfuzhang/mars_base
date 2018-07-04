@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" style="width:100%;height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="./jtopo-0.4.8-min.js"></script>
+    <script type="text/javascript" src="../../../node_modules/lodash/lodash.js"></script>
+</head>
+<body style="width:100%;height: 100%" onresize="resize()">
+<canvas width="800" height="800" id="canvas" style="background-color: gray"></canvas>
+</div>
+</body>
+<script>
+  window.requestAnimFrame = (function(callback) {
+    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+      function(callback) {
+        window.setTimeout(callback, 1000 / 60);
+      };
+  })();
+
+  this.height = 600;
+  this.width = 800;
+  this.spineContainer = null;
+  this.leafContainer = null;
+  this.otherContainer = null;
+  this.spineContainerLeftNode = null;
+  this.spineContainerRightNode = null;
+
+  this.leafContainerLeftNode = null;
+  this.leafContainerRightNode = null;
+
+  this.otherContainerLeftNode = null;
+  this.otherContainerRightNode = null;
+
+  this.stage = null;
+  this.scene = null;
+
+  this.spines = {};
+  this.leafs = {};
+  this.others = {};
+  this.links = {};
+  this.switchLocation = {};
+
+
+  let scope = {
+    "spines":[{'id':'11_spine'}, {'id':'22_spine'}, {'id':'33_spine'}],
+    "leafs":[{'id':'11_leaf','leaf_group':1},{'id':'44_leaf','leaf_group':3}, {'id':'22_leaf','leaf_group':1},{'id':'33_leaf','leaf_group':4} ,{'id':'55_leaf','leaf_group':3}, {'id':'66_leaf','leaf_group':2}],
+    "others":[{'id':'11_other'}, {'id':'22_other'}, {'id':'33_other'}],
+    "links": [
+      {
+        "src": {
+          "port": "1",
+          "device": "11_spine"
+        },
+        "dst": {
+          "port": "3",
+          "device": "11_leaf"
+        },
+        "type": "DIRECT",
+        "state": "ACTIVE"
+      },
+      {
+        "src": {
+          "port": "3",
+          "device": "22_spine"
+        },
+        "dst": {
+          "port": "2",
+          "device": "22_leaf"
+        },
+        "type": "DIRECT",
+        "state": "ACTIVE"
+      },
+      {
+        "src": {
+          "port": "3",
+          "device": "11_leaf"
+        },
+        "dst": {
+          "port": "2",
+          "device": "22_leaf"
+        },
+        "type": "DIRECT",
+        "state": "DOWN"
+      }
+    ]
+  }
+  let self = this;
+  let initialize = () => {
+
+
+    this.stage = new JTopo.Stage(canvas); // 创建一个舞台对象
+    this.scene = new JTopo.Scene(this.stage);
+    this.spineContainer = new JTopo.Container();
+    this.leafContainer = new JTopo.Container();
+    this.otherContainer = new JTopo.Container();
+
+
+    this.spineContainer.fillColor = '255,0,255';
+    this.leafContainer.fillColor = '255,255,0';
+    this.otherContainer.fillColor = '0,255,255';
+
+
+//    this.spineContainer.dragable = false;
+//    this.leafContainer.dragable = false;
+//    this.otherContainer.dragable = false;
+
+//    this.spineContainer.showSelected = false;
+//    this.leafContainer.showSelected = false;
+//    this.otherContainer.showSelected = false;
+
+    this.scene.add(this.spineContainer);
+    this.scene.add(this.leafContainer);
+    this.scene.add(this.otherContainer);
+
+    genSpine();
+    genLeaf();
+    genOther();
+    genLinks();
+
+    resize();
+  };
+
+  let genSpine = () =>{
+    this.spineContainerLeftNode = genAnchorNode();
+    this.spineContainerRightNode = genAnchorNode();
+
+    this.spineContainer.add(this.spineContainerLeftNode);
+    this.spineContainer.add(this.spineContainerRightNode);
+
+    this.scene.add(this.spineContainerLeftNode);
+    this.scene.add(this.spineContainerRightNode);
+
+
+    for(let index in scope.spines){
+      let spine = scope.spines[index];
+      this.spines[spine.id] = genNormalNode(spine.id);
+    }
+
+  }
+
+  let genLeaf = () =>{
+    this.leafContainerLeftNode = genAnchorNode();
+    this.leafContainerRightNode = genAnchorNode();
+
+    this.leafContainer.add(this.leafContainerLeftNode);
+    this.leafContainer.add(this.leafContainerRightNode);
+
+    this.scene.add(this.leafContainerLeftNode);
+    this.scene.add(this.leafContainerRightNode);
+
+    for(let index in scope.leafs){
+      let leaf = scope.leafs[index];
+      this.leafs[leaf.id] = genNormalNode(leaf.id);
+    }
+  }
+
+  let genOther = () => {
+    this.otherContainerLeftNode = genAnchorNode();
+    this.otherContainerRightNode = genAnchorNode();
+
+    this.otherContainer.add(this.otherContainerLeftNode);
+    this.otherContainer.add(this.otherContainerRightNode);
+
+    this.scene.add(this.otherContainerLeftNode);
+    this.scene.add(this.otherContainerRightNode);
+
+    for(let index in scope.others){
+      let other = scope.others[index];
+
+      this.others[other.id] = genNormalNode(other.id);
+    }
+  }
+
+  let genLinks = () => {
+
+    _.forEach(scope.links, function(link, key) {
+      let deviceIds = [link.src.device, link.dst.device];
+      let linkId = getLinkId(deviceIds);
+      this.links[linkId] = genLinkNode(deviceIds);
+
+      if(link.state != "ACTIVE"){
+        this.links[linkId].strokeColor = "255,0,0";
+      }
+    });
+
+  }
+
+  let getLinkId = (deviceIds) =>{
+    deviceIds = _.sortBy(deviceIds);
+    return deviceIds[0] + '_' + deviceIds[1];
+  }
+
+  let draw = () =>{
+
+    let avgHeight = this.height/3;
+    let spineInterval = calcInterval(scope.spines, this.width);
+    let leafInterval = calcLeafInterval(scope.leafs, this.width);
+    let otherInterval = calcInterval(scope.others, this.width);
+
+    let spineKeys = _.keys(this.spines);
+    spineKeys = _.sortBy(spineKeys);
+    for(let i = 0; i< spineKeys.length; i++){
+      let key = spineKeys[i];
+      let node = this.spines[key];
+      let x = (i + 1) * spineInterval + i * 16;
+      let y =  (avgHeight - 104)/2;
+      node.setLocation(x, y);
+
+//      this.spineContainer.add(node);
+      this.switchLocation[key] = [x, y];
+    }
+
+    let leaf_groups = _.groupBy(scope.leafs, "leaf_group");
+    let orderKeys = _.keys(leaf_groups);
+    let last_x = 0;
+    for(let i = 0; i< orderKeys.length; i++){
+      let key = orderKeys[i];
+      let leaf_group = leaf_groups[key]; //arr
+      for(let j = 0; j < leaf_group.length; j ++){
+        let node = this.leafs[leaf_group[j].id];
+        let y = (avgHeight - 104)/2 + avgHeight;
+        let x = last_x + leafInterval + j * (16+2);
+        node.setLocation(x, y);
+
+        this.switchLocation[leaf_group[j].id] = [x, y];
+      }
+      last_x = last_x + leafInterval +(16+2)* leaf_group.length;
+
+    }
+
+    let otherKeys = _.keys(this.others);
+    otherKeys = _.sortBy(otherKeys);
+    for(let i = 0; i< otherKeys.length; i++){
+      let key = otherKeys[i];
+      let node = this.others[key];
+      let x = (i + 1) * otherInterval + i * 16;
+      let y =  (avgHeight - 104)/2 + avgHeight * 2;
+      node.setLocation(x, y);
+      this.switchLocation[key] = [x, y];
+    }
+  };
+
+  let calcInterval = (nodes, width) =>{
+    return (width - 16 * nodes.length)/(nodes.length + 1)
+  }
+
+  let calcLeafInterval = (leafs, width) =>{
+    let remainWidth = width - 16 * leafs.length;
+    let group = _.groupBy(leafs, 'leaf_group');
+    return remainWidth/ (_.keys(group).length + 1);
+  }
+
+  let genAnchorNode = () =>{
+    let node = new JTopo.Node();
+    node.dragable = false ;
+    node.width = 1;
+    node.showSelected =false;
+    node.fillColor = "98,98,255";
+    return node;
+  };
+
+  let genNormalNode = (deviceId) =>{
+    let node = new JTopo.Node();
+    node.dragable = true ;
+    node.width = 16;
+    node.height = 104;
+    node.showSelected =true;
+    node.deviceId = deviceId;
+    node.move = false;
+
+    node.mouseup(mouseUpHandler);
+    node.mousedrag(mouseDragHandler);
+    this.scene.add(node);
+    return node;
+  };
+
+
+  function mouseUpHandler(data){
+    if(this.move){
+      console.log("move");
+      let oldLocation = self.switchLocation[this.deviceId];
+      let nowX = data.x, nowY = data.y;
+      let node = this;
+      let xSpeed = (nowX - oldLocation[0])/1000;
+      let ySpeed = (nowY - oldLocation[1])/1000;
+      let starttime = (new Date()).getTime();
+      setTimeout(goBack_Animate(oldLocation, nowX, nowY,starttime, node),100)
+    } else {
+      console.log("click")
+      console.log(this.deviceId)
+
+    }
+    this.move = false;
+  }
+  this.count = 20
+  let goBack_Animate = (oldLocation, nowX, nowY,starttime, node)=>{
+    let time = (new Date()).getTime() - starttime;
+    let curX = (oldLocation[0] - nowX) * time/1000 + nowX;
+    let curY = (oldLocation[1] - nowY) * time/1000 + nowY;
+    this.count = this.count + 1;
+    if(this.count >= 1020){
+      node.setLocation(oldLocation[0], oldLocation[1]);
+    } else {
+      node.setLocation(curX, curY);
+      requestAnimFrame(goBack_Animate(oldLocation, nowX, nowY,starttime, node))
+    }
+
+//    if( ( ((curX - oldLocation[0]) >= 0 && (nowX - oldLocation[0]) <= 0)
+//      || ((curX - oldLocation[0]) <= 0 && (nowX - oldLocation[0]) >= 0) )
+//      && ( ((curY - oldLocation[1]) >= 0 && (nowY - oldLocation[1]) <= 0)
+//      || ((curY - oldLocation[1]) <= 0 && (nowY - oldLocation[1]) >= 0) )){
+//
+//    } else {
+//      node.setLocation(curX, curY);
+//      requestAnimFrame(goBack_Animate(oldLocation, nowX, nowY,starttime, node))
+//    }
+
+
+  }
+
+  function mouseDragHandler(data){
+    this.move = true;
+  }
+
+  let genLinkNode = (devices) => {
+    let nodeA = this.leafs[devices[0]] || this.spines[devices[0]];
+    let nodeB = this.leafs[devices[1]] || this.spines[devices[1]];
+
+    let link = new JTopo.Link(nodeA, nodeB);
+
+//    var effect = JTopo.Effect.spring({
+//      grivity: 10 // 引力 (可以为负值)
+//    })
+//
+//    // 效果作用对象(node节点以targetNode为目标，产生弹性效果)
+//    effect.addNode(nodeA, nodeB);
+//
+//    // 播放
+//    effect.play();
+
+    link.zIndex = 20;
+    link.strokeColor = '136,234,136';
+    this.scene.add(link);
+    return link;
+  };
+
+  /*
+   负责给container加上两个隐藏的node，用来固定整个容器
+   */
+  let layout = () =>{
+    let avgHeight = this.height/3;
+
+    this.spineContainerLeftNode.setLocation(0,0);
+    this.spineContainerRightNode.setLocation(this.width,0);
+
+    this.spineContainerLeftNode.height = avgHeight;
+    this.spineContainerRightNode.height = avgHeight;
+
+    this.leafContainerLeftNode.setLocation(0, avgHeight);
+    this.leafContainerRightNode.setLocation(this.width, avgHeight);
+
+    this.leafContainerLeftNode.height = avgHeight;
+    this.leafContainerRightNode.height = avgHeight;
+
+    this.otherContainerLeftNode.setLocation(0, avgHeight*2);
+    this.otherContainerRightNode.setLocation(this.width, avgHeight*2);
+
+    this.otherContainerLeftNode.height = avgHeight;
+    this.otherContainerRightNode.height = avgHeight;
+  };
+
+  let resize = () => {
+    let canvas = document.getElementById("canvas");
+    this.height = canvas.parentNode.offsetHeight;
+    this.width = canvas.parentNode.offsetWidth;
+    canvas.width = this.width;
+    canvas.height = this.height;
+
+    layout();
+    draw();
+  };
+
+  initialize();
+
+
+
+  
+
+
+</script>
+</html>

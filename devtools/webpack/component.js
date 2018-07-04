@@ -79,8 +79,8 @@ module.exports = function (config) {
               loader: "sass-loader",
               options: {
                 includePaths: [
+                  path.resolve('node_modules/xbem/src'),
                   "node_modules",
-                  path.resolve('node_modules/xbem/src/'),
                   path.resolve('src/themes/shared'),
                   path.resolve('src/themes/' + config.theme)
                 ]

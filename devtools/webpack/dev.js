@@ -16,7 +16,7 @@ module.exports = function (config) {
   return {
     mode: "none",
     entry: {
-      app: [path.resolve('src/main.js')],
+      app: [path.resolve('src/main.js'), path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js')],
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -75,8 +75,8 @@ module.exports = function (config) {
               loader: "sass-loader",
               options: {
                 includePaths: [
+                  path.resolve('node_modules/xbem/src'),
                   "node_modules",
-                  path.resolve('node_modules/xbem/src/'),
                   path.resolve('src/themes/shared'),
                   path.resolve('src/themes/' + config.theme)
                 ]

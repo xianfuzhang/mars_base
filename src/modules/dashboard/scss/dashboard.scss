@@ -1,23 +1,2 @@
-$sizes: (
-        xx-large: 22%,
-        large: 14%
-);
-
-$spacing: (
-        xx-large: 221px,
-        large: 140px
-);
-
-
-html{
-  height:100%;
-  width: 100%;
-
-  body{
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    background-color: #282828;
-    margin: 0;
-  };
-}
+@import 'default';
+@import 'shared';

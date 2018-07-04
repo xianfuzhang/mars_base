@@ -1,11 +1,13 @@
 //颜色定义在component引入之前，覆盖即可
 $mdc-theme-primary: #000;
-$mdc-theme-secondary: #d8a27e;
+$mdc-theme-secondary: #47B8E0;
 $mdc-theme-on-primary: #333;
 $mdc-theme-on-secondary: #442b2d;
 
 @import "material-components-web/material-components-web";
+@import 'xbem';
 @import 'colors';
+@import "layout";
 
 
 html{
@@ -16,7 +18,23 @@ html{
     height: 100%;
     width: 100%;
     overflow: hidden;
-    //background-color: #282828;
     margin: 0;
   };
+}
+
+a {
+  text-decoration: none;
+}
+ul {
+  padding: 0;
+}
+i {
+  font-style: normal;
+}
+
+@mixin keyframes($animationName) {
+  @-webkit-keyframes #{$animationName} { @content; }
+  @-moz-keyframes #{$animationName} { @content; }
+  @-o-keyframes #{$animationName} { @content; }
+  @keyframes #{$animationName} { @content; }
 }
