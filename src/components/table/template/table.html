@@ -51,7 +51,7 @@
                 <input type="checkbox"
                        ng-checked="_isSelectedAll()"
                        class="mdc-checkbox__native-control"/>
-                <div class="mdc-checkbox__background table-checkbox__modify" style="border-color: rgba(255, 255, 255, 0.6)">
+                <div class="mdc-checkbox__background">
                   <svg class="mdc-checkbox__checkmark"
                        viewBox="0 0 24 24">
                     <path class="mdc-checkbox__checkmark-path"
@@ -90,7 +90,7 @@
       <div class="mdl-table-body">
         <table>
           <tbody ng-if="tableModel.filteredData.length===0">
-            <tr class="mdl-table-body__row"><td>没数据</td></tr>
+            <tr class="mdl-table-body__row"><td class="text-center" ng-bind="'MODULES.TABLE.RESULT.NODATA'|translate"></td></tr>
           </tbody>
           <tbody ng-if="tableModel.filteredData.length>0">
             <tr class="mdl-table-body__row"

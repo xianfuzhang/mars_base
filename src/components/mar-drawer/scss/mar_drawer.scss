@@ -2,26 +2,6 @@
 @import 'default';
 @import 'shared';
 
-//@include block(mdc-drawer){
-//
-//  //@include element(temporary){
-//  //  & @include element(){
-//  //
-//  //  }
-//  //
-//  //}
-//
-//  @include element(drawer){
-//    //&.+right {
-//    //  right: 0px;
-//    //  left: auto;
-//    //}
-//    @include state(right){
-//
-//    }
-//  }
-//}
-
 .mdc-drawer {
   &.\+right {
 
