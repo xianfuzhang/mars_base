@@ -18,12 +18,12 @@
     display: block;
     position: relative;
     float: left;
-    color: map_get($colors, grey-fill);;
+    color: white;
 
     @include state(act){
       transition: none;
       border-top:2px solid map_get($colors, second_color);
-      background: map_get($colors, white);
+      background: black;
       color:map_get($colors, second_color);
       height:map_get($sizes, header-height)-2px;
       line-height: map_get($sizes, header-height)-2px;
@@ -81,15 +81,15 @@
       @include state(act){
         transition: none;
         border-top:none;
-        background: map_get($colors, white);
-        color: map_get($colors, grey-fill);
+        background: black;
+        color:white;
         height:auto;
         z-index:10;
       }
 
       &:hover {
         background: map_get($colors, second_color);
-        color: map_get($colors, grey-fill);
+        color: black;
       }
     }
   }
