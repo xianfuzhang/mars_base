@@ -50,6 +50,9 @@ module.exports = function (config) {
       publicPath: assetHost,
       inline: true,
       port: port,
+      proxy: {
+        '/onos/v1': 'http://localhost:4001'
+      }
     },
     module: {
       rules: [

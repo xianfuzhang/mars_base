@@ -15,15 +15,14 @@ class AliasProvider {
       'login': path.resolve('src/modules/login/'),
       'dashboard': path.resolve('src/modules/dashboard/'),
       'fabric': path.resolve('src/modules/fabric/'),
-      'switches': path.resolve('src/modules/fabric_switch/'),
       'logical': path.resolve('src/modules/logical/'),
-      'tenants': path.resolve('src/modules/logical_tenant/'),
     };
   }
 
   static getComponents() {
     return {
       'mdc': path.resolve('src/components/mdc/'),
+      'mdlHeader': path.resolve('src/components/mdl-header'),
       'menu': path.resolve('src/components/menu/'),
       'marHeader': path.resolve('src/components/mar-header/'),
       'marDrawer': path.resolve('src/components/mar-drawer/'),
