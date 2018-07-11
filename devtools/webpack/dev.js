@@ -14,7 +14,7 @@ const assetHost = process.env.ASSET_HOST || host + '/';
 
 module.exports = function (config) {
   return {
-    mode: "none",
+    mode: "development",
     entry: {
       app: [path.resolve('src/main.js'), path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js')],
     },
