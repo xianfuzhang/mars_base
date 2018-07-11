@@ -4,6 +4,9 @@ mdc设置组件颜色
   color: rgba(0, 0, 0, 0.38);
   !* @alternate *!
   color: var(--mdl-theme-text-icon-on-background, rgba(0, 0, 0, 0.38)); }*/
+.mdl-table-field{
+  height: 100%;
+}
 .right{
   float: right;
 }
@@ -38,12 +41,13 @@ table{
 }
 .mdl-table-header{
   border:1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 0;
-  border-radius: 4px 4px 0 0;
+  /*border-bottom: 0;*/
+  /*border-radius: 4px 4px 0 0;*/
 }
 .mdl-table-body{
-  border:1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 4px 4px;
+  /*border-radius: 0 0 4px 4px;*/
+  height: 90%;
+  overflow-y: auto;
 }
 .mdl-table-footer{
   opacity: 0.6;
@@ -55,20 +59,25 @@ table{
   line-height: 24px;
 }
 .mdl-table-body__row{
-  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
 }
 .mdl-table-body__row:last-child {
-  border-bottom: 0;
+ /* border-bottom: 0;*/
 }
 .mdl-table-body__td__hide{
   display: none;
 }
 .mdl-table-body__row__highlight, .mdl-table-body__row:last-child.mdl-table-body__row__highlight{
-  border-bottom: 1px solid #00D3FF;
+  border-bottom: 1px solid #47B8E0;
+  background: rgba(71,184,224, 0.12);
+}
+.mdl-table-body__row td {
+  text-align: center;
 }
 .mdl-table-header__row th {
-  text-align: left;
+  text-align: center;
   opacity: 0.6;
 }
 .mdl-table-header__row th.sortable {
@@ -101,12 +110,12 @@ table{
   vertical-align: middle;
 }
 .mdl-table-field__content{
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 13px;
   overflow: hidden;
   transition: box-shadow 135ms cubic-bezier(.4,0,.2,1),width 235ms cubic-bezier(.4,0,.2,1);
   vertical-align: top;
-  z-index: 1;
+  height: calc(100% - 48px);
 }
 .pagination {
   display: flex;

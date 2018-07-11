@@ -269,6 +269,7 @@ export class mdlTable {
         'def': columnDef,
         'visible': scope._getLayoutProperty(columnDef, 'visible', true),
         'hidden': scope._getLayoutProperty(columnDef, 'hidden', false),
+        'fixed': scope._getLayoutProperty(columnDef, 'fixed', false),
         'sortable': scope._getLayoutProperty(columnDef, 'sortable', false),
         'sort': scope._getInitialColumnSort(colIndex),
       };

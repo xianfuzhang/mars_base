@@ -6,14 +6,14 @@
   <div class="column-manipulation-field__content">
     <div class="column-manipulation-field__column">
       <div ng-repeat="item in columns_1 track by $index">
-        <mdl-checkbox ng-model="item.visible"
+        <mdl-checkbox ng-model="item.visible"  disable="item.fixed"
                       display-label="item.ui">
         </mdl-checkbox>
       </div>
     </div>
     <div class="column-manipulation-field__column">
       <div ng-repeat="item in columns_2 track by $index">
-        <mdl-checkbox ng-model="item.visible"
+        <mdl-checkbox ng-model="item.visible"  disable="item.fixed"
                       display-label="item.ui">
         </mdl-checkbox>
       </div>
