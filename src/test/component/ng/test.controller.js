@@ -161,7 +161,6 @@ export class TestController {
 
     this.di.$scope.onTableRowClick = (event) => {
       if (event.$data){
-        this.di.$log.info(event.$data);
         this.di.$scope.dashModel.api.setSelectedRow(event.$data.mac);
       }
     };

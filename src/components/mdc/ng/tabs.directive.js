@@ -20,6 +20,11 @@ export class mdlTabs {
   }
 
   _link (scope, element, attrs, ngModel) {
+    if (attrs.classList) {
+      attrs.classList.split(' ').forEach((cls) => {
+        element.addClass(cls);
+      });
+    }
     var unsubscribers = [];
 
     scope.prepareOptions = (data) => {

@@ -5,6 +5,8 @@ import 'angular-translate';
 import 'angular-ui-bootstrap';
 
 import 'lodashService';
+import 'easing';
+import 'apis';
 
 import 'login';
 import 'test';
@@ -17,6 +19,12 @@ import 'menu';
 import 'mdc';
 import 'mdlTable';
 import 'modal';
+import 'menu';
+import 'marDrawer';
+import 'marHeader';
+import 'footer';
+import 'topo';
+import 'resize';
 
 angular
   .module('marsApp', [
@@ -25,6 +33,8 @@ angular
     'ui.bootstrap',
     'pascalprecht.translate',
     '_',
+    'easing',
+    'apis',
     'test',
     'login',
     'fabric',
@@ -34,7 +44,13 @@ angular
     'mdc',
     'menu',
     'mdlTable',
-    'modal'
+    'modal',
+    'menu',
+    'marDrawer',
+    'marHeader',
+    'footer',
+    'topo',
+    'resize'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {
@@ -68,6 +84,10 @@ angular
       .when('/', {
         template: require('./test/component/template/test'),
         controller: 'TestController'
+      })
+      .when('/switches', {
+        template: require('./modules/fabric_switch/template/switch.html'),
+        controller: 'SwitchController'
       })
       .otherwise({ redirectTo: '/' });
   }]);
