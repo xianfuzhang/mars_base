@@ -1,0 +1,47 @@
+<!--<div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">-->
+  <mdl-header></mdl-header>
+  <!--<mar-header  headers="deviceModel.headers"></mar-header>-->
+  <div class="app-main">
+    <section class="+hasscroll" >
+      <!--<div class="main__title">
+        <h5>Fabric</h5>
+        &nbsp;&nbsp;>&nbsp;&nbsp;
+        <h5>Switches</h5>
+      </div>-->
+      <div class="main__content">
+        <mdl-tabs ng-model="tabSelected" options="tabs"
+                  class-list="main__content__device-tabs"
+                  on-select="onTabChange($value)">
+        </mdl-tabs>
+        <section class="tab-content" ng-if="tabSelected.type == 'device'">
+          <mdl-table actions-show="deviceModel.actionsShow"
+                     row-click="onTableRowClick($event)"
+                     provider="deviceModel.deviceProvider" api-ready="onDeviceAPIReady($api)"
+                     on-add="addSwitch()" on-remove="removeSwitch($value)">
+          </mdl-table>
+        </section>
+        <section class="tab-content" ng-if="tabSelected.type == 'port'">
+          <mdl-table actions-show="portModel.actionsShow"
+                     row-click="onTableRowClick($event)"
+                     provider="portModel.portProvider" api-ready="onPortApiReady($api)"
+                     on-add="addSwitch()" on-remove="removeSwitch($value)">
+          </mdl-table>
+        </section>
+        <section class="tab-content" ng-if="tabSelected.type == 'link'">
+          <mdl-table actions-show="linkModel.actionsShow"
+                     row-click="onTableRowClick($event)"
+                     provider="linkModel.linkProvider" api-ready="onSwitchApiReady($api)"
+                     on-add="addSwitch()" on-remove="removeSwitch($value)">
+          </mdl-table>
+        </section>
+        <section class="tab-content" ng-if="tabSelected.type == 'endpoint'">
+
+        </section>
+      </div>
+    </section>
+    <!--<section class="column__1__3 +hasscroll +hasborder">
+    </section>-->
+  </div>
+<!--
+</div>
+-->
