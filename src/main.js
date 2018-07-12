@@ -6,15 +6,17 @@ import 'angular-ui-bootstrap';
 
 import 'lodashService';
 import 'easing';
+import 'apis';
 
 import 'login';
 import 'dashboard';
 import 'fabric';
-import 'switches';
 import 'logical';
-import 'tenants';
 
 import 'mdc';
+import 'mdlHeader';
+import 'mdlTable';
+import 'modal';
 import 'menu';
 import 'marDrawer';
 import 'marHeader';
@@ -29,13 +31,15 @@ angular
     'pascalprecht.translate',
     '_',
     'easing',
+    'apis',
     'dashboard',
     'login',
     'fabric',
-    'switches',
     'logical',
-    'tenants',
     'mdc',
+    'mdlHeader',
+    'mdlTable',
+    'modal',
     'menu',
     'marDrawer',
     'marHeader',
@@ -69,34 +73,34 @@ angular
       $translateProvider.preferredLanguage('cn');
     }
   }])
-  .config(['$routeProvider', function ($routeProvider) {
+  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
         template: require('./modules/dashboard/template/dashboard'),
         controller: 'DashboardController'
       })
-      .when('/login', {
-        template: require('./modules/login/template/login'),
-        controller: 'LoginController'
+      .when('/devices', {
+        template: require('./modules/fabric/template/device.html'),
+        controller: 'deviceController'
       })
-      .when('/logout', {
-        redirectTo: function(param, path, search){
-          return '/login';
-        }
+      .when('/interface_group', {
+        template: require('./modules/fabric/template/interface_group.html'),
+        controller: 'interfaceGroupController'
       })
-      .when('/fabric', {
-        template: require('./modules/fabric/template/fabric'),
-        controller: 'FabricController'
+      .when('/statistics', {
+        template: require('./modules/fabric/template/statistic.html'),
+        controller: 'statisticController'
       })
-      .when('/switches', {
-        template: require('./modules/fabric_switch/template/switch'),
-        controller: 'SwitchController'
-      })
-      .when('/tenants', {
-        template: require('./modules/logical_tenant/template/tenant'),
-        controller: 'TenantController'
+      .when('/storm_control', {
+        template: require('./modules/fabric/template/storm_control.html'),
+        controller: 'stormControlController'
       })
       .otherwise({ redirectTo: '/' });
+
+    $locationProvider.html5Mode({
+      enabled: true,
+      requireBase: false
+    });
   }]);
 
 /*

@@ -1,16 +1,22 @@
 $grid-size: 12;
-
-.main{
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  min-width: 1360px;
-  min-height: 600px;
+body{
+  font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 13px;
+}
+tbody{
+  overflow-y: auto;
+}
+.app-main:before, .app-main:after{
+  content: " ";
+  display: table;
+}
+.app-main:after{
+  clear: both;
+}
+.app-main{
   display: flex;
+  overflow: auto;
+  height: 100%;
 }
 .main__title{
   height: 48px;
@@ -21,10 +27,11 @@ $grid-size: 12;
 }
 .main__content{
   display: flex;
-  overflow: auto;
-  padding: 12px;
+  overflow: hidden;
+  padding: 0 24px;
   flex-direction: column;
- /* height: 100%;*/
+  height: 100%;
+  min-height: 600px;
 }
 .main__content__full-width{
   width: 100%;
@@ -35,6 +42,7 @@ $grid-size: 12;
 }
 .tab-content{
   margin-top: 12px;
+  height: calc(100% - 200px);
 }
 
 @include block(column) {

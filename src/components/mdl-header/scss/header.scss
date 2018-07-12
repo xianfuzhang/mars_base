@@ -1,0 +1,97 @@
+.navbar::after, .container::after{
+  clear: both;
+}
+.navbar::before, .navbar::after, .container::after, .container::before{
+  content: " ";
+  display: table;
+}
+
+.navbar-inner{
+  background: #263238;
+  height: 56px;
+}
+.navbar-inner a{
+  text-decoration: none;
+  user-select: none;
+}
+.navbar-inner__container{
+  padding: 0 12px;
+  height: 100%;
+  display: flex;
+}
+.navbar-inner__brand{
+  background-image: url('../image/mars_logo.png');
+  background-size:60px 47px;
+  height: 47px;
+  width: 60px;
+  cursor: pointer;
+}
+.navbar-inner__nav{
+  list-style: none;
+  margin: 0 24px;
+  position: relative;
+  display: block;
+  float: left;
+}
+.navbar-inner__nav li{
+  position: relative;
+  float: left;
+  display: block;
+  cursor: pointer;
+  text-align: left;
+}
+.navbar-inner__nav li:hover{
+  background: #37474F;
+}
+.navbar-inner__dropdown-toggle{
+  display: block;
+  position: relative;
+  color: rgba(255,255,255,0.87);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 56px;
+  padding: 0 24px;
+  text-transform: uppercase;
+  transition: all .3s;
+}
+.navbar-inner__dropdown-menu{
+  position: absolute;
+  float: left;
+  min-width: 160px;
+  list-style: none;
+  background: #37474F;
+  border-radius: 0 0 2px 2px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.12), 0 3px 2px rgba(0, 0, 0, 0.24);
+  color: #fff;
+  z-index: 100;
+  display: none;
+}
+.open>.navbar-inner__dropdown-menu {
+  display: block;
+}
+.navbar-inner__dropdown-menu li{
+  border-bottom: 1px solid rgba(38,50,56,0.56);
+  box-sizing: border-box;
+  line-height: 48px;
+  cursor: pointer;
+  width: 100%;
+}
+.navbar-inner__dropdown-menu li:last-child {
+  border-bottom: 0;
+}
+.navbar-inner__dropdown-menu li > a{
+  background: #37474F;
+  display: block;
+  color: #fff;
+  font-weight: 300;
+  line-height: 48px;
+  padding: 0 16px;
+  transition: all .2s;
+}
+.navbar-inner__dropdown-menu li > a:hover{
+  background: #455A64;
+}
+navbar-inner__dropdown-menu__show{
+  position: absolute;
+  float: left;
+}

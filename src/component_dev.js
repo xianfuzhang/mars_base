@@ -9,6 +9,7 @@ import 'easing';
 import 'apis';
 
 import 'login';
+import 'dashboard';
 import 'test';
 import 'fabric';
 import 'switches';
@@ -17,6 +18,7 @@ import 'tenants';
 import 'menu';
 
 import 'mdc';
+import 'mdlHeader';
 import 'mdlTable';
 import 'modal';
 import 'menu';
@@ -37,20 +39,20 @@ angular
     'apis',
     'test',
     'login',
+    'dashboard',
     'fabric',
     'switches',
     'logical',
     'tenants',
     'mdc',
-    'menu',
+    'mdlHeader',
     'mdlTable',
     'modal',
     'menu',
     'marDrawer',
     'marHeader',
     'footer',
-    'topo',
-    'resize'
+    'topo'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {
@@ -84,6 +86,10 @@ angular
       .when('/', {
         template: require('./test/component/template/test'),
         controller: 'TestController'
+      })
+      .when('/dashboard', {
+        template: require('./modules/dashboard/template/dashboard'),
+        controller: 'DashboardController'
       })
       .when('/switches', {
         template: require('./modules/fabric_switch/template/switch.html'),

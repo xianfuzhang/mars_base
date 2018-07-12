@@ -447,6 +447,10 @@ export class Topo {
       });
 
     }).call(this);
+
+    scope.$on('$destroy', ()=>{
+      angular.element(this.di.$window).off('resize');
+    });
   }
 }
 

@@ -184,6 +184,7 @@ export class mdlTable {
       event && event.stopPropagation();
     };
     scope._search = () => {
+      scope.tableModel.pagination.start = 0;
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
       scope._queryUpdate(scope._getTableParams());
     };
@@ -269,6 +270,7 @@ export class mdlTable {
         'def': columnDef,
         'visible': scope._getLayoutProperty(columnDef, 'visible', true),
         'hidden': scope._getLayoutProperty(columnDef, 'hidden', false),
+        'fixed': scope._getLayoutProperty(columnDef, 'fixed', false),
         'sortable': scope._getLayoutProperty(columnDef, 'sortable', false),
         'sort': scope._getInitialColumnSort(colIndex),
       };
