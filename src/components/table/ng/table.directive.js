@@ -184,6 +184,7 @@ export class mdlTable {
       event && event.stopPropagation();
     };
     scope._search = () => {
+      scope.tableModel.pagination.start = 0;
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
       scope._queryUpdate(scope._getTableParams());
     };

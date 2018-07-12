@@ -77,7 +77,8 @@ export class DeviceController {
         let defer = this.di.$q.defer();
         this.di.deviceDataManager.getDevices(params).then((res) => {
           defer.resolve({
-            data: this.getEntities(res)
+            data: this.getEntities(res.data.devices),
+            count: res.data.total
           });
         });
         return defer.promise;
@@ -97,7 +98,8 @@ export class DeviceController {
         let defer = this.di.$q.defer();
         this.di.deviceDataManager.getPorts(params).then((res) => {
           defer.resolve({
-            data: this.getEntities(res)
+            data: this.getEntities(res.data.ports),
+            count: res.data.total
           });
         });
         return defer.promise;
@@ -114,7 +116,14 @@ export class DeviceController {
     });
     this.scope.linkModel.linkProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
-        return this.di.deviceDataManager.getSwitches(params);
+        let defer = this.di.$q.defer();
+        this.di.deviceDataManager.getLinks(params).then((res) => {
+          defer.resolve({
+            data: this.getEntities(res.data.links),
+            count: res.data.total
+          });
+        });
+        return defer.promise;
       },
       getSchema: () => {
         return {
@@ -156,23 +165,35 @@ export class DeviceController {
         break;
 
       case 'port':
-        origins.forEach((device) => {
-          device.ports.forEach((port) => {
-            let obj = {};
-            obj.port_name = port.annotations.portName;
-            obj.port_mac = port.annotations.portMac;
-            obj.port_id = port.port;
-            obj.link_status = port.annotations.linkStatus;
-            obj.type = port.type;
-            obj.speed = port.portSpeed;
-            obj.device_name = device.annotations.name;
-            obj.isEnabled = port.isEnabled;
-            entities.push(obj);
-          });
+        origins.forEach((port) => {
+          let obj = {};
+          obj.port_name = port.annotations.portName;
+          obj.port_mac = port.annotations.portMac;
+          obj.port_id = port.port;
+          obj.link_status = port.annotations.linkStatus;
+          obj.type = port.type;
+          obj.speed = port.portSpeed;
+          obj.device_name = port.device_name;
+          obj.isEnabled = port.isEnabled;
+          entities.push(obj);
         });
         break;
 
       case 'link':
+        origins.forEach((link) => {
+          let obj = {};
+          obj.id = link.id;
+          obj.src_device = link.src.device;
+          obj.src_port = link.src.port;
+          obj.dst_device = link.dst.device;
+          obj.dst_port = link.dst.port;
+          obj.state = link.state;
+          obj.type = link.type;
+          obj.duration = link.annotations.durable;
+          obj.protocol = link.annotations.protocol;
+          obj.latency = link.annotations.latency;
+          entities.push(obj);
+        });
         break;
 
       case 'endpoint':

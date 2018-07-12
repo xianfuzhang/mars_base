@@ -205,20 +205,20 @@ export class DeviceService{
 
   getLinkTableSchema() {
     return [
-      {
+     /* {
         'label': 'ID',
         'field': 'id',
         'layout': {'visible': true, 'sortable': false, 'fixed': true}
-      },
+      },*/
       {
         'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.SRC_DEVICE'),
         'field': 'src_device',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
       },
       {
         'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.SRC_PORT'),
         'field': 'src_port',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
       },
       {
         'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.DST_DEVICE'),
@@ -232,7 +232,27 @@ export class DeviceService{
       },
       {
         'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.STATUS'),
-        'field': 'status',
+        'field': 'state',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.TYPE'),
+        'field': 'type',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.DURATION'),
+        'field': 'duration',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.PROTOCOL'),
+        'field': 'protocol',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.LATENCY'),
+        'field': 'latency',
         'layout': {'visible': true, 'sortable': true}
       }
     ];

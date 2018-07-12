@@ -17,10 +17,10 @@ export class DeviceDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getDevicesUrl(), {'params': params}).then(
       (res) => {
-        defer.resolve(res.data.devices);
+        defer.resolve(res);
       },
       (error) => {
-        defer.resolve([]);
+        defer.resolve({'data': {'devices': [], 'total': 0}});
       }
     );
     return defer.promise;
@@ -30,10 +30,23 @@ export class DeviceDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getPortsUrl(), {'params': params}).then(
       (res) => {
-        defer.resolve(res.data.ports);
+        defer.resolve(res);
       },
       (error) => {
-        defer.resolve([]);
+        defer.resolve({'data': {'ports': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
+  getLinks(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getLinksUrl(), {'params': params}).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'links': [], 'total': 0}});
       }
     );
     return defer.promise;
