@@ -116,6 +116,8 @@ table{
   transition: box-shadow 135ms cubic-bezier(.4,0,.2,1),width 235ms cubic-bezier(.4,0,.2,1);
   vertical-align: top;
   height: calc(100% - 48px);
+  display: flex;
+  flex-direction: column;
 }
 .pagination {
   display: flex;
