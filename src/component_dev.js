@@ -24,11 +24,6 @@ angular
     'pascalprecht.translate',
     '_',
     'test',
-    'login',
-    'fabric',
-    'switches',
-    'logical',
-    'tenants',
     'mdc',
     'menu'
   ])

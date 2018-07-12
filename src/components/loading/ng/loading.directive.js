@@ -1,0 +1,85 @@
+
+export class Loading {
+  static getDI () {
+    return [
+      '$rootScope',
+      '$window',
+      '$timeout',
+      '$document',
+      '_',
+    ];
+  }
+
+  constructor (...args) {
+    this.di = [];
+    Loading.getDI().forEach((value, index) => {
+      this.di[value] = args[index];
+    }, this);
+
+    this.replace = true;
+    this.restrict = 'E';
+    this.template = require('../template/loading');
+
+    this.scope = {
+
+    };
+
+    this.link = (...args) => this._link.apply(this, args);
+  }
+
+  _link (scope, element) {
+    (function init () {
+
+      this.imageCount = 11;
+      let loading = element.find('canvas')[0];
+
+      let imgs = [];
+      imgs.push();
+      for(let i = 1 ; i<= this.imageCount ; i++){
+        let image = new Image();
+        let imgUrl = require('../image/Mars_loading_'+i+'.png');
+
+        image.src = imgUrl;
+        imgs.push(image)
+      }
+
+      let intervalTime = 100;
+      let index = 0;
+      let interval = null;
+      // function stop() {
+      //   console.log('stop');
+      //   clearInterval(interval);
+      //   index = 0;
+      // }
+      function  start() {
+        let arrIndex = index %11;
+        let sleepTime = intervalTime;
+        if(arrIndex == 0){
+          sleepTime = 600;
+        }
+        interval = setTimeout(function () {
+          let context = loading.getContext('2d');
+          context.clearRect(0, 0, 60, 60);
+
+          context.drawImage(imgs[arrIndex],0,0,60,60);
+          context.restore();
+          index = index + 1;
+          start()
+        }, sleepTime);
+      }
+
+
+      start();
+
+      setTimeout(function () {
+        clearTimeout(interval);
+      },5000)
+
+
+    }).call(this);
+  }
+}
+
+
+Loading.$inject = Loading.getDI();
+Loading.$$ngIsClass = true;

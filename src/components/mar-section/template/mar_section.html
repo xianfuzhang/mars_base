@@ -1,0 +1,11 @@
+    <div class="mar_section" >
+    <div class="mar_section__header" ng-click="foldAndNot()">
+        <div class="mar_section__header__icon"></div>
+        <div class="mar_section__header__title">{{ sectionModel.title }}</div>
+    </div>
+    <!--<div class="mar_section__body" ng-class="{'+expand':!sectionModel.isFold}" ng-style="sectionModel.showStyle">-->
+    <div class="mar_section__body" ng-style="sectionModel.showStyle">
+        <ng-transclude>
+        </ng-transclude>
+    </div>
+</div>

@@ -25,7 +25,8 @@ export class Topo {
       spines: '=',
       leafs: '=',
       others:'=',
-      links:'='
+      links:'=',
+      topoSetting:'='
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -33,6 +34,7 @@ export class Topo {
 
   _link (scope, element) {
     (function init () {
+      let unsubscribers = [];
 
       this.di.$window.requestAnimFrame = (function(callback) {
         return this.di.$window.requestAnimationFrame
@@ -81,12 +83,13 @@ export class Topo {
       this.LINE_WIDTH = 3;
       this.LINE_NORMAL = '136,234,136';
       this.LINE_ERROR = "255,0,0";
+      this.oldWidth = null;
 
       let easingService = this.di.easingService;
       let switchLocation = this.switchLocation;
 
       let initialize = () => {
-
+        let canvas = document.getElementById('canvas');
 
         this.stage = new JTopo.Stage(canvas); // 创建一个舞台对象
         this.scene = new JTopo.Scene(this.stage);
@@ -96,7 +99,8 @@ export class Topo {
         this.otherContainer = new JTopo.Container();
 
         this.spineContainer.fillColor = '255,255,255';
-        this.leafContainer.fillColor = '239,239,239';
+        // this.leafContainer.fillColor = '239,239,239';
+        this.leafContainer.fillColor = '255,255,255';
         this.otherContainer.fillColor = '255,255,255';
 
         this.spineContainer.alpha = 1;
@@ -118,8 +122,8 @@ export class Topo {
         genSpine();
         genLeaf();
         genOther();
-        genLinks();
 
+        setTimeout(genLinks,200);
         resize();
       };
 
@@ -134,11 +138,6 @@ export class Topo {
         this.di._.forEach(scope.spines, (spine, key) => {
           this.spines[spine.id] = genNormalNode(spine.id);
         });
-
-        // for(let index in scope.spines){
-        //   let spine = scope.spines[index];
-        //   this.spines[spine.id] = genNormalNode(spine.id);
-        // }
 
       };
 
@@ -155,10 +154,7 @@ export class Topo {
           this.leafs[leaf.id] = genNormalNode(leaf.id);
         });
 
-        // for(let index in scope.leafs){
-        //   let leaf = scope.leafs[index];
-        //   this.leafs[leaf.id] = genNormalNode(leaf.id);
-        // }
+
       };
 
       let genOther = () => {
@@ -173,23 +169,29 @@ export class Topo {
         this.di._.forEach(scope.others, (other, key) => {
           this.others[other.id] = genNormalNode(other.id);
         });
-        // for(let index in scope.others){
-        //   let other = scope.others[index];
-        //
-        //   this.others[other.id] = genNormalNode(other.id);
-        // }
+
       };
 
       let genLinks = () => {
-        this.di._.forEach(scope.links, (link, key) => {
-          let deviceIds = [link.src.device, link.dst.device];
-          let linkId = getLinkId(deviceIds);
-          this.links[linkId] = genLinkNode(deviceIds);
-
-          if(link.state != this.active_status){
-            this.links[linkId].strokeColor = this.LINE_ERROR;
+          if(scope.topoSetting.show_links){
+            this.di._.forEach(scope.links, (link, key) => {
+              let deviceIds = [link.src.device, link.dst.device];
+              let linkId = getLinkId(deviceIds);
+              this.links[linkId] = genLinkNode(deviceIds);
+              if(link.state != this.active_status){
+                this.links[linkId].strokeColor = this.LINE_ERROR;
+              }
+            });
           }
+      };
+
+      let crushLinks =()=>{
+        this.di._.forEach(this.links, (link, key) => {
+          this.scene.remove(link);
         });
+
+        delete this.links;
+        this.links = {};
       };
 
       let getLinkId = (deviceIds) =>{
@@ -211,13 +213,13 @@ export class Topo {
         return link;
       };
 
-      let draw = () =>{
+      let draw = (width) =>{
 
         let avgHeight = this.height/3;
-        let spineInterval = calcInterval(scope.spines, this.width);
+        let spineInterval = calcInterval(scope.spines, width);
         //leaf有分组，需要特殊处理
-        let leafInterval = calcLeafInterval(scope.leafs, this.width);
-        let otherInterval = calcInterval(scope.others, this.width);
+        let leafInterval = calcLeafInterval(scope.leafs, width);
+        let otherInterval = calcInterval(scope.others, width);
 
         let spineKeys = this.di._.keys(this.spines);
         spineKeys = this.di._.sortBy(spineKeys);
@@ -311,7 +313,8 @@ export class Topo {
 
         node.mouseup(mouseUpHandler);
         node.mousedrag(mouseDragHandler);
-
+        node.mouseover(mouseOverHandler);
+        node.mouseout(mouseOutHandler);
         //根据实际的端口数来
         let count = 36;
         //超过48个端口len为2，根据实际情况来
@@ -393,6 +396,21 @@ export class Topo {
       function mouseDragHandler(data){
         this.move = true;
       }
+
+
+      let mouseOverHandler = (evt) =>{
+        console.log('node mouse over');
+
+        this.di.$rootScope.$emit("show_tooltip",{event:evt});
+      };
+
+      let mouseOutHandler = (evt) => {
+        console.log('node mouse out');
+        this.di.$rootScope.$emit("hide_tooltip");
+      };
+
+
+
       /*
       负责给container加上两个隐藏的node，用来固定整个容器
        */
@@ -419,11 +437,18 @@ export class Topo {
       };
 
       let resize = () => {
+
         let parentNode = element[0].parentNode;
         this.width = parentNode.offsetWidth;
         this.height = parentNode.offsetHeight;
 
-        let canvas = this.di.$document[0].getElementById('canvas');
+        // let canvas = this.di.$document[0].getElementById('canvas');
+        let canvas = document.getElementById('canvas');
+
+        if(this.oldWidth === null){
+          this.oldWidth = canvas.width;
+        }
+
         canvas.width = this.width;
         canvas.height = this.height;
 
@@ -434,16 +459,78 @@ export class Topo {
         context.shadowBlur = 5;
 
         layout();
-        draw();
+
+        let starttime = (new Date()).getTime();
+
+        if(this.resizeTimeout){
+          console.log(this.di.$timeout.cancel(this.resizeTimeout));
+        }
+        this.resizeTimeout = this.di.$timeout(function () {
+          delayDraw()
+        }, 200);
+        // this.oldWidth = null
+      };
+
+      let delayDraw =()=> {
+        let oldWidth = this.oldWidth;
+        this.oldWidth =  null;
+        // console.log(oldWidth);
+        let starttime = (new Date()).getTime();
+        dynamicDraw(starttime, oldWidth);
+      };
+
+      let dynamicDraw = (starttime, oldWidth) => {
+        console.log('================');
+        let testT = (new Date()).getTime();
+        // console.log('===' + testT + '=== dynamicDraw =====oldWidth : ' + this.oldWidth + '===newWidth : ' +  this.width);
+        let time = (new Date()).getTime() - starttime;
+        if(time > 1000) {
+          draw(this.width);
+          return;
+        }
+        let percentage = time/1000;
+        let nP = easingService.easeInOutQuad(percentage);
+        let width = (this.width - oldWidth) * nP + oldWidth;
+        draw(width);
+        requestAnimFrame(function () {
+          dynamicDraw(starttime, oldWidth);
+        });
       };
 
       initialize();
 
       angular.element(this.di.$window).bind('resize', () => {
-        if(this.resizeTimeout){
-          this.di.$timeout.cancel(this.resizeTimeout);
+        console.log('exec resize');
+        resize();
+        // if(this.resizeTimeout){
+        //   this.di.$timeout.cancel(this.resizeTimeout);
+        // }
+        // self.resizeTimeout = this.di.$timeout(resize, 500);
+      });
+
+      unsubscribers.push(this.di.$rootScope.$on('resize_canvas',() =>{
+        console.log('receive resize_canvas');
+        resize()
+      }));
+
+      // unsubscribers.push(this.di.$rootScope.$on('show_tooltips',()=>{
+      //   if(scope.topoSetting.show_tooltips){
+      //   } else {
+      //   }
+      // }));
+
+      unsubscribers.push(this.di.$rootScope.$on('show_links',()=>{
+        if(scope.topoSetting.show_links){
+          genLinks()
+        } else {
+          crushLinks()
         }
-        self.resizeTimeout = this.di.$timeout(resize, 200);
+      }));
+
+      scope.$on('$destroy', () => {
+        unsubscribers.forEach((unsubscribe) => {
+          unsubscribe();
+        });
       });
 
     }).call(this);

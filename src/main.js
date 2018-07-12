@@ -6,6 +6,7 @@ import 'angular-ui-bootstrap';
 
 import 'lodashService';
 import 'easing';
+import 'localStore';
 
 import 'login';
 import 'dashboard';
@@ -18,8 +19,12 @@ import 'mdc';
 import 'menu';
 import 'marDrawer';
 import 'marHeader';
+import 'marSection';
 import 'footer';
 import 'topo';
+import 'loading';
+import 'deviceTooltip';
+
 
 angular
   .module('marsApp', [
@@ -29,6 +34,7 @@ angular
     'pascalprecht.translate',
     '_',
     'easing',
+    'localStore',
     'dashboard',
     'login',
     'fabric',
@@ -39,8 +45,11 @@ angular
     'menu',
     'marDrawer',
     'marHeader',
+    'marSection',
     'footer',
-    'topo'
+    'topo',
+    'loading',
+    'deviceTooltip'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {

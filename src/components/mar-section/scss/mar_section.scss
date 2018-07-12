@@ -1,0 +1,99 @@
+@import 'xbem';
+@import 'default';
+@import 'shared';
+
+
+
+
+@include block(mar_section){
+  padding: 8px 8px;
+
+  @include element(header){
+    display: block;
+    position: relative;
+    border-bottom: 1px solid #E5E5E5;
+    white-space: nowrap;
+    padding-left: 2px;
+    cursor: pointer;
+    color: #4C4C4C;
+    font-weight: 200;
+    white-space: nowrap;
+    //padding-left: 2px;
+    cursor: pointer;
+    color: #4C4C4C;
+    font-weight: 200;
+    font-size: 18px;
+    border-bottom: 1px solid lightgray;
+
+    @include element(icon){
+      background: url('../image/arrow.svg') no-repeat;
+      background-size: 15px;
+      display: inline-block;
+      height: 15px;
+      width: 15px;
+      margin-right: 2px;
+      position: relative;
+      display: inline-block;
+      top:2px;
+    }
+
+    @include  element(title){
+      display: inline-block;
+
+    }
+  }
+
+  @include element(body){
+    //@include state(expand){
+    //  display: block;
+    //  animation: 1.15s ease-out;
+    //  animation-name: section_expand;
+    //  background-color: #2b2a2e;
+    //}
+
+  }
+}
+
+
+
+//@-webkit-keyframes section_expand {
+//  0% {
+//    height: 0%
+//  }
+//
+//  100% {
+//    height: 100%
+//  }
+//}
+//
+//@-moz-keyframes section_expand {
+//  0% {
+//    height: 0%
+//  }
+//
+//  100% {
+//    height: 100%
+//  }
+//}
+//
+//@-ms-keyframes section_expand {
+//  0% {
+//    height: 0%
+//  }
+//
+//  100% {
+//    height: 100%
+//  }
+//}
+//
+//@keyframes section_expand {
+//  0% {
+//    height: 0%
+//  }
+//
+//  100% {
+//    height: 100%
+//  }
+//}
+//
+//
