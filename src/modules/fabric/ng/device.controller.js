@@ -53,6 +53,9 @@ export class DeviceController {
           case 'port':
             this.scope.portModel.portAPI.setSelectedRow(event.$data.port_mac);
             break;
+          case 'link':
+            this.scope.linkModel.linkAPI.setSelectedRow(event.$data.id);
+            break;
         }
       }
     };
@@ -63,6 +66,10 @@ export class DeviceController {
 
     this.scope.onPortApiReady = ($api) => {
       this.scope.portModel.portAPI = $api;
+    };
+
+    this.scope.onLinkApiReady = ($api) => {
+      this.scope.linkModel.linkAPI = $api;
     };
 
     this.scope.onMenuClick = ($value, event) => {
@@ -108,7 +115,7 @@ export class DeviceController {
         return {
           schema: this.di.deviceService.getPortTableSchema(),
           index_name: 'port_mac',
-          rowCheckboxSupport: true,
+          rowCheckboxSupport: false,
           rowActionsSupport: true,
           rowActions: this.di.deviceService.getPortTableRowActions(),
         };
@@ -175,6 +182,9 @@ export class DeviceController {
           obj.speed = port.portSpeed;
           obj.device_name = port.device_name;
           obj.isEnabled = port.isEnabled;
+          obj.port_status = port.isEnabled === true ?
+            this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE') :
+            this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE');
           entities.push(obj);
         });
         break;
@@ -182,7 +192,7 @@ export class DeviceController {
       case 'link':
         origins.forEach((link) => {
           let obj = {};
-          obj.id = link.id;
+          obj.id = link.src.device + '_' + link.src.port;
           obj.src_device = link.src.device;
           obj.src_port = link.src.port;
           obj.dst_device = link.dst.device;

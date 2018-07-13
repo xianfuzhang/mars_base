@@ -23,15 +23,13 @@
         <section class="tab-content" ng-if="tabSelected.type == 'port'">
           <mdl-table actions-show="portModel.actionsShow"
                      row-click="onTableRowClick($event)"
-                     provider="portModel.portProvider" api-ready="onPortApiReady($api)"
-                     on-add="addSwitch()" on-remove="removeSwitch($value)">
+                     provider="portModel.portProvider" api-ready="onPortApiReady($api)">
           </mdl-table>
         </section>
         <section class="tab-content" ng-if="tabSelected.type == 'link'">
           <mdl-table actions-show="linkModel.actionsShow"
                      row-click="onTableRowClick($event)"
-                     provider="linkModel.linkProvider" api-ready="onSwitchApiReady($api)"
-                     on-add="addSwitch()" on-remove="removeSwitch($value)">
+                     provider="linkModel.linkProvider" api-ready="onLinkApiReady($api)">
           </mdl-table>
         </section>
         <section class="tab-content" ng-if="tabSelected.type == 'endpoint'">

@@ -163,6 +163,11 @@ export class DeviceService{
         'layout': {'visible': true, 'sortable': true}
       },
       {
+        'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.STATUS'),
+        'field': 'port_status',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
         'field': 'link_status',
         'layout': {'visible': true, 'sortable': true}
@@ -181,24 +186,19 @@ export class DeviceService{
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.DEVICE'),
         'field': 'device_name',
         'layout': {'visible': true, 'sortable': true}
-      },
-      {
-        'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.STATUS'),
-        'field': 'isEnabled',
-        'layout': {'visible': true, 'sortable': true}
-      },
+      }
     ];
   }
 
   getPortTableRowActions() {
     return [
       {
-        'label': this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.STARTUP'),
-        'value': 'startup'
+        'label': this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE'),
+        'value': 'enable'
       },
       {
-        'label': this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.SHUTDOWN'),
-        'value': 'shutdown'
+        'label': this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE'),
+        'value': 'disable'
       }
     ];
   }
