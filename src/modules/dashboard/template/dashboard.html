@@ -35,36 +35,80 @@
         </div>
       </div>
       <div ng-style="resize_length" style="position: absolute;right:0;top:0;height:100%;background-color: white;width:295px;">
+
         <mar-section title="Topo Settings" class="topo_setting">
           <div style="margin:2px;">
-              <div ng-click="topoRefresh()" id="refresh_topo"  class="+front mdc-button topo_setting__button">
-                <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                  <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
-                  <path d="M0 0h24v24H0z" fill="none"/>
-                </svg>
-              </div>
+            <div ng-click="topoRefresh()" id="refresh_topo"  class="+front mdc-button topo_setting__button">
+              <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
+              </svg>
+            </div>
 
-              <div ng-click="topoSetting()" id="settings_topo" class="+front mdc-button topo_setting__button">
-                <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                  <path fill="none" d="M0 0h24v24H0V0z"/>
-                  <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
-                </svg>
+            <div ng-click="tooltipSetting()" id="settings_topo" ng-class="{'+show':fabricModel.topoSetting.show_tooltips}" class="+front mdc-button topo_setting__button">
+              <svg style="height:28px;width:28px;margin:0;" class="mdc-button__icon" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path fill="none" d="M0 0h24v24H0V0z"/>
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+              </svg>
 
-              </div>
-              <div ng-click="lineSetting()" id="line_topo" ng-class="{'+show':fabricModel.topoSetting.show_links}"  class="+front mdc-button topo_setting__button">
-                <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
-                  <defs>
-                    <path id="a" d="M0 0h24v24H0V0z"/>
-                  </defs>
-                  <clipPath id="b">
-                    <use xlink:href="#a" overflow="visible"/>
-                  </clipPath>
-                  <path clip-path="url(#b)" d="M23 8c0 1.1-.9 2-2 2-.18 0-.35-.02-.51-.07l-3.56 3.55c.05.16.07.34.07.52 0 1.1-.9 2-2 2s-2-.9-2-2c0-.18.02-.36.07-.52l-2.55-2.55c-.16.05-.34.07-.52.07s-.36-.02-.52-.07l-4.55 4.56c.05.16.07.33.07.51 0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2c.18 0 .35.02.51.07l4.56-4.55C8.02 9.36 8 9.18 8 9c0-1.1.9-2 2-2s2 .9 2 2c0 .18-.02.36-.07.52l2.55 2.55c.16-.05.34-.07.52-.07s.36.02.52.07l3.55-3.56C19.02 8.35 19 8.18 19 8c0-1.1.9-2 2-2s2 .9 2 2z"/>
-                </svg>
-              </div>
+            </div>
+            <div ng-click="lineSetting()" id="line_topo" ng-class="{'+show':fabricModel.topoSetting.show_links}"  class="+front mdc-button topo_setting__button">
+              <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+                <defs>
+                  <path id="a" d="M0 0h24v24H0V0z"/>
+                </defs>
+                <clipPath id="b">
+                  <use xlink:href="#a" overflow="visible"/>
+                </clipPath>
+                <path clip-path="url(#b)" d="M23 8c0 1.1-.9 2-2 2-.18 0-.35-.02-.51-.07l-3.56 3.55c.05.16.07.34.07.52 0 1.1-.9 2-2 2s-2-.9-2-2c0-.18.02-.36.07-.52l-2.55-2.55c-.16.05-.34.07-.52.07s-.36-.02-.52-.07l-4.55 4.56c.05.16.07.33.07.51 0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2c.18 0 .35.02.51.07l4.56-4.55C8.02 9.36 8 9.18 8 9c0-1.1.9-2 2-2s2 .9 2 2c0 .18-.02.36-.07.52l2.55 2.55c.16-.05.34-.07.52-.07s.36.02.52.07l3.55-3.56C19.02 8.35 19 8.18 19 8c0-1.1.9-2 2-2s2 .9 2 2z"/>
+              </svg>
+            </div>
+
+            <div ng-click="portSettings()" id="port_topo"  ng-class="{'+show':fabricModel.topoSetting.show_ports }" class="+front mdc-button topo_setting__button">
+              <svg style="height:24px;width:24px;margin:0;" class="mdc-button__icon" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-334 518 44 49" width="44pt" height="49pt">
+                <g stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
+                  <g>
+                    <line x1="-330.99363" y1="559.43924" x2="-292.99363" y2="559.43924" fill="white"/>
+                    <line x1="-330.99363" y1="559.43924" x2="-292.99363" y2="559.43924" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-330.985" y1="534.6" x2="-330.985" y2="559.393" fill="white"/>
+                    <line x1="-330.985" y1="534.6" x2="-330.985" y2="559.393" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-293.11824" y1="534.43556" x2="-293.11824" y2="559.22856" fill="white"/>
+                    <line x1="-293.11824" y1="534.43556" x2="-293.11824" y2="559.22856" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-330.99363" y1="534.43924" x2="-322.59364" y2="534.43924" fill="white"/>
+                    <line x1="-330.99363" y1="534.43924" x2="-322.59364" y2="534.43924" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-301.8" y1="534.43924" x2="-293.4" y2="534.43924" fill="white"/>
+                    <line x1="-301.8" y1="534.43924" x2="-293.4" y2="534.43924" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-322.5495" y1="530" x2="-322.5495" y2="534.3002" fill="white"/>
+                    <line x1="-322.5495" y1="530" x2="-322.5495" y2="534.3002" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-301.8167" y1="530" x2="-301.8167" y2="534.3002" fill="white"/>
+                    <line x1="-301.8167" y1="530" x2="-301.8167" y2="534.3002" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-322.52683" y1="529.97244" x2="-319.52683" y2="529.97244" fill="white"/>
+                    <line x1="-322.52683" y1="529.97244" x2="-319.52683" y2="529.97244" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-304.8" y1="529.97244" x2="-301.8" y2="529.97244" fill="white"/>
+                    <line x1="-304.8" y1="529.97244" x2="-301.8" y2="529.97244" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-318.3499" y1="525.7284" x2="-318.3499" y2="530.0286" fill="white"/>
+                    <line x1="-318.3499" y1="525.7284" x2="-318.3499" y2="530.0286" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-305.9835" y1="525.7284" x2="-305.9835" y2="530.0286" fill="white"/>
+                    <line x1="-305.9835" y1="525.7284" x2="-305.9835" y2="530.0286" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-318.15692" y1="525.71087" x2="-307.80002" y2="525.71087" fill="white"/>
+                    <line x1="-318.15692" y1="525.71087" x2="-307.80002" y2="525.71087" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-322.59364" y1="553.03924" x2="-323.39364" y2="553.03924" fill="white"/>
+                    <line x1="-322.59364" y1="553.03924" x2="-323.39364" y2="553.03924" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-315.76368" y1="553.0392" x2="-316.56368" y2="553.0392" fill="white"/>
+                    <line x1="-315.76368" y1="553.0392" x2="-316.56368" y2="553.0392" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-308.9337" y1="553.03924" x2="-309.7337" y2="553.03924" fill="white"/>
+                    <line x1="-308.9337" y1="553.03924" x2="-309.7337" y2="553.03924" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                    <line x1="-301.8" y1="553.0392" x2="-302.6" y2="553.0392" fill="white"/>
+                    <line x1="-301.8" y1="553.0392" x2="-302.6" y2="553.0392" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                  </g>
+                </g>
+              </svg>
+            </div>
 
           </div>
         </mar-section>
+
+
 
 
       </div>

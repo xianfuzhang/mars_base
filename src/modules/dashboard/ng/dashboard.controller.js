@@ -60,46 +60,459 @@ export class DashboardController {
           ]
         }
       },
-      deSpines:[{'id':'11_spine'}, {'id':'22_spine'}, {'id':'33_spine'}],
-      deLeafs:[{'id':'11_leaf','leaf_group':"1"}, {'id':'22_leaf','leaf_group':"1"},{'id':'33_leaf','leaf_group':"2"}, {'id':'44_leaf','leaf_group':"3"},{'id':'55_leaf','leaf_group':"3"}, {'id':'66_leaf','leaf_group':"4"}],
-      deOthers:[{'id':'11_other'}, {'id':'22_other'}, {'id':'33_other'}],
+      deSpines:[
+        {
+          "id": "of:0000000000000001",
+          "type": "spine",
+          "available": true,
+          "role": "MASTER",
+          "mfr": "Nicira, Inc.",
+          "hw": "Open vSwitch",
+          "sw": "2.5.4",
+          "serial": "None",
+          "driver": "ovs",
+      "mac":"00-00-11-22-33-44",
+          "rack_id":"10-1-2-3",
+    "chassisId": "3",
+      "lastUpdate": "1528558441869",
+      "humanReadableLastUpdate": "connected 4m52s ago",
+      "annotations": {
+      "channelId": "192.168.123.3:36892",
+        "managementAddress": "192.168.123.3",
+        "protocol": "OF_13"
+    }
+  },
+    {
+      "id": "of:0000000000000002",
+      "type": "spine",
+      "available": true,
+      "role": "MASTER",
+      "mfr": "Nicira, Inc.",
+      "hw": "Open vSwitch",
+      "sw": "2.5.4",
+      "serial": "None",
+      "driver": "ovs",
+      "mac":"00-00-11-22-33-44",
+      "rack_id":"10-1-2-3",
+      "chassisId": "3",
+      "lastUpdate": "1528558441869",
+      "humanReadableLastUpdate": "connected 4m52s ago",
+      "annotations": {
+      "channelId": "192.168.123.3:36892",
+        "managementAddress": "192.168.123.3",
+        "protocol": "OF_13"
+    }
+    },
+    {
+      "id": "of:0000000000000003",
+      "type": "spine",
+      "available": true,
+      "role": "MASTER",
+      "mfr": "Nicira, Inc.",
+      "hw": "Open vSwitch",
+      "sw": "2.5.4",
+      "serial": "None",
+      "driver": "ovs",
+      "mac":"00-00-11-22-33-44",
+      "rack_id":"10-1-2-3",
+      "chassisId": "3",
+      "lastUpdate": "1528558441869",
+      "humanReadableLastUpdate": "connected 4m52s ago",
+      "annotations": {
+      "channelId": "192.168.123.3:36892",
+        "managementAddress": "192.168.123.3",
+        "protocol": "OF_13"
+    }
+    }
+  ],
+      deLeafs:[
+        {
+          "id": "of:0000000000000011",
+          "type": "leaf",
+          'leaf_group':"1",
+          "available": true,
+          "role": "MASTER",
+          "mfr": "Nicira, Inc.",
+          "hw": "Open vSwitch",
+          "sw": "2.5.4",
+          "serial": "None",
+          "driver": "ovs",
+          "mac":"00-00-11-22-33-44",
+          "rack_id":"10-1-2-3",
+          "chassisId": "3",
+          "lastUpdate": "1528558441869",
+          "humanReadableLastUpdate": "connected 4m52s ago",
+          "annotations": {
+            "channelId": "192.168.123.3:36892",
+            "managementAddress": "192.168.123.3",
+            "protocol": "OF_13"
+          }
+        },
+        {
+          "id": "of:0000000000000012",
+          "type": "leaf",
+          'leaf_group':"2",
+          "available": true,
+          "role": "MASTER",
+          "mfr": "Nicira, Inc.",
+          "hw": "Open vSwitch",
+          "sw": "2.5.4",
+          "serial": "None",
+          "driver": "ovs",
+          "mac":"00-00-11-22-33-44",
+          "rack_id":"10-1-2-3",
+          "chassisId": "3",
+          "lastUpdate": "1528558441869",
+          "humanReadableLastUpdate": "connected 4m52s ago",
+          "annotations": {
+            "channelId": "192.168.123.3:36892",
+            "managementAddress": "192.168.123.3",
+            "protocol": "OF_13"
+          }
+        },
+        {
+          "id": "of:0000000000000013",
+          "type": "leaf",
+          'leaf_group':"3",
+          "available": true,
+          "role": "MASTER",
+          "mfr": "Nicira, Inc.",
+          "hw": "Open vSwitch",
+          "sw": "2.5.4",
+          "serial": "None",
+          "driver": "ovs",
+          "mac":"00-00-11-22-33-44",
+          "rack_id":"10-1-2-3",
+          "chassisId": "3",
+          "lastUpdate": "1528558441869",
+          "humanReadableLastUpdate": "connected 4m52s ago",
+          "annotations": {
+            "channelId": "192.168.123.3:36892",
+            "managementAddress": "192.168.123.3",
+            "protocol": "OF_13"
+          }
+        },
+        {
+          "id": "of:0000000000000014",
+          "type": "leaf",
+          'leaf_group':"1",
+          "available": true,
+          "role": "MASTER",
+          "mfr": "Nicira, Inc.",
+          "hw": "Open vSwitch",
+          "sw": "2.5.4",
+          "serial": "None",
+          "driver": "ovs",
+          "mac":"00-00-11-22-33-44",
+          "rack_id":"10-1-2-3",
+          "chassisId": "3",
+          "lastUpdate": "1528558441869",
+          "humanReadableLastUpdate": "connected 4m52s ago",
+          "annotations": {
+            "channelId": "192.168.123.3:36892",
+            "managementAddress": "192.168.123.3",
+            "protocol": "OF_13"
+          }
+        },
+        {
+          "id": "of:0000000000000015",
+          "type": "leaf",
+          'leaf_group':"3",
+          "available": true,
+          "role": "MASTER",
+          "mfr": "Nicira, Inc.",
+          "hw": "Open vSwitch",
+          "sw": "2.5.4",
+          "serial": "None",
+          "driver": "ovs",
+          "mac":"00-00-11-22-33-44",
+          "rack_id":"10-1-2-3",
+          "chassisId": "3",
+          "lastUpdate": "1528558441869",
+          "humanReadableLastUpdate": "connected 4m52s ago",
+          "annotations": {
+            "channelId": "192.168.123.3:36892",
+            "managementAddress": "192.168.123.3",
+            "protocol": "OF_13"
+          }
+        },
+        {
+          "id": "of:0000000000000016",
+          "type": "leaf",
+          'leaf_group':"4",
+          "available": true,
+          "role": "MASTER",
+          "mfr": "Nicira, Inc.",
+          "hw": "Open vSwitch",
+          "sw": "2.5.4",
+          "serial": "None",
+          "driver": "ovs",
+          "mac":"00-00-11-22-33-44",
+          "rack_id":"10-1-2-3",
+          "chassisId": "3",
+          "lastUpdate": "1528558441869",
+          "humanReadableLastUpdate": "connected 4m52s ago",
+          "annotations": {
+            "channelId": "192.168.123.3:36892",
+            "managementAddress": "192.168.123.3",
+            "protocol": "OF_13"
+          }
+        }
+      ],
+      deOthers:[{
+        "id": "of:0000000000000021",
+        "type": "other",
+        "available": true,
+        "role": "MASTER",
+        "mfr": "Nicira, Inc.",
+        "hw": "Open vSwitch",
+        "sw": "2.5.4",
+        "serial": "None",
+        "driver": "ovs",
+        "mac":"00-00-11-22-33-44",
+        "rack_id":"10-1-2-3",
+        "chassisId": "3",
+        "lastUpdate": "1528558441869",
+        "humanReadableLastUpdate": "connected 4m52s ago",
+        "annotations": {
+          "channelId": "192.168.123.3:36892",
+          "managementAddress": "192.168.123.3",
+          "protocol": "OF_13"
+        }
+      },
+        {
+          "id": "of:0000000000000022",
+          "type": "other",
+          "available": true,
+          "role": "MASTER",
+          "mfr": "Nicira, Inc.",
+          "hw": "Open vSwitch",
+          "sw": "2.5.4",
+          "serial": "None",
+          "driver": "ovs",
+          "mac":"00-00-11-22-33-44",
+          "rack_id":"10-1-2-3",
+          "chassisId": "3",
+          "lastUpdate": "1528558441869",
+          "humanReadableLastUpdate": "connected 4m52s ago",
+          "annotations": {
+            "channelId": "192.168.123.3:36892",
+            "managementAddress": "192.168.123.3",
+            "protocol": "OF_13"
+          }
+        },
+        {
+          "id": "of:0000000000000033",
+          "type": "other",
+          "available": true,
+          "role": "MASTER",
+          "mfr": "Nicira, Inc.",
+          "hw": "Open vSwitch",
+          "sw": "2.5.4",
+          "serial": "None",
+          "driver": "ovs",
+          "mac":"00-00-11-22-33-44",
+          "rack_id":"10-1-2-3",
+          "chassisId": "3",
+          "lastUpdate": "1528558441869",
+          "humanReadableLastUpdate": "connected 4m52s ago",
+          "annotations": {
+            "channelId": "192.168.123.3:36892",
+            "managementAddress": "192.168.123.3",
+            "protocol": "OF_13"
+          }
+        }],
       deLinks: [
         {
           "src": {
             "port": "1",
-            "device": "11_spine"
+            "device": "of:0000000000000001"
           },
           "dst": {
             "port": "3",
-            "device": "11_leaf"
+            "device": "of:0000000000000011"
           },
           "type": "DIRECT",
           "state": "ACTIVE"
         },
         {
           "src": {
-            "port": "3",
-            "device": "22_spine"
+            "port": "1",
+            "device": "of:0000000000000001"
           },
           "dst": {
-            "port": "2",
-            "device": "22_leaf"
+            "port": "3",
+            "device": "of:0000000000000012"
           },
           "type": "DIRECT",
           "state": "ACTIVE"
         },
         {
           "src": {
-            "port": "3",
-            "device": "11_leaf"
+            "port": "1",
+            "device": "of:0000000000000001"
           },
           "dst": {
-            "port": "2",
-            "device": "22_leaf"
+            "port": "3",
+            "device": "of:0000000000000013"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000001"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000014"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000001"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000015"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000002"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000011"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000002"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000012"
           },
           "type": "DIRECT",
           "state": "DOWN"
-        }
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000002"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000013"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },{
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000002"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000014"
+          },
+          "type": "DIRECT",
+          "state": "DOWN"
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000002"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000015"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },{
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000002"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000016"
+          },
+          "type": "DIRECT",
+          "state": "DOWN"
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000003"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000011"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000003"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000012"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000003"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000014"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000003"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000015"
+          },
+          "type": "DIRECT",
+          "state": "DOWN"
+        },
+        {
+          "src": {
+            "port": "1",
+            "device": "of:0000000000000003"
+          },
+          "dst": {
+            "port": "3",
+            "device": "of:0000000000000016"
+          },
+          "type": "DIRECT",
+          "state": "ACTIVE"
+        },
       ]
     };
 
@@ -123,6 +536,7 @@ export class DashboardController {
         this.di.$scope.fabricModel.topoSetting = {
           "show_links": false,
           "show_tooltips":false,
+          "show_ports":false,
         }
       } else {
         this.di.$scope.fabricModel.topoSetting = data
@@ -136,17 +550,21 @@ export class DashboardController {
       this.di.$scope.fabricModel.topoSetting.show_tooltips = !this.di.$scope.fabricModel.topoSetting.show_tooltips;
       this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("topo_set", this.di.$scope.fabricModel.topoSetting);
 
-
-
     };
     this.di.$scope.lineSetting = (event) => {
       this.di.$scope.fabricModel.topoSetting.show_links = !this.di.$scope.fabricModel.topoSetting.show_links;
       this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("topo_set", this.di.$scope.fabricModel.topoSetting);
 
-      // this.di.$scope.$apply();
-
       this.di.$rootScope.$emit('show_links');
     };
+
+    this.di.$scope.portSettings = (event) => {
+      this.di.$scope.fabricModel.topoSetting.show_ports = !this.di.$scope.fabricModel.topoSetting.show_ports;
+      this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("topo_set", this.di.$scope.fabricModel.topoSetting);
+      this.di.$rootScope.$emit('show_ports');
+
+    };
+
 
 
 
@@ -193,7 +611,7 @@ export class DashboardController {
 
 
     this.di.$timeout(function () {
-      initTop()
+      // initTop()
     },200);
 
 

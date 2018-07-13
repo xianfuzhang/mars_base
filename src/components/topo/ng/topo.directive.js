@@ -36,6 +36,8 @@ export class Topo {
     (function init () {
       let unsubscribers = [];
 
+      let DI = this.di;
+
       this.di.$window.requestAnimFrame = (function(callback) {
         return this.di.$window.requestAnimationFrame
           || this.di.$window.webkitRequestAnimationFrame
@@ -64,6 +66,11 @@ export class Topo {
       this.otherContainerRightNode = null;
       this.otherContainerText = null;
 
+      let DeviceType = {
+        'leaf':'leaf',
+        'spine':'spine',
+        'other':'other'
+      }
       this.stage = null;
       this.scene = null;
 
@@ -119,12 +126,15 @@ export class Topo {
         this.scene.add(this.leafContainer);
         this.scene.add(this.otherContainer);
 
+        setTimeout(delayInit,200);
+      };
+
+      let delayInit = () =>{
         genSpine();
         genLeaf();
         genOther();
-
-        setTimeout(genLinks,200);
-        resize();
+        genLinks();
+        resize(true);
       };
 
       let genSpine = () =>{
@@ -136,7 +146,7 @@ export class Topo {
         this.spineContainer.add(this.spineContainerRightNode);
 
         this.di._.forEach(scope.spines, (spine, key) => {
-          this.spines[spine.id] = genNormalNode(spine.id);
+          this.spines[spine.id] = genNormalNode(spine.id, DeviceType.spine);
         });
 
       };
@@ -151,7 +161,7 @@ export class Topo {
 
 
         this.di._.forEach(scope.leafs, (leaf, key) => {
-          this.leafs[leaf.id] = genNormalNode(leaf.id);
+          this.leafs[leaf.id] = genNormalNode(leaf.id, DeviceType.leaf);
         });
 
 
@@ -167,7 +177,7 @@ export class Topo {
 
 
         this.di._.forEach(scope.others, (other, key) => {
-          this.others[other.id] = genNormalNode(other.id);
+          this.others[other.id] = genNormalNode(other.id, DeviceType.other);
         });
 
       };
@@ -301,14 +311,14 @@ export class Topo {
         return node;
       };
 
-      let genNormalNode = (deviceId) =>{
+      let genNormalNode = (deviceId, type) =>{
         let node = new JTopo.Node();
         node.dragable = true ;
         node.width = this.switch_width;
         node.height = this.switch_height;
         node.showSelected =true;
         node.deviceId = deviceId;
-
+        node.deviceType = type;
         node.move = false;
 
         node.mouseup(mouseUpHandler);
@@ -332,26 +342,26 @@ export class Topo {
           g.fill();
           g.closePath();
 
-          let padding = (width - len * 2)/3;
-          let left = - width/2 + padding;
-          let right = width/2 -padding - len;
-          // top = 8;
-          for(let i = 0; i< count ; i++){
-            g.beginPath();
-            if(i % 2 === 0){
-              g.rect(left, -height/2 +  top + parseInt(i/2) * (len + 1), len , len);
-            } else {
-              g.rect(right, -height/2 + top + parseInt(i/2) * (len + 1), len , len);
+          if(scope.topoSetting.show_ports){
+            let padding = (width - len * 2)/3;
+            let left = - width/2 + padding;
+            let right = width/2 -padding - len;
+            // top = 8;
+            for(let i = 0; i< count ; i++){
+              g.beginPath();
+              if(i % 2 === 0){
+                g.rect(left, -height/2 +  top + parseInt(i/2) * (len + 1), len , len);
+              } else {
+                g.rect(right, -height/2 + top + parseInt(i/2) * (len + 1), len , len);
+              }
+              g.fillStyle = status_normal;
+              if(i%10 === 0){
+                g.fillStyle = status_error;
+              }
+              g.fill();
+              g.closePath();
             }
-            g.fillStyle = status_normal;
-            if(i%10 === 0){
-              g.fillStyle = status_error;
-            }
-            g.fill();
-            g.closePath();
           }
-          g.save();
-          g.restore();
 
           this.paintText(g);
         };
@@ -359,8 +369,6 @@ export class Topo {
         this.scene.add(node);
         return node;
       };
-
-
 
       function mouseUpHandler(data){
         if(this.move){
@@ -397,16 +405,47 @@ export class Topo {
         this.move = true;
       }
 
+      function genHtml() {
+        
+      }
 
-      let mouseOverHandler = (evt) =>{
+      function mouseOverHandler(evt) {
+        let deviceId =  this.deviceId;
+        let deviceType = this.deviceType;
+
+        let innerHtml = '';
+        let showArray= [];
+        if(deviceType == DeviceType.spine){
+          let sw = DI._.find(scope.spines,{'id':deviceId});
+
+          showArray.push({'label': 'id', 'value': sw.id})
+          showArray.push({'label': 'type', 'value': sw.type})
+          showArray.push({'label': 'available', 'value': sw.available})
+          showArray.push({'label': 'MAC', 'value': sw.mac})
+          showArray.push({'label': 'connect since', 'value': sw.lastUpdate})
+          showArray.push({'label': 'Management Address', 'value': sw.managementAddress})
+          showArray.push({'label': 'rack_id', 'value': sw.rack_id})
+
+        } else if(deviceType == DeviceType.leaf){
+
+        } else if(deviceType == DeviceType.other){
+
+        } else {
+
+        }
+
         console.log('node mouse over');
+        if(scope.topoSetting.show_tooltips){
+          DI.$rootScope.$emit("show_tooltip",{event:evt, value: showArray});
+        }
+      }
 
-        this.di.$rootScope.$emit("show_tooltip",{event:evt});
-      };
 
       let mouseOutHandler = (evt) => {
         console.log('node mouse out');
-        this.di.$rootScope.$emit("hide_tooltip");
+        if(scope.topoSetting.show_tooltips){
+          this.di.$rootScope.$emit("hide_tooltip");
+        }
       };
 
 
@@ -436,16 +475,15 @@ export class Topo {
         this.otherContainerRightNode.height = avgHeight;
       };
 
-      let resize = () => {
+      let resize = (isInit) => {
 
         let parentNode = element[0].parentNode;
         this.width = parentNode.offsetWidth;
         this.height = parentNode.offsetHeight;
 
-        // let canvas = this.di.$document[0].getElementById('canvas');
         let canvas = document.getElementById('canvas');
 
-        if(this.oldWidth === null){
+        if(this.oldWidth === null ||  this.oldWidth === undefined){
           this.oldWidth = canvas.width;
         }
 
@@ -457,18 +495,18 @@ export class Topo {
         context.shadowOffsetX = 2;
         context.shadowOffsetY = 5;
         context.shadowBlur = 5;
-
         layout();
-
         let starttime = (new Date()).getTime();
-
         if(this.resizeTimeout){
           console.log(this.di.$timeout.cancel(this.resizeTimeout));
         }
-        this.resizeTimeout = this.di.$timeout(function () {
-          delayDraw()
-        }, 200);
-        // this.oldWidth = null
+        if(isInit){
+          delayDraw();
+        } else{
+          this.resizeTimeout = this.di.$timeout(function () {
+            delayDraw()
+          }, 200);
+        }
       };
 
       let delayDraw =()=> {
@@ -476,13 +514,12 @@ export class Topo {
         this.oldWidth =  null;
         // console.log(oldWidth);
         let starttime = (new Date()).getTime();
+        console.log(":==" + oldWidth);
         dynamicDraw(starttime, oldWidth);
       };
 
       let dynamicDraw = (starttime, oldWidth) => {
-        console.log('================');
         let testT = (new Date()).getTime();
-        // console.log('===' + testT + '=== dynamicDraw =====oldWidth : ' + this.oldWidth + '===newWidth : ' +  this.width);
         let time = (new Date()).getTime() - starttime;
         if(time > 1000) {
           draw(this.width);
@@ -499,9 +536,93 @@ export class Topo {
 
       initialize();
 
+
+      let crushAllPorts = () =>{
+        this.di._.forEach(scope.spines, (spine, key) => {
+          crushPorts(this.spines[spine.id])
+        });
+
+        this.di._.forEach(scope.leafs, (leaf, key) => {
+          crushPorts(this.leafs[leaf.id])
+        });
+
+        this.di._.forEach(scope.others, (other, key) => {
+          crushPorts(this.others[other.id])
+        });
+      };
+
+      let genAllPorts = () =>{
+        this.di._.forEach(scope.spines, (spine, key) => {
+          genPorts(this.spines[spine.id])
+        });
+
+        this.di._.forEach(scope.leafs, (leaf, key) => {
+          genPorts(this.leafs[leaf.id])
+        });
+
+        this.di._.forEach(scope.others, (other, key) => {
+          genPorts(this.others[other.id])
+        });
+      };
+
+      let crushPorts = (node) =>{
+        let height = this.switch_height;
+        let width = this.switch_width;
+        node.paint = function(g) {
+          g.beginPath();
+          g.rect(-width / 2, -height / 2, width, height);
+          g.fillStyle = 'rgba(0,0,0)';
+          g.fill();
+          g.closePath();
+          this.paintText(g);
+        }
+      };
+
+
+      let genPorts = (node) => {
+        //根据实际的端口数来
+        let count = 36;
+        //超过48个端口len为2，根据实际情况来
+        let len = 3;
+        let height = this.switch_height;
+        let width = this.switch_width;
+        let status_normal = '#81FF1A';
+        let status_error = 'rgb(255,0,0)';
+        let top = 8;
+        node.paint = function(g){
+          g.beginPath();
+          g.rect(-width/2, -height/2, width, height);
+          g.fillStyle = 'rgba(0,0,0)';
+          g.fill();
+          g.closePath();
+
+          let padding = (width - len * 2)/3;
+          let left = - width/2 + padding;
+          let right = width/2 -padding - len;
+          // top = 8;
+          for(let i = 0; i< count ; i++){
+            g.beginPath();
+            if(i % 2 === 0){
+              g.rect(left, -height/2 +  top + parseInt(i/2) * (len + 1), len , len);
+            } else {
+              g.rect(right, -height/2 + top + parseInt(i/2) * (len + 1), len , len);
+            }
+            g.fillStyle = status_normal;
+            if(i%10 === 0){
+              g.fillStyle = status_error;
+            }
+            g.fill();
+            g.closePath();
+          }
+          this.paintText(g);
+          // g.save();
+          // g.restore();
+        }
+      };
+
       angular.element(this.di.$window).bind('resize', () => {
         console.log('exec resize');
-        resize();
+        resize(false);
         // if(this.resizeTimeout){
         //   this.di.$timeout.cancel(this.resizeTimeout);
         // }
@@ -510,7 +631,7 @@ export class Topo {
 
       unsubscribers.push(this.di.$rootScope.$on('resize_canvas',() =>{
         console.log('receive resize_canvas');
-        resize()
+        resize(false)
       }));
 
       // unsubscribers.push(this.di.$rootScope.$on('show_tooltips',()=>{
@@ -524,6 +645,15 @@ export class Topo {
           genLinks()
         } else {
           crushLinks()
+        }
+      }));
+
+
+      unsubscribers.push(this.di.$rootScope.$on('show_ports',()=>{
+        if(scope.topoSetting.show_ports){
+          genAllPorts()
+        } else {
+          crushAllPorts()
         }
       }));
 

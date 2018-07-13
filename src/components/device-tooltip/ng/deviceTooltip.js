@@ -7,7 +7,8 @@ export class deviceTooltip {
     return [
       '$document',
       '$rootScope',
-      '$window'
+      '$window',
+      '_'
     ];
   }
 
@@ -27,11 +28,23 @@ export class deviceTooltip {
     (function init () {
       scope.tooltipStyle = {};
       scope.arrowStyle = {};
-
+      scope.isRight = true;
 
       let unsubscribers = [];
       unsubscribers.push(this.di.$rootScope.$on('show_tooltip',(event, param)=>{
         // console.log(param);
+        let showArray = param.value;
+        let leftDom = angular.element(element[0].getElementsByClassName('deviceTooltip__content__body--left'));
+        let rightDom = angular.element(element[0].getElementsByClassName('deviceTooltip__content__body--right'));
+        // let leftDom = angular.element(element).find('.deviceTooltip__content__body--left');
+        // let rightDom = angular.element(element).find('.deviceTooltip__content__body--right');
+
+        this.di._.forEach(showArray, (item, key)=>{
+          leftDom.append('<div>'+ item.label +'</div>');
+          rightDom.append('<div>'+ item.value +'</div>');
+        });
+        // angular.element(element).find('.deviceTooltip__content__body--left').append()
+
         let win_width = this.di.$window.innerWidth;
         let win_height = this.di.$window.innerHeight;
 
@@ -42,6 +55,11 @@ export class deviceTooltip {
 
         let tooltipHeight = 400;
         let tooltipWidth = 428;
+        tooltipHeight = element[0].clientHeight;
+        tooltipWidth = element[0].clientWidth;
+
+
+
 
         let tooltipTop = param.event.clientY - tooltipHeight/2;
 
@@ -55,10 +73,13 @@ export class deviceTooltip {
         }
 
         if(tooltipLeft + tooltipWidth > win_width){
+          scope.isRight = false;
           tooltipLeft = param.event.clientX - 20 -  tooltipWidth;
           if(tooltipLeft < 0){
             tooltipLeft = param.event.clientX + 20;
           }
+        } else {
+          scope.isRight = true;
         }
 
         scope.tooltipStyle = {'left': tooltipLeft + 'px', 'top': tooltipTop + 'px','visibility': 'visible'};
@@ -68,6 +89,12 @@ export class deviceTooltip {
 
       unsubscribers.push(this.di.$rootScope.$on('hide_tooltip',()=>{
         // console.log('hide_tooltip');
+
+        let leftDom = angular.element(element[0].getElementsByClassName('deviceTooltip__content__body--left'));
+        let rightDom = angular.element(element[0].getElementsByClassName('deviceTooltip__content__body--right'));
+        leftDom.empty();
+        rightDom.empty();
+
         scope.tooltipStyle = {'visibility': 'hidden'};
         scope.$apply();
       }));

@@ -16,37 +16,87 @@
   color: #555;
   pointer-events: none;
 
+  //visibility: visible;//临时开启测试使用
   visibility: hidden;
 
   @include element(arrow){
     border-color: white transparent;
     content: '';
     position: absolute;
-    //border-style: solid;
-    //border-width: 0px 12px 8px 12px;
     display: block;
-    //width: 0;
     z-index: 1;
     left: -10px;
     top: 50%;
     pointer-events: none;
+    width:10px;
+    height:11px;
 
-    width: 0;
-    height: 0;
-    border-top: 5px solid transparent;
-    border-right: 10px solid gray;
-    border-bottom: 5px solid transparent;
+    @include state(right){
+      background: url('../images/arrow_right.png') no-repeat;
+      background-size: 10px;
+    }
+
+    @include state(left){
+      background: url('../images/arrow_left.png') no-repeat;
+      background-size: 10px;
+    }
+    //width: 0;
+    //height: 0;
+    //border-top: 5px solid transparent;
+    //border-right: 10px solid whitesmoke;
+    //border-bottom: 5px solid transparent;
 
   }
 
   @include element(content){
     padding: 9px;
     color: #555;
-    background-color: gray;
-    width:400px;
-    heigth:200px;
+    //background-color: gray;
+    //width:400px;
+    //heigth:200px;
     pointer-events: none;
 
+
+    @include element(body){
+      display: inline;
+      font-size:16px;
+      font-family: "helvetica neue","Roboto",helvetica,arial,verdana,"trebuchet ms",calibri,sans-serif;
+      color:black;
+
+      @include modifier(right){
+        display:inline-block;
+
+        div{
+          //text-align: right;
+          padding-top: 4px;
+          padding-left:8px;
+        }
+      }
+
+      @include modifier(left){
+        text-transform: capitalize;
+        display:inline-block;
+        text-align: right;
+        font-weight:300;
+        div{
+          text-align: right;
+          padding-top:4px;
+        }
+      }
+    }
   }
 }
 
+
+
+//@include block(tooltip_body){
+//  display: inline-block;
+//
+//  @include element(left){
+//    text-align: right;
+//  }
+//
+//  @include element(right){
+//
+//  }
+//}
