@@ -51,6 +51,19 @@ export class DeviceDataManager {
     );
     return defer.promise;
   }
+
+  changePortState(deviceId, portId, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getChangePortStateUrl(deviceId, portId), params)
+      .then((res) => {
+          defer.resolve(null);
+        },
+        () => {
+          defer.reject(null);
+        }
+      );
+    return defer.promise;
+  }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
 DeviceDataManager.$$ngIsClass = true;

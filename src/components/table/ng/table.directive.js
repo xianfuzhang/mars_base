@@ -30,7 +30,8 @@ export class mdlTable {
       rowClick: '&',
       onAdd: '&',
       onRemove: '&',
-      rowActionsFilter: '&'
+      rowActionsFilter: '&',
+      rowSelectAction: '&'
     }
     this.link = (...args) => this._link.apply(this, args);
   }

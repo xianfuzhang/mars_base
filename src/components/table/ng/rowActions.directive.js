@@ -1,6 +1,6 @@
 export class rowActions {
   static getDI () {
-    return ['$log', '$window'];
+    return ['$log', '$rootScope', '$window'];
   }
 
   constructor(...args) {
@@ -46,6 +46,11 @@ export class rowActions {
       event && event.stopPropagation();
     };
 
+    this.di.$rootScope.$on('change-device-port-state', ($event, param) => {
+      if (scope.data.element === param.data.element && scope.data.port_id === param.data.port_id) {
+        scope.actions =  ctrl.rowActionsFilter(param.data, scope.actionItems);
+      }
+    });
     scope.$on('$destroy', ()=> {
       document.body.removeEventListener('click', onTriggerClickHide);
     });

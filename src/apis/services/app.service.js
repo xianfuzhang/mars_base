@@ -70,6 +70,10 @@ export class appService {
   getLinksUrl() {
     return this.getZoneEndpoint() + 'onos/v1/links';
   }
+
+  getChangePortStateUrl(deviceId, portId) {
+    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId + '/portstate/' + portId;
+  }
 }
 
 appService.$inject = appService.getDI();

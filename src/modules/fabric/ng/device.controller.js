@@ -21,6 +21,7 @@ export class DeviceController {
     this.translate = this.di.$filter('translate');
     this.scope.tabSelected = null;
     this.scope.tabs = this.di.deviceService.getTabSchema();
+    this.scope.entities = [];
     this.scope.deviceModel = {
       actionsShow: this.di.deviceService.getDeviceActionsShow(),
       rowActions: this.di.deviceService.getDeviceTableRowActions(),
@@ -77,6 +78,33 @@ export class DeviceController {
       return filterActions;
     };
 
+    this.scope.onTableRowSelectAction = (event) => {
+      if (event.data) {
+        switch (this.scope.tabSelected.type) {
+          case 'device':
+            break;
+
+          case 'port':
+            let enabled = event.action.value === 'enable' ?  true : false;
+            this.di.deviceDataManager.changePortState(event.data.element, event.data.port_id, {'enabled': enabled})
+              .then((res) => {
+                event.data.isEnabled = !event.data.isEnabled;
+                this.scope.entities.forEach((item) => {
+                  if (item.element === event.data.element && item.port_id === event.data.port_id) {
+                    item.port_status = event.data.isEnabled === true ?
+                      this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE') :
+                      this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE');
+                    this.scope.portModel.portAPI.update();
+                  }
+                });
+
+                this.scope.$emit('change-device-port-state', {data: event.data});
+            });
+            break;
+        }
+      }
+    };
+
     this.scope.onDeviceAPIReady = ($api) => {
       this.scope.deviceModel.deviceAPI = $api;
     };
@@ -100,8 +128,9 @@ export class DeviceController {
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.deviceDataManager.getDevices(params).then((res) => {
+          this.scope.entities = this.getEntities(res.data.devices);
           defer.resolve({
-            data: this.getEntities(res.data.devices),
+            data: this.scope.entities,
             count: res.data.total
           });
         });
@@ -120,8 +149,9 @@ export class DeviceController {
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.deviceDataManager.getPorts(params).then((res) => {
+          this.scope.entities = this.getEntities(res.data.ports);
           defer.resolve({
-            data: this.getEntities(res.data.ports),
+            data: this.scope.entities,
             count: res.data.total
           });
         });
@@ -186,6 +216,7 @@ export class DeviceController {
       case 'port':
         origins.forEach((port) => {
           let obj = {};
+          obj.element = port.element;
           obj.port_name = port.annotations.portName;
           obj.port_mac = port.annotations.portMac;
           obj.port_id = port.port;
