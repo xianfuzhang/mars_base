@@ -50,6 +50,12 @@ export class TableController {
     this.rowSelectAction = (row, action) => {
       this.di.$log.info('table controller row action func');
     };
+
+    this.rowActionsFilter = (data, actions) => {
+      let rowActionsFilter = this.scope.rowActionsFilter || angular.noop;
+      let filter = rowActionsFilter({$event:{data: data, actions: actions}}) || actions;
+      return filter;
+    };
   }
 }
 

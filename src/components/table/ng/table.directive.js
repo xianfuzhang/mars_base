@@ -24,11 +24,13 @@ export class mdlTable {
     this.template = require('../template/table.html');
     this.scope = {
       actionsShow: '=', //是否显示相应action，默认都隐藏
+      actions: '=',     //row actions
       provider: '=',
       apiReady: '&',
       rowClick: '&',
       onAdd: '&',
       onRemove: '&',
+      rowActionsFilter: '&'
     }
     this.link = (...args) => this._link.apply(this, args);
   }
@@ -50,7 +52,7 @@ export class mdlTable {
       schema: [],
       rowActionsSupport: false,
       rowCheckboxSupport: false,
-      rowActions: [],
+      //rowActions: [],
       data: [],
       filteredData: [],
 
@@ -237,7 +239,7 @@ export class mdlTable {
       scope.tableModel.schema = scope.provider.getSchema().schema || [];
       scope.tableModel.rowCheckboxSupport = scope.provider.getSchema().rowCheckboxSupport;
       scope.tableModel.rowActionsSupport = scope.provider.getSchema().rowActionsSupport;
-      scope.tableModel.rowActions = scope.provider.getSchema().rowActions;
+      //scope.tableModel.rowActions = scope.provider.getSchema().rowActions;
 
       if (scope.tableModel.columns.length === 0) {
         scope.tableModel.schema.forEach((value, index) => {

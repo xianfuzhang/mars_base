@@ -23,11 +23,13 @@ export class DeviceController {
     this.scope.tabs = this.di.deviceService.getTabSchema();
     this.scope.deviceModel = {
       actionsShow: this.di.deviceService.getDeviceActionsShow(),
+      rowActions: this.di.deviceService.getDeviceTableRowActions(),
       deviceProvider: null,
       deviceAPI: null
     };
     this.scope.portModel = {
       actionsShow: this.di.deviceService.getPortActionsShow(),
+      rowActions: this.di.deviceService.getPortTableRowActions(),
       portProvider: null,
       portAPI: null
     };
@@ -58,6 +60,21 @@ export class DeviceController {
             break;
         }
       }
+    };
+
+    this.scope.onPortTableRowActionsFilter = (event) =>{
+      let filterActions = [];
+      if (event.data) {
+        event.actions.forEach((action) =>{
+          if (event.data.isEnabled && action.value === 'disable') {
+            filterActions.push(action);
+          }
+          else if (!event.data.isEnabled && action.value === 'enable') {
+            filterActions.push(action);
+          }
+        });
+      }
+      return filterActions;
     };
 
     this.scope.onDeviceAPIReady = ($api) => {
@@ -95,8 +112,7 @@ export class DeviceController {
           schema: this.di.deviceService.getDeviceTableSchema(),
           index_name: 'mac',
           rowCheckboxSupport: true,
-          rowActionsSupport: true,
-          rowActions: this.di.deviceService.getDeviceTableRowActions(),
+          rowActionsSupport: true
         };
       }
     });
@@ -116,8 +132,7 @@ export class DeviceController {
           schema: this.di.deviceService.getPortTableSchema(),
           index_name: 'port_mac',
           rowCheckboxSupport: false,
-          rowActionsSupport: true,
-          rowActions: this.di.deviceService.getPortTableRowActions(),
+          rowActionsSupport: true
         };
       }
     });
@@ -135,10 +150,7 @@ export class DeviceController {
       getSchema: () => {
         return {
           schema: this.di.deviceService.getLinkTableSchema(),
-          index_name: 'id',
-          rowCheckboxSupport: false,
-          rowActionsSupport: false,
-          //rowActions: this.di.deviceService.getSwitchTableRowActions(),
+          index_name: 'id'
         };
       }
     });

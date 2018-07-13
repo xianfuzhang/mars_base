@@ -19,6 +19,7 @@ export class rowActions {
   }
 
   _link(scope, element, attrs, ctrl) {
+    scope.actions =  ctrl.rowActionsFilter(scope.data, scope.actionItems);
     let document = this.di.$window.document;
     let buttonElement = element.children().eq(0).children().eq(0);
     let menuElement = element.children().eq(0).children().eq(1);
