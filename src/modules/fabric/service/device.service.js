@@ -48,6 +48,10 @@ export class DeviceService{
     return {'menu': true, 'add': false, 'remove': false, 'refresh': true, 'search': true};
   }
 
+  getEndpointActionsShow() {
+    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': true};
+  }
+
   getDeviceTableSchema() {
     return [
       /*{
@@ -254,6 +258,45 @@ export class DeviceService{
         'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.LATENCY'),
         'field': 'latency',
         'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
+
+  getEndpointTableSchema(){
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.TENANT'),
+        'field': 'tenant_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.SEGMENT'),
+        'field': 'segment_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.MAC'),
+        'field': 'mac',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP'),
+        'field': 'ip',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.LOCATION'),
+        'field': 'location',
+        'layout': {'visible': true, 'sortable': true}
+      },
+    ];
+  }
+
+  getEndpointTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.ROW.ACTION.DELETE'),
+        'value': 'delete'
       }
     ];
   }

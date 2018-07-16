@@ -39,9 +39,14 @@ export class DeviceController {
       linkProvider: null,
       linkAPI: null
     };
+    this.scope.endpointModel = {
+      actionsShow: this.di.deviceService.getEndpointActionsShow(),
+      rowActions: this.di.deviceService.getEndpointTableRowActions(),
+      endpointProvider: null,
+      endpointAPI: null
+    };
 
     this.scope.onTabChange= (tab) => {
-      this.di.$log.info(tab);
       if (tab){
         this.scope.tabSelected = tab;
       }
@@ -101,6 +106,14 @@ export class DeviceController {
                 this.scope.$emit('change-device-port-state', {data: event.data});
             });
             break;
+
+          case 'endpoint':
+            let tenant = event.data.tenant_name, segment = event.data.segment_name, mac = event.data.mac;
+            this.di.deviceDataManager.deleteEndpoint(tenant, segment, mac)
+              .then((res) =>{
+                this.scope.endpointModel.endpointAPI.queryUpdate();
+              });
+            break;
         }
       }
     };
@@ -117,9 +130,10 @@ export class DeviceController {
       this.scope.linkModel.linkAPI = $api;
     };
 
-    this.scope.onMenuClick = ($value, event) => {
-      this.di.$log.info($value);
+    this.scope.onEndpointApiReady = ($api) => {
+      this.scope.endpointModel.endpointAPI = $api;
     };
+
     this.init();
   }
 
@@ -181,6 +195,27 @@ export class DeviceController {
         return {
           schema: this.di.deviceService.getLinkTableSchema(),
           index_name: 'id'
+        };
+      }
+    });
+    this.scope.endpointModel.endpointProvider = this.di.tableProviderFactory.createProvider({
+      query: (params) => {
+        let defer = this.di.$q.defer();
+        this.di.deviceDataManager.getEndpoints(params).then((res) => {
+          this.scope.entities = this.getEntities(res.data.hosts);
+          defer.resolve({
+            data: this.scope.entities,
+            count: res.data.total
+          });
+        });
+        return defer.promise;
+      },
+      getSchema: () => {
+        return {
+          schema: this.di.deviceService.getEndpointTableSchema(),
+          index_name: 'id',
+          rowCheckboxSupport: true,
+          rowActionsSupport: true
         };
       }
     });
@@ -250,6 +285,20 @@ export class DeviceController {
         break;
 
       case 'endpoint':
+        origins.forEach((endpoint) => {
+          let obj = {};
+          obj.id = endpoint.id;
+          obj.mac = endpoint.mac;
+          obj.tenant_name = endpoint.tenant;
+          obj.segment_name = endpoint.segment;
+          obj.ip = endpoint.ip_addresses.join(" | ");
+          let locals = [];
+          endpoint.locations.forEach((location) => {
+            locals.push(location.device_id + '/' + location.port);
+          });
+          obj.location = locals.join(" | ");
+            entities.push(obj);
+        });
         break;
     }
     return entities;
