@@ -103,13 +103,17 @@ angular
       .when('/storm_control', {
         template: require('./modules/fabric/template/storm_control.html'),
         controller: 'stormControlController'
+      }).
+      when('/fabric_summary', {
+        template: require('./modules/fabric/template/fabric_summary.html'),
+        controller: 'fabricSummaryController'
       })
       .otherwise({ redirectTo: '/' });
 
-    $locationProvider.html5Mode({
-      enabled: true,
-      requireBase: false
-    });
+    // $locationProvider.html5Mode({
+    //   enabled: true,
+    //   requireBase: false
+    // });
   }]);
 
 /*

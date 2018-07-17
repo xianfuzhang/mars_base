@@ -1,9 +1,10 @@
 <div class="menu" ng-mouseleave="hide($event)" style="z-index:100;">
-    <a class="menu__head" target="_blank" ng-class="{'+act':menuModel.isAct}" ng-mouseenter="show($event)">
+    <!--<a class="menu__head" target="_blank" ng-class="{'+act':menuModel.isAct}" ng-mouseenter="show($event)">-->
+    <a class="menu__head"  ng-class="{'+act':menuModel.isAct}" ng-mouseenter="show($event)">
         <i>{{menuModel.groupName}}</i>
         <span class="menu__head__arrow" ng-class="{'+act':menuModel.isAct}" ng-show="menuModel.isUser"></span>
     </a>
     <div class="menu__dropdown" ng-class="{'+act':menuModel.isAct}">
-        <a target="_blank" class="menu__dropdown__item" ng-class="{'+act':menuModel.isAct}" ng-repeat="$data in menuModel.urls" href="{{$data.url}}">{{$data.label}}</a>
+        <a class="menu__dropdown__item" ng-class="{'+act':menuModel.isAct}" ng-repeat="$data in menuModel.urls" href="{{$data.url}}">{{$data.label}}</a>
     </div>
 </div>
