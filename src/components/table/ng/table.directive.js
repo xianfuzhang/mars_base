@@ -24,11 +24,14 @@ export class mdlTable {
     this.template = require('../template/table.html');
     this.scope = {
       actionsShow: '=', //是否显示相应action，默认都隐藏
+      actions: '=',     //row actions
       provider: '=',
       apiReady: '&',
       rowClick: '&',
       onAdd: '&',
       onRemove: '&',
+      rowActionsFilter: '&',
+      rowSelectAction: '&'
     }
     this.link = (...args) => this._link.apply(this, args);
   }
@@ -50,7 +53,7 @@ export class mdlTable {
       schema: [],
       rowActionsSupport: false,
       rowCheckboxSupport: false,
-      rowActions: [],
+      //rowActions: [],
       data: [],
       filteredData: [],
 
@@ -111,7 +114,7 @@ export class mdlTable {
       scope.tableModel.sort[$col.field] = $col.sort;
       //scope.tableModel.pagination.currentPage = 1;
 
-      scope._queryUpdate(scope._getTableParams());
+      scope._queryUpdate();
     };
 
     scope._isColumnDisplayable = (col) => {
@@ -179,19 +182,18 @@ export class mdlTable {
       event && event.stopPropagation();
     };
     scope._refresh = (event) => {
-      this.di.$log.info('_refresh click');
-      scope._queryUpdate(scope._getTableParams());
+      scope._queryUpdate();
       event && event.stopPropagation();
     };
     scope._search = () => {
       scope.tableModel.pagination.start = 0;
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
-      scope._queryUpdate(scope._getTableParams());
+      scope._queryUpdate();
     };
     scope._clearSearch = (event) => {
       scope.tableModel.searchResult = '';
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
-      scope._queryUpdate(scope._getTableParams());
+      scope._queryUpdate();
       event && event.stopPropagation();
     };
     scope._filter = (event) => {
@@ -237,7 +239,7 @@ export class mdlTable {
       scope.tableModel.schema = scope.provider.getSchema().schema || [];
       scope.tableModel.rowCheckboxSupport = scope.provider.getSchema().rowCheckboxSupport;
       scope.tableModel.rowActionsSupport = scope.provider.getSchema().rowActionsSupport;
-      scope.tableModel.rowActions = scope.provider.getSchema().rowActions;
+      //scope.tableModel.rowActions = scope.provider.getSchema().rowActions;
 
       if (scope.tableModel.columns.length === 0) {
         scope.tableModel.schema.forEach((value, index) => {
@@ -325,9 +327,8 @@ export class mdlTable {
         scope.tableModel.listeners.notify('table.update');
     };
 
-    scope._queryUpdate = (params) => {
-      params.sort = params.sort ? params.sort : {};
-      params.search = params.search ? params.search : {};
+    scope._queryUpdate = () => {
+      let params = scope._getTableParams();
       return scope.provider.query(params).then(
         function (response) {
           scope._onDataSuccess(response);
@@ -359,9 +360,9 @@ export class mdlTable {
       scope.tableModel.columnsByField[fieldName].visible = visible;
     };
 
-    scope._apiQueryUpdate = (params) => {
+    scope._apiQueryUpdate = () => {
       scope._apiGuard();
-      return scope._queryUpdate(params);
+      return scope._queryUpdate();
     };
 
     scope._apiGetColumnVisibility = () => {

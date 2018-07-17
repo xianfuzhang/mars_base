@@ -3,6 +3,7 @@ export class StatisticController {
     return [];
   }
   constructor(...args){
+    this.di = {};
 
   }
 }

@@ -70,6 +70,22 @@ export class appService {
   getLinksUrl() {
     return this.getZoneEndpoint() + 'onos/v1/links';
   }
+
+  getChangePortStateUrl(deviceId, portId) {
+    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId + '/portstate/' + portId;
+  }
+
+  getEndPointsUrl(){
+    return this.getZoneEndpoint() + 'onos/v1/endpoints';
+  }
+
+  getDeleteEndpointUrl(tenant, segment, mac){
+    return this.getZoneEndpoint() + 'onos/v1/endpoints/' + tenant + '/' + segment + '/' + mac;
+  }
+
+  getStormProfilesUrl(){
+    return this.getZoneEndpoint() + 'onos/v1/links';
+  }
 }
 
 appService.$inject = appService.getDI();

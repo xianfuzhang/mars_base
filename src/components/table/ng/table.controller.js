@@ -47,8 +47,15 @@ export class TableController {
       }
     };
 
-    this.rowSelectAction = (row, action) => {
-      this.di.$log.info('table controller row action func');
+    this.rowSelectAction = (data, action) => {
+      let rowSelectAction = this.scope.rowSelectAction || angular.noop;
+      rowSelectAction({$event: {data: data, action: action}});
+    };
+
+    this.rowActionsFilter = (data, actions) => {
+      let rowActionsFilter = this.scope.rowActionsFilter || angular.noop;
+      let filter = rowActionsFilter({$event:{data: data, actions: actions}}) || actions;
+      return filter;
     };
   }
 }

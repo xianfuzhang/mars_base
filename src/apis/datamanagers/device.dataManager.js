@@ -51,6 +51,45 @@ export class DeviceDataManager {
     );
     return defer.promise;
   }
+
+  getEndpoints(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getEndPointsUrl(), {'params': params}).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'hosts': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
+  changePortState(deviceId, portId, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getChangePortStateUrl(deviceId, portId), params)
+      .then((res) => {
+          defer.resolve(null);
+        },
+        () => {
+          defer.reject(null);
+        }
+      );
+    return defer.promise;
+  }
+
+  deleteEndpoint(tenant, segment, mac) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDeleteEndpointUrl(tenant, segment, mac))
+      .then((res) => {
+          defer.resolve(null);
+        },
+        () => {
+          defer.reject(null);
+        }
+      );
+    return defer.promise;
+  }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
 DeviceDataManager.$$ngIsClass = true;

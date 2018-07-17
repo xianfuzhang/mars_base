@@ -15,6 +15,7 @@
         </mdl-tabs>
         <section class="tab-content" ng-if="tabSelected.type == 'device'">
           <mdl-table actions-show="deviceModel.actionsShow"
+                     actions="deviceModel.rowActions"
                      row-click="onTableRowClick($event)"
                      provider="deviceModel.deviceProvider" api-ready="onDeviceAPIReady($api)"
                      on-add="addSwitch()" on-remove="removeSwitch($value)">
@@ -22,20 +23,28 @@
         </section>
         <section class="tab-content" ng-if="tabSelected.type == 'port'">
           <mdl-table actions-show="portModel.actionsShow"
+                     actions="portModel.rowActions"
                      row-click="onTableRowClick($event)"
-                     provider="portModel.portProvider" api-ready="onPortApiReady($api)"
-                     on-add="addSwitch()" on-remove="removeSwitch($value)">
+                     provider="portModel.portProvider"
+                     row-actions-filter="onPortTableRowActionsFilter($event)"
+                     row-select-action="onTableRowSelectAction($event)"
+                     api-ready="onPortApiReady($api)">
           </mdl-table>
         </section>
         <section class="tab-content" ng-if="tabSelected.type == 'link'">
           <mdl-table actions-show="linkModel.actionsShow"
                      row-click="onTableRowClick($event)"
-                     provider="linkModel.linkProvider" api-ready="onSwitchApiReady($api)"
-                     on-add="addSwitch()" on-remove="removeSwitch($value)">
+                     provider="linkModel.linkProvider" api-ready="onLinkApiReady($api)">
           </mdl-table>
         </section>
         <section class="tab-content" ng-if="tabSelected.type == 'endpoint'">
-
+          <mdl-table actions-show="endpointModel.actionsShow"
+                     actions="endpointModel.rowActions"
+                     row-click="onTableRowClick($event)"
+                     row-select-action="onTableRowSelectAction($event)"
+                     provider="endpointModel.endpointProvider" api-ready="onEndpointApiReady($api)"
+                     on-add="addEndpoint()" on-remove="removeEndpoint($value)">
+          </mdl-table>
         </section>
       </div>
     </section>
