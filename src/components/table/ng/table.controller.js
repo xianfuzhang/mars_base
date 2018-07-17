@@ -33,9 +33,9 @@ export class TableController {
     });
     };
 
-    this.onFilter = () => {
+   /* this.onFilter = () => {
       this.di.$log.info('table controller in filter popup func.');
-    };
+    };*/
 
     this.select = (row, action) => {
       let index = this.scope.tableModel.removeItems.indexOf(row);

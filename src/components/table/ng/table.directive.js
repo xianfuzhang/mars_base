@@ -176,6 +176,13 @@ export class mdlTable {
     scope._remove = (event) => {
       this.di.$log.info('_remove click');
       scope.onRemove = scope.onRemove || angular.noop;
+      let removes = this.di._.cloneDeep(scope.tableModel.removeItems);
+      for(let i=0; i< removes.length; i++) {
+        let item = this.di._.find(scope.tableModel.filteredData, removes[i]);
+        if(!item) {
+          scope.tableModel.removeItems.splice(this.di._.findIndex(scope.tableModel.removeItems, removes[i]), 1);
+        }
+      }
       if (scope.tableModel.removeItems.length) {
         scope.onRemove({$value: scope.tableModel.removeItems});
       }
@@ -196,9 +203,9 @@ export class mdlTable {
       scope._queryUpdate();
       event && event.stopPropagation();
     };
-    scope._filter = (event) => {
+    /*scope._filter = (event) => {
       tableCtrl.onFilter();
-    };
+    };*/
 
     /*****************************************************************************
      data handle
