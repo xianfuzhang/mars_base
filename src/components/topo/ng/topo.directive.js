@@ -392,7 +392,7 @@ export class Topo {
           return;
         }
         let percentage = time/1000;
-        let nP = easingService.easeOutElastic(percentage);
+        let nP = easingService.easeInOutCubic(percentage);
         let curX = (oldLocation[0] - nowX) * nP + nowX;
         let curY = (oldLocation[1] - nowY) * nP+ nowY;
         node.setLocation(curX, curY);
