@@ -69,7 +69,7 @@
     @include element(warning){
       display: flex;
       flex-direction: row;
-      margin: 7px 1px 7px 7px;
+      margin: 12px 1px 7px 7px;
       margin-right: 1px;
       border-right: 1px solid gray;
       padding-right: 10px;
@@ -79,7 +79,16 @@
         background-size: 26px;
         min-width: 26px;
         width:26px;
-        height:26px
+        height:26px;
+
+        &.mdc-icon-button {
+          background: url('../image/notification.svg') no-repeat;
+          background-size: 26px;
+          min-width: 26px;
+          width:26px;
+          height:26px;
+        }
+
       }
 
       @include element(number){

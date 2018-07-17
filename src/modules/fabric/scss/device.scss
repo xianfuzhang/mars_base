@@ -1,4 +1,28 @@
+//@import 'xbem';
+@import 'default';
+@import 'shared';
+
 .mdc-tab-bar.main__content__device-tabs{
   margin: 0;
   width: 160px;
+}
+
+@include block(topo_setting){
+
+
+}
+
+//3联动才能使样式置顶
+.\+front.mdc-button.topo_setting__button{
+  margin: 0;
+  padding: 0;
+  min-width: 32px;
+  width:32px;
+  height:32px;
+  color: black;
+}
+
+.\+show.mdc-button.topo_setting__button{
+  border: 1px solid lightgray;
+  background-color: lightgray;
 }
