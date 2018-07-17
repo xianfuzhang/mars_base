@@ -20,7 +20,7 @@ export class appService {
           {
             'group':'Fabric',
             'items':[
-              {'label': 'summary', 'url': '#!/fabric_summary'},
+              {'label': 'Summary', 'url': '#!/fabric_summary'},
               {'label': 'Devices', 'url': '/devices'},
              // {'label': 'Interface Group', 'url': '/interface_group'},
               {'label': 'Statistics', 'url': '/statistics'},

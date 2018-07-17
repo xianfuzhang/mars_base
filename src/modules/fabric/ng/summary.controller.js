@@ -27,8 +27,12 @@ export class FabricSummaryController {
     });
 
     let fabric_storage_ns = "storage_farbic_";
+    let unsubscribers = [];
 
     this.resizeTimeout = null;
+    this.di.$scope.resize_right_plus = {};
+    this.di.$scope.resize_right = {};
+    this.di.$scope.resize_length = {};
 
     let  distributeSwitches = (allSwitches) => {
       let distributeSwt = {'spine':[], 'leaf':[], 'other':[]};
@@ -43,7 +47,7 @@ export class FabricSummaryController {
       });
 
       return distributeSwt;
-    }
+    };
     let dstSwt = distributeSwitches(this.di.deviceService.getAllSwitches());
 
     this.di.$scope.fabricModel = {
@@ -54,9 +58,7 @@ export class FabricSummaryController {
       deLinks: this.di.deviceService.getAllLinks()
     };
 
-    this.di.$scope.resize_right_plus = {};
-    this.di.$scope.resize_right = {};
-    this.di.$scope.resize_length = {};
+
 
     // let deferred = this.di.$q.defer();
     // this.di.$http.get('http://192.168.122.45:9200/alert_types/_search').then(
@@ -103,9 +105,6 @@ export class FabricSummaryController {
 
     };
 
-
-
-
     this.di.$scope.resize_div = (event) => {
       console.log(event);
       event.preventDefault();
@@ -148,20 +147,46 @@ export class FabricSummaryController {
     });
 
 
-    this.di.$timeout(function () {
-      // initTop()
-    },200);
+    // this.di.$timeout(function () {
+    //   // initTop()
+    // },200);
+
+    // let initTop = () =>{
+    //   this.di.$rootScope.$emit('resize_canvas');
+    // };
 
 
     let win_width = this.di.$window.innerWidth;
     this.di.$scope.resize_right_plus = {'width': (win_width - 300)+ 'px','right':'300px'};
 
-    let initTop = () =>{
-      this.di.$rootScope.$emit('resize_canvas');
+    let showSwitch = (id, type, summaryList) => {
+      showDetail(summaryList);
+      // showPorts();
+      // showStatics();
+      // showFlows();
     };
 
+    let showDetail = (summaryList) => {
+      let leftDom = angular.element(document.getElementsByClassName('detail_summary__body--left'));
+      let rightDom = angular.element(document.getElementsByClassName('detail_summary__body--right'));
+      rightDom.empty();
+      leftDom.empty();
+      this.di._.forEach(summaryList, (item, key)=>{
+        leftDom.append('<div>'+ item.label +'</div>');
+        rightDom.append('<div>'+ item.value +'</div>');
+      });
+    };
 
+    unsubscribers.push(this.di.$rootScope.$on('switch_select',(evt, data)=>{
+      showSwitch(data.id, data.type,data.value);
+    }));
 
+    this.di.$scope.$on('$destroy', () => {
+      this.di._.each(unsubscribers, (unsubscribe) => {
+        unsubscribe();
+      });
+      this.di.$log.info('FabricSummaryController', 'Destroyed');
+    });
 
 
   }

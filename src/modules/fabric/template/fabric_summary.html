@@ -6,7 +6,7 @@
 
     <div style="flex-grow: 2;
               flex-basis:auto;
-              flex-shrink: 1;background-color: white;overflow: hidden;padding:0 8px;">
+              flex-shrink: 1;background-color: white;overflow: scroll;padding:0 8px;display:flex;flex-direction: column;">
         <div class="header_content">
             <a class="header_content__breadcrumb" href="/">Mars Cloud</a>
             <span class="header_content__breadcrumb">•</span>
@@ -16,7 +16,7 @@
             <!--<span class="breadcrumb"><div class="bsn_entity_name_breadcrumb bottom" title="R1L1">R1L1</div></span>-->
         </div>
 
-        <div style="height:600px;width:100%;position:relative;border-top:1px solid lightgray;">
+        <div style="height:100%;width:100%;position:relative;border-top:1px solid lightgray;flex-grow: 1;flex-shrink: 1;min-height:400px;overflow: hidden;">
 
             <div ng-style="resize_right_plus" style="position: absolute;right:300px;top:0;height:100%;left:0px;">
                 <topo spines="fabricModel.deSpines" leafs="fabricModel.deLeafs" others="fabricModel.deOthers" links="fabricModel.deLinks" topo-setting="fabricModel.topoSetting">
@@ -26,7 +26,7 @@
                 <div style="height:20px;width:1px;background-color: black;border: 0;top:49%; left:2px;position: absolute;">
                 </div>
             </div>
-            <div ng-style="resize_length" style="position: absolute;right:0;top:0;height:100%;background-color: white;width:295px;">
+            <div ng-style="resize_length" style="position: absolute;right:0;top:0;height:100%;background-color: white;width:295px;display:inline-block;overflow:scroll; ">
 
                 <mar-section title="Topo Settings" class="topo_setting">
                     <div style="margin:2px;">
@@ -100,7 +100,12 @@
                     </div>
                 </mar-section>
 
-
+                <mar-section title="Spine Switch" class="detail_summary">
+                    <div class="detail_summary__body" style="position: relative;">
+                        <div class="detail_summary__body--left"></div>
+                        <div class="detail_summary__body--right"></div>
+                    </div>
+                </mar-section>
 
 
             </div>

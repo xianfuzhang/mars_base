@@ -7,7 +7,8 @@ export class Topo {
       '$timeout',
       '$document',
       '_',
-      'easingService'
+      'easingService',
+      'switchService'
     ];
   }
 
@@ -325,6 +326,7 @@ export class Topo {
         node.mousedrag(mouseDragHandler);
         node.mouseover(mouseOverHandler);
         node.mouseout(mouseOutHandler);
+        node.click(clickHandler);
         //根据实际的端口数来
         let count = 36;
         //超过48个端口len为2，根据实际情况来
@@ -413,33 +415,25 @@ export class Topo {
         let deviceId =  this.deviceId;
         let deviceType = this.deviceType;
 
-        let innerHtml = '';
         let showArray= [];
+
         if(deviceType == DeviceType.spine){
           let sw = DI._.find(scope.spines,{'id':deviceId});
-
-          showArray.push({'label': 'id', 'value': sw.id})
-          showArray.push({'label': 'type', 'value': sw.type})
-          showArray.push({'label': 'available', 'value': sw.available})
-          showArray.push({'label': 'MAC', 'value': sw.mac})
-          showArray.push({'label': 'connect since', 'value': sw.lastUpdate})
-          showArray.push({'label': 'Management Address', 'value': sw.managementAddress})
-          showArray.push({'label': 'rack_id', 'value': sw.rack_id})
-
+          showArray = DI.switchService.getSpineShowInfo(sw);
         } else if(deviceType == DeviceType.leaf){
-
+          let sw = DI._.find(scope.leafs,{'id':deviceId});
+          showArray = DI.switchService.getLeafShowInfo(sw);
         } else if(deviceType == DeviceType.other){
-
+          let sw = DI._.find(scope.others,{'id':deviceId});
+          showArray = DI.switchService.getOtherShowInfo(sw);
         } else {
-
+          return;
         }
-
-        console.log('node mouse over');
+        // console.log('node mouse over');
         if(scope.topoSetting.show_tooltips){
           DI.$rootScope.$emit("show_tooltip",{event:evt, value: showArray});
         }
       }
-
 
       let mouseOutHandler = (evt) => {
         console.log('node mouse out');
@@ -448,6 +442,25 @@ export class Topo {
         }
       };
 
+      function clickHandler(evt) {
+        let deviceId =  this.deviceId;
+        let deviceType = this.deviceType;
+        let showArray= [];
+
+        if(deviceType == DeviceType.spine){
+          let sw = DI._.find(scope.spines,{'id':deviceId});
+          showArray = DI.switchService.getSpineShowInfo(sw);
+        } else if(deviceType == DeviceType.leaf){
+          let sw = DI._.find(scope.leafs,{'id':deviceId});
+          showArray = DI.switchService.getLeafShowInfo(sw);
+        } else if(deviceType == DeviceType.other){
+          let sw = DI._.find(scope.others,{'id':deviceId});
+          showArray = DI.switchService.getOtherShowInfo(sw);
+        } else {
+          return;
+        }
+        DI.$rootScope.$emit("switch_select",{id: this.deviceId, type: deviceType, value: showArray});
+      }
 
 
       /*
