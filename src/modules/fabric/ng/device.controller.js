@@ -134,6 +134,19 @@ export class DeviceController {
       this.scope.endpointModel.endpointAPI = $api;
     };
 
+    this.scope.batchRemove = ($value) => {
+      if ($value.length) {
+        switch (this.scope.tabSelected.type) {
+          case 'device':
+            this.batchDeleteDevices($value);
+            break;
+          case 'endpoint':
+            this.batchDeleteEndpoints($value);
+            break
+        }
+      }
+    };
+
     this.init();
   }
 
@@ -302,6 +315,31 @@ export class DeviceController {
         break;
     }
     return entities;
+  }
+
+  batchDeleteDevices(arr) {
+
+  }
+
+  batchDeleteEndpoints(arr) {
+    let deferredArr = [];
+    arr.forEach((item) => {
+      let defer = this.di.$q.defer();
+      let tenant = item.tenant_name, segment = item.segment_name, mac = item.mac;
+      this.di.deviceDataManager.deleteEndpoint(tenant, segment, mac)
+        .then(() => {
+          defer.resolve();
+        }, () => {
+          defer.resolve();
+        });
+      deferredArr.push(defer.promise);
+    });
+
+    this.di.$q.all(deferredArr).then(() => {
+      this.scope.endpointModel.endpointAPI.queryUpdate();
+    });
+
+    this.scope.$emit('batch-delete-endpoints');
   }
 }
 
