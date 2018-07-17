@@ -1,0 +1,8 @@
+@import 'xbem';
+@import 'default';
+@import 'shared';
+
+@include block(topo){
+  background-image: url("../image/graphback.png") ;
+  background-repeat: repeat-y;
+}

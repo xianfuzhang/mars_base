@@ -25,7 +25,8 @@ export class Topo {
       spines: '=',
       leafs: '=',
       others:'=',
-      links:'='
+      links:'=',
+      topoSetting:'='
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -33,6 +34,9 @@ export class Topo {
 
   _link (scope, element) {
     (function init () {
+      let unsubscribers = [];
+
+      let DI = this.di;
 
       this.di.$window.requestAnimFrame = (function(callback) {
         return this.di.$window.requestAnimationFrame
@@ -62,6 +66,11 @@ export class Topo {
       this.otherContainerRightNode = null;
       this.otherContainerText = null;
 
+      let DeviceType = {
+        'leaf':'leaf',
+        'spine':'spine',
+        'other':'other'
+      }
       this.stage = null;
       this.scene = null;
 
@@ -81,12 +90,13 @@ export class Topo {
       this.LINE_WIDTH = 3;
       this.LINE_NORMAL = '136,234,136';
       this.LINE_ERROR = "255,0,0";
+      this.oldWidth = null;
 
       let easingService = this.di.easingService;
       let switchLocation = this.switchLocation;
 
       let initialize = () => {
-
+        let canvas = document.getElementById('canvas');
 
         this.stage = new JTopo.Stage(canvas); // 创建一个舞台对象
         this.scene = new JTopo.Scene(this.stage);
@@ -96,7 +106,8 @@ export class Topo {
         this.otherContainer = new JTopo.Container();
 
         this.spineContainer.fillColor = '255,255,255';
-        this.leafContainer.fillColor = '239,239,239';
+        // this.leafContainer.fillColor = '239,239,239';
+        this.leafContainer.fillColor = '255,255,255';
         this.otherContainer.fillColor = '255,255,255';
 
         this.spineContainer.alpha = 1;
@@ -115,12 +126,15 @@ export class Topo {
         this.scene.add(this.leafContainer);
         this.scene.add(this.otherContainer);
 
+        setTimeout(delayInit,200);
+      };
+
+      let delayInit = () =>{
         genSpine();
         genLeaf();
         genOther();
         genLinks();
-
-        resize();
+        resize(true);
       };
 
       let genSpine = () =>{
@@ -132,13 +146,8 @@ export class Topo {
         this.spineContainer.add(this.spineContainerRightNode);
 
         this.di._.forEach(scope.spines, (spine, key) => {
-          this.spines[spine.id] = genNormalNode(spine.id);
+          this.spines[spine.id] = genNormalNode(spine.id, DeviceType.spine);
         });
-
-        // for(let index in scope.spines){
-        //   let spine = scope.spines[index];
-        //   this.spines[spine.id] = genNormalNode(spine.id);
-        // }
 
       };
 
@@ -152,13 +161,10 @@ export class Topo {
 
 
         this.di._.forEach(scope.leafs, (leaf, key) => {
-          this.leafs[leaf.id] = genNormalNode(leaf.id);
+          this.leafs[leaf.id] = genNormalNode(leaf.id, DeviceType.leaf);
         });
 
-        // for(let index in scope.leafs){
-        //   let leaf = scope.leafs[index];
-        //   this.leafs[leaf.id] = genNormalNode(leaf.id);
-        // }
+
       };
 
       let genOther = () => {
@@ -171,25 +177,31 @@ export class Topo {
 
 
         this.di._.forEach(scope.others, (other, key) => {
-          this.others[other.id] = genNormalNode(other.id);
+          this.others[other.id] = genNormalNode(other.id, DeviceType.other);
         });
-        // for(let index in scope.others){
-        //   let other = scope.others[index];
-        //
-        //   this.others[other.id] = genNormalNode(other.id);
-        // }
+
       };
 
       let genLinks = () => {
-        this.di._.forEach(scope.links, (link, key) => {
-          let deviceIds = [link.src.device, link.dst.device];
-          let linkId = getLinkId(deviceIds);
-          this.links[linkId] = genLinkNode(deviceIds);
-
-          if(link.state != this.active_status){
-            this.links[linkId].strokeColor = this.LINE_ERROR;
+          if(scope.topoSetting.show_links){
+            this.di._.forEach(scope.links, (link, key) => {
+              let deviceIds = [link.src.device, link.dst.device];
+              let linkId = getLinkId(deviceIds);
+              this.links[linkId] = genLinkNode(deviceIds);
+              if(link.state != this.active_status){
+                this.links[linkId].strokeColor = this.LINE_ERROR;
+              }
+            });
           }
+      };
+
+      let crushLinks =()=>{
+        this.di._.forEach(this.links, (link, key) => {
+          this.scene.remove(link);
         });
+
+        delete this.links;
+        this.links = {};
       };
 
       let getLinkId = (deviceIds) =>{
@@ -211,13 +223,13 @@ export class Topo {
         return link;
       };
 
-      let draw = () =>{
+      let draw = (width) =>{
 
         let avgHeight = this.height/3;
-        let spineInterval = calcInterval(scope.spines, this.width);
+        let spineInterval = calcInterval(scope.spines, width);
         //leaf有分组，需要特殊处理
-        let leafInterval = calcLeafInterval(scope.leafs, this.width);
-        let otherInterval = calcInterval(scope.others, this.width);
+        let leafInterval = calcLeafInterval(scope.leafs, width);
+        let otherInterval = calcInterval(scope.others, width);
 
         let spineKeys = this.di._.keys(this.spines);
         spineKeys = this.di._.sortBy(spineKeys);
@@ -299,19 +311,20 @@ export class Topo {
         return node;
       };
 
-      let genNormalNode = (deviceId) =>{
+      let genNormalNode = (deviceId, type) =>{
         let node = new JTopo.Node();
         node.dragable = true ;
         node.width = this.switch_width;
         node.height = this.switch_height;
         node.showSelected =true;
         node.deviceId = deviceId;
-
+        node.deviceType = type;
         node.move = false;
 
         node.mouseup(mouseUpHandler);
         node.mousedrag(mouseDragHandler);
-
+        node.mouseover(mouseOverHandler);
+        node.mouseout(mouseOutHandler);
         //根据实际的端口数来
         let count = 36;
         //超过48个端口len为2，根据实际情况来
@@ -329,26 +342,26 @@ export class Topo {
           g.fill();
           g.closePath();
 
-          let padding = (width - len * 2)/3;
-          let left = - width/2 + padding;
-          let right = width/2 -padding - len;
-          // top = 8;
-          for(let i = 0; i< count ; i++){
-            g.beginPath();
-            if(i % 2 === 0){
-              g.rect(left, -height/2 +  top + parseInt(i/2) * (len + 1), len , len);
-            } else {
-              g.rect(right, -height/2 + top + parseInt(i/2) * (len + 1), len , len);
+          if(scope.topoSetting.show_ports){
+            let padding = (width - len * 2)/3;
+            let left = - width/2 + padding;
+            let right = width/2 -padding - len;
+            // top = 8;
+            for(let i = 0; i< count ; i++){
+              g.beginPath();
+              if(i % 2 === 0){
+                g.rect(left, -height/2 +  top + parseInt(i/2) * (len + 1), len , len);
+              } else {
+                g.rect(right, -height/2 + top + parseInt(i/2) * (len + 1), len , len);
+              }
+              g.fillStyle = status_normal;
+              if(i%10 === 0){
+                g.fillStyle = status_error;
+              }
+              g.fill();
+              g.closePath();
             }
-            g.fillStyle = status_normal;
-            if(i%10 === 0){
-              g.fillStyle = status_error;
-            }
-            g.fill();
-            g.closePath();
           }
-          g.save();
-          g.restore();
 
           this.paintText(g);
         };
@@ -356,8 +369,6 @@ export class Topo {
         this.scene.add(node);
         return node;
       };
-
-
 
       function mouseUpHandler(data){
         if(this.move){
@@ -381,7 +392,7 @@ export class Topo {
           return;
         }
         let percentage = time/1000;
-        let nP = easingService.easeOutElastic(percentage);
+        let nP = easingService.easeInOutCubic(percentage);
         let curX = (oldLocation[0] - nowX) * nP + nowX;
         let curY = (oldLocation[1] - nowY) * nP+ nowY;
         node.setLocation(curX, curY);
@@ -393,6 +404,52 @@ export class Topo {
       function mouseDragHandler(data){
         this.move = true;
       }
+
+      function genHtml() {
+        
+      }
+
+      function mouseOverHandler(evt) {
+        let deviceId =  this.deviceId;
+        let deviceType = this.deviceType;
+
+        let innerHtml = '';
+        let showArray= [];
+        if(deviceType == DeviceType.spine){
+          let sw = DI._.find(scope.spines,{'id':deviceId});
+
+          showArray.push({'label': 'id', 'value': sw.id})
+          showArray.push({'label': 'type', 'value': sw.type})
+          showArray.push({'label': 'available', 'value': sw.available})
+          showArray.push({'label': 'MAC', 'value': sw.mac})
+          showArray.push({'label': 'connect since', 'value': sw.lastUpdate})
+          showArray.push({'label': 'Management Address', 'value': sw.managementAddress})
+          showArray.push({'label': 'rack_id', 'value': sw.rack_id})
+
+        } else if(deviceType == DeviceType.leaf){
+
+        } else if(deviceType == DeviceType.other){
+
+        } else {
+
+        }
+
+        console.log('node mouse over');
+        if(scope.topoSetting.show_tooltips){
+          DI.$rootScope.$emit("show_tooltip",{event:evt, value: showArray});
+        }
+      }
+
+
+      let mouseOutHandler = (evt) => {
+        console.log('node mouse out');
+        if(scope.topoSetting.show_tooltips){
+          this.di.$rootScope.$emit("hide_tooltip");
+        }
+      };
+
+
+
       /*
       负责给container加上两个隐藏的node，用来固定整个容器
        */
@@ -418,12 +475,18 @@ export class Topo {
         this.otherContainerRightNode.height = avgHeight;
       };
 
-      let resize = () => {
+      let resize = (isInit) => {
+
         let parentNode = element[0].parentNode;
         this.width = parentNode.offsetWidth;
         this.height = parentNode.offsetHeight;
 
-        let canvas = this.di.$document[0].getElementById('canvas');
+        let canvas = document.getElementById('canvas');
+
+        if(this.oldWidth === null ||  this.oldWidth === undefined){
+          this.oldWidth = canvas.width;
+        }
+
         canvas.width = this.width;
         canvas.height = this.height;
 
@@ -432,18 +495,172 @@ export class Topo {
         context.shadowOffsetX = 2;
         context.shadowOffsetY = 5;
         context.shadowBlur = 5;
-
         layout();
-        draw();
+        let starttime = (new Date()).getTime();
+        if(this.resizeTimeout){
+          console.log(this.di.$timeout.cancel(this.resizeTimeout));
+        }
+        if(isInit){
+          delayDraw();
+        } else{
+          this.resizeTimeout = this.di.$timeout(function () {
+            delayDraw()
+          }, 200);
+        }
+      };
+
+      let delayDraw =()=> {
+        let oldWidth = this.oldWidth;
+        this.oldWidth =  null;
+        // console.log(oldWidth);
+        let starttime = (new Date()).getTime();
+        console.log(":==" + oldWidth);
+        dynamicDraw(starttime, oldWidth);
+      };
+
+      let dynamicDraw = (starttime, oldWidth) => {
+        let testT = (new Date()).getTime();
+        let time = (new Date()).getTime() - starttime;
+        if(time > 1000) {
+          draw(this.width);
+          return;
+        }
+        let percentage = time/1000;
+        let nP = easingService.easeInOutQuad(percentage);
+        let width = (this.width - oldWidth) * nP + oldWidth;
+        draw(width);
+        requestAnimFrame(function () {
+          dynamicDraw(starttime, oldWidth);
+        });
       };
 
       initialize();
 
-      angular.element(this.di.$window).bind('resize', () => {
-        if(this.resizeTimeout){
-          this.di.$timeout.cancel(this.resizeTimeout);
+
+      let crushAllPorts = () =>{
+        this.di._.forEach(scope.spines, (spine, key) => {
+          crushPorts(this.spines[spine.id])
+        });
+
+        this.di._.forEach(scope.leafs, (leaf, key) => {
+          crushPorts(this.leafs[leaf.id])
+        });
+
+        this.di._.forEach(scope.others, (other, key) => {
+          crushPorts(this.others[other.id])
+        });
+      };
+
+      let genAllPorts = () =>{
+        this.di._.forEach(scope.spines, (spine, key) => {
+          genPorts(this.spines[spine.id])
+        });
+
+        this.di._.forEach(scope.leafs, (leaf, key) => {
+          genPorts(this.leafs[leaf.id])
+        });
+
+        this.di._.forEach(scope.others, (other, key) => {
+          genPorts(this.others[other.id])
+        });
+      };
+
+      let crushPorts = (node) =>{
+        let height = this.switch_height;
+        let width = this.switch_width;
+        node.paint = function(g) {
+          g.beginPath();
+          g.rect(-width / 2, -height / 2, width, height);
+          g.fillStyle = 'rgba(0,0,0)';
+          g.fill();
+          g.closePath();
+          this.paintText(g);
         }
-        self.resizeTimeout = this.di.$timeout(resize, 200);
+      };
+
+
+      let genPorts = (node) => {
+        //根据实际的端口数来
+        let count = 36;
+        //超过48个端口len为2，根据实际情况来
+        let len = 3;
+        let height = this.switch_height;
+        let width = this.switch_width;
+        let status_normal = '#81FF1A';
+        let status_error = 'rgb(255,0,0)';
+        let top = 8;
+        node.paint = function(g){
+          g.beginPath();
+          g.rect(-width/2, -height/2, width, height);
+          g.fillStyle = 'rgba(0,0,0)';
+          g.fill();
+          g.closePath();
+
+          let padding = (width - len * 2)/3;
+          let left = - width/2 + padding;
+          let right = width/2 -padding - len;
+          // top = 8;
+          for(let i = 0; i< count ; i++){
+            g.beginPath();
+            if(i % 2 === 0){
+              g.rect(left, -height/2 +  top + parseInt(i/2) * (len + 1), len , len);
+            } else {
+              g.rect(right, -height/2 + top + parseInt(i/2) * (len + 1), len , len);
+            }
+            g.fillStyle = status_normal;
+            if(i%10 === 0){
+              g.fillStyle = status_error;
+            }
+            g.fill();
+            g.closePath();
+          }
+          this.paintText(g);
+          // g.save();
+          // g.restore();
+        }
+      };
+
+      angular.element(this.di.$window).bind('resize', () => {
+        console.log('exec resize');
+        resize(false);
+        // if(this.resizeTimeout){
+        //   this.di.$timeout.cancel(this.resizeTimeout);
+        // }
+        // self.resizeTimeout = this.di.$timeout(resize, 500);
+      });
+
+      unsubscribers.push(this.di.$rootScope.$on('resize_canvas',() =>{
+        console.log('receive resize_canvas');
+        resize(false)
+      }));
+
+      // unsubscribers.push(this.di.$rootScope.$on('show_tooltips',()=>{
+      //   if(scope.topoSetting.show_tooltips){
+      //   } else {
+      //   }
+      // }));
+
+      unsubscribers.push(this.di.$rootScope.$on('show_links',()=>{
+        if(scope.topoSetting.show_links){
+          genLinks()
+        } else {
+          crushLinks()
+        }
+      }));
+
+
+      unsubscribers.push(this.di.$rootScope.$on('show_ports',()=>{
+        if(scope.topoSetting.show_ports){
+          genAllPorts()
+        } else {
+          crushAllPorts()
+        }
+      }));
+
+      scope.$on('$destroy', () => {
+        unsubscribers.forEach((unsubscribe) => {
+          unsubscribe();
+        });
       });
 
     }).call(this);
