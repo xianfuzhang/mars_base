@@ -6,6 +6,7 @@
 export class FabricSummaryController {
   static getDI() {
     return [
+      '$filter',
       '$scope',
       '$rootScope',
       '_',
@@ -17,14 +18,20 @@ export class FabricSummaryController {
       'localStoreService',
       'deviceService',
       'appService',
+      'deviceDataManager',
+      'tableProviderFactory',
+      'deviceService'
     ];
   }
 
   constructor(...args) {
     this.di = {};
+
     FabricSummaryController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
+
+    this.translate = this.di.$filter('translate');
 
     let fabric_storage_ns = "storage_farbic_";
     let unsubscribers = [];
@@ -177,6 +184,71 @@ export class FabricSummaryController {
       });
     };
 
+
+    this.di.$scope.fabricModel.interfaceProvider = this.di.tableProviderFactory.createProvider({
+      query: (params) => {
+        let defer = this.di.$q.defer();
+        let d = this.di.deviceService.getInterfaceByDevice();
+        let entities = this.getEntities(d.ports);
+        defer.resolve({
+          data: entities,
+          count: 10
+        });
+        // this.di.deviceDataManager.getPorts(params).then((res) => {
+        //   let entities = this.getEntities(res.data.ports);
+        //   defer.resolve({
+        //     data: entities,
+        //     count: res.data.total
+        //   },()=>{
+        //
+        //   });
+        //
+        // });
+        return defer.promise;
+      },
+      getSchema: () => {
+        return {
+          // schema: this.di.deviceService.getPortTableSchema(),
+          schema: [
+            /*{
+             'label': 'ID',
+             'field': 'id',
+             'layout': {'visible': true, 'sortable': false, 'fixed': true}
+             },*/
+            {
+              'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.NAME'),
+              'field': 'port_name',
+              'layout': {'visible': true, 'sortable': true, 'fixed': true}
+            },
+            {
+              'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.PORT_ID'),
+              'field': 'port_id',
+              'layout': {'visible': true, 'sortable': true}
+            },
+            {
+              'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.STATUS'),
+              'field': 'port_status',
+              'layout': {'visible': true, 'sortable': true}
+            },
+            {
+              'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
+              'field': 'link_status',
+              'layout': {'visible': true, 'sortable': true}
+            },
+            {
+              'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.SPEED'),
+              'field': 'speed',
+              'layout': {'visible': true, 'sortable': true}
+            }
+          ],
+          index_name: 'port_mac',
+          rowCheckboxSupport: false,
+          rowActionsSupport: true
+        };
+      }
+    });
+
+
     unsubscribers.push(this.di.$rootScope.$on('switch_select',(evt, data)=>{
       showSwitch(data.id, data.type,data.value);
     }));
@@ -188,7 +260,26 @@ export class FabricSummaryController {
       this.di.$log.info('FabricSummaryController', 'Destroyed');
     });
 
+  }
 
+  getEntities(origins){
+    let entities = [];
+    if(!Array.isArray(origins)) return entities;
+    origins.forEach((port) => {
+      let obj = {};
+      obj.element = port.element;
+      obj.port_name = port.annotations.portName;
+      obj.port_mac = port.annotations.portMac;
+      obj.port_id = port.port;
+      obj.link_status = port.annotations.linkStatus;
+      obj.type = port.type;
+      obj.speed = port.portSpeed;
+      obj.device_name = port.device_name;
+      obj.isEnabled = port.isEnabled;
+      obj.port_status ='1';
+      entities.push(obj);
+    });
+    return entities;
   }
 }
 
