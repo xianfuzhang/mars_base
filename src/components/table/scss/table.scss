@@ -76,6 +76,11 @@ table{
 .mdl-table-body__row td {
   text-align: center;
 }
+.mdl-table-body__row td.clickable{
+  cursor: pointer;
+  text-decoration: underline;
+  color: #47B8E0;
+}
 .mdl-table-header__row th {
   text-align: center;
   opacity: 0.6;

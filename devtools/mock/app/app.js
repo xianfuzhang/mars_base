@@ -28,11 +28,11 @@ app.use(sessionParser);
 
 app.use(initController);
 // setup the routes
-app.use('/', deviceController);
-app.use('/', endPointController);
+app.use('/onos/v1', deviceController);
+app.use('/onos/v1', endPointController);
 
 // set port
-app.set('port', (process.env.PORT || 3001));
+app.set('port', (process.env.PORT || 4001));
 
 var server = app.listen(app.get('port'), function () {
   console.log('Mock server started on port ' + app.get('port'));

@@ -1,8 +1,18 @@
-<div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">
-  <mdl-header></mdl-header>
-  <div class="main">
-    <section class="+hasscroll">
-      storm control page.
-    </section>
-  </div>
+<mdl-header></mdl-header>
+<div class="app-main">
+  <section class="+hasscroll" >
+    <div class="main__content">
+      <mdl-tabs ng-model="tabSelected" options="tabs"
+                class-list="main__content__device-tabs"
+                on-select="onTabChange($value)">
+      </mdl-tabs>
+      <section class="tab-content" ng-if="tabSelected.type == 'storm'">
+        <mdl-table actions-show="stormModel.actionsShow"
+                   row-click="onTableRowClick($event)"
+                   provider="stormModel.stormProvider"
+                   api-ready="onStormApiReady($api)">
+        </mdl-table>
+      </section>
+    </div>
+  </section>
 </div>

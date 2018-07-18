@@ -19,18 +19,31 @@ export class rowCheckbox {
   }
 
   _link(scope, element, attrs, ctrl) {
+    let unsubscribers = [];
     scope._clicked = (event) => {
       let action = event.target.checked ? 'add' : 'remove';
       ctrl.select(scope.data, action);
       event.stopPropagation();
     }
 
-    this.di.$rootScope.$on('checkbox-select-all', (event, data) => {
+    unsubscribers.push(this.di.$rootScope.$on('checkbox-select-all', (event, data) => {
       element.find('input')[0].checked = data.checked || false;
-    });
+    }));
 
-    this.di.$rootScope.$on('pagination-checkbox-unselect', (event) => {
+    unsubscribers.push(this.di.$rootScope.$on('pagination-checkbox-unselect', (event) => {
       element.find('input')[0].checked = false;
+    }));
+
+    unsubscribers.push(this.di.$rootScope.$on('batch-delete-endpoints', (event) => {
+      if (element.find('input')[0].checked) {
+        element.find('input')[0].checked = false;
+      }
+    }));
+
+    scope.$on('$destroy', () => {
+      unsubscribers.forEach((cb) => {
+        cb();
+      });
     });
   }
 }

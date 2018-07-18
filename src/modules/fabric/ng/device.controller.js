@@ -2,6 +2,8 @@ export class DeviceController {
   static getDI() {
     return [
       '$scope',
+      '$rootScope',
+      '$location',
       '$log',
       '$q',
       '$filter',
@@ -45,6 +47,8 @@ export class DeviceController {
       endpointProvider: null,
       endpointAPI: null
     };
+
+    this.unsubscribers = [];
 
     this.scope.onTabChange= (tab) => {
       if (tab){
@@ -134,7 +138,33 @@ export class DeviceController {
       this.scope.endpointModel.endpointAPI = $api;
     };
 
+    this.scope.batchRemove = ($value) => {
+      if ($value.length) {
+        switch (this.scope.tabSelected.type) {
+          case 'device':
+            this.batchDeleteDevices($value);
+            break;
+          case 'endpoint':
+            this.batchDeleteEndpoints($value);
+            break
+        }
+      }
+    };
+
     this.init();
+
+    this.unsubscribers.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
+      //location path to device detail
+      if (params && params.field === 'switch_name') {
+        this.di.$location.path('/devices/' + params.value);
+      }
+    }));
+
+    this.scope.$on('$destroy', () => {
+      this.unsubscribers.forEach((cb) => {
+        cb();
+      });
+    });
   }
 
   init() {
@@ -302,6 +332,31 @@ export class DeviceController {
         break;
     }
     return entities;
+  }
+
+  batchDeleteDevices(arr) {
+
+  }
+
+  batchDeleteEndpoints(arr) {
+    let deferredArr = [];
+    arr.forEach((item) => {
+      let defer = this.di.$q.defer();
+      let tenant = item.tenant_name, segment = item.segment_name, mac = item.mac;
+      this.di.deviceDataManager.deleteEndpoint(tenant, segment, mac)
+        .then(() => {
+          defer.resolve();
+        }, () => {
+          defer.resolve();
+        });
+      deferredArr.push(defer.promise);
+    });
+
+    this.di.$q.all(deferredArr).then(() => {
+      this.scope.endpointModel.endpointAPI.queryUpdate();
+    });
+
+    this.scope.$emit('batch-delete-endpoints');
   }
 }
 

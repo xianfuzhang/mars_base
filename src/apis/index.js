@@ -1,4 +1,5 @@
 import {DeviceDataManager} from './datamanagers/device.dataManager';
+import {StormDataManager} from './datamanagers/storm.dataManager';
 import {appService} from './services/app.service';
 import {switchService} from './services/switch.service';
 
@@ -7,4 +8,5 @@ export default angular
   .service('appService', appService)
   .service('switchService', switchService)
   .service('deviceDataManager', DeviceDataManager)
+  .service('stormDataManager', StormDataManager)
   .name;

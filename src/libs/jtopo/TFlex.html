@@ -7,15 +7,19 @@
     <script type="text/javascript" src="../../../node_modules/lodash/lodash.js"></script>
 </head>
 <body style="width:100%;height: 100%" onresize="resize()">
-<canvas width="800" height="800" id="canvas" style="background-color: gray"></canvas>
+<canvas width="800" height="800" id="canvas" style="background-image: url(./graphback.png);background-repeat: repeat;border-right: 1px solid whitesmoke"></canvas>
 </div>
 </body>
 <script>
   window.requestAnimFrame = (function(callback) {
-    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
-      function(callback) {
-        window.setTimeout(callback, 1000 / 60);
-      };
+    return window.requestAnimationFrame
+      || window.webkitRequestAnimationFrame
+      || window.mozRequestAnimationFrame
+      || window.oRequestAnimationFrame
+      || window.msRequestAnimationFrame
+      || function(callback) {
+           window.setTimeout(callback, 1000 / 60);
+         };
   })();
 
   this.height = 600;
@@ -25,12 +29,15 @@
   this.otherContainer = null;
   this.spineContainerLeftNode = null;
   this.spineContainerRightNode = null;
+  this.spineContainerText = null;
 
   this.leafContainerLeftNode = null;
   this.leafContainerRightNode = null;
+  this.leafContainerText = null;
 
   this.otherContainerLeftNode = null;
   this.otherContainerRightNode = null;
+  this.otherContainerText = null;
 
   this.stage = null;
   this.scene = null;
@@ -44,7 +51,8 @@
 
   let scope = {
     "spines":[{'id':'11_spine'}, {'id':'22_spine'}, {'id':'33_spine'}],
-    "leafs":[{'id':'11_leaf','leaf_group':1},{'id':'44_leaf','leaf_group':3}, {'id':'22_leaf','leaf_group':1},{'id':'33_leaf','leaf_group':4} ,{'id':'55_leaf','leaf_group':3}, {'id':'66_leaf','leaf_group':2}],
+    "leafs":[{'id':'11_leaf','leaf_group':1},{'id':'44_leaf','leaf_group':3}, {'id':'22_leaf','leaf_group':1},{'id':'33_leaf','leaf_group':4} ,{'id':'55_leaf','leaf_group':3}, {'id':'66_leaf','leaf_group':2},
+      {'id':'11_leaf1','leaf_group':11},{'id':'44_leaf1','leaf_group':31}, {'id':'22_leaf1','leaf_group':11},{'id':'33_leaf1','leaf_group':41} ,{'id':'55_leaf1','leaf_group':31}, {'id':'66_leaf1','leaf_group':21}],
     "others":[{'id':'11_other'}, {'id':'22_other'}, {'id':'33_other'}],
     "links": [
       {
@@ -87,61 +95,88 @@
   }
   let self = this;
   let initialize = () => {
+    let canvas = document.getElementById("canvas");
 
 
-    this.stage = new JTopo.Stage(canvas); // 创建一个舞台对象
-    this.scene = new JTopo.Scene(this.stage);
-    this.spineContainer = new JTopo.Container();
-    this.leafContainer = new JTopo.Container();
-    this.otherContainer = new JTopo.Container();
+    var context = canvas.getContext('2d');
+    // 设置文字阴影的颜色为黑色，透明度为20%
+    context.shadowColor = 'rgba(0, 0, 0, 1)';
+    // 将阴影向右移动15px，向上移动10px
+    context.shadowOffsetX = 20;
+    context.shadowOffsetY = 20;
+    // 轻微模糊阴影
+    context.shadowBlur = 20;
+    context.shadowColor = '0,0,0';
 
 
-    this.spineContainer.fillColor = '255,0,255';
-    this.leafContainer.fillColor = '255,255,0';
-    this.otherContainer.fillColor = '0,255,255';
+//    this.stage = new JTopo.Stage(canvas); // 创建一个舞台对象
+//    this.scene = new JTopo.Scene(this.stage);
 
-
+//    this.spineContainer = new JTopo.Container();
+//    this.leafContainer = new JTopo.Container();
+//    this.otherContainer = new JTopo.Container();
+//
+//    this.spineContainer.fillColor = '255,255,255';
+////    this.leafContainer.fillColor = '239,239,239';
+//    this.leafContainer.fillColor = '255,255,255';
+//    this.otherContainer.fillColor = '255,255,255';
+//
+//
+//
 //    this.spineContainer.dragable = false;
 //    this.leafContainer.dragable = false;
 //    this.otherContainer.dragable = false;
-
+//
+//    this.spineContainer.alpha=0;
+//
+//    this.leafContainer.alpha=0.1;
+//
+//    this.otherContainer.alpha=0;
+//
+//
 //    this.spineContainer.showSelected = false;
 //    this.leafContainer.showSelected = false;
 //    this.otherContainer.showSelected = false;
+//
+//    this.scene.add(this.spineContainer);
+//    this.scene.add(this.leafContainer);
+//    this.scene.add(this.otherContainer);
 
-    this.scene.add(this.spineContainer);
-    this.scene.add(this.leafContainer);
-    this.scene.add(this.otherContainer);
-
-    genSpine();
-    genLeaf();
-    genOther();
-    genLinks();
-
-    resize();
+//    genSpine();
+//    genLeaf();
+//    genOther();
+//    genLinks();
+//
+//    resize();
   };
 
   let genSpine = () =>{
     this.spineContainerLeftNode = genAnchorNode();
     this.spineContainerRightNode = genAnchorNode();
+    this.spineContainerText = genTextNode("Spine Switch");
+//    this.spineContainerText.index = 100
 
     this.spineContainer.add(this.spineContainerLeftNode);
     this.spineContainer.add(this.spineContainerRightNode);
+//    this.spineContainer.add(this.spineContainerText);
 
     this.scene.add(this.spineContainerLeftNode);
     this.scene.add(this.spineContainerRightNode);
 
-
-    for(let index in scope.spines){
-      let spine = scope.spines[index];
+    _.forEach(scope.spines, (spine, index)=>{
       this.spines[spine.id] = genNormalNode(spine.id);
-    }
+    });
+//    for(let index in scope.spines){
+//      let spine = scope.spines[index];
+//      this.spines[spine.id] = genNormalNode(spine.id);
+//    }
 
   }
 
   let genLeaf = () =>{
     this.leafContainerLeftNode = genAnchorNode();
     this.leafContainerRightNode = genAnchorNode();
+    this.leafContainerText = genTextNode("Leaf Switch");
 
     this.leafContainer.add(this.leafContainerLeftNode);
     this.leafContainer.add(this.leafContainerRightNode);
@@ -149,15 +184,21 @@
     this.scene.add(this.leafContainerLeftNode);
     this.scene.add(this.leafContainerRightNode);
 
-    for(let index in scope.leafs){
-      let leaf = scope.leafs[index];
+//    for(let index in scope.leafs){
+//      let leaf = scope.leafs[index];
+//      this.leafs[leaf.id] = genNormalNode(leaf.id);
+//    }
+
+    _.forEach(scope.leafs, (leaf, index)=>{
       this.leafs[leaf.id] = genNormalNode(leaf.id);
-    }
-  }
+    });
+
+  };
 
   let genOther = () => {
     this.otherContainerLeftNode = genAnchorNode();
     this.otherContainerRightNode = genAnchorNode();
+    this.otherContainerText = genTextNode("Other Switch");
 
     this.otherContainer.add(this.otherContainerLeftNode);
     this.otherContainer.add(this.otherContainerRightNode);
@@ -165,11 +206,15 @@
     this.scene.add(this.otherContainerLeftNode);
     this.scene.add(this.otherContainerRightNode);
 
-    for(let index in scope.others){
-      let other = scope.others[index];
 
+    _.forEach(scope.others, (other, index)=>{
       this.others[other.id] = genNormalNode(other.id);
-    }
+    });
+//    for(let index in scope.others){
+//      let other = scope.others[index];
+//
+//      this.others[other.id] = genNormalNode(other.id);
+//    }
   }
 
   let genLinks = () => {
@@ -204,12 +249,13 @@
       let key = spineKeys[i];
       let node = this.spines[key];
       let x = (i + 1) * spineInterval + i * 16;
-      let y =  (avgHeight - 104)/2;
+      let y =  (avgHeight - 108)/2;
       node.setLocation(x, y);
 
-//      this.spineContainer.add(node);
       this.switchLocation[key] = [x, y];
     }
+
+    this.spineContainerText.setLocation(10, 10);
 
     let leaf_groups = _.groupBy(scope.leafs, "leaf_group");
     let orderKeys = _.keys(leaf_groups);
@@ -226,8 +272,9 @@
         this.switchLocation[leaf_group[j].id] = [x, y];
       }
       last_x = last_x + leafInterval +(16+2)* leaf_group.length;
-
     }
+    this.leafContainerText.setLocation(10, 10 + avgHeight);
+
 
     let otherKeys = _.keys(this.others);
     otherKeys = _.sortBy(otherKeys);
@@ -237,9 +284,13 @@
       let x = (i + 1) * otherInterval + i * 16;
       let y =  (avgHeight - 104)/2 + avgHeight * 2;
       node.setLocation(x, y);
+
       this.switchLocation[key] = [x, y];
     }
+
+    this.otherContainerText.setLocation(10, 10 + avgHeight*2);
   };
+
 
   let calcInterval = (nodes, width) =>{
     return (width - 16 * nodes.length)/(nodes.length + 1)
@@ -249,7 +300,7 @@
     let remainWidth = width - 16 * leafs.length;
     let group = _.groupBy(leafs, 'leaf_group');
     return remainWidth/ (_.keys(group).length + 1);
-  }
+  };
 
   let genAnchorNode = () =>{
     let node = new JTopo.Node();
@@ -257,6 +308,25 @@
     node.width = 1;
     node.showSelected =false;
     node.fillColor = "98,98,255";
+    return node;
+  };
+
+  let genTextNode = (text) =>{
+    let node = new JTopo.Node(text);
+    node.dragable = false ;
+    node.showSelected =false;
+    node.font = '16px 微软雅黑';
+    node.fontColor = "255,255,255";
+    node.fillColor = '200,200,0';
+    node.textPosition = 'Middle_Center';
+    node.borderRadius = 3;
+    node.shadowOffsetX = 3;
+    node.shadowOffsetY = 3;
+    node.shadowBlur = 3;
+    node.shadowColor= '0,0,0';
+    node.width = 100;
+    node.height = 25;
+    this.scene.add(node);
     return node;
   };
 
@@ -271,6 +341,43 @@
 
     node.mouseup(mouseUpHandler);
     node.mousedrag(mouseDragHandler);
+
+
+    let count = 36;
+    let len = 3;
+    node.paint = function(g){
+      g.beginPath();
+      g.rect(-8,-54, 16, 108);
+      g.fillStyle = 'rgba(0,0,0,' + this.alpha + ')';
+      g.fill();
+      g.closePath();
+
+      let padding = (16 - len * 2)/3;
+      let left = - 16/2 + padding;
+      let right = 16/2 -padding - len;
+      let top = 8;
+      for(let i = 0; i< count ; i++){
+        g.beginPath();
+        if(i % 2 === 0){
+          g.rect(left, -54 +  6 + parseInt(i/2) * (len + 1), len , len);
+        } else {
+          g.rect(right, -54 + 6 + parseInt(i/2) * (len + 1), len , len);
+        }
+        //green
+        g.fillStyle ='#81FF1A';
+        if(i%10 ===0){
+          //red
+          g.fillStyle ='rgb(255,0,0)';
+        }
+        g.fill();
+        g.closePath();
+      }
+      g.save();
+      g.restore();
+
+      this.paintText(g);
+    };
+
     this.scene.add(node);
     return node;
   };
@@ -280,12 +387,10 @@
     if(this.move){
       console.log("move");
       let oldLocation = self.switchLocation[this.deviceId];
-      let nowX = data.x, nowY = data.y;
+      let curLocation = this.getLocation();
       let node = this;
-      let xSpeed = (nowX - oldLocation[0])/1000;
-      let ySpeed = (nowY - oldLocation[1])/1000;
       let starttime = (new Date()).getTime();
-      setTimeout(goBack_Animate(oldLocation, nowX, nowY,starttime, node),100)
+      setTimeout(goBack_Animate(oldLocation, curLocation.x, curLocation.y,starttime, node))
     } else {
       console.log("click")
       console.log(this.deviceId)
@@ -293,30 +398,59 @@
     }
     this.move = false;
   }
-  this.count = 20
-  let goBack_Animate = (oldLocation, nowX, nowY,starttime, node)=>{
+  function goBack_Animate(oldLocation, nowX, nowY,starttime, node){
     let time = (new Date()).getTime() - starttime;
-    let curX = (oldLocation[0] - nowX) * time/1000 + nowX;
-    let curY = (oldLocation[1] - nowY) * time/1000 + nowY;
-    this.count = this.count + 1;
-    if(this.count >= 1020){
+    if(time > 1000) {
       node.setLocation(oldLocation[0], oldLocation[1]);
-    } else {
-      node.setLocation(curX, curY);
-      requestAnimFrame(goBack_Animate(oldLocation, nowX, nowY,starttime, node))
+      return;
     }
-
-//    if( ( ((curX - oldLocation[0]) >= 0 && (nowX - oldLocation[0]) <= 0)
-//      || ((curX - oldLocation[0]) <= 0 && (nowX - oldLocation[0]) >= 0) )
-//      && ( ((curY - oldLocation[1]) >= 0 && (nowY - oldLocation[1]) <= 0)
-//      || ((curY - oldLocation[1]) <= 0 && (nowY - oldLocation[1]) >= 0) )){
+    let percentage = time/1000;
+    let nP = easeOutElastic(percentage)
+    let curX = (oldLocation[0] - nowX) * nP + nowX;
+    let curY = (oldLocation[1] - nowY) * nP+ nowY;
+    node.setLocation(curX, curY);
+    requestAnimFrame(function () {
+      goBack_Animate(oldLocation, nowX, nowY, starttime, node);
+    })
 //
+//    let curX = (oldLocation[0] - nowX) * time/1000 + nowX;
+//    let curY = (oldLocation[1] - nowY) * time/1000 + nowY;
+
+
+//    self.count = self.count + 1;
+//    if(self.count >= 120){
+//      node.setLocation(oldLocation[0], oldLocation[1]);
+//      self.count = 0;
 //    } else {
 //      node.setLocation(curX, curY);
-//      requestAnimFrame(goBack_Animate(oldLocation, nowX, nowY,starttime, node))
+//      requestAnimFrame(function () {
+//        goBack_Animate(oldLocation, nowX, nowY, starttime, node);
+//      })
 //    }
+//    if( ( ((curX - oldLocation[0] + 30) >= 0 && (nowX - oldLocation[0]) <= 0)
+//      || ((curX - oldLocation[0] + 30) <= 0 && (nowX - oldLocation[0]) >= 0) )
+//      && ( ((curY - oldLocation[1] + 30) >= 0 && (nowY - oldLocation[1]) <= 0)
+//      || ((curY - oldLocation[1] + 30) <= 0 && (nowY - oldLocation[1]) >= 0) )){
+//      node.setLocation(oldLocation[0], oldLocation[1]);
 
+//      if( ( ((curX - oldLocation[0]) >= 0 && (nowX - oldLocation[0]) <= 0)
+//        || ((curX - oldLocation[0] ) <= 0 && (nowX - oldLocation[0]) >= 0) )
+//        && ( ((curY - oldLocation[1]) >= 0 && (nowY - oldLocation[1]) <= 0)
+//        || ((curY - oldLocation[1] ) <= 0 && (nowY - oldLocation[1]) >= 0) )){
+//        node.setLocation(oldLocation[0], oldLocation[1]);
 
+//    } else {
+//      node.setLocation(curX, curY);
+//      requestAnimFrame(function () {
+//        goBack_Animate(oldLocation, nowX, nowY, starttime, node);
+//      })
+//    }
+  }
+  let c4 = ( 2 * Math.PI ) / 3;
+  function easeOutElastic(x) {
+
+    return x === 0 ? 0 : x === 1 ? 1 :
+      Math.pow(2, -10 * x) * Math.sin(( x * 10 - 0.75 ) * c4) + 1
   }
 
   function mouseDragHandler(data){
@@ -328,19 +462,12 @@
     let nodeB = this.leafs[devices[1]] || this.spines[devices[1]];
 
     let link = new JTopo.Link(nodeA, nodeB);
-
-//    var effect = JTopo.Effect.spring({
-//      grivity: 10 // 引力 (可以为负值)
-//    })
-//
-//    // 效果作用对象(node节点以targetNode为目标，产生弹性效果)
-//    effect.addNode(nodeA, nodeB);
-//
-//    // 播放
-//    effect.play();
-
     link.zIndex = 20;
+    link.lineWidth = 3;
     link.strokeColor = '136,234,136';
+    link.dragable = true;
+    link.showSelected = false;
+
     this.scene.add(link);
     return link;
   };
@@ -369,24 +496,33 @@
     this.otherContainerLeftNode.height = avgHeight;
     this.otherContainerRightNode.height = avgHeight;
   };
-
+  let timeOut = null;
   let resize = () => {
-    let canvas = document.getElementById("canvas");
-    this.height = canvas.parentNode.offsetHeight;
-    this.width = canvas.parentNode.offsetWidth;
-    canvas.width = this.width;
-    canvas.height = this.height;
 
-    layout();
-    draw();
+    if(timeOut){
+      clearTimeout(timeOut);
+    }
+    timeOut = setTimeout(()=>{
+      let canvas = document.getElementById("canvas");
+      this.height = canvas.parentNode.offsetHeight;
+      this.width = canvas.parentNode.offsetWidth;
+      canvas.width = this.width;
+      canvas.height = this.height;
+
+      var context = canvas.getContext('2d');
+      context.shadowColor = 'rgba(0, 0, 0, 0.2)';
+      context.shadowOffsetX = 5;
+      context.shadowOffsetY = 5;
+      context.shadowBlur = 5;
+
+//      this.leafContainer.shadowColor = 'rgba(255, 255, 0, 1)';
+      layout();
+      draw();
+    },100);
+
   };
 
   initialize();
-
-
-
-  
-
 
 </script>
 </html>
