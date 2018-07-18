@@ -2,6 +2,8 @@ export class DeviceController {
   static getDI() {
     return [
       '$scope',
+      '$rootScope',
+      '$location',
       '$log',
       '$q',
       '$filter',
@@ -45,6 +47,8 @@ export class DeviceController {
       endpointProvider: null,
       endpointAPI: null
     };
+
+    this.unsubscribers = [];
 
     this.scope.onTabChange= (tab) => {
       if (tab){
@@ -148,6 +152,19 @@ export class DeviceController {
     };
 
     this.init();
+
+    this.unsubscribers.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
+      //location path to device detail
+      if (params && params.field === 'switch_name') {
+        this.di.$location.path('/devices/' + params.value);
+      }
+    }));
+
+    this.scope.$on('$destroy', () => {
+      this.unsubscribers.forEach((cb) => {
+        cb();
+      });
+    });
   }
 
   init() {

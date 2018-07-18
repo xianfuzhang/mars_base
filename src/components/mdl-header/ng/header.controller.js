@@ -18,7 +18,6 @@ export class headerController{
 
     this.scope.location = (url, event) => {
       event && event.stopPropagation();
-      this.di.$log.info(url);
       this.di.$location.path(url);
     };
   }
