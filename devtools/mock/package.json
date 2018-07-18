@@ -16,7 +16,7 @@
     "express": "^4.14.1",
     "express-session": "^1.15.0",
     "lodash": "^4.17.4",
-    "uuid": ""
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "eslint": "^3.17.1",
