@@ -92,6 +92,10 @@ angular
         template: require('./modules/fabric/template/device.html'),
         controller: 'deviceController'
       })
+      .when('/devices/:deviceId', {
+        template: require('./modules/fabric/template/device_detail.html'),
+        controller: 'deviceDetailController'
+      })
       .when('/interface_group', {
         template: require('./modules/fabric/template/interface_group.html'),
         controller: 'interfaceGroupController'
@@ -110,10 +114,10 @@ angular
       })
       .otherwise({ redirectTo: '/' });
 
-    // $locationProvider.html5Mode({
-    //   enabled: true,
-    //   requireBase: false
-    // });
+    /*$locationProvider.html5Mode({
+      enabled: true,
+      requireBase: false
+    });*/
   }]);
 
 /*

@@ -13,7 +13,9 @@ import {renderService} from './service/render.service';
 import {genericFactoryRegistry} from './service/genericFactoryRegistry';
 import {genericFactoryRegistryService} from './service/genericFactoryRegistry.service';
 import {textRenderer} from './service/renderers/textRenderer';
-import {textRendererFactory} from './service/renderers/textRendererFactory'
+import {textRendererFactory} from './service/renderers/textRendererFactory';
+import {ClickableTextRenderer} from './service/renderers/clickableTextRenderer';
+import {ClickableTextRendererFactory} from './service/renderers/clickableTextRendererFactory';
 import {tableConsts} from './service/table.consts';
 
 import {rowCheckbox} from './ng/rowCheckbox.directive';
@@ -40,4 +42,6 @@ export default angular
   .service('tableConsts', tableConsts)
   .service('textRenderer', textRenderer)
   .service('textRendererFactory', textRendererFactory)
+  .service('clickableTextRenderer', ClickableTextRenderer)
+  .service('clickableTextRendererFactory', ClickableTextRendererFactory)
   .name;

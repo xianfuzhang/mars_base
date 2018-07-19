@@ -9,7 +9,8 @@ export class mdlTable {
       'tableConsts',
       'renderService',
       'fastListenerService',
-      'textRendererFactory'
+      'textRendererFactory',
+      'clickableTextRendererFactory'
     ];
   }
 
@@ -215,6 +216,7 @@ export class mdlTable {
     scope._OnRegistryToRenders = () => {
       //let registry = scope._getRendererService();
       scope.renderService.register('text', this.di.textRendererFactory);
+      scope.renderService.register('clickabletext', this.di.clickableTextRendererFactory);
     };
 
     scope._onDataSuccess = (response) => {

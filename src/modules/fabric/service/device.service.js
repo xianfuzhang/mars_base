@@ -71,6 +71,7 @@ export class DeviceService{
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.NAME'),
         'field': 'switch_name',
+        'type': 'clickabletext',
         'layout': {'visible': true, 'sortable': true, 'fixed': true},
       },
       {
