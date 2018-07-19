@@ -7,7 +7,7 @@ var _ = require('lodash'),
 const chance = new Chance();
 
 class Device {
-  constructor (id, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassId, driver, portMinNum) {
+  constructor (id, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassId, driver, portMinNum, leaf_group) {
     this.id = id;
     this.type = type;
     this.available = available;
@@ -20,6 +20,7 @@ class Device {
     this.mfr = mfr;
     this.chanssId = chassId;
     this.driver = driver;
+    this.leaf_group = leaf_group;
     this.lastUpdate = (new Date()).getMilliseconds();
     // TODO:
     this.humanReadableLastUpdate = "connected 4m52s ago";
