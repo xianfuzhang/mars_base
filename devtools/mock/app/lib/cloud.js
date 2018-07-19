@@ -29,10 +29,11 @@ let cloudLib = {
     let spineNum = chance.natural({min:3, max:5});
     let unknownNum = chance.natural({min:2, max:4});
     let leafNum = config.deviceNumber - spineNum - unknownNum;
+    let leafGroups = [];
     if(leafNum < 1) return;
     
     _.times(config.deviceNumber, (index) => {
-      let type, portMinNum;
+      let type, portMinNum, leaf_group = "";
       if(index < spineNum) {
         type = config.deviceTypes[0];
         portMinNum = leafNum;
@@ -42,6 +43,8 @@ let cloudLib = {
       } else {
         type =  config.deviceTypes[2];
         portMinNum = spineNum;
+        leaf_group = `${(index - spineNum - unknownNum) % Math.ceil(leafNum / 2 + 1)}`;
+        leafGroups.push(leaf_group);
       }
       let device = new Device(
         chance.guid(),
@@ -56,7 +59,8 @@ let cloudLib = {
         chance.company(),
         chance.natural({ min: 1000, max: 9999 }),
         chance.word(),
-        portMinNum);
+        portMinNum,
+        leaf_group);
   
       // adding data to the cloud
       cloudModel.devices.push(device);
@@ -93,32 +97,65 @@ let cloudLib = {
     }
     
     // 2.leaf--leaf links
-    _.times(config.linkLeafNumber, () => {
-      let linkType = chance.pickone(config.linkTypes);
-      let linkState = chance.pickone(config.linkStates);
-      let pairDevices = chance.pick(cloudModel.devices.slice(spineNum+unknownNum), 2);
+    leafGroups.forEach((leaf_group) => {
+      let result = _.find(cloudModel.devices.slice(spineNum+unknownNum), (device) => {
+        return device.leaf_group == leaf_group;
+      });
+      
+      if(result && result.length > 1) {
+        let linkType = chance.pickone(config.linkTypes);
+        let linkState = chance.pickone(config.linkStates);
+        let pairDevices = chance.pick(cloudModel.devices.slice(spineNum+unknownNum), 2);
   
-      let linkPair = getLinkPair(pairDevices[0], pairDevices[1]);
-      let link = new Link(
-        linkPair[0].src.port,
-        linkPair[0].src.device,
-        linkPair[0].dst.port,
-        linkPair[0].dst.device,
-        linkType,
-        linkState);
-      // adding data to the cloud
-      cloudModel.links.push(link);
+        let linkPair = getLinkPair(pairDevices[0], pairDevices[1]);
+        let link = new Link(
+          linkPair[0].src.port,
+          linkPair[0].src.device,
+          linkPair[0].dst.port,
+          linkPair[0].dst.device,
+          linkType,
+          linkState);
+        // adding data to the cloud
+        cloudModel.links.push(link);
   
-      link = new Link(
-        linkPair[1].src.port,
-        linkPair[1].src.device,
-        linkPair[1].dst.port,
-        linkPair[1].dst.device,
-        linkType,
-        linkState);
-      // adding data to the cloud
-      cloudModel.links.push(link);
+        link = new Link(
+          linkPair[1].src.port,
+          linkPair[1].src.device,
+          linkPair[1].dst.port,
+          linkPair[1].dst.device,
+          linkType,
+          linkState);
+        // adding data to the cloud
+        cloudModel.links.push(link);
+      }
     });
+    
+    // _.times(config.linkLeafNumber, () => {
+    //   let linkType = chance.pickone(config.linkTypes);
+    //   let linkState = chance.pickone(config.linkStates);
+    //   let pairDevices = chance.pick(cloudModel.devices.slice(spineNum+unknownNum), 2);
+    //
+    //   let linkPair = getLinkPair(pairDevices[0], pairDevices[1]);
+    //   let link = new Link(
+    //     linkPair[0].src.port,
+    //     linkPair[0].src.device,
+    //     linkPair[0].dst.port,
+    //     linkPair[0].dst.device,
+    //     linkType,
+    //     linkState);
+    //   // adding data to the cloud
+    //   cloudModel.links.push(link);
+    //
+    //   link = new Link(
+    //     linkPair[1].src.port,
+    //     linkPair[1].src.device,
+    //     linkPair[1].dst.port,
+    //     linkPair[1].dst.device,
+    //     linkType,
+    //     linkState);
+    //   // adding data to the cloud
+    //   cloudModel.links.push(link);
+    // });
     
     // create endpoints
     _.times(config.endpointsNumber, () => {
