@@ -7,7 +7,7 @@ var _ = require('lodash'),
 const chance = new Chance();
 
 class Device {
-  constructor (id, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassId, driver) {
+  constructor (id, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassId, driver, portMinNum) {
     this.id = id;
     this.type = type;
     this.available = available;
@@ -24,7 +24,7 @@ class Device {
     // TODO:
     this.humanReadableLastUpdate = "connected 4m52s ago";
     this.annotations = this.createAnnotations();
-    this.ports = this.createPhysicalPorts(id, chance.natural({min:6, max:8}));
+    this.ports = this.createPhysicalPorts(id, portMinNum + 8);
     this.storm = this.createStorm();
   }
 

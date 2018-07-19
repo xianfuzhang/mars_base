@@ -6,6 +6,7 @@
   "repository": "https://github.com/angular/angular-seed",
   "license": "MIT",
   "scripts": {
+    "postinstall": "npm --prefix ./devtools/mock install ./devtools/mock",
     "prebuild:dev": "webpack --config devtools/webpack/webpack.config",
     "build:dev": "concurrently \"webpack-dev-server --config devtools/webpack/webpack.config\" \"node devtools/mock/app/app.js\"",
     "prestart": "npm install",
