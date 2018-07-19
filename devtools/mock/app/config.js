@@ -1,11 +1,11 @@
 let config = {
   // new config
-  deviceNumber: 5,
-  deviceTypes: ['leaf', 'spine', 'unknown'],
+  deviceNumber: 20,
+  deviceTypes: ['spine', 'unknown', 'leaf'],
   deviceRoles: ['MASTER', 'SLAVE'],
   deviceProtocols: ['Rest', 'gRPC', 'SNMP', 'OF_13'],
   
-  linkNumber: 10,
+  linkLeafNumber: 5,
   linkProtocols: ['LLDP', 'Manual'],
   linkTypes: ['DIRECT'],
   linkStates: ['ACTIVE'],
