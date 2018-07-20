@@ -8,7 +8,7 @@ let config = {
   linkLeafNumber: 5,
   linkProtocols: ['LLDP', 'Manual'],
   linkTypes: ['DIRECT'],
-  linkStates: ['ACTIVE'],
+  linkStates: ['ACTIVE', 'INACTIVE'],
   
   endpointsNumber: 5,
 };
