@@ -22,7 +22,6 @@ class Device {
     this.driver = driver;
     this.leaf_group = leaf_group;
     this.lastUpdate = (new Date()).getMilliseconds();
-    // TODO:
     this.humanReadableLastUpdate = "connected 4m52s ago";
     this.annotations = this.createAnnotations();
     this.ports = this.createPhysicalPorts(id, portMinNum + 8);
@@ -50,7 +49,7 @@ class Device {
       }
       
       let annotations = {
-        linkStatus: chance.pickone(['Down', 'Up']),
+        linkStatus: chance.pickone(['Down', 'Up', 'Up', 'Up']),
         interfaceType: chance.word(),
         portName: chance.word(),
         portMac: chance.mac_address()
