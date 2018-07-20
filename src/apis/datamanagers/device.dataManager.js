@@ -26,6 +26,58 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getDeviceDetail(deviceId) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDeviceDetailUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+  getDevicePorts(deviceId, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDevicePortsUrl(deviceId), {'params': params}).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'ports': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
+  getDevicePortsStatistics(deviceId, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDevicePortsStatisticsUrl(deviceId), {'params': params}).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'ports': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
+  getDeviceFlows(deviceId, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDeviceFlowsUrl(deviceId), {'params': params}).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'flows': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
   getPorts(params) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getPortsUrl(), {'params': params}).then(

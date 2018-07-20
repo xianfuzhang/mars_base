@@ -64,8 +64,24 @@ export class appService {
     return this.getZoneEndpoint() + 'onos/v1/devices';
   }
 
+  getDeviceDetailUrl(deviceId){
+    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId;
+  }
+
   getPortsUrl() {
     return this.getZoneEndpoint() + 'onos/v1/devices/ports';
+  }
+
+  getDevicePortsUrl(deviceId) {
+    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId + '/ports';
+  }
+
+  getDevicePortsStatisticsUrl(deviceId) {
+    return this.getZoneEndpoint() + 'onos/v1/statistics/ports/' + deviceId;
+  }
+
+  getDeviceFlowsUrl(deviceId) {
+    return this.getZoneEndpoint() + 'onos/v1/sflow/' + deviceId;
   }
 
   getLinksUrl() {
