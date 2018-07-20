@@ -26,6 +26,7 @@ class AliasProvider {
       'mdlHeader': path.resolve('src/components/mdl-header'),
       'menu': path.resolve('src/components/menu/'),
       'marHeader': path.resolve('src/components/mar-header/'),
+      'contentHeader': path.resolve('src/components/content-header/'),
       'marDrawer': path.resolve('src/components/mar-drawer/'),
       'marSection': path.resolve('src/components/mar-section/'),
       'footer': path.resolve('src/components/footer/'),

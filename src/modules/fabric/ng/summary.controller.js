@@ -55,28 +55,24 @@ export class FabricSummaryController {
 
       return distributeSwt;
     };
-    let dstSwt = distributeSwitches(this.di.deviceService.getAllSwitches());
 
     this.di.$scope.fabricModel = {
       headers:this.di.appService.CONST.HEADER,
-      deSpines:dstSwt.spine,
-      deLeafs:dstSwt.leaf,
-      deOthers:dstSwt.other,
-      deLinks: this.di.deviceService.getAllLinks()
+      showSwitchDetail: false,
+      isShowTopo: false
     };
+    this.di.deviceDataManager.getDetailDevices().then((res)=>{
+      let dstSwt = distributeSwitches(res.data.devices);
+      this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
+      this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
+      this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
+      this.di.$scope.fabricModel.isShowTopo = true;
+    });
 
+    this.di.deviceDataManager.getLinks().then((res)=>{
+      this.di.$scope.fabricModel['deLinks'] = res.data.links;
+    });
 
-
-    // let deferred = this.di.$q.defer();
-    // this.di.$http.get('http://192.168.122.45:9200/alert_types/_search').then(
-    //   (response) => {
-    //     console.log('success to get es data');
-    //     console.log(response)
-    //   },
-    //   () => {
-    //     console.log('failed to get es data');
-    //   }
-    // );
 
     this.di.localStoreService.getStorage(fabric_storage_ns).get('topo_set').then((data)=>{
       if(data === undefined){
@@ -86,7 +82,7 @@ export class FabricSummaryController {
           "show_ports":false,
         }
       } else {
-        this.di.$scope.fabricModel.topoSetting = data
+        this.di.$scope.fabricModel.topoSetting = data;
       }
     });
 
@@ -166,12 +162,29 @@ export class FabricSummaryController {
     let win_width = this.di.$window.innerWidth;
     this.di.$scope.resize_right_plus = {'width': (win_width - 300)+ 'px','right':'300px'};
 
-    let showSwitch = (id, type, summaryList) => {
+    let showSwitchDetail = (id, type, summaryList) => {
+      if(this.di.$scope.fabricModel.showSwitchDetail){
+        this.di.$scope.fabricModel.showSwitchDetail = false;
+        this.di.$scope.$apply();
+      }
+      this.di.$scope.fabricModel.showSwitchId = id;
+
+
+      this.di.$scope.fabricModel.showSwitchDetail = true;
+      this.di.$scope.$apply();
       showDetail(summaryList);
-      // showPorts();
+      showPorts();
       // showStatics();
       // showFlows();
     };
+
+    let hideSwitchDetail = () =>{
+      this.di.$scope.fabricModel.showSwitchDetail = false;
+      this.di.$scope.fabricModel.showSwitchId = null;
+      this.di.$scope.$apply();
+    };
+
+
 
     let showDetail = (summaryList) => {
       let leftDom = angular.element(document.getElementsByClassName('detail_summary__body--left'));
@@ -184,26 +197,22 @@ export class FabricSummaryController {
       });
     };
 
+    let showPorts = () =>{
+
+    };
+
 
     this.di.$scope.fabricModel.interfaceProvider = this.di.tableProviderFactory.createProvider({
-      query: (params) => {
+      query: () => {
         let defer = this.di.$q.defer();
-        let d = this.di.deviceService.getInterfaceByDevice();
-        let entities = this.getEntities(d.ports);
-        defer.resolve({
-          data: entities,
-          count: 10
+        this.di.deviceDataManager.getDeviceWithPorts(this.di.$scope.fabricModel.showSwitchId).then((res) => {
+          let entities = this.getEntities(res.data.ports);
+          defer.resolve({
+            data: entities,
+            count: entities.length
+          },()=>{
+          });
         });
-        // this.di.deviceDataManager.getPorts(params).then((res) => {
-        //   let entities = this.getEntities(res.data.ports);
-        //   defer.resolve({
-        //     data: entities,
-        //     count: res.data.total
-        //   },()=>{
-        //
-        //   });
-        //
-        // });
         return defer.promise;
       },
       getSchema: () => {
@@ -250,8 +259,14 @@ export class FabricSummaryController {
 
 
     unsubscribers.push(this.di.$rootScope.$on('switch_select',(evt, data)=>{
-      showSwitch(data.id, data.type,data.value);
+      showSwitchDetail(data.id, data.type,data.value);
     }));
+
+
+    unsubscribers.push(this.di.$rootScope.$on('topo_unselect',(evt)=>{
+      hideSwitchDetail();
+    }));
+
 
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unsubscribers, (unsubscribe) => {

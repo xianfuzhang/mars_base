@@ -105,6 +105,22 @@ export class Topo {
         this.spineContainer = new JTopo.Container();
         this.leafContainer = new JTopo.Container();
         this.otherContainer = new JTopo.Container();
+        //无法阻止事件不冒泡，所以不能通过点击scene事件来取消显示右侧的内容
+        // this.scene.click(function (e) {
+        //   console.log("scene click");
+        // })
+
+        this.spineContainer.click(function (e) {
+          unSelectNode();
+        });
+
+        this.leafContainer.click(function (e) {
+          unSelectNode();
+        });
+
+        this.otherContainer.click(function (e) {
+          unSelectNode();
+        });
 
         this.spineContainer.fillColor = '255,255,255';
         // this.leafContainer.fillColor = '239,239,239';
@@ -147,7 +163,7 @@ export class Topo {
         this.spineContainer.add(this.spineContainerRightNode);
 
         this.di._.forEach(scope.spines, (spine, key) => {
-          this.spines[spine.id] = genNormalNode(spine.id, DeviceType.spine);
+          this.spines[spine.id] = genNormalNode(spine.id, DeviceType.spine, spine.ports);
         });
 
       };
@@ -162,7 +178,7 @@ export class Topo {
 
 
         this.di._.forEach(scope.leafs, (leaf, key) => {
-          this.leafs[leaf.id] = genNormalNode(leaf.id, DeviceType.leaf);
+          this.leafs[leaf.id] = genNormalNode(leaf.id, DeviceType.leaf, leaf.ports);
         });
 
 
@@ -178,7 +194,7 @@ export class Topo {
 
 
         this.di._.forEach(scope.others, (other, key) => {
-          this.others[other.id] = genNormalNode(other.id, DeviceType.other);
+          this.others[other.id] = genNormalNode(other.id, DeviceType.other, other.ports);
         });
 
       };
@@ -188,6 +204,9 @@ export class Topo {
             this.di._.forEach(scope.links, (link, key) => {
               let deviceIds = [link.src.device, link.dst.device];
               let linkId = getLinkId(deviceIds);
+              if(this.links[linkId]){
+                return;
+              }
               this.links[linkId] = genLinkNode(deviceIds);
               if(link.state != this.active_status){
                 this.links[linkId].strokeColor = this.LINE_ERROR;
@@ -211,8 +230,8 @@ export class Topo {
       };
 
       let genLinkNode = (devices) => {
-        let nodeA = this.leafs[devices[0]] || this.spines[devices[0]];
-        let nodeB = this.leafs[devices[1]] || this.spines[devices[1]];
+        let nodeA = this.leafs[devices[0]] || this.spines[devices[0]] || this.others[devices[0]];
+        let nodeB = this.leafs[devices[1]] || this.spines[devices[1]] || this.others[devices[1]];
 
         let link = new JTopo.Link(nodeA, nodeB);
         link.zIndex = 20;
@@ -312,7 +331,7 @@ export class Topo {
         return node;
       };
 
-      let genNormalNode = (deviceId, type) =>{
+      let genNormalNode = (deviceId, type, ports) =>{
         let node = new JTopo.Node();
         node.dragable = true ;
         node.width = this.switch_width;
@@ -327,8 +346,9 @@ export class Topo {
         node.mouseover(mouseOverHandler);
         node.mouseout(mouseOutHandler);
         node.click(clickHandler);
+
         //根据实际的端口数来
-        let count = 36;
+        let count = ports.length;
         //超过48个端口len为2，根据实际情况来
         let len = 3;
         let height = this.switch_height;
@@ -349,7 +369,8 @@ export class Topo {
             let left = - width/2 + padding;
             let right = width/2 -padding - len;
             // top = 8;
-            for(let i = 0; i< count ; i++){
+            for(let i = 0; i< ports.length ; i++){
+              let port = ports[i];
               g.beginPath();
               if(i % 2 === 0){
                 g.rect(left, -height/2 +  top + parseInt(i/2) * (len + 1), len , len);
@@ -357,7 +378,7 @@ export class Topo {
                 g.rect(right, -height/2 + top + parseInt(i/2) * (len + 1), len , len);
               }
               g.fillStyle = status_normal;
-              if(i%10 === 0){
+              if(!port.isEnabled){
                 g.fillStyle = status_error;
               }
               g.fill();
@@ -549,6 +570,9 @@ export class Topo {
 
       initialize();
 
+      let unSelectNode = () => {
+        this.di.$rootScope.$emit("topo_unselect");
+      };
 
       let crushAllPorts = () =>{
         this.di._.forEach(scope.spines, (spine, key) => {
@@ -566,15 +590,15 @@ export class Topo {
 
       let genAllPorts = () =>{
         this.di._.forEach(scope.spines, (spine, key) => {
-          genPorts(this.spines[spine.id])
+          genPorts(this.spines[spine.id], spine.ports)
         });
 
         this.di._.forEach(scope.leafs, (leaf, key) => {
-          genPorts(this.leafs[leaf.id])
+          genPorts(this.leafs[leaf.id], leaf.ports)
         });
 
         this.di._.forEach(scope.others, (other, key) => {
-          genPorts(this.others[other.id])
+          genPorts(this.others[other.id], other.ports)
         });
       };
 
@@ -592,9 +616,8 @@ export class Topo {
       };
 
 
-      let genPorts = (node) => {
+      let genPorts = (node, ports) => {
         //根据实际的端口数来
-        let count = 36;
         //超过48个端口len为2，根据实际情况来
         let len = 3;
         let height = this.switch_height;
@@ -613,7 +636,8 @@ export class Topo {
           let left = - width/2 + padding;
           let right = width/2 -padding - len;
           // top = 8;
-          for(let i = 0; i< count ; i++){
+          for(let i = 0; i< ports.length ; i++){
+            let port = ports[i];
             g.beginPath();
             if(i % 2 === 0){
               g.rect(left, -height/2 +  top + parseInt(i/2) * (len + 1), len , len);
@@ -621,7 +645,7 @@ export class Topo {
               g.rect(right, -height/2 + top + parseInt(i/2) * (len + 1), len , len);
             }
             g.fillStyle = status_normal;
-            if(i%10 === 0){
+            if(!port.isEnabled){
               g.fillStyle = status_error;
             }
             g.fill();

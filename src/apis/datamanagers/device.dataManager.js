@@ -13,6 +13,33 @@ export class DeviceDataManager {
     });
   }
 
+  getDetailDevices(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getPortsUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'devices': []}});
+      }
+    );
+    return defer.promise;
+  }
+
+  getDeviceWithPorts(deviceId){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDevicePortsUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'devices': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+
+  }
+
   getDevices(params) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getDevicesUrl(), {'params': params}).then(

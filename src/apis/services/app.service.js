@@ -60,6 +60,11 @@ export class appService {
     return endpoint;
   }
 
+  getDevicePortsUrl(deviceId){
+    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId + '/ports';
+  }
+
+
   getDevicesUrl(){
     return this.getZoneEndpoint() + 'onos/v1/devices';
   }
