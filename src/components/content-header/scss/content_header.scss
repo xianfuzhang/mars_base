@@ -1,0 +1,41 @@
+@import 'xbem';
+@import 'default';
+@import 'shared';
+
+
+@include block(header_content) {
+  margin-top: 4px;
+  margin-left: 16px;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  //margin-bottom: 16px;
+  flex-basis: 30px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  @include element(breadcrumb) {
+    a, span {
+      font-size: 12px;
+      text-decoration: none;
+    }
+  }
+
+  @include element(sep) {
+    margin: 0px 5px;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  @include element(title) {
+    max-width: 400px;
+    font-size: 24px;
+    font-weight: 200;
+    letter-spacing: 2px;
+    vertical-align: bottom;
+    margin-top: 10px;
+  }
+}
+

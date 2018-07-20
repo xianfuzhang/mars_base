@@ -16,6 +16,7 @@ import 'logical';
 
 import 'mdc';
 import 'mdlHeader';
+import 'contentHeader';
 import 'mdlTable';
 import 'modal';
 import 'menu';
@@ -49,6 +50,7 @@ angular
     'menu',
     'marDrawer',
     'marHeader',
+    'contentHeader',
     'marSection',
     'footer',
     'topo',

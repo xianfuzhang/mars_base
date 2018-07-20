@@ -36,8 +36,6 @@ export class deviceTooltip {
         let showArray = param.value;
         let leftDom = angular.element(element[0].getElementsByClassName('deviceTooltip__content__body--left'));
         let rightDom = angular.element(element[0].getElementsByClassName('deviceTooltip__content__body--right'));
-        // let leftDom = angular.element(element).find('.deviceTooltip__content__body--left');
-        // let rightDom = angular.element(element).find('.deviceTooltip__content__body--right');
 
         this.di._.forEach(showArray, (item, key)=>{
           leftDom.append('<div>'+ item.label +'</div>');
@@ -48,18 +46,10 @@ export class deviceTooltip {
         let win_width = this.di.$window.innerWidth;
         let win_height = this.di.$window.innerHeight;
 
-        // let out_width = this.di.$window.outerWidth;
-        // let out_height = this.di.$window.outerHeight;
-        // let scrollY  = this.di.$window.scrollY;
-        // let scrollX  = this.di.$window.scrollX;
-
         let tooltipHeight = 400;
         let tooltipWidth = 428;
         tooltipHeight = element[0].clientHeight;
         tooltipWidth = element[0].clientWidth;
-
-
-
 
         let tooltipTop = param.event.clientY - tooltipHeight/2;
 

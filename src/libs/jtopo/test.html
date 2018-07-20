@@ -8,15 +8,28 @@
     <script type="text/javascript" src="./jtopo-0.4.8-min.js"></script>
 </head>
 <body ng-app="marsApp">
-<canvas width="800" height="800" id="canvas" style="background-color: gray"></canvas>
+<canvas width="800" height="800" id="canvas" style="background-color: white"></canvas>
 </body>
 <script type="text/javascript">
 
 
   var canvas = document.getElementById('canvas');
+
+
+  var context = canvas.getContext('2d');
+  // 设置文字阴影的颜色为黑色，透明度为20%
+  context.shadowColor = 'rgba(0, 0, 0, 0.5)';
+  // 将阴影向右移动15px，向上移动10px
+  context.shadowOffsetX = 2;
+  context.shadowOffsetY = 2;
+  // 轻微模糊阴影
+  context.shadowBlur = 2;
+//  context.opacity = 1;
+  context.globalAlpha = 1;
+
   var stage = new JTopo.Stage(canvas); // 创建一个舞台对象
   stage.removeAllEventListener();
-  stage.mode = 'a'
+  stage.mode = 'edit';
   stage.mousedrag(function (a) {
     console.log(a)
   })
@@ -24,12 +37,18 @@
   var scene = new JTopo.Scene(stage); // 创建一个场景对象
   scene.removeAllEventListener();
 
-//  let node1 = new JTopo.Node();
-//  node1.percent = 0.1;
-//  node1.beginDegree = 0;
-//  node1.width = 20;
-//  node1.height = 80;
-//  node1.setLocation(400, 210);
+  let node111 = new JTopo.Node();
+  node111.percent = 0.1;
+  node111.beginDegree = 0;
+  node111.width = 20;
+  node111.height = 80;
+  node111.setLocation(400, 210);
+//  node111.shadowOffsetX = 5;
+//  node111.shadowOffsetY = 15;
+//  node111.shadowColor = '0,255,0';
+//  node111.shadowBlur = 5;
+
+  scene.add(node111);
 ////  node1.showSelected = false;
 //  node1.paint = function(g){
 //    g.beginPath();
@@ -82,7 +101,7 @@
   container.fontColor = '100,255,0';
   container.font = '18pt 微软雅黑';
   container.borderColor = '255,0,0';
-  container.fillColor = '255,255,255';
+  container.fillColor = '255,0,255';
   container.borderRadius = 0; // 圆角
   container.dragable = false;
   scene.add(container);
@@ -126,6 +145,7 @@
   container1.borderColor = '255,0,0';
   container1.fillColor = '255,255,255';
   container1.borderRadius = 0; // 圆角
+  container1.alpha = 1;
   container1.dragable = false;
   scene.add(container1);
   //  container.add(node1);
@@ -158,9 +178,11 @@
   stage.dragable = false;
 
 
+  stage.saveAsLocalImage();
 
 
-  //  for(var i=0; i<5; i++){
+
+//  for(var i=0; i<5; i++){
 //    var node = new JTopo.Node("A_"+i);
 //    node.textPosition = "Middle_Center";
 //    node.setLocation(300+ Math.random() * 300, 200+ Math.random() * 200);

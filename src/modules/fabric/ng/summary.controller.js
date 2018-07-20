@@ -6,6 +6,7 @@
 export class FabricSummaryController {
   static getDI() {
     return [
+      '$filter',
       '$scope',
       '$rootScope',
       '_',
@@ -17,18 +18,28 @@ export class FabricSummaryController {
       'localStoreService',
       'deviceService',
       'appService',
+      'deviceDataManager',
+      'tableProviderFactory',
+      'deviceService'
     ];
   }
 
   constructor(...args) {
     this.di = {};
+
     FabricSummaryController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
 
+    this.translate = this.di.$filter('translate');
+
     let fabric_storage_ns = "storage_farbic_";
+    let unsubscribers = [];
 
     this.resizeTimeout = null;
+    this.di.$scope.resize_right_plus = {};
+    this.di.$scope.resize_right = {};
+    this.di.$scope.resize_length = {};
 
     let  distributeSwitches = (allSwitches) => {
       let distributeSwt = {'spine':[], 'leaf':[], 'other':[]};
@@ -43,31 +54,25 @@ export class FabricSummaryController {
       });
 
       return distributeSwt;
-    }
-    let dstSwt = distributeSwitches(this.di.deviceService.getAllSwitches());
+    };
 
     this.di.$scope.fabricModel = {
       headers:this.di.appService.CONST.HEADER,
-      deSpines:dstSwt.spine,
-      deLeafs:dstSwt.leaf,
-      deOthers:dstSwt.other,
-      deLinks: this.di.deviceService.getAllLinks()
+      showSwitchDetail: false,
+      isShowTopo: false
     };
+    this.di.deviceDataManager.getDetailDevices().then((res)=>{
+      let dstSwt = distributeSwitches(res.data.devices);
+      this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
+      this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
+      this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
+      this.di.$scope.fabricModel.isShowTopo = true;
+    });
 
-    this.di.$scope.resize_right_plus = {};
-    this.di.$scope.resize_right = {};
-    this.di.$scope.resize_length = {};
+    this.di.deviceDataManager.getLinks().then((res)=>{
+      this.di.$scope.fabricModel['deLinks'] = res.data.links;
+    });
 
-    // let deferred = this.di.$q.defer();
-    // this.di.$http.get('http://192.168.122.45:9200/alert_types/_search').then(
-    //   (response) => {
-    //     console.log('success to get es data');
-    //     console.log(response)
-    //   },
-    //   () => {
-    //     console.log('failed to get es data');
-    //   }
-    // );
 
     this.di.localStoreService.getStorage(fabric_storage_ns).get('topo_set').then((data)=>{
       if(data === undefined){
@@ -77,7 +82,7 @@ export class FabricSummaryController {
           "show_ports":false,
         }
       } else {
-        this.di.$scope.fabricModel.topoSetting = data
+        this.di.$scope.fabricModel.topoSetting = data;
       }
     });
 
@@ -102,9 +107,6 @@ export class FabricSummaryController {
       this.di.$rootScope.$emit('show_ports');
 
     };
-
-
-
 
     this.di.$scope.resize_div = (event) => {
       console.log(event);
@@ -148,22 +150,151 @@ export class FabricSummaryController {
     });
 
 
-    this.di.$timeout(function () {
-      // initTop()
-    },200);
+    // this.di.$timeout(function () {
+    //   // initTop()
+    // },200);
+
+    // let initTop = () =>{
+    //   this.di.$rootScope.$emit('resize_canvas');
+    // };
 
 
     let win_width = this.di.$window.innerWidth;
     this.di.$scope.resize_right_plus = {'width': (win_width - 300)+ 'px','right':'300px'};
 
-    let initTop = () =>{
-      this.di.$rootScope.$emit('resize_canvas');
+    let showSwitchDetail = (id, type, summaryList) => {
+      if(this.di.$scope.fabricModel.showSwitchDetail){
+        this.di.$scope.fabricModel.showSwitchDetail = false;
+        this.di.$scope.$apply();
+      }
+      this.di.$scope.fabricModel.showSwitchId = id;
+
+
+      this.di.$scope.fabricModel.showSwitchDetail = true;
+      this.di.$scope.$apply();
+      showDetail(summaryList);
+      showPorts();
+      // showStatics();
+      // showFlows();
+    };
+
+    let hideSwitchDetail = () =>{
+      this.di.$scope.fabricModel.showSwitchDetail = false;
+      this.di.$scope.fabricModel.showSwitchId = null;
+      this.di.$scope.$apply();
     };
 
 
 
+    let showDetail = (summaryList) => {
+      let leftDom = angular.element(document.getElementsByClassName('detail_summary__body--left'));
+      let rightDom = angular.element(document.getElementsByClassName('detail_summary__body--right'));
+      rightDom.empty();
+      leftDom.empty();
+      this.di._.forEach(summaryList, (item, key)=>{
+        leftDom.append('<div>'+ item.label +'</div>');
+        rightDom.append('<div>'+ item.value +'</div>');
+      });
+    };
+
+    let showPorts = () =>{
+
+    };
 
 
+    this.di.$scope.fabricModel.interfaceProvider = this.di.tableProviderFactory.createProvider({
+      query: () => {
+        let defer = this.di.$q.defer();
+        this.di.deviceDataManager.getDeviceWithPorts(this.di.$scope.fabricModel.showSwitchId).then((res) => {
+          let entities = this.getEntities(res.data.ports);
+          defer.resolve({
+            data: entities,
+            count: entities.length
+          },()=>{
+          });
+        });
+        return defer.promise;
+      },
+      getSchema: () => {
+        return {
+          // schema: this.di.deviceService.getPortTableSchema(),
+          schema: [
+            /*{
+             'label': 'ID',
+             'field': 'id',
+             'layout': {'visible': true, 'sortable': false, 'fixed': true}
+             },*/
+            {
+              'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.NAME'),
+              'field': 'port_name',
+              'layout': {'visible': true, 'sortable': true, 'fixed': true}
+            },
+            {
+              'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.PORT_ID'),
+              'field': 'port_id',
+              'layout': {'visible': true, 'sortable': true}
+            },
+            {
+              'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.STATUS'),
+              'field': 'port_status',
+              'layout': {'visible': true, 'sortable': true}
+            },
+            {
+              'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
+              'field': 'link_status',
+              'layout': {'visible': true, 'sortable': true}
+            },
+            {
+              'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.SPEED'),
+              'field': 'speed',
+              'layout': {'visible': true, 'sortable': true}
+            }
+          ],
+          index_name: 'port_mac',
+          rowCheckboxSupport: false,
+          rowActionsSupport: true
+        };
+      }
+    });
+
+
+    unsubscribers.push(this.di.$rootScope.$on('switch_select',(evt, data)=>{
+      showSwitchDetail(data.id, data.type,data.value);
+    }));
+
+
+    unsubscribers.push(this.di.$rootScope.$on('topo_unselect',(evt)=>{
+      hideSwitchDetail();
+    }));
+
+
+    this.di.$scope.$on('$destroy', () => {
+      this.di._.each(unsubscribers, (unsubscribe) => {
+        unsubscribe();
+      });
+      this.di.$log.info('FabricSummaryController', 'Destroyed');
+    });
+
+  }
+
+  getEntities(origins){
+    let entities = [];
+    if(!Array.isArray(origins)) return entities;
+    origins.forEach((port) => {
+      let obj = {};
+      obj.element = port.element;
+      obj.port_name = port.annotations.portName;
+      obj.port_mac = port.annotations.portMac;
+      obj.port_id = port.port;
+      obj.link_status = port.annotations.linkStatus;
+      obj.type = port.type;
+      obj.speed = port.portSpeed;
+      obj.device_name = port.device_name;
+      obj.isEnabled = port.isEnabled;
+      obj.port_status ='1';
+      entities.push(obj);
+    });
+    return entities;
   }
 }
 

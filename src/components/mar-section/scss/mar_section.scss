@@ -6,7 +6,8 @@
 
 
 @include block(mar_section){
-  padding: 8px 8px;
+  margin: 12px 8px;
+  display: inline-block;
 
 
 
@@ -26,6 +27,8 @@
     font-weight: 200;
     font-size: 18px;
     border-bottom: 1px solid lightgray;
+    min-width:400px;
+
 
     @include element(icon){
       background: url('../image/arrow.svg') no-repeat;

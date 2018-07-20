@@ -231,4 +231,15 @@ $scope.steps = [
 
 **``before-cancel:``** 点击``wizard``对话框中**``取消``**按钮，会先调用这个方法，并将表单内容传递给此方法。当此方法返回**``true``**时，``wizard``对话框才会关闭，否则不会关闭。**``注意：``**``cancel(formData)``参数名``formData``不能修改。  
 
-**``before-submit:``** 点击``wizard``对话框中**``确定``**按钮，会先调用这个方法，并将表单内容传递给此方法。当此方法返回**``true``**时，``wizard``对话框才会关闭，否则不会关闭。**``注意：``**``submit(formData)``参数名``formData``不能修改。  
+**``before-submit:``** 点击``wizard``对话框中**``确定``**按钮，会先调用这个方法，并将表单内容传递给此方法。当此方法返回**``true``**时，``wizard``对话框才会关闭，否则不会关闭。**``注意：``**``submit(formData)``参数名``formData``不能修改。
+  
+  
+### mar-section
+```
+<mar-section title="Topo Settings" class="topo_setting">
+...    
+</mar-section>
+```
+
+**title**: head部分的名字
+另外section里面的内容根据实际使用添加

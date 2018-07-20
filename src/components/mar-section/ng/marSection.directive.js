@@ -51,7 +51,8 @@ export class marSection {
         // console.log('==' + starttime + duration);
         let time = (new Date()).getTime() - starttime;
         if(time > duration) {
-          bodyDom.css('height',scope.lastHeight+'px');
+          // bodyDom.css('height',scope.lastHeight+'px');
+          bodyDom.css('height','auto');
           return;
         }
         if(!scope.isDown) {
@@ -73,6 +74,7 @@ export class marSection {
       let dynamicUp = (starttime, duration) => {
         let time = (new Date()).getTime() - starttime;
         if(time > duration) {
+          bodyDom.css('height','auto');
           bodyDom.css('display','none');
           return;
         }
@@ -91,6 +93,8 @@ export class marSection {
 
 
       scope.foldAndNot = (event) =>{
+        let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
+        scope.lastHeight = scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
         if(scope.sectionModel.isFold){
           scope.sectionModel.showStyle = {'display':'block','height':'0px'};
           scope.sectionModel.iconStyle = {'animation': '.15s ease-out', 'animation-name': 'section_expand', 'transform': 'rotateZ(0deg)'};
@@ -100,12 +104,16 @@ export class marSection {
         } else {
           // scope.sectionModel.showStyle = {'display':'none'};
           scope.sectionModel.iconStyle = {'animation': '.15s ease-out', 'animation-name': 'section_fold', 'transform': 'rotateZ(270deg)'};
+          if(!scope.isDown){
+            let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
+            scope.lastHeight = scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
+          }
           scope.isDown = false;
           scope.isUp = true;
           setTimeout(dynamicUp((new Date()).getTime(), 500),10);
         }
         scope.sectionModel.isFold = !scope.sectionModel.isFold;
-      }
+      };
 
       setTimeout(function () {
         let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));

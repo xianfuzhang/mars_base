@@ -26,3 +26,54 @@
   border: 1px solid lightgray;
   background-color: lightgray;
 }
+
+@include block(detail_summary){
+  @include element(body){
+    display: inline;
+    font-size:16px;
+    font-family: "helvetica neue","Roboto",helvetica,arial,verdana,"trebuchet ms",calibri,sans-serif;
+    color:black;
+    white-space: nowrap;
+
+    @include modifier(right){
+      display:inline-block;
+
+      div{
+        padding-top: 4px;
+        padding-left:8px;
+      }
+    }
+
+    @include modifier(left){
+      text-transform: capitalize;
+      display:inline-block;
+      text-align: right;
+      font-weight:300;
+      div{
+        text-align: right;
+        padding-top:4px;
+      }
+    }
+  }
+}
+
+
+.mdc-icon-button{
+  width:32px !important;
+  height:32px !important;
+  padding:0px !important;
+}
+
+.mdl-table-header__row, .mdl-table-body__row{
+  height:32px !important;
+}
+
+.table-td-field{
+  height:32px !important;
+}
+
+.mdl-table-field__content{
+  height:auto !important;
+}
+
+

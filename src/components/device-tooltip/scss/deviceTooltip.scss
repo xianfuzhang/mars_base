@@ -58,32 +58,32 @@
 
 
     @include element(body){
-      display: inline;
-      font-size:16px;
-      font-family: "helvetica neue","Roboto",helvetica,arial,verdana,"trebuchet ms",calibri,sans-serif;
-      color:black;
+       display: inline;
+       font-size:16px;
+       font-family: "helvetica neue","Roboto",helvetica,arial,verdana,"trebuchet ms",calibri,sans-serif;
+       color:black;
 
-      @include modifier(right){
-        display:inline-block;
+       @include modifier(right){
+         display:inline-block;
 
-        div{
-          //text-align: right;
-          padding-top: 4px;
-          padding-left:8px;
-        }
-      }
+         div{
+           //text-align: right;
+           padding-top: 4px;
+           padding-left:8px;
+         }
+       }
 
-      @include modifier(left){
-        text-transform: capitalize;
-        display:inline-block;
-        text-align: right;
-        font-weight:300;
-        div{
-          text-align: right;
-          padding-top:4px;
-        }
-      }
-    }
+       @include modifier(left){
+         text-transform: capitalize;
+         display:inline-block;
+         text-align: right;
+         font-weight:300;
+         div{
+           text-align: right;
+           padding-top:4px;
+         }
+       }
+     }
   }
 }
 
