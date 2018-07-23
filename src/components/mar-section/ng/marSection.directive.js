@@ -93,8 +93,8 @@ export class marSection {
 
 
       scope.foldAndNot = (event) =>{
-        let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
-        scope.lastHeight = scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
+        // let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
+        // scope.lastHeight = scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
         if(scope.sectionModel.isFold){
           scope.sectionModel.showStyle = {'display':'block','height':'0px'};
           scope.sectionModel.iconStyle = {'animation': '.15s ease-out', 'animation-name': 'section_expand', 'transform': 'rotateZ(0deg)'};
