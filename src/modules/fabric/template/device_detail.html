@@ -1,14 +1,57 @@
 <mdl-header></mdl-header>
 <div class="app-main">
-  <content-header big-title="Device 詳情">
+  <content-header big-title="{{page_title}}">
     <a href="/">Mars Cloud</a>
     <span>•</span>
-    <span>Device 詳情</span>
+    <span ng-bind="'MODULES.SWITCH.DETAIL.TITLE'|translate"></span>
   </content-header>
   <section class="+hasscroll" >
     <div class="main__content">
+      <div class="device-detail" ng-if="detailDisplay">
+        <div class="device-detail__row">
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.NAME'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.annotations.name}}</span>
+          </div>
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.IP'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.annotations.ipaddress}}</span>
+          </div>
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.MAC'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.mac}}</span>
+          </div>
+        </div>
+        <div class="device-detail__row">
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.RACK'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.rack_id}}</span>
+          </div>
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.TYPE'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.type}}</span>
+          </div>
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.GROUP'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.leaf_group}}</span>
+          </div>
+        </div>
+        <div class="device-detail__row">
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.AVAILABLE'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.available}}</span>
+          </div>
+        </div>
+      </div>
       <mdl-tabs ng-model="tabSelected" options="tabs"
-                class-list="main__content__device-tabs"
+                class-list="main__content__device-detail-tabs"
                 on-select="onTabChange($value)">
       </mdl-tabs>
       <section class="tab-content" ng-if="tabSelected.type == 'port'">

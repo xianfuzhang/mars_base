@@ -6,6 +6,10 @@
   margin: 0;
   width: 160px;
 }
+.mdc-tab-bar.main__content__device-detail-tabs{
+  margin: 0 auto;
+  height: 35px;
+}
 
 @include block(topo_setting){
 
@@ -57,5 +61,26 @@
   }
 }
 
-
-
+.device-detail {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+}
+.device-detail__row{
+  display: flex;
+  margin-bottom: 10px;
+}
+.device-detail__item{
+  display: flex;
+  margin-right: 20px;
+  width: 200px;
+  align-items: center;
+}
+.device-detail__item-label{
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.6;
+}
+.device-detail__item-value{
+  margin-left: 10px;
+}
