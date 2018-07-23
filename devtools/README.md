@@ -124,6 +124,7 @@ Options
 template 引入
 ```
 <mdl-table actions-show="dashModel.actionsShow"
+           table-size="small"
             row-click="onTableRowClick($event)"
              provider="dashModel.provider" api-ready="onApiReady($api)"
              on-add="addSwitch()" on-remove="removeSwitch($value)"></mdl-table>
@@ -136,7 +137,8 @@ Options 可参考test.html以及controller使用说明
     provider    数据准备的provider table根据provider获取数据
     api-ready   table 提供给外部使用接口   
     on-add      增加数据
-    on-remove    删除数据          
+    on-remove    删除数据  
+    table-size   默认为normal，可是设置small显示
 ```
 
 
