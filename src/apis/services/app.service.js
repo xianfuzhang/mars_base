@@ -21,7 +21,7 @@ export class appService {
             'group':'Fabric',
             'items':[
               {'label': 'Summary', 'url': '#!/fabric_summary'},
-              {'label': 'Devices', 'url': '/devices'},
+              {'label': 'Devices', 'url': '#!/devices'},
              // {'label': 'Interface Group', 'url': '/interface_group'},
               {'label': 'Statistics', 'url': '/statistics'},
               {'label': 'Storm Profile', 'url': '/storm_control'},
@@ -60,17 +60,28 @@ export class appService {
     return endpoint;
   }
 
-  getDevicePortsUrl(deviceId){
-    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId + '/ports';
-  }
-
-
   getDevicesUrl(){
     return this.getZoneEndpoint() + 'onos/v1/devices';
   }
 
+  getDeviceDetailUrl(deviceId){
+    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId;
+  }
+
   getPortsUrl() {
     return this.getZoneEndpoint() + 'onos/v1/devices/ports';
+  }
+
+  getDevicePortsUrl(deviceId) {
+    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId + '/ports';
+  }
+
+  getDevicePortsStatisticsUrl(deviceId) {
+    return this.getZoneEndpoint() + 'onos/v1/statistics/ports/' + deviceId;
+  }
+
+  getDeviceFlowsUrl(deviceId) {
+    return this.getZoneEndpoint() + 'onos/v1/sflow/' + deviceId;
   }
 
   getLinksUrl() {

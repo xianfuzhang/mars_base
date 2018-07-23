@@ -1,10 +1,12 @@
   <!--<button class="mdc-icon-button material-icons">menu</button>-->
 <div class="table-td-field mdc-menu-anchor">
-  <button id="menu-button" class="mdc-icon-button material-icons"
-          ng-click="_menuToggle($event)" >menu</button>
+  <button id="menu-button" class="material-icons mdc-icon-button mdc-icon-button__normal"
+          ng-class="{'mdc-icon-button__small': size === 'small'}"
+          ng-click="_menuToggle($event)" aria-hidden="true">menu</button>
   <div class="mdc-menu table-row-action-list">
     <ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">
-      <li class="mdc-list-item" role="menuitem" tabindex="0"
+      <li class="mdc-list-item mdc-list-item__normal-size" role="menuitem" tabindex="0"
+          ng-class="{'mdc-list-item__small-size': size === 'small'}"
           ng-click="clickItem(item, $event)"
           ng-repeat="item in actions track by $index">
         {{item.label}}

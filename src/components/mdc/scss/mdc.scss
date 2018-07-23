@@ -8,3 +8,33 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+.mdc-icon-button.mdc-icon-button__normal{
+  font-size: 22px;
+  height: 35px;
+  width: 35px;
+  padding: 5px;
+}
+.mdc-icon-button.mdc-icon-button__small{
+  font-size: 18px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+.mdc-checkbox.mdc-checkbox__normal{
+  padding: 0;
+}
+.mdc-checkbox.mdc-checkbox__normal::before, .mdc-checkbox.mdc-checkbox__normal::after,
+.mdc-checkbox.mdc-checkbox__small::before, .mdc-checkbox.mdc-checkbox__small::after{
+  width: 0;
+  height: 0;
+}
+.mdc-checkbox__background.mdc-checkbox__background-normal{
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+}
+.mdc-checkbox__background.mdc-checkbox__background-small{
+  width: 15px;
+  height: 15px;
+}

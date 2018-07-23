@@ -5,6 +5,7 @@ import {DeviceDetailController} from './ng/deviceDetail.controller';
 import {StatisticController} from './ng/statistic.controller';
 import {StormControlController} from './ng/stormControl.controller';
 import {DeviceService} from './service/device.service';
+import {DeviceDetailService} from './service/deviceDetail.service';
 import {FabricSummaryController} from './ng/summary.controller';
 import {StormService} from './service/storm.service';
 
@@ -17,5 +18,6 @@ export default angular
   .controller('stormControlController', StormControlController)
   .controller('fabricSummaryController', FabricSummaryController)
   .service('deviceService', DeviceService)
+  .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)
   .name;

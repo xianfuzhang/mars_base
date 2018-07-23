@@ -1,5 +1,42 @@
 <mdl-header></mdl-header>
 <div class="app-main">
+  <content-header big-title="Device 詳情">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span>Device 詳情</span>
+  </content-header>
   <section class="+hasscroll" >
+    <div class="main__content">
+      <mdl-tabs ng-model="tabSelected" options="tabs"
+                class-list="main__content__device-tabs"
+                on-select="onTabChange($value)">
+      </mdl-tabs>
+      <section class="tab-content" ng-if="tabSelected.type == 'port'">
+        <mdl-table actions-show="detailModel.actionsShow"
+                   actions="detailModel.rowActions"
+                   row-click="onTableRowClick($event)"
+                   provider="detailModel.provider" api-ready="onApiReady($api)">
+        </mdl-table>
+      </section>
+      <section class="tab-content" ng-if="tabSelected.type == 'link'">
+        <mdl-table actions-show="detailModel.actionsShow"
+                   row-click="onTableRowClick($event)"
+                   provider="detailModel.provider" api-ready="onApiReady($api)">
+        </mdl-table>
+      </section>
+      <section class="tab-content" ng-if="tabSelected.type == 'statistic'">
+        <mdl-table actions-show="detailModel.actionsShow"
+                   row-click="onTableRowClick($event)"
+                   provider="detailModel.provider" api-ready="onApiReady($api)">
+        </mdl-table>
+      </section>
+      <section class="tab-content" ng-if="tabSelected.type == 'flow'">
+        <mdl-table actions-show="detailModel.actionsShow"
+                   actions="detailModel.rowActions"
+                   row-click="onTableRowClick($event)"
+                   provider="detailModel.provider" api-ready="onApiReady($api)">
+        </mdl-table>
+      </section>
+    </div>
   </section>
 </div>

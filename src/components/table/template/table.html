@@ -2,20 +2,22 @@
   <!--<div class="mdl-table-field">-->
     <!--<table-action></table-action>-->
     <div class="mdl-table-field__actions">
-      <mdl-button ng-click="_menu($event)" ng-if="actionsShow.menu" icon-name="menu"></mdl-button>
-      <mdl-button ng-click="_add($event)" ng-if="actionsShow.add" icon-name="add"></mdl-button>
-      <mdl-button ng-click="_remove($event)"
+      <mdl-button ng-click="_menu($event)" size="tableSize" ng-if="actionsShow.menu" icon-name="menu"></mdl-button>
+      <mdl-button ng-click="_add($event)" size="tableSize" ng-if="actionsShow.add" icon-name="add"></mdl-button>
+      <mdl-button ng-click="_remove($event)" size="tableSize"
                   disabled="tableModel.removeItems.length === 0"
                   ng-if="actionsShow.remove" icon-name="remove"></mdl-button>
-      <mdl-button ng-click="_refresh($event)" ng-if="actionsShow.refresh" icon-name="refresh"></mdl-button>
-      <div class="mdl-table-action__search" ng-if="actionsShow.search">
+      <mdl-button ng-click="_refresh($event)" size="tableSize" ng-if="actionsShow.refresh"
+                  icon-name="refresh"></mdl-button>
+      <div class="mdl-table-action__search" size="tableSize" ng-if="actionsShow.search">
         <div class="mdl-table-action__search-body">
           <input type="text" placeholder="{{placeholder}}"
                  ng-model="tableModel.searchResult" ng-model-options="{debounce: 1000}"
                  ng-change="_search()"
                  class="mdc-text-field__input mdl-table-action__search-body__input">
         </div>
-        <mdl-button ng-click="_clearSearch($event)" ng-show="tableModel.searchResult" icon-name="close"></mdl-button>
+        <mdl-button ng-click="_clearSearch($event)" size="tableSize"
+                    ng-show="tableModel.searchResult" icon-name="close"></mdl-button>
         <div class="mdl-table-action__search-filter">
           <!--<mdl-button ng-click="_filter($event)" icon-name="filter_list" class_list="search-filter-button"></mdl-button>-->
           <!--<div class="mdc-menu search-filter-list">
@@ -47,16 +49,18 @@
           <thead>
           <tr class="mdl-table-header__row">
             <th ng-if="tableModel.rowCheckboxSupport" style="width: 5%;">
-              <div class="mdc-checkbox" ng-click="_selectAll($event)">
+              <div class="mdc-checkbox mdc-checkbox__normal"
+                   ng-class="{'mdc-checkbox__small': tableSize === 'small'}"
+                   ng-click="_selectAll($event)">
                 <input type="checkbox"
                        ng-checked="_isSelectedAll()"
                        class="mdc-checkbox__native-control"/>
-                <div class="mdc-checkbox__background">
+                <div class="mdc-checkbox__background mdc-checkbox__background-normal"
+                     ng-class="{'mdc-checkbox__background-small': tableSize === 'small'}">
                   <svg class="mdc-checkbox__checkmark"
                        viewBox="0 0 24 24">
                     <path class="mdc-checkbox__checkmark-path"
                           fill="none"
-                          stroke="white"
                           d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
                   </svg>
                   <div class="mdc-checkbox__mixedmark"></div>
@@ -64,7 +68,9 @@
               </div>
             </th>
             <th ng-if="tableModel.rowActionsSupport"  style="width: 5%;">
-              <span><button class="mdc-icon-button material-icons" disabled>menu</button></span>
+              <span><button class="mdc-icon-button material-icons mdc-icon-button__normal"
+                            ng-class="{'mdc-icon-button__small': tableSize === 'small'}"
+                            disabled>menu</button></span>
             </th>
             <th ng-repeat="$col in tableModel.columns track by $index"
                 ng-click="_onHeaderClick($col, $event)"
@@ -95,12 +101,16 @@
           <tbody ng-if="tableModel.filteredData.length>0">
             <tr class="mdl-table-body__row"
                 ng-repeat="$data in tableModel.filteredData track by $index"
-                ng-class="{'mdl-table-body__row__highlight': _isSelected($data[tableModel.index_name])}"
+                ng-class="{'mdl-table-body__row__highlight': _isSelected($data[tableModel.index_name]),
+                            'mdl-table-body__row__small': tableSize === 'small'
+                          }"
                 ng-click="_onRowClick($data, $index, $event)"
                 metarow>
-              <td ng-if="tableModel.rowCheckboxSupport" style="width: 5%;" data="$data" row-checkbox></td>
+              <td ng-if="tableModel.rowCheckboxSupport" style="width: 5%;" size="tableSize"
+                  data="$data" row-checkbox></td>
               <td ng-if="tableModel.rowActionsSupport"  style="width: 5%;"
                   action-items="actions"
+                  size="tableSize"
                   data="$data"
                   row-actions></td>
             </tr>

@@ -55,8 +55,11 @@ table{
 .mdl-table-header__row, .mdl-table-body__row {
   display: table-row;
   align-items: center;
-  height: 48px;
+  height: 40px;
   line-height: 24px;
+}
+.mdl-table-body__row__small{
+  height: 35px;
 }
 .mdl-table-body__row{
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -124,10 +127,19 @@ table{
   display: flex;
   flex-direction: column;
 }
+.mdc-menu.table-row-action-list{
+  min-width: 80px;
+}
+.mdc-list-item.mdc-list-item__normal-size{
+  height: 35px;
+}
+.mdc-list-item.mdc-list-item__small-size{
+  height: 28px;
+}
 .pagination {
   display: flex;
   align-items: center;
-  padding: 0;
+  padding: 10px 0 0 0;
   margin: 0;
   float: right;
 }
@@ -139,6 +151,10 @@ table{
   height: 24px;
   padding: 12px 24px;
   align-items: center;
+}
+.pagination--page__small{
+  height: 18px;
+  padding: 6px;
 }
 .pagination--page---counts, .pagination--page---divider{
   padding-left: 10px;

@@ -23,12 +23,16 @@ export class mdlCheckbox {
     scope.label = scope.displayLabel && scope.displayLabel.label;
     scope.id = scope.displayLabel && scope.displayLabel.id;
 
-    if (scope.disable) {   //scope.$eval(attrs.status)
-      element.addClass('mdc-checkbox--disabled');
+    if (scope.disable) {
       element.find('input').attr('disabled', true);
     }
     if (scope.data) {
       element.find('input').attr('checked' ,true);
+    }
+    if (attrs.size && attrs.size === 'small') {
+      let checkboxElm = element.children().eq(0);
+      checkboxElm.addClass('mdc-checkbox__small');
+      checkboxElm.children().eq(1).addClass('mdc-checkbox__background-small');
     }
 
     scope.clicked = (event) => {

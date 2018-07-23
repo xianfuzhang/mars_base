@@ -1,7 +1,7 @@
 <nav ng-if="numPages && pages.length >= 2">
   <ul class="pagination">
     <li>
-      <div class="pagination--page">
+      <div class="pagination--page" ng-class="{'pagination--page__small': tableSize === 'small'}">
         <div ng-bind="'MODULES.TABLE.PAGINATION.ROWSPERPAGE'|translate"></div>
         <div class="mdc-select mdc-line-ripple--active pagination-select-field pagination--item--modify">
           <select class="mdc-select__native-control pagination--select--modify"
@@ -21,20 +21,16 @@
       </div>
     </li>
     <li>
-      <button class="material-icons mdc-icon-button"
-              ng-click="_selectPage(1)">first_page</button>
+      <mdl-button ng-click="_selectPage(1)" size="tableSize" icon-name="first_page"></mdl-button>
     </li>
     <li>
-      <button class="material-icons mdc-icon-button"
-              ng-click="_selectPage(currentPage - 1)">chevron_left</button>
+      <mdl-button ng-click="_selectPage(currentPage - 1)" size="tableSize" icon-name="chevron_left"></mdl-button>
     </li>
     <li>
-      <button class="material-icons mdc-icon-button"
-              ng-click="_selectPage(currentPage + 1)">chevron_right</button>
+      <mdl-button ng-click="_selectPage(currentPage + 1)" size="tableSize" icon-name="chevron_right"></mdl-button>
     </li>
     <li>
-      <button class="material-icons mdc-icon-button"
-              ng-click="_selectPage(numPages)">last_page</button>
+      <mdl-button ng-click="_selectPage(numPages)" size="tableSize" icon-name="last_page"></mdl-button>
     </li>
   </ul>
 </nav>

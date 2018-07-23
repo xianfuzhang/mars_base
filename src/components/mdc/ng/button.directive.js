@@ -11,6 +11,7 @@ export class mdlButton {
     this.restrict = 'E';
     this.scope = {
       disabled: '=',
+      size: '=',
       ngClick: '&'
     };
     this.template = require('../templates/button.html');
@@ -22,6 +23,9 @@ export class mdlButton {
     let disabled = scope.disabled || false;
     if (disabled) {
       element.attr('disabled', true);
+    }
+    if(scope.size && scope.size === 'small' ||attr.size && attr.size === 'small') {
+      element.addClass('mdc-icon-button__small');
     }
     if (attr.classList) {
       let classList = attr.classList.split(" ");
