@@ -15,8 +15,13 @@ tbody{
 }
 .app-main{
   display: flex;
+  flex-direction: column;
   overflow: auto;
   height: 100%;
+}
+.app-body{
+  height:100%;
+  overflow: auto;
 }
 .main__title{
   height: 48px;

@@ -13,12 +13,14 @@ export class rowActions {
     this.template = require('../template/rowActions.html');
     this.scope = {
       data: '=',
+      size: '=',
       actionItems: '='
     };
     this.link = (...args) => this._link.apply(this, args);
   }
 
   _link(scope, element, attrs, ctrl) {
+    scope.size = scope.size || 'normal';
     scope.actions =  ctrl.rowActionsFilter(scope.data, scope.actionItems);
     let document = this.di.$window.document;
     let buttonElement = element.children().eq(0).children().eq(0);

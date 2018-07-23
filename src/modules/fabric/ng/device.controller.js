@@ -21,8 +21,10 @@ export class DeviceController {
     });
     this.scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
-    this.scope.tabSelected = null;
-    this.scope.tabs = this.di.deviceService.getTabSchema();
+    /*this.scope.tabSelected = null;
+    this.scope.tabs = this.di.deviceService.getTabSchema();*/
+    this.scope.page_title = this.translate('MODULES.SWITCHES.TAB.SCHEMA.SWITCH');
+    this.scope.tableSize = 'small';
     this.scope.entities = [];
     this.scope.deviceModel = {
       actionsShow: this.di.deviceService.getDeviceActionsShow(),

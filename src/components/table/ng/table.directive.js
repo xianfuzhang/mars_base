@@ -42,6 +42,7 @@ export class mdlTable {
     scope.placeholder = this.di.$filter('translate')('MODULES.TABLE.SEARCH.PLACEHOLDER');
     scope.renderService = this.di.renderService.render();
     scope.log = this.di.$log;
+    scope.tableSize = attrs.tableSize || 'normal';
 
     scope.tableModel = {
       'CONST_SORT_ASC': this.di.tableConsts.CONST.SORT_ASC,

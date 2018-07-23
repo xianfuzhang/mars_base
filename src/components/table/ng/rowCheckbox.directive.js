@@ -12,13 +12,15 @@ export class rowCheckbox {
     this.restrict = 'A';
     this.require = '^mdlTable';
     this.scope = {
-      data: '='
+      data: '=',
+      size: '='
     }
     this.template = require('../template/rowCheckbox.html');
     this.link = (...args) => this._link.apply(this, args);
   }
 
   _link(scope, element, attrs, ctrl) {
+    let size = scope.size || 'normal';
     let unsubscribers = [];
     scope._clicked = (event) => {
       let action = event.target.checked ? 'add' : 'remove';
