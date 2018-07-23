@@ -32,7 +32,7 @@ export class DeviceController {
       deviceProvider: null,
       deviceAPI: null
     };
-    this.scope.portModel = {
+/*    this.scope.portModel = {
       actionsShow: this.di.deviceService.getPortActionsShow(),
       rowActions: this.di.deviceService.getPortTableRowActions(),
       portProvider: null,
@@ -48,19 +48,20 @@ export class DeviceController {
       rowActions: this.di.deviceService.getEndpointTableRowActions(),
       endpointProvider: null,
       endpointAPI: null
-    };
+    };*/
 
     this.unsubscribers = [];
 
-    this.scope.onTabChange= (tab) => {
+/*    this.scope.onTabChange= (tab) => {
       if (tab){
         this.scope.tabSelected = tab;
       }
-    };
+    };*/
 
     this.scope.onTableRowClick = (event) => {
       if (event.$data){
-        switch (this.scope.tabSelected.type) {
+        this.scope.deviceModel.deviceAPI.setSelectedRow(event.$data.mac);
+        /*switch (this.scope.tabSelected.type) {
           case 'device':
             this.scope.deviceModel.deviceAPI.setSelectedRow(event.$data.mac);
             break;
@@ -70,10 +71,10 @@ export class DeviceController {
           case 'link':
             this.scope.linkModel.linkAPI.setSelectedRow(event.$data.id);
             break;
-        }
+        }*/
       }
     };
-
+/*
     this.scope.onPortTableRowActionsFilter = (event) =>{
       let filterActions = [];
       if (event.data) {
@@ -87,7 +88,7 @@ export class DeviceController {
         });
       }
       return filterActions;
-    };
+    };*/
 
     this.scope.onTableRowSelectAction = (event) => {
       if (event.data) {
@@ -127,7 +128,7 @@ export class DeviceController {
     this.scope.onDeviceAPIReady = ($api) => {
       this.scope.deviceModel.deviceAPI = $api;
     };
-
+/*
     this.scope.onPortApiReady = ($api) => {
       this.scope.portModel.portAPI = $api;
     };
@@ -138,7 +139,7 @@ export class DeviceController {
 
     this.scope.onEndpointApiReady = ($api) => {
       this.scope.endpointModel.endpointAPI = $api;
-    };
+    };*/
 
     this.scope.batchRemove = ($value) => {
       if ($value.length) {
@@ -146,9 +147,9 @@ export class DeviceController {
           case 'device':
             this.batchDeleteDevices($value);
             break;
-          case 'endpoint':
+          /*case 'endpoint':
             this.batchDeleteEndpoints($value);
-            break
+            break*/
         }
       }
     };
@@ -191,7 +192,7 @@ export class DeviceController {
         };
       }
     });
-    this.scope.portModel.portProvider = this.di.tableProviderFactory.createProvider({
+   /* this.scope.portModel.portProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.deviceDataManager.getPorts(params).then((res) => {
@@ -251,14 +252,14 @@ export class DeviceController {
         };
       }
     });
-    this.scope.onTabChange(this.scope.tabs[0]);
+    this.scope.onTabChange(this.scope.tabs[0]);*/
   }
 
   getEntities(origins) {
     let entities = [];
     if(!Array.isArray(origins)) return entities;
-    switch(this.scope.tabSelected.type) {
-      case 'device':
+    //switch(this.scope.tabSelected.type) {
+      //case 'device':
         origins.forEach((item) => {
           let obj = {};
           obj.id = item.id;
@@ -278,8 +279,8 @@ export class DeviceController {
           obj.sw = item.sw;
           entities.push(obj);
         });
-        break;
-
+      //  break;
+/*
       case 'port':
         origins.forEach((port) => {
           let obj = {};
@@ -331,8 +332,8 @@ export class DeviceController {
           obj.location = locals.join(" | ");
             entities.push(obj);
         });
-        break;
-    }
+        break;*/
+    //}
     return entities;
   }
 
