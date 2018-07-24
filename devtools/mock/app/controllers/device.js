@@ -87,8 +87,7 @@ router.get('/devices/:deviceId/:type', function (req, res) {
   if (searchDevice !== undefined) {
     switch(req.params.type) {
       case 'ports':
-        delete searchDevice.storm;
-        return res.json(searchDevice);
+        return res.json(searchDevice.ports);
         
       case 'storm':
         return res.json(searchDevice.storm);
