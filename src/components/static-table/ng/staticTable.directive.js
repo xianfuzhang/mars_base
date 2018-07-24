@@ -45,29 +45,16 @@ export class staticTable {
 
       }, {
         dataset: scope.data
-          // [{opt:'' ,name: "Moroni21", age: 510},
-          // {opt:"",name: "Moroni2", age: 520},
-          // {opt:"",name: "Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534", age: 550},
-          // {opt:"",name: "Moroni2", age: 510},{opt:'' ,name: "Moroni21", age: 510},
-          // {opt:"",name: "Moroni2", age: 520},
-          // {opt:"",name: "Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534", age: 550},
-          // {opt:"",name: "Moroni2", age: 510},{opt:'' ,name: "Moroni21", age: 510},
-          // {opt:"",name: "Moroni2", age: 520},
-          // {opt:"",name: "Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534", age: 550},
-          // {opt:"",name: "Moroni2", age: 510},{opt:'' ,name: "Moroni21", age: 510},
-          // {opt:"",name: "Moroni2", age: 520},
-          // {opt:"",name: "Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534", age: 550},
-          // {opt:"",name: "Moroni2", age: 510},{opt:'' ,name: "Moroni21", age: 510},
-          // {opt:"",name: "Moroni2", age: 520},
-          // {opt:"",name: "Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534", age: 550},
-          // {opt:"",name: "Moroni2", age: 510},{opt:'' ,name: "Moroni21", age: 510},
-          // {opt:"",name: "Moroni2", age: 520},
-          // {opt:"",name: "Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534Moroni534", age: 550},
-          // {opt:"",name: "Moroni2", age: 510}]
       });
 
       unsubscribers.push(scope.$watch('data',(newData)=>{
+        if(newData){
+          scope.tableModel['tableParams'] = new this.di.NgTableParams({
 
+          }, {
+            dataset: scope.data
+          });
+        }
       }));
 
 
