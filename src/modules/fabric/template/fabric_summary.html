@@ -7,18 +7,6 @@
     <div style="flex-grow: 2;
               flex-basis:auto;
               flex-shrink: 1;background-color: white;overflow: scroll;padding:0 8px;display:flex;flex-direction: column;">
-        <!--<div class="header_content">-->
-            <!--<div class="header_content__breadcrumb">-->
-                <!--<a href="/">Mars Cloud</a>-->
-                <!--<span>•</span>-->
-                <!--&lt;!&ndash;<a class="header_content__breadcrumb" href="/fabric">Fabric</a>&ndash;&gt;-->
-                <!--<span>Fabric</span>-->
-                <!--&lt;!&ndash;<span class="sep">•</span>&ndash;&gt;-->
-            <!--</div>-->
-            <!--<div class="header_content__title">-->
-                <!--Fabric-->
-            <!--</div>-->
-        <!--</div>-->
         <content-header big-title="Fabric">
             <a href="/">Mars Cloud</a>
             <span>•</span>
@@ -36,7 +24,6 @@
                 </div>
             </div>
             <div ng-style="resize_length" style="position: absolute;right:0;top:0;height:100%;background-color: white;width:295px;display:inline-block;overflow:scroll; ">
-
                 <mar-section title="Topo Settings" class="topo_setting">
                     <div style="margin:2px;">
                         <div ng-click="topoRefresh()" id="refresh_topo"  class="+front mdc-button topo_setting__button">
@@ -117,12 +104,13 @@
                 </mar-section>
 
                 <mar-section ng-if="fabricModel.showSwitchDetail" title="Interfaces" class="detail_interface">
-                    <mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">
-                    </mdl-table>
+                    <static-table style="max-width:400px" data="fabricModel.switchPorts" columns="fabricModel.portsSchema"></static-table>
+                    <!--<mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">-->
+                    <!--</mdl-table>-->
                 </mar-section>
 
-                <mar-section ng-show="fabricModel.showSwitchDetail"  title="Links" class="detail_link">
-
+                <mar-section ng-if="fabricModel.showSwitchDetail"  title="Links" class="detail_link">
+                    <static-table style="max-width:400px" data="fabricModel.switchLinks" columns="fabricModel.linksSchema"></static-table>
                 </mar-section>
 
 
