@@ -9,7 +9,6 @@ const chance = new Chance();
 class Device {
   constructor (id, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassId, driver, portMinNum, leaf_group) {
     this.id = id;
-    this.name = name;
     this.type = type;
     this.available = available;
     this.role = role;

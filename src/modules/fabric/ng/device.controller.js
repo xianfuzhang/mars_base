@@ -182,7 +182,7 @@ export class DeviceController {
     this.unsubscribers.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
       //location path to device detail
       if (params && params.field === 'switch_name') {
-        this.di.$location.path('/devices/' + params.value);
+        this.di.$location.path('/devices/' + params.value).search({'id': params.object.id});
       }
     }));
 
