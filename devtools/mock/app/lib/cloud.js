@@ -48,6 +48,7 @@ let cloudLib = {
       }
       let device = new Device(
         chance.guid(),
+        chance.word(),
         type,
         chance.bool({ likelihood: 10 }),
         chance.pickone(config.deviceRoles),
