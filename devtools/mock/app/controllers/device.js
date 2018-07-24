@@ -51,12 +51,12 @@ router.get('/devices/:deviceId', function (req, res) {
   }
 
   if(req.params.deviceId == 'ports') {
-    devices = _.cloneDeep(cloudModel.devices);
-    devices.forEach((device) => {
-      delete device.storm;
-    })
+    let ports = [];
+    _.forEach(cloudModel.devices,(device) => {
+      ports = ports.concat(device.ports);
+    });
   
-    return res.json({devices: devices});
+    return res.json({ports: ports});
   }
   
   devices = _.cloneDeep(cloudModel.devices);
@@ -92,6 +92,18 @@ router.get('/devices/:deviceId/:type', function (req, res) {
         
       case 'storm':
         return res.json(searchDevice.storm);
+        
+      case 'links':
+        
+        let result = _.filter(cloudModel.links, (link) => {
+          return link.src.device == req.params.deviceId || link.dst.device == req.params.deviceId
+        });
+        
+        if(result) {
+          return res.json(result);
+        } else {
+          return res.status(404).json("This device doesn't exist!");
+        }
         
       default:
         break;
