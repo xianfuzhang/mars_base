@@ -7,6 +7,7 @@ export class DeviceController {
       '$log',
       '$q',
       '$filter',
+      '$uibModal',
       'appService',
       'deviceService',
       'deviceDataManager',
@@ -90,8 +91,20 @@ export class DeviceController {
     };*/
 
     this.scope.onTableRowSelectAction = (event) => {
-      if (event.data) {
-        switch (this.scope.tabSelected.type) {
+      if (event.data && event.action) {
+        if (event.action.value === 'delete') {
+          this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.DELETE_SWITCH'))
+            .then((data) =>{
+              this.di.deviceDataManager.deleteDevice(event.data.id)
+                .then((res) =>{
+                  this.scope.deviceModel.deviceAPI.queryUpdate();
+                });
+            }, (res) =>{
+              this.di.$log.debug('delete switch dialog cancel');
+            });
+        }
+
+      /*  switch (this.scope.tabSelected.type) {
           case 'device':
             break;
 
@@ -120,7 +133,7 @@ export class DeviceController {
                 this.scope.endpointModel.endpointAPI.queryUpdate();
               });
             break;
-        }
+        }*/
       }
     };
 
@@ -142,14 +155,25 @@ export class DeviceController {
 
     this.scope.batchRemove = ($value) => {
       if ($value.length) {
-        switch (this.scope.tabSelected.type) {
-          case 'device':
+        this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.BATCH_DELETE_SWITCH'))
+          .then((data) =>{
             this.batchDeleteDevices($value);
+          }, (res) =>{
+            this.di.$log.debug('delete switch dialog cancel');
+          });
+        /*switch (this.scope.tabSelected.type) {
+          case 'device':
+            this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.BATCH_DELETE_SWITCH'))
+              .then((data) =>{
+                this.batchDeleteDevices($value);
+              }, (res) =>{
+                this.di.$log.debug('delete switch dialog cancel');
+              });
             break;
-          /*case 'endpoint':
+          case 'endpoint':
             this.batchDeleteEndpoints($value);
-            break*/
-        }
+            break
+        }*/
       }
     };
 
@@ -267,7 +291,7 @@ export class DeviceController {
           obj.mac = item.mac;
           obj.type = item.type;
           obj.role = item.role;
-          obj.rack_id = item.rackId;
+          obj.rack_id = item.rack_id;
           obj.available = item.available;
           //obj.ports = item.ports.length;
           obj.chassisId = item.chassisId;
@@ -337,7 +361,23 @@ export class DeviceController {
   }
 
   batchDeleteDevices(arr) {
+    let deferredArr = [];
+    arr.forEach((item) => {
+      let defer = this.di.$q.defer();
+      this.di.deviceDataManager.deleteDevice(item.id)
+        .then(() => {
+          defer.resolve();
+        }, () => {
+          defer.resolve();
+        });
+      deferredArr.push(defer.promise);
+    });
 
+    this.di.$q.all(deferredArr).then(() => {
+      this.scope.deviceModel.deviceAPI.queryUpdate();
+    });
+
+    this.scope.$emit('batch-delete-endpoints');
   }
 
   batchDeleteEndpoints(arr) {
@@ -359,6 +399,35 @@ export class DeviceController {
     });
 
     this.scope.$emit('batch-delete-endpoints');
+  }
+
+  confirmDialog(content) {
+    let defer = this.di.$q.defer();
+    this.di.$uibModal
+      .open({
+        template: require('../../../components/mdc/templates/dialog.html'),
+        controller: 'dialogCtrl',
+        backdrop: true,
+        resolve: {
+          dataModel: () => {
+            return {
+              type: 'warning',
+              headerText: this.translate('MODULES.SWITCHES.DIALOG.HEADER'),
+              contentText: content,
+            };
+          }
+        }
+      })
+      .result.then((data) => {
+        if(data) {
+          defer.resolve(data);
+        }
+        else {
+          defer.reject(null);
+        }
+    });
+
+    return defer.promise;
   }
 }
 

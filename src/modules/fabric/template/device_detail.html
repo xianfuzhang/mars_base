@@ -57,6 +57,8 @@
       <section class="tab-content" ng-if="tabSelected.type == 'port'">
         <mdl-table actions-show="detailModel.actionsShow"
                    actions="detailModel.rowActions"
+                   row-actions-filter="onTableRowActionsFilter($event)"
+                   row-select-action="onTableRowSelectAction($event)"
                    row-click="onTableRowClick($event)"
                    provider="detailModel.provider" api-ready="onApiReady($api)">
         </mdl-table>

@@ -12,12 +12,12 @@
     <section id="my-mdc-dialog-description" class="mdc-dialog__body">
       {{content}}
     </section>
-    <footer class="mdc-dialog__footer">
+    <div class="mdc-dialog__footer">
       <button type="button"  ng-show="type === 'warning'" ng-click="canceled()"
               class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--cancel">{{cancel}}</button>
       <button type="button" ng-click="ok()"
               class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--accept">{{confirmation}}</button>
-    </footer>
+    </div>
   </div>
   <div class="mdc-dialog__backdrop"></div>
 </aside>

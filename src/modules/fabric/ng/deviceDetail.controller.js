@@ -62,6 +62,53 @@ export class DeviceDetailController {
         this.scope.detailModel.api.setSelectedRow(event.$data.id);
       }
     };
+
+    this.scope.onTableRowActionsFilter = (event) => {
+      let filterActions = [];
+      if (event.data) {
+        switch (this.scope.tabSelected.type){
+          case 'port':
+            event.actions.forEach((action) =>{
+              if (event.data.isEnabled && action.value === 'disable') {
+                filterActions.push(action);
+              }
+              else if (!event.data.isEnabled && action.value === 'enable') {
+                filterActions.push(action);
+              }
+            });
+            break;
+          case 'flow':
+            break;
+        }
+      }
+      return filterActions;
+    };
+
+    this.scope.onTableRowSelectAction = (event) => {
+      if (event.data) {
+        switch (this.scope.tabSelected.type){
+          case 'port':
+            let enabled = event.action.value === 'enable' ?  true : false;
+            this.di.deviceDataManager.changePortState(event.data.element, event.data.port_id, {'enabled': enabled})
+              .then((res) => {
+                event.data.isEnabled = !event.data.isEnabled;
+                this.scope.detailModel.entities.forEach((item) => {
+                  if (item.element === event.data.element && item.port_id === event.data.port_id) {
+                    item.port_status = event.data.isEnabled === true ?
+                      this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE') :
+                      this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE');
+                    this.scope.detailModel.api.update();
+                  }
+                });
+
+                this.scope.$emit('change-device-port-state', {data: event.data});
+              });
+            break;
+          case 'flow':
+            break;
+        }
+      }
+    };
   }
 
   init() {
@@ -69,6 +116,8 @@ export class DeviceDetailController {
       query: (params) => {
         let defer = this.di.$q.defer();
         this.getEntities(params).then((res) => {
+          this.entityStandardization(res.data);
+          this.scope.detailModel.total = res.total;
           defer.resolve({
             data: this.scope.detailModel.entities,
             count: this.scope.detailModel.total
@@ -176,8 +225,7 @@ export class DeviceDetailController {
         });
         break;
       case 'link':
-        this.di.deviceDataManager.getLinks(params).then((res) => {
-          let filter = this.scope.deviceId;
+        this.di.deviceDataManager.getDeviceLinks(this.scope.deviceId, params).then((res) => {
           defer.resolve({'data': res.data.links, 'total': res.data.total});
         });
         break;
@@ -187,7 +235,7 @@ export class DeviceDetailController {
         });
         break;
       case 'flow':
-        this.di.deviceDataManager.getDeviceFlows(this.scope.deviceId).then((res) => {
+        this.di.deviceDataManager.getDeviceFlows(this.scope.deviceId, params).then((res) => {
           defer.resolve({'data': res.data.flows, 'total': res.data.total});
         });
         break;
@@ -201,24 +249,25 @@ export class DeviceDetailController {
       case 'port':
         entities.forEach((entity) => {
           let obj = {};
-          obj['id'] = entity.device_name + '_' + entity.port;
+          obj['id'] = entity.element + '_' + entity.port;
+          obj['element'] = entity.element;
           obj['port_name'] = entity.annotations.portName;
           obj['port_mac'] = entity.annotations.portMac;
           obj['port_id'] = entity.port;
+          obj['isEnabled'] = entity.isEnabled;
           obj['port_status'] = entity.isEnabled === true ?
             this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE') :
             this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE');
           obj['link_status'] = entity.annotations.linkStatus;;
           obj['type'] = entity.type;
           obj['speed'] = entity.portSpeed;
-          obj['device_name'] = entity.device_name;
           this.scope.detailModel.entities.push(obj);
         });
         break;
       case 'link':
         entities.forEach((entity) => {
           let obj = {};
-          obj['id'] = entity.src_device + '_' + entity.src_port;
+          obj['id'] =  entity.src.device + '_' + entity.src.port;
           obj['src_device'] = entity.src.device;
           obj['src_port'] = entity.src.port;
           obj['dst_device'] = entity.dst.device;
@@ -270,10 +319,7 @@ export class DeviceDetailController {
     let actions = [];
     switch (type) {
       case 'port':
-        break;
-      case 'link':
-        break;
-      case 'statistic':
+        actions = this.di.deviceDetailService.getDevicePortsTableRowActions();
         break;
       case 'flow':
         break;
