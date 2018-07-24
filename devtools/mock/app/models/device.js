@@ -7,7 +7,7 @@ var _ = require('lodash'),
 const chance = new Chance();
 
 class Device {
-  constructor (id, name, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassId, driver, portMinNum, leaf_group) {
+  constructor (id, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassId, driver, portMinNum, leaf_group) {
     this.id = id;
     this.name = name;
     this.type = type;
@@ -30,9 +30,9 @@ class Device {
   }
 
   createAnnotations () {
-    // TODO:
     let ip = chance.ip();
     let annotations = {
+      name: chance.name(),
       channelId: ip + ':' + chance.natural({min:1, max:65535}),
       protocol: chance.pickone(config.deviceProtocols),
       managementAddress: ip
