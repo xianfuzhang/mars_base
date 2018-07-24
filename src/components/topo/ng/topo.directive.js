@@ -150,7 +150,8 @@ export class Topo {
         genSpine();
         genLeaf();
         genOther();
-        genLinks();
+        //初始化的时候不许去渲染links
+        // genLinks();
         resize(true);
       };
 
@@ -468,6 +469,8 @@ export class Topo {
         let deviceType = this.deviceType;
         let showArray= [];
 
+        showDeviceLinks(deviceId);
+
         if(deviceType == DeviceType.spine){
           let sw = DI._.find(scope.spines,{'id':deviceId});
           showArray = DI.switchService.getSpineShowInfo(sw);
@@ -482,6 +485,25 @@ export class Topo {
         }
         DI.$rootScope.$emit("switch_select",{id: this.deviceId, type: deviceType, value: showArray});
       }
+
+      let showDeviceLinks = (deviceId) =>{
+        crushLinks();
+        if(scope.topoSetting.show_links){
+          this.di._.forEach(scope.links, (link, key) => {
+            if(deviceId == link.src.device){
+              let deviceIds = [link.src.device, link.dst.device];
+              let linkId = getLinkId(deviceIds);
+              if(this.links[linkId]){
+                return;
+              }
+              this.links[linkId] = genLinkNode(deviceIds);
+              if(link.state != this.active_status){
+                this.links[linkId].strokeColor = this.LINE_ERROR;
+              }
+            }
+          });
+        }
+      };
 
 
       /*
@@ -572,6 +594,7 @@ export class Topo {
 
       let unSelectNode = () => {
         this.di.$rootScope.$emit("topo_unselect");
+        crushLinks();
       };
 
       let crushAllPorts = () =>{
@@ -678,11 +701,11 @@ export class Topo {
       // }));
 
       unsubscribers.push(this.di.$rootScope.$on('show_links',()=>{
-        if(scope.topoSetting.show_links){
-          genLinks()
-        } else {
-          crushLinks()
-        }
+        // if(scope.topoSetting.show_links){
+        //   genLinks()
+        // } else {
+        //   crushLinks()
+        // }
       }));
 
 
