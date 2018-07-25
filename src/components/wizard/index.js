@@ -9,7 +9,7 @@ import { SwitchWizardController } from './ng/SwitchWizard.controller';
 
 export default angular
   .module('wizard', [])
-  .controller('SwitchWizardController', SwitchWizardController)
+  .controller('switchWizardController', SwitchWizardController)
   .directive('wizard', Wizard)
   .directive('initBind', initBind)
   .name;

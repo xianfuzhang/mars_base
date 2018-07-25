@@ -27,6 +27,7 @@ import 'footer';
 import 'topo';
 import 'loading';
 import 'deviceTooltip';
+import 'wizard';
 
 
 angular
@@ -55,7 +56,8 @@ angular
     'footer',
     'topo',
     'loading',
-    'deviceTooltip'
+    'deviceTooltip',
+    'wizard'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {

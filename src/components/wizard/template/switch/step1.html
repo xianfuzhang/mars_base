@@ -4,10 +4,10 @@
         <!--<mdl-select ng-model="mac_address" name="mac_address"-->
                     <!--display-label="{ options: [{label: '男1', value: '0'}, {label: '男2', value: '1'}]}">-->
         <!--</mdl-select>-->
-        <input class="wizard__body__input__text" list="mac_addresses_datalist" placeholder="Please enter or select the mac address" ng-model="formModel.mac_address" ng-pattern="mac_regex" ng-change="upper(formModel.mac_address)"/>
-        <datalist id="mac_addresses_datalist">
-            <option ng-value="mac" ng-repeat="mac in mac_addresses track by $index"/>
-        </datalist>
+        <input class="wizard__body__input__text" ng-model="formModel.mac_address" ng-pattern="mac_regex" ng-change="upper(formModel.mac_address)"/>
+        <!--<datalist id="mac_addresses_datalist">-->
+            <!--<option ng-value="mac" ng-repeat="mac in mac_addresses track by $index"/>-->
+        <!--</datalist>-->
         <div class="wizard__body__input__annotaions">
             Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future. When a switch with the entered MAC is discovered, this configuration will automatically be applied to it.
         </div>
@@ -16,6 +16,30 @@
     <div class="wizard__body__input">
         <div class="wizard__body__input__label">Name<span class="wizard__body__input__required">*</span></div>
         <input class="wizard__body__input__text" name="name" type="text" ng-model="switch.name" ng-required="true"/>
+    </div>
+    <div class="wizard__body__input">
+        <div class="wizard__body__input__label">ManagementAddress & Port<span class="wizard__body__input__required">*</span></div>
+        <input class="wizard__body__input__text" name="managementAddress" type="text" ng-model="switch.managementAddress" ng-required="true" ng-pattern="ip_regex"/>
+        <input class="wizard__body__input__text" name="port" type="number" ng-model="switch.port" ng-required="true"/>
+    </div>
+    <div class="wizard__body__input">
+        <div class="wizard__body__input__label">Rack Id</div>
+        <input class="wizard__body__input__text" name="rack_id" type="text" ng-model="switch.rack_id"/>
+    </div>
+    <div class="wizard__body__input">
+        <div class="wizard__body__input__label">Protocol<span class="wizard__body__input__required">*</span></div>
+        <input class="wizard__body__input__text" list="protocals-datalist" name="protocol" type="text" ng-model="switch.protocol" ng-required="true"/>
+        <datalist id="protocals-datalist">
+            <option ng-value="protocol" ng-repeat="protocol in protocols track by $index"/>
+        </datalist>
+    </div>
+    <div class="wizard__body__input" ng-show="switch.protocol == 'SNMP'">
+        <div class="wizard__body__input__label">Community</div>
+        <input class="wizard__body__input__text" name="community" type="text" ng-model="switch.community"/>
+    </div>
+    <div class="wizard__body__input">
+        <div class="wizard__body__input__label">Mfr</div>
+        <input class="wizard__body__input__text" name="mfr" ng-value="switch.protocol == 'Rest' ? 'Accton' : ''" type="text" ng-model="switch.mfr"/>
     </div>
     <div class="wizard__body__input">
         <div class="wizard__body__input__label">Description</div>
