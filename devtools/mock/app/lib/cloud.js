@@ -60,7 +60,8 @@ let cloudLib = {
         chance.natural({ min: 1000, max: 9999 }),
         chance.word(),
         portMinNum,
-        leaf_group);
+        leaf_group,
+        chance.name());
   
       // adding data to the cloud
       cloudModel.devices.push(device);
@@ -130,33 +131,6 @@ let cloudLib = {
       }
     });
     
-    // _.times(config.linkLeafNumber, () => {
-    //   let linkType = chance.pickone(config.linkTypes);
-    //   let linkState = chance.pickone(config.linkStates);
-    //   let pairDevices = chance.pick(cloudModel.devices.slice(spineNum+unknownNum), 2);
-    //
-    //   let linkPair = getLinkPair(pairDevices[0], pairDevices[1]);
-    //   let link = new Link(
-    //     linkPair[0].src.port,
-    //     linkPair[0].src.device,
-    //     linkPair[0].dst.port,
-    //     linkPair[0].dst.device,
-    //     linkType,
-    //     linkState);
-    //   // adding data to the cloud
-    //   cloudModel.links.push(link);
-    //
-    //   link = new Link(
-    //     linkPair[1].src.port,
-    //     linkPair[1].src.device,
-    //     linkPair[1].dst.port,
-    //     linkPair[1].dst.device,
-    //     linkType,
-    //     linkState);
-    //   // adding data to the cloud
-    //   cloudModel.links.push(link);
-    // });
-    
     // create endpoints
     _.times(config.endpointsNumber, () => {
       let ip_addresses = [];
@@ -181,14 +155,18 @@ let cloudLib = {
       chance.guid(),
       reqParams.type,
       reqParams.available,
-      reqParams.role,
+      reqParams.role || chance.pickone(config.deviceRoles),
       reqParams.mac,
-      reqParams.rack_id,
-      reqParams.sw,
-      reqParams.hw,
-      reqParams.serial,
-      reqParams.mfr,
-      reqParams.chanssId
+      reqParams.rack_id || chance.guid(),
+      reqParams.sw || chance.word(),
+      reqParams.hw || chance.word(),
+      reqParams.serial || chance.word(),
+      reqParams.mfr || chance.company(),
+      reqParams.chanssId || chance.natural({ min: 1000, max: 9999 }),
+      reqParams.driver || chance.word(),
+      24,
+      reqParams.leaf_group,
+      reqParams.name
     );
     
     // adding data to the cloud
@@ -212,6 +190,7 @@ let cloudLib = {
       device.serial = reqParams.serial;
       device.mfr = reqParams.mfr;
       device.chanssId = reqParams.chanssId;
+      device.annotaions.name = reqParams.name;
   
       return true;
     }
