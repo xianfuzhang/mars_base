@@ -190,7 +190,7 @@ let cloudLib = {
       device.serial = reqParams.serial;
       device.mfr = reqParams.mfr;
       device.chanssId = reqParams.chanssId;
-      device.annotaions.name = reqParams.name;
+      device.annotations.name = reqParams.name;
   
       return true;
     }

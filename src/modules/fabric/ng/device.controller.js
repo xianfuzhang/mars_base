@@ -103,6 +103,11 @@ export class DeviceController {
               this.di.$log.debug('delete switch dialog cancel');
             });
         }
+        
+        // add by yazhou.miao
+        if (event.action.value === 'edit') {
+          this.di.$rootScope.$emit('switch-wizard-show', event.data.id);
+        }
 
       /*  switch (this.scope.tabSelected.type) {
           case 'device':
@@ -176,7 +181,12 @@ export class DeviceController {
         }*/
       }
     };
-
+    
+    // add by yazhou.miao
+    this.scope.addSwitch = () => {
+      this.di.$rootScope.$emit('switch-wizard-show');
+    }
+    
     this.init();
 
     this.unsubscribers.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
@@ -184,6 +194,11 @@ export class DeviceController {
       if (params && params.field === 'switch_name') {
         this.di.$location.path('/devices/' + params.value).search({'id': params.object.id});
       }
+    }));
+  
+    // refresh the device list
+    this.unsubscribers.push(this.di.$rootScope.$on('device-list-refresh', (event, params) => {
+      this.scope.deviceModel.deviceAPI.queryUpdate();
     }));
 
     this.scope.$on('$destroy', () => {
