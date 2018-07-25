@@ -22,7 +22,7 @@ export class ClickableTextRenderer {
 
     this.render = (spec) => {
       spec.element.innerHTML = (spec.value === null || spec.value === undefined ? '' : String(spec.value));
-      spec.element._clickdata = {value: spec.value, field: spec.col.field};
+      spec.element._clickdata = {value: spec.value, field: spec.col.field, object: spec.object};
       spec.element.addEventListener('click', clickHandler);
       if (spec.col.def.tooltip) {
         spec.element.title = spec.col_title || spec.value;

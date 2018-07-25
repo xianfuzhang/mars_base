@@ -5,7 +5,7 @@
     <span>•</span>
     <span ng-bind="'MODULES.SWITCH.DETAIL.TITLE'|translate"></span>
   </content-header>
-  <section class="+hasscroll" >
+  <section class="app-body">
     <div class="main__content">
       <div class="device-detail" ng-if="detailDisplay">
         <div class="device-detail__row">
@@ -57,6 +57,8 @@
       <section class="tab-content" ng-if="tabSelected.type == 'port'">
         <mdl-table actions-show="detailModel.actionsShow"
                    actions="detailModel.rowActions"
+                   row-actions-filter="onTableRowActionsFilter($event)"
+                   row-select-action="onTableRowSelectAction($event)"
                    row-click="onTableRowClick($event)"
                    provider="detailModel.provider" api-ready="onApiReady($api)">
         </mdl-table>

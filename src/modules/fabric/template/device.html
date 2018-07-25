@@ -17,6 +17,7 @@
           <mdl-table actions-show="deviceModel.actionsShow"
                      actions="deviceModel.rowActions"
                      row-click="onTableRowClick($event)"
+                     row-select-action="onTableRowSelectAction($event)"
                      provider="deviceModel.deviceProvider" api-ready="onDeviceAPIReady($api)"
                      on-add="addSwitch()" on-remove="batchRemove($value)">
           </mdl-table>

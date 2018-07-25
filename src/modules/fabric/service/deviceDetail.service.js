@@ -92,10 +92,23 @@ export class DeviceDetailService {
         'field': 'speed',
         'layout': {'visible': true, 'sortable': true}
       },
-      {
+      /*{
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.DEVICE'),
         'field': 'device_name',
         'layout': {'visible': true, 'sortable': true}
+      }*/
+    ];
+  }
+
+  getDevicePortsTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE'),
+        'value': 'enable'
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE'),
+        'value': 'disable'
       }
     ];
   }

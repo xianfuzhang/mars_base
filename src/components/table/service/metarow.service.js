@@ -26,7 +26,7 @@ export class metarowService {
       }
 
       return {
-        object: $scope.$data._object,
+        object: $scope.$data,
         value: value,
         col_title: $scope.$data[col.field + '_title'],
         params: col.render.params,
