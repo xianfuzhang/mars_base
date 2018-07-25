@@ -226,7 +226,7 @@ export class DeviceDetailController {
         break;
       case 'link':
         this.di.deviceDataManager.getDeviceLinks(this.scope.deviceId, params).then((res) => {
-          defer.resolve({'data': res.data.links, 'total': res.data.total});
+          defer.resolve({'data': res.data, 'total': res.data.total});
         });
         break;
       case 'statistic':
