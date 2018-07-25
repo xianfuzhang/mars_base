@@ -20,14 +20,7 @@ export class Wizard {
     this.replace = true;
     this.restrict = 'E';
     this.template = require('../template/wizard');
-    this.scope = {
-      title: '=',
-      steps: '=',
-      allowSkip: '=',
-      showWizard: '=',
-      beforeCancel: '&',
-      beforeSubmit: '&'
-    };
+    this.scope = false;
     this.link = (...args) => this._link.apply(this, args);
   }
 
@@ -37,6 +30,7 @@ export class Wizard {
     (function init () {
       scope.curIndex = 0;
       scope.showWizard = scope.showWizard || false;
+      scope.wizardForm = {};
 
       scope.preStep = function() {
         scope.curIndex = scope.curIndex != 0 ? scope.curIndex - 1 : scope.curIndex;
@@ -50,28 +44,22 @@ export class Wizard {
         scope.curIndex = $index;
       }
 
-      scope.cancel = function() {
-        let formModel = {};
-        for(let key in scope.wizardForm) {
-          if (!key.startsWith('$')) {
-            formModel[key] = scope.wizardForm[key].$viewValue;
-          }
-        }
-
-        if (scope.beforeCancel({formData: formModel}))
+      scope.postCancel = function() {
+        let result = scope.cancel();
+        if (result == true) {
           scope.showWizard = false;
+        } else {
+          scope.errMsg = result.message || '';
+        }
       }
 
-      scope.submit = function() {
-        let formModel = {};
-        for(let key in scope.wizardForm) {
-          if (!key.startsWith('$')) {
-            formModel[key] = scope.wizardForm[key].$viewValue;
-          }
+      scope.postSubmit = function() {
+        let result = scope.submit();
+        if (result == true) {
+          scope.showWizard = false;
+        } else {
+          scope.errMsg = result.message || '';
         }
-
-        if (scope.beforeSubmit({formData: formModel}))
-            scope.showWizard = false;
       }
 
       const sce = this.di.$sce;
