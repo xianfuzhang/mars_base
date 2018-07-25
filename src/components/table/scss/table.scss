@@ -78,6 +78,9 @@ table{
 }
 .mdl-table-body__row td {
   text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .mdl-table-body__row td.clickable{
   cursor: pointer;
