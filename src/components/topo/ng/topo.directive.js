@@ -84,7 +84,7 @@ export class Topo {
 
       this.switch_width = 16;
       this.switch_height = 108;
-      this.leaf_group_interval = 2;
+      this.leaf_group_interval = 8;
       this.leaf_group_str = 'leaf_group';
       this.resizeTimeout = null;
       this.active_status = "ACTIVE";
