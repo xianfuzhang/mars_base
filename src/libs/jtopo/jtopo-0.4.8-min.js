@@ -1039,7 +1039,7 @@
         var a = "dragable,selected,showSelected,isMouseOver".split(",");
         this.serializedProperties = this.serializedProperties.concat(a)
       }, this.initialize(), this.paintSelected = function(a) {
-        0 != this.showSelected && (a.save(), a.beginPath(), a.strokeStyle = "rgba(168,202,255, 0.9)", a.fillStyle = "rgba(168,202,236,0.7)", a.rect(-this.width / 2 - 3, -this.height / 2 - 3, this.width + 6, this.height + 6), a.fill(), a.stroke(), a.closePath(), a.restore())
+        0 != this.showSelected && (a.save(), a.beginPath(), a.strokeStyle = "rgba(168,202,255, 1)", a.fillStyle = "rgba(255,124,9,1)", a.rect(-this.width / 2 - 5, -this.height / 2 - 5, this.width + 10, this.height + 10), a.fill(), a.stroke(), a.closePath(), a.restore())
       }, this.paintMouseover = function(a) {
         return this.paintSelected(a)
       }, this.isInBound = function(a, b) {
