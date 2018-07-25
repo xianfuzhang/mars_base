@@ -279,7 +279,8 @@ export class Topo {
             this.switchLocation[leaf_group[j].id] = [x, y];
 
           }
-          last_x = last_x + leafInterval +(this.switch_width + this.leaf_group_interval)* leaf_group.length;
+          // last_x = last_x + leafInterval +(this.switch_width + this.leaf_group_interval)* leaf_group.length;
+          last_x = last_x + leafInterval + this.switch_width* leaf_group.length + this.leaf_group_interval * (leaf_group.length-1) ;
         }
         this.leafContainerText.setLocation(10, 10 + avgHeight);
 
@@ -303,7 +304,15 @@ export class Topo {
       let calcLeafInterval = (leafs, width) =>{
         let remainWidth = width - this.switch_width * leafs.length;
         let group = this.di._.groupBy(leafs, this.leaf_group_str);
-        return remainWidth/ (this.di._.keys(group).length + 1);
+        let groupLen = this.di._.keys(group).length;
+        remainWidth = remainWidth - groupLen * this.leaf_group_interval;
+        console.log('+++')
+        console.log(width);
+        console.log(this.switch_width);
+        console.log(groupLen);
+        console.log(remainWidth);
+        console.log('----')
+        return remainWidth/ (groupLen + 1);
       };
 
       let genAnchorNode = () =>{
