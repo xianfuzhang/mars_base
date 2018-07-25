@@ -52,7 +52,7 @@ let cloudLib = {
         chance.bool({ likelihood: 10 }),
         chance.pickone(config.deviceRoles),
         chance.mac_address(),
-        chance.guid(),
+        chance.guid().slice(0,8),
         chance.word(),
         chance.word(),
         chance.word(),
