@@ -1,0 +1,24 @@
+<div class="wizard__body__form">
+    <!--<div class="form-name">Form1</div>-->
+    <div class="wizard__body__input">
+        <div class="wizard__body__input__label">NTP and Time Zone Settings</div>
+        <span>Inherit From Controller</span>
+        <mdl-switch ng-model="switch.clock.settings"
+                    display-label="{on: 'On', off: 'Off', id: 'device-clock'}">
+        </mdl-switch>
+    </div>
+
+    <div ng-show="switch.clock.settings">
+        <div class="wizard__body__input">
+            <div class="wizard__body__input__label">Time Zone</div>
+            <mdl-select ng-model="switch.clock.zone"
+                        display-label="{ options: [{label: '男1', value: '0'}, {label: '男2', value: '1'}]}">
+            </mdl-select>
+        </div>
+
+        <div class="wizard__body__input">
+            <div class="wizard__body__input__label">NTP Servers</div>
+            <Table></Table>
+        </div>
+    </div>
+</div>

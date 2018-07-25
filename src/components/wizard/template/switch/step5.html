@@ -1,0 +1,41 @@
+<div class="wizard__body__form">
+    <div class="wizard__body__input">
+        <div class="wizard__body__input__label">Logging Settings</div>
+        <span>Inherit From Controller</span>
+        <mdl-switch ng-model="switch.logging.settings"
+                    display-label="{on: 'On', off: 'Off', id: 'device-logging'}">
+        </mdl-switch>
+    </div>
+
+    <div ng-show="switch.logging.settings">
+        <div class="wizard__body__input">
+            <div class="wizard__body__input__label">Controller Enabled</div>
+            <mdl-switch ng-model="switch.logging.controller"
+                        display-label="{on: 'Yes', off: 'No', id: 'switch-logging-controller'}">
+            </mdl-switch>
+            <div class="wizard__body__input__annotation">
+                When enabled, fabric switches log to controller
+            </div>
+        </div>
+
+        <div class="wizard__body__input">
+            <div class="wizard__body__input__label">Remote Enabled</div>
+            <mdl-switch ng-model="switch.logging.remote"
+                        display-label="{on: 'Yes', off: 'No', id: 'switch-logging-remote'}">
+            </mdl-switch>
+            <div class="wizard__body__input__annotation">
+                When enabled, controller logs to remote syslog servers
+            </div>
+        </div>
+
+        <div class="wizard__body__input">
+            <div class="wizard__body__input__label">Remote Servers</div>
+            <mdl-switch ng-model="switch.logging.remote"
+                        display-label="{on: 'Yes', off: 'No', id: 'switch-logging-controller'}">
+            </mdl-switch>
+            <div class="wizard__body__input__annotation">
+                When enabled, controller logs to remote syslog servers
+            </div>
+        </div>
+    </div>
+</div>

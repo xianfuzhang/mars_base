@@ -42,7 +42,7 @@ export class DeviceDataManager {
 
   getDevices(params) {
     let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getDevicesUrl(), {'params': params}).then(
+    this.di.$http.get(this.di.appService.getDeviceDetailUrl(), {'params': params}).then(
       (res) => {
         defer.resolve(res);
       },
@@ -79,6 +79,33 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  // add by yazhou.miao
+  postDeviceDetail(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getDevicesUrl(), params).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+  
+  putDeviceDetail(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.put(this.di.appService.getDeviceDetailUrl(params.deviceId), params).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+  
   getDevicePorts(deviceId, params) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getDevicePortsUrl(deviceId), {'params': params}).then(
