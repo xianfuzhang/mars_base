@@ -125,7 +125,7 @@ router.put('/devices/:deviceId', function(req, res) {
   }
 })
 
-router.post('/devices/:deviceId/poststate/:portId', function(req, res) {
+router.post('/devices/:deviceId/portstate/:portId', function(req, res) {
   if (!req.params.deviceId) {
     return res.status(404).json('Device ID is required');
   }
