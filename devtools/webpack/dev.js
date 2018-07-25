@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 
 const port = process.env.PORT || 3000;
@@ -27,6 +28,12 @@ module.exports = function (config) {
       new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css"
+      }),
+      new OptimizeCssAssetsPlugin({
+        assetNameRegExp: /\.css\.*(?!.*map)/g,
+        cssProcessor: require('cssnano'),
+        cssProcessorOptions: { safe: true, discardComments: { removeAll: true } },
+        canPrint: true
       }),
       new MergeJsonWebpackPlugin({
         'output': {

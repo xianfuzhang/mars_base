@@ -53,6 +53,19 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  deleteDevice(deviceId) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDeleteDeviceUrl(deviceId))
+      .then((res) => {
+          defer.resolve(null);
+        },
+        () => {
+          defer.reject(null);
+        }
+      );
+    return defer.promise;
+  }
+
   getDeviceDetail(deviceId) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getDeviceDetailUrl(deviceId)).then(
@@ -66,6 +79,33 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  // add by yazhou.miao
+  postDeviceDetail(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getDevicesUrl(), params).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+  
+  putDeviceDetail(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.put(this.di.appService.getDeviceDetailUrl(params.deviceId), params).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+  
   getDevicePorts(deviceId, params) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getDevicePortsUrl(deviceId), {'params': params}).then(
@@ -121,6 +161,19 @@ export class DeviceDataManager {
   getLinks(params) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getLinksUrl(), {'params': params}).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'links': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
+  getDeviceLinks(deviceId, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDeviceLinksUrl(deviceId), {'params': params}).then(
       (res) => {
         defer.resolve(res);
       },

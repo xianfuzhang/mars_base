@@ -51,12 +51,12 @@ router.get('/devices/:deviceId', function (req, res) {
   }
 
   if(req.params.deviceId == 'ports') {
-    devices = _.cloneDeep(cloudModel.devices);
-    devices.forEach((device) => {
-      delete device.storm;
-    })
+    let ports = [];
+    _.forEach(cloudModel.devices,(device) => {
+      ports = ports.concat(device.ports);
+    });
   
-    return res.json({devices: devices});
+    return res.json({ports: ports});
   }
   
   devices = _.cloneDeep(cloudModel.devices);
@@ -87,11 +87,22 @@ router.get('/devices/:deviceId/:type', function (req, res) {
   if (searchDevice !== undefined) {
     switch(req.params.type) {
       case 'ports':
-        delete searchDevice.storm;
-        return res.json(searchDevice);
+        return res.json(searchDevice.ports);
         
       case 'storm':
         return res.json(searchDevice.storm);
+        
+      case 'links':
+        
+        let result = _.filter(cloudModel.links, (link) => {
+          return link.src.device == req.params.deviceId || link.dst.device == req.params.deviceId
+        });
+        
+        if(result) {
+          return res.json(result);
+        } else {
+          return res.status(404).json("This device doesn't exist!");
+        }
         
       default:
         break;
@@ -108,13 +119,13 @@ router.put('/devices/:deviceId', function(req, res) {
   
   let result = cloudLib.updateDevice(req.params.deviceId, req.body);
   if (result) {
-    return res.status(200).json("This device has been deleted!");
+    return res.status(200).json("This device has been changed!");
   } else {
     return res.status(400).json("Failed to delete the device!");
   }
 })
 
-router.post('/devices/:deviceId/poststate/:portId', function(req, res) {
+router.post('/devices/:deviceId/portstate/:portId', function(req, res) {
   if (!req.params.deviceId) {
     return res.status(404).json('Device ID is required');
   }
