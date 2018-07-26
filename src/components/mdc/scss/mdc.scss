@@ -8,6 +8,34 @@
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+.material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):before, .material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):after{
+  background: black;
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity:0;
+  transition: all 0.3s;
+  pointer-events: auto;
+}
+.material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):focus:before{
+  opacity: 0;
+}
+.material-icons.mdc-icon-button:hover:before{
+  opacity: 0.04;
+}
+.material-icons.mdc-icon-button:active:before, .material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):active:after{
+  width: 0;
+  height: 0;
+  left:24px;
+  top: 24px;
+  opacity: 0.3;
+  transition-duration: 0s;
+}
 .mdc-icon-button.mdc-icon-button__normal{
   font-size: 22px;
   height: 35px;
