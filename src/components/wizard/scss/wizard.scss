@@ -34,10 +34,7 @@
     height: 40px;
     padding: 5px 0;
     border-bottom: 1px solid #777;
-    background: -webkit-linear-gradient(left,#CCCCCC,#F5F5F5,#CCCCCC);
-    background: -moz-linear-gradient(left,#CCCCCC,#F5F5F5,#CCCCCC);
-    background: -ms-linear-gradient(left,#CCCCCC,#F5F5F5,#CCCCCC);
-    background: linear-gradient(left,#CCCCCC,#F5F5F5,#CCCCCC);
+    background-color: #7accef;
 
     @include element(title) {
       float: left;
@@ -130,13 +127,12 @@
       
       @include element(label) {
         font-size: 16px;
-        font-weight: bold;
         /*text-decoration:underline;*/
       }
   
       @include element(textarea) {
         width: 100%;
-        height: 100px;
+        height: 70px;
         font-size: 15px;
         border-radius: 5px;
         box-sizing: border-box;
@@ -148,6 +144,33 @@
         font-size: 15px;
         border: 1px solid rgb(169, 169, 169);
         box-sizing: border-box;
+        border-radius: 5px;
+      }
+  
+      @include element(text-prefix) {
+        width: 70%;
+        height: 30px;
+        font-size: 15px;
+        border: 1px solid rgb(169, 169, 169);
+        box-sizing: border-box;
+        border-radius: 5px;
+        display: inline-block;
+      }
+      @include element(separator) {
+        width: 10%;
+        height: 30px;
+        font-size: 16px;
+        text-align: center;
+        font-weight: bold;
+      }
+      @include element(text-postfix) {
+        width: 20%;
+        height: 30px;
+        font-size: 15px;
+        border: 1px solid rgb(169, 169, 169);
+        box-sizing: border-box;
+        border-radius: 5px;
+        display: inline-block;
       }
   
       @include element(annotation) {

@@ -20,16 +20,23 @@ export class SwitchWizardController {
     });
     
     let unsubscribes = [];
+    const scope = this.di.$scope;
     const deviceDataManager = this.di.deviceDataManager;
-    
+    const rootScope = this.di.$rootScope;
+  
     let initSwitch = {
       id: '',
       mac_address: '',
       name: '',
-      description: '',
+      rack_id: '',
+      mfr: '',
       admin_status: false,
       fabric_role: 'unknown',
-      leaf_group: ''
+      leaf_group: '',
+      managementAddress: '',
+      port: '',
+      protocol: '',
+      description: ''
     }
   
     this.di.$scope.showWizard = false;
@@ -66,8 +73,8 @@ export class SwitchWizardController {
     // init form data
     this.di.$scope.switch = _.cloneDeep(initSwitch);
     
-    this.di.$scope.mac_regex = '^([A-F0-9]{2}:){5}[A-F0-9]{2}$';  // MAC Address regex for validation
-    this.di.$scope.ip_regex = '/\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b/';
+    this.di.$scope.mac_regex = '^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$';  // MAC Address regex for validation
+    this.di.$scope.ip_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
     
     this.di.$scope.mac_addresses = [
       '00:00:00:02:00:01',
@@ -84,12 +91,6 @@ export class SwitchWizardController {
       'R1L1', 'R1L2', 'R1L3'
     ];
     
-    let scope = this.di.$scope;
-    
-    this.di.$scope.upper = function(mac) {
-      scope.switch.mac_address = mac.toUpperCase();  // Make every character uppercase
-    }
-    
     this.di.$scope.open = function(deviceId){
       if(scope.showWizard) return;
       
@@ -100,20 +101,29 @@ export class SwitchWizardController {
           .then((res) => {
             if(res) {
               const device = res.data;
+              let port = device.annotations.channelId ? device.annotations.channelId.split(':')[1] : '';
+              
               scope.switch = {
                 id: device.id,
                 mac_address: device.mac,
-                name: device.annotations.name,
                 description: 'test',
                 admin_status: device.available,
                 fabric_role: device.type,
-                leaf_group: device.leaf_group
+                leaf_group: device.leaf_group,
+                rack_id: device.rack_id,
+                mfr: device.mfr,
+                community: device.community,
+                name: device.annotations.name,
+                managementAddress: device.annotations.managementAddress,
+                port: parseInt(port),
+                protocol: device.annotations.protocol,
               }
   
               scope.showWizard = true;
             }
           });
       } else { // 'add' mode
+        scope.mode = 'add';
         scope.switch = _.cloneDeep(initSwitch);
         scope.showWizard = true;
       }
@@ -123,7 +133,6 @@ export class SwitchWizardController {
       return true;
     }
   
-    const rootScope = this.di.$rootScope;
     this.di.$scope.submit = function() {
       let params = {
         deviceId: scope.switch.id,
@@ -131,10 +140,15 @@ export class SwitchWizardController {
         name: scope.switch.name,
         type: scope.switch.fabric_role,
         available: scope.switch.admin_status,
-        leaf_group: scope.switch.leaf_group
+        leaf_group: scope.switch.leaf_group,
+        rack_id: scope.switch.rack_id,
+        mfr: scope.switch.mfr,
+        community: scope.switch.community,
+        managementAddress: scope.switch.managementAddress,
+        port: scope.switch.port,
+        protocol: scope.switch.protocol,
       }
       
-      // TODO:
       return new Promise((resolve, reject) => {
         if(scope.mode == 'update') { // update switch config
           deviceDataManager.putDeviceDetail(params)
