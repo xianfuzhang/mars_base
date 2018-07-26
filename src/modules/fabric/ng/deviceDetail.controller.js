@@ -19,7 +19,7 @@ export class DeviceDetailController {
     this.scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
     this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE');
-    this.scope.deviceId = this.di.$routeParams['id'];
+    this.scope.deviceId = this.di.$routeParams['deviceId'];
     this.scope.tabSelected = null;
     this.scope.tabs = this.di.deviceDetailService.getTabSchema();
     this.scope.detailDisplay= false;

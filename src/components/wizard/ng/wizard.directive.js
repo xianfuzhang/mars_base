@@ -54,12 +54,15 @@ export class Wizard {
       }
 
       scope.postSubmit = function() {
-        let result = scope.submit();
-        if (result == true) {
-          scope.showWizard = false;
-        } else {
-          scope.errMsg = result.message || '';
-        }
+        scope.submit()
+          .then((result) => {
+            if (result == true) {
+              scope.showWizard = false;
+              scope.$apply();
+            } else {
+              scope.errMsg = result.error || '';
+            }
+          });
       }
 
       const sce = this.di.$sce;

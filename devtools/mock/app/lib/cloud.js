@@ -52,7 +52,7 @@ let cloudLib = {
         chance.bool({ likelihood: 10 }),
         chance.pickone(config.deviceRoles),
         chance.mac_address(),
-        chance.guid(),
+        chance.guid().slice(0,8),
         chance.word(),
         chance.word(),
         chance.word(),
@@ -190,7 +190,7 @@ let cloudLib = {
       device.serial = reqParams.serial;
       device.mfr = reqParams.mfr;
       device.chanssId = reqParams.chanssId;
-      device.annotaions.name = reqParams.name;
+      device.annotations.name = reqParams.name;
   
       return true;
     }

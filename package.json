@@ -8,7 +8,7 @@
   "scripts": {
     "postinstall": "npm --prefix ./devtools/mock install ./devtools/mock",
     "prebuild:dev": "webpack --config devtools/webpack/webpack.config",
-    "build:dev": "concurrently \"webpack-dev-server --config devtools/webpack/webpack.config\" \"node devtools/mock/app/app.js\"",
+    "build:dev": "concurrently \"webpack-dev-server --config devtools/webpack/webpack.config\" \"nodemon devtools/mock/app/app.js\"",
     "prestart": "npm install",
     "build:component": "webpack --config devtools/webpack/webpack.config --env.environment=component",
     "postbuild:component": "concurrently \"webpack-dev-server --config devtools/webpack/webpack.config --env.environment=component\" \"node devtools/mock/app/app.js\"",
@@ -45,6 +45,7 @@
     "merge-jsons-webpack-plugin": "^1.0.15",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.9.0",
+    "nodemon": "^1.18.3",
     "optimize-css-assets-webpack-plugin": "^5.0.0",
     "rimraf": "^2.6.0",
     "sass-loader": "^6.0.2",

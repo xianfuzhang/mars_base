@@ -1,7 +1,7 @@
 <!--<div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">-->
   <mdl-header></mdl-header>
   <!--<mar-header  headers="deviceModel.headers"></mar-header>-->
-  <div class="app-main">
+  <ng-controller class="app-main">
     <content-header big-title="{{page_title}}">
       <a href="/">Mars Cloud</a>
       <span>•</span>
@@ -51,6 +51,10 @@
     </section>
     <!--<section class="column__1__3 +hasscroll +hasborder">
     </section>-->
+
+    <ng-controller ng-controller="switchWizardController">
+      <wizard steps="steps" title="title" show-wizard="showWizard" next-step="" before-cancel="cancel(formData)" before-submit="submit(formData)"></wizard>
+    </ng-controller>
   </div>
 <!--
 </div>
