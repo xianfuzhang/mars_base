@@ -7,7 +7,7 @@ var _ = require('lodash'),
 const chance = new Chance();
 
 class Device {
-  constructor (id, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassId, driver, portMinNum, leaf_group, name) {
+  constructor (id, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassisId, driver, portMinNum, leaf_group, community, name, ip, port, protocol) {
     this.id = id;
     this.type = type;
     this.available = available;
@@ -18,22 +18,22 @@ class Device {
     this.hw = hw;
     this.serial = serial;
     this.mfr = mfr;
-    this.chanssId = chassId;
+    this.chassisId = chassisId;
     this.driver = driver;
+    this.community = community;
     this.leaf_group = leaf_group;
     this.lastUpdate = (new Date()).getMilliseconds();
     this.humanReadableLastUpdate = "connected 4m52s ago";
-    this.annotations = this.createAnnotations(name);
+    this.annotations = this.createAnnotations(name, ip, port, protocol);
     this.ports = this.createPhysicalPorts(id, portMinNum + 8);
     this.storm = this.createStorm();
   }
 
-  createAnnotations (name) {
-    let ip = chance.ip();
+  createAnnotations (name, ip, port, protocol) {
     let annotations = {
       name: name,
-      channelId: ip + ':' + chance.natural({min:1, max:65535}),
-      protocol: chance.pickone(config.deviceProtocols),
+      channelId: ip + ':' + port,
+      protocol: protocol,
       managementAddress: ip
     };
 

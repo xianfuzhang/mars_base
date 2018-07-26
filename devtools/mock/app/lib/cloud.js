@@ -61,7 +61,11 @@ let cloudLib = {
         chance.word(),
         portMinNum,
         leaf_group,
-        chance.name());
+        chance.company(),
+        chance.name(),
+        chance.ip(),
+        chance.port(),
+        chance.pickone(config.deviceProtocols));
   
       // adding data to the cloud
       cloudModel.devices.push(device);
@@ -166,7 +170,11 @@ let cloudLib = {
       reqParams.driver || chance.word(),
       24,
       reqParams.leaf_group,
-      reqParams.name
+      reqParams.community,
+      reqParams.name,
+      reqParams.managementAddress,
+      reqParams.port,
+      reqParams.protocol
     );
     
     // adding data to the cloud
@@ -180,17 +188,22 @@ let cloudLib = {
     
     // TODO: how to update, which key
     if (device !== undefined) {
-      device.type = reqParams.type;
-      device.available = reqParams.available;
-      device.role = reqParams.role;
-      device.mac = reqParams.mac;
-      device.rack_id = reqParams.rack_id;
-      device.sw = reqParams.sw;
-      device.hw = reqParams.hw;
-      device.serial = reqParams.serial;
-      device.mfr = reqParams.mfr;
-      device.chanssId = reqParams.chanssId;
-      device.annotations.name = reqParams.name;
+      device.type = reqParams.type || device.type;
+      device.available = reqParams.available || device.available;
+      device.role = reqParams.role || device.role;
+      device.mac = reqParams.mac || device.mac;
+      device.rack_id = reqParams.rack_id || device.rack_id;
+      device.sw = reqParams.sw || device.sw;
+      device.hw = reqParams.hw || device.hw;
+      device.serial = reqParams.serial || device.serial;
+      device.mfr = reqParams.mfr || device.mfr;
+      device.chassisId = reqParams.chassisId || device.chassisId;
+      device.community = reqParams.community || device.community;
+      device.leaf_group =  reqParams.leaf_group || device.leaf_group;
+      device.annotations.name = reqParams.name || device.annotations.name;
+      device.annotations.managementAddress = reqParams.managementAddress || device.annotations.managementAddress;
+      device.annotations.channelId = reqParams.managementAddress + ':' + reqParams.port || device.annotations.channelId;
+      device.annotations.protocol = reqParams.protocol || device.annotations.protocol;
   
       return true;
     }
