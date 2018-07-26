@@ -93,7 +93,7 @@ export class appService {
   }
 
   getDeviceLinksUrl(deviceId){
-    return this.getZoneEndpoint() + 'onos/v1/links/' +  deviceId;
+    return this.getZoneEndpoint() + 'onos/v1/devices/' +  deviceId + '/links';
   }
 
   getChangePortStateUrl(deviceId, portId) {
