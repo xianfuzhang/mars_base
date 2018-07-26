@@ -20,7 +20,8 @@ export class FabricSummaryController {
       'appService',
       'deviceDataManager',
       'tableProviderFactory',
-      'deviceService'
+      'deviceService',
+      'switchService',
     ];
   }
 
@@ -65,12 +66,46 @@ export class FabricSummaryController {
       linksSchema: this.di.deviceService.getSummaryLinkTableSchema()
     };
 
-    this.di.deviceDataManager.getDetailDevices().then((res)=>{
-      let dstSwt = distributeSwitches(res.data.devices);
+    let portsDefer = this.di.$q.defer(),
+      devicesDefer = this.di.$q.defer();
+    let promises = [];
+    let portGroups = {};
+    this.devices = [];
+
+    this.di.deviceDataManager.getPorts().then((res)=>{
+      if(res.data.ports){
+        portGroups = this.di._.groupBy(res.data.ports , "element");
+      }
+      portsDefer.resolve();
+      // let dstSwt = distributeSwitches(res.data.ports);
+      // this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
+      // this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
+      // this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
+      // this.di.$scope.fabricModel.isShowTopo = true;
+    });
+
+    promises.push(portsDefer.promise);
+
+
+    this.di.deviceDataManager.getDevices().then((res)=>{
+      if(res.data.devices){
+        this.devices = res.data.devices;
+
+      }
+      devicesDefer.resolve();
+    });
+    promises.push(devicesDefer.promise);
+
+    Promise.all(promises).then(()=>{
+      this.di._.forEach(this.devices, (device)=>{
+        device.ports = portGroups[device.id];
+      });
+      let dstSwt = distributeSwitches(this.devices);
       this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
       this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
       this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
       this.di.$scope.fabricModel.isShowTopo = true;
+      this.di.$scope.$apply();
     });
 
     this.di.deviceDataManager.getLinks().then((res)=>{
@@ -214,7 +249,7 @@ export class FabricSummaryController {
     let showPorts = () =>{
       this.di.deviceDataManager.getDeviceWithPorts(this.di.$scope.fabricModel.showSwitchId).then((res) => {
         // let entities = this.getEntities(res.data.ports);
-        scope.fabricModel.switchPorts = this.getEntitiesPorts(res.data.ports);
+        scope.fabricModel.switchPorts = this.getEntitiesPorts(res.data);
         // this.di.$scope.$apply();
       });
     };
@@ -227,34 +262,8 @@ export class FabricSummaryController {
       });
     };
 
-
-    this.di.$scope.fabricModel.interfaceProvider = this.di.tableProviderFactory.createProvider({
-      query: () => {
-        let defer = this.di.$q.defer();
-        this.di.deviceDataManager.getDeviceWithPorts(this.di.$scope.fabricModel.showSwitchId).then((res) => {
-          let entities = this.getEntities(res.data.ports);
-          defer.resolve({
-            data: entities,
-            count: entities.length
-          },()=>{
-          });
-        });
-        return defer.promise;
-      },
-      getSchema: () => {
-        return {
-          // schema: this.di.deviceService.getPortTableSchema(),
-          schema: this.di.deviceService.getSummaryPortsTableSchema(),
-          index_name: 'port_mac',
-          rowCheckboxSupport: false,
-          rowActionsSupport: true
-        };
-      }
-    });
-
-
     unsubscribers.push(this.di.$rootScope.$on('switch_select',(evt, data)=>{
-      showSwitchDetail(data.id, data.type,data.value);
+      showSwitchDetail(data.id, data.type, data.value);
     }));
 
 
@@ -267,7 +276,7 @@ export class FabricSummaryController {
       this.di._.each(unsubscribers, (unsubscribe) => {
         unsubscribe();
       });
-      this.di.$log.info('FabricSummaryController', 'Destroyed');
+      // this.di.$log.info('FabricSummaryController', 'Destroyed');
     });
 
   }
@@ -304,9 +313,9 @@ export class FabricSummaryController {
     this.di._.forEach(links, (link)=>{
       if(link.src.device == this.di.$scope.fabricModel.showSwitchId){
         let obj = {};
-        obj.src_device = link.src.device;
+        obj.src_device = this.di.switchService.getSwitchName(link.src.device, this.devices) ;
         obj.src_port = link.src.port;
-        obj.dst_device = link.dst.device;
+        obj.dst_device =  this.di.switchService.getSwitchName(link.dst.device, this.devices) ;;
         obj.dst_port = link.dst.port;
         obj.state = link.state;
         // this.setTableOpt(obj);

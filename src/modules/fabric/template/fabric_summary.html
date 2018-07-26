@@ -1,19 +1,17 @@
 
-<div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">
+<div class="summary">
     <!--  <mar-header headers="dashModel.headers"></mar-header>-->
     <!--<mdl-header></mdl-header>-->
     <mar-header headers="fabricModel.headers"></mar-header>
 
-    <div style="flex-grow: 2;
-              flex-basis:auto;
-              flex-shrink: 1;background-color: white;overflow: scroll;padding:0 8px;display:flex;flex-direction: column;">
+    <div class="summary__body" >
         <content-header big-title="Fabric">
             <a href="/">Mars Cloud</a>
             <span>•</span>
             <span>Fabric</span>
         </content-header>
 
-        <div style="height:100%;width:100%;position:relative;border-top:1px solid lightgray;flex-grow: 1;flex-shrink: 1;min-height:400px;overflow: hidden;">
+        <div class="summary__body__content">
 
             <div ng-style="resize_right_plus" style="position: absolute;right:300px;top:0;height:100%;left:0px;">
                 <topo ng-if="fabricModel.isShowTopo" spines="fabricModel.deSpines" leafs="fabricModel.deLeafs" others="fabricModel.deOthers" links="fabricModel.deLinks" topo-setting="fabricModel.topoSetting">
@@ -112,6 +110,13 @@
                 <mar-section ng-if="fabricModel.showSwitchDetail"  title="Links" class="detail_link">
                     <static-table style="max-width:400px" data="fabricModel.switchLinks" columns="fabricModel.linksSchema"></static-table>
                 </mar-section>
+
+                <!--<mar-section ng-if="fabricModel.showSwitchDetail"  title="Flows" class="detail_flow">-->
+                    <!--<div style="">-->
+                    <!--<button class="material-icons mdc-icon-button mdc-card__action&#45;&#45;icon" >add</button>-->
+                    <!--</div>-->
+                    <!--<static-table style="max-width:400px" data="fabricModel.switchLinks" columns="fabricModel.linksSchema"></static-table>-->
+                <!--</mar-section>-->
 
 
 
