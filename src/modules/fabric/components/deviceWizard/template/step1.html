@@ -1,0 +1,74 @@
+<div class="step">
+    <div class="step__input">
+        <div class="step__input__label">Name<span class="step__input__required">*</span></div>
+        <input class="step__input__text" name="name" type="text" ng-model="switch.name" ng-required="true"/>
+    </div>
+    <div class="step__input">
+        <div class="step__input__label">Mac Address</div>
+        <!--<mdl-select ng-model="mac_address" name="mac_address"-->
+        <!--display-label="{ options: [{label: '男1', value: '0'}, {label: '男2', value: '1'}]}">-->
+        <!--</mdl-select>-->
+        <input class="step__input__text" list="mac_addresses_datalist" ng-model="switch.mac_address" ng-pattern="mac_regex"/>
+        <datalist id="mac_addresses_datalist">
+            <option ng-value="mac" ng-repeat="mac in mac_addresses"/>
+        </datalist>
+        <div class="step__input__annotaions">
+            Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future. When a switch with the entered MAC is discovered, this configuration will automatically be applied to it.
+        </div>
+    </div>
+    <div class="step__input">
+        <div class="step__input__label">ManagementAddress & Port<span class="step__input__required">*</span></div>
+        <input class="step__input__text-prefix" name="managementAddress" type="text" ng-model="switch.managementAddress" ng-required="true" ng-pattern="ip_regex"/>
+        <span class="step__input__separator">&nbsp;:&nbsp;</span>
+        <input class="step__input__text-postfix" name="port" type="number" ng-model="switch.port" ng-required="true" min="0" max="65535"/>
+    </div>
+    <div class="step__input">
+        <div class="step__input__label">Rack Id</div>
+        <input class="step__input__text" name="rack_id" type="text" ng-model="switch.rack_id"/>
+    </div>
+    <div class="step__input">
+        <div class="step__input__label">Protocol<span class="step__input__required">*</span></div>
+        <input class="step__input__text" list="protocals-datalist" name="protocol" type="text" ng-model="switch.protocol" ng-required="true"/>
+        <datalist id="protocals-datalist">
+            <option ng-value="protocol" ng-repeat="protocol in protocols"/>
+        </datalist>
+    </div>
+
+    <div class="step__input" ng-show="switch.protocol == 'SNMP'">
+        <div class="step__input__label">Community</div>
+        <input class="step__input__text" name="community" type="text" ng-model="switch.community"/>
+    </div>
+    <div class="step__input">
+        <div class="step__input__label">Manufacturer</div>
+        <input class="step__input__text" name="mfr" ng-value="switch.protocol == 'Rest' ? 'Accton' : switch.mfr" type="text" ng-model="switch.mfr"/>
+    </div>
+    <div class="step__input">
+        <div class="step__input__label" style="text-decoration: underline">Admin Status<span class="step__input__required">*</span></div>
+        <mdl-switch ng-model="switch.admin_status" name="status"
+                    display-label="{on: 'Down', off: 'Up', id: 'status'}">
+        </mdl-switch>
+    </div>
+    <div class="step__input">
+        <div class="step__input__label" style="text-decoration: underline">Fabric Role</div>
+        <mdl-radio ng-model="switch.fabric_role" name="role" value="spine"
+                   display-label="{id: 'check_2', label: 'Spine', name: 'role', value: 'spine'}">
+        </mdl-radio>
+        <mdl-radio ng-model="switch.fabric_role" name="role" value="leaf"
+                   display-label="{id: 'check_1', label: 'Leaf', name: 'role', value: 'leaf'}">
+        </mdl-radio>
+        <mdl-radio ng-model="switch.fabric_role" name="role" value="unknown"
+                   display-label="{id: 'check_3', label: 'None', name: 'role', value: 'unknown'}">
+        </mdl-radio>
+    </div>
+    <div class="step__input" ng-if="switch.fabric_role == 'leaf'">
+        <div class="step__input__label">Leaf Group</div>
+        <input class="step__input__text" list="leaf_group_datalist" placeholder="Please enter or select the leaf group" ng-model="switch.leaf_group""/>
+        <datalist id="leaf_group_datalist">
+            <option ng-value="group" ng-repeat="group in leaf_groups"/>
+        </datalist>
+    </div>
+    <div class="step__input">
+        <div class="step__input__label">Description</div>
+        <textarea class="step__input__textarea" name="description" ng-model="switch.description" class="step__input__textarea" resize="false"></textarea>
+    </div>
+</div>

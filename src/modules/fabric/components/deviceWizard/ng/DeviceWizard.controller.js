@@ -1,4 +1,4 @@
-export class SwitchWizardController {
+export class DeviceWizardController {
   static getDI() {
     return [
       '$scope',
@@ -15,7 +15,7 @@ export class SwitchWizardController {
 
   constructor(...args) {
     this.di = {};
-    SwitchWizardController.getDI().forEach((value, index) => {
+    DeviceWizardController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
     
@@ -46,27 +46,27 @@ export class SwitchWizardController {
       {
         id: 'step1',
         title: 'Info',
-        content: require('../template/switch/step1.html'),
+        content: require('../template/step1.html'),
       },
       // {
       //   id: 'second',
       //   title: 'Clock',
-      //   content: require('../template/switch/step2.html')
+      //   content: require('../template/step2.html')
       // },
       // {
       //   id: 'third',
       //   title: 'SNP',
-      //   content: require('../template/switch/step3.html')
+      //   content: require('../template/step3.html')
       // },
       // {
       //   id: 'fourth',
       //   title: 'SNP Traps',
-      //   content: require('../template/switch/step4.html')
+      //   content: require('../template/step4.html')
       // },
       // {
       //   id: 'fifth',
       //   title: 'Logging',
-      //   content: require('../template/switch/step5.html')
+      //   content: require('../template/step5.html')
       // },
     ];
   
@@ -192,6 +192,6 @@ export class SwitchWizardController {
   }
 }
 
-SwitchWizardController.$inject = SwitchWizardController.getDI();
-SwitchWizardController.$$ngIsClass = true;
+DeviceWizardController.$inject = DeviceWizardController.getDI();
+DeviceWizardController.$$ngIsClass = true;
 
