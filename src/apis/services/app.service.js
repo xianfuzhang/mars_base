@@ -10,11 +10,16 @@ export class appService {
     appService.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
+    this.translate = this.di.$filter('translate');
     this.isMocked = true;
     this.CONST = {
       MOCKED_ZONE_ENDPOINT: 'http://localhost:3000/',
       LIVE_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/',
 
+      MOCKED_USERNAME: 'nocsys',
+      MOCKED_PASSWORD: 'nocsys',
+      GUEST_GROUP: 'guest',
+      ADMIN_GROUP: 'admin',
       HEADER: {
         'menu':[
           {
@@ -40,8 +45,8 @@ export class appService {
           //username暂时是用来显示的，后期是通过接口返回。或者是通过session
           'UserName':'Nocsys',
           'items':[
-            {'label': 'setting', 'url': 'setting'},
-            {'label': 'logout', 'url': 'logout'}
+            {'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manager'},
+            {'label': this.translate('MODULE.LOGIN.USERACCOUNT.LOGOUT'), 'url': '/logout'}
           ]
         }
       }
@@ -58,6 +63,14 @@ export class appService {
         (this.di.$location.host()  + ":"+  this.di.$location.port()));
     }
     return endpoint;
+  }
+
+  getLoginUrl() {
+    return this.getZoneEndpoint() + 'onos/v1/login';
+  }
+
+  getLogoutUrl() {
+    return this.getZoneEndpoint() + 'onos/v1/logout';
   }
 
   getDevicesUrl(){

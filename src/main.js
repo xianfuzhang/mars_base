@@ -115,6 +115,15 @@ angular
       when('/fabric_summary', {
         template: require('./modules/fabric/template/fabric_summary.html'),
         controller: 'fabricSummaryController'
+      }).
+      when('/login', {
+        template: require('./modules/login/template/login.html'),
+        controller: 'loginController'
+      }).
+      when('/logout', {
+        redirectTo: function(param, path, search){
+          return '/login';
+        }
       })
       .otherwise({ redirectTo: '/' });
 
