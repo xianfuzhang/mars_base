@@ -3,19 +3,39 @@
     <div class="navbar-inner" ng-controller="headerCtrl">
       <div class="navbar-inner__container">
         <span class="navbar-inner__brand" ng-click="location('/dashboard', $event)"></span>
-        <ul class="navbar-inner__nav">
-          <li class="navbar-inner__dropdown" ng-repeat="menu in groups.menu" uib-dropdown>
-            <a class="navbar-inner__dropdown-toggle"
-               uib-dropdown-toggle
-               aria-haspopup="true"
-               aria-expanded="false">{{menu.group}}</a>
-            <ul class="navbar-inner__dropdown-menu" uib-dropdown-menu>
-              <li ng-repeat="item in menu.items">
-                <a ng-click="location(item.url, $event)">{{item.label}}</a>
-              </li>
-            </ul>
-          </li>
-        </ul>
+        <div class="navbar-flex-between">
+          <ul class="navbar-inner__nav">
+            <li class="navbar-inner__dropdown" ng-repeat="menu in groups.menu" uib-dropdown>
+              <a class="navbar-inner__dropdown-toggle"
+                 uib-dropdown-toggle
+                 aria-haspopup="true"
+                 aria-expanded="false">{{menu.group}}</a>
+              <ul class="navbar-inner__dropdown-menu" uib-dropdown-menu>
+                <li ng-repeat="item in menu.items">
+                  <a ng-click="location(item.url, $event)">{{item.label}}</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <div class="navbar-inner__right">
+            <div class="navbar-inner__notification">
+              <span class="notification-status"></span>
+              <mdl-button ng-click="_selectPage(numPages)" icon-name="notifications"></mdl-button>
+            </div>
+            <div class="navbar-inner__account navbar-inner__dropdown" uib-dropdown>
+              <div class="navbar-inner__account-summary" uib-dropdown-toggle>
+                <i class="material-icons">account_circle</i>
+                <span class="navbar-inner__account-user">admin</span>
+                <span class="dropdown-caret" ></span>
+              </div>
+              <ul class="navbar-inner__dropdown-menu navbar-inner__dropdown-menu__right" uib-dropdown-menu>
+                <li ng-repeat="item in userConfig">
+                  <a ng-click="location(item.url, $event)">{{item.label}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
