@@ -10,17 +10,21 @@
   overflow: hidden;
 }
 .login-fields{
-  width: 300px;
-  height: 300px;
+  width: 500px;
+  height: 450px;
 }
 .login-fields__logo{
   background: url('../images/mars_logo.png') no-repeat center center;
-  margin: auto auto 30px auto;
+  margin: auto auto 10px auto;
   width: 115px;
   height: 94px;
 }
 .login-fields__element{
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.login-fields__element .mdc-text-field{
+  width: 300px;
 }
 .login-fields__element .mdc-text-field:not(.mdc-text-field--disabled)>.mdc-floating-label,
 .login-fields__element .mdc-text-field:not(.mdc-text-field--disabled)>.mdc-text-field__input{
