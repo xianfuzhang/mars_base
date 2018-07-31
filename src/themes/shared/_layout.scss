@@ -6,6 +6,13 @@ body{
 tbody{
   overflow-y: auto;
 }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.6);
+  transition: background-color 9999s ease-in-out 0s;
+}
 .app-main:before, .app-main:after{
   content: " ";
   display: table;
