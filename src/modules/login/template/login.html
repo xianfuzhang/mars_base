@@ -1,3 +1,25 @@
-<div>
-
+<div class="login">
+  <div class="login-fields">
+    <form class="login__form" name="loginForm" autocomplete="false" role="presentation">
+      <div class="login-fields__logo"></div>
+      <div class="login-fields__username login-fields__element">
+        <mdl-text ng-model="loginModel.username"
+                  display-label="loginModel.userNameDisplayLabel">
+        </mdl-text>
+      </div>
+      <div class="login-fields__password login-fields__element">
+        <mdl-text ng-model="loginModel.password"
+                  display-label="loginModel.passwordDisplayLabel">
+        </mdl-text>
+      </div>
+      <div class="login-fields__btn login-fields__element">
+        <button class="mdc-button" ng-bind="'MODULE.LOGIN.FORM.SIGN_IN' | translate"
+                ng-click="login($event)">
+        </button>
+      </div>
+      <div class="login-fields__message-error login-fields__element" ng-show="showBrowserMsg">
+        <span>{{ loginModel.errorMessage }}</span>
+      </div>
+    </form>
+  </div>
 </div>

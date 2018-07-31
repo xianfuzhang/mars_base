@@ -1,0 +1,57 @@
+.login{
+  background: url('../images/background.png') no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 35vh;
+  overflow: hidden;
+}
+.login-fields{
+  width: 500px;
+  height: 450px;
+}
+.login-fields__logo{
+  background: url('../images/mars_logo.png') no-repeat center center;
+  margin: auto auto 10px auto;
+  width: 115px;
+  height: 94px;
+}
+.login-fields__element{
+  margin-bottom: 10px;
+  text-align: center;
+}
+.login-fields__element .mdc-text-field{
+  width: 300px;
+}
+.login-fields__element .mdc-text-field:not(.mdc-text-field--disabled)>.mdc-floating-label,
+.login-fields__element .mdc-text-field:not(.mdc-text-field--disabled)>.mdc-text-field__input{
+  color: rgba(255, 255, 255, 0.6);
+}
+.login-fields__element .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-text{
+  color: rgba(255, 255, 255, 0.6);
+}
+.login-fields__element .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input{
+  border-bottom-color: rgba(255, 255, 255, 0.42);
+}
+.login-fields__element .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input:hover{
+  border-bottom-color: rgba(255, 255, 255, 0.87);
+}
+.login-fields__element .mdc-text-field .mdc-line-ripple{
+  background-color: #fff;
+}
+.login-fields__btn{
+  text-align: center;
+}
+.login-fields__btn > .mdc-button:not(:disabled){
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid;
+  border-radius: 4px;
+}
+.login-fields__message-error{
+  text-align: center;
+  color: #b00020;
+  padding: 10px;
+}
