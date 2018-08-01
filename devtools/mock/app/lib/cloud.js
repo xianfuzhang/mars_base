@@ -14,6 +14,8 @@ global.cloudModel = {
   endpoints: []
 };
 
+let updateInterval;
+
 let cloudLib = {
   isCloudEmpty: () => {
     if (cloudModel.devices.length == 0) {
@@ -49,7 +51,7 @@ let cloudLib = {
       let device = new Device(
         chance.guid(),
         type,
-        chance.bool({ likelihood: 10 }),
+        chance.bool({ likelihood: 90 }),
         chance.pickone(config.deviceRoles),
         chance.mac_address(),
         chance.guid().slice(0,8),
@@ -152,6 +154,8 @@ let cloudLib = {
       // adding data to the cloud
       cloudModel.endpoints.push(endpoint);
     });
+    
+    updateStatistics();
   },
   
   addDevice: (reqParams) => {
@@ -284,6 +288,33 @@ let cloudLib = {
   }
 };
 
+function updateStatistics() {
+  if(!updateInterval) {
+    updateInterval = setInterval(() => {
+      cloudModel.devices.forEach(device => {
+        if(!device.available) return;
+    
+        device.ports.forEach((port) => {
+          if(!port.isEnabled) return;
+      
+          port.statistic.packetsReceived += _.random(1, 10);
+          port.statistic.packetsSent += _.random(1, 100);
+          port.statistic.bytesReceived += _.random(10000, 100000);
+          port.statistic.bytesSent += _.random(100, 1000);
+          port.statistic.packetsRxDropped += _.random(0, 5);
+          port.statistic.packetsTxDropped += _.random(0, 5);
+          port.statistic.packetsRxErrors += _.random(0, 5);
+          port.statistic.packetsTxErrors += _.random(0, 5);
+          port.statistic.durationSec += config.statisticUpdateIntervalSeconds;
+        });
+        
+        // update time
+        device.uptime += config.statisticUpdateIntervalSeconds;
+        device.statistic = device.createSystemStatistic();
+      });
+    }, config.statisticUpdateIntervalSeconds * 1000);
+  }
+}
 
 function getLinkPair(preDevice, postDevice) {
   let linkPair = [];
