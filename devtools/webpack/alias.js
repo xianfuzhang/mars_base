@@ -6,6 +6,7 @@ class AliasProvider {
     return {
       'lodashService': path.resolve('src/libs/lodash/'),
       'easing': path.resolve('src/libs/easing/'),
+      // 'ngTable': path.resolve('src/libs/ngtable/'),
       'apis': path.resolve('src/apis/'),
       'localStore': path.resolve('src/libs/localstore/'),
     };
@@ -27,6 +28,7 @@ class AliasProvider {
       'menu': path.resolve('src/components/menu/'),
       'marHeader': path.resolve('src/components/mar-header/'),
       'contentHeader': path.resolve('src/components/content-header/'),
+      'staticTable': path.resolve('src/components/static-table/'),
       'marDrawer': path.resolve('src/components/mar-drawer/'),
       'marSection': path.resolve('src/components/mar-section/'),
       'footer': path.resolve('src/components/footer/'),
@@ -36,6 +38,7 @@ class AliasProvider {
       'topo': path.resolve('src/components/topo/'),
       'loading': path.resolve('src/components/loading/'),
       'deviceTooltip': path.resolve('src/components/device-tooltip/'),
+      'ngTable$': path.resolve('src/libs/ngtable/ng-table.min.js')
     };
   }
 

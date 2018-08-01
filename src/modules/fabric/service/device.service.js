@@ -1,28 +1,16 @@
-export class DeviceService{
-  static getDI(){
+export class DeviceService {
+  static getDI() {
     return ['$filter'];
   }
 
-  constructor(...args){
-    this.di={};
+  constructor(...args) {
+    this.di = {};
     DeviceService.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
     this.translate = this.di.$filter('translate');
   }
 
-
-  getAllSwitches(){
-    return [{"id":"of:0000000000000001","type":"spine","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000002","type":"spine","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000003","type":"spine","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000011","type":"leaf","leaf_group":"1","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000012","type":"leaf","leaf_group":"2","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000013","type":"leaf","leaf_group":"3","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000014","type":"leaf","leaf_group":"1","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000015","type":"leaf","leaf_group":"3","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000016","type":"leaf","leaf_group":"4","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000021","type":"other","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000022","type":"other","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}},{"id":"of:0000000000000033","type":"other","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"3","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 4m52s ago","annotations":{"channelId":"192.168.123.3:36892","managementAddress":"192.168.123.3","protocol":"OF_13"}}];
-  }
-
-  getAllLinks(){
-    return [{"src":{"port":"1","device":"of:0000000000000001"},"dst":{"port":"3","device":"of:0000000000000011"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000001"},"dst":{"port":"3","device":"of:0000000000000012"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000001"},"dst":{"port":"3","device":"of:0000000000000013"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000001"},"dst":{"port":"3","device":"of:0000000000000014"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000001"},"dst":{"port":"3","device":"of:0000000000000015"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000002"},"dst":{"port":"3","device":"of:0000000000000011"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000002"},"dst":{"port":"3","device":"of:0000000000000012"},"type":"DIRECT","state":"DOWN"},{"src":{"port":"1","device":"of:0000000000000002"},"dst":{"port":"3","device":"of:0000000000000013"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000002"},"dst":{"port":"3","device":"of:0000000000000014"},"type":"DIRECT","state":"DOWN"},{"src":{"port":"1","device":"of:0000000000000002"},"dst":{"port":"3","device":"of:0000000000000015"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000002"},"dst":{"port":"3","device":"of:0000000000000016"},"type":"DIRECT","state":"DOWN"},{"src":{"port":"1","device":"of:0000000000000003"},"dst":{"port":"3","device":"of:0000000000000011"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000003"},"dst":{"port":"3","device":"of:0000000000000012"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000003"},"dst":{"port":"3","device":"of:0000000000000014"},"type":"DIRECT","state":"ACTIVE"},{"src":{"port":"1","device":"of:0000000000000003"},"dst":{"port":"3","device":"of:0000000000000015"},"type":"DIRECT","state":"DOWN"},{"src":{"port":"1","device":"of:0000000000000003"},"dst":{"port":"3","device":"of:0000000000000016"},"type":"DIRECT","state":"ACTIVE"}];
-  }
-
-  getInterfaceByDevice(){
-    return {"id":"of:0000000000000001","type":"leaf","available":true,"role":"MASTER","mfr":"Nicira, Inc.","hw":"Open vSwitch","sw":"2.5.4","serial":"None","driver":"ovs","mac":"00-00-11-22-33-44","rack_id":"10-1-2-3","chassisId":"1","lastUpdate":"1528558441869","humanReadableLastUpdate":"connected 7m27s ago","annotations":{"channelId":"192.168.123.3:36890","managementAddress":"192.168.123.3","protocol":"OF_13"},"ports":[{"element":"of:0000000000000001","port":"local","isEnabled":false,"type":"copper","portSpeed":0,"annotations":{"adminState":"disabled","portMac":"2a:a7:13:49:9b:4c","portName":"s1"}},{"element":"of:0000000000000001","port":"1","isEnabled":true,"type":"copper","portSpeed":10000,"annotations":{"adminState":"enabled","portMac":"16:58:3f:b7:5d:66","portName":"s1-eth1"}},{"element":"of:0000000000000001","port":"2","isEnabled":true,"type":"copper","portSpeed":10000,"annotations":{"adminState":"enabled","portMac":"4a:be:5b:f7:bc:60","portName":"s1-eth2"}}]}
-  }
 
   getTabSchema() {
     return [
@@ -68,10 +56,10 @@ export class DeviceService{
   getDeviceTableSchema() {
     return [
       /*{
-        'label': 'ID',
-        'field': 'id',
-        'layout': {'visible': false, 'sortable': false, 'fixed': true}
-      },*/
+       'label': 'ID',
+       'field': 'id',
+       'layout': {'visible': false, 'sortable': false, 'fixed': true}
+       },*/
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.NAME'),
         'field': 'switch_name',
@@ -109,10 +97,10 @@ export class DeviceService{
         'layout': {'visible': true, 'sortable': true}
       },
       /*{
-        'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.PORTS'),
-        'field': 'ports',
-        'layout': {'visible': true, 'sortable': true}
-      },*/
+       'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.PORTS'),
+       'field': 'ports',
+       'layout': {'visible': true, 'sortable': true}
+       },*/
       {
         'label': 'CHASSIS',
         'field': 'chassisId',
@@ -132,7 +120,7 @@ export class DeviceService{
         'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.SERIAL'),
         'field': 'serial',
         'layout': {'visible': true, 'sortable': true}
-      },{
+      }, {
         'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.HW'),
         'field': 'hw',
         'layout': {'visible': true, 'sortable': true}
@@ -161,10 +149,10 @@ export class DeviceService{
   getPortTableSchema() {
     return [
       /*{
-        'label': 'ID',
-        'field': 'id',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true}
-      },*/
+       'label': 'ID',
+       'field': 'id',
+       'layout': {'visible': true, 'sortable': false, 'fixed': true}
+       },*/
       {
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.NAME'),
         'field': 'port_name',
@@ -223,11 +211,11 @@ export class DeviceService{
 
   getLinkTableSchema() {
     return [
-     /* {
-        'label': 'ID',
-        'field': 'id',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true}
-      },*/
+      /* {
+       'label': 'ID',
+       'field': 'id',
+       'layout': {'visible': true, 'sortable': false, 'fixed': true}
+       },*/
       {
         'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.SRC_DEVICE'),
         'field': 'src_device',
@@ -276,7 +264,7 @@ export class DeviceService{
     ];
   }
 
-  getEndpointTableSchema(){
+  getEndpointTableSchema() {
     return [
       {
         'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.TENANT'),
@@ -313,6 +301,304 @@ export class DeviceService{
         'value': 'delete'
       }
     ];
+  }
+
+
+  getSummaryLinkTableSchema() {
+    return [
+      // { field: "opt", title: "", show: true },
+      {
+        'title': this.translate('MODULES.SWITCHES.LINK.COLUMN.SRC_DEVICE'),
+        'field': 'src_device',
+        'sortable': "src_device",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.SWITCHES.LINK.COLUMN.SRC_PORT'),
+        'field': 'src_port',
+        'sortable': "src_port",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.SWITCHES.LINK.COLUMN.DST_DEVICE'),
+        'field': 'dst_device',
+        'sortable': "dst_device",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.SWITCHES.LINK.COLUMN.DST_PORT'),
+        'field': 'dst_port',
+        'sortable': "dst_port",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.SWITCHES.LINK.COLUMN.STATUS'),
+        'field': 'state',
+        'sortable': "state",
+        'showState': true,
+        'show': true
+      },
+    ];
+  }
+
+  getSummaryPortsTableSchema() {
+    return [
+      {field: "opt", title: "", show: true},
+      {
+        'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.NAME'),
+        'field': 'port_name',
+        'sortable': "port_name",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.PORT_ID'),
+        'field': 'port_id',
+        'sortable': "port_id",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.STATUS'),
+        'field': 'port_status',
+        'sortable': "port_status",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
+        'field': 'link_status',
+        'sortable': "link_status",
+        'showState': true,
+        'show': true
+      },
+    ]
+  }
+
+
+  getSummarySwitchMenu() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCH.MENU.EDIT'),
+        'isEnabled': true,
+        'msg': 'summary_switch_menu_edit'
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.MENU.CREATE_FLOW'),
+        'isEnabled': true,
+        'msg': 'summary_switch_menu_create_flow'
+      }
+
+    ]
+
+  }
+
+  getFlowsInstructionSchema() {
+    return {
+      'OUTPUT': [{'field': 'port', 'type': 'string'}],
+      'TABLE': [{'field': 'tableId', 'type': 'int'}],
+      'GROUP': [{'field': 'groupId', 'type': 'int'}],
+      'METER': [{'field': 'meterId', 'type': 'int'}],
+      'QUEUE': [
+        {'field': 'queueId', 'type': 'int'},
+        {'field': 'port', 'type': 'int'}
+      ],
+      'L0MODIFICATION': [{
+        'field': 'subtype',
+        'type':'object',
+        'list': {
+          'LAMBDA': [
+            {'field': 'lambda', 'type': 'int'}
+          ]
+        },
+        'OCH': [
+          {'field': 'gridType', 'type': 'string'},
+          {'field': 'channelSpacing', 'type': 'int'},
+          {'field': 'spacingMultiplier', 'type': 'int'},
+          {'field': 'slotGranularity', 'type': 'int'}
+        ]
+      }
+      ],
+      'L1MODIFICATION': [
+        {
+          'field': 'subtype',
+          'type':'object',
+          'list': {
+            'ODU_SIGID': [
+              {'field': 'tributaryPortNumber', 'type': 'int'},
+              {'field': 'tributarySlotLength', 'type': 'int'},
+            ]
+          }
+        }
+      ],
+      'L2MODIFICATION': [
+        {
+          'field': 'subtype',
+          'type':'object',
+          'list': {
+            'VLAN_PUSH': [],
+            'VLAN_ID': [{'field': 'vlanId', 'type': 'int'}],
+            'VLAN_PCP': [{'field': 'vlanPcp', 'type': 'int'}],
+            'ETH_SRC': [{'field': 'mac', 'type': 'string'}],
+            'ETH_DST': [{'field': 'mac', 'type': 'string'}],
+            'MPLS_LABEL': [{'field': 'label', 'type': 'int'}],
+            'MPLS_PUSH': [{'field': 'ethernetType', 'type': 'int'}],
+            'TUNNEL_ID': [{'field': 'tunnelId', 'type': 'int'}],
+          }
+        }
+      ],
+      'L3MODIFICATION': [
+        {
+          'field': 'subtype',
+          'type':'object',
+          'list': {
+            'IPV4_SRC': [{'field': 'ip', 'type': 'string'}],
+            'IPV4_DST': [{'field': 'ip', 'type': 'string'}],
+            'IPV6_SRC': [{'field': 'ip', 'type': 'string'}],
+            'IPV6_DST': [{'field': 'ip', 'type': 'string'}],
+            'IPV6_FLABEL': [{'field': 'flowLabel', 'type': 'int'}],
+          }
+        }
+      ],
+      'L4MODIFICATION': [
+        {
+          'field': 'subtype',
+          'type':'object',
+          'list': {
+            'TCP_SRC': [{'field': 'tcpPort', 'type': 'int'}],
+            'UDP_SRC': [{'field': 'udpPort', 'type': 'int'}]
+          }
+        }
+      ]
+    }
+  }
+
+  getFlowsCriteriaSchema() {
+    return {
+      'ETH_TYPE': [
+        {'field':'ethType','type': 'string'},
+      ],
+      'ETH_DST': [
+        {'field':'mac','type': 'string'},
+      ],
+      'ETH_SRC': [
+        {'field':'mac','type': 'string'},
+      ],
+      'IN_PORT': [
+        {'field':'port','type': 'string'},
+      ],
+      'IN_PHY_PORT': [
+        {'field':'port','type': 'string'},
+      ],
+      'METADATA': [
+        {'field':'metadata','type': 'string'},
+      ],
+      'VLAN_VID': [
+        {'field':'vlanId','type': 'string'},
+      ],
+      'VLAN_PCP': [
+        {'field':'priority','type': 'string'},
+      ],
+      'INNER_VLAN_VID': [
+        {'field':'innerVlanId','type': 'string'},
+      ],
+      'INNER_VLAN_PCP': [
+        {'field':'innerPriority','type': 'string'},
+      ],
+      'IP_DSCP': [
+        {'field':'ipDscp','type': 'int'},
+      ],
+      'IP_ECN': [
+        {'field':'ipEcn','type': 'int'},
+      ],
+      'IP_PROTO': [
+        {'field':'protocol','type': 'int'},
+      ],
+      'IPV4_SRC': [
+        {'field':'ip','type': 'string'},
+      ],
+      'IPV4_DST': [
+        {'field':'ip','type': 'string'},
+      ],
+      'TCP_SRC': [
+        {'field':'tcpPort','type': 'int'},
+      ],
+      'TCP_DST': [
+        {'field':'tcpPort','type': 'int'},
+      ],
+      'UDP_SRC': [
+        {'field':'udpPort','type': 'int'},
+      ],
+      'UDP_DST': [
+        {'field':'udpPort','type': 'int'},
+      ],
+      'SCTP_SRC': [
+        {'field':'sctpPort','type': 'int'},
+      ],
+      'SCTP_DST': [
+        {'field':'sctpPort','type': 'int'},
+      ],
+      'ICMPV4_TYPE': [
+        {'field':'icmpType','type': 'string'},
+      ],
+      'ICMPV4_CODE': [
+        {'field':'icmpCode','type': 'int'},
+      ],
+      'IPV6_SRC': [
+        {'field':'ip','type': 'string'},
+      ],
+      'IPV6_DST': [
+        {'field':'ip','type': 'string'},
+      ],
+      'IPV6_FLABEL': [
+        {'field':'flowlabel','type': 'int'},
+      ],
+      'ICMPV6_TYPE': [
+        {'field':'icmpv6Type','type': 'int'},
+      ],
+      'ICMPV6_CODE': [
+        {'field':'icmpv6Code','type': 'int'},
+      ],
+      'IPV6_ND_TARGET': [
+        {'field':'targetAddress','type': 'string'},
+      ],
+      'IPV6_ND_SLL': [
+        {'field':'mac','type': 'string'},
+      ],
+      'IPV6_ND_TLL': [
+        {'field':'mac','type': 'string'},
+      ],
+      'MPLS_LABEL': [
+        {'field':'label','type': 'int'},
+      ],
+      'IPV6_EXTHDR': [
+        {'field':'exthdrFlags','type': 'int'},
+      ],
+      'OCH_SIGID': [
+        {'field':'lambda','type': 'int'},
+      ],
+      'GRID_TYPE': [
+        {'field':'gridType','type': 'string'},
+      ],
+      'CHANNEL_SPACING': [
+        {'field':'channelSpacing','type': 'int'},
+      ],
+      'SPACING_MULIPLIER': [
+        {'field':'spacingMultiplier','type': 'int'},
+      ],
+      'SLOT_GRANULARITY': [
+        {'field':'slotGranularity','type': 'int'},
+      ],
+      'OCH_SIGID': [
+        {'field':'ochSignalId','type': 'int'},
+      ],
+      'TUNNEL_ID': [
+        {'field':'tunnelId','type': 'int'},
+      ],
+      'OCH_SIGTYPE': [
+        {'field':'ochSignalType','type': 'int'},
+      ],
+      'ODU_SIGTYPE': [
+        {'field':'oduSignalType','type': 'int'},
+      ],
+    }
   }
 }
 

@@ -53,8 +53,11 @@ export class marSection {
         if(time > duration) {
           // bodyDom.css('height',scope.lastHeight+'px');
           bodyDom.css('height','auto');
+          scope.isDown = false;
+          // scope = false;
           return;
         }
+
         if(!scope.isDown) {
           return;
         }
@@ -76,6 +79,7 @@ export class marSection {
         if(time > duration) {
           bodyDom.css('height','auto');
           bodyDom.css('display','none');
+          scope.isUp = false;
           return;
         }
         if(!scope.isUp) {
@@ -93,8 +97,8 @@ export class marSection {
 
 
       scope.foldAndNot = (event) =>{
-        let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
-        scope.lastHeight = scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
+        // let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
+        // scope.lastHeight = scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
         if(scope.sectionModel.isFold){
           scope.sectionModel.showStyle = {'display':'block','height':'0px'};
           scope.sectionModel.iconStyle = {'animation': '.15s ease-out', 'animation-name': 'section_expand', 'transform': 'rotateZ(0deg)'};
@@ -104,9 +108,11 @@ export class marSection {
         } else {
           // scope.sectionModel.showStyle = {'display':'none'};
           scope.sectionModel.iconStyle = {'animation': '.15s ease-out', 'animation-name': 'section_fold', 'transform': 'rotateZ(270deg)'};
-          if(!scope.isDown){
+          // console.log(scope.isDown);
+          if(!scope.isDown && !scope.isUp){
             let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
-            scope.lastHeight = scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
+            scope.lastHeight = bodyDom[0].clientHeight;
+            //scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
           }
           scope.isDown = false;
           scope.isUp = true;
@@ -118,7 +124,7 @@ export class marSection {
       setTimeout(function () {
         let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
         scope.lastHeight = bodyDom[0].clientHeight;
-        console.log(scope.lastHeight)
+        // console.log(scope.lastHeight)
       },200)
 
     }).call(this);
