@@ -1,0 +1,82 @@
+@import 'xbem';
+@import 'default';
+@import 'shared';
+
+
+@include block(instruction){
+
+  .instruction_line{
+    display: inline-block;
+  }
+
+  @include element(header){
+    display: inline-block;
+    margin-top: 2px;
+
+    div{
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+
+  @include element(body){
+
+    @include element(item){
+      margin-top: 16px;
+      border-radius: 3px;
+      border: 1px solid gray;
+      display: block;
+      padding: 16px;
+      position: relative;
+
+      .remove{
+        top:0;
+        right:0;
+        position: absolute;
+      }
+
+      @include element(line){
+        display:block;
+      }
+    }
+  }
+}
+
+@include block(criteria){
+
+  .instruction_line{
+    display: inline-block;
+  }
+
+  @include element(header){
+    display: inline-block;
+    margin-top: 2px;
+
+    div{
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+
+  @include element(body){
+
+    @include element(item){
+      margin-top: 16px;
+      border-radius: 3px;
+      border: 1px solid gray;
+      display: block;
+      padding: 16px;
+      position: relative;
+
+      .remove{
+        top:0;
+        right:0;
+        position: absolute;
+      }
+
+      @include element(line){
+        display:block;
+      }
+    }
+  }
+}

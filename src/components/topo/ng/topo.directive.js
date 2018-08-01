@@ -84,7 +84,7 @@ export class Topo {
 
       this.switch_width = 16;
       this.switch_height = 108;
-      this.leaf_group_interval = 2;
+      this.leaf_group_interval = 8;
       this.leaf_group_str = 'leaf_group';
       this.resizeTimeout = null;
       this.active_status = "ACTIVE";
@@ -150,7 +150,8 @@ export class Topo {
         genSpine();
         genLeaf();
         genOther();
-        genLinks();
+        //初始化的时候不许去渲染links
+        // genLinks();
         resize(true);
       };
 
@@ -278,7 +279,8 @@ export class Topo {
             this.switchLocation[leaf_group[j].id] = [x, y];
 
           }
-          last_x = last_x + leafInterval +(this.switch_width + this.leaf_group_interval)* leaf_group.length;
+          // last_x = last_x + leafInterval +(this.switch_width + this.leaf_group_interval)* leaf_group.length;
+          last_x = last_x + leafInterval + this.switch_width* leaf_group.length + this.leaf_group_interval * (leaf_group.length-1) ;
         }
         this.leafContainerText.setLocation(10, 10 + avgHeight);
 
@@ -302,7 +304,9 @@ export class Topo {
       let calcLeafInterval = (leafs, width) =>{
         let remainWidth = width - this.switch_width * leafs.length;
         let group = this.di._.groupBy(leafs, this.leaf_group_str);
-        return remainWidth/ (this.di._.keys(group).length + 1);
+        let groupLen = this.di._.keys(group).length;
+        remainWidth = remainWidth - groupLen * this.leaf_group_interval;
+        return remainWidth/ (groupLen + 1);
       };
 
       let genAnchorNode = () =>{
@@ -360,7 +364,8 @@ export class Topo {
         node.paint = function(g){
           g.beginPath();
           g.rect(-width/2, -height/2, width, height);
-          g.fillStyle = 'rgba(0,0,0)';
+          g.fillStyle = '0,0,0';
+          // g.fillStyle = 'rgba(0,0,0)';
           g.fill();
           g.closePath();
 
@@ -393,17 +398,21 @@ export class Topo {
         return node;
       };
 
-      function mouseUpHandler(data){
+      function mouseUpHandler(evt){
         if(this.move){
-          console.log("move");
+          // console.log("move");
           let oldLocation = switchLocation[this.deviceId];
           let curLocation = this.getLocation();
           let node = this;
           let starttime = (new Date()).getTime();
           setTimeout(goBack_Animate(oldLocation, curLocation.x, curLocation.y,starttime, node))
         } else {
-          console.log("click");
-          console.log(this.deviceId);
+          // console.log("click");
+          // console.log(this.deviceId);
+          if(evt.button == 2){// 右键
+            unSelectNode();
+            DI.$rootScope.$emit("switch_opt",{event: evt, id: this.deviceId});
+          }
 
         }
         this.move = false;
@@ -457,7 +466,7 @@ export class Topo {
       }
 
       let mouseOutHandler = (evt) => {
-        console.log('node mouse out');
+        // console.log('node mouse out');
         if(scope.topoSetting.show_tooltips){
           this.di.$rootScope.$emit("hide_tooltip");
         }
@@ -467,6 +476,8 @@ export class Topo {
         let deviceId =  this.deviceId;
         let deviceType = this.deviceType;
         let showArray= [];
+
+        showDeviceLinks(deviceId);
 
         if(deviceType == DeviceType.spine){
           let sw = DI._.find(scope.spines,{'id':deviceId});
@@ -480,8 +491,27 @@ export class Topo {
         } else {
           return;
         }
-        DI.$rootScope.$emit("switch_select",{id: this.deviceId, type: deviceType, value: showArray});
+        DI.$rootScope.$emit("switch_select",{event:evt, id: this.deviceId, type: deviceType, value: showArray});
       }
+
+      let showDeviceLinks = (deviceId) =>{
+        crushLinks();
+        if(scope.topoSetting.show_links){
+          this.di._.forEach(scope.links, (link, key) => {
+            if(deviceId == link.src.device){
+              let deviceIds = [link.src.device, link.dst.device];
+              let linkId = getLinkId(deviceIds);
+              if(this.links[linkId]){
+                return;
+              }
+              this.links[linkId] = genLinkNode(deviceIds);
+              if(link.state != this.active_status){
+                this.links[linkId].strokeColor = this.LINE_ERROR;
+              }
+            }
+          });
+        }
+      };
 
 
       /*
@@ -532,7 +562,8 @@ export class Topo {
         layout();
         let starttime = (new Date()).getTime();
         if(this.resizeTimeout){
-          console.log(this.di.$timeout.cancel(this.resizeTimeout));
+          // console.log(this.di.$timeout.cancel(this.resizeTimeout));
+          this.di.$timeout.cancel(this.resizeTimeout);
         }
         if(isInit){
           delayDraw();
@@ -548,7 +579,7 @@ export class Topo {
         this.oldWidth =  null;
         // console.log(oldWidth);
         let starttime = (new Date()).getTime();
-        console.log(":==" + oldWidth);
+        // console.log(":==" + oldWidth);
         dynamicDraw(starttime, oldWidth);
       };
 
@@ -572,6 +603,7 @@ export class Topo {
 
       let unSelectNode = () => {
         this.di.$rootScope.$emit("topo_unselect");
+        crushLinks();
       };
 
       let crushAllPorts = () =>{
@@ -678,11 +710,11 @@ export class Topo {
       // }));
 
       unsubscribers.push(this.di.$rootScope.$on('show_links',()=>{
-        if(scope.topoSetting.show_links){
-          genLinks()
-        } else {
-          crushLinks()
-        }
+        // if(scope.topoSetting.show_links){
+        //   genLinks()
+        // } else {
+        //   crushLinks()
+        // }
       }));
 
 

@@ -11,6 +11,7 @@ import {dialogCtrl} from './ng/dialog.controller';
 import {TabsController} from './ng/tabs.controller';
 import {mdlTabs} from './ng/tabs.directive';
 import {tabItem} from './ng/tabItem.directive';
+import {mdlMenu} from './ng/menu.directive';
 
 
 export default angular
@@ -18,6 +19,7 @@ export default angular
   .directive('mdlCheckbox', mdlCheckbox)
   .directive('mdlButton', mdlButton)
   .directive('mdlSwitch', mdlSwitch)
+  .directive('mdlMenu', mdlMenu)
   .directive('mdlRadio', mdlRadio)
   .directive('mdlText', mdlText)
   .directive('mdlSelect', mdlSelect)

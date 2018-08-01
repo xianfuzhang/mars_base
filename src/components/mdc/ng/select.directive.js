@@ -1,7 +1,8 @@
 export class mdlSelect {
   static getDI() {
     return [
-      '$compile'
+      '$compile',
+      '$timeout'
     ];
   }
 
@@ -18,6 +19,8 @@ export class mdlSelect {
       displayLabel: '=',
       helper: '=',
       disable: '=',
+      ngChange: '&',
+      onInit:'&'
     }
     this.link = (...args) => this._link.apply(this, args);
   }
@@ -48,7 +51,15 @@ export class mdlSelect {
     scope.selectChange = () => {
       element.find('label').addClass('mdc-floating-label--float-above');
       element.find('div').addClass('mdc-line-ripple--active');
+      scope.ngChange = scope.ngChange || angular.noop;
+      scope.ngChange({'$value': scope.value});
     };
+
+    this.di.$timeout(function () {
+      if(scope.onInit){
+        scope.onInit();
+      }
+    })
   }
 }
 
