@@ -44,24 +44,24 @@ router.delete('/endpoints/:tenant/:segment/:mac', (req, res) => {
   }
 });
 
-router.post('/devices', function(req, res) {
-  //  TODO: need validation
-  if(params.mac
-    && params.tenant
-    && params.segment
-    && params.location
-    && params.location.device_id
-    && params.location.port) {
-  
-    if(cloudLib.addEndpoint(req.body)) {
-      return res.status(200).json('Success to add new endpoint!');
-    } else {
-      return res.status(400).json('Failed to add new endpoint!');
-    }
-    
-  } else {
-    return res.status(400).json('The request params to add new endpoint are invalid!');
-  }
-});
+// router.post('/devices', function(req, res) {
+//   //  TODO: need validation
+//   if(params.mac
+//     && params.tenant
+//     && params.segment
+//     && params.location
+//     && params.location.device_id
+//     && params.location.port) {
+//
+//     if(cloudLib.addEndpoint(req.body)) {
+//       return res.status(200).json('Success to add new endpoint!');
+//     } else {
+//       return res.status(400).json('Failed to add new endpoint!');
+//     }
+//
+//   } else {
+//     return res.status(400).json('The request params to add new endpoint are invalid!');
+//   }
+// });
 
 module.exports = router;

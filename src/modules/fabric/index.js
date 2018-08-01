@@ -1,5 +1,4 @@
 import './scss/device.scss'
-import './components/deviceWizard/scss/step.scss'
 import './components/flow_establish/scss/flow_establish';
 
 import {InterfaceGroupController} from './ng/interfaceGroup.controller';
