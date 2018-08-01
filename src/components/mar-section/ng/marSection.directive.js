@@ -124,7 +124,7 @@ export class marSection {
       setTimeout(function () {
         let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
         scope.lastHeight = bodyDom[0].clientHeight;
-        console.log(scope.lastHeight)
+        // console.log(scope.lastHeight)
       },200)
 
     }).call(this);

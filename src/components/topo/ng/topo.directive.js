@@ -306,12 +306,6 @@ export class Topo {
         let group = this.di._.groupBy(leafs, this.leaf_group_str);
         let groupLen = this.di._.keys(group).length;
         remainWidth = remainWidth - groupLen * this.leaf_group_interval;
-        console.log('+++')
-        console.log(width);
-        console.log(this.switch_width);
-        console.log(groupLen);
-        console.log(remainWidth);
-        console.log('----')
         return remainWidth/ (groupLen + 1);
       };
 
@@ -370,7 +364,8 @@ export class Topo {
         node.paint = function(g){
           g.beginPath();
           g.rect(-width/2, -height/2, width, height);
-          g.fillStyle = 'rgba(0,0,0)';
+          g.fillStyle = '0,0,0';
+          // g.fillStyle = 'rgba(0,0,0)';
           g.fill();
           g.closePath();
 
@@ -403,17 +398,21 @@ export class Topo {
         return node;
       };
 
-      function mouseUpHandler(data){
+      function mouseUpHandler(evt){
         if(this.move){
-          console.log("move");
+          // console.log("move");
           let oldLocation = switchLocation[this.deviceId];
           let curLocation = this.getLocation();
           let node = this;
           let starttime = (new Date()).getTime();
           setTimeout(goBack_Animate(oldLocation, curLocation.x, curLocation.y,starttime, node))
         } else {
-          console.log("click");
-          console.log(this.deviceId);
+          // console.log("click");
+          // console.log(this.deviceId);
+          if(evt.button == 2){// 右键
+            unSelectNode();
+            DI.$rootScope.$emit("switch_opt",{event: evt, id: this.deviceId});
+          }
 
         }
         this.move = false;
@@ -467,7 +466,7 @@ export class Topo {
       }
 
       let mouseOutHandler = (evt) => {
-        console.log('node mouse out');
+        // console.log('node mouse out');
         if(scope.topoSetting.show_tooltips){
           this.di.$rootScope.$emit("hide_tooltip");
         }
@@ -492,7 +491,7 @@ export class Topo {
         } else {
           return;
         }
-        DI.$rootScope.$emit("switch_select",{id: this.deviceId, type: deviceType, value: showArray});
+        DI.$rootScope.$emit("switch_select",{event:evt, id: this.deviceId, type: deviceType, value: showArray});
       }
 
       let showDeviceLinks = (deviceId) =>{
@@ -563,7 +562,8 @@ export class Topo {
         layout();
         let starttime = (new Date()).getTime();
         if(this.resizeTimeout){
-          console.log(this.di.$timeout.cancel(this.resizeTimeout));
+          // console.log(this.di.$timeout.cancel(this.resizeTimeout));
+          this.di.$timeout.cancel(this.resizeTimeout);
         }
         if(isInit){
           delayDraw();
@@ -579,7 +579,7 @@ export class Topo {
         this.oldWidth =  null;
         // console.log(oldWidth);
         let starttime = (new Date()).getTime();
-        console.log(":==" + oldWidth);
+        // console.log(":==" + oldWidth);
         dynamicDraw(starttime, oldWidth);
       };
 

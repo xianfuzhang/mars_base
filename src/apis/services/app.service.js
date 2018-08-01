@@ -113,6 +113,10 @@ export class appService {
     return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId + '/portstate/' + portId;
   }
 
+  getCreateFlowUrl(deviceId, appId) {
+    return this.getZoneEndpoint() + 'onos/v1/flows/' + deviceId + '?appId=' + appId;
+  }
+
   getEndPointsUrl(){
     return this.getZoneEndpoint() + 'onos/v1/endpoints';
   }

@@ -222,6 +222,20 @@ export class DeviceDataManager {
       );
     return defer.promise;
   }
+
+  createFlow(deviceId, appId, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getCreateFlowUrl(deviceId, appId), params)
+      .then((res) => {
+          defer.resolve(null);
+        },
+        () => {
+          defer.reject(null);
+        }
+      );
+    return defer.promise;
+  }
+
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
 DeviceDataManager.$$ngIsClass = true;

@@ -125,7 +125,26 @@
     </div>
 
     <footer></footer>
+    <mdl-menu data="fabricModel.switchContextMenu.data" is-show="fabricModel.switchContextMenu.isShow" location="fabricModel.switchContextMenu.location"></mdl-menu>
+    <!--<div id="toolbar" class="mdc-menu" tabindex="-1" style="position: fixed;z-index: 100;">-->
+        <!--<ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">-->
+            <!--<li class="mdc-list-item" role="menuitem" tabindex="0" msg="bb">-->
+                <!--A Menu Item-->
+            <!--</li>-->
+            <!--<li class="mdc-list-item" role="menuitem" tabindex="{{1==1?-1:0}}" aria-disabled="true" msg="aa">-->
+                <!--Disabled Menu Item-->
+            <!--</li>-->
+
+        <!--</ul>-->
+    <!--</div>-->
 
     <mar-drawer is-right=true></mar-drawer>
     <device-tooltip></device-tooltip>
+    <ng-controller ng-controller="deviceWizardController">
+        <wizard steps="steps" title="title" show-wizard="showWizard" next-step="" before-cancel="cancel(formData)" before-submit="submit(formData)"></wizard>
+    </ng-controller>
+
+    <ng-controller ng-controller="flowEstablishController">
+        <wizard steps="steps" title="title" show-wizard="showWizard" next-step="" before-cancel="cancel(formData)" before-submit="submit(formData)"></wizard>
+    </ng-controller>
 </div>

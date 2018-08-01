@@ -1,7 +1,8 @@
 /**
  * Created by wls on 2018/7/17.
  */
-
+import {MDCMenu} from '@material/menu';
+import {Corner} from '@material/menu';
 
 export class FabricSummaryController {
   static getDI() {
@@ -54,16 +55,22 @@ export class FabricSummaryController {
           distributeSwt.other.push(swt);
         }
       });
-
       return distributeSwt;
     };
+
 
     this.di.$scope.fabricModel = {
       headers:this.di.appService.CONST.HEADER,
       showSwitchDetail: false,
       isShowTopo: false,
       portsSchema: this.di.deviceService.getSummaryPortsTableSchema(),
-      linksSchema: this.di.deviceService.getSummaryLinkTableSchema()
+      linksSchema: this.di.deviceService.getSummaryLinkTableSchema(),
+      switchContextMenu: {
+        location:{'x':0, 'y':1},
+        isShow : false,
+        data:this.di.deviceService.getSummarySwitchMenu()
+      }
+
     };
 
     let portsDefer = this.di.$q.defer(),
@@ -148,7 +155,7 @@ export class FabricSummaryController {
     };
 
     this.di.$scope.resize_div = (event) => {
-      console.log(event);
+      // console.log(event);
       event.preventDefault();
       // console.log(self);
       this.di.$document.on("mouseup", mouseup);
@@ -156,7 +163,7 @@ export class FabricSummaryController {
     };
 
     let mouseup = (event) =>{
-      console.log('mouseup');
+      // console.log('mouseup');
       this.di.$document.off('mousemove', mousemove);
       this.di.$document.off('mouseup', mouseup);
     };
@@ -262,14 +269,55 @@ export class FabricSummaryController {
       });
     };
 
+
+
+
     unsubscribers.push(this.di.$rootScope.$on('switch_select',(evt, data)=>{
+      // console.log('==switch_select is receive. isShow: ' + this.di.$scope.fabricModel.switchContextMenu.isShow);
+      this.di.$scope.fabricModel.switchContextMenu.isShow = false;
+      this.di.$scope.$apply();
       showSwitchDetail(data.id, data.type, data.value);
     }));
 
 
-    unsubscribers.push(this.di.$rootScope.$on('topo_unselect',(evt)=>{
+    unsubscribers.push(this.di.$rootScope.$on('switch_opt',(evt, data)=>{
+      // console.log('==switch_opt is receive. isShow: ' + this.di.$scope.fabricModel.switchContextMenu.isShow);
+      if(this.di.$scope.fabricModel.switchContextMenu.isShow){
+        this.di.$scope.fabricModel.switchContextMenu.isShow = false;
+        setTimeout(()=>{
+          this.di.$scope.fabricModel.switchContextMenu.location= {'x':data.event.clientX, 'y':data.event.clientY};
+          this.di.$scope.fabricModel.switchContextMenu.isShow = true;
+          this.di.$scope.$apply();
+        },100);
+      } else {
+        this.di.$scope.fabricModel.switchContextMenu.location= {'x':data.event.clientX, 'y':data.event.clientY};
+        this.di.$scope.fabricModel.switchContextMenu.isShow = true;
+      }
       hideSwitchDetail();
+      this.di.$scope.fabricModel.showSwitchId = data.id;
+      this.di.$scope.$apply();
+
     }));
+
+    unsubscribers.push(this.di.$rootScope.$on('topo_unselect',(evt)=>{
+      // console.log('==switch_select is receive. isShow: ' + this.di.$scope.fabricModel.switchContextMenu.isShow);
+      this.di.$scope.fabricModel.switchContextMenu.isShow = false;
+      hideSwitchDetail();
+
+    }));
+
+    unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_edit',(evt)=>{
+      this.di.$rootScope.$emit('switch-wizard-show', this.di.$scope.fabricModel.showSwitchId);
+
+    }));
+
+
+    unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_create_flow',(evt)=>{
+      this.di.$rootScope.$emit('flow-wizard-show', this.di.$scope.fabricModel.showSwitchId);
+
+    }));
+
+    
 
 
     this.di.$scope.$on('$destroy', () => {
@@ -280,6 +328,9 @@ export class FabricSummaryController {
     });
 
   }
+
+
+
 
 
   setTableOpt(obj){
