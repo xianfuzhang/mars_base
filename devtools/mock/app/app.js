@@ -4,6 +4,7 @@ var express = require('express'),
   initController = require('./controllers/init');
   deviceController = require('./controllers/device'),
   endPointController = require('./controllers/endpoint'),
+  statisticController = require('./controllers/statistic'),
   app = express(),
   //expressSession = require('express-session'),
   cookieParser = require('cookie-parser');
@@ -30,6 +31,7 @@ app.use(initController);
 // setup the routes
 app.use('/onos/v1', deviceController);
 app.use('/onos/v1', endPointController);
+app.use('/onos/v1/statistics', statisticController);
 
 // set port
 app.set('port', (process.env.PORT || 4001));
