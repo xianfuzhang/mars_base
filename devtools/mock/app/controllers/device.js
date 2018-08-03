@@ -8,10 +8,7 @@ router.get('/devices', function (req, res) {
   let devices = [];
   
   devices = _.cloneDeep(cloudModel.devices).map((device, index) => {
-    delete device.ports;
-    delete device.storm;
-
-    return device;
+    return formatDevice(device);
   });
   
   return res.json({devices: devices});
@@ -56,7 +53,7 @@ router.get('/devices/:deviceId', function (req, res) {
       ports = ports.concat(device.ports);
     });
   
-    return res.json({ports: ports});
+    return res.json({ports: formatPorts(ports)});
   }
   
   devices = _.cloneDeep(cloudModel.devices);
@@ -65,10 +62,7 @@ router.get('/devices/:deviceId', function (req, res) {
   let searchDevice = devices.find(device => device.id === req.params.deviceId);
 
   if (searchDevice !== undefined) {
-    delete searchDevice.ports;
-    delete searchDevice.storm;
-  
-    return res.json(searchDevice);
+    return res.json(formatDevice(searchDevice));
   } else {
     return res.status(404).json("This device doesn't exist!");
   }
@@ -87,7 +81,7 @@ router.get('/devices/:deviceId/:type', function (req, res) {
   if (searchDevice !== undefined) {
     switch(req.params.type) {
       case 'ports':
-        return res.json(searchDevice.ports);
+        return res.json(formatPorts(searchDevice.ports));
         
       case 'storm':
         return res.json(searchDevice.storm);
@@ -168,6 +162,25 @@ function validateDeviceRequest(params) {
   }
   
   return false;
+}
+
+function formatDevice(device) {
+  let tmpDevice = _.cloneDeep(device);
+  delete tmpDevice.ports;
+  delete tmpDevice.storm;
+  delete tmpDevice.statistic;
+  
+  return tmpDevice;
+}
+
+function formatPorts (ports) {
+  let tmpPorts =  _.cloneDeep(ports).map((port) => {
+    delete port.statistic;
+  
+    return port;
+  });
+  
+  return tmpPorts;
 }
 
 module.exports = router;

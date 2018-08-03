@@ -1,31 +1,17 @@
 
-<div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">
+<div class="summary">
     <!--  <mar-header headers="dashModel.headers"></mar-header>-->
     <!--<mdl-header></mdl-header>-->
     <mar-header headers="fabricModel.headers"></mar-header>
 
-    <div style="flex-grow: 2;
-              flex-basis:auto;
-              flex-shrink: 1;background-color: white;overflow: scroll;padding:0 8px;display:flex;flex-direction: column;">
-        <!--<div class="header_content">-->
-            <!--<div class="header_content__breadcrumb">-->
-                <!--<a href="/">Mars Cloud</a>-->
-                <!--<span>•</span>-->
-                <!--&lt;!&ndash;<a class="header_content__breadcrumb" href="/fabric">Fabric</a>&ndash;&gt;-->
-                <!--<span>Fabric</span>-->
-                <!--&lt;!&ndash;<span class="sep">•</span>&ndash;&gt;-->
-            <!--</div>-->
-            <!--<div class="header_content__title">-->
-                <!--Fabric-->
-            <!--</div>-->
-        <!--</div>-->
+    <div class="summary__body" >
         <content-header big-title="Fabric">
             <a href="/">Mars Cloud</a>
             <span>•</span>
             <span>Fabric</span>
         </content-header>
 
-        <div style="height:100%;width:100%;position:relative;border-top:1px solid lightgray;flex-grow: 1;flex-shrink: 1;min-height:400px;overflow: hidden;">
+        <div class="summary__body__content">
 
             <div ng-style="resize_right_plus" style="position: absolute;right:300px;top:0;height:100%;left:0px;">
                 <topo ng-if="fabricModel.isShowTopo" spines="fabricModel.deSpines" leafs="fabricModel.deLeafs" others="fabricModel.deOthers" links="fabricModel.deLinks" topo-setting="fabricModel.topoSetting">
@@ -36,7 +22,6 @@
                 </div>
             </div>
             <div ng-style="resize_length" style="position: absolute;right:0;top:0;height:100%;background-color: white;width:295px;display:inline-block;overflow:scroll; ">
-
                 <mar-section title="Topo Settings" class="topo_setting">
                     <div style="margin:2px;">
                         <div ng-click="topoRefresh()" id="refresh_topo"  class="+front mdc-button topo_setting__button">
@@ -117,13 +102,21 @@
                 </mar-section>
 
                 <mar-section ng-if="fabricModel.showSwitchDetail" title="Interfaces" class="detail_interface">
-                    <mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">
-                    </mdl-table>
+                    <static-table style="max-width:400px" data="fabricModel.switchPorts" columns="fabricModel.portsSchema"></static-table>
+                    <!--<mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">-->
+                    <!--</mdl-table>-->
                 </mar-section>
 
-                <mar-section ng-show="fabricModel.showSwitchDetail"  title="Links" class="detail_link">
-
+                <mar-section ng-if="fabricModel.showSwitchDetail"  title="Links" class="detail_link">
+                    <static-table style="max-width:400px" data="fabricModel.switchLinks" columns="fabricModel.linksSchema"></static-table>
                 </mar-section>
+
+                <!--<mar-section ng-if="fabricModel.showSwitchDetail"  title="Flows" class="detail_flow">-->
+                    <!--<div style="">-->
+                    <!--<button class="material-icons mdc-icon-button mdc-card__action&#45;&#45;icon" >add</button>-->
+                    <!--</div>-->
+                    <!--<static-table style="max-width:400px" data="fabricModel.switchLinks" columns="fabricModel.linksSchema"></static-table>-->
+                <!--</mar-section>-->
 
 
 
@@ -132,7 +125,26 @@
     </div>
 
     <footer></footer>
+    <mdl-menu data="fabricModel.switchContextMenu.data" is-show="fabricModel.switchContextMenu.isShow" location="fabricModel.switchContextMenu.location"></mdl-menu>
+    <!--<div id="toolbar" class="mdc-menu" tabindex="-1" style="position: fixed;z-index: 100;">-->
+        <!--<ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">-->
+            <!--<li class="mdc-list-item" role="menuitem" tabindex="0" msg="bb">-->
+                <!--A Menu Item-->
+            <!--</li>-->
+            <!--<li class="mdc-list-item" role="menuitem" tabindex="{{1==1?-1:0}}" aria-disabled="true" msg="aa">-->
+                <!--Disabled Menu Item-->
+            <!--</li>-->
+
+        <!--</ul>-->
+    <!--</div>-->
 
     <mar-drawer is-right=true></mar-drawer>
     <device-tooltip></device-tooltip>
+    <ng-controller ng-controller="deviceWizardController">
+        <wizard steps="steps" title="title" show-wizard="showWizard" next-step="" before-cancel="cancel(formData)" before-submit="submit(formData)"></wizard>
+    </ng-controller>
+
+    <ng-controller ng-controller="flowEstablishController">
+        <wizard steps="steps" title="title" show-wizard="showWizard" next-step="" before-cancel="cancel(formData)" before-submit="submit(formData)"></wizard>
+    </ng-controller>
 </div>

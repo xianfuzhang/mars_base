@@ -8,6 +8,7 @@ import 'lodashService';
 import 'easing';
 import 'apis';
 import 'localStore';
+import 'ngTable';
 
 import 'login';
 import 'dashboard';
@@ -17,6 +18,7 @@ import 'logical';
 import 'mdc';
 import 'mdlHeader';
 import 'contentHeader';
+import 'staticTable';
 import 'mdlTable';
 import 'modal';
 import 'menu';
@@ -37,6 +39,8 @@ angular
     'ui.bootstrap',
     'pascalprecht.translate',
     '_',
+    'ngTable',
+    // ngTableModule.name,
     'easing',
     'apis',
     'localStore',
@@ -52,6 +56,7 @@ angular
     'marDrawer',
     'marHeader',
     'contentHeader',
+    'staticTable',
     'marSection',
     'footer',
     'topo',

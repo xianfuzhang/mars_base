@@ -11,6 +11,8 @@ let config = {
   linkStates: ['ACTIVE', 'INACTIVE'],
   
   endpointsNumber: 5,
+  
+  statisticUpdateIntervalSeconds: 15
 };
 
 module.exports = config;

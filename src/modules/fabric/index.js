@@ -1,5 +1,6 @@
 import './scss/device.scss'
-import './components/deviceWizard/scss/step.scss'
+import './components/flow_establish/scss/flow_establish';
+
 import {InterfaceGroupController} from './ng/interfaceGroup.controller';
 import {DeviceController} from './ng/device.controller';
 import {DeviceDetailController} from './ng/deviceDetail.controller';
@@ -10,6 +11,7 @@ import {DeviceDetailService} from './service/deviceDetail.service';
 import {FabricSummaryController} from './ng/summary.controller';
 import {StormService} from './service/storm.service';
 import { DeviceWizardController } from './components/deviceWizard/ng/DeviceWizard.controller'
+import { FlowEstablishController } from './components/flow_establish/ng/FlowEstablish.controller';
 
 export default angular
   .module('fabric', [])
@@ -20,6 +22,7 @@ export default angular
   .controller('stormControlController', StormControlController)
   .controller('fabricSummaryController', FabricSummaryController)
   .controller('deviceWizardController', DeviceWizardController)
+  .controller('flowEstablishController', FlowEstablishController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)

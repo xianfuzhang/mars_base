@@ -73,7 +73,11 @@ export class deviceTooltip {
         }
 
         scope.tooltipStyle = {'left': tooltipLeft + 'px', 'top': tooltipTop + 'px','visibility': 'visible'};
+
         scope.arrowStyle = {'top': (param.event.clientY - tooltipTop - 10) + 'px'};
+        if(!scope.isRight){
+          scope.arrowStyle['left'] = tooltipWidth + 'px';
+        }
         scope.$apply();
       }));
 
