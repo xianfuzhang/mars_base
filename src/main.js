@@ -121,6 +121,10 @@ angular
         template: require('./modules/fabric/template/fabric_summary.html'),
         controller: 'fabricSummaryController'
       }).
+      when('/configuration', {
+        template: require('./modules/configuration/template/configuration.html'),
+        controller: 'ConfigurationController'
+      }).
       when('/login', {
         template: require('./modules/login/template/login.html'),
         controller: 'loginController'
