@@ -60,7 +60,6 @@ export class FabricSummaryController {
 
 
     this.di.$scope.fabricModel = {
-      headers:this.di.appService.CONST.HEADER,
       showSwitchDetail: false,
       isShowTopo: false,
       portsSchema: this.di.deviceService.getSummaryPortsTableSchema(),

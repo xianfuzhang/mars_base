@@ -4,7 +4,8 @@ export class marDrawer{
   static getDI () {
     return [
       '$rootScope',
-      '$log'
+      '$log',
+      '_'
     ];
   }
 
@@ -28,7 +29,7 @@ export class marDrawer{
 
   _link (scope, element) {
     (function init() {
-      let ele =
+      // let ele =
       scope.drawerModel = {
         isRight: scope.isRight,
       };
