@@ -68,7 +68,12 @@
   width: 15px;
   height: 15px;
 }
-
+.mdc-select.mdc-select__no-label{
+  height: 28px;
+}
+.mdc-select.mdc-select__no-label > .mdc-select__native-control{
+  padding-top: 0;
+}
 .menu-fixed{
   position: fixed;
   z-index: 100;
