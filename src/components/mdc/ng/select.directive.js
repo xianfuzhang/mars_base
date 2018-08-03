@@ -32,7 +32,9 @@ export class mdlSelect {
     }
     scope.hint = scope.displayLabel && scope.displayLabel.hint;
     scope.options = scope.displayLabel && scope.displayLabel.options;
-
+    if(!scope.hint && scope.options){
+      scope.value = scope.options[0];
+    }
     if (scope.helper) {
       //scope.helpId = scope.helper.id;
       scope.content = scope.helper.content;
