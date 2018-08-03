@@ -108,9 +108,9 @@ angular
         template: require('./modules/fabric/template/statistic.html'),
         controller: 'statisticController'
       })
-      .when('/storm_control', {
-        template: require('./modules/fabric/template/storm_control.html'),
-        controller: 'stormControlController'
+      .when('/account_manage', {
+        template: require('./modules/login/template/account_manage.html'),
+        controller: 'accountManageController'
       }).
       when('/fabric_summary', {
         template: require('./modules/fabric/template/fabric_summary.html'),
