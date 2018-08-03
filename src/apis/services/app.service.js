@@ -45,7 +45,7 @@ export class appService {
           //username暂时是用来显示的，后期是通过接口返回。或者是通过session
           'UserName':'Nocsys',
           'items':[
-            {'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manager'},
+            {'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manage'},
             {'label': this.translate('MODULE.LOGIN.USERACCOUNT.LOGOUT'), 'url': '/logout'}
           ]
         }
@@ -72,6 +72,14 @@ export class appService {
 
   getLogoutUrl() {
     return this.getZoneEndpoint() + 'onos/v1/logout';
+  }
+
+  getUserAccountUrl() {
+    return this.getZoneEndpoint() + 'onos/v1/useraccount/v1';
+  }
+
+  getDeleteUserAccountUrl(username) {
+    return this.getZoneEndpoint() + 'onos/v1/useraccount/v1/' + username;
   }
 
   getDevicesUrl(){
