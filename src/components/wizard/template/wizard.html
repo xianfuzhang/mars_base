@@ -14,6 +14,7 @@
             </div>
 
             <div class="wizard__body__right" ng-class="{'+single': steps.length < 2}">
+                <div class="wizard__body__right__alert" ng-show="errorMessage != ''" ng-bind="errorMessage"></div>
                 <form name="wizardForm">
                     <div class="wizard__body__form" ng-class="{'+single': steps.length < 2}">
                         <div ng-show="curIndex == $index" ng-repeat="step in steps track by $index" class="wizard__body__right__content">

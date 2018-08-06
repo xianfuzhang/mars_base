@@ -29,38 +29,77 @@ export class Wizard {
 
     (function init () {
       scope.curIndex = 0;
+      scope.errorMessage = '';
       scope.showWizard = scope.showWizard || false;
       scope.wizardForm = {};
 
       scope.preStep = function() {
-        scope.curIndex = scope.curIndex != 0 ? scope.curIndex - 1 : scope.curIndex;
+        let preIndex = scope.curIndex != 0 ? scope.curIndex - 1 : scope.curIndex;
+        if(typeof scope.stepValidation == 'function' && preIndex != scope.curIndex) {
+          // validate the step form by parent controller scope
+          let res = scope.stepValidation(scope.curIndex + 1, preIndex + 1);
+          if(res.valid == false) {
+            scope.errorMessage = res.errorMessage;
+          } else {
+            scope.curIndex = preIndex;
+            scope.errorMessage = '';
+          }
+        } else {
+          scope.curIndex = preIndex;
+        }
       }
 
       scope.nextStep = function() {
-        scope.curIndex = scope.curIndex < scope.steps.length ? scope.curIndex + 1 : scope.curIndex;
+        let nextIndex = scope.curIndex < scope.steps.length ? scope.curIndex + 1 : scope.curIndex;
+        if(typeof scope.stepValidation == 'function' && nextIndex != scope.curIndex) {
+          // validate the step form by parent controller scope
+          let res = scope.stepValidation(scope.curIndex + 1, nextIndex + 1);
+          if(res.valid == false) {
+            scope.errorMessage = res.errorMessage;
+          } else {
+            scope.curIndex = nextIndex;
+            scope.errorMessage = '';
+          }
+        } else {
+          scope.curIndex = nextIndex;
+        }
       }
 
       scope.switchTo = function($index) {
-        scope.curIndex = $index;
+        let nextIndex = $index;
+        if(typeof scope.stepValidation == 'function' && nextIndex != scope.curIndex) {
+          // validate the step form by parent controller scope
+          let res = scope.stepValidation(scope.curIndex + 1, nextIndex + 1);
+          if(res.valid == false) {
+            scope.errorMessage = res.errorMessage;
+          } else {
+            scope.curIndex = nextIndex;
+            scope.errorMessage = '';
+          }
+        } else {
+          scope.curIndex = nextIndex;
+        }
       }
 
       scope.postCancel = function() {
-        let result = scope.cancel();
-        if (result == true) {
-          scope.showWizard = false;
-        } else {
-          scope.errMsg = result.message || '';
-        }
+        scope.cancel()
+          .then((result) => {
+            if (result.valid == false) {
+              scope.errorMessage = result.errorMessage || '';
+            } else {
+              scope.showWizard = false;
+            }
+          });
       }
 
       scope.postSubmit = function() {
         scope.submit()
           .then((result) => {
-            if (result == true) {
+            if (result.valid == false) {
+              scope.errorMessage = result.errorMessage || '';
+            } else {
               scope.showWizard = false;
               scope.$apply();
-            } else {
-              scope.errMsg = result.error || '';
             }
           });
       }
