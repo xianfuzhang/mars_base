@@ -1,6 +1,7 @@
 var Device = require('../models/device'),
     Link = require('../models/link'),
     Endpoint = require('../models/endpoint'),
+    UserAccount = require('../models/useraccount'),
     config = require('../config'),
     Chance = require('chance'),
     _ = require('lodash');
@@ -11,7 +12,8 @@ const chance = new Chance();
 global.cloudModel = {
   devices: [],
   links: [],
-  endpoints: []
+  endpoints: [],
+  useraccounts: []
 };
 
 let updateInterval;
@@ -285,6 +287,28 @@ let cloudLib = {
     cloudModel.endpoints.push(endpoint);
     
     return true;
+  },
+
+  addUserAccount: (reqParams) => {
+    let user = new UserAccount(
+      reqParams.user_name,
+      reqParams.groups,
+      reqParams.password
+    );
+
+    cloudModel.useraccounts.push(user);
+  },
+
+  deleteUserAccount: (userName) => {
+    let index = cloudModel.useraccounts.findIndex((useraccount) => {
+      return useraccount.user_name === userName;
+    });
+
+    if (index !== -1) {
+      cloudModel.useraccounts.splice(index, 1);
+      return true;
+    }
+    return false;
   }
 };
 

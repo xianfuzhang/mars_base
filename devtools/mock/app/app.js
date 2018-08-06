@@ -5,6 +5,7 @@ var express = require('express'),
   deviceController = require('./controllers/device'),
   endPointController = require('./controllers/endpoint'),
   statisticController = require('./controllers/statistic'),
+  useraccountController = require('./controllers/useraccount'),
   app = express(),
   //expressSession = require('express-session'),
   cookieParser = require('cookie-parser');
@@ -32,6 +33,7 @@ app.use(initController);
 app.use('/onos/v1', deviceController);
 app.use('/onos/v1', endPointController);
 app.use('/onos/v1/statistics', statisticController);
+app.use('/onos/v1/useraccount/v1', useraccountController);
 
 // set port
 app.set('port', (process.env.PORT || 4001));
