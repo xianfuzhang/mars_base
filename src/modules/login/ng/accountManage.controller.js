@@ -4,6 +4,7 @@ export class AccountManageController {
       '$scope',
       '$filter',
       '$q',
+      '$uibModal',
       'accountService',
       'accountDataManager',
       'tableProviderFactory'
@@ -26,7 +27,9 @@ export class AccountManageController {
     };
 
     this.scope.onTableRowClick = (event) => {
-
+      if (event.$data){
+        this.scope.accountModel.api.setSelectedRow(event.$data.id);
+      }
     };
 
     this.scope.onAPIReady = ($api) => {
@@ -37,8 +40,15 @@ export class AccountManageController {
 
     };
 
-    this.scope.batchRemove = () => {
-
+    this.scope.batchRemove = ($value) => {
+      if ($value.length) {
+        this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.BATCH_DELETE_SWITCH'))
+          .then((data) =>{
+            this.batchDeleteUserAccounts($value);
+          }, (res) =>{
+            this.di.$log.debug('delete user account dialog cancel');
+          });
+      }
     };
 
     this.init();
@@ -66,6 +76,55 @@ export class AccountManageController {
         };
       }
     });
+  }
+
+  confirmDialog(content) {
+    let defer = this.di.$q.defer();
+    this.di.$uibModal
+      .open({
+        template: require('../../../components/mdc/templates/dialog.html'),
+        controller: 'dialogCtrl',
+        backdrop: true,
+        resolve: {
+          dataModel: () => {
+            return {
+              type: 'warning',
+              headerText: this.translate('MODULES.SWITCHES.DIALOG.HEADER'),
+              contentText: content,
+            };
+          }
+        }
+      })
+      .result.then((data) => {
+      if(data) {
+        defer.resolve(data);
+      }
+      else {
+        defer.reject(null);
+      }
+    });
+
+    return defer.promise;
+  }
+
+  batchDeleteUserAccounts(arr) {
+    let deferredArr = [];
+    arr.forEach((item) => {
+      let defer = this.di.$q.defer();
+      this.di.accountDataManager.deleteUser(item.user_name)
+        .then(() => {
+          defer.resolve();
+        }, () => {
+          defer.resolve();
+        });
+      deferredArr.push(defer.promise);
+    });
+
+    this.di.$q.all(deferredArr).then(() => {
+      this.scope.accountModel.api.queryUpdate();
+    });
+
+    this.scope.$emit('batch-delete-endpoints');
   }
 
   getEntities(users) {

@@ -21,22 +21,22 @@ export class loginService {
 
     switch (status) {
       case CONST_HTTP_FORBIDDEN:
-        message = this.di.$filter('translate')('MODULES.LOGIN.HTTP_FORBIDDEN');
+        message = this.di.$filter('translate')('MODULE.LOGIN.HTTP_FORBIDDEN');
         break;
       case CONST_HTTP_HOST:
-        message = this.di.$filter('translate')('MODULES.LOGIN.ACCEPT_CERTIFICATE');
+        message = this.di.$filter('translate')('MODULE.LOGIN.ACCEPT_CERTIFICATE');
         break;
       case CONST_HTTP_AUTHORIZATION:
-        message = this.di.$filter('translate')('MODULES.LOGIN.INVALID_LOGIN');
+        message = this.di.$filter('translate')('MODULE.LOGIN.INVALID_LOGIN');
         break;
       case CONST_HTTP_OK:
         message = null;
         break;
       case CONST_HTTP_NOPERMISSION:
-        message = this.di.$filter('translate')('MODULES.LOGIN.NO_PERMISSIONS');
+        message = this.di.$filter('translate')('MODULE.LOGIN.NO_PERMISSIONS');
         break;
       default:
-        message = this.di.$filter('translate')('MODULES.LOGIN.HTTP_ERROR_DEFAULT', status);
+        message = this.di.$filter('translate')('MODULE.LOGIN.HTTP_ERROR_DEFAULT', status);
         break;
     }
     return message;

@@ -20,7 +20,7 @@ export class AccountDataManager {
       .then((res) => {
         defer.resolve(res);
       }, () => {
-        defer.resolve({'data': {"users": [{'user_name': 'admin', 'groups': ['admingroup', 'guestgroup']}]}});
+        defer.resolve({'data': {"users": []}});
       });
     return defer.promise;
   }

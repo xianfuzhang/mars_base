@@ -4,6 +4,11 @@
   "MODULE.LOGIN.FORM.USERNAME.HINT": "Username",
   "MODULE.LOGIN.FORM.PASSWORD.HINT": "Password",
   "MODULE.LOGIN.FORM.SIGN_IN": "Sign In",
+  "MODULE.LOGIN.HTTP_FORBIDDEN": "Forbidden, you do not have authority to access.",
+  "MODULE.LOGIN.ACCEPT_CERTIFICATE": "Zone IP is invalid. Make sure you can reach the zone IP with your browser.",
+  "MODULE.LOGIN.INVALID_LOGIN": "Username or Password is invalid.",
+  "MODULE.LOGIN.NO_PERMISSIONS": "No permission, please make sure that the user has admin permission!",
+  "MODULE.LOGIN.HTTP_ERROR_DEFAULT": "Error logginng in. HTTP status code: {0}",
   "MODULE.ACCOUNT.MANAGE.TITLE": "Account Management",
   "MODULE.ACCOUNT.MANAGE.COLUMN.NAME": "User Name",
   "MODULE.ACCOUNT.MANAGE.COLUMN.GROUP": "Group"
