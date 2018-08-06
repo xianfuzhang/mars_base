@@ -1,5 +1,5 @@
 <div class="select-field-container">
-  <div class="mdc-select">
+  <div class="mdc-select" ng-class="{'mdc-select__no-label': hint === undefined}">
     <select class="mdc-select__native-control"
             ng-change="selectChange()"
             ng-model="value" ng-options="obj.label for obj in options track by obj.label">

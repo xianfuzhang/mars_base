@@ -231,7 +231,7 @@ export class DeviceDetailController {
         break;
       case 'statistic':
         this.di.deviceDataManager.getDevicePortsStatistics(this.scope.deviceId, params).then((res) => {
-          defer.resolve({'data': res.data.ports, 'total': res.data.total});
+          defer.resolve({'data': res.data.statistics, 'total': res.data.total});
         });
         break;
       case 'flow':
@@ -282,20 +282,22 @@ export class DeviceDetailController {
         break;
       case 'statistic':
         entities.forEach((entity) => {
-          let obj = {};
-          obj['id'] = entity.deviceId + '_' + entity.port;
-          obj['device'] = entity.device;
-          obj['port'] = entity.port;
-          obj['rx_pkt'] = entity.packetsReceived;
-          obj['tx_pkt'] = entity.packetsSent;
-          obj['rx_byte'] = entity.bytesReceived;
-          obj['tx_byte'] = entity.bytesSent;
-          obj['rx_pkt_drop'] = entity.packetsRxDropped;
-          obj['tx_pkt_drop'] = entity.packetsTxDropped;
-          obj['rx_pkt_error'] = entity.packetsRxErrors;
-          obj['tx_pkt_error'] = entity.packetsTxErrors;
-          obj['duration'] = entity.durationSec;
-          this.scope.detailModel.entities.push(obj);
+          entity.ports.forEach((port) => {
+            let obj = {};
+            obj['id'] = entity.device + '_' + port.port;
+            obj['device'] = entity.device;
+            obj['port'] = port.port;
+            obj['rx_pkt'] = port.packetsReceived;
+            obj['tx_pkt'] = port.packetsSent;
+            obj['rx_byte'] = port.bytesReceived;
+            obj['tx_byte'] = port.bytesSent;
+            obj['rx_pkt_drop'] = port.packetsRxDropped;
+            obj['tx_pkt_drop'] = port.packetsTxDropped;
+            obj['rx_pkt_error'] = port.packetsRxErrors;
+            obj['tx_pkt_error'] = port.packetsTxErrors;
+            obj['duration'] = port.durationSec;
+            this.scope.detailModel.entities.push(obj);
+          });
         });
         break;
       case 'flow':
