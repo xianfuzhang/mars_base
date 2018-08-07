@@ -79,13 +79,14 @@ export class FlowEstablishController {
         disLabels.push({'label': item, 'value':item});
       });
 
-      return {'options': disLabels};
+      return {'options': disLabels, 'hint':'Type'};
     };
 
     this.di.$scope.instructionSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.instructionSchema));
     this.di.$scope.criteriaSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.criteriaSchema));
 
-
+    this.di.$scope.instructionSchemaList['hint'] = 'Instruction Type';
+    this.di.$scope.criteriaSchemaList['hint'] = 'Criteria Type';
     this.di.$scope.flowEstablishModel = {
       instructionType: angular.copy(this.di.$scope.instructionSchemaList.options[0]),
       criteriaType: angular.copy(this.di.$scope.criteriaSchemaList.options[0]),

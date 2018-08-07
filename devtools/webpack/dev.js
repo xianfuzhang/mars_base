@@ -29,12 +29,12 @@ module.exports = function (config) {
         filename: "[name].css",
         chunkFilename: "[id].css"
       }),
-      new OptimizeCssAssetsPlugin({
-        assetNameRegExp: /\.css\.*(?!.*map)/g,
-        cssProcessor: require('cssnano'),
-        cssProcessorOptions: { safe: true, discardComments: { removeAll: true } },
-        canPrint: true
-      }),
+      // new OptimizeCssAssetsPlugin({
+      //   assetNameRegExp: /\.css\.*(?!.*map)/g,
+      //   cssProcessor: require('cssnano'),
+      //   cssProcessorOptions: { safe: true, discardComments: { removeAll: true } },
+      //   canPrint: true
+      // }),
       new MergeJsonWebpackPlugin({
         'output': {
           'groupBy': [

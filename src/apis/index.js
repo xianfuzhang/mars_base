@@ -2,6 +2,7 @@ import {DeviceDataManager} from './datamanagers/device.dataManager';
 import {StormDataManager} from './datamanagers/storm.dataManager';
 import {LoginDataManager} from './datamanagers/login.dataManager';
 import {AccountDataManager} from './datamanagers/account.dataManager';
+import {ConfigurationDataManager} from './datamanagers/configuration.dataManager';
 import {appService} from './services/app.service';
 import {switchService} from './services/switch.service';
 
@@ -13,4 +14,5 @@ export default angular
   .service('stormDataManager', StormDataManager)
   .service('loginDataManager', LoginDataManager)
   .service('accountDataManager', AccountDataManager)
+  .service('configurationDataManager', ConfigurationDataManager)
   .name;

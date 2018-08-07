@@ -1,0 +1,41 @@
+
+@include block(flex_entirety){
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  height: 100%;
+
+
+  @include element(header){
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: map_get($sizes, header-height);
+  }
+
+  @include element(body){
+    flex-grow: 2;
+    flex-basis: auto;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 8px;
+    height: 100%;
+
+    @include element(header){
+      flex-basis: 30px;
+      flex-grow: 0;
+      flex-shrink: 0;
+    }
+
+    @include element(body){
+      flex-grow: 1;
+      flex-shrink: 1;
+      height: 100%;
+    }
+
+  }
+
+}
+
+

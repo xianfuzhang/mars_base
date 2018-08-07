@@ -1,7 +1,8 @@
 export class mdlText {
   static getDI() {
     return [
-      '$compile'
+      '$compile',
+      '_'
     ];
   }
 
@@ -17,13 +18,16 @@ export class mdlText {
       value: '=ngModel',
       displayLabel: '=',
       helper: '=',
-      disable: '=',
+      disable: '@',
+      datalist:'@'
     };
     this.link = (...args) => this._link.apply(this, args);
   }
 
   _link (scope, element, attrs, ngModel) {
     let helperElement;
+
+    let unSubscribes = [];
 
     scope.hint = scope.displayLabel && scope.displayLabel.hint;
     scope.id = scope.displayLabel && scope.displayLabel.id;
@@ -32,9 +36,10 @@ export class mdlText {
     scope.helpId = scope.helper && scope.helper.id;
     scope.content = scope.helper && scope.helper.content;
 
-    if (scope.disable) {   //scope.$eval(attrs.status)
-      angular.element(element.children()[0]).addClass('mdc-text-field--disabled');
-      element.find('input').attr('disabled', true);
+    if (scope.disable == 'true') {   //scope.$eval(attrs.status)
+      // angular.element(element.children()[0]).addClass('mdc-text-field--disabled');
+      // element.find('input').attr('disabled', true);
+      disable();
       //当text有值,hint float
       if (scope.value) {
         element.find('label').addClass('mdc-floating-label--float-above');
@@ -42,7 +47,7 @@ export class mdlText {
       }
     }
 
-    if (scope.required) {
+    if (scope.required !== 'false') {
       element.find('input').attr('required', true);
     }
 
@@ -81,6 +86,39 @@ export class mdlText {
       angular.element(element.children()[0]).removeClass('mdc-text-field--focused');
       element.find('div').removeClass('mdc-line-ripple--active');
     };
+
+    function disable(){
+      angular.element(element.children()[0]).addClass('mdc-text-field--disabled');
+      element.find('input').attr('disabled', true);
+    }
+
+    function enable(){
+      angular.element(element.children()[0]).removeClass('mdc-text-field--disabled');
+      element.find('input').attr('disabled', false);
+    }
+
+    unSubscribes.push(scope.$watch('value',(newValue)=>{
+      if(scope.value === ''){
+        scope.blur();
+      } else {
+        scope.focus();
+      }
+    }));
+
+    unSubscribes.push(scope.$watch('disable',(newValue)=>{
+      if(newValue === 'true'){
+        disable();
+      } else {
+        enable();
+      }
+    }));
+
+    scope.$on('$destroy', () => {
+      this.di._.each(unSubscribes, (unSubscribe) => {
+        unSubscribe();
+      });
+    });
+
   }
 }
 mdlText.$inject = mdlText.getDI();

@@ -1,17 +1,15 @@
 
-<div class="summary">
-    <!--  <mar-header headers="dashModel.headers"></mar-header>-->
-    <!--<mdl-header></mdl-header>-->
-    <mar-header headers="fabricModel.headers"></mar-header>
+<div class="summary flex_entirety">
+    <mar-header></mar-header>
 
-    <div class="summary__body" >
+    <div class="summary__body flex_entirety__body" >
         <content-header big-title="Fabric">
             <a href="/">Mars Cloud</a>
             <span>•</span>
             <span>Fabric</span>
         </content-header>
 
-        <div class="summary__body__content">
+        <div class="summary__body__content flex_entirety__body__body">
 
             <div ng-style="resize_right_plus" style="position: absolute;right:300px;top:0;height:100%;left:0px;">
                 <topo ng-if="fabricModel.isShowTopo" spines="fabricModel.deSpines" leafs="fabricModel.deLeafs" others="fabricModel.deOthers" links="fabricModel.deLinks" topo-setting="fabricModel.topoSetting">

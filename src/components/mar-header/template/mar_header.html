@@ -1,8 +1,8 @@
-<div class="mar_header">
+<div class="mar_header flex_entirety__header">
     <div class="mar_header__logo">
     </div>
     <div class="mar_header__menu">
-        <menu is-user=false group-url="item" ng-repeat="item in headers.menu"></menu>
+        <menu is-user=false group-url="item" ng-repeat="item in headerModel.menu"></menu>
     </div>
     <div class="mar_header__tools">
         <div class="mar_header__tools__warning">
@@ -10,6 +10,6 @@
             <div class="mar_header__tools__warning__number">6</div>
             <!--<mar-drawer></mar-drawer>-->
         </div>
-        <div><menu is-user=true group-url="headers.user"></menu></div>
+        <div><menu ng-if="headerModel.user" is-user=true group-url="headerModel.user"></menu></div>
     </div>
 </div>

@@ -13,7 +13,7 @@ export class appService {
     this.translate = this.di.$filter('translate');
     this.isMocked = true;
     this.CONST = {
-      MOCKED_ZONE_ENDPOINT: 'http://localhost:3000/',
+      MOCKED_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/',
       LIVE_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/',
 
       MOCKED_USERNAME: 'nocsys',
@@ -39,6 +39,12 @@ export class appService {
               {'label': 'Segment', 'url': '/segment'},
               {'label': 'Interface Group', 'url': '/interface_group'},
             ]
+          },
+          {
+            'group':'Config',
+            'items':[
+              {'label': 'Configuration', 'url': '#!/configuration'},
+            ]
           }
         ],
         'user':{
@@ -53,10 +59,12 @@ export class appService {
     };
   }
 
+
   getZoneEndpoint() {
     let endpoint;
     if (this.isMocked) {
-      endpoint = this.CONST.MOCKED_ZONE_ENDPOINT;
+      endpoint = this.CONST.MOCKED_ZONE_ENDPOINT.replace('[%__ZONE_IP__%]',
+        (this.di.$location.host()  + ":"+  this.di.$location.port()));;
     }
     else {
       endpoint = this.CONST.LIVE_WEBSOCKETS_ENDPONT.replace('[%__ZONE_IP__%]',
@@ -135,6 +143,17 @@ export class appService {
 
   getStormProfilesUrl(){
     return this.getZoneEndpoint() + 'onos/v1/links';
+  }
+
+  getConfigurationUrl(subjectClass, subject){
+    let url = this.getZoneEndpoint() + 'onos/v1/configuration'
+    if(subjectClass){
+      url = url + '/' + subjectClass;
+      if(subject){
+        url =   url + '/' + subject;
+      }
+    }
+    return url;
   }
 }
 

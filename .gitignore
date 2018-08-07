@@ -14,3 +14,4 @@ nocsys-mars.iml
 bower.json
 karma.conf.js
 e2e-tests
+src/test/

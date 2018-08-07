@@ -1,62 +1,39 @@
-<div class="wizard__body__input">
-    <div class="wizard__body__input__label">Priority<span class="wizard__body__input__required">*</span></div>
-    <input class="wizard__body__input__text" name="priority" type="text" ng-model="flow.priority" ng-required="true" ng-pattern="num_regex" />
+
+<div class="stepForm__input">
+    <div class="stepForm__input__label">Priority<span class="stepForm__input__required">*</span></div>
+    <input class="stepForm__input__text ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required" name="name" type="text" ng-model="flow.priority" ng-required="true" required="required" ng-pattern="num_regex" />
 </div>
-<div class="wizard__body__input">
-    <div class="wizard__body__input__label">Timeout<span class="wizard__body__input__required">*</span></div>
-    <input class="wizard__body__input__text" name="timeout" type="text" ng-model="flow.timeout" ng-required="true" ng-pattern="num_regex"/>
-    <!--<div class="wizard__body__input__annotaions">-->
-        <!--Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future. When a switch with the entered MAC is discovered, this configuration will automatically be applied to it.-->
-    <!--</div>-->
+
+<div class="stepForm__input">
+    <div class="stepForm__input__label">Timeout<span class="stepForm__input__required">*</span></div>
+    <input class="stepForm__input__text ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required" name="priority" type="text" ng-model="flow.timeout" ng-required="true" required="required" ng-pattern="num_regex" />
 </div>
-<div class="wizard__body__input">
-    <div class="wizard__body__input__label">Is Permanent<span class="wizard__body__input__required">*</span></div>
-    <!--<input class="wizard__body__input__text-postfix" name="port" type="number" ng-model="switch.port" ng-required="true" min="0" max="65535"/>-->
+
+
+<div class="stepForm__input">
+    <div class="stepForm__input__label">Is Permanent<span class="stepForm__input__required">*</span></div>
     <mdl-switch ng-model="flow.isPermanent" name="isPermanent"
-            display-label="{on: 'True', off: 'False', id: 'isPermanent'}">
+                display-label="{on: 'True', off: 'False', id: 'isPermanent'}">
     </mdl-switch>
 </div>
+
+
+
 <!--<div class="wizard__body__input">-->
-    <!--<div class="wizard__body__input__label">Protocol<span class="wizard__body__input__required">*</span></div>-->
-    <!--<input class="wizard__body__input__text" list="protocals-datalist" name="protocol" type="text" ng-model="switch.protocol" ng-required="true"/>-->
-    <!--<datalist id="protocals-datalist">-->
-        <!--<option ng-value="protocol" ng-repeat="protocol in protocols"/>-->
-    <!--</datalist>-->
-<!--</div>-->
-<!--<div class="wizard__body__input" ng-show="switch.protocol == 'SNMP'">-->
-    <!--<div class="wizard__body__input__label">Community</div>-->
-    <!--<input class="wizard__body__input__text" name="community" type="text" ng-model="switch.community"/>-->
+    <!--<div class="wizard__body__input__label stepForm__input__label">Priority<span class="wizard__body__input__required">*</span></div>-->
+    <!--<input class="wizard__body__input__text stepForm__input__text" name="priority" type="text" ng-model="flow.priority" ng-required="true" ng-pattern="num_regex" />-->
 <!--</div>-->
 <!--<div class="wizard__body__input">-->
-    <!--<div class="wizard__body__input__label">Mfr</div>-->
-    <!--<input class="wizard__body__input__text" name="mfr" ng-value="switch.protocol == 'Rest' ? 'Accton' : switch.mfr" type="text" ng-model="switch.mfr"/>-->
+    <!--<div class="wizard__body__input__label stepForm__input__label">Timeout<span class="wizard__body__input__required">*</span></div>-->
+    <!--<input class="wizard__body__input__text stepForm__input__text" name="timeout" type="text" ng-model="flow.timeout" ng-required="true" ng-pattern="num_regex"/>-->
+    <!--&lt;!&ndash;<div class="wizard__body__input__annotaions">&ndash;&gt;-->
+        <!--&lt;!&ndash;Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future. When a switch with the entered MAC is discovered, this configuration will automatically be applied to it.&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
 <!--</div>-->
 <!--<div class="wizard__body__input">-->
-    <!--<div class="wizard__body__input__label" style="text-decoration: underline">Admin Status<span class="wizard__body__input__required">*</span></div>-->
-    <!--<mdl-switch ng-model="switch.admin_status" name="status"-->
-                <!--display-label="{on: 'Down', off: 'Up', id: 'status'}">-->
+    <!--<div class="wizard__body__input__label stepForm__input__label">Is Permanent<span class="wizard__body__input__required">*</span></div>-->
+    <!--&lt;!&ndash;<input class="wizard__body__input__text-postfix" name="port" type="number" ng-model="switch.port" ng-required="true" min="0" max="65535"/>&ndash;&gt;-->
+    <!--<mdl-switch ng-model="flow.isPermanent" name="isPermanent"-->
+            <!--display-label="{on: 'True', off: 'False', id: 'isPermanent'}">-->
     <!--</mdl-switch>-->
-<!--</div>-->
-<!--<div class="wizard__body__input">-->
-    <!--<div class="wizard__body__input__label" style="text-decoration: underline">Fabric Role</div>-->
-    <!--<mdl-radio ng-model="switch.fabric_role" name="role" value="spine"-->
-               <!--display-label="{id: 'check_2', label: 'Spine', name: 'role', value: 'spine'}">-->
-    <!--</mdl-radio>-->
-    <!--<mdl-radio ng-model="switch.fabric_role" name="role" value="leaf"-->
-               <!--display-label="{id: 'check_1', label: 'Leaf', name: 'role', value: 'leaf'}">-->
-    <!--</mdl-radio>-->
-    <!--<mdl-radio ng-model="switch.fabric_role" name="role" value="unknown"-->
-               <!--display-label="{id: 'check_3', label: 'None', name: 'role', value: 'unknown'}">-->
-    <!--</mdl-radio>-->
-<!--</div>-->
-<!--<div class="wizard__body__input" ng-if="switch.fabric_role == 'leaf'">-->
-    <!--<div class="wizard__body__input__label">Leaf Group</div>-->
-    <!--<input class="wizard__body__input__text" list="leaf_group_datalist" placeholder="Please enter or select the leaf group" ng-model="switch.leaf_group""/>-->
-    <!--<datalist id="leaf_group_datalist">-->
-        <!--<option ng-value="group" ng-repeat="group in leaf_groups"/>-->
-    <!--</datalist>-->
-<!--</div>-->
-<!--<div class="wizard__body__input">-->
-    <!--<div class="wizard__body__input__label">Description</div>-->
-    <!--<textarea class="wizard__body__input__textarea" name="description" ng-model="switch.description" class="wizard__body__input__textarea" resize="false"></textarea>-->
 <!--</div>-->
