@@ -39,6 +39,12 @@ export class appService {
               {'label': 'Segment', 'url': '/segment'},
               {'label': 'Interface Group', 'url': '/interface_group'},
             ]
+          },
+          {
+            'group':'Config',
+            'items':[
+              {'label': 'Configuration', 'url': '#!/configuration'},
+            ]
           }
         ],
         'user':{
@@ -52,6 +58,7 @@ export class appService {
       }
     };
   }
+
 
   getZoneEndpoint() {
     let endpoint;
@@ -136,6 +143,17 @@ export class appService {
 
   getStormProfilesUrl(){
     return this.getZoneEndpoint() + 'onos/v1/links';
+  }
+
+  getConfigurationUrl(subjectClass, subject){
+    let url = this.getZoneEndpoint() + 'onos/v1/configuration'
+    if(subjectClass){
+      url = url + '/' + subjectClass;
+      if(subject){
+        url =   url + '/' + subject;
+      }
+    }
+    return url;
   }
 }
 
