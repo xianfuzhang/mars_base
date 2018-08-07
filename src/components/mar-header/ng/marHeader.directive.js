@@ -22,7 +22,7 @@ export class marHeader {
     this.template = require('../template/mar_header');
 
     this.scope = {
-      headers : '=',
+      // headers : '=',
     };
 
     this.link = (...args) => this._link.apply(this, args);

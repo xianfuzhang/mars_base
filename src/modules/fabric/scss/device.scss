@@ -1,6 +1,7 @@
 @import 'xbem';
 @import 'default';
 @import 'shared';
+@import 'framework_layout';
 
 .mdc-tab-bar.main__content__device-tabs{
   margin: 0;
@@ -62,29 +63,29 @@
 }
 
 @include block(summary){
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  height: 100%;
+  //display: flex;
+  //flex-direction: column;
+  //flex-wrap: nowrap;
+  //height: 100%;
 
   @include element(body){
-    flex-grow: 2;
-    flex-basis: auto;
-    flex-shrink: 1;
+    //flex-grow: 2;
+    //flex-basis: auto;
+    //flex-shrink: 1;
     background-color: white;
     overflow: scroll;
     padding: 0 8px;
-    display: flex;
-    flex-direction: column;
+    //display: flex;
+    //flex-direction: column;
 
 
     @include element(content){
       height: 100%;
       width: 100%;
       position: relative;
-      border-top: 1px solid lightgray;
-      flex-grow: 1;
-      flex-shrink: 1;
+      //border-top: 1px solid lightgray;
+      //flex-grow: 1;
+      //flex-shrink: 1;
       min-height: 400px;
       overflow: hidden;
 

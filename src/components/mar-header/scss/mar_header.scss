@@ -10,11 +10,12 @@
   background-color: map_get($colors, header_color);
   display: flex;
   flex-direction: row;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: map_get($sizes, header-height);
+  //flex-grow: 0;
+  //flex-shrink: 0;
+  //flex-basis: map_get($sizes, header-height);
   z-index:map_get($z-indexes, z1);
   box-shadow: 1px 2px 2px #bfbebe;
+
 
   @include element(logo){
     background-image: url('../image/mars_logo.png');
