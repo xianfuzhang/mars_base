@@ -129,8 +129,30 @@ export class DeviceWizardController {
       }
     }
     
+    this.di.$scope.stepValidation = function(curStep, nextStep) {
+      // TODO:
+      // if(scope.switch.name) {
+      //   return {
+      //     valid: true,
+      //     errorMessage: ''
+      //   }
+      // } else {
+      //   return {
+      //     valid: false,
+      //     errorMessage: 'Name error'
+      //   }
+      // }
+  
+      return {
+        valid: true,
+        errorMessage: ''
+      }
+    }
+    
     this.di.$scope.cancel = function(formData){
-      return true;
+      return new Promise((resolve, reject) => {
+        resolve({valid: true, errorMessage: ''});
+      });
     }
   
     this.di.$scope.submit = function() {
@@ -155,20 +177,20 @@ export class DeviceWizardController {
             .then(() => {
               scope.switch = _.cloneDeep(initSwitch);
               rootScope.$emit('device-list-refresh');
-              resolve(true);
+              resolve({valid: true, errorMessage: ''});
             }, () => {
               scope.switch = _.cloneDeep(initSwitch);
-              resolve(false);
+              resolve({valid: false, errorMessage: 'Error occurred!'});
             });
         } else { // add a new switch
           deviceDataManager.postDeviceDetail(params)
             .then(() => {
               scope.switch = _.cloneDeep(initSwitch);
               rootScope.$emit('device-list-refresh');
-              resolve(true);
+              resolve({valid: true, errorMessage: ''});
             }, () => {
               scope.switch = _.cloneDeep(initSwitch);
-              resolve(false);
+              resolve({valid: false, errorMessage: 'Error occurred!'});
             });
         }
       });

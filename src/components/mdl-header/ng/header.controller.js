@@ -19,7 +19,7 @@ export class headerController{
     this.scope = this.di.$scope;
     this.CONST_ADMIN_GROUP = this.di.appService.CONST.ADMIN_GROUP;
     this.scope.groups = this.di.appService.CONST.HEADER;
-
+    this.scope.username = null;
     this.scope.location = (url, event) => {
       event && event.stopPropagation();
       if (url === '/logout') {
@@ -37,6 +37,9 @@ export class headerController{
     let useraccount = this.di.$cookies.get('useraccount');
     if (!useraccount || JSON.parse(useraccount).groups.indexOf(this.CONST_ADMIN_GROUP) === -1) {
       this.scope.userConfig.splice(0, 1);
+    }
+    if (useraccount) {
+      this.scope.username = JSON.parse(useraccount).user_name;
     }
   }
 }
