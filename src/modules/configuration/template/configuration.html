@@ -35,17 +35,19 @@
           </datalist>
         </div>
         <mdl-checkbox ng-model="configurationModel.isEditable"
-                      display-label="{id: 'check_edit_config', label: '开启编辑模式'}">
+                      display-label="checkDisLab">
         </mdl-checkbox>
         <div>
           <button class="mdc-button mdc-button--raised" ng-click="updateConfiguration()" ng-disabled="!configurationModel.isEditable" id="updateConfiguration" style="color:#ffffff;font-weight: 500;">
             <i class="material-icons mdc-button__icon" aria-hidden="true">playlist_add</i>
-            更新
+            {{'MODULES.CONFIGURATION.OPTION.UPDATE'|translate}}
           </button>
+          <style></style>
           <button class="mdc-button mdc-button--raised" ng-click="deleteConfiguration()" ng-disabled="!configurationModel.isEditable" id="deleteConfiguration" style="color:#ffffff;font-weight: 500;">
             <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
-            删除
+            {{'MODULES.CONFIGURATION.OPTION.DELETE'|translate}}
           </button>
+          <!--<style></style>-->
         </div>
       </div>
 

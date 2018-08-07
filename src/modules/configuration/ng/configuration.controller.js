@@ -5,6 +5,7 @@ export class ConfigurationController {
       '$rootScope',
       '_',
       '$http',
+      '$filter',
       '$q',
       'appService',
       'configurationDataManager'
@@ -18,6 +19,7 @@ export class ConfigurationController {
     });
     let unSubscribers = [];
     let scope = this.di.$scope;
+    this.translate = this.di.$filter('translate');
 
     this.di.$scope.testJSON = {
 
@@ -94,6 +96,8 @@ export class ConfigurationController {
       configurationShow: '',
       isEditable: false
     };
+
+    scope.checkDisLab = {id: 'check_edit_config', label: this.translate('MODULES.CONFIGURATION.OPTION.START_CHECK')};
 
 
     scope.updateConfiguration = () =>{
