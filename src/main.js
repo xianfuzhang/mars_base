@@ -14,6 +14,7 @@ import 'login';
 import 'dashboard';
 import 'fabric';
 import 'logical';
+import 'configuration';
 
 import 'mdc';
 import 'mdlHeader';
@@ -48,6 +49,7 @@ angular
     'login',
     'fabric',
     'logical',
+    'configuration',
     'mdc',
     'mdlHeader',
     'mdlTable',

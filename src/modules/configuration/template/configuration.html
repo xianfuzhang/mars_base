@@ -1,0 +1,54 @@
+<div class="configuration flex_entirety">
+  <mar-header></mar-header>
+  <div class="configuration__body flex_entirety__body">
+
+    <content-header big-title="Configuration">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>Configuration</span>
+    </content-header>
+    <div class="configuration__body__content flex_entirety__body__body" style="display:flex;flex-direction: row">
+
+      <div style="flex-shrink: 1;flex-grow:1;background-color: white;margin:8px;height:90%;width:90%">
+        <pre contenteditable="true" style="height:90%;overflow: scroll;border:1px solid lightgray">{{configurationModel.configurationShow}}</pre>
+      </div>
+
+      <div style="display:flex;flex-direction: column;height:100%;flex-basis: 500px;flex-shrink: 0;flex-grow: 0;padding-left:16px;margin:8px;">
+        <div>
+          <mdl-text ng-model="configurationModel.currentSubjectClass"
+                    disable="false"
+                    datalist="subject_class_datalist"
+                    display-label="{id: 'subjectClassInput', hint: 'Subject Class', type: 'text', required: false}" >
+          </mdl-text>
+          <datalist id="subject_class_datalist" style="background-color: red">
+            <option ng-value="subjectClass" ng-repeat="subjectClass in configurationModel.subjectClassList"/>
+          </datalist>
+        </div>
+        <div>
+          <mdl-text ng-model="configurationModel.currentSubject"
+                    disable="{{configurationModel.subjectListDisable}}"
+                    datalist="subject_datalist"
+                    display-label="{id: 'subjectInput', hint: 'Subject', type: 'text', required: false}" >
+          </mdl-text>
+          <datalist id="subject_datalist" style="background-color: red">
+            <option ng-value="subjectClass" ng-repeat="subjectClass in configurationModel.subjectList"/>
+          </datalist>
+        </div>
+        <mdl-checkbox ng-model="configurationModel.isEditable"
+                      display-label="{id: 'check_edit_config', label: '开启编辑模式'}">
+        </mdl-checkbox>
+        <div>
+          <button class="mdc-button mdc-button--raised" ng-click="updateConfiguration()" ng-disabled="!configurationModel.isEditable" id="updateConfiguration" style="color:#ffffff;font-weight: 500;">
+            <i class="material-icons mdc-button__icon" aria-hidden="true">playlist_add</i>
+            更新
+          </button>
+          <button class="mdc-button mdc-button--raised" ng-click="deleteConfiguration()" ng-disabled="!configurationModel.isEditable" id="deleteConfiguration" style="color:#ffffff;font-weight: 500;">
+            <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
+            删除
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

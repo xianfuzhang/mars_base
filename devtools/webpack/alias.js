@@ -6,7 +6,6 @@ class AliasProvider {
     return {
       'lodashService': path.resolve('src/libs/lodash/'),
       'easing': path.resolve('src/libs/easing/'),
-      // 'ngTable': path.resolve('src/libs/ngtable/'),
       'apis': path.resolve('src/apis/'),
       'localStore': path.resolve('src/libs/localstore/'),
     };
@@ -18,6 +17,7 @@ class AliasProvider {
       'dashboard': path.resolve('src/modules/dashboard/'),
       'fabric': path.resolve('src/modules/fabric/'),
       'logical': path.resolve('src/modules/logical/'),
+      'configuration': path.resolve('src/modules/configuration/'),
     };
   }
 
