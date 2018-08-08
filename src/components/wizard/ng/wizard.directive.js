@@ -88,6 +88,7 @@ export class Wizard {
               scope.errorMessage = result.errorMessage || '';
             } else {
               scope.showWizard = false;
+              scope.$apply();
             }
           });
       }

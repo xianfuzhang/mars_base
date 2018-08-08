@@ -2,6 +2,7 @@ var Device = require('../models/device'),
     Link = require('../models/link'),
     Endpoint = require('../models/endpoint'),
     UserAccount = require('../models/useraccount'),
+    Flow = require('../models/flow'),
     config = require('../config'),
     Chance = require('chance'),
     _ = require('lodash');
@@ -13,6 +14,7 @@ global.cloudModel = {
   devices: [],
   links: [],
   endpoints: [],
+  flows: [],
   useraccounts: []
 };
 
@@ -156,6 +158,33 @@ let cloudLib = {
       // adding data to the cloud
       cloudModel.endpoints.push(endpoint);
     });
+    
+    // create flows
+    let deviceIds = [];
+    cloudModel.devices.forEach((device) => {
+      deviceIds.push(device.id);
+    });
+    _.times(config.flowNumber, () => {
+      let flow = new Flow(
+        chance.guid(),
+        chance.natural({min:0, max:5}),
+        'org.onosproject.core',
+        chance.natural({min:0, max:3}),
+        chance.natural({min:40000, max:40005}),
+        chance.natural({min:0, max:1000}),
+        chance.bool({likelihood: 90}),
+        chance.pickone(deviceIds),
+        'ADDED',
+        chance.natural({min: 1000, max: 1000000}),
+        chance.natural({min: 100, max: 100000}),
+        chance.natural({min: 1000, max: 10000000}),
+        "UNKNOWN",
+        (new Date()).getMilliseconds()
+      );
+      
+      cloudModel.flows.push(flow);
+    });
+    
     
     updateStatistics();
   },
@@ -309,6 +338,32 @@ let cloudLib = {
       return true;
     }
     return false;
+  },
+  
+  addFlow: (reqParams) => {
+    reqParams.flows.forEach((flow) => {
+      flow = new Flow(
+        chance.guid(),
+        chance.natural({min:0, max:5}),
+        'org.onosproject.core',
+        chance.natural({min:0, max:3}),
+        flow.priority,
+        flow.timeout,
+        flow.isPermanent,
+        flow.deviceId,
+        'ADDED',
+        chance.natural({min: 1000, max: 1000000}),
+        chance.natural({min: 100, max: 100000}),
+        chance.natural({min: 1000, max: 10000000}),
+        "UNKNOWN",
+        (new Date()).getMilliseconds()
+      );
+  
+      // adding data to the cloud
+      cloudModel.flows.push(flow);
+    });
+    
+    return true;
   }
 };
 
