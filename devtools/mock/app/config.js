@@ -15,6 +15,11 @@ let config = {
   statisticUpdateIntervalSeconds: 15,
   
   flowNumber: 10,
+  
+  alertNumber: 10,
+  alertNames: ['Alert_1', 'Alert_2', 'Alert_3'],
+  alertLevels: [1, 2, 3],
+  alertGroups: ['Group_1', 'Group_2', 'Group_3'],
 };
 
 module.exports = config;

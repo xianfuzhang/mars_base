@@ -3,6 +3,7 @@ var Device = require('../models/device'),
     Endpoint = require('../models/endpoint'),
     UserAccount = require('../models/useraccount'),
     Flow = require('../models/flow'),
+    Alert = require('../models/alert'),
     config = require('../config'),
     Chance = require('chance'),
     _ = require('lodash');
@@ -15,6 +16,7 @@ global.cloudModel = {
   links: [],
   endpoints: [],
   flows: [],
+  alerts: [],
   useraccounts: []
 };
 
@@ -185,6 +187,19 @@ let cloudLib = {
       cloudModel.flows.push(flow);
     });
     
+    // create alert
+    _.times(config.alertNumber, () => {
+      let alert = new Alert(
+        chance.guid(),
+        chance.pickone(config.alertNames),
+        chance.pickone(config.alertLevels),
+        chance.name(),
+        chance.sentence(),
+        chance.pickone(config.alertGroups)
+      );
+      
+      cloudModel.alerts.push(alert);
+    })
     
     updateStatistics();
   },
