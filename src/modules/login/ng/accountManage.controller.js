@@ -1,13 +1,15 @@
 export class AccountManageController {
   static getDI() {
     return [
+      '$log',
       '$scope',
       '$filter',
       '$q',
       '$uibModal',
       'accountService',
       'accountDataManager',
-      'tableProviderFactory'
+      'tableProviderFactory',
+      'modalManager'
     ];
   }
   constructor(...args) {
@@ -37,16 +39,33 @@ export class AccountManageController {
     };
 
     this.scope.createUser = () => {
+      this.di.modalManager.open({
+          template: require('../template/createUserAccount.html'),
+          controller: 'createUserAccountController',
+          windowClass: 'create-user-account-modal',
+        })
+        .result.then((data) => {
+        if (data && !data.canceled) {
+          this.di.accountDataManager.createUser(data.result)
+            .then(() => {
+              this.scope.accountModel.api.queryUpdate();
+            }, (res) => {
+              this.di.$log.info(res);
+              this.di.$log.debug('delete user account dialog cancel');
+              this.confirmDialog('notification', res.data)
+                .then(() => {
 
+                });
+            });
+        }
+      });
     };
 
     this.scope.batchRemove = ($value) => {
       if ($value.length) {
-        this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.BATCH_DELETE_SWITCH'))
+        this.confirmDialog('warning', this.translate('MODULE.ACCOUNT.DIALOG.CONTENT.BATCH_DELETE_ACCOUNT'))
           .then((data) =>{
             this.batchDeleteUserAccounts($value);
-          }, (res) =>{
-            this.di.$log.debug('delete user account dialog cancel');
           });
       }
     };
@@ -78,7 +97,7 @@ export class AccountManageController {
     });
   }
 
-  confirmDialog(content) {
+  confirmDialog(type, content) {
     let defer = this.di.$q.defer();
     this.di.$uibModal
       .open({
@@ -88,7 +107,7 @@ export class AccountManageController {
         resolve: {
           dataModel: () => {
             return {
-              type: 'warning',
+              type: type,
               headerText: this.translate('MODULES.SWITCHES.DIALOG.HEADER'),
               contentText: content,
             };

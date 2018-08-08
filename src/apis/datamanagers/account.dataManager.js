@@ -25,6 +25,18 @@ export class AccountDataManager {
     return defer.promise;
   }
 
+  createUser(jsonData) {
+    let defer = this.di.$q.defer();
+
+    this.di.$http.post(this.di.appService.getUserAccountUrl(), jsonData)
+      .then((res) => {
+        defer.resolve(res);
+      }, (res) => {
+        defer.reject(res);
+      });
+    return defer.promise;
+  }
+
   deleteUser(username) {
     let defer = this.di.$q.defer();
 

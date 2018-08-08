@@ -7,8 +7,7 @@ import {Corner} from '@material/menu';
 export class mdlMenu {
   static getDI () {
     return [
-      '$rootScope',
-      '_'
+      '$rootScope'
     ];
   }
 
