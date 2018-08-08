@@ -69,29 +69,33 @@ export class CreateUserAccountController {
     };
 
     this.scope.save = (event) =>{
+      let invalid = false;
       if (this.scope.userModel.userForm.$invalid) {
         return;
       }
       if (!this.scope.userModel.user_name) {
         this.scope.userModel.userNameHelper.validation = 'true';
-        return;
+        invalid = true;
       }
       else {
         this.scope.userModel.userNameHelper.validation = 'false';
       }
       if (!this.scope.userModel.password) {
         this.scope.userModel.passwordHelper.validation = 'true';
-        return;
+        invalid = true;
       }
       else {
         this.scope.userModel.passwordHelper.validation = 'false';
       }
       if (!this.scope.userModel.group.admingroup && !this.scope.userModel.group.guestgroup) {
         this.scope.userModel.groupHelper.validation = 'true';
-        return;
+        invalid = true;
       }
       else {
         this.scope.userModel.groupHelper.validation = 'false';
+      }
+      if (invalid) {
+        return;
       }
       if (this.scope.userModel.group.admingroup) {
         this.scope.userModel.groups.push('admingroup');

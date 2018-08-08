@@ -48,22 +48,26 @@ export class LoginController {
     this.scope.showBrowserMsg = false;
 
     this.scope.login = (event) =>{
+      let invalid = false;
       if (this.scope.loginForm.$invalid) {
         return;
       }
       if (!this.scope.loginModel.username) {
         this.scope.loginModel.nameHelper.validation = 'true';
-        return;
+        invalid = true;
       }
       else {
         this.scope.loginModel.nameHelper.validation = 'false';
       }
       if (!this.scope.loginModel.password) {
         this.scope.loginModel.passwordHelper.validation = 'true';
-        return;
+        invalid = true;
       }
       else {
         this.scope.loginModel.passwordHelper.validation = 'false';
+      }
+      if (invalid) {
+        return;
       }
       this.scope.loginModel.errorMessage = null;
       this.scope.showBrowserMsg = false;

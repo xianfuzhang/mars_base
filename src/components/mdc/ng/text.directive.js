@@ -53,13 +53,11 @@ export class mdlText {
 
     function changeValidationState() {
       //告警信息当invalid才会显示
-      if (scope.helper.validation) {
+      if (scope.helper.validation === 'true') {
         angular.element(element.children()[0]).addClass('mdc-text-field--invalid');
-        helperElement.addClass('mdc-text-field-helper-text--validation-msg');
       }
       else {
         angular.element(element.children()[0]).removeClass('mdc-text-field--invalid');
-        helperElement.removeClass('mdc-text-field-helper-text--validation-msg');
       }
     }
     if (scope.helper) {
@@ -70,8 +68,11 @@ export class mdlText {
       element.find('input').attr('aria-describedby', scope.helpId);
 
       //说明信息会一直显示
-      if (scope.helper.persistent) {
+      if (scope.helper.persistent === 'true') {
         helperElement.addClass('mdc-text-field-helper-text--persistent');
+      }
+      if (scope.helper.validation) {
+        helperElement.addClass('mdc-text-field-helper-text--validation-msg');
       }
       changeValidationState();
     }
@@ -101,7 +102,7 @@ export class mdlText {
     }
 
     unSubscribes.push(scope.$watch('value',(newValue)=>{
-      if(scope.value === ''){
+      if(!scope.value){
         scope.blur();
       } else {
         scope.focus();
