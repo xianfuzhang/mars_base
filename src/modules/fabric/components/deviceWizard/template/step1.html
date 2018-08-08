@@ -2,18 +2,20 @@
     <div class="stepForm__input">
         <div class="stepForm__input__label">Name<span class="stepForm__input__required">*</span></div>
         <input class="stepForm__input__text" name="name" type="text" ng-model="switch.name" ng-required="true"/>
+        <span class="stepForm__input__error" ng-show="wizardForm.name.$invalid">必填项</span>
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">Mac Address</div>
         <!--<mdl-select ng-model="mac_address" name="mac_address"-->
         <!--display-label="{ options: [{label: '男1', value: '0'}, {label: '男2', value: '1'}]}">-->
         <!--</mdl-select>-->
-        <input class="stepForm__input__text" list="mac_addresses_datalist" ng-model="switch.mac_address" ng-pattern="mac_regex"/>
+        <input class="stepForm__input__text" name="mac" list="mac_addresses_datalist" ng-model="switch.mac_address" ng-pattern="mac_regex"/>
         <datalist id="mac_addresses_datalist">
             <option ng-value="mac" ng-repeat="mac in mac_addresses"/>
         </datalist>
+        <span class="stepForm__input__error" ng-show="wizardForm.mac.$invalid">Mac地址无效</span>
         <div class="stepForm__input__annotaions">
-            Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future. When a switch with the entered MAC is discovered, this configuration will automatically be applied to it.
+            Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future.
         </div>
     </div>
     <div class="stepForm__input">
@@ -21,6 +23,8 @@
         <input class="stepForm__input__text-prefix" name="managementAddress" type="text" ng-model="switch.managementAddress" ng-required="true" ng-pattern="ip_regex"/>
         <span class="stepForm__input__separator">&nbsp;:&nbsp;</span>
         <input class="stepForm__input__text-postfix" name="port" type="number" ng-model="switch.port" ng-required="true" min="0" max="65535"/>
+        <span class="stepForm__input__error" ng-show="wizardForm.managementAddress.$invalid">IP地址无效</span>
+        <span class="stepForm__input__error" ng-show="wizardForm.port.$invalid">端口无效</span>
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">Rack Id</div>
@@ -32,6 +36,7 @@
         <datalist id="protocals-datalist">
             <option ng-value="protocol" ng-repeat="protocol in protocols"/>
         </datalist>
+        <span class="stepForm__input__error" ng-show="wizardForm.protocol.$invalid">必填项</span>
     </div>
 
     <div class="stepForm__input" ng-show="switch.protocol == 'SNMP'">
@@ -47,6 +52,7 @@
         <mdl-switch ng-model="switch.admin_status" name="status"
                     display-label="{on: 'Down', off: 'Up', id: 'status'}">
         </mdl-switch>
+        <span class="stepForm__input__error" ng-show="wizardForm.status.$invalid">必填项</span>
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label" style="text-decoration: underline">Fabric Role</div>
@@ -62,7 +68,7 @@
     </div>
     <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">
         <div class="stepForm__input__label">Leaf Group</div>
-        <input class="stepForm__input__text" list="leaf_group_datalist" placeholder="Please enter or select the leaf group" ng-model="switch.leaf_group""/>
+        <input class="stepForm__input__text" list="leaf_group_datalist" placeholder="Please enter or select the leaf group" ng-model="switch.leaf_group"/>
         <datalist id="leaf_group_datalist">
             <option ng-value="group" ng-repeat="group in leaf_groups"/>
         </datalist>

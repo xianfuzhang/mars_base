@@ -189,6 +189,11 @@
   @include element(input) {
     margin: 10px 0 20px;
     
+    @include element(error) {
+      font-size: 12px;
+      color: red;
+    }
+    
     @include element(label) {
       font-size: 16px;
       /*text-decoration:underline;*/
