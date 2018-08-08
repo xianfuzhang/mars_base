@@ -12,7 +12,9 @@ let config = {
   
   endpointsNumber: 5,
   
-  statisticUpdateIntervalSeconds: 15
+  statisticUpdateIntervalSeconds: 15,
+  
+  flowNumber: 10,
 };
 
 module.exports = config;
