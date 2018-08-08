@@ -95,14 +95,14 @@ module.exports = function (config) {
           ]
         },
         {
-          test: /\.(jpg|svg|png)$/,
+          test: /\.(jpg|svg|png|woff|woff2|eot|ttf)$/,
           exclude: /node_modules/,
           use: [
             {
               loader: 'file-loader'
             }
           ]
-        },
+        }
       ]
     }
   };
