@@ -6,6 +6,7 @@ var express = require('express'),
   endPointController = require('./controllers/endpoint'),
   statisticController = require('./controllers/statistic'),
   flowController = require('./controllers/flow'),
+  alertController = require('./controllers/alert'),
   useraccountController = require('./controllers/useraccount'),
   app = express(),
   //expressSession = require('express-session'),
@@ -36,6 +37,7 @@ app.use('/onos/v1', endPointController);
 app.use('/onos/v1/statistics', statisticController);
 app.use('/onos/v1/useraccount/v1', useraccountController);
 app.use('/onos/v1/flows', flowController);
+app.use('/onos/v1/alert', alertController);
 
 // set port
 app.set('port', (process.env.PORT || 4001));
