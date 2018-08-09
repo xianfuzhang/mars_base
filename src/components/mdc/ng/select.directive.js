@@ -1,8 +1,7 @@
 export class mdlSelect {
   static getDI() {
     return [
-      '$compile',
-      '$timeout'
+      '$compile'
     ];
   }
 
@@ -19,8 +18,7 @@ export class mdlSelect {
       displayLabel: '=',
       helper: '=',
       disable: '=',
-      ngChange: '&',
-      onInit:'&'
+      ngChange: '&'
     }
     this.link = (...args) => this._link.apply(this, args);
   }
@@ -56,12 +54,6 @@ export class mdlSelect {
       scope.ngChange = scope.ngChange || angular.noop;
       scope.ngChange({'$value': scope.value});
     };
-
-    this.di.$timeout(function () {
-      if(scope.onInit){
-        scope.onInit();
-      }
-    })
   }
 }
 
