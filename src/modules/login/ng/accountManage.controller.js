@@ -7,6 +7,7 @@ export class AccountManageController {
       '$q',
       '$uibModal',
       'accountService',
+      'notificationService',
       'accountDataManager',
       'tableProviderFactory',
       'modalManager'
@@ -51,11 +52,11 @@ export class AccountManageController {
               this.scope.accountModel.api.queryUpdate();
             }, (res) => {
               this.di.$log.info(res);
-              this.di.$log.debug('delete user account dialog cancel');
-              this.confirmDialog('notification', res.data)
-                .then(() => {
-
-                });
+              this.scope.alert = {
+                type: 'warning',
+                msg: res.data
+              }
+              this.di.notificationService.render(this.scope);
             });
         }
       });
