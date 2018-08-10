@@ -15,6 +15,7 @@ import 'dashboard';
 import 'fabric';
 import 'logical';
 import 'configuration';
+import 'alert';
 
 import 'mdc';
 import 'mdlHeader';
@@ -50,6 +51,7 @@ angular
     'fabric',
     'logical',
     'configuration',
+    'alert',
     'mdc',
     'mdlHeader',
     'mdlTable',
@@ -126,6 +128,14 @@ angular
       when('/configuration', {
         template: require('./modules/configuration/template/configuration.html'),
         controller: 'ConfigurationController'
+      }).
+      when('/alert', {
+        template: require('./modules/alert/template/alert.html'),
+        controller: 'AlertController'
+      }).
+      when('/healthycheck', {
+        template: require('./modules/alert/template/healthycheck.html'),
+        controller: 'HealthyCheckController'
       }).
       when('/login', {
         template: require('./modules/login/template/login.html'),

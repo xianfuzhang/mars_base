@@ -41,6 +41,13 @@ export class appService {
             ]
           },
           {
+            'group':'Alert',
+            'items':[
+              {'label': 'Alert', 'url': '#!/alert'},
+              {'label': 'Healthy Check', 'url': '#!/healthy_check'}
+            ]
+          },
+          {
             'group':'Config',
             'items':[
               {'label': 'Configuration', 'url': '#!/configuration'},
@@ -146,7 +153,7 @@ export class appService {
   }
 
   getConfigurationUrl(subjectClass, subject){
-    let url = this.getZoneEndpoint() + 'onos/v1/configuration'
+    let url = this.getZoneEndpoint() + 'onos/v1/configuration';
     if(subjectClass){
       url = url + '/' + subjectClass;
       if(subject){
@@ -155,6 +162,24 @@ export class appService {
     }
     return url;
   }
+
+  getAlertHistoryUrl(){
+    return this.getZoneEndpoint() + 'alert/history/list';
+  }
+
+  getAlertHistoryRemoveUrl(uuid){
+    return this.getZoneEndpoint() + 'alert/history/uuid/' + uuid ;
+  }
+
+  getAlertHistoriesSelectedRemoveUrl(){
+    return this.getZoneEndpoint() + 'alert/history/select';
+
+  }
+
+  getAlertHistoriesRemoveAllUrl(){
+    return this.getZoneEndpoint() + 'alert/history/all';
+  }
+
 }
 
 appService.$inject = appService.getDI();

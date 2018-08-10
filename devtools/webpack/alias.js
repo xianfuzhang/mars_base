@@ -18,6 +18,7 @@ class AliasProvider {
       'fabric': path.resolve('src/modules/fabric/'),
       'logical': path.resolve('src/modules/logical/'),
       'configuration': path.resolve('src/modules/configuration/'),
+      'alert': path.resolve('src/modules/alert/'),
     };
   }
 
