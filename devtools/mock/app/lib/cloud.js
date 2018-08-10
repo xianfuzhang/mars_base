@@ -70,7 +70,7 @@ let cloudLib = {
         portMinNum,
         leaf_group,
         chance.company(),
-        'Device_' + chance.name(),
+        'Device_' + chance.word(),
         chance.ip(),
         chance.port(),
         chance.pickone(config.deviceProtocols));
@@ -193,7 +193,7 @@ let cloudLib = {
         chance.guid(),
         chance.pickone(config.alertNames),
         chance.pickone(config.alertLevels),
-        'Alert_' + chance.name(),
+        'Alert_' + chance.word(),
         chance.sentence(),
         chance.pickone(config.alertGroups)
       );
