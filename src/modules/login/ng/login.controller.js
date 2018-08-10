@@ -26,6 +26,11 @@ export class LoginController {
         type: 'text',
         required: true
       },
+      nameHelper: {
+        id: 'nameHelper',
+        validation: 'false',
+        content: this.translate('MODULE.LOGIN.FORM.USERNAME.HELP')
+      },
       password: '',
       passwordDisplayLabel: {
         id: 'password',
@@ -33,12 +38,35 @@ export class LoginController {
         type: 'password',
         required: true
       },
+      passwordHelper: {
+        id: 'passwordHelper',
+        validation: 'false',
+        content: this.translate('MODULE.LOGIN.FORM.PASSWORD.HELP')
+      },
       errorMessage: null
     };
     this.scope.showBrowserMsg = false;
 
     this.scope.login = (event) =>{
-      if (!this.scope.loginForm.$valid) {
+      let invalid = false;
+      if (this.scope.loginForm.$invalid) {
+        return;
+      }
+      if (!this.scope.loginModel.username) {
+        this.scope.loginModel.nameHelper.validation = 'true';
+        invalid = true;
+      }
+      else {
+        this.scope.loginModel.nameHelper.validation = 'false';
+      }
+      if (!this.scope.loginModel.password) {
+        this.scope.loginModel.passwordHelper.validation = 'true';
+        invalid = true;
+      }
+      else {
+        this.scope.loginModel.passwordHelper.validation = 'false';
+      }
+      if (invalid) {
         return;
       }
       this.scope.loginModel.errorMessage = null;

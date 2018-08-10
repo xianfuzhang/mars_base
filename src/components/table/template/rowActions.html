@@ -3,14 +3,17 @@
   <button id="menu-button" class="material-icons mdc-icon-button mdc-icon-button__normal"
           ng-class="{'mdc-icon-button__small': size === 'small'}"
           ng-click="_menuToggle($event)" aria-hidden="true">menu</button>
-  <div class="mdc-menu table-row-action-list">
-    <ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">
-      <li class="mdc-list-item mdc-list-item__normal-size" role="menuitem" tabindex="0"
-          ng-class="{'mdc-list-item__small-size': size === 'small'}"
-          ng-click="clickItem(item, $event)"
-          ng-repeat="item in actions track by $index">
-        {{item.label}}
-      </li>
-    </ul>
-  </div>
 </div>
+
+<script type="text/ng-template" id="table-row-action-list.html">
+  <div class="mdc-menu table-row-action-list">
+   <ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">
+     <li class="mdc-list-item mdc-list-item__normal-size" role="menuitem" tabindex="0"
+         ng-class="{'mdc-list-item__small-size': size === 'small'}"
+         ng-click="clickItem(item, $event)"
+         ng-repeat="item in actions track by $index">
+       {{item.label}}
+     </li>
+   </ul>
+ </div>
+</script>

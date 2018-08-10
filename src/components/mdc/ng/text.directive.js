@@ -51,6 +51,15 @@ export class mdlText {
       element.find('input').attr('required', true);
     }
 
+    function changeValidationState() {
+      //告警信息当invalid才会显示
+      if (scope.helper.validation === 'true') {
+        angular.element(element.children()[0]).addClass('mdc-text-field--invalid');
+      }
+      else {
+        angular.element(element.children()[0]).removeClass('mdc-text-field--invalid');
+      }
+    }
     if (scope.helper) {
       helperElement = this.di.$compile('<p id="{{helpId}}" aria-hidden="true"' +
         'class="mdc-text-field-helper-text" >{{content}} </p>')(scope);
@@ -59,18 +68,13 @@ export class mdlText {
       element.find('input').attr('aria-describedby', scope.helpId);
 
       //说明信息会一直显示
-      if (scope.helper.persistent) {
+      if (scope.helper.persistent === 'true') {
         helperElement.addClass('mdc-text-field-helper-text--persistent');
       }
-      //告警信息当invalid才会显示
       if (scope.helper.validation) {
-        angular.element(element.children()[0]).addClass('mdc-text-field--invalid');
         helperElement.addClass('mdc-text-field-helper-text--validation-msg');
       }
-      else {
-        angular.element(element.children()[0]).removeClass('mdc-text-field--invalid');
-        helperElement.removeClass('mdc-text-field-helper-text--validation-msg');
-      }
+      changeValidationState();
     }
 
     scope.focus = () => {
@@ -98,7 +102,7 @@ export class mdlText {
     }
 
     unSubscribes.push(scope.$watch('value',(newValue)=>{
-      if(scope.value === ''){
+      if(!scope.value){
         scope.blur();
       } else {
         scope.focus();
@@ -112,6 +116,12 @@ export class mdlText {
         enable();
       }
     }));
+    
+     scope.$watch('helper.validation', (newVal, oldVal) => {
+      if (scope.helper) {
+        changeValidationState();
+      }
+    }, true);
 
     scope.$on('$destroy', () => {
       this.di._.each(unSubscribes, (unSubscribe) => {

@@ -4,11 +4,13 @@
       <div class="login-fields__logo"></div>
       <div class="login-fields__username login-fields__element">
         <mdl-text ng-model="loginModel.username"
+                  helper="loginModel.nameHelper"
                   display-label="loginModel.userNameDisplayLabel">
         </mdl-text>
       </div>
       <div class="login-fields__password login-fields__element">
         <mdl-text ng-model="loginModel.password"
+                  helper="loginModel.passwordHelper"
                   display-label="loginModel.passwordDisplayLabel">
         </mdl-text>
       </div>
