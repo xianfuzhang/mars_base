@@ -169,7 +169,9 @@ export class FlowEstablishController {
     };
 
     this.di.$scope.cancel = function(formData){
-      return true;
+      return new Promise((resolve, reject) => {
+        resolve({valid: true, errorMessage: ''});
+      });
     };
 
     let formatInstructionValue = () => {
