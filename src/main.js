@@ -98,8 +98,10 @@ angular
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
-        template: require('./modules/dashboard/template/dashboard'),
-        controller: 'DashboardController'
+        // template: require('./modules/dashboard/template/dashboard'),
+        // controller: 'DashboardController'
+        template: require('./modules/fabric/template/fabric_summary.html'),
+        controller: 'fabricSummaryController'
       })
       .when('/devices', {
         template: require('./modules/fabric/template/device.html'),

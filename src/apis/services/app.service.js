@@ -25,32 +25,32 @@ export class appService {
           {
             'group':'Fabric',
             'items':[
-              {'label': 'Summary', 'url': '#!/fabric_summary'},
-              {'label': 'Devices', 'url': '#!/devices'},
+              {'label': 'Summary', 'url': '/fabric_summary'},
+              {'label': 'Devices', 'url': '/devices'},
              // {'label': 'Interface Group', 'url': '/interface_group'},
-              {'label': 'Statistics', 'url': '/statistics'},
-              {'label': 'Storm Profile', 'url': '/storm_control'},
+             //  {'label': 'Statistics', 'url': '/statistics'},
+             //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
-          {
-            'group':'Logical',
-            'items':[
-              {'label': 'Tenant', 'url': '/tenant'},
-              {'label': 'Segment', 'url': '/segment'},
-              {'label': 'Interface Group', 'url': '/interface_group'},
-            ]
-          },
+          // {
+          //   'group':'Logical',
+          //   'items':[
+          //     {'label': 'Tenant', 'url': '/tenant'},
+          //     {'label': 'Segment', 'url': '/segment'},
+          //     {'label': 'Interface Group', 'url': '/interface_group'},
+          //   ]
+          // },
           {
             'group':'Alert',
             'items':[
-              {'label': 'Alert', 'url': '#!/alert'},
-              {'label': 'Healthy Check', 'url': '#!/healthy_check'}
+              {'label': 'Alert', 'url': '/alert'},
+              // {'label': 'Healthy Check', 'url': '#!/healthy_check'}
             ]
           },
           {
             'group':'Config',
             'items':[
-              {'label': 'Configuration', 'url': '#!/configuration'},
+              {'label': 'Configuration', 'url': '/configuration'},
             ]
           }
         ],

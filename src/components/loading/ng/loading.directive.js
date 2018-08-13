@@ -101,7 +101,7 @@ export class Loading {
       }));
 
 
-      this.di.$scope.$on('$destroy', () => {
+      scope.$on('$destroy', () => {
         this.di._.each(unSubscribes, (unSubscribe) => {
           unSubscribe();
         });

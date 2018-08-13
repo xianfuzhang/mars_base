@@ -78,41 +78,99 @@ export class FabricSummaryController {
     let portGroups = {};
     this.devices = [];
 
-    this.di.deviceDataManager.getPorts().then((res)=>{
-      if(res.data.ports){
-        portGroups = this.di._.groupBy(res.data.ports , "element");
-      }
-      portsDefer.resolve();
-      // let dstSwt = distributeSwitches(res.data.ports);
-      // this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
-      // this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
-      // this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
-      // this.di.$scope.fabricModel.isShowTopo = true;
-    });
+    let init = () => {
 
-    promises.push(portsDefer.promise);
+      this.di.$rootScope.$emit('start_loading');
 
-
-    this.di.deviceDataManager.getDevices().then((res)=>{
-      if(res.data.devices){
-        this.devices = res.data.devices;
-
-      }
-      devicesDefer.resolve();
-    });
-    promises.push(devicesDefer.promise);
-
-    Promise.all(promises).then(()=>{
-      this.di._.forEach(this.devices, (device)=>{
-        device.ports = portGroups[device.id];
+      this.di.deviceDataManager.getPorts().then((res)=>{
+        if(res.data.ports){
+          portGroups = this.di._.groupBy(res.data.ports , "element");
+        }
+        portsDefer.resolve();
+        // let dstSwt = distributeSwitches(res.data.ports);
+        // this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
+        // this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
+        // this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
+        // this.di.$scope.fabricModel.isShowTopo = true;
       });
-      let dstSwt = distributeSwitches(this.devices);
-      this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
-      this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
-      this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
-      this.di.$scope.fabricModel.isShowTopo = true;
-      this.di.$scope.$apply();
-    });
+
+      promises.push(portsDefer.promise);
+
+
+      this.di.deviceDataManager.getDevices().then((res)=>{
+        if(res.data.devices){
+          this.devices = res.data.devices;
+
+        }
+        devicesDefer.resolve();
+      });
+      promises.push(devicesDefer.promise);
+
+      Promise.all(promises).then(()=>{
+
+        let DI = this.di;
+        let devices = this.devices;
+        //TODO 这里为了给台湾同事测试效果增加timeout
+        setTimeout(function () {
+          DI.$rootScope.$emit('stop_loading');
+          DI._.forEach(devices, (device)=>{
+            device.ports = portGroups[device.id];
+          });
+          let dstSwt = distributeSwitches(devices);
+          DI.$scope.fabricModel['deSpines'] = dstSwt.spine;
+          DI.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
+          DI.$scope.fabricModel['deOthers'] = dstSwt.other;
+          DI.$scope.fabricModel.isShowTopo = true;
+          DI.$scope.$apply();
+        },1000)
+
+        // this.di._.forEach(this.devices, (device)=>{
+        //   device.ports = portGroups[device.id];
+        // });
+        // let dstSwt = distributeSwitches(this.devices);
+        // this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
+        // this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
+        // this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
+        // this.di.$scope.fabricModel.isShowTopo = true;
+        // this.di.$scope.$apply();
+      });
+    };
+
+    // this.di.deviceDataManager.getPorts().then((res)=>{
+    //   if(res.data.ports){
+    //     portGroups = this.di._.groupBy(res.data.ports , "element");
+    //   }
+    //   portsDefer.resolve();
+    //   // let dstSwt = distributeSwitches(res.data.ports);
+    //   // this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
+    //   // this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
+    //   // this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
+    //   // this.di.$scope.fabricModel.isShowTopo = true;
+    // });
+    //
+    // promises.push(portsDefer.promise);
+    //
+    //
+    // this.di.deviceDataManager.getDevices().then((res)=>{
+    //   if(res.data.devices){
+    //     this.devices = res.data.devices;
+    //
+    //   }
+    //   devicesDefer.resolve();
+    // });
+    // promises.push(devicesDefer.promise);
+    //
+    // Promise.all(promises).then(()=>{
+    //   this.di._.forEach(this.devices, (device)=>{
+    //     device.ports = portGroups[device.id];
+    //   });
+    //   let dstSwt = distributeSwitches(this.devices);
+    //   this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
+    //   this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
+    //   this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
+    //   this.di.$scope.fabricModel.isShowTopo = true;
+    //   this.di.$scope.$apply();
+    // });
 
     this.di.deviceDataManager.getLinks().then((res)=>{
       this.di.$scope.fabricModel['deLinks'] = res.data.links;
@@ -132,6 +190,7 @@ export class FabricSummaryController {
     });
 
     this.di.$scope.topoRefresh = (event) => {
+      init();
 
     };
     this.di.$scope.tooltipSetting = (event) => {
@@ -247,8 +306,23 @@ export class FabricSummaryController {
       rightDom.empty();
       leftDom.empty();
       this.di._.forEach(summaryList, (item, key)=>{
+        if(item.label === 'id'){
+          return
+        }
         leftDom.append('<div>'+ item.label +'</div>');
-        rightDom.append('<div>'+ item.value +'</div>');
+        if(item.value === "false" || item.value === false){
+          rightDom.append('<div><svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"> <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="red"/> <path d="M0 0h24v24H0z" fill="none"/> </svg></div>');
+        } else if(item.value === "true" || item.value === true) {
+          rightDom.append("<div><svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'><path fill='none' d='M0 0h18v18H0z'/><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z' fill='green'/></svg></div>");
+        } else {
+          if(item.label === 'name'){
+            rightDom.append('<div><a class="summary__link" href="/#!/devices/'+ this.di.$scope.fabricModel.showSwitchId +'">'+ item.value +'</a></div>');
+          } else{
+            rightDom.append('<div>'+ item.value +'</div>');
+          }
+
+
+        }
       });
     };
 
@@ -325,6 +399,9 @@ export class FabricSummaryController {
       });
       // this.di.$log.info('FabricSummaryController', 'Destroyed');
     });
+
+
+    init();
 
   }
 
