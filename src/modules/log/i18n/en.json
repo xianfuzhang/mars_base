@@ -1,0 +1,9 @@
+{
+  "MODULE.LOG.PAGE.TITLE": "System Log",
+  "MODULE.LOG.COLUMN.TIME": "Created Time",
+  "MODULE.LOG.COLUMN.TYPE": "Type",
+  "MODULE.LOG.COLUMN.LEVEL": "Level",
+  "MODULE.LOG.COLUMN.OPERATION": "Operation",
+  "MODULE.LOG.COLUMN.CREATOR": "Creator",
+  "MODULE.LOG.COLUMN.CONTENT": "Content"
+}

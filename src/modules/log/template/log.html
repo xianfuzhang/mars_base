@@ -1,0 +1,27 @@
+<div class="flex_entirety">
+    <mar-header></mar-header>
+    <div class="flex_entirety__body">
+
+        <content-header big-title="{{pageTitle}}">
+            <a href="/">Mars Cloud</a>
+            <span>•</span>
+            <span>Log</span>
+        </content-header>
+        <section class="app-body" >
+            <div class="main__content">
+                <mdl-tabs ng-model="tabSelected" options="tabs"
+                          class-list="main__content__device-tabs"
+                          on-select="onTabChange($value)">
+                </mdl-tabs>
+                <section class="tab-content">
+                    <mdl-table actions-show="logModel.actionsShow"
+                               actions="logModel.rowActions"
+                               provider="logModel.logProvider" api-ready="onDeviceAPIReady($api)">
+                    </mdl-table>
+                </section>
+            </div>
+        </section>
+        <!--<section class="column__1__3 +hasscroll +hasborder">
+        </section>-->
+    </div>
+</div>
