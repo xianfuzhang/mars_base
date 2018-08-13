@@ -17,7 +17,7 @@
           <div class="device-detail__item">
             <label class="device-detail__item-label"
                    ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.IP'|translate"></label>
-            <span class="device-detail__item-value">{{detailValue.annotations.ipaddress}}</span>
+            <span class="device-detail__item-value">{{detailValue.annotations.ipaddress||detailValue.annotations.managementAddress}}</span>
           </div>
           <div class="device-detail__item">
             <label class="device-detail__item-label"
