@@ -50,6 +50,9 @@
   height: 30px;
   padding: 0;
 }
+.mdc-form-field .mdc-checkbox-label{
+  user-select: none;
+}
 .mdc-checkbox.mdc-checkbox__normal{
   padding: 0;
 }

@@ -18,8 +18,8 @@ export class appService {
 
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
-      GUEST_GROUP: 'guest',
-      ADMIN_GROUP: 'admin',
+      GUEST_GROUP: 'guestgroup',
+      ADMIN_GROUP: 'admingroup',
       HEADER: {
         'menu':[
           {
@@ -52,13 +52,19 @@ export class appService {
             'items':[
               {'label': 'Configuration', 'url': '/configuration'},
             ]
+          },
+          {
+            'group': 'Account',
+            'items': [
+              {'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manage'}
+            ]
           }
         ],
         'user':{
           //username暂时是用来显示的，后期是通过接口返回。或者是通过session
-          'UserName':'Nocsys',
+          //'UserName':'Nocsys',
           'items':[
-            {'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manage'},
+            //{'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manage'},
             {'label': this.translate('MODULE.LOGIN.USERACCOUNT.LOGOUT'), 'url': '/logout'}
           ]
         }
