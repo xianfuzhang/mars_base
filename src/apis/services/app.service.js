@@ -25,31 +25,31 @@ export class appService {
           {
             'group':'Fabric',
             'items':[
-              {'label': 'Summary', 'url': '#!/fabric_summary'},
-              {'label': 'Devices', 'url': '#!/devices'},
+              {'label':  this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary'},
+              {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices'},
              // {'label': 'Interface Group', 'url': '/interface_group'},
-              {'label': 'Statistics', 'url': '/statistics'},
-              {'label': 'Storm Profile', 'url': '/storm_control'},
+             // {'label': 'Statistics', 'url': '/statistics'},
+             // {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
-          {
+          /*{
             'group':'Logical',
             'items':[
               {'label': 'Tenant', 'url': '/tenant'},
               {'label': 'Segment', 'url': '/segment'},
               {'label': 'Interface Group', 'url': '/interface_group'},
             ]
-          },
+          },*/
           {
             'group':'Config',
             'items':[
-              {'label': 'Configuration', 'url': '#!/configuration'},
+              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration'},
             ]
           },
           {
             'group': 'Account',
             'items': [
-              {'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manage'}
+              {'label': this.translate('MODULE.HEADER.ACCOUNT.ACCOUNT_MANAGER'), 'url': '/account_manage'}
             ]
           }
         ],
@@ -58,7 +58,7 @@ export class appService {
           //'UserName':'Nocsys',
           'items':[
             //{'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manage'},
-            {'label': this.translate('MODULE.LOGIN.USERACCOUNT.LOGOUT'), 'url': '/logout'}
+            {'label': this.translate('MODULE.HEADER.ACCOUNT.LOGOUT'), 'url': '/logout'}
           ]
         }
       }

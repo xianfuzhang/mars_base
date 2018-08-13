@@ -303,7 +303,7 @@ export class DeviceController {
           let obj = {};
           obj.id = item.id;
           obj.switch_name = item.annotations.name;
-          obj.ip = item.annotations.ipaddress;
+          obj.ip = item.annotations.ipaddress || item.annotations.managementAddress;
           obj.mac = item.mac;
           obj.type = item.type;
           obj.role = item.role;

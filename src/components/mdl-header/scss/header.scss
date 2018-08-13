@@ -8,7 +8,7 @@
 
 .navbar-inner{
   background: #263238;
-  height: 56px;
+  height: 47px;
 }
 .navbar-flex-between{
   width: 100%;
@@ -66,7 +66,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  height: 100%;
+  line-height: 47px;
 }
 .navbar-inner__account-user{
   margin: 0 4px;
@@ -93,7 +93,7 @@
   color: rgba(255,255,255,0.87);
   font-size: 16px;
   font-weight: 300;
-  line-height: 56px;
+  line-height: 47px;
   padding: 0 24px;
   text-transform: uppercase;
   transition: all .3s;
