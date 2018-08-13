@@ -79,7 +79,7 @@ export class FlowEstablishController {
         disLabels.push({'label': item, 'value':item});
       });
 
-      return {'options': disLabels, 'hint':'Type'};
+      return {'options': disLabels};
     };
 
     this.di.$scope.instructionSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.instructionSchema));

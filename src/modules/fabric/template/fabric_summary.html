@@ -1,6 +1,7 @@
 
 <div class="summary flex_entirety">
-    <mar-header></mar-header>
+    <!--<mar-header></mar-header>-->
+    <mdl-header></mdl-header>
 
     <div class="summary__body flex_entirety__body" >
         <content-header big-title="Fabric">
@@ -122,7 +123,7 @@
         </div>
     </div>
 
-    <footer></footer>
+    <!--<footer></footer>-->
     <mdl-menu data="fabricModel.switchContextMenu.data" is-show="fabricModel.switchContextMenu.isShow" location="fabricModel.switchContextMenu.location"></mdl-menu>
     <!--<div id="toolbar" class="mdc-menu" tabindex="-1" style="position: fixed;z-index: 100;">-->
         <!--<ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">-->
@@ -145,4 +146,5 @@
     <ng-controller ng-controller="flowEstablishController">
         <wizard steps="steps" title="title" show-wizard="showWizard" next-step="" before-cancel="cancel(formData)" before-submit="submit(formData)"></wizard>
     </ng-controller>
+    <loading></loading>
 </div>

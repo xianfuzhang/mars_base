@@ -1,5 +1,6 @@
 <div class="configuration flex_entirety">
-  <mar-header></mar-header>
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
   <div class="configuration__body flex_entirety__body">
 
     <content-header big-title="Configuration">
@@ -10,7 +11,7 @@
     <div class="configuration__body__content flex_entirety__body__body" style="display:flex;flex-direction: row">
 
       <div style="flex-shrink: 1;flex-grow:1;background-color: white;margin:8px;height:90%;width:90%">
-        <pre contenteditable="true" style="height:90%;overflow: scroll;border:1px solid lightgray">{{configurationModel.configurationShow}}</pre>
+        <pre contenteditable="{{configurationModel.isEditable}}" style="height:90%;overflow: scroll;border:1px solid lightgray">{{configurationModel.configurationShow}}</pre>
       </div>
 
       <div style="display:flex;flex-direction: column;height:100%;flex-basis: 500px;flex-shrink: 0;flex-grow: 0;padding-left:16px;margin:8px;">
