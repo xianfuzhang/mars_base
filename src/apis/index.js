@@ -6,6 +6,8 @@ import {ConfigurationDataManager} from './datamanagers/configuration.dataManager
 import {appService} from './services/app.service';
 import {switchService} from './services/switch.service';
 import {notificationService} from './services/notification.service';
+import {LogService} from './services/log.service';
+import {LogDataManager} from './datamanagers/log.dataManager'
 
 export default angular
   .module('apis', [])
@@ -17,4 +19,6 @@ export default angular
   .service('loginDataManager', LoginDataManager)
   .service('accountDataManager', AccountDataManager)
   .service('configurationDataManager', ConfigurationDataManager)
+  .service('logService', LogService)
+  .service('logDataManager', LogDataManager)
   .name;
