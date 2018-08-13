@@ -41,18 +41,21 @@ let cloudLib = {
     if(leafNum < 1) return;
     
     _.times(config.deviceNumber, (index) => {
-      let type, portMinNum, leaf_group = "";
+      let type, portMinNum, name, leaf_group = "";
       if(index < spineNum) {
         type = config.deviceTypes[0];
         portMinNum = leafNum;
+        name = 'Spine_' + chance.word();
       } else if(index < spineNum + unknownNum) {
         type = config.deviceTypes[1];
         portMinNum = 12;
+        name = 'Unknown_' + chance.word();
       } else {
         type =  config.deviceTypes[2];
         portMinNum = spineNum;
         leaf_group = `${(index - spineNum - unknownNum) % Math.ceil(leafNum / 2 + 1)}`;
         leafGroups.push(leaf_group);
+        name = 'Leaf_' + chance.word();
       }
       let device = new Device(
         chance.guid(),
@@ -70,7 +73,7 @@ let cloudLib = {
         portMinNum,
         leaf_group,
         chance.company(),
-        'Device_' + chance.word(),
+        name,
         chance.ip(),
         chance.port(),
         chance.pickone(config.deviceProtocols));
