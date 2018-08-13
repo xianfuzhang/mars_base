@@ -14,7 +14,7 @@ router.post('/', function (req, res) {
   let username = req.body.user_name;
   let exists = checkUsernameExists(username);
   if (exists) {
-    res.status(400).json('username has exists');
+    res.status(401).json('username has exists');
   }
   else {
     cloudLib.addUserAccount(req.body);

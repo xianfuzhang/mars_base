@@ -8,6 +8,7 @@ var express = require('express'),
   flowController = require('./controllers/flow'),
   alertController = require('./controllers/alert'),
   useraccountController = require('./controllers/useraccount'),
+  loginController = require('./controllers/login'),
   app = express(),
   //expressSession = require('express-session'),
   cookieParser = require('cookie-parser');
@@ -38,6 +39,7 @@ app.use('/onos/v1/statistics', statisticController);
 app.use('/onos/v1/useraccount/v1', useraccountController);
 app.use('/onos/v1/flows', flowController);
 app.use('/onos/v1/alert', alertController);
+app.use('/onos/v1', loginController);
 
 // set port
 app.set('port', (process.env.PORT || 4001));
