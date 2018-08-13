@@ -18,28 +18,37 @@ export class headerController{
     });
     this.scope = this.di.$scope;
     this.CONST_ADMIN_GROUP = this.di.appService.CONST.ADMIN_GROUP;
-    this.scope.groups = this.di.appService.CONST.HEADER;
+    this.scope.groups = angular.copy(this.di.appService.CONST.HEADER);
     this.scope.username = null;
     this.scope.location = (url, event) => {
       event && event.stopPropagation();
       if (url === '/logout') {
-        this.di.loginDataManager.doLogout();
+        this.di.loginDataManager.doLogout().then(() => {
+          this.di.$location.path(url);
+        });
       }
-      this.di.$location.path(url);
+      else {
+        this.di.$location.path(url);
+      }
     };
 
     this.init();
   }
 
   init() {
-    this.di.$log.info('mdl-header controller func');
     this.scope.userConfig = angular.copy(this.scope.groups.user.items);
     let useraccount = this.di.$cookies.get('useraccount');
-    if (!useraccount || JSON.parse(useraccount).groups.indexOf(this.CONST_ADMIN_GROUP) === -1) {
-      this.scope.userConfig.splice(0, 1);
+    if (!useraccount) {
+      this.di.$location.path('/login');
+      return;
     }
-    if (useraccount) {
-      this.scope.username = JSON.parse(useraccount).user_name;
+    this.scope.username = JSON.parse(useraccount).user_name;
+    if (JSON.parse(useraccount).groups.indexOf(this.CONST_ADMIN_GROUP) === -1) {
+      //this.scope.userConfig.splice(0, 1);
+      let index = this.di._.findIndex(this.scope.groups.menu, (menu)=> {
+        return menu.group === 'Account';
+      });
+      this.scope.groups.menu.splice(index, 1);
     }
   }
 }
