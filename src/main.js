@@ -95,10 +95,10 @@ angular
   }])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
-      .when('/', {
+     /* .when('/', {
         template: require('./modules/dashboard/template/dashboard'),
         controller: 'DashboardController'
-      })
+      })*/
       .when('/devices', {
         template: require('./modules/fabric/template/device.html'),
         controller: 'deviceController'
@@ -136,7 +136,7 @@ angular
           return '/login';
         }
       })
-      .otherwise({ redirectTo: '/' });
+      .otherwise({ redirectTo: '/fabric_summary' });
 
     /*$locationProvider.html5Mode({
       enabled: true,
