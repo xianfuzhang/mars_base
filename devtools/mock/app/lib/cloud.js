@@ -271,7 +271,7 @@ let cloudLib = {
       let port = device.ports.find(port => port.port == portId);
       
       if(port) {
-        port.isEnabled == reqParams.enabled;
+        port.isEnabled = reqParams.enabled === undefined ? port.isEnabled : reqParams.enabled;
         return true;
       }
       
