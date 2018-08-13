@@ -268,7 +268,7 @@ let cloudLib = {
     let device = cloudModel.devices.find(device => device.id === deviceId);
     
     if (device) {
-      let port = device.ports.find(port => port == portId);
+      let port = device.ports.find(port => port.port == portId);
       
       if(port) {
         port.isEnabled == reqParams.enabled;
