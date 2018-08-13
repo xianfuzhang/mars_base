@@ -80,6 +80,16 @@ export class FabricSummaryController {
 
     let init = () => {
 
+
+      this.di.localStoreService.getStorage(fabric_storage_ns).get('resize_db').then((data)=>{
+        if(data){
+          this.di.$scope.resize_right_plus = data['resize_right_plus'];
+          this.di.$scope.resize_right = data['resize_right'];
+          this.di.$scope.resize_length = data['resize_length'];
+        }
+      });
+
+
       this.di.$rootScope.$emit('start_loading');
 
       this.di.deviceDataManager.getPorts().then((res)=>{
@@ -229,12 +239,23 @@ export class FabricSummaryController {
     let mousemove = (event) => {
       var x = event.pageX;
       let win_width = this.di.$window.innerWidth;
+      //控制拖拉的最大最小宽度
       if(win_width - x > 500){
+        return;
+      }
+      if(win_width - x < 300){
         return;
       }
       this.di.$scope.resize_right_plus = {'right': (win_width - x + 5) +'px','width': (x - 5)+ 'px'};
       this.di.$scope.resize_right = {'right':+ (win_width - x) +'px'};
       this.di.$scope.resize_length = {'width':+ (win_width - x) +'px'};
+
+      let data = {
+        'resize_right_plus':angular.copy(this.di.$scope.resize_right_plus),
+        'resize_right':angular.copy(this.di.$scope.resize_right),
+        'resize_length':angular.copy(this.di.$scope.resize_length),
+      }
+      this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("resize_db", data);
       this.di.$scope.$apply();
 
       // if(this.resizeTimeout){
@@ -316,7 +337,7 @@ export class FabricSummaryController {
           rightDom.append("<div><svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'><path fill='none' d='M0 0h18v18H0z'/><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z' fill='green'/></svg></div>");
         } else {
           if(item.label === 'name'){
-            rightDom.append('<div><a class="summary__link" href="/#!/devices/'+ this.di.$scope.fabricModel.showSwitchId +'">'+ item.value +'</a></div>');
+            rightDom.append('<div><a class="summary__link" target="_blank" href="/#!/devices/'+ this.di.$scope.fabricModel.showSwitchId +'">'+ item.value +'</a></div>');
           } else{
             rightDom.append('<div>'+ item.value +'</div>');
           }
@@ -390,7 +411,7 @@ export class FabricSummaryController {
 
     }));
 
-    
+
 
 
     this.di.$scope.$on('$destroy', () => {
@@ -401,7 +422,10 @@ export class FabricSummaryController {
     });
 
 
-    init();
+    setTimeout(function () {
+      init();
+    });
+
 
   }
 
