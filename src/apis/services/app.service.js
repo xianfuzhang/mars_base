@@ -47,6 +47,12 @@ export class appService {
             ]
           },
           {
+            'group': 'Log',
+            'items': [
+              {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '#!/log'}
+            ]
+          },
+          {
             'group': 'Account',
             'items': [
               {'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manage'}
