@@ -108,14 +108,13 @@ export class AlertController {
         //     count: 100
         //   });
         // });
-
+        //TODO 暂无实际数据，临时测试使用
         setTimeout(function () {
-          console.log('=-=-=-=-=-' +  'settimeout');
           defer.resolve({
             data: m.getTestAlertHistory()['history'],
             count: 19
           });
-        },1000);
+        },400);
 
         return defer.promise;
       },
