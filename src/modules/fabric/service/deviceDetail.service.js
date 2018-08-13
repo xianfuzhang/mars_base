@@ -31,11 +31,11 @@ export class DeviceDetailService {
         'value': 'statistic',
         'type': 'statistic'
       },
-      {
+      /*{
         'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.FLOW'),
         'value': 'flow',
         'type': 'flow'
-      }
+      }*/
     ];
   }
 
@@ -165,11 +165,11 @@ export class DeviceDetailService {
 
   getDevicePortsStatisticsSchema() {
     return [
-      {
+     /* {
         'label': this.translate('MODULES.SWITCH.DETAIL.STATISTICS.COLUMN.DEVICE'),
         'field': 'device',
         'layout': {'visible': true, 'sortable': true}
-      },
+      },*/
       {
         'label': this.translate('MODULES.SWITCH.DETAIL.STATISTICS.COLUMN.PORT'),
         'field': 'port',

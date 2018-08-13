@@ -28,7 +28,7 @@ export class LoginDataManager {
     }
     this.di.$http.post(this.di.appService.getLoginUrl(), {'username': username, 'password': password})
       .then((result) => {
-        this.di.$cookies.put('useraccount', JSON.stringify(result));
+        this.di.$cookies.put('useraccount', JSON.stringify(result.data));
         defer.resolve(result);
       }, (result) => {
         defer.reject(result);
