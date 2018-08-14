@@ -80,6 +80,7 @@ export class DeviceDetailService {
       {
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
         'field': 'link_status',
+        'type': 'icon',
         'layout': {'visible': true, 'sortable': true}
       },
       {
@@ -138,6 +139,7 @@ export class DeviceDetailService {
       {
         'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.STATUS'),
         'field': 'state',
+        'type': 'icon',
         'layout': {'visible': true, 'sortable': true}
       },
       {

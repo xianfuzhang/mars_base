@@ -16,6 +16,7 @@ import 'fabric';
 import 'logical';
 import 'configuration';
 import 'alert';
+import 'log';
 
 import 'mdc';
 import 'mdlHeader';
@@ -52,6 +53,7 @@ angular
     'logical',
     'configuration',
     'alert',
+    'log',
     'mdc',
     'mdlHeader',
     'mdlTable',
@@ -147,8 +149,12 @@ angular
         redirectTo: function(param, path, search){
           return '/login';
         }
+      }).
+      when('/log', {
+        template: require('./modules/log/template/log.html'),
+        controller: 'logController'
       })
-      .otherwise({ redirectTo: '/' });
+      .otherwise({ redirectTo: '/fabric_summary' });
 
     /*$locationProvider.html5Mode({
       enabled: true,

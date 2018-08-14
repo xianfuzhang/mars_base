@@ -43,20 +43,26 @@ export class appService {
           {
             'group':'Alert',
             'items':[
-              {'label': 'Alert', 'url': '/alert'},
-              // {'label': 'Healthy Check', 'url': '#!/healthy_check'}
+              
             ]
           },
           {
             'group':'Config',
             'items':[
-              {'label': 'Configuration', 'url': '/configuration'},
+              // {'label': 'Configuration', 'url': '/configuration'},
+              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration'},
+            ]
+          },
+          {
+            'group': 'Log',
+            'items': [
+              {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '#!/log'}
             ]
           },
           {
             'group': 'Account',
             'items': [
-              {'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manage'}
+              {'label': this.translate('MODULE.HEADER.ACCOUNT.ACCOUNT_MANAGER'), 'url': '/account_manage'}
             ]
           }
         ],
@@ -65,7 +71,7 @@ export class appService {
           //'UserName':'Nocsys',
           'items':[
             //{'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manage'},
-            {'label': this.translate('MODULE.LOGIN.USERACCOUNT.LOGOUT'), 'url': '/logout'}
+            {'label': this.translate('MODULE.HEADER.ACCOUNT.LOGOUT'), 'url': '/logout'}
           ]
         }
       }
