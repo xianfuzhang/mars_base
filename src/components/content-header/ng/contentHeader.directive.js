@@ -40,7 +40,6 @@ export class contentHeader {
 
       unSubscribes.push(scope.$watch('bigTitle', (newValue) => {
         scope.contentHeaderModel.title = newValue;
-        scope.$apply();
       }));
 
       scope.$on('$destroy', () => {

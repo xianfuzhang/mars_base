@@ -26,7 +26,7 @@ export class appService {
             'group':'Fabric',
             'items':[
               {'label': 'Summary', 'url': '/fabric_summary'},
-              {'label': 'Devices', 'url': '/devices'},
+              {'label': 'Switches', 'url': '/devices'},
              // {'label': 'Interface Group', 'url': '/interface_group'},
              //  {'label': 'Statistics', 'url': '/statistics'},
              //  {'label': 'Storm Profile', 'url': '/storm_control'},
