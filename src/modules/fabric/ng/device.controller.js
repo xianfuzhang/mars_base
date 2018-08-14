@@ -308,7 +308,7 @@ export class DeviceController {
           obj.type = item.type;
           obj.role = item.role;
           obj.rack_id = item.rack_id;
-          obj.available = item.available;
+          obj.available = item.available === true ? 'available' : 'unavailable';
           //obj.ports = item.ports.length;
           obj.chassisId = item.chassisId;
           obj.protocol = item.annotations.protocol;

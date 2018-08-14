@@ -32,14 +32,14 @@ export class appService {
              //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
-          // {
-          //   'group':'Logical',
-          //   'items':[
-          //     {'label': 'Tenant', 'url': '/tenant'},
-          //     {'label': 'Segment', 'url': '/segment'},
-          //     {'label': 'Interface Group', 'url': '/interface_group'},
-          //   ]
-          // },
+          /*{
+            'group':'Logical',
+            'items':[
+              {'label': 'Tenant', 'url': '/tenant'},
+              {'label': 'Segment', 'url': '/segment'},
+              {'label': 'Interface Group', 'url': '/interface_group'},
+            ]
+          },*/
           {
             'group':'Alert',
             'items':[
@@ -50,7 +50,6 @@ export class appService {
           {
             'group':'Config',
             'items':[
-              // {'label': 'Configuration', 'url': '/configuration'},
               {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration'},
             ]
           },

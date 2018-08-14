@@ -101,10 +101,16 @@ table{
   background-size: 64px auto;
 }
 .mdl-table-body__row td .status_icon.up, .mdl-table-body__row td .status_icon.active{
-  background-position: -48px 0px;
+  background-position: -48px 0;
 }
 .mdl-table-body__row td .status_icon.down, .mdl-table-body__row td .status_icon.inactive{
-  background-position: -48px -16px;
+  background-position: -48px -15px;
+}
+.mdl-table-body__row td .status_icon.available{
+  background-position: 0 0;
+}
+.mdl-table-body__row td .status_icon.unavailable{
+  background-position: 0 -15px;
 }
 .mdl-table-header__row th {
   text-align: center;
