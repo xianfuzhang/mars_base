@@ -114,6 +114,7 @@ table{
 }
 .mdl-table-header__row th {
   text-align: center;
+  user-select: none;
   /*opacity: 0.6;*/
 }
 .mdl-table-header__row th.sortable {
@@ -125,13 +126,18 @@ table{
   opacity: 0.8;
 }
 .mdl-table-header__row th.sortable .icon-sort{
-  vertical-align: middle;
+  /*vertical-align: middle;
   background-color: transparent;
   background-size: 12px 16px;
   background-image: url('../images/arrow.svg');
-  background-repeat: no-repeat;
+  background-repeat: no-repeat;*/
+  position: relative;
+  display: inline-block;
+  width: 10px;
+  height: 20px;
+  vertical-align: middle;
 }
-.mdl-table-header__row th.sortable .icon-sort-desc{
+/*.mdl-table-header__row th.sortable .icon-sort-desc{
   background-image: url("../images/arrow_down.svg");
   background-repeat: no-repeat;
   background-color: transparent;
@@ -144,6 +150,30 @@ table{
   background-color: transparent;
   background-size: 12px 16px;
   vertical-align: middle;
+}*/
+.mdl-table-header__row th.sortable .icon-sort-asc{
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-bottom-color: #777777;
+  position: absolute;
+  top: -4px;
+}
+.mdl-table-header__row th.sortable .icon-sort-desc{
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-color: #777777;
+  position: absolute;
+  top: 10px;
+}
+.mdl-table-header__row th.sort-asc .icon-sort-asc{
+  border-bottom-color: #000000;
+}
+.mdl-table-header__row th.sort-desc .icon-sort-desc{
+  border-top-color: #000000;
 }
 .mdl-table-field__content{
   border-radius: 4px;
