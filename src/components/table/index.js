@@ -16,6 +16,7 @@ import {textRenderer} from './service/renderers/textRenderer';
 import {textRendererFactory} from './service/renderers/textRendererFactory';
 import {ClickableTextRenderer} from './service/renderers/clickableTextRenderer';
 import {ClickableTextRendererFactory} from './service/renderers/clickableTextRendererFactory';
+import {iconRenderer} from './service/renderers/iconRenderer';
 import {tableConsts} from './service/table.consts';
 
 import {rowCheckbox} from './ng/rowCheckbox.directive';
@@ -44,4 +45,5 @@ export default angular
   .service('textRendererFactory', textRendererFactory)
   .service('clickableTextRenderer', ClickableTextRenderer)
   .service('clickableTextRendererFactory', ClickableTextRendererFactory)
+  .service('iconRendererFactory', iconRenderer)
   .name;

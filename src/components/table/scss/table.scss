@@ -92,6 +92,20 @@ table{
   text-decoration: underline;
   color: #47B8E0;
 }
+.mdl-table-body__row td .status_icon{
+  margin: 0 auto;
+  height: 16px;
+  width: 16px;
+  background-image: url('../images/status-icons.png');
+  background-repeat: no-repeat;
+  background-size: 64px auto;
+}
+.mdl-table-body__row td .status_icon.up{
+  background-position: -48px 0px;
+}
+.mdl-table-body__row td .status_icon.down{
+  background-position: -48px -16px;
+}
 .mdl-table-header__row th {
   text-align: center;
   /*opacity: 0.6;*/
