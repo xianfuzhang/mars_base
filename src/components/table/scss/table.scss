@@ -100,10 +100,10 @@ table{
   background-repeat: no-repeat;
   background-size: 64px auto;
 }
-.mdl-table-body__row td .status_icon.up{
+.mdl-table-body__row td .status_icon.up, .mdl-table-body__row td .status_icon.active{
   background-position: -48px 0px;
 }
-.mdl-table-body__row td .status_icon.down{
+.mdl-table-body__row td .status_icon.down, .mdl-table-body__row td .status_icon.inactive{
   background-position: -48px -16px;
 }
 .mdl-table-header__row th {

@@ -139,6 +139,7 @@ export class DeviceDetailService {
       {
         'label': this.translate('MODULES.SWITCHES.LINK.COLUMN.STATUS'),
         'field': 'state',
+        'type': 'icon',
         'layout': {'visible': true, 'sortable': true}
       },
       {
