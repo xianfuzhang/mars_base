@@ -1,9 +1,11 @@
 <!--<div class="loading mdc-drawer mdc-drawer&#45;&#45;temporary mdc-typography ng-isolate-scope mdc-drawer&#45;&#45;open">-->
-<div class="loading">
-    <canvas width="60" height="60" id="loading" style="background-color: white;
-    text-align: center;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);"></canvas>
+<div ng-show="isLoading" style="display: block;position: fixed;width:100%;height:100%;z-index:10000;background-color: #fffefd;opacity:0.8">
+    <div class="loading">
+        <canvas width="60" height="60" id="loading" style="background-color: white;
+        text-align: center;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);"></canvas>
+    </div>
 </div>

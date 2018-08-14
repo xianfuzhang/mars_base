@@ -120,7 +120,7 @@
 
 .ng-table td{
     text-align: center;
-    overflow:scroll;
+    /*overflow:scroll;*/
     padding:0px 1px;
     white-space: nowrap;
 }

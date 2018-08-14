@@ -25,31 +25,39 @@ export class appService {
           {
             'group':'Fabric',
             'items':[
-              {'label':  this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary'},
+              {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary'},
               {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices'},
              // {'label': 'Interface Group', 'url': '/interface_group'},
-             // {'label': 'Statistics', 'url': '/statistics'},
-             // {'label': 'Storm Profile', 'url': '/storm_control'},
+             //  {'label': 'Statistics', 'url': '/statistics'},
+             //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
-          /*{
-            'group':'Logical',
+          // {
+          //   'group':'Logical',
+          //   'items':[
+          //     {'label': 'Tenant', 'url': '/tenant'},
+          //     {'label': 'Segment', 'url': '/segment'},
+          //     {'label': 'Interface Group', 'url': '/interface_group'},
+          //   ]
+          // },
+          {
+            'group':'Alert',
             'items':[
-              {'label': 'Tenant', 'url': '/tenant'},
-              {'label': 'Segment', 'url': '/segment'},
-              {'label': 'Interface Group', 'url': '/interface_group'},
+              // {'label': 'Alert', 'url': '/alert'},
+              {'label': this.translate('MODULE.HEADER.CONFIG.ALERT'), 'url': '/alert'},
             ]
-          },*/
+          },
           {
             'group':'Config',
             'items':[
+              // {'label': 'Configuration', 'url': '/configuration'},
               {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration'},
             ]
           },
           {
             'group': 'Log',
             'items': [
-              {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '#!/log'}
+              {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '/log'}
             ]
           },
           {
@@ -70,7 +78,6 @@ export class appService {
       }
     };
   }
-
 
   getZoneEndpoint() {
     let endpoint;
@@ -158,7 +165,7 @@ export class appService {
   }
 
   getConfigurationUrl(subjectClass, subject){
-    let url = this.getZoneEndpoint() + 'onos/v1/configuration'
+    let url = this.getZoneEndpoint() + 'onos/v1/configuration';
     if(subjectClass){
       url = url + '/' + subjectClass;
       if(subject){
@@ -167,6 +174,24 @@ export class appService {
     }
     return url;
   }
+
+  getAlertHistoryUrl(){
+    return this.getZoneEndpoint() + 'alert/history/list';
+  }
+
+  getAlertHistoryRemoveUrl(uuid){
+    return this.getZoneEndpoint() + 'alert/history/uuid/' + uuid ;
+  }
+
+  getAlertHistoriesSelectedRemoveUrl(){
+    return this.getZoneEndpoint() + 'alert/history/select';
+
+  }
+
+  getAlertHistoriesRemoveAllUrl(){
+    return this.getZoneEndpoint() + 'alert/history/all';
+  }
+
 }
 
 appService.$inject = appService.getDI();

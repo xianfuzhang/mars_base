@@ -410,6 +410,11 @@ export class Topo {
           // console.log("click");
           // console.log(this.deviceId);
           if(evt.button == 2){// 右键
+
+            if(scope.topoSetting.show_tooltips){
+              DI.$rootScope.$emit("hide_tooltip");
+            }
+
             unSelectNode();
             DI.$rootScope.$emit("switch_opt",{event: evt, id: this.deviceId});
           }
@@ -478,6 +483,12 @@ export class Topo {
         let showArray= [];
 
         showDeviceLinks(deviceId);
+
+
+        if(scope.topoSetting.show_tooltips){
+          DI.$rootScope.$emit("hide_tooltip");
+        }
+
 
         if(deviceType == DeviceType.spine){
           let sw = DI._.find(scope.spines,{'id':deviceId});

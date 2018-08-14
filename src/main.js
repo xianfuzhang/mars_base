@@ -15,6 +15,7 @@ import 'dashboard';
 import 'fabric';
 import 'logical';
 import 'configuration';
+import 'alert';
 import 'log';
 
 import 'mdc';
@@ -51,6 +52,7 @@ angular
     'fabric',
     'logical',
     'configuration',
+    'alert',
     'log',
     'mdc',
     'mdlHeader',
@@ -97,10 +99,12 @@ angular
   }])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
-     /* .when('/', {
-        template: require('./modules/dashboard/template/dashboard'),
-        controller: 'DashboardController'
-      })*/
+      .when('/', {
+        // template: require('./modules/dashboard/template/dashboard'),
+        // controller: 'DashboardController'
+        template: require('./modules/fabric/template/fabric_summary.html'),
+        controller: 'fabricSummaryController'
+      })
       .when('/devices', {
         template: require('./modules/fabric/template/device.html'),
         controller: 'deviceController'
@@ -128,6 +132,14 @@ angular
       when('/configuration', {
         template: require('./modules/configuration/template/configuration.html'),
         controller: 'ConfigurationController'
+      }).
+      when('/alert', {
+        template: require('./modules/alert/template/alert.html'),
+        controller: 'AlertController'
+      }).
+      when('/healthycheck', {
+        template: require('./modules/alert/template/healthycheck.html'),
+        controller: 'HealthyCheckController'
       }).
       when('/login', {
         template: require('./modules/login/template/login.html'),

@@ -6,7 +6,8 @@ import {MDCTemporaryDrawer} from '@material/drawer';
 export class contentHeader {
   static getDI () {
     return [
-      '$rootScope'
+      '$rootScope',
+      '_'
     ];
   }
 
@@ -31,9 +32,21 @@ export class contentHeader {
   _link (scope, element) {
     (function init(){
 
+      let unSubscribes = [];
+
       scope.contentHeaderModel = {
         'title': scope.bigTitle
       };
+
+      unSubscribes.push(scope.$watch('bigTitle', (newValue) => {
+        scope.contentHeaderModel.title = newValue;
+      }));
+
+      scope.$on('$destroy', () => {
+        this.di._.each(unSubscribes, (unsubscribe) => {
+          unsubscribe();
+        });
+      });
 
     }).call(this);
   }

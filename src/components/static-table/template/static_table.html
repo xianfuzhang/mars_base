@@ -18,7 +18,7 @@
                     </svg>
 
                 </span>
-                {{row[col.field]}}
+                {{col.showState?'':row[col.field]}}
                 <div ng-if="col.field=='opt'" >
                     <button class="mdc-icon-button material-icons static_table__table__opt_button" >menu</button>
                 </div>

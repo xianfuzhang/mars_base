@@ -165,9 +165,6 @@ export class ConfigurationController {
 
     unSubscribers.push(this.di.$scope.$watch('configurationModel.currentSubject',(newSubject)=>{
       getConfiguration();
-      // if(newSubject !== ''){
-      //   getConfiguration()
-      // }
     }));
 
     this.di.$scope.$on('$destroy', () => {

@@ -40,6 +40,9 @@ export class DeviceDetailController {
       if (res) {
         this.scope.detailDisplay = true;
         this.scope.detailValue = res.data;
+
+        this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE') + "(" + this.scope.detailValue.annotations.name + ")";
+
       }
       this.init();
     });

@@ -30,6 +30,7 @@ export class Loading {
   _link (scope, element) {
     (function init () {
 
+      let unSubscribes = [];
       this.imageCount = 11;
       let loading = element.find('canvas')[0];
 
@@ -51,10 +52,14 @@ export class Loading {
       //   clearInterval(interval);
       //   index = 0;
       // }
+
+
+      scope.isLoading = false;
       function  start() {
+        scope.isLoading = true;
         let arrIndex = index %11;
         let sleepTime = intervalTime;
-        if(arrIndex == 0){
+        if(arrIndex === 0 && index !== 0){
           sleepTime = 600;
         }
         interval = setTimeout(function () {
@@ -68,13 +73,39 @@ export class Loading {
         }, sleepTime);
       }
 
-
-      start();
-
-      setTimeout(function () {
+      function stop() {
         clearTimeout(interval);
-      },5000)
+        scope.isLoading = false;
+        index = 0;
+        let context = loading.getContext('2d');
+        context.clearRect(0, 0, 60, 60);
 
+        context.drawImage(imgs[0],0,0,60,60);
+        context.restore();
+
+      }
+
+      //
+      // start();
+      //
+      // setTimeout(function () {
+      //   clearTimeout(interval);
+      // },5000)
+
+      unSubscribes.push(this.di.$rootScope.$on('start_loading',()=>{
+        start();
+      }));
+
+      unSubscribes.push(this.di.$rootScope.$on('stop_loading',()=>{
+        stop();
+      }));
+
+
+      scope.$on('$destroy', () => {
+        this.di._.each(unSubscribes, (unSubscribe) => {
+          unSubscribe();
+        });
+      });
 
     }).call(this);
   }

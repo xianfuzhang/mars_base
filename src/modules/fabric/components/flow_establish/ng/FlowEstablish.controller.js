@@ -79,7 +79,7 @@ export class FlowEstablishController {
         disLabels.push({'label': item, 'value':item});
       });
 
-      return {'options': disLabels, 'hint':'Type'};
+      return {'options': disLabels};
     };
 
     this.di.$scope.instructionSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.instructionSchema));
@@ -169,7 +169,9 @@ export class FlowEstablishController {
     };
 
     this.di.$scope.cancel = function(formData){
-      return true;
+      return new Promise((resolve, reject) => {
+        resolve({valid: true, errorMessage: ''});
+      });
     };
 
     let formatInstructionValue = () => {

@@ -54,6 +54,7 @@ module.exports = function (config) {
     devtool: 'inline-source-map',
     devServer: {
       contentBase: "./public",
+      host:'0.0.0.0',
       publicPath: assetHost,
       inline: true,
       port: port,

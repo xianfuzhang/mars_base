@@ -1,0 +1,20 @@
+<div class="configuration flex_entirety">
+  <mar-header></mar-header>
+  <div class="configuration__body flex_entirety__body">
+
+    <content-header big-title="Configuration">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>Configuration</span>
+    </content-header>
+    <div class="configuration__body__content flex_entirety__body__body" style="display:flex;flex-direction: row">
+      <mdl-table actions-show="alertModel.actionsShow"
+                 actions="alertModel.rowActions"
+                 row-click="onTableRowClick($event)"
+                 row-select-action="onTableRowSelectAction($event)"
+                 provider="alertModel.deviceProvider" api-ready="onAlertAPIReady($api)"
+                 on-remove="batchRemove($value)">
+      </mdl-table>
+    </div>
+  </div>
+</div>

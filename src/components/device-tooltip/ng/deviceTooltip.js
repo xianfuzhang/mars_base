@@ -39,7 +39,14 @@ export class deviceTooltip {
 
         this.di._.forEach(showArray, (item, key)=>{
           leftDom.append('<div>'+ item.label +'</div>');
-          rightDom.append('<div>'+ item.value +'</div>');
+          // rightDom.append('<div>'+ item.value +'</div>');
+          if(item.value === "false" || item.value === false){
+            rightDom.append('<div><svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"> <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="red"/> <path d="M0 0h24v24H0z" fill="none"/> </svg></div>');
+          } else if(item.value === "true" || item.value === true) {
+            rightDom.append("<div><svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'><path fill='none' d='M0 0h24v24H0z'/><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z' fill='green'/></svg></div>");
+          } else {
+            rightDom.append('<div>'+ item.value +'</div>');
+          }
         });
         // angular.element(element).find('.deviceTooltip__content__body--left').append()
 
