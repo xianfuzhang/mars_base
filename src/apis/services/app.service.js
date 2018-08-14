@@ -25,8 +25,8 @@ export class appService {
           {
             'group':'Fabric',
             'items':[
-              {'label': 'Summary', 'url': '/fabric_summary'},
-              {'label': 'Switches', 'url': '/devices'},
+              {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary'},
+              {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices'},
              // {'label': 'Interface Group', 'url': '/interface_group'},
              //  {'label': 'Statistics', 'url': '/statistics'},
              //  {'label': 'Storm Profile', 'url': '/storm_control'},
@@ -43,7 +43,8 @@ export class appService {
           {
             'group':'Alert',
             'items':[
-              
+              // {'label': 'Alert', 'url': '/alert'},
+              {'label': this.translate('MODULE.HEADER.CONFIG.ALERT'), 'url': '/alert'},
             ]
           },
           {
@@ -56,7 +57,7 @@ export class appService {
           {
             'group': 'Log',
             'items': [
-              {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '#!/log'}
+              {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '/log'}
             ]
           },
           {
@@ -77,7 +78,6 @@ export class appService {
       }
     };
   }
-
 
   getZoneEndpoint() {
     let endpoint;
