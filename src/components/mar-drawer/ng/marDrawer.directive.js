@@ -51,7 +51,6 @@ export class marDrawer{
         });
         // element[0].removeEventListener('click', clickEvent);
         // angular.element(this.di.$window).unbind('resize', onResize);
-        this.di.$log.info(this.__NAME__, 'Destroyed');
       });
 
     }).call(this);
