@@ -19,11 +19,11 @@ module.exports = function (config) {
   return {
     mode: "development",
     entry: {
-      app: [path.resolve('src/component_dev.js')],
+      app: [path.resolve('src/test/component_dev.js')],
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: "./src/index.html",
+        template: "./src/test/index.html",
         filename: "./index.html",
         inject: 'head'
       }),
@@ -91,14 +91,14 @@ module.exports = function (config) {
           ]
         },
         {
-          test: /\.(jpg|svg|png)$/,
+          test: /\.(jpg|svg|png|woff|woff2|eot|ttf)$/,
           exclude: /node_modules/,
           use: [
             {
               loader: 'file-loader'
             }
           ]
-        },
+        }
       ]
     }
   };
