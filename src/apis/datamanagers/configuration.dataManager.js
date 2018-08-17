@@ -58,6 +58,49 @@ export class ConfigurationDataManager{
     );
     return defer.promise;
   }
+
+
+  getConfigurationFileList(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getConfigurationFileListUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'fileList': []}});
+      }
+    );
+    return defer.promise;
+  }
+
+  getConfigurationByFileName(filename){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getConfigurationFileUrl(filename)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'config': []}});
+      }
+    );
+    return defer.promise;
+  }
+
+  setConfigurationFile(filename, config){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getConfigurationFileUrl(filename), config).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+
+  }
+
+
 }
 
 ConfigurationDataManager.$inject = ConfigurationDataManager.getDI();
