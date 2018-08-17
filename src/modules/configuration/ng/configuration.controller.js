@@ -145,8 +145,9 @@ export class ConfigurationController {
     };
 
     unSubscribers.push(this.di.$scope.$watch('configurationModel.currentSubjectClass',(newClass)=>{
-      console.log('$watch currentSubjectClass ==');
-      console.log(newClass);
+      // console.log('$watch currentSubjectClass ==');
+      // console.log(newClass);
+      //TODO 目前使用测试数据
       if(test_subjectDict[newClass]){
         scope.configurationModel.subjectList = test_subjectDict[newClass];
       } else {
