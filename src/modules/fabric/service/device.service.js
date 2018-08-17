@@ -94,6 +94,7 @@ export class DeviceService {
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.AVAILABLE'),
         'field': 'available',
+        'type': 'icon',
         'layout': {'visible': true, 'sortable': true}
       },
       /*{

@@ -82,12 +82,16 @@
                  }"
             >
               <span ng-bind="$col.def.label"></span>
-              <span ng-class="{
+              <div class="icon-sort">
+                <span class="icon-sort-desc"></span>
+                <span class="icon-sort-asc"></span>
+              </div>
+              <!--<span ng-class="{
                     'icon-sort': !(_getColumnSortMode($col) === tableModel.CONST_SORT_ASC
                       || _getColumnSortMode($col) === tableModel.CONST_SORT_DESC),
                     'icon-sort-asc': (_getColumnSortMode($col) === tableModel.CONST_SORT_ASC),
                     'icon-sort-desc': (_getColumnSortMode($col) === tableModel.CONST_SORT_DESC)
-                  }">&nbsp;&nbsp;&nbsp;</span>
+                  }">&nbsp;&nbsp;&nbsp;</span>-->
             </th>
           </tr>
           </thead>
