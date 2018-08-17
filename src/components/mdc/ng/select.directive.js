@@ -1,7 +1,8 @@
 export class mdlSelect {
   static getDI() {
     return [
-      '$compile'
+      '$compile',
+      '_'
     ];
   }
 
@@ -24,9 +25,11 @@ export class mdlSelect {
   }
 
   _link (scope, element, attrs, ngModel) {
+    let unSubscribes = [];
     if (scope.disable) {
-      angular.element(element.children()[0]).addClass('mdc-select--disabled');
-      element.find('select').attr('disabled', true);
+      // angular.element(element.children()[0]).addClass('mdc-select--disabled');
+      // element.find('select').attr('disabled', true);
+      disable();
     }
     scope.hint = scope.displayLabel && scope.displayLabel.hint;
     scope.options = scope.displayLabel && scope.displayLabel.options;
@@ -54,6 +57,31 @@ export class mdlSelect {
       scope.ngChange = scope.ngChange || angular.noop;
       scope.ngChange({'$value': scope.value});
     };
+
+    function disable(){
+      angular.element(element.children()[0]).addClass('mdc-select--disabled');
+      element.find('select').attr('disabled', true);
+    }
+
+    function enable(){
+      angular.element(element.children()[0]).removeClass('mdc-select--disabled');
+      element.find('select').attr('disabled', false);
+    }
+
+    unSubscribes.push(scope.$watch('disable',(newValue)=>{
+      console.log('=-=-=-==-');
+      if(newValue === true){
+        disable();
+      } else {
+        enable();
+      }
+    }));
+
+    scope.$on('$destroy', () => {
+      this.di._.each(unSubscribes, (unSubscribe) => {
+        unSubscribe();
+      });
+    });
   }
 }
 

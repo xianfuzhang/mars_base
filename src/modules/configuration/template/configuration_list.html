@@ -1,0 +1,53 @@
+<div class="configuration_list flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="configuration_list__body flex_entirety__body">
+
+    <content-header big-title="{{'MODULE.HEADER.CONFIG.CONFIGURATION_LIST' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.CONFIG.CONFIGURATION_LIST' | translate}}</span>
+    </content-header>
+    <div class="configuration_list__body__content flex_entirety__body__body" style="display:flex;flex-direction: row">
+
+      <div style="flex-shrink: 1;flex-grow:1;background-color: white;margin:8px;height:90%;width:90%">
+        <pre contenteditable="{{configurationListModel.isEditable}}" style="height:90%;overflow: scroll;border:1px solid lightgray">{{configurationListModel.configurationShow}}</pre>
+      </div>
+
+      <div style="display:flex;flex-direction: column;height:100%;flex-basis: 500px;flex-shrink: 0;flex-grow: 0;padding-left:16px;margin:8px;">
+
+        <div>
+          <mdl-select ng-model="configurationListModel.fileNameSelected"
+                      disable="configurationListModel.isEditable"
+                      display-label="fileNameSelectedDisLab">
+          </mdl-select>
+        </div>
+
+        <mdl-checkbox style="margin-left:-8px;margin-top: 16px;"
+                      ng-model="configurationListModel.isEditable"
+                      display-label="checkDisLab">
+        </mdl-checkbox>
+
+        <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="fileName" style="width:250px;margin-top:8px;">
+          <input type="text" id="tf-outlined" class="mdc-text-field__input" ng-model="configurationListModel.fileName">
+          <label for="tf-outlined" class="mdc-floating-label">{{'MODULES.CONFIGURATION.FILENAME' | translate}}</label>
+          <div class="mdc-notched-outline">
+            <svg>
+              <path class="mdc-notched-outline__path"/>
+            </svg>
+          </div>
+          <div class="mdc-notched-outline__idle"></div>
+        </div>
+
+        <div>
+          <button class="mdc-button mdc-button--raised" ng-click="addConfigFile()" ng-disabled="!configurationListModel.isEditable" id="updateConfigurationList" style="color:#ffffff;font-weight: 500;">
+            <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
+            {{'MODULES.CONFIGURATION.OPTION.ADD'|translate}}
+          </button>
+          <style></style>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

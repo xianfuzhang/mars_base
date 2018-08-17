@@ -133,6 +133,10 @@ angular
         template: require('./modules/configuration/template/configuration.html'),
         controller: 'ConfigurationController'
       }).
+      when('/configuration_list', {
+        template: require('./modules/configuration/template/configuration_list.html'),
+        controller: 'ConfigurationListController'
+      }).
       when('/alert', {
         template: require('./modules/alert/template/alert.html'),
         controller: 'AlertController'

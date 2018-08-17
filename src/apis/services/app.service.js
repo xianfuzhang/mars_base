@@ -51,6 +51,7 @@ export class appService {
             'group':'Config',
             'items':[
               {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration'},
+              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_LIST'), 'url': '/configuration_list'},
             ]
           },
           {
@@ -174,16 +175,24 @@ export class appService {
     return url;
   }
 
+  getConfigurationFileListUrl(){
+    return this.getZoneEndpoint() + 'onos/v1/network/configuration/files';
+  }
+
+  getConfigurationFileUrl(filename){
+    return this.getZoneEndpoint() + 'onos/v1/network/configuration/files/' + filename;
+  }
+
   getAlertHistoryUrl(){
-    return this.getZoneEndpoint() + 'alert/history/list';
+    return this.getZoneEndpoint() + 'onos/v1/alert/history/list';
   }
 
   getAlertHistoryRemoveUrl(uuid){
-    return this.getZoneEndpoint() + 'alert/history/uuid/' + uuid ;
+    return this.getZoneEndpoint() + 'onos/v1/alert/history/uuid/' + uuid ;
   }
 
   getAlertHistoriesSelectedRemoveUrl(){
-    return this.getZoneEndpoint() + 'alert/history/select';
+    return this.getZoneEndpoint() + 'onos/v1/alert/history/select';
 
   }
 
