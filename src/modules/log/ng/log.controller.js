@@ -70,7 +70,7 @@ export class LogController {
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.logDataManager.getLogs(params).then((res) => {
-          this.scope.entities = this.getEntities(res.logs);
+          this.scope.entities = this.getEntities(res.data.logs);
           defer.resolve({
             data: this.scope.entities,
             count: 4

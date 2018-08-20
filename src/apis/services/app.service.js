@@ -199,6 +199,10 @@ export class appService {
   getAlertHistoriesRemoveAllUrl(){
     return this.getZoneEndpoint() + 'alert/history/all';
   }
+  
+  getLogsUrl(){
+    return this.getZoneEndpoint() + 'onos/v1/logs/v1/controller';
+  }
 
 }
 

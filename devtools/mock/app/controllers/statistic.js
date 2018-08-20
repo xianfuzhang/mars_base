@@ -1,6 +1,9 @@
 const express = require('express'),
   router = express.Router(),
+  Chance = require('chance'),
   _ = require('lodash');
+
+const chance = new Chance();
 
 router.get('/ports', function (req, res) {
   let statistics = cloudModel.devices.map((device, index) => {
@@ -70,11 +73,26 @@ router.get('/ports/:deviceId/:port', function (req, res) {
   }
 });
 
-router.get('/system/devices', function (req, res) {
+router.get('/system/controller', function (req, res) {
   let statistics = [];
   
   cloudModel.devices.forEach((device) => {
-    statistics.push(device.statistic);
+    statistics.push({
+      ip: chance.ip(),
+      ...device.statistic
+    });
+  })
+  return res.json({statistics: statistics});
+})
+
+router.get('/system', function (req, res) {
+  let statistics = [];
+  
+  cloudModel.devices.forEach((device) => {
+    statistics.push({
+      device_id: device.id,
+      ...device.statistic
+    });
   })
   return res.json({statistics: statistics});
 });

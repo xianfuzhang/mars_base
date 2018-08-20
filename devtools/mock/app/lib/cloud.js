@@ -4,6 +4,7 @@ var Device = require('../models/device'),
     UserAccount = require('../models/useraccount'),
     Flow = require('../models/flow'),
     Alert = require('../models/alert'),
+    Log = require('../models/log'),
     config = require('../config'),
     Chance = require('chance'),
     _ = require('lodash');
@@ -17,6 +18,8 @@ global.cloudModel = {
   endpoints: [],
   flows: [],
   alerts: [],
+  logs: [],
+  controller: [],
   useraccounts: []
 };
 
@@ -203,6 +206,21 @@ let cloudLib = {
       
       cloudModel.alerts.push(alert);
     })
+    
+    // create logs
+    _.times(config.logNumber, () => {
+      let log = new Log(
+        chance.guid(),
+        chance.pickone(config.logCreators),
+        chance.pickone(config.logOpertations),
+        chance.pickone(config.logLevels),
+        chance.pickone(config.logTypes),
+        chance.sentence(),
+        (new Date()).toLocaleString()
+      );
+      
+      cloudModel.logs.push(log);
+    });
     
     updateStatistics();
   },
