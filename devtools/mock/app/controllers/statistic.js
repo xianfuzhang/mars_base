@@ -70,6 +70,15 @@ router.get('/ports/:deviceId/:port', function (req, res) {
   }
 });
 
+router.get('/system/devices', function (req, res) {
+  let statistics = [];
+  
+  cloudModel.devices.forEach((device) => {
+    statistics.push(device.statistic);
+  })
+  return res.json({statistics: statistics});
+});
+
 router.get('/system/device/:deviceId', function (req, res) {
   let devices = [];
   
