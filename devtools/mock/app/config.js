@@ -27,7 +27,8 @@ let config = {
   logTypes: ['INFO', 'WARNING'],
   logLevels: ['FelixStartLevel'],
   
-  
+  clusterNumber: 10,
+  clusterStatus: ['ACTIVE', 'INACTIVE', 'READY']
 };
 
 module.exports = config;

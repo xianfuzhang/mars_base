@@ -8,6 +8,7 @@ var express = require('express'),
   flowController = require('./controllers/flow'),
   alertController = require('./controllers/alert'),
   logController = require('./controllers/log'),
+  clusterController = require('./controllers/cluster'),
   useraccountController = require('./controllers/useraccount'),
   loginController = require('./controllers/login'),
   app = express(),
@@ -41,6 +42,7 @@ app.use('/onos/v1/useraccount/v1', useraccountController);
 app.use('/onos/v1/flows', flowController);
 app.use('/onos/v1/alert', alertController);
 app.use('/onos/v1/logs/v1', logController);
+app.use('/onos/v1/cluster', clusterController);
 app.use('/onos/v1', loginController);
 
 
