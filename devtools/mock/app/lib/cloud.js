@@ -5,6 +5,7 @@ var Device = require('../models/device'),
     Flow = require('../models/flow'),
     Alert = require('../models/alert'),
     Log = require('../models/log'),
+    Cluster = require('../models/cluster'),
     config = require('../config'),
     Chance = require('chance'),
     _ = require('lodash');
@@ -19,7 +20,7 @@ global.cloudModel = {
   flows: [],
   alerts: [],
   logs: [],
-  controller: [],
+  clusters: [],
   useraccounts: []
 };
 
@@ -187,7 +188,7 @@ let cloudLib = {
         chance.natural({min: 100, max: 100000}),
         chance.natural({min: 1000, max: 10000000}),
         "UNKNOWN",
-        (new Date()).getMilliseconds()
+        Date.now()
       );
       
       cloudModel.flows.push(flow);
@@ -209,6 +210,9 @@ let cloudLib = {
     
     // create logs
     _.times(config.logNumber, () => {
+      const date = new Date();
+      let created_time = date.toLocaleString() + ',' + date.getMilliseconds();
+      
       let log = new Log(
         chance.guid(),
         chance.pickone(config.logCreators),
@@ -216,10 +220,22 @@ let cloudLib = {
         chance.pickone(config.logLevels),
         chance.pickone(config.logTypes),
         chance.sentence(),
-        (new Date()).toLocaleString()
+        created_time
       );
       
       cloudModel.logs.push(log);
+    });
+    
+    // create controller cluster
+    _.times(config.clusterNumber, () => {
+      let cluster = new Cluster(
+        chance.ip(),
+        chance.integer({min:1000,  max:65535}),
+        chance.pickone(config.clusterStatus),
+        Date.now()
+      );
+      
+      cloudModel.clusters.push(cluster);
     });
     
     updateStatistics();
@@ -392,7 +408,7 @@ let cloudLib = {
         chance.natural({min: 100, max: 100000}),
         chance.natural({min: 1000, max: 10000000}),
         "UNKNOWN",
-        (new Date()).getMilliseconds()
+        Date.now()
       );
   
       // adding data to the cloud
