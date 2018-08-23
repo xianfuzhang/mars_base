@@ -76,10 +76,10 @@ router.get('/ports/:deviceId/:port', function (req, res) {
 router.get('/system/controller', function (req, res) {
   let statistics = [];
   
-  cloudModel.devices.forEach((device) => {
+  cloudModel.clusters.forEach((cluster) => {
     statistics.push({
-      ip: chance.ip(),
-      ...device.statistic
+      ip: cluster.ip,
+      ...cluster.statistic
     });
   })
   return res.json({statistics: statistics});

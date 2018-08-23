@@ -27,7 +27,7 @@ let config = {
   logTypes: ['INFO', 'WARNING'],
   logLevels: ['FelixStartLevel'],
   
-  clusterNumber: 10,
+  clusterNumber: 3,
   clusterStatus: ['ACTIVE', 'INACTIVE', 'READY']
 };
 
