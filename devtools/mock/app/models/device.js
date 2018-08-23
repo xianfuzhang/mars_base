@@ -105,26 +105,26 @@ class Device {
       "memory_info": {
         "mem":
           {
-            "total": `${mem_total}k`,
-            "free": `${mem_free}k`,
-            "used": `${mem_total - mem_free}k`,
-            "buffers": `${chance.natural({min: 2000000, max: 8000000})}k`
+            "total": mem_total,
+            "free":  mem_free ,
+            "used":  mem_total - mem_free ,
+            "buffers":  chance.natural({min: 2000000, max: 8000000})
           },
         "swap":
           {
-            "total": `${swap_total}k`,
-            "used": `${swap_total - swap_free}k`,
-            "free": `${swap_free}k`,
-            "cached": `${chance.natural({min: 200000, max: 1000000})}k`
+            "total":  swap_total ,
+            "used":  swap_total - swap_free ,
+            "free":  swap_free ,
+            "cached":  chance.natural({min: 200000, max: 1000000})
           }
       },
       "disk_info": {
         "partition": [
           {
             "filesystem": "/dev/sda2",
-            "size": `${disk_total}G`,
-            "used": `${disk_used}G`,
-            "Available": `${(disk_total - disk_used).toFixed(1)}G`,
+            "size":  disk_total,
+            "used":  disk_used,
+            "Available":  (disk_total - disk_used).toFixed(1),
           }
         ]
       }
