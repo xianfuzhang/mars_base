@@ -6,10 +6,15 @@ const express = require('express'),
 
 router.get('/', function (req, res) {
   cloudModel.clusters.forEach((cluster) => {
-    cluster.humanReadableLastUpdate = cluster.getHumanReadableLastUpdate();
+    cluster.humanReadableLastUpdate = cluster._getHumanReadableLastUpdate();
   });
   
-  return res.json({clusters: cloudModel.clusters});
+  let clusters = _.cloneDeep(cloudModel.clusters);
+  clusters.forEach((cluster) => {
+    delete cluster.statistic;
+  })
+  
+  return res.json({clusters: clusters});
 });
 
 router.post('/configuration', function (req, res) {

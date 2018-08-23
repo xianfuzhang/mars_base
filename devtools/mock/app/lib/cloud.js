@@ -443,6 +443,12 @@ function updateStatistics() {
         device.uptime += config.statisticUpdateIntervalSeconds;
         device.statistic = device.createSystemStatistic();
       });
+  
+      cloudModel.clusters.forEach(cluster => {
+        // update time
+        cluster.uptime += config.statisticUpdateIntervalSeconds;
+        cluster.statistic = cluster._createStatistic();
+      });
     }, config.statisticUpdateIntervalSeconds * 1000);
   }
 }
