@@ -23,12 +23,6 @@ export class ConfigurationListController {
     let scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
 
-    let test_subjectclassList = ['org.onosproject.provider.snmp.device.impl.SnmpDeviceConfig', 'org.onosproject.provider.snmp.device.impl.DhcpDeviceConfig'];
-    let test_subjectDict = {
-      'org.onosproject.provider.snmp.device.impl.SnmpDeviceConfig':['snmp:192.168.0.1:1','snmp:192.168.0.2:1','snmp:192.168.0.3:1'],
-      'org.onosproject.provider.snmp.device.impl.DhcpDeviceConfig':['dhcp:192.168.0.1','dhcp:192.168.0.2','dhcp:192.168.0.3'],
-    };
-
     this.fileNameInput = new MDCTextField(document.querySelector('#fileName'));
     this.fileNameInput.disabled = true;
 
@@ -136,11 +130,14 @@ export class ConfigurationListController {
 
 
     let getConfigurationByName = (name) =>{
-      this.di.configurationDataManager.getConfigurationByFileName(name)
-        .then((res)=>{
-          //TODO 具体操作，根据返回结果来具体实现
-          this.di.$scope.configurationModel.configurationShow = JSON.stringify(res['data']['config'], null, 2);
-        });
+      //TODO 测试使用
+      this.di.$scope.configurationModel.configurationShow = '';
+
+      // this.di.configurationDataManager.getConfigurationByFileName(name)
+      //   .then((res)=>{
+      //     //TODO 具体操作，根据返回结果来具体实现
+      //     this.di.$scope.configurationModel.configurationShow = JSON.stringify(res['data']['config'], null, 2);
+      //   });
     };
 
     let init = ()=> {
@@ -154,8 +151,10 @@ export class ConfigurationListController {
       // console.log(newValue);
       if(newValue){
         this.fileNameInput.disabled = false;
+        this.di.$scope.configurationModel.configurationShow = '';
       } else {
         this.fileNameInput.disabled = true;
+        getConfigurationByName(this.fileNameInput.value);
       }
     }));
 

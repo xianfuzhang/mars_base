@@ -5,6 +5,7 @@ import 'angular-translate';
 import 'angular-ui-bootstrap';
 
 import 'lodashService';
+import 'c3Service';
 import 'easing';
 import 'apis';
 import 'localStore';
@@ -28,6 +29,7 @@ import 'menu';
 import 'marDrawer';
 import 'marHeader';
 import 'marSection';
+import 'contentPanel';
 import 'footer';
 import 'topo';
 import 'loading';
@@ -42,6 +44,7 @@ angular
     'ui.bootstrap',
     'pascalprecht.translate',
     '_',
+    'c3',
     'ngTable',
     // ngTableModule.name,
     'easing',
@@ -64,6 +67,7 @@ angular
     'contentHeader',
     'staticTable',
     'marSection',
+    'contentPanel',
     'footer',
     'topo',
     'loading',
@@ -100,10 +104,10 @@ angular
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
-        // template: require('./modules/dashboard/template/dashboard'),
-        // controller: 'DashboardController'
-        template: require('./modules/fabric/template/fabric_summary.html'),
-        controller: 'fabricSummaryController'
+        template: require('./modules/dashboard/template/dashboard'),
+        controller: 'DashboardController'
+        // template: require('./modules/fabric/template/fabric_summary.html'),
+        // controller: 'fabricSummaryController'
       })
       .when('/devices', {
         template: require('./modules/fabric/template/device.html'),

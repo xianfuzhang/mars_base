@@ -1,9 +1,102 @@
-<div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">
-  <!--  <mar-header headers="dashModel.headers"></mar-header>-->
+<div class="dashboard flex_entirety">
+  <!--<mar-header></mar-header>-->
   <mdl-header></mdl-header>
-  <!--<mar-header headers="dashboardModel.headers"></mar-header>-->
-  <div style="flex-grow: 2;
-              flex-basis:auto;
-              flex-shrink: 1;background-color: white;overflow: hidden;padding:0 8px;">
+  <div class="flex_entirety__body">
+
+    <!--<content-header big-title="{{'MODULE.HEADER.CONFIG.CONFIGURATION' | translate}}">-->
+    <content-header big-title="首页">
+    <!--<span>{{'MODULE.HEADER.CONFIG.CONFIGURATION' | translate}}</span>-->
+    <span>Mars Cloud</span>
+  </content-header>
+    <!--<div class="flex_entirety__body__body" style="display:flex;flex-direction: row">-->
+    <div class="flex_entirety__body__body" style="">
+
+      <mar-section  title="Spine Switch" no-fold="true" class="detail_summary" style="background-color: #f8f8f8">
+        <div style="width:500px;height:300px;">
+          <content-panel>
+
+            <div>
+              <div style="width:500px;height:300px;text-align: center;padding-top: 60px;">
+                <div>
+                <div style="background-color: white;margin:16px 16px;border-radius: 5px;box-shadow: 5px 5px 5px #dddddd">
+                  <table style="width:200px;margin-left:130px;" class="table_content summary">
+                    <tr>
+                      <td><span>模式</span></td>
+                      <td><span>单节点</span></td>
+                    </tr>
+                    <tr>
+                      <td><span>数量</span></td>
+                      <td><span>3</span></td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!--<div style="width:100%;height:0;border-top:1px solid red"></div>-->
+
+                <div style="width:100%; margin-top: 16px">
+                  <div style="display: inline-block;width:30%;background-color: lightgreen;border-radius: 5px;box-shadow: 5px 5px 5px #dddddd">
+                    <table class="table_content">
+                      <tr>
+                        <td><span>Ip</span></td>
+                        <td><span>1.0.0.2</span></td>
+                      </tr>
+                      <tr>
+                        <td><span>状态</span></td>
+                        <td><span>ok</span></td>
+                      </tr>
+                      <tr>
+                        <td ><span>启动时间</span></td>
+                        <td ><span>1天20小时</span></td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div style="display: inline-block;width:30%;background-color: lightgreen;border-radius: 5px;box-shadow: 5px 5px 5px #dddddd">
+                    <table class="table_content ">
+                      <tr>
+                        <td><span>Ip</span></td>
+                        <td><span>1.0.0.2</span></td>
+                      </tr>
+                      <tr>
+                        <td><span>状态</span></td>
+                        <td><span>ok</span></td>
+                      </tr>
+                      <tr>
+                        <td ><span>启动时间</span></td>
+                        <td ><span>1天20小时</span></td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div style="display: inline-block;width:30%;background-color: #f17c7c;border-radius: 5px;color:white;box-shadow: 5px 5px 5px #dddddd">
+                    <table class="table_content">
+                      <tr>
+                        <td><span>Ip</span></td>
+                        <td><span>1.0.0.2</span></td>
+                      </tr>
+                      <tr>
+                        <td><span>状态</span></td>
+                        <td><span>ok</span></td>
+                      </tr>
+                      <tr>
+                        <td ><span>启动时间</span></td>
+                        <td ><span>1天20小时</span></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                </div>
+
+              </div>
+            </div>
+            <div>
+              <div id="testC1" style="width:500px;height:300px;"></div>
+            </div>
+          </content-panel>
+        </div>
+      </mar-section>
+
+
+
+
+    </div>
   </div>
 </div>
