@@ -24,6 +24,7 @@ export class appService {
         'menu':[
           {
             'group':'Fabric',
+            'label': this.translate('MODULE.HEADER.FABRIC'),
             'items':[
               {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary'},
               {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices'},
@@ -42,6 +43,7 @@ export class appService {
           },*/
           {
             'group':'Alert',
+            'label': this.translate('MODULE.HEADER.ALERT'),
             'items':[
               // {'label': 'Alert', 'url': '/alert'},
               {'label': this.translate('MODULE.HEADER.CONFIG.ALERT'), 'url': '/alert'},
@@ -49,6 +51,7 @@ export class appService {
           },
           {
             'group':'Config',
+            'label': this.translate('MODULE.HEADER.CONFIG'),
             'items':[
               {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration'},
               {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_LIST'), 'url': '/configuration_list'},
@@ -56,12 +59,14 @@ export class appService {
           },
           {
             'group': 'Log',
+            'label': this.translate('MODULE.HEADER.LOG'),
             'items': [
               {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '/log'}
             ]
           },
           {
             'group': 'Account',
+            'label': this.translate('MODULE.HEADER.ACCOUNT'),
             'items': [
               {'label': this.translate('MODULE.HEADER.ACCOUNT.ACCOUNT_MANAGER'), 'url': '/account_manage'}
             ]
@@ -198,6 +203,10 @@ export class appService {
 
   getAlertHistoriesRemoveAllUrl(){
     return this.getZoneEndpoint() + 'alert/history/all';
+  }
+  
+  getLogsUrl(){
+    return this.getZoneEndpoint() + 'onos/v1/logs/v1/controller';
   }
 
 }

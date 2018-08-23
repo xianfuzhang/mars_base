@@ -9,7 +9,7 @@
               <a class="navbar-inner__dropdown-toggle"
                  uib-dropdown-toggle
                  aria-haspopup="true"
-                 aria-expanded="false">{{menu.group}}</a>
+                 aria-expanded="false">{{menu.label}}</a>
               <ul class="navbar-inner__dropdown-menu" uib-dropdown-menu>
                 <li ng-repeat="item in menu.items">
                   <a ng-click="location(item.url, $event)">{{item.label}}</a>

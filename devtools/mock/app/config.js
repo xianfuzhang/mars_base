@@ -20,6 +20,15 @@ let config = {
   alertNames: ['Alert_1', 'Alert_2', 'Alert_3'],
   alertLevels: [1, 2, 3],
   alertGroups: ['Group_1', 'Group_2', 'Group_3'],
+  
+  logNumber: 10,
+  logCreators: ['org.apache.felix.fileinstall'],
+  logOpertations: ['fileinstall', 'fillremove', 'fillupdate'],
+  logTypes: ['INFO', 'WARNING'],
+  logLevels: ['FelixStartLevel'],
+  
+  clusterNumber: 10,
+  clusterStatus: ['ACTIVE', 'INACTIVE', 'READY']
 };
 
 module.exports = config;

@@ -22,7 +22,7 @@ class Device {
     this.driver = driver;
     this.community = community;
     this.leaf_group = leaf_group;
-    this.lastUpdate = (new Date()).getMilliseconds();
+    this.lastUpdate = Date.now();
     this.humanReadableLastUpdate = "connected 4m52s ago";
     this.annotations = this.createAnnotations(name, ip, port, protocol);
     this.ports = this.createPhysicalPorts(id, portMinNum + 8);
