@@ -45,7 +45,7 @@
 
     <div class="mdl-table-field__content">
       <div class="mdl-table-header">
-        <table>
+        <table class="mdl-table">
           <thead>
           <tr class="mdl-table-header__row">
             <th ng-if="tableModel.rowCheckboxSupport" style="width: 5%;">
@@ -98,7 +98,7 @@
         </table>
       </div>
       <div class="mdl-table-body">
-        <table>
+        <table class="mdl-table">
           <tbody ng-if="tableModel.filteredData.length===0">
             <tr class="mdl-table-body__row"><td class="text-center" ng-bind="'MODULES.TABLE.RESULT.NODATA'|translate"></td></tr>
           </tbody>
@@ -122,7 +122,7 @@
         </table>
       </div>
       <div class="mdl-table-footer">
-        <table>
+        <table class="mdl-table">
           <tfoot>
             <tr>
               <td>
