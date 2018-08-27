@@ -12,9 +12,10 @@ export class appService {
     });
     this.translate = this.di.$filter('translate');
     this.isMocked = true;
+    this.versionUrl = 'onos/v1';
     this.CONST = {
-      MOCKED_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/',
-      LIVE_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/',
+      MOCKED_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/' + this.versionUrl,
+      LIVE_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/'  + this.versionUrl,
 
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
@@ -98,79 +99,79 @@ export class appService {
   }
 
   getLoginUrl() {
-    return this.getZoneEndpoint() + 'onos/v1/login';
+    return this.getZoneEndpoint() + '/login';
   }
 
   getLogoutUrl() {
-    return this.getZoneEndpoint() + 'onos/v1/logout';
+    return this.getZoneEndpoint() + '/logout';
   }
 
   getUserAccountUrl() {
-    return this.getZoneEndpoint() + 'onos/v1/useraccount/v1';
+    return this.getZoneEndpoint() + '/useraccount/v1';
   }
 
   getDeleteUserAccountUrl(username) {
-    return this.getZoneEndpoint() + 'onos/v1/useraccount/v1/' + username;
+    return this.getZoneEndpoint() + '/useraccount/v1/' + username;
   }
 
   getDevicesUrl(){
-    return this.getZoneEndpoint() + 'onos/v1/devices';
+    return this.getZoneEndpoint() + '/devices';
   }
 
   getDeviceDetailUrl(deviceId){
-    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId;
+    return this.getZoneEndpoint() + '/devices/' + deviceId;
   }
 
   getDeleteDeviceUrl(deviceId) {
-    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId;
+    return this.getZoneEndpoint() + '/devices/' + deviceId;
   }
 
   getPortsUrl() {
-    return this.getZoneEndpoint() + 'onos/v1/devices/ports';
+    return this.getZoneEndpoint() + '/devices/ports';
   }
 
   getDevicePortsUrl(deviceId) {
-    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId + '/ports';
+    return this.getZoneEndpoint() + '/devices/' + deviceId + '/ports';
   }
 
   getDevicePortsStatisticsUrl(deviceId) {
-    return this.getZoneEndpoint() + 'onos/v1/statistics/ports/' + deviceId;
+    return this.getZoneEndpoint() + '/statistics/ports/' + deviceId;
   }
 
   getDeviceFlowsUrl(deviceId) {
-    return this.getZoneEndpoint() + 'onos/v1/sflow/' + deviceId;
+    return this.getZoneEndpoint() + '/sflow/' + deviceId;
   }
 
   getLinksUrl() {
-    return this.getZoneEndpoint() + 'onos/v1/links';
+    return this.getZoneEndpoint() + '/links';
   }
 
   getDeviceLinksUrl(deviceId){
-    return this.getZoneEndpoint() + 'onos/v1/devices/' +  deviceId + '/links';
+    return this.getZoneEndpoint() + '/devices/' +  deviceId + '/links';
   }
 
   getChangePortStateUrl(deviceId, portId) {
-    return this.getZoneEndpoint() + 'onos/v1/devices/' + deviceId + '/portstate/' + portId;
+    return this.getZoneEndpoint() + '/devices/' + deviceId + '/portstate/' + portId;
   }
 
   getCreateFlowUrl(deviceId, appId) {
-    return this.getZoneEndpoint() + 'onos/v1/flows/' + deviceId + '?appId=' + appId;
+    return this.getZoneEndpoint() + '/flows/' + deviceId + '?appId=' + appId;
   }
 
   getEndPointsUrl(){
-    return this.getZoneEndpoint() + 'onos/v1/endpoints';
+    return this.getZoneEndpoint() + '/endpoints';
   }
 
   getDeleteEndpointUrl(tenant, segment, mac){
-    return this.getZoneEndpoint() + 'onos/v1/endpoints/' + tenant + '/' + segment + '/' + mac;
+    return this.getZoneEndpoint() + '/endpoints/' + tenant + '/' + segment + '/' + mac;
   }
 
   getStormProfilesUrl(){
-    return this.getZoneEndpoint() + 'onos/v1/links';
+    return this.getZoneEndpoint() + '/links';
   }
 
   getConfigurationUrl(subjectClass, subject){
-    let url = this.getZoneEndpoint() + 'onos/v1/configuration';
+    let url = this.getZoneEndpoint() + '/configuration';
     if(subjectClass){
       url = url + '/' + subjectClass;
       if(subject){
@@ -181,33 +182,43 @@ export class appService {
   }
 
   getConfigurationFileListUrl(){
-    return this.getZoneEndpoint() + 'onos/v1/network/configuration/files';
+    return this.getZoneEndpoint() + '/network/configuration/files';
   }
 
   getConfigurationFileUrl(filename){
-    return this.getZoneEndpoint() + 'onos/v1/network/configuration/files/' + filename;
+    return this.getZoneEndpoint() + '/network/configuration/files/' + filename;
   }
 
   getAlertHistoryUrl(){
-    return this.getZoneEndpoint() + 'onos/v1/alert/history/list';
+    return this.getZoneEndpoint() + '/alert/history/list';
   }
 
   getAlertHistoryRemoveUrl(uuid){
-    return this.getZoneEndpoint() + 'onos/v1/alert/history/uuid/' + uuid ;
+    return this.getZoneEndpoint() + '/alert/history/uuid/' + uuid ;
   }
 
   getAlertHistoriesSelectedRemoveUrl(){
-    return this.getZoneEndpoint() + 'onos/v1/alert/history/select';
+    return this.getZoneEndpoint() + '/alert/history/select';
 
   }
 
   getAlertHistoriesRemoveAllUrl(){
-    return this.getZoneEndpoint() + 'alert/history/all';
+    return this.getZoneEndpoint() + '/alert/history/all';
   }
   
   getLogsUrl(){
-    return this.getZoneEndpoint() + 'onos/v1/logs/v1/controller';
+    return this.getZoneEndpoint() + '/logs/v1/controller';
   }
+
+  getClusterUrl(){
+    return this.getZoneEndpoint() + '/cluster';
+  }
+
+  getStatisticOfController(){
+    return this.getZoneEndpoint() + '/statistics/system/controller';
+  }
+
+
 
 }
 

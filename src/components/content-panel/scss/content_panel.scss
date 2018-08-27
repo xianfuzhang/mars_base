@@ -14,10 +14,11 @@
 
   ng-transclude>div{
     position: absolute;
-    background-color: white;
+    //background-color: saddlebrown;
     width:100%;
     height:100%;
     overflow: hidden;
+    display:none;
 
     //&.animate_content{
     //  animation: 1s ease-in-out;
@@ -50,6 +51,23 @@
         cursor: auto;
       }
     }
+  }
+
+
+  @include element(loading){
+
+    width:100%;
+    height:100%;
+    position: absolute;
+    z-index:200;
+    background-color: gray;
+    top:0;
+    display:none;
+
+    @include state(show){
+      display: block;
+    }
+
   }
 }
 

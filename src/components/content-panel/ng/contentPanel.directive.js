@@ -22,7 +22,8 @@ export class contentPanel {
     this.template = require('../template/content_panel.html');
 
     this.scope = {
-
+      // refresh: '=',
+      isLoad: '='
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -34,10 +35,25 @@ export class contentPanel {
       this.currentContent = null;
       this.currentNode = null;
 
-      this.contents = element.find('ng-transclude').children();
+
       let timeoutHandler = null;
 
-      let contentLength = this.contents.length;
+      let unSubscribes = [];
+      let contentLength = 0;
+
+      scope.contentPanelModel = {
+        contents : []
+      };
+
+      let load =()=> {
+        this.contents = element.find('ng-transclude').children();
+        contentLength = this.contents.length;
+        for(var n = 0; n < contentLength; n++) scope.contentPanelModel.contents[n] = {};
+      };
+
+      load();
+      // this.contents = element.find('ng-transclude').children();
+      // let contentLength = this.contents.length;
       let currentIndex = 0;
       let lastIndex = -1;
       let max_z_index = 3;
@@ -52,11 +68,13 @@ export class contentPanel {
       let parentHeight = element[0].offsetHeight;
       let circleLength = Math.sqrt(Math.pow(element[0].offsetWidth, 2)  + Math.pow(element[0].offsetHeight,2));
 
-      angular.element(element.find('ng-transclude').children()[0]).css({'z-index': max_z_index});
-      scope.contentPanelModel = {
-        contents : []
-      };
-      for(var n = 0; n < contentLength; n++) scope.contentPanelModel.contents[n] = {};
+
+      function reload() {
+        load();
+      }
+      angular.element(element.find('ng-transclude').children()[0]).css({'z-index': max_z_index, 'display':'block'});
+
+      // for(var n = 0; n < contentLength; n++) scope.contentPanelModel.contents[n] = {};
 
       function addSelectNodeClass() {
         let nodesDom = element[0].querySelector('.content_panel__markers');
@@ -81,19 +99,18 @@ export class contentPanel {
         }
 
         let nextContentDiv = angular.element(element.find('ng-transclude').children()[currentIndex]);
-        // nextContentDiv.addClass("animate_content");
-        nextContentDiv.css({"z-index": max_z_index,"width":"0px", 'height':'0px' });
+        nextContentDiv.css({"z-index": max_z_index,"width":"0px", 'height':'0px','display':'block','background-color':'#f1f1f1' });
 
         let starttime = new Date().getTime();
         addSelectNodeClass();
 
-        dynamicGrow(starttime, nextContentDiv)
+        dynamicGrow(starttime, nextContentDiv);
 
       };
 
       let setCurrentDiv = () =>{
         let currContentDiv = angular.element(element.find('ng-transclude').children()[currentIndex]);
-        currContentDiv.css({'z-index': middle_z_index});
+        currContentDiv.css({'z-index': middle_z_index,'display':'none'});
         // currContentDiv.removeClass("animate_content");
 
         removeSelectNodeClass();
@@ -164,14 +181,24 @@ export class contentPanel {
           'top': '0px',
           'left':'0px',
           'border-radius': '0',
-          // 'background-color':'',
+          'background-color':'',
         });
 
         nodeJq.children().css({'margin-top': '0px',
           'margin-left': '0px',
           'opacity':"1"});
 
+
+
+
         isNodeChange = false;
+
+
+        // if(lastIndex === -1){
+        //   lastIndex = currentIndex === 0?contentLength -1 :currentIndex - 1;
+        // }
+        // let lastContentDiv = angular.element(element.find('ng-transclude').children()[lastIndex]);
+        // lastContentDiv.css({'display': 'none'});
       }
 
       scope.clickNode = (index)=>{
@@ -183,6 +210,37 @@ export class contentPanel {
         }
         changeContent(index);
       }
+
+      // unSubscribes.push(scope.$watch('refresh',(newValue)=>{
+      //   // console.log('*****' + newValue);
+      //   if(newValue === true){
+      //     console.log('refresh');
+      //     reload();
+      //     scope.refresh = false;
+      //   }
+      // }));
+
+
+      unSubscribes.push(scope.$watch('isLoad',(newValue)=>{
+        if(newValue === true){
+
+        } else {
+          reload();
+        }
+      }));
+
+
+      scope.$on('$destroy', () => {
+        unSubscribes.forEach((cb) => {
+          cb();
+        });
+
+        if(timeoutHandler){
+          clearTimeout(timeoutHandler);
+        }
+      });
+
+
     }).call(this);
   }
 }
