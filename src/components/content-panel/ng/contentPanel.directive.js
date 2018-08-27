@@ -133,14 +133,14 @@ export class contentPanel {
         setCurrentDiv();
         setNextDiv(index);
 
-        timeoutHandler = setTimeout(function () {
-          changeContent();
-        }, intervalTime)
+        // timeoutHandler = setTimeout(function () {
+        //   changeContent();
+        // }, intervalTime)
       };
 
-      timeoutHandler = setTimeout(function () {
-        changeContent();
-      },intervalTime);
+      // timeoutHandler = setTimeout(function () {
+      //   changeContent();
+      // },intervalTime);
 
       let dynamicGrow = (starttime, contentJQ) => {
         let time = (new Date()).getTime() - starttime;

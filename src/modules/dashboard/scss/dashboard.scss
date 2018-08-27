@@ -2,69 +2,145 @@
 @import 'default';
 @import 'shared';
 
-@include block(topo_setting){
-
+@include block(topo_setting) {
 
 }
 
 //3联动才能使样式置顶
-.\+front.mdc-button.topo_setting__button{
+.\+front.mdc-button.topo_setting__button {
   margin: 0;
   padding: 0;
   min-width: 32px;
-  width:32px;
-  height:32px;
+  width: 32px;
+  height: 32px;
   color: black;
 }
 
-.\+show.mdc-button.topo_setting__button{
+.\+show.mdc-button.topo_setting__button {
   border: 1px solid lightgray;
   background-color: lightgray;
 }
 
-
-
-.table_content tr td:first-child{
+.table_content tr td:first-child {
   text-align: right;
-  padding-right:4px;
+  padding-right: 4px;
   //background-color: red;
-  padding-top:4px;
+  padding-top: 4px;
   font-weight: 300;
-  font-size:11px;
+  font-size: 11px;
 }
 
-.table_content tr td:last-child{
+.table_content tr td:last-child {
   text-align: left;
-  padding-left:2px;
-  padding-top:4px;
+  padding-left: 2px;
+  padding-top: 4px;
   font-weight: 400;
-  font-size:11px;
+  font-size: 11px;
 }
 
-.table_content.summary tr td:first-child{
-  font-size:16px;
+.table_content.summary tr td:first-child {
+  font-size: 16px;
 }
 
-.table_content.summary tr td:last-child{
-  font-size:16px;
+.table_content.summary tr td:last-child {
+  font-size: 16px;
 }
 
-
-
-
-.swt_table_dashboard tr td:first-child{
+.swt_table_dashboard tr td:first-child {
   text-align: right;
-  padding-right:8px;
+  padding-right: 8px;
   //background-color: red;
-  padding-top:4px;
+  padding-top: 4px;
   font-weight: 400;
-  font-size:16px;
+  font-size: 16px;
 }
 
-.swt_table_dashboard tr td:last-child{
+.swt_table_dashboard tr td:last-child {
   text-align: left;
-  padding-left:8px;
-  padding-top:4px;
+  padding-left: 8px;
+  padding-top: 4px;
   font-weight: 300;
-  font-size:14px;
+  font-size: 14px;
 }
+
+@include block(dashboard) {
+
+  @include element(body){
+    overflow-y: scroll;
+  }
+  @include element(horizontal_box) {
+    display: block;
+    margin: 24px 0 0 24px;
+
+    > div:first-child {
+      min-width: 500px;
+      display: inline-block;
+      vertical-align: top;
+    }
+
+    > div:last-child {
+      min-width: 500px;
+      display: inline-block;
+      margin-left: 24px;
+      vertical-align: top;
+    }
+  }
+}
+
+.content_panel_parent {
+  width: 500px;
+  height: 300px;
+}
+
+.content_panel_dash_box {
+  text-align: center;
+  padding-top: 60px;
+}
+
+.content_panel_dash_chart {
+  width: 500px;
+  height: 280px;
+  maring-bottom: 16px;
+}
+
+.content_panel_table_parent {
+  margin: 16px;
+}
+
+.content_panel_table_parent.swtTable {
+  //margin-top: 80px;background-color: white;
+}
+
+.content_panel_table {
+  box-shadow: 5px 5px 5px #dddddd;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.content_panel_table.cluster{
+  width: 250px;
+  margin-left: 115px;
+  background-color: white;
+}
+
+.content_panel_table.controller{
+  width: 250px;
+  margin-left: 115px;
+  background-color: lightgreen;
+}
+
+.content_panel_table.switch{
+  display:inline-block;
+  margin-top: 80px;
+  background-color: white;
+  text-align: center
+}
+
+.dash_mar_section{
+  background-color: #f8f8f8;
+}
+
+
+
+
+

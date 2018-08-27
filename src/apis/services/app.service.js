@@ -135,6 +135,9 @@ export class appService {
   }
 
   getDevicePortsStatisticsUrl(deviceId) {
+    if(deviceId === undefined || deviceId === null || deviceId === ''){
+      return this.getZoneEndpoint() + '/statistics/ports';
+    }
     return this.getZoneEndpoint() + '/statistics/ports/' + deviceId;
   }
 
@@ -205,7 +208,7 @@ export class appService {
   getAlertHistoriesRemoveAllUrl(){
     return this.getZoneEndpoint() + '/alert/history/all';
   }
-  
+
   getLogsUrl(){
     return this.getZoneEndpoint() + '/logs/v1/controller';
   }

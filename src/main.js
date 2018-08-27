@@ -162,7 +162,7 @@ angular
         template: require('./modules/log/template/log.html'),
         controller: 'logController'
       })
-      .otherwise({ redirectTo: '/fabric_summary' });
+      .otherwise({ redirectTo: '/' });
 
     /*$locationProvider.html5Mode({
       enabled: true,

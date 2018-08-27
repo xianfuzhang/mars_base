@@ -1,270 +1,225 @@
-<loading></loading>
 <div class="dashboard flex_entirety">
-  <!--<mar-header></mar-header>-->
-  <mdl-header></mdl-header>
-  <div class="flex_entirety__body">
+    <!--<mar-header></mar-header>-->
+    <mdl-header></mdl-header>
+    <div class="flex_entirety__body">
+        <content-header big-title="首页">
+            <span>Mars Cloud</span>
+        </content-header>
+        <div class="flex_entirety__body__body dashboard__body">
 
-    <!--<content-header big-title="{{'MODULE.HEADER.CONFIG.CONFIGURATION' | translate}}">-->
-    <content-header big-title="首页">
-    <!--<span>{{'MODULE.HEADER.CONFIG.CONFIGURATION' | translate}}</span>-->
-    <span>Mars Cloud</span>
-  </content-header>
-    <!--<div class="flex_entirety__body__body" style="display:flex;flex-direction: row">-->
-    <div class="flex_entirety__body__body" style="">
-
-
-      <mar-section  title="控制器概要" no-fold="true" class="detail_summary" style="display:none;background-color: #f8f8f8">
-        <div style="width:500px;height:300px;">
-          <content-panel>
-            <div>
-              <div style="width:500px;height:300px;text-align: center;padding-top: 60px;">
+            <div class="dashboard__horizontal_box">
                 <div>
-                  <div style="background-color: white;margin:16px 16px;border-radius: 5px;box-shadow: 5px 5px 5px #dddddd">
-                    <table style="width:200px;margin-left:130px;" class="table_content summary">
-                      <tr>
-                        <td><span>{{'MODULES.DASHBOARD.CONTROLLER.MODE'| translate}}</span></td>
-                        <td><span>{{dashboardModel.controllerSummary.mode}}</span></td>
-                      </tr>
-                      <tr>
-                        <td><span>{{'MODULES.DASHBOARD.CONTROLLER.COUNT'|translate}}</span></td>
-                        <td><span>{{dashboardModel.controllerSummary.count}}</span></td>
-                      </tr>
-                    </table>
-                  </div>
+                    <mar-section title="控制器概要" no-fold="true" class="detail_summary dash_mar_section">
+                        <div class="content_panel_parent">
+                            <content-panel is-load="panelLoading.controller">
+                                <div>
+                                    <div class="content_panel_parent content_panel_dash_box">
+                                        <div>
+                                            <div class="content_panel_table_parent">
+                                                <table class="table_content summary content_panel_table cluster">
+                                                    <tr>
+                                                        <td>
+                                                            <span>{{'MODULES.DASHBOARD.CONTROLLER.MODE'| translate}}</span>
+                                                        </td>
+                                                        <td><span>{{dashboardModel.controllerSummary.mode}}</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span>{{'MODULES.DASHBOARD.CONTROLLER.COUNT'|translate}}</span>
+                                                        </td>
+                                                        <td><span>{{dashboardModel.controllerSummary.count}}</span></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                  <div style="width:100%; margin-top: 16px">
-                    <div ng-repeat="node in dashboardModel.controllerSummary.nodes" style="display: inline-block;width:30%;background-color: lightgreen;border-radius: 5px;box-shadow: 5px 5px 5px #dddddd">
-                      <table class="table_content">
-                        <tr>
-                          <td><span>{{ 'MODULES.DASHBOARD.CONTROLLER.IP' |translate }}</span></td>
-                          <td><span>{{ node.ip }}</span></td>
-                        </tr>
-                        <tr>
-                          <td><span>{{ 'MODULES.DASHBOARD.CONTROLLER.STATUS' |translate }}</span></td>
-                          <td><span>{{ node.status }}</span></td>
-                        </tr>
-                        <tr>
-                          <td ><span>{{ 'MODULES.DASHBOARD.CONTROLLER.RUNTIME' |translate }}</span></td>
-                          <td ><span>{{ node.lastUpdate }}</span></td>
-                        </tr>
-                      </table>
-                    </div>
-                  </div>
+                                <div ng-repeat="node in dashboardModel.controllerSummary.nodes">
+                                    <div class="content_panel_parent content_panel_dash_box">
+                                        <div>
+                                            <div class="content_panel_table_parent">
+                                                <table class="table_content content_panel_table controller">
+                                                    <tr>
+                                                        <td>
+                                                            <span>{{ 'MODULES.DASHBOARD.CONTROLLER.IP' |translate }}</span>
+                                                        </td>
+                                                        <td><span>{{ node.ip }}</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span>{{ 'MODULES.DASHBOARD.CONTROLLER.STATUS' |translate }}</span>
+                                                        </td>
+                                                        <td><span>{{ node.status }}</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><span>{{ 'MODULES.DASHBOARD.CONTROLLER.RUNTIME' |translate }}</span>
+                                                        </td>
+                                                        <td><span>{{ node.lastUpdate }}</span></td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div id="controllerChart" class="content_panel_dash_chart"></div>
+                                </div>
+                            </content-panel>
+                        </div>
+                    </mar-section>
                 </div>
-
-              </div>
-            </div>
-            <div>
-              <div id="testC1" style="width:500px;height:300px;"></div>
-            </div>
-          </content-panel>
-        </div>
-      </mar-section>
-
-      <!--<div id="testC2"></div>-->
-
-      <mar-section  title="交换机概要" no-fold="true" class="detail_summary" style="display:none;background-color: #f8f8f8">
-        <div style="width:500px;height:300px;">
-          <!--<content-panel>-->
-            <div style="text-align: center">
-              <div style="display:inline-block;margin-top: 50px;background-color: white;margin:16px 16px;border-radius: 5px;box-shadow:5px 5px 5px #dddddd;text-align: center">
-                <table  class="swt_table_dashboard summary">
-                  <tr>
-                    <td><span>1 </span></td>
-                    <td><span>Spine交换机</span></td>
-
-                  </tr>
-                  <tr>
-                    <td><span>3</span></td>
-                    <td><span>Leaf交换机</span></td>
-
-                  </tr>
-                  <tr>
-                    <td><span>1</span></td>
-                    <td><span>Unknown交换机</span></td>
-                  </tr>
-                  <tr style="color:red">
-                    <td><span>0</span></td>
-                    <td><span>不可用</span></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-
-          <!--</content-panel>-->
-        </div>
-      </mar-section>
-
-      <div style="display: block;margin: 24px 0 0 24px;">
-        <div  style="height:300px;min-width:500px;display: inline-block;">
-          <mar-section  title="控制器概要" no-fold="true" class="detail_summary" style="background-color: #f8f8f8">
-            <div style="width:500px;height:300px;">
-              <content-panel is-load="panelLoading.controller">
                 <div>
-                  <div style="width:500px;height:300px;text-align: center;padding-top: 60px;">
-                    <div>
-                      <div style="margin:16px;">
-                        <table style="width:250px;margin-left:115px;background-color: white;box-shadow: 5px 5px 5px #dddddd;border-radius: 5px;padding:8px;" class="table_content summary">
-                          <tr>
-                            <td><span>{{'MODULES.DASHBOARD.CONTROLLER.MODE'| translate}}</span></td>
-                            <td><span>{{dashboardModel.controllerSummary.mode}}</span></td>
-                          </tr>
-                          <tr>
-                            <td><span>{{'MODULES.DASHBOARD.CONTROLLER.COUNT'|translate}}</span></td>
-                            <td><span>{{dashboardModel.controllerSummary.count}}</span></td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                    <mar-section title="交换机概要" no-fold="true" class="detail_summary dash_mar_section">
+                        <div class="content_panel_parent">
+                            <div style="text-align: center">
+                                <!--<div style="display:inline-block;margin-top: 80px;background-color: white;border-radius: 5px;box-shadow:5px 5px 5px #dddddd;text-align: center">-->
+                                    <!--<table class="swt_table_dashboard summary">-->
 
-                <div ng-repeat="node in dashboardModel.controllerSummary.nodes">
-                  <div style="width:500px;height:300px;text-align: center;padding-top: 60px;">
-                    <div>
-                      <div style="margin:16px;">
-                        <table style="width:250px;margin-left:115px;background-color: lightgreen;box-shadow: 5px 5px 5px #dddddd;border-radius: 5px;padding:8px;" class="table_content summary">
-                          <tr>
-                            <td><span>{{ 'MODULES.DASHBOARD.CONTROLLER.IP' |translate }}</span></td>
-                            <td><span>{{ node.ip }}</span></td>
-                          </tr>
-                          <tr>
-                            <td><span>{{ 'MODULES.DASHBOARD.CONTROLLER.STATUS' |translate }}</span></td>
-                            <td><span>{{ node.status }}</span></td>
-                          </tr>
-                          <tr>
-                            <td ><span>{{ 'MODULES.DASHBOARD.CONTROLLER.RUNTIME' |translate }}</span></td>
-                            <td ><span>{{ node.lastUpdate }}</span></td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
+                                <div class="content_panel_table_parent swtTable">
+                                    <table class="swt_table_dashboard content_panel_table switch">
+
+
+                                        <tr>
+                                            <td><span>1 </span></td>
+                                            <td><span>Spine交换机</span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td><span>3</span></td>
+                                            <td><span>Leaf交换机</span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td><span>1</span></td>
+                                            <td><span>Unknown交换机</span></td>
+                                        </tr>
+                                        <tr style="color:red">
+                                            <td><span>0</span></td>
+                                            <td><span>不可用</span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </mar-section>
+                </div>
+            </div>
+            <div class="dashboard__horizontal_box">
                 <div>
-                  <div id="controllerChart" style="width:500px;height:300px;"></div>
+                    <mar-section title="Interface Packages Top5" no-fold="true" class="detail_summary dash_mar_section">
+                        <div class="content_panel_parent">
+                            <content-panel is-load="panelLoading.controller">
+                                <div>
+                                    <div id="swtInterfaceRxPackage"
+                                         class="content_panel_dash_chart"></div>
+                                </div>
+                                <div>
+                                    <div id="swtInterfaceTxPackage"
+                                         class="content_panel_dash_chart"></div>
+                                </div>
+                            </content-panel>
+                        </div>
+                    </mar-section>
                 </div>
-              </content-panel>
-            </div>
-          </mar-section>
-        </div>
-        <div  style="height:300px;min-width:500px;display: inline-block;margin-left: 24px;">
-          <mar-section  title="交换机概要" no-fold="true" class="detail_summary" style="background-color: #f8f8f8">
-            <div style="width:500px;height:300px;">
-              <!--<content-panel>-->
-              <div style="text-align: center">
-                <div style="display:inline-block;margin-top: 80px;background-color: white;border-radius: 5px;box-shadow:5px 5px 5px #dddddd;text-align: center">
-                  <table  class="swt_table_dashboard summary">
-                    <tr>
-                      <td><span>1 </span></td>
-                      <td><span>Spine交换机</span></td>
-
-                    </tr>
-                    <tr>
-                      <td><span>3</span></td>
-                      <td><span>Leaf交换机</span></td>
-
-                    </tr>
-                    <tr>
-                      <td><span>1</span></td>
-                      <td><span>Unknown交换机</span></td>
-                    </tr>
-                    <tr style="color:red">
-                      <td><span>0</span></td>
-                      <td><span>不可用</span></td>
-                    </tr>
-                  </table>
+                <div>
+                    <mar-section title="Interface Bytes Top5" no-fold="true" class="detail_summary dash_mar_section">
+                        <div class="content_panel_parent">
+                            <content-panel is-load="panelLoading.controller">
+                                <div>
+                                    <div id="swtInterfaceRxByte" class="content_panel_dash_chart"></div>
+                                </div>
+                                <div>
+                                    <div id="swtInterfaceTxByte" class="content_panel_dash_chart"></div>
+                                </div>
+                            </content-panel>
+                        </div>
+                    </mar-section>
                 </div>
-              </div>
-
-              <!--</content-panel>-->
             </div>
-          </mar-section>
-        </div>
-      </div>
 
 
-
-      <!-- google material 布局尝试 -->
-      <!--<div class="mdc-layout-grid mdc-layout-grid&#45;&#45;fixed-column-width-108" style="display: none;">-->
-        <!--<div class="mdc-layout-grid__inner">-->
-          <!--<div class="mdc-layout-grid__cell  mdc-layout-grid__cell&#45;&#45;span-6"  style="height:300px;min-width:500px">-->
+            <!-- google material 布局尝试 -->
+            <!--<div class="mdc-layout-grid mdc-layout-grid&#45;&#45;fixed-column-width-108" style="display: none;">-->
+            <!--<div class="mdc-layout-grid__inner">-->
+            <!--<div class="mdc-layout-grid__cell  mdc-layout-grid__cell&#45;&#45;span-6"  style="height:300px;min-width:500px">-->
             <!--<mar-section  title="交换机概要" no-fold="true" class="detail_summary" style="background-color: #f8f8f8">-->
-              <!--<div style="width:500px;height:300px;">-->
-                <!--&lt;!&ndash;<content-panel>&ndash;&gt;-->
-                <!--<div style="text-align: center">-->
-                  <!--<div style="display:inline-block;margin-top: 50px;background-color: white;margin:16px 16px;border-radius: 5px;box-shadow:5px 5px 5px #dddddd;text-align: center">-->
-                    <!--<table  class="swt_table_dashboard summary">-->
-                      <!--<tr>-->
-                        <!--<td><span>1 </span></td>-->
-                        <!--<td><span>Spine交换机</span></td>-->
+            <!--<div style="width:500px;height:300px;">-->
+            <!--&lt;!&ndash;<content-panel>&ndash;&gt;-->
+            <!--<div style="text-align: center">-->
+            <!--<div style="display:inline-block;margin-top: 50px;background-color: white;margin:16px 16px;border-radius: 5px;box-shadow:5px 5px 5px #dddddd;text-align: center">-->
+            <!--<table  class="swt_table_dashboard summary">-->
+            <!--<tr>-->
+            <!--<td><span>1 </span></td>-->
+            <!--<td><span>Spine交换机</span></td>-->
 
-                      <!--</tr>-->
-                      <!--<tr>-->
-                        <!--<td><span>3</span></td>-->
-                        <!--<td><span>Leaf交换机</span></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td><span>3</span></td>-->
+            <!--<td><span>Leaf交换机</span></td>-->
 
-                      <!--</tr>-->
-                      <!--<tr>-->
-                        <!--<td><span>1</span></td>-->
-                        <!--<td><span>Unknown交换机</span></td>-->
-                      <!--</tr>-->
-                      <!--<tr style="color:red">-->
-                        <!--<td><span>0</span></td>-->
-                        <!--<td><span>不可用</span></td>-->
-                      <!--</tr>-->
-                    <!--</table>-->
-                  <!--</div>-->
-                <!--</div>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td><span>1</span></td>-->
+            <!--<td><span>Unknown交换机</span></td>-->
+            <!--</tr>-->
+            <!--<tr style="color:red">-->
+            <!--<td><span>0</span></td>-->
+            <!--<td><span>不可用</span></td>-->
+            <!--</tr>-->
+            <!--</table>-->
+            <!--</div>-->
+            <!--</div>-->
 
-                <!--&lt;!&ndash;</content-panel>&ndash;&gt;-->
-              <!--</div>-->
+            <!--&lt;!&ndash;</content-panel>&ndash;&gt;-->
+            <!--</div>-->
             <!--</mar-section>-->
-          <!--</div>-->
-          <!--<div class="mdc-layout-grid__cell mdc-layout-grid__cell&#45;&#45;span-6" style="height:300px;min-width:500px;">-->
+            <!--</div>-->
+            <!--<div class="mdc-layout-grid__cell mdc-layout-grid__cell&#45;&#45;span-6" style="height:300px;min-width:500px;">-->
             <!--<mar-section  title="交换机概要" no-fold="true" class="detail_summary" style="background-color: #f8f8f8">-->
-              <!--<div style="width:500px;height:300px;">-->
-                <!--&lt;!&ndash;<content-panel>&ndash;&gt;-->
-                <!--<div style="text-align: center">-->
-                  <!--<div style="display:inline-block;margin-top: 50px;background-color: white;margin:16px 16px;border-radius: 5px;box-shadow:5px 5px 5px #dddddd;text-align: center">-->
-                    <!--<table  class="swt_table_dashboard summary">-->
-                      <!--<tr>-->
-                        <!--<td><span>1 </span></td>-->
-                        <!--<td><span>Spine交换机</span></td>-->
+            <!--<div style="width:500px;height:300px;">-->
+            <!--&lt;!&ndash;<content-panel>&ndash;&gt;-->
+            <!--<div style="text-align: center">-->
+            <!--<div style="display:inline-block;margin-top: 50px;background-color: white;margin:16px 16px;border-radius: 5px;box-shadow:5px 5px 5px #dddddd;text-align: center">-->
+            <!--<table  class="swt_table_dashboard summary">-->
+            <!--<tr>-->
+            <!--<td><span>1 </span></td>-->
+            <!--<td><span>Spine交换机</span></td>-->
 
-                      <!--</tr>-->
-                      <!--<tr>-->
-                        <!--<td><span>3</span></td>-->
-                        <!--<td><span>Leaf交换机</span></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td><span>3</span></td>-->
+            <!--<td><span>Leaf交换机</span></td>-->
 
-                      <!--</tr>-->
-                      <!--<tr>-->
-                        <!--<td><span>1</span></td>-->
-                        <!--<td><span>Unknown交换机</span></td>-->
-                      <!--</tr>-->
-                      <!--<tr style="color:red">-->
-                        <!--<td><span>0</span></td>-->
-                        <!--<td><span>不可用</span></td>-->
-                      <!--</tr>-->
-                    <!--</table>-->
-                  <!--</div>-->
-                <!--</div>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td><span>1</span></td>-->
+            <!--<td><span>Unknown交换机</span></td>-->
+            <!--</tr>-->
+            <!--<tr style="color:red">-->
+            <!--<td><span>0</span></td>-->
+            <!--<td><span>不可用</span></td>-->
+            <!--</tr>-->
+            <!--</table>-->
+            <!--</div>-->
+            <!--</div>-->
 
-                <!--&lt;!&ndash;</content-panel>&ndash;&gt;-->
-              <!--</div>-->
+            <!--&lt;!&ndash;</content-panel>&ndash;&gt;-->
+            <!--</div>-->
             <!--</mar-section>-->
-          <!--</div>-->
-        <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
 
-        <!--<div class="mdc-layout-grid__inner">-->
-          <!--<div class="mdc-layout-grid__cell" style="background-color: blue;height:100px;"></div>-->
-          <!--<div class="mdc-layout-grid__cell" style="background-color: blue;height:100px;"></div>-->
-          <!--&lt;!&ndash;<div class="mdc-layout-grid__cell" style="background-color: blue;height:100px;width: 500px;" ></div>&ndash;&gt;-->
-        <!--</div>-->
-      <!--</div>-->
+            <!--<div class="mdc-layout-grid__inner">-->
+            <!--<div class="mdc-layout-grid__cell" style="background-color: blue;height:100px;"></div>-->
+            <!--<div class="mdc-layout-grid__cell" style="background-color: blue;height:100px;"></div>-->
+            <!--&lt;!&ndash;<div class="mdc-layout-grid__cell" style="background-color: blue;height:100px;width: 500px;" ></div>&ndash;&gt;-->
+            <!--</div>-->
+            <!--</div>-->
 
+        </div>
     </div>
-  </div>
-
+    <loading></loading>
 </div>

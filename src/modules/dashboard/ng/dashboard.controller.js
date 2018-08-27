@@ -79,7 +79,9 @@ export class DashboardController {
       let promises = [];
       let clusterDefer = this.di.$q.defer(),
         devicesDefer = this.di.$q.defer(),
-        clusterStaticsDefer = this.di.$q.defer();
+        portsDefer = this.di.$q.defer(),
+        clusterStaticsDefer = this.di.$q.defer(),
+        swtStaticsDefer = this.di.$q.defer();
 
 
 
@@ -103,6 +105,21 @@ export class DashboardController {
         devicesDefer.resolve();
       });
       promises.push(devicesDefer.promise);
+
+      this.di.deviceDataManager.getDevicePortsStatistics().then((res)=>{
+        dataModel['swtStatistics'] = res.data.statistics;
+        swtStaticsDefer.resolve();
+      });
+      promises.push(swtStaticsDefer.promise);
+
+      this.di.deviceDataManager.getPorts().then((res)=>{
+        dataModel['ports'] = res.data.ports;
+        portsDefer.resolve();
+      });
+
+      promises.push(portsDefer.promise);
+
+
       this.di.$rootScope.$emit('start_loading');
       this.di.$scope.panelLoading.controller = true;
 
@@ -123,8 +140,12 @@ export class DashboardController {
     
     function convertData2View() {
       convertControllerData();
-      convertSwitchData()
+      convertSwitchData();
+      convertSwitchInterface2Chart();
+      // convertSwitchInterfaceTx();
     }
+
+
 
     let convertControllerData =()=>{
       //1. summary
@@ -208,6 +229,182 @@ export class DashboardController {
       });
     };
 
+    let convertSwitchInterface2Chart =()=>{
+      let swtStatistics = dataModel['swtStatistics'];
+      let waitOrderPortsStatistics = [];
+      this.di._.forEach(swtStatistics, (device)=>{
+        let curDeviceId = device.device;
+        this.di._.forEach(device.ports, (port)=>{
+          let portSt = {};
+          portSt['device'] = curDeviceId;
+          portSt['port'] = port['port'];
+          portSt['packetsReceived'] = port['packetsReceived'];
+          portSt['packetsSent'] = port['packetsSent'];
+          portSt['bytesReceived'] = port['bytesReceived'];
+          portSt['bytesSent'] = port['bytesSent'];
+          portSt['packetsRxDropped'] = port['packetsRxDropped'];
+          portSt['packetsTxDropped'] = port['packetsTxDropped'];
+          portSt['durationSec'] = port['durationSec'];
+          waitOrderPortsStatistics.push(portSt)
+        });
+      });
+
+
+      let rx_p_str = 'packetsReceived';
+      let rxPackagesOrder = this.di._.orderBy(waitOrderPortsStatistics, rx_p_str, 'desc');
+      rxPackagesOrder.splice(5, rxPackagesOrder.length-5);
+      // chartingSwtInterfaceTop5Rx(rxTop5);
+      chartSwtInterface(rxPackagesOrder, 'swtInterfaceRxPackage', rx_p_str, 'Rx Packages','packages');
+
+      let tx_p_str = 'packetsSent';
+      let txPackagesOrder = this.di._.orderBy(waitOrderPortsStatistics, tx_p_str, 'desc');
+      txPackagesOrder.splice(5, txPackagesOrder.length-5);
+      chartSwtInterface(txPackagesOrder, 'swtInterfaceTxPackage', tx_p_str, 'Tx Packages','packages');
+
+
+      let rx_b_str = 'bytesReceived';
+      let rxBytesOrder = this.di._.orderBy(waitOrderPortsStatistics, rx_b_str, 'desc');
+      rxBytesOrder.splice(5, rxBytesOrder.length-5);
+      chartSwtInterface(rxBytesOrder, 'swtInterfaceRxByte', rx_b_str, 'Rx Bytes','bytes');
+
+      let tx_b_str = 'bytesSent';
+      let txBytesOrder = this.di._.orderBy(waitOrderPortsStatistics, tx_b_str, 'desc');
+      txBytesOrder.splice(5, txBytesOrder.length- 5);
+      chartSwtInterface(txBytesOrder, 'swtInterfaceTxByte', tx_b_str, 'Tx Bytes','bytes');
+    };
+
+    // let chartingSwtInterfaceTop5Rx = (top5)=> {
+    //   // getSwtAndPortName
+    //
+    //   let category= [];
+    //   let rxs = ['RX Packages'];
+    //   this.di._.forEach(top5, (statistic)=>{
+    //     category.push(getSwtAndPortName(statistic['device'], statistic['port']));
+    //     rxs.push(statistic['packetsReceived']);
+    //     // console.log(getSwtAndPortName(statistic['device'], statistic['port']) + ': ' + statistic['packetsReceived']);
+    //   });
+    //
+    //   let chart = this.di.c3.generate({
+    //     bindto: '#swtInterfaceRx',
+    //     data: {
+    //       columns: [
+    //         rxs
+    //       ],
+    //       type: 'bar'
+    //     },
+    //     bar: {
+    //       width: {
+    //         ratio: 0.5 // this makes bar width 50% of length between ticks
+    //       }
+    //     },
+    //     tooltip: {
+    //       format: {
+    //         title: function (d) { return category[d]; },
+    //         value: function (value, ratio, id) {
+    //           return value + ' packages';
+    //         }
+    //       },
+    //       grouped:false
+    //     },
+    //     axis: {
+    //       x: {
+    //         type: 'category',
+    //         categories: category
+    //       },
+    //       y:{
+    //         label: "packets"
+    //       }
+    //     }
+    //   });
+    // };
+    //
+    //
+    // let chartingSwtInterfaceTop5Rx = (top5)=> {
+    //   // getSwtAndPortName
+    //
+    //   let category= [];
+    //   let rxs = ['TX Packages'];
+    //   this.di._.forEach(top5, (statistic)=>{
+    //     category.push(getSwtAndPortName(statistic['device'], statistic['port']));
+    //     rxs.push(statistic['packetsReceived']);
+    //   });
+    //
+    //   let chart = this.di.c3.generate({
+    //     bindto: '#swtInterfaceTx',
+    //     data: {
+    //       columns: [
+    //         rxs
+    //       ],
+    //       type: 'bar'
+    //     },
+    //     bar: {
+    //       width: {
+    //         ratio: 0.5 // this makes bar width 50% of length between ticks
+    //       }
+    //     },
+    //     tooltip: {
+    //       format: {
+    //         title: function (d) { return category[d]; },
+    //         value: function (value, ratio, id) {
+    //           return value;
+    //         }
+    //       },
+    //       grouped:false
+    //     },
+    //     axis: {
+    //       x: {
+    //         type: 'category',
+    //         categories: category
+    //       },
+    //       y:{
+    //         label: "packets"
+    //       }
+    //     }
+    //   });
+    // };
+
+    let chartSwtInterface = (top5, bindTo, orderType, TypeStr,y_label) =>{
+      let category= [];
+      let rxs = [TypeStr];
+      this.di._.forEach(top5, (statistic)=>{
+        category.push(getSwtAndPortName(statistic['device'], statistic['port']));
+        rxs.push(statistic[orderType]);
+      });
+
+      let chart = this.di.c3.generate({
+        bindto: '#' + bindTo,
+        data: {
+          columns: [
+            rxs
+          ],
+          type: 'bar'
+        },
+        bar: {
+          width: {
+            ratio: 0.5 // this makes bar width 50% of length between ticks
+          }
+        },
+        tooltip: {
+          format: {
+            title: function (d) { return category[d]; },
+            value: function (value, ratio, id) {
+              return value;
+            }
+          },
+          grouped:false
+        },
+        axis: {
+          x: {
+            type: 'category',
+            categories: category
+          },
+          y:{
+            label: y_label
+          }
+        }
+      });
+    }
+
     let genControllerToolTip = (d, category)=>{
       // let tableStart = "<table style='max-width:350px' class='table_content'>";
       // let tableEnd = "</table>";
@@ -231,14 +428,13 @@ export class DashboardController {
       // tbs += tableEnd;
 
       return "<div style='background-color: white;color:black;border:1px gray solid;border-radius: 4px;padding:6px;box-shadow: 5px 5px 5px #dddddd;'>"+ tbs+ "</div>";
-    }
+    };
 
     let convertSwitchData =()=>{
       // data
     }
     
     let calcRunningDate = (ts)=> {
-      console.log('==time:' + ts)
 
       // 1000 * 60 * 60 * 24
       let dayCount = Math.floor(ts/(1000 * 60 * 60 * 24));
@@ -262,6 +458,21 @@ export class DashboardController {
         return seconds + this.translate('MODULES.DASHBOARD.SECONDS');
       }
       return dayStr + hourStr;
+    };
+
+    let getSwtAndPortName = (deviceId, portNo) =>{
+      return getPortName(deviceId, portNo);
+    };
+
+    let getSwtName = (deviceid) =>{
+      let device = this.di._.find(dataModel['devices'], { 'id': deviceid});
+      return device['name'];
+    };
+
+    let getPortName = (deviceid, portNo) =>{
+      let port = this.di._.find(dataModel['ports'], { 'element': deviceid, 'port': portNo});
+      // if(port)
+      return port['annotations']['portName'];
     };
 
 
