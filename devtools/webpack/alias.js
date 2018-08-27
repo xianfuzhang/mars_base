@@ -5,6 +5,7 @@ class AliasProvider {
   static getServices() {
     return {
       'lodashService': path.resolve('src/libs/lodash/'),
+      'c3Service': path.resolve('src/libs/c3/'),
       'easing': path.resolve('src/libs/easing/'),
       'apis': path.resolve('src/apis/'),
       'localStore': path.resolve('src/libs/localstore/'),
@@ -33,6 +34,7 @@ class AliasProvider {
       'staticTable': path.resolve('src/components/static-table/'),
       'marDrawer': path.resolve('src/components/mar-drawer/'),
       'marSection': path.resolve('src/components/mar-section/'),
+      'contentPanel': path.resolve('src/components/content-panel/'),
       'footer': path.resolve('src/components/footer/'),
       'wizard': path.resolve('src/components/wizard'),
       'mdlTable': path.resolve('src/components/table'),

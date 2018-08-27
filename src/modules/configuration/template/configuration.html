@@ -35,7 +35,7 @@
             <option ng-value="subjectClass" ng-repeat="subjectClass in configurationModel.subjectList"/>
           </datalist>
         </div>
-        <mdl-checkbox ng-model="configurationModel.isEditable"
+        <mdl-checkbox style="margin-left: -8px;margin-top: 16px;" ng-model="configurationModel.isEditable"
                       display-label="checkDisLab">
         </mdl-checkbox>
         <div>
@@ -43,11 +43,11 @@
             <i class="material-icons mdc-button__icon" aria-hidden="true">playlist_add</i>
             {{'MODULES.CONFIGURATION.OPTION.UPDATE'|translate}}
           </button>
-          <style></style>
-          <button class="mdc-button mdc-button--raised" ng-click="deleteConfiguration()" ng-disabled="!configurationModel.isEditable" id="deleteConfiguration" style="color:#ffffff;font-weight: 500;">
-            <i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>
-            {{'MODULES.CONFIGURATION.OPTION.DELETE'|translate}}
-          </button>
+          <!--<style></style>-->
+          <!--<button class="mdc-button mdc-button&#45;&#45;raised" ng-click="deleteConfiguration()" ng-disabled="!configurationModel.isEditable" id="deleteConfiguration" style="color:#ffffff;font-weight: 500;">-->
+            <!--<i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>-->
+            <!--{{'MODULES.CONFIGURATION.OPTION.DELETE'|translate}}-->
+          <!--</button>-->
           <!--<style></style>-->
         </div>
       </div>

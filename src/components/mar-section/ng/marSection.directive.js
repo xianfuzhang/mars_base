@@ -23,6 +23,7 @@ export class marSection {
 
     this.scope = {
       title : '@',
+      noFold: '='
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -37,8 +38,15 @@ export class marSection {
         'title': scope.title,
         'showStyle': {'display':'block'},
         'iconStyle':{},
-        'isFold': false
+        'noFoldStyle':{},
+        'isFold': false,
+        'noFold': false
       };
+
+      if(scope.noFold === true){
+        scope.sectionModel.noFold = true;
+        scope.sectionModel.noFoldStyle = {'cursor':'auto'};
+      }
 
       scope.lastHeight = 0;
       scope.isUp = false;
@@ -97,6 +105,9 @@ export class marSection {
 
 
       scope.foldAndNot = (event) =>{
+        if(scope.sectionModel.noFold ===  true){
+          return;
+        }
         // let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
         // scope.lastHeight = scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
         if(scope.sectionModel.isFold){
