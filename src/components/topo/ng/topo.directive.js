@@ -71,7 +71,7 @@ export class Topo {
         'leaf':'leaf',
         'spine':'spine',
         'other':'other'
-      }
+      };
       this.stage = null;
       this.scene = null;
 
@@ -164,7 +164,7 @@ export class Topo {
         this.spineContainer.add(this.spineContainerRightNode);
 
         this.di._.forEach(scope.spines, (spine, key) => {
-          this.spines[spine.id] = genNormalNode(spine.id, DeviceType.spine, spine.ports);
+          this.spines[spine.id] = genNormalNode(spine.id, DeviceType.spine, spine.ports, spine.available);
         });
 
       };
@@ -179,7 +179,7 @@ export class Topo {
 
 
         this.di._.forEach(scope.leafs, (leaf, key) => {
-          this.leafs[leaf.id] = genNormalNode(leaf.id, DeviceType.leaf, leaf.ports);
+          this.leafs[leaf.id] = genNormalNode(leaf.id, DeviceType.leaf, leaf.ports, leaf.available);
         });
 
 
@@ -195,7 +195,7 @@ export class Topo {
 
 
         this.di._.forEach(scope.others, (other, key) => {
-          this.others[other.id] = genNormalNode(other.id, DeviceType.other, other.ports);
+          this.others[other.id] = genNormalNode(other.id, DeviceType.other, other.ports, other.available);
         });
 
       };
@@ -335,7 +335,7 @@ export class Topo {
         return node;
       };
 
-      let genNormalNode = (deviceId, type, ports) =>{
+      let genNormalNode = (deviceId, type, ports, status) =>{
         let node = new JTopo.Node();
         node.dragable = true ;
         node.width = this.switch_width;
@@ -344,6 +344,7 @@ export class Topo {
         node.deviceId = deviceId;
         node.deviceType = type;
         node.move = false;
+        node.status = status;
 
         node.mouseup(mouseUpHandler);
         node.mousedrag(mouseDragHandler);
@@ -364,8 +365,12 @@ export class Topo {
         node.paint = function(g){
           g.beginPath();
           g.rect(-width/2, -height/2, width, height);
-          g.fillStyle = '0,0,0';
-          // g.fillStyle = 'rgba(0,0,0)';
+
+          if(node.status === false){
+            g.fillStyle ='rgb(255,0,0)';
+          } else {
+            g.fillStyle = 'rgb(0,0,0)';
+          }
           g.fill();
           g.closePath();
 
@@ -651,7 +656,11 @@ export class Topo {
         node.paint = function(g) {
           g.beginPath();
           g.rect(-width / 2, -height / 2, width, height);
-          g.fillStyle = 'rgba(0,0,0)';
+          if(node.status === false){
+            g.fillStyle ='rgb(255,0,0)';
+          } else {
+            g.fillStyle = 'rgb(0,0,0)';
+          }
           g.fill();
           g.closePath();
           this.paintText(g);
@@ -671,7 +680,11 @@ export class Topo {
         node.paint = function(g){
           g.beginPath();
           g.rect(-width/2, -height/2, width, height);
-          g.fillStyle = 'rgba(0,0,0)';
+          if(node.status === false){
+            g.fillStyle ='rgb(255,0,0)';
+          } else {
+            g.fillStyle = 'rgb(0,0,0)';
+          }
           g.fill();
           g.closePath();
 
