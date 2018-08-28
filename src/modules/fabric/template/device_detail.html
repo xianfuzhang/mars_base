@@ -46,7 +46,11 @@
           <div class="device-detail__item">
             <label class="device-detail__item-label"
                    ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.AVAILABLE'|translate"></label>
-            <span class="device-detail__item-value">{{detailValue.available}}</span>
+            <span class="device-detail__item-value "
+                  ng-class="{
+                  'device-detail__available': detailValue.available === true,
+                  'device-detail__inavailable': detailValue.available === false
+                  }"></span>
           </div>
         </div>
       </div>
