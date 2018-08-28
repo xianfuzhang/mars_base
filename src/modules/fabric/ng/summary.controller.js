@@ -83,9 +83,13 @@ export class FabricSummaryController {
 
       this.di.localStoreService.getStorage(fabric_storage_ns).get('resize_db').then((data)=>{
         if(data){
-          this.di.$scope.resize_right_plus = data['resize_right_plus'];
+          let win_width = this.di.$window.innerWidth;
           this.di.$scope.resize_right = data['resize_right'];
           this.di.$scope.resize_length = data['resize_length'];
+
+          let rightLenStr = data['resize_length']['width'];
+          let rightLen = Number(rightLenStr.substr(0, rightLenStr.length - 2 ));
+          this.di.$scope.resize_right_plus = {'right': (rightLen + 5) +'px','width': ( win_width - rightLen - 5)+ 'px'};
         }
       });
 
@@ -251,7 +255,7 @@ export class FabricSummaryController {
       this.di.$scope.resize_length = {'width':+ (win_width - x) +'px'};
 
       let data = {
-        'resize_right_plus':angular.copy(this.di.$scope.resize_right_plus),
+        // 'resize_right_plus':angular.copy(this.di.$scope.resize_right_plus),
         'resize_right':angular.copy(this.di.$scope.resize_right),
         'resize_length':angular.copy(this.di.$scope.resize_length),
       }
