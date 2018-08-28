@@ -41,7 +41,12 @@ export class DashboardController {
     this.di.$scope.dashboardModel = {
       'controllerSummary':{},
       'controllerStatistic':{},
-      'switchSummary':{}
+      'switchSummary':{
+        leafCount:0,
+        spineCount:0,
+        unknownCount:0,
+        unavailableCount:0,
+      }
 
     };
 
@@ -57,23 +62,6 @@ export class DashboardController {
     };
 
     let di = this.di;
-    setTimeout(function () {
-      // var chart2 = di.c3.generate({
-      //   bindto: '#testC2',
-      //   data: {
-      //     columns: [
-      //       ['data1', 1, 32, 124, 64, 78, 124],
-      //       ['data2', 54, 20, 30, 10, 135, 125]
-      //     ],
-      //     type: 'bar'
-      //
-      //   },
-      //   axis: {
-      //
-      //   }
-      // });
-    });
-
 
     let init =() =>{
       let promises = [];
@@ -431,8 +419,15 @@ export class DashboardController {
     };
 
     let convertSwitchData =()=>{
-      // data
-    }
+      let leafSwt = this.di._.filter(dataModel['devices'], { 'type': 'leaf'});
+      let spineSwt = this.di._.filter(dataModel['devices'], { 'type': 'spine'});
+      let unknownSwt = this.di._.filter(dataModel['devices'], { 'type': 'unknown'});
+      let unavailableSwt = this.di._.filter(dataModel['devices'], { 'available': false});
+      this.di.$scope.dashboardModel.switchSummary.leafCount = leafSwt.length;
+      this.di.$scope.dashboardModel.switchSummary.spineCount = spineSwt.length;
+      this.di.$scope.dashboardModel.switchSummary.unknownCount = unknownSwt.length;
+      this.di.$scope.dashboardModel.switchSummary.unavailableCount = unavailableSwt.length;
+    };
     
     let calcRunningDate = (ts)=> {
 
@@ -482,27 +477,11 @@ export class DashboardController {
 
 
     setTimeout(function () {init()});
-    // const buttonRipple = new MDCRipple(document.querySelector('.mdc-button'));
-
-    let getTop5CPU = (statistics) =>{
-
-    };
-
-    let getTop5Mem = (statistics) => {
-
-    };
-
-    let exec =()=>{
-      let statistics = getAllDeviceStatistics();
-      getTop5CPU(statistics);
-      getTop5Mem(statistics);
-    };
 
     // let init = () => {
     //
     //   this.interval_device = setInterval(exec, 15000);
     // };
-
 
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
