@@ -78,27 +78,25 @@
                                     <!--<table class="swt_table_dashboard summary">-->
 
 
-                                <div class="content_panel_table_parent swtTable">
+                                <div class="swtTable">
                                     <table class="swt_table_dashboard content_panel_table switch">
-
-
                                         <tr>
-                                            <td><span>1 </span></td>
-                                            <td><span>Spine交换机</span></td>
+                                            <td><span>{{ dashboardModel.switchSummary.spineCount }} </span></td>
+                                            <td><span>{{'MODULES.DASHBOARD.SWITCH.TYPE.SPINE'| translate}}</span></td>
 
                                         </tr>
                                         <tr>
-                                            <td><span>3</span></td>
-                                            <td><span>Leaf交换机</span></td>
+                                            <td><span>{{ dashboardModel.switchSummary.leafCount }}</span></td>
+                                            <td><span>{{'MODULES.DASHBOARD.SWITCH.TYPE.LEAF'| translate}}</span></td>
 
                                         </tr>
                                         <tr>
-                                            <td><span>1</span></td>
-                                            <td><span>Unknown交换机</span></td>
+                                            <td><span>{{ dashboardModel.switchSummary.unknownCount }}</span></td>
+                                            <td><span>{{'MODULES.DASHBOARD.SWITCH.TYPE.UNKNOWN'| translate}}</span></td>
                                         </tr>
                                         <tr style="color:red">
-                                            <td><span>0</span></td>
-                                            <td><span>不可用</span></td>
+                                            <td><span>{{ dashboardModel.switchSummary.unavailableCount }}</span></td>
+                                            <td><span>{{'MODULES.DASHBOARD.SWITCH.TYPE.NO_AVAILABLE'| translate}}</span></td>
                                         </tr>
                                     </table>
                                 </div>
