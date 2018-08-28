@@ -59,7 +59,7 @@ export class contentPanel {
       let max_z_index = 3;
       let middle_z_index = 2;
       let min_z_index = 1;
-      let intervalTime = 6000;
+      let intervalTime = 8000;
       let easingTime = 1000;
       let easingService = this.di.easingService;
       let isNodeChange = false;
@@ -133,14 +133,14 @@ export class contentPanel {
         setCurrentDiv();
         setNextDiv(index);
 
-        // timeoutHandler = setTimeout(function () {
-        //   changeContent();
-        // }, intervalTime)
+        timeoutHandler = setTimeout(function () {
+          changeContent();
+        }, intervalTime)
       };
 
-      // timeoutHandler = setTimeout(function () {
-      //   changeContent();
-      // },intervalTime);
+      timeoutHandler = setTimeout(function () {
+        changeContent();
+      },intervalTime);
 
       let dynamicGrow = (starttime, contentJQ) => {
         let time = (new Date()).getTime() - starttime;
