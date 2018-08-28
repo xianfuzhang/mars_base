@@ -83,7 +83,7 @@ export class ConfigurationListController {
       ];
 
     scope.configurationListModel = {
-      subjectClassList: test_subjectclassList,
+      subjectClassList: test_configurations,
       subjectList: [],
       subjectListDisable: 'true',
       currentSubjectClass: '',
