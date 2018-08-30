@@ -6,7 +6,7 @@ var proxy = require('http-proxy-middleware');
 
 let app = express();
 
-var wsProxy = proxy('/onos/v1', {target:'http://localhost:4001', ws:false});
+var wsProxy = proxy('/mars', {target:'http://localhost:4001', ws:false});
 app.use(wsProxy);
 // 启用gzip
 app.use(compression());

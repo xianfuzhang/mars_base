@@ -35,15 +35,15 @@ app.use(sessionParser);
 
 app.use(initController);
 // setup the routes
-app.use('/onos/v1', deviceController);
-app.use('/onos/v1', endPointController);
-app.use('/onos/v1/statistics', statisticController);
-app.use('/onos/v1/useraccount/v1', useraccountController);
-app.use('/onos/v1/flows', flowController);
-app.use('/onos/v1/alert', alertController);
-app.use('/onos/v1/logs/v1', logController);
-app.use('/onos/v1/cluster', clusterController);
-app.use('/onos/v1', loginController);
+app.use('/mars', deviceController);
+app.use('/mars', endPointController);
+app.use('/mars/statistics', statisticController);
+app.use('/mars/useraccount/v1', useraccountController);
+app.use('/mars/flows', flowController);
+app.use('/mars/alert', alertController);
+app.use('/mars/logs/v1', logController);
+app.use('/mars/cluster', clusterController);
+app.use('/mars', loginController);
 
 
 // set port
