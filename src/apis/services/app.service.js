@@ -12,7 +12,7 @@ export class appService {
     });
     this.translate = this.di.$filter('translate');
     this.isMocked = true;
-    this.versionUrl = 'onos/v1';
+    this.versionUrl = 'mars';
     this.CONST = {
       MOCKED_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/' + this.versionUrl,
       LIVE_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/'  + this.versionUrl,

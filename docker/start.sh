@@ -14,7 +14,7 @@ while true; do
         echo 'mock server is running';
     else
         node ./devtools/mock/app/app.js &
-    fimenu
+    fi
 
     sleep 1
 done
