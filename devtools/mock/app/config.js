@@ -16,10 +16,44 @@ let config = {
   
   flowNumber: 10,
   
+  alertRuleNumber: 5,
+  alertRuleStatus: ['enabled', 'disabled'],
+  alertRuleTypes: ['cpu', 'ram', 'disk'],
+  alertRuleLevels: [0, 1],
+  alertInitGroups: [{
+    name: "Alert_Group_1",
+    receive: {
+      wechat: [
+        {
+          department: "department1",
+          agentId: 1002121
+        }
+      ],
+      email: [
+        {
+          name: "email_name_2",
+          email: "email1@noc.com"
+        }
+      ]
+    }
+  }, {
+    name: "Alert_Group_2",
+    receive: {
+      wechat: [
+        {
+          department: "department2",
+          agentId: 1002122
+        }
+      ],
+      email: [
+        {
+          name: "email_name_1",
+          email: "email2@noc.com"
+        }
+      ]
+    }
+  }],
   alertNumber: 10,
-  alertNames: ['Alert_1', 'Alert_2', 'Alert_3'],
-  alertLevels: [1, 2, 3],
-  alertGroups: ['Group_1', 'Group_2', 'Group_3'],
   
   logNumber: 10,
   logCreators: ['org.apache.felix.fileinstall'],
