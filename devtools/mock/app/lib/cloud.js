@@ -3,7 +3,7 @@ var Device = require('../models/device'),
     Endpoint = require('../models/endpoint'),
     UserAccount = require('../models/useraccount'),
     Flow = require('../models/flow'),
-    Alert = require('../models/alert'),
+    {AlertRule, Alert} = require('../models/alert'),
     Log = require('../models/log'),
     Cluster = require('../models/cluster'),
     config = require('../config'),
@@ -18,7 +18,11 @@ global.cloudModel = {
   links: [],
   endpoints: [],
   flows: [],
-  alerts: [],
+  alert: {
+    rules: [],
+    history: [],
+    groups: [],
+  },
   logs: [],
   clusters: [],
   useraccounts: []
@@ -194,19 +198,52 @@ let cloudLib = {
       cloudModel.flows.push(flow);
     });
     
-    // create alert
-    _.times(config.alertNumber, () => {
-      let alert = new Alert(
-        chance.guid(),
-        chance.pickone(config.alertNames),
-        chance.pickone(config.alertLevels),
-        'Alert_' + chance.word(),
-        chance.sentence(),
-        chance.pickone(config.alertGroups)
+    // create alert group
+    cloudModel.alert.groups = _.cloneDeep(config.alertInitGroups);
+    
+    // create alert rule
+    _.times(config.alertRuleNumber, (index) => {
+      let from = index < config.alertRuleNumber / 2 ? 'controller' : 'switch';
+      let type = from == 'switch' ? chance.pickone(config.alertRuleTypes.concat('port')) : chance.pickone(config.alertRuleTypes);
+      let query = getAlertQuery(type);
+      let group = chance.pickone(cloudModel.alert.groups);
+      
+      let alertRule = new AlertRule(
+        'Alert_Rule_' + chance.word(),
+        chance.pickone(config.alertRuleStatus),
+        chance.pickone(config.alertRuleLevels),
+        group.name,
+        query,
+        from,
+        type
       );
       
-      cloudModel.alerts.push(alert);
+      cloudModel.alert.rules.push(alertRule);
+    });
+  
+    // create alert
+    let rules = _.filter(cloudModel.alert.rules, (rule) => {
+      return rule.status === 'enabled';
     })
+    _.times(config.alertNumber, (index) => {
+      let rule = chance.pickone(rules);
+      
+      let msg = `${rule.type} `;
+      Object.keys(rule.query).forEach((key) => {
+        msg += `${rule.query[key]} `
+      })
+      
+      let alert = new Alert(
+        chance.guid(),
+        rule.name,
+        rule.alert_level,
+        rule.receive_group,
+        rule.from,
+        msg
+      );
+    
+      cloudModel.alert.history.push(alert);
+    });
     
     // create logs
     _.times(config.logNumber, () => {
@@ -486,6 +523,42 @@ function isLinkUnique(linkObj) {
   });
   
   return res ? false : true;
+}
+
+function getAlertQuery(type) {
+  switch (type) {
+    case 'cpu':
+      return {
+        util: 60,
+        condition: "gt",
+        continue: 120
+      };
+    case 'ram':
+      return {
+        "used_ratio": 80,
+        "condition": "gt",
+        "continue": 180
+      }
+    case 'disk':
+      return {
+        "root_used_ratio": 90,
+        "condition": "gt",
+        "continue": 1800
+      }
+    case 'port':
+      return {
+        "query_rx": {
+          "rx_util": 70,
+          "condition": "gt",
+          "continue": 600
+        },
+        "query_tx": {
+          "tx_util": 60,
+          "condition": "gt",
+          "continue": 600
+        }
+      }
+  }
 }
 
 module.exports = cloudLib;

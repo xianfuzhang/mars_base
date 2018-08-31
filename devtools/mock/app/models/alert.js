@@ -4,16 +4,30 @@ var _ = require('lodash'),
 
 const chance = new Chance();
 
-class Alert {
-  constructor (uuid, name, alert_level, from, msg, receive_group) {
-    this.uuid = uuid;
-    this.name = name;
+class AlertRule {
+  constructor (rule_name, status, alert_level, receive_group, query, from, type) {
+    this.name = rule_name;
+    this.status = status;
     this.alert_level = alert_level;
-    this.from = from;
-    this.msg = msg;
     this.receive_group = receive_group;
+    this.query = query;
+    this.from = from;
+    this.type = type;
   }
 }
 
+exports.AlertRule = AlertRule;
 
-module.exports = Alert;
+
+class Alert {
+  constructor (uuid, rule_name, alert_level, receive_group, from, msg) {
+    this.uuid = uuid;
+    this.name = rule_name;
+    this.alert_level = alert_level;
+    this.receive_group = receive_group;
+    this.from = from;
+    this.msg = msg;
+  }
+}
+
+exports.Alert = Alert;
