@@ -6,6 +6,7 @@ var express = require('express'),
   endPointController = require('./controllers/endpoint'),
   statisticController = require('./controllers/statistic'),
   flowController = require('./controllers/flow'),
+  alertRuleController = require('./controllers/alertRule'),
   alertController = require('./controllers/alert'),
   logController = require('./controllers/log'),
   clusterController = require('./controllers/cluster'),
@@ -40,6 +41,7 @@ app.use('/mars', endPointController);
 app.use('/mars/statistics', statisticController);
 app.use('/mars/useraccount/v1', useraccountController);
 app.use('/mars/flows', flowController);
+app.use('/mars/healthycheck/v1', alertRuleController);
 app.use('/mars/alert', alertController);
 app.use('/mars/logs/v1', logController);
 app.use('/mars/cluster', clusterController);
