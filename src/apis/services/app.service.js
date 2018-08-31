@@ -47,7 +47,8 @@ export class appService {
             'label': this.translate('MODULE.HEADER.ALERT'),
             'items':[
               // {'label': 'Alert', 'url': '/alert'},
-              {'label': this.translate('MODULE.HEADER.CONFIG.ALERT'), 'url': '/alert'},
+              {'label': this.translate('MODULE.HEADER.ALERT.ALERT'), 'url': '/alert'},
+              {'label': this.translate('MODULE.HEADER.ALERT.INFORM'), 'url': '/inform'},
             ]
           },
           {
