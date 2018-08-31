@@ -81,3 +81,16 @@
   position: fixed;
   z-index: 100;
 }
+.mdc-tab-field.mdc-tab-bar{
+  display: flex;
+}
+.mdc-tab-bar .mdc-tab{
+  margin-right: 5px;
+  border: 1px solid rgba(0,0,0, 0.03);
+  border-radius: 4px;
+  line-height: 2.75rem;
+  background: rgba(0,0,0, 0.03);
+}
+.mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab--active{
+  background: rgba(0,0,0, 0.1);
+}
