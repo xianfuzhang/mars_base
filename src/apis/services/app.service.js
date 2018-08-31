@@ -12,7 +12,7 @@ export class appService {
     });
     this.translate = this.di.$filter('translate');
     this.isMocked = true;
-    this.versionUrl = 'mars';
+    this.versionUrl = 'mars/v1/';
     this.CONST = {
       MOCKED_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/' + this.versionUrl,
       LIVE_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/'  + this.versionUrl,
@@ -47,7 +47,8 @@ export class appService {
             'label': this.translate('MODULE.HEADER.ALERT'),
             'items':[
               // {'label': 'Alert', 'url': '/alert'},
-              {'label': this.translate('MODULE.HEADER.CONFIG.ALERT'), 'url': '/alert'},
+              {'label': this.translate('MODULE.HEADER.ALERT.ALERT'), 'url': '/alert'},
+              {'label': this.translate('MODULE.HEADER.ALERT.INFORM'), 'url': '/inform'},
             ]
           },
           {

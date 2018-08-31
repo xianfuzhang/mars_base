@@ -60,7 +60,7 @@ module.exports = function (config) {
       inline: true,
       port: port,
       proxy: {
-        '/mars': 'http://localhost:4001'
+        '/mars/v1': 'http://localhost:4001'
       }
     },
     module: {
