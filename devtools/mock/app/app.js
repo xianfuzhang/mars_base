@@ -36,16 +36,16 @@ app.use(sessionParser);
 
 app.use(initController);
 // setup the routes
-app.use('/mars', deviceController);
-app.use('/mars', endPointController);
-app.use('/mars/statistics', statisticController);
-app.use('/mars/useraccount/v1', useraccountController);
-app.use('/mars/flows', flowController);
-app.use('/mars/healthycheck/v1', alertRuleController);
-app.use('/mars/alert', alertController);
-app.use('/mars/logs/v1', logController);
-app.use('/mars/cluster', clusterController);
-app.use('/mars', loginController);
+app.use('/mars/v1', deviceController);
+app.use('/mars/v1', endPointController);
+app.use('/mars/v1/statistics', statisticController);
+app.use('/mars/v1/useraccount/v1', useraccountController);
+app.use('/mars/v1/flows', flowController);
+app.use('/mars/v1/healthycheck/v1', alertRuleController);
+app.use('/mars/v1/alert', alertController);
+app.use('/mars/v1/logs/v1', logController);
+app.use('/mars/v1/cluster', clusterController);
+app.use('/mars/v1', loginController);
 
 
 // set port
