@@ -54,7 +54,7 @@ module.exports = function (config) {
       inline: true,
       port: port,
       proxy: {
-        '/onos/v1': 'http://localhost:4001'
+        '/mars': 'http://localhost:4001'
       }
     },
     module: {

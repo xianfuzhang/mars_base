@@ -132,3 +132,21 @@
 .device-detail__item-value{
   margin-left: 10px;
 }
+
+.device-detail__available{
+  height: 16px;
+  width: 16px;
+  background-image: url('../../../components/table/images/status-icons.png');
+  background-repeat: no-repeat;
+  background-size: 64px auto;
+  background-position: -48px 0;
+}
+
+.device-detail__inavailable{
+  height: 16px;
+  width: 16px;
+  background-image: url('../../../components/table/images/status-icons.png');
+  background-repeat: no-repeat;
+  background-size: 64px auto;
+  background-position: -48px -15px;
+}

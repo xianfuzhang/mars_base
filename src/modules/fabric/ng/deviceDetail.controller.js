@@ -42,7 +42,7 @@ export class DeviceDetailController {
         this.scope.detailValue = res.data;
 
         this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE') + "(" + this.scope.detailValue.annotations.name + ")";
-
+        this.scope.detailValue.leaf_group = !this.scope.detailValue.leaf_group ? '-' : this.scope.detailValue.leaf_group;
       }
       this.init();
     });
