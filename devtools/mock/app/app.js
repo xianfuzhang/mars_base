@@ -37,7 +37,7 @@ app.use(sessionParser);
 app.use(initController);
 // setup the routes
 app.use('/mars/v1', deviceController);
-app.use('/mars/v1', endPointController);
+app.use('/mars/v1/endpoints', endPointController);
 app.use('/mars/v1/statistics', statisticController);
 app.use('/mars/v1/useraccount/v1', useraccountController);
 app.use('/mars/v1/flows', flowController);

@@ -16,7 +16,7 @@ let config = {
   
   flowNumber: 10,
   
-  alertRuleNumber: 5,
+  alertRuleNumber: 10,
   alertRuleStatus: ['enabled', 'disabled'],
   alertRuleTypes: ['cpu', 'ram', 'disk'],
   alertRuleLevels: [0, 1],
@@ -34,6 +34,13 @@ let config = {
           name: "email_name_2",
           email: "email1@noc.com"
         }
+      ],
+      sms: [
+        {
+          phone_number: "8860926895615",
+          content_code: "SMS_0001",
+          Content_Pattern: {"code":"1234", "project":"mars", "msg":"xxxxxx"}
+        }
       ]
     }
   }, {
@@ -49,6 +56,13 @@ let config = {
         {
           name: "email_name_1",
           email: "email2@noc.com"
+        }
+      ],
+      sms: [
+        {
+          phone_number: "8860926895615",
+          content_code: "SMS_0002",
+          Content_Pattern: {"code":"1234", "project":"mars", "msg":"xxxxxx"}
         }
       ]
     }

@@ -45,12 +45,23 @@ router.delete('/history/all', function (req, res) {
   return res.status(200).json('All alerts had been deleted!');
 });
 
-router.get('/group', function (req, res) {
-  return res.json({groups: cloudModel.alert.groups});
+router.get('/group/receiver', function (req, res) {
+  return res.status(200).json({groups: cloudModel.alert.groups});
 });
 
+router.get('/group/receiver/:groupName', function (req, res) {
+  let index = cloudModel.alert.groups.findIndex((group) => {
+    return group.name === req.params.groupName;
+  });
+  
+  if(index === -1) {
+    return res.status(404).json("This group doesn't exist!");
+  }
+  
+  return res.status(200).json({data: cloudModel.alert.groups[index]});
+});
 
-router.post('/group', function (req, res) {
+router.post('/group/receiver', function (req, res) {
   if(!req.body.name || !req.body.receive) {
     return res.status(400).json("Valid params are required!");
   }
@@ -72,7 +83,7 @@ router.post('/group', function (req, res) {
   return res.status(200).json('Alert group has been added!');
 });
 
-router.delete('/group/:groupName', function (req, res) {
+router.delete('/group/receiver/:groupName', function (req, res) {
   let index = cloudModel.alert.groups.findIndex((group) => {
     return group.name === req.params.groupName;
   });
@@ -83,6 +94,37 @@ router.delete('/group/:groupName', function (req, res) {
   
   cloudModel.alert.groups.splice(index, 1);
   return res.status(200).json('This group has been deleted!');
+});
+
+
+router.post('/basicconfig', function(req, res) {
+  if(!req.body.wechat && !req.body.smtp && !req.body.sms) {
+    return res.status(400).json("The paramater is invalid!");
+  }
+  
+  let config = {};
+  if(req.body.wechat)
+    config.wechat = req.body.wechat;
+  
+  if(req.body.smtp)
+    config.smtp = req.body.smtp;
+  
+  if(req.body.sms)
+    config.sms = req.body.sms;
+  
+  cloudModel.alert.basicconfig = config;
+  
+  return res.status(200).json('This config has been added!');
+})
+
+router.get('/basicconfig', function (req, res) {
+  return res.status(200).json({data: cloudModel.alert.basicconfig});
+});
+
+router.delete('/basicconfig', function (req, res) {
+  cloudModel.alert.basicconfig = {};
+  
+  return res.status(200).json('The alert basicconfig has been deleted!');
 });
 
 module.exports = router;
