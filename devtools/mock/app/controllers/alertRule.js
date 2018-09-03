@@ -5,24 +5,7 @@ const express = require('express'),
   _ = require('lodash');
 
 router.get('/threshold', function (req, res) {
-  if (!req.params.from) {
-    return res.status(404).json("Controller's or switch's threshold is required");
-  }
-  
-  if (!req.params.type) {
-    return res.status(404).json('Threshold type is required');
-  }
-  
-  let rules = cloudModel.alert.rules.filter((rule) => {
-    return rule.from === req.params.from && rule.type === req.params.type;
-  });
-  
-  if(rules.length) {
-    return res.json({data: formatRule(rules)});
-  } else {
-    return res.status(404).json("No data exists!");
-  }
-  
+  return res.json({data: formatRule(cloudModel.alert.rules)});
 });
 
 router.get('/:from/:type/threshold', function (req, res) {
@@ -129,10 +112,24 @@ function formatRule(rules) {
   
   if(_.isArray(tmpRules)) {
     tmpRules.forEach((rule) => {
+      if (rule.type == 'port') {
+        rule.query_rx = rule.query.query_rx;
+        rule.query_tx = rule.query.query_tx;
+        
+        delete rule['query'];
+      }
+      
       delete rule['from'];
       delete rule['type'];
     })
   } else {
+    if (rule.type == 'port') {
+      rule.query_rx = rule.query.query_rx;
+      rule.query_tx = rule.query.query_tx;
+  
+      delete rule['query'];
+    }
+    
     delete tmpRules['from'];
     delete tmpRules['type'];
   }
