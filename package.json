@@ -10,6 +10,7 @@
     "prebuild:dev": "webpack --config devtools/webpack/webpack.config",
     "build:dev": "concurrently \"webpack-dev-server --config devtools/webpack/webpack.config\" \"nodemon devtools/mock/app/app.js\"",
     "prestart": "npm install",
+    "build:code": "webpack --config devtools/webpack/webpack.config",
     "build:component": "webpack --config devtools/webpack/webpack.config --env.environment=component",
     "postbuild:component": "concurrently \"webpack-dev-server --config devtools/webpack/webpack.config --env.environment=component\" \"node devtools/mock/app/app.js\"",
     "start": "http-server -a localhost -p 8000 -c-1 ./app",
