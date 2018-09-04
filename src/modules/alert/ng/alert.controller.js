@@ -4,11 +4,11 @@ export class AlertController {
       '$scope',
       '$rootScope',
       '_',
-      '$http',
       '$filter',
       '$q',
       '$log',
-      '$uibModal',
+      //'$uibModal',
+      'dialogService',
       'appService',
       'tableProviderFactory',
       'alertDataManager',
@@ -64,7 +64,8 @@ export class AlertController {
     scope.onTableRowSelectAction = (event) => {
       if (event.data && event.action) {
         if (event.action.value === 'delete') {
-          this.confirmDialog(this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORY'))
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORY'))
+          //this.confirmDialog(this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORY'))
             .then((data) =>{
               this.di.alertDataManager.deleteAlertHistory(event.data.uuid)
                 .then((res) =>{
@@ -80,7 +81,8 @@ export class AlertController {
 
     scope.batchRemove = ($value) => {
       if ($value.length) {
-        this.confirmDialog(this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES'))
+        this.di.dialogService.createDialog('warning', this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES'))
+        //this.confirmDialog(this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES'))
           .then((data) =>{
             this.batchDeleteAlertHistory($value);
           }, (res) =>{
@@ -128,7 +130,7 @@ export class AlertController {
       }
     });
   }
-
+  /**
   confirmDialog(content) {
     let defer = this.di.$q.defer();
     this.di.$uibModal
@@ -157,7 +159,7 @@ export class AlertController {
 
     return defer.promise;
   }
-
+  **/
 
   batchDeleteAlertHistory(arr) {
     let uuids = [];

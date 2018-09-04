@@ -7,7 +7,8 @@ export class DeviceController {
       '$log',
       '$q',
       '$filter',
-      '$uibModal',
+      //'$uibModal',
+      'dialogService',
       'appService',
       'deviceService',
       'deviceDataManager',
@@ -93,7 +94,8 @@ export class DeviceController {
     this.scope.onTableRowSelectAction = (event) => {
       if (event.data && event.action) {
         if (event.action.value === 'delete') {
-          this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.DELETE_SWITCH'))
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCHES.DIALOG.CONTENT.DELETE_SWITCH'))
+          //this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.DELETE_SWITCH'))
             .then((data) =>{
               this.di.deviceDataManager.deleteDevice(event.data.id)
                 .then((res) =>{
@@ -160,7 +162,8 @@ export class DeviceController {
 
     this.scope.batchRemove = ($value) => {
       if ($value.length) {
-        this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.BATCH_DELETE_SWITCH'))
+        this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCHES.DIALOG.CONTENT.BATCH_DELETE_SWITCH'))
+        //this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.BATCH_DELETE_SWITCH'))
           .then((data) =>{
             this.batchDeleteDevices($value);
           }, (res) =>{
@@ -416,7 +419,7 @@ export class DeviceController {
 
     this.scope.$emit('batch-delete-endpoints');
   }
-
+  /**
   confirmDialog(content) {
     let defer = this.di.$q.defer();
     this.di.$uibModal
@@ -444,7 +447,7 @@ export class DeviceController {
     });
 
     return defer.promise;
-  }
+  }**/
 }
 
 DeviceController.$inject = DeviceController.getDI();

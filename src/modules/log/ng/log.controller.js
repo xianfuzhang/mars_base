@@ -4,6 +4,7 @@ export class LogController {
       '$filter',
       '$scope',
       '$q',
+      'dialogService',
       'logService',
       'logDataManager',
       'tableProviderFactory'
@@ -39,7 +40,8 @@ export class LogController {
     this.scope.onTableRowSelectAction = (event) => {
       if (event.data && event.action) {
         if (event.action.value === 'delete') {
-          this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.DELETE_SWITCH'))
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCHES.DIALOG.CONTENT.DELETE_SWITCH'))
+          //this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.DELETE_SWITCH'))
             .then((data) =>{
               this.di.logDataManager.deleteDevice(event.data.id)
                 .then((res) =>{

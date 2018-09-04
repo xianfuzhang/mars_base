@@ -5,7 +5,8 @@ export class AccountManageController {
       '$scope',
       '$filter',
       '$q',
-      '$uibModal',
+      //'$uibModal',
+      'dialogService',
       'accountService',
       'notificationService',
       'accountDataManager',
@@ -64,7 +65,8 @@ export class AccountManageController {
 
     this.scope.batchRemove = ($value) => {
       if ($value.length) {
-        this.confirmDialog('warning', this.translate('MODULE.ACCOUNT.DIALOG.CONTENT.BATCH_DELETE_ACCOUNT'))
+        this.di.dialogService.createDialog('warning', this.translate('MODULE.ACCOUNT.DIALOG.CONTENT.BATCH_DELETE_ACCOUNT'))
+        //this.confirmDialog('warning', this.translate('MODULE.ACCOUNT.DIALOG.CONTENT.BATCH_DELETE_ACCOUNT'))
           .then((data) =>{
             this.batchDeleteUserAccounts($value);
           });
@@ -98,6 +100,7 @@ export class AccountManageController {
     });
   }
 
+  /**
   confirmDialog(type, content) {
     let defer = this.di.$q.defer();
     this.di.$uibModal
@@ -125,7 +128,7 @@ export class AccountManageController {
     });
 
     return defer.promise;
-  }
+  }**/
 
   batchDeleteUserAccounts(arr) {
     let deferredArr = [];
