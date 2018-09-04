@@ -1,5 +1,4 @@
-import {MDCRipple} from '@material/ripple';
-
+// import {MDCRipple} from '@material/ripple';
 export class DashboardController {
   static getDI() {
     return [
@@ -140,7 +139,7 @@ export class DashboardController {
       let controllerSummary = {};
       let ctrlNodes = dataModel['cluster'];
       controllerSummary.count = ctrlNodes.length;
-      if(ctrlNodes.length > 1) {
+      if(ctrlNodes.length === 1) {
         controllerSummary.mode = this.translate('MODULES.DASHBOARD.CONTROLLER.MODE.SINGLETON');
       } else {
         controllerSummary.mode = this.translate('MODULES.DASHBOARD.CONTROLLER.MODE.HA');
@@ -168,8 +167,8 @@ export class DashboardController {
         let cpu_info = statistic['cpu_info'];
         cpuUsage.push( 100 - cpu_info.idle);
 
-        let mem_info = statistic['memory_info']['mem'];
-        memUsage.push(100* mem_info.free/mem_info.total);
+        let mem_info = statistic['memory_info'];
+        memUsage.push(100* mem_info.free_percent);
 
         category.push(statistic['ip']);
       });
