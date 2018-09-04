@@ -74,26 +74,21 @@ router.get('/ports/:deviceId/:port', function (req, res) {
 });
 
 router.get('/system/controller', function (req, res) {
-  let statistics = [];
+  let statistics = {};
   
   cloudModel.clusters.forEach((cluster) => {
-    statistics.push({
-      ip: cluster.ip,
-      ...cluster.statistic
-    });
+    statistics[cluster.ip] = cluster.statistic
   })
   return res.json({statistics: statistics});
 })
 
 router.get('/system', function (req, res) {
-  let statistics = [];
+  let statistics = {};
   
   cloudModel.devices.forEach((device) => {
-    statistics.push({
-      device_id: device.id,
-      ...device.statistic
-    });
+    statistics[device.id] = device.statistic;
   })
+  
   return res.json({statistics: statistics});
 });
 
