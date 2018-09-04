@@ -73,60 +73,58 @@ class Device {
   }
   
   createSystemStatistic() {
-    let uptime = this.uptime;
-    let day = Math.floor(uptime/(60*60*24));
-    let hour = Math.floor(uptime % (60 * 60 * 24) / (3600));
-    let minute = Math.floor(uptime % (60 * 60 * 24) % 3600 / 60);
     
-    let user_proc = chance.floating({min:0.5, max: 30.0, fixed:1});
-    let hardware_int = chance.floating({min:0.5, max: 30.0, fixed:1});
-    let mem_total = 1012 * 1024 * 12;
-    let mem_free = chance.natural({min: 1024*100, max: 1024*1024*4});
-    let swap_total = 1012 * 1024 * 4;
-    let swap_free = chance.natural({min: 1024*1024*2, max: 1024*1024*4});
-    let disk_total = chance.floating({min: 8, max: 16, fixed: 1});
-    let disk_used = chance.floating({min: 1.0, max: 7.9, fixed: 1});
+    let uptime = this.uptime;
+    
+    let user_proc = chance.floating({min:10.0, max: 40.0, fixed:1});
+    let system = chance.floating({min:10.0, max: 40.0, fixed:1});
+    let wait = chance.floating({min:0, max: 10.0, fixed:1});
+    
+    let mem_total = 1012 * 1024 * chance.integer({min: 12, max: 16});
+    let mem_buffered = chance.natural({min: 1024*100, max: 1024*1024});
+    let mem_used = chance.natural({min: 1024*1024, max: 1024*1024*8});
+    let mem_cached = chance.natural({min: 1024*1000, max: 1024*1024*2});
+    let mem_slab_recl = chance.natural({min: 1024 * 100, max: 1024*600});
+    let mem_slab_unrecl = chance.natural({min: 1024 * 100, max: 1024*600});
+    let mem_free = mem_total - mem_buffered - mem_used - mem_cached - mem_slab_recl - mem_slab_unrecl;
+    
+    let disk_total = 1012 * 1024 * chance.integer({min: 400, max: 600});
+    let disk_used = chance.natural({min: 1024*1024*100, max: 1024*1024*300});
+    let disk_reserved = chance.natural({min: 1024*1024*10, max: 1024*1024*100});
+    let disk_free = disk_total - disk_used - disk_reserved;
     
     return {
-      "global": {
-        "uptime": `${day} day, ${hour}:${minute}`,
-        "avg_last_min": chance.floating({min: 0.02, max: 1.0, fixed: 2}),
-        "avg_5_min": chance.floating({min: 0.12, max: 3.0, fixed: 2}),
-        "avg_15_min": chance.floating({min: 0.07, max: 5.0, fixed: 2})
+      cpu_info: {
+        wait: wait,
+        user: user_proc,
+        system: system,
+        idle: (100.0 - user_proc - system - wait).toFixed(1),
+        nice: 0,
+        interrupt: 0,
+        softirq: 0,
+        steal: 0
       },
-      "cpu_info": {
-        "user_proc": user_proc,
-        "sys_proc": 0.0,
-        "idle": (100.0 - user_proc - hardware_int).toFixed(1),
-        "wait_io": 0,
-        "hardware_int": hardware_int,
-        "software_int": 0
+      memory_info: {
+        cached: mem_cached,
+        slab_recl: mem_slab_recl,
+        slab_unrecl_percent: mem_slab_unrecl / mem_total,
+        used: mem_used,
+        used_percent: mem_used / mem_total,
+        free_percent: mem_free / mem_total,
+        slab_recl_percent: mem_slab_recl / mem_total,
+        buffered: mem_buffered,
+        free: mem_free,
+        buffered_percent: mem_buffered / mem_total,
+        slab_unrecl: mem_slab_unrecl,
+        cached_percent: mem_cached / mem_total
       },
-      "memory_info": {
-        "mem":
-          {
-            "total": mem_total,
-            "free":  mem_free ,
-            "used":  mem_total - mem_free ,
-            "buffers":  chance.natural({min: 2000000, max: 8000000})
-          },
-        "swap":
-          {
-            "total":  swap_total ,
-            "used":  swap_total - swap_free ,
-            "free":  swap_free ,
-            "cached":  chance.natural({min: 200000, max: 1000000})
-          }
-      },
-      "disk_info": {
-        "partition": [
-          {
-            "filesystem": "/dev/sda2",
-            "size":  disk_total,
-            "used":  disk_used,
-            "Available":  (disk_total - disk_used).toFixed(1),
-          }
-        ]
+      disk_info: {
+        free: disk_free,
+        free_percent: disk_free / disk_total,
+        used: disk_used,
+        used_percent: disk_used / disk_total,
+        reserved: disk_reserved,
+        reserved_percent: disk_reserved / disk_total
       }
     }
   }
