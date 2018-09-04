@@ -44,12 +44,17 @@ export class CreateUserAccountController {
         content: this.translate('MODULE.LOGIN.FORM.PASSWORD.HELP')
       },
       group:{
+        'supergroup': false,
         'admingroup': false,
         'guestgroup': false
       },
       groupHelper: {
         validation: 'false',
         content: this.translate('MODULE.ACCOUNT.CREATE.GROUP.HELP')
+      },
+      superGroupDisplayLabel: {
+        id: 'super_group',
+        label: this.translate('MODULE.ACCOUNT.CREATE.GROUP.SUPER'),
       },
       adminGroupDisplayLabel: {
         id: 'admin_group',
@@ -87,7 +92,8 @@ export class CreateUserAccountController {
       else {
         this.scope.userModel.passwordHelper.validation = 'false';
       }
-      if (!this.scope.userModel.group.admingroup && !this.scope.userModel.group.guestgroup) {
+      if (!this.scope.userModel.group.admingroup && !this.scope.userModel.group.guestgroup
+        && !this.scope.userModel.group.supergroup) {
         this.scope.userModel.groupHelper.validation = 'true';
         invalid = true;
       }
@@ -96,6 +102,9 @@ export class CreateUserAccountController {
       }
       if (invalid) {
         return;
+      }
+      if (this.scope.userModel.group.supergroup) {
+        this.scope.userModel.groups.push('supergroup');
       }
       if (this.scope.userModel.group.admingroup) {
         this.scope.userModel.groups.push('admingroup');

@@ -20,6 +20,8 @@
       <div class="column-manipulation-field__item">
         <div class="group-item-field">
           <span ng-bind="'MODULE.ACCOUNT.CREATE.GROUPS'|translate"></span>
+          <mdl-checkbox ng-model="userModel.group.supergroup" display-label="userModel.superGroupDisplayLabel">
+          </mdl-checkbox>
           <mdl-checkbox ng-model="userModel.group.admingroup" display-label="userModel.adminGroupDisplayLabel">
           </mdl-checkbox>
           <mdl-checkbox ng-model="userModel.group.guestgroup" display-label="userModel.guestGroupDisplayLabel">
