@@ -114,7 +114,7 @@ export class ConfigurationListController {
 
     let getConfigurationList = ()=>{
 
-      let test_options = [{label:"myasgaggasdg",value:"myasgaggasdg"},{label:"myasgaggasdg1",value:"myasgaggasdg1"},{label:"myasgaggasdg2",value:"myasgaggasdg2"}]
+      let test_options = [{label:"客户诺配置",value:"myasgaggasdg"},{label:"客户云配置",value:"myasgaggasdg1"},{label:"客户Mars配置",value:"myasgaggasdg2"}]
       scope.fileNameSelectedDisLab.options = test_options;
 
       // //mock没有数据，暂时注释 //TODO
@@ -131,7 +131,7 @@ export class ConfigurationListController {
 
     let getConfigurationByName = (name) =>{
       //TODO 测试使用
-      this.di.$scope.configurationModel.configurationShow = '';
+      this.di.$scope.configurationListModel.configurationShow = '';
 
       // this.di.configurationDataManager.getConfigurationByFileName(name)
       //   .then((res)=>{
@@ -151,7 +151,7 @@ export class ConfigurationListController {
       // console.log(newValue);
       if(newValue){
         this.fileNameInput.disabled = false;
-        this.di.$scope.configurationModel.configurationShow = '';
+        this.di.$scope.configurationListModel.configurationShow = '';
       } else {
         this.fileNameInput.disabled = true;
         getConfigurationByName(this.fileNameInput.value);
