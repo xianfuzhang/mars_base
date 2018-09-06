@@ -535,29 +535,34 @@ function getAlertQuery(type) {
       };
     case 'ram':
       return {
-        "used_ratio": 80,
-        "condition": "gt",
-        "continue": 180
+        used_ratio: 80,
+        condition: "gt",
+        continue: 180
       }
     case 'disk':
       return {
-        "root_used_ratio": 90,
-        "condition": "gt",
-        "continue": 1800
+        root_used_ratio: 90,
+        condition: "gt",
+        continue: 1800
       }
     case 'port':
-      return {
-        "query_rx": {
-          "rx_util": 70,
-          "condition": "gt",
-          "continue": 600
+      let tmp = [
+        {
+          query_rx: {
+            rx_util: 70,
+            condition: "gt",
+            continue: 600
+          }
         },
-        "query_tx": {
-          "tx_util": 60,
-          "condition": "gt",
-          "continue": 600
-        }
-      }
+        {
+          query_tx: {
+            tx_util: 60,
+            condition: "gt",
+            continue: 600
+          }
+        }]
+      
+      return chance.pickone(tmp);
   }
 }
 
