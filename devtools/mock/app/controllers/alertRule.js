@@ -122,6 +122,8 @@ function formatRule(rules, isGetAll) {
       if(!isGetAll) {
         delete rule['from'];
         delete rule['type'];
+      } else {
+        formatType(rule)
       }
     })
   } else {
@@ -135,10 +137,32 @@ function formatRule(rules, isGetAll) {
     if(!isGetAll) {
       delete rule['from'];
       delete rule['type'];
+    } else {
+      formatType(rule)
     }
   }
   
   return tmpRules;
+}
+
+function formatType(rule) {
+  switch(rule.type){
+    case 'cpu':
+      rule.type = 'cpu_utilization';
+      
+    case 'ram':
+      rule.type = 'ram_used_ratio';
+      
+    case 'disk':
+      rule.type = 'disk_root_used_ratio';
+      
+    case 'port':
+      if(rule.query_rx)
+        rule.type = 'rx_util';
+      
+      if(rule.query_tx)
+        rule.type = 'tx_util';
+  }
 }
 
 function getRuleQuery(body, type){
