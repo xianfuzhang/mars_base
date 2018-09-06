@@ -149,19 +149,34 @@ function formatType(rule) {
   switch(rule.type){
     case 'cpu':
       rule.type = 'cpu_utilization';
+      rule.query.value = rule.query.util
+      delete rule.query.util;
+      break;
       
     case 'ram':
       rule.type = 'ram_used_ratio';
+      rule.query.value = rule.query.used_ratio
+      delete rule.query.used_ratio
+      break;
       
     case 'disk':
       rule.type = 'disk_root_used_ratio';
+      rule.query.value = rule.query.root_used_ratio
+      delete rule.query.root_used_ratio;
+      break;
       
     case 'port':
-      if(rule.query_rx)
+      if(rule.query_rx){
         rule.type = 'rx_util';
+        rule.query_rx.value = rule.query_rx.rx_util
+        delete rule.query_rx.rx_util;
+      }
       
-      if(rule.query_tx)
+      if(rule.query_tx) {
         rule.type = 'tx_util';
+        rule.query_tx.value = rule.query_tx.tx_util
+        delete rule.query_tx.tx_util;
+      }
   }
 }
 
