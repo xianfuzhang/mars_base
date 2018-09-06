@@ -2,3 +2,48 @@
 @import 'default';
 @import 'shared';
 @import 'framework_layout';
+
+
+
+
+
+
+@-webkit-keyframes fly_into {
+  0% {
+    margin-left: -100%;
+  }
+
+  100% {
+    margin-left: 0%;
+  }
+}
+
+@-moz-keyframes section_expand {
+  0% {
+    margin-left: -100%;
+  }
+
+  100% {
+    margin-left: 0%;
+  }
+}
+
+@-ms-keyframes section_expand {
+  0% {
+    margin-left: -100%;
+  }
+
+  100% {
+    margin-left: 0%;
+  }
+}
+
+@keyframes section_expand {
+  0% {
+    margin-left: -100%;
+  }
+
+  100% {
+    margin-left: 0%;
+  }
+}
