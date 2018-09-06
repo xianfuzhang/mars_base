@@ -26,7 +26,8 @@ let config = {
       wechat: [
         {
           department: "department1",
-          agentId: 1002121
+          agentId: 1002121,
+          agent_corpsecret: "testeE7JIe3vwVeaH30XbHj0uY_7tOy0tw_VlmhGe0g",
         }
       ],
       email: [
@@ -49,7 +50,8 @@ let config = {
       wechat: [
         {
           department: "department2",
-          agentId: 1002122
+          agentId: 1002122,
+          agent_corpsecret: "voeveE7JIe3vwVeaH30XbHj0uY_7tOy0tw_VlmhGe0g"
         }
       ],
       email: [

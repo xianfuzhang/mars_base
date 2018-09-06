@@ -5,7 +5,7 @@ const express = require('express'),
   _ = require('lodash');
 
 router.get('/threshold', function (req, res) {
-  return res.json({data: formatRule(cloudModel.alert.rules)});
+  return res.json(formatRule(cloudModel.alert.rules, true));
 });
 
 router.get('/:from/:type/threshold', function (req, res) {
@@ -22,7 +22,7 @@ router.get('/:from/:type/threshold', function (req, res) {
   });
   
   if(rules.length) {
-    return res.json({data: formatRule(rules)});
+    return res.json(formatRule(rules));
   } else {
     return res.status(404).json("No data exists!");
   }
@@ -47,7 +47,7 @@ router.get('/:from/:type/threshold/:ruleName', function (req, res) {
   });
   
   if(rule) {
-    return res.json({data: formatRule(rule)});
+    return res.json(formatRule(rule));
   } else {
     return res.status(404).json("No data exists!");
   }
@@ -107,7 +107,7 @@ router.delete('/:from/:type/threshold/:ruleName', function (req, res) {
   }
 });
 
-function formatRule(rules) {
+function formatRule(rules, isGetAll) {
   let tmpRules = _.cloneDeep(rules);
   
   if(_.isArray(tmpRules)) {
@@ -119,8 +119,10 @@ function formatRule(rules) {
         delete rule['query'];
       }
       
-      delete rule['from'];
-      delete rule['type'];
+      if(!isGetAll) {
+        delete rule['from'];
+        delete rule['type'];
+      }
     })
   } else {
     if (rule.type == 'port') {
@@ -129,9 +131,11 @@ function formatRule(rules) {
   
       delete rule['query'];
     }
-    
-    delete tmpRules['from'];
-    delete tmpRules['type'];
+  
+    if(!isGetAll) {
+      delete rule['from'];
+      delete rule['type'];
+    }
   }
   
   return tmpRules;
