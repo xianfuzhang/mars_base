@@ -58,7 +58,7 @@ router.get('/group/receiver/:groupName', function (req, res) {
     return res.status(404).json("This group doesn't exist!");
   }
   
-  return res.status(200).json({data: cloudModel.alert.groups[index]});
+  return res.status(200).json(cloudModel.alert.groups[index]);
 });
 
 router.post('/group/receiver', function (req, res) {
@@ -118,7 +118,7 @@ router.post('/basicconfig', function(req, res) {
 })
 
 router.get('/basicconfig', function (req, res) {
-  return res.status(200).json({data: cloudModel.alert.basicconfig});
+  return res.status(200).json(cloudModel.alert.basicconfig);
 });
 
 router.delete('/basicconfig', function (req, res) {
