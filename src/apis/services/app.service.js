@@ -57,6 +57,7 @@ export class appService {
             'items':[
               {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration'},
               {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_LIST'), 'url': '/configuration_list'},
+              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY'), 'url': '/configuration_history'}
             ]
           },
           {
@@ -192,7 +193,18 @@ export class appService {
   getConfigurationFileUrl(filename){
     return this.getZoneEndpoint() + '/network/configuration/files/' + filename;
   }
-
+  
+  getConfigurationHistoryUrl(subjectClass, subject){
+    let url = this.getZoneEndpoint() + '/utility/confighistory/v1/';
+    if(subjectClass){
+      url = url + '/' + subjectClass;
+      if(subject){
+        url =   url + '/' + subject;
+      }
+    }
+    return url;
+  }
+  
   getAlertHistoryUrl(){
     return this.getZoneEndpoint() + '/alert/history/list';
   }

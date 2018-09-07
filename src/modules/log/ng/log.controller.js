@@ -4,6 +4,7 @@ export class LogController {
       '$filter',
       '$scope',
       '$q',
+      '$timeout',
       'dialogService',
       'logService',
       'logDataManager',
@@ -19,44 +20,46 @@ export class LogController {
     
     this.scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
+    this.date = this.di.$filter('date');
   
     this.scope.pageTitle = this.translate('MODULE.LOG.PAGE.TITLE');
+    this.scope.loading = false;
+    this.scope.hasData = false;
+    
+    let now = Date.now();
+    let today = this.date(now, 'yyyy-MM-dd');
+    this.scope.today = new Date(today + ' 23:59:59');
+    this.scope.dateFrom = new Date(today + ' 00:00:00');
+    this.scope.dateTo = new Date(today + ' 23:59:59');
+    
+    // the params that had send to get data
+    let dateObj = {from: null, to: null};
   
     this.scope.logModel = {
-      actionsShow: this.di.logService.getActionsShow(),
+      // actionsShow: this.di.logService.getActionsShow(),
       // rowActions: this.di.logService.getDeviceTableRowActions(),
       logProvider: null,
       logAPI: null
     };
+    
+    this.scope.search = () => {
+      this.scope.loading = true;
+      
+      this.scope.logModel.logAPI.queryUpdate();
+    }
   
-    this.unsubscribers = [];
+    this.scope.file = () => {
+      this.scope.loading = true;
+      this.di.$timeout(() => {
+        this.scope.loading = false;
+      }, 2000)
+    }
   
-    this.scope.onTableRowClick = (event) => {
-      if (event.$data){
-        this.scope.logModel.logAPI.setSelectedRow(event.$data.mac);
-      }
-    };
-  
-    this.scope.onTableRowSelectAction = (event) => {
-      if (event.data && event.action) {
-        if (event.action.value === 'delete') {
-          this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCHES.DIALOG.CONTENT.DELETE_SWITCH'))
-          //this.confirmDialog(this.translate('MODULES.SWITCHES.DIALOG.CONTENT.DELETE_SWITCH'))
-            .then((data) =>{
-              this.di.logDataManager.deleteDevice(event.data.id)
-                .then((res) =>{
-                  this.scope.logModel.logAPI.queryUpdate();
-                });
-            }, (res) =>{
-              this.di.$log.debug('delete switch dialog cancel');
-            });
-        }
-      }
-    };
-  
-    this.scope.onDeviceAPIReady = ($api) => {
+    this.scope.onLogAPIReady = ($api) => {
       this.scope.logModel.logAPI = $api;
     };
+    
+    this.unsubscribers = [];
   
     this.init();
   
@@ -71,11 +74,18 @@ export class LogController {
     this.scope.logModel.logProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
-        this.di.logDataManager.getLogs(params).then((res) => {
+        
+        let dateObj = {};
+        dateObj.from = this.date(this.scope.dateFrom, 'yyyy-MM-dd');
+        dateObj.to = this.date(this.scope.dateTo, 'yyyy-MM-dd');
+        
+        this.di.logDataManager.getLogs(dateObj).then((res) => {
+          this.scope.loading = false;
+          this.scope.hasData = res.data.logs.length ? true : false;
           this.scope.entities = this.getEntities(res.data.logs);
           defer.resolve({
             data: this.scope.entities,
-            count: 4
+            count: this.scope.entities.length
           });
         });
         return defer.promise;
@@ -84,8 +94,6 @@ export class LogController {
         return {
           schema: this.di.logService.getTableSchema(),
           index_name: 'created_time',
-          // rowCheckboxSupport: true,
-          // rowActionsSupport: true
         };
       }
     });
@@ -94,16 +102,16 @@ export class LogController {
   getEntities(origins) {
     let entities = [];
     if(!Array.isArray(origins)) return entities;
-    //switch(this.scope.tabSelected.type) {
-    //case 'log':
     origins.forEach((item) => {
       let obj = {};
-      obj.type = item.type;
-      obj.created_time = item.created_time;
-      obj.operation = item.operation;
-      obj.content = item.content;
-      obj.creator = item.creator;
-      obj.level = item.level;
+      let arr = item.split('|');
+      
+      obj.created_time = arr[0];
+      obj.type = arr[1];
+      obj.level = arr[2];
+      obj.creator = arr[3];
+      obj.operation = arr[4];
+      obj.content = arr[5];
       
       entities.push(obj);
     });

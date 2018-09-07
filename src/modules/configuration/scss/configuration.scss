@@ -1305,3 +1305,34 @@
 //.text-field-container {
 //  min-width: 200px; }
 
+@include block(actions){
+  margin: 15px 0;
+  font-weight: bold;
+  font-size: 15px;
+  
+  @include element(input) {
+    height: 20px;
+    padding: 5px 0;
+  }
+  
+  @include element(button){
+    width: 70px;
+    height: 35px;
+    margin: 0 15px;
+    padding: 5px 0;
+    border-radius: 3px;
+  
+    @include state(disabled) {
+      background-color: #E0E0E0 !important;
+    }
+  }
+  
+  @include element(search-btn) {
+    background-color: #7accef;
+  }
+  
+  @include element(file-btn) {
+    float: right;
+    background-color: #7accef;
+  }
+}
