@@ -45,7 +45,7 @@ router.delete('/history/all', function (req, res) {
   return res.status(200).json('All alerts had been deleted!');
 });
 
-router.get('/group/receiver', function (req, res) {
+router.get('/group/receiver/all', function (req, res) {
   return res.status(200).json({groups: cloudModel.alert.groups});
 });
 

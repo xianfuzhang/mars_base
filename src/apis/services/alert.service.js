@@ -18,8 +18,66 @@ export class alertService {
     this.translate = this.di.$filter('translate');
   }
 
+
+  getRuleResource(trans){
+    let res = "";
+    if(trans === 'CPU使用率'){
+      type = "cpu";
+    } else if(trans === '内存使用率'){
+      type = "ram";
+    } else if(trans === '硬盘使用率'){
+      type = "disk";
+    } else if(trans === '下载速率'){
+      type = "port";
+    } else if(type === '上传速率'){
+      type = "port";
+    }
+    return res;
+  }
+
+  getRuleObject(trans){
+    let obj = "";
+    if(trans === '交换机'){
+      obj = "switch";
+    } else if(trans === '控制器'){
+      obj = "controller";
+    }
+    return obj;
+  }
+
+  getRuleTypeTranslate(type) {
+    let tran = "";
+    if(type === 'cpu_utilization'){
+      tran = "CPU使用率";
+    } else if(type === 'ram_used_ratio'){
+      tran = "内存使用率";
+    } else if(type === 'disk_root_used_ratio'){
+      tran = "硬盘使用率";
+    } else if(type === 'rx_util'){
+      tran = "下载速率";
+    } else if(type === 'tx_util'){
+      tran = "上传速率";
+    }
+    return tran;
+  }
+
+   getDescriptionTranslate(query, type) {
+    let trans = "";
+    if(type === 'cpu_utilization'){
+      trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
+    } else if(type === 'ram_used_ratio'){
+      trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
+    } else if(type === 'disk_root_used_ratio'){
+      trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
+    } else if(type === 'rx_util'){
+      trans = (query.condition ==='gt'?"超过":"低于") + query.value + "Mbps持续"+ query.continue + '秒';
+    } else if(type === 'tx_util'){
+      trans = (query.condition ==='gt'?"超过":"低于") + query.value + "Mbps持续"+ query.continue + '秒';
+    }
+    return trans;
+  }
+
   getAlertTableSchema(){
-    let test = this.translate('MODULES.ALERT.HISTORY.RULE_NAME');
     return [
       {
         'label': this.translate('MODULES.ALERT.HISTORY.RULE_NAME'),
@@ -48,6 +106,181 @@ export class alertService {
       }
     ];
   }
+
+
+  getInformTabSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.ALERT.INFORM.TAB.RECEIVE_GROUP'),
+        'value': 'receive_group',
+        'type': 'receive_group'
+      },
+      {
+        'label': this.translate('MODULES.ALERT.INFORM.TAB.SERVER_CONFIG'),
+        'value': 'server_config',
+        'type': 'server_config'
+      }
+    ];
+  }
+
+  getReceiveGroupTabSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.WECHAT'),
+        'value': 'wechat',
+        'type': 'wechat'
+      },
+      {
+        'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.EMAIL'),
+        'value': 'email',
+        'type': 'email'
+      }
+    ];
+  }
+
+
+
+  getReceiveGroupTableSchema(){
+    return [
+      {
+        'label': this.translate("MODULES.ALERT.INFORM.RGTABLE.GROUP_NAME"),
+        'field': 'group_name',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.ALERT.INFORM.RGTABLE.EMAIL_GROUP"),
+        'field': 'email_group',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      },
+      {
+        'label': this.translate("MODULES.ALERT.INFORM.RGTABLE.WECHAT_GROUP"),
+        'field': 'wechat_group',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      }
+    ];
+  }
+
+
+  getHealthyCheckTableSchema(){
+    return [
+      {
+        'label': "规则名",
+        'field': 'rule_name',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': "对象",
+        'field': 'from',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      },
+      {
+        'label': "状态",
+        'field': 'status',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      },
+      {
+        'label': "级别",
+        'field': 'alert_level',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      },
+      {
+        'label': "接收群组",
+        'field': 'receive_group',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      },
+      {
+        'label': "类型",
+        'field': 'type',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      },
+      {
+        'label': "描述",
+        'field': 'description',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      }
+    ];
+  }
+
+
+  getWechatTableSchema() {
+    return [
+      {
+        'title': this.translate('MODULES.ALERT.RECEIVE_GROUP.WECHAT.DEPARTMENT'),
+        'field': 'department',
+        'sortable': "department",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.ALERT.RECEIVE_GROUP.WECHAT.AGENTID'),
+        'field': 'agentId',
+        'sortable': "agentId",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.ALERT.RECEIVE_GROUP.WECHAT.SECRET'),
+        'field': 'agent_corpsecret',
+        'sortable': "agent_corpsecret",
+        'show': true
+      }
+    ]
+  }
+
+  getEmailTableSchema() {
+    return [
+      {
+        'title': this.translate('MODULES.ALERT.RECEIVE_GROUP.EMAIL.NAME'),
+        'field': 'name',
+        'sortable': "name",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.ALERT.RECEIVE_GROUP.EMAIL.ADDRESS'),
+        'field': 'email',
+        'sortable': "email",
+        'show': true
+      }
+    ]
+  }
+
+
+  getHcObjectDisLabel(){
+    return {options: [{label: '交换机', value: 'switch'}, {label: '控制器', value: 'controller'}]}
+  }
+
+  getHcTypeSwtDisLabel(){
+    return {
+      options: [
+        {label: 'CPU', value: 'cpu'},
+        {label: '内存', value: 'ram'},
+        {label: '硬盘', value: 'disk'},
+        {label: '下载速率', value: 'rx'},
+        {label: '上传速率', value: 'tx'}
+      ]
+    }
+  }
+
+  getHcTypeCtrlDisLabel(){
+    return {
+      options: [
+        {label: 'CPU', value: 'cpu'},
+        {label: '内存', value: 'ram'},
+        {label: '硬盘', value: 'disk'},
+      ]
+    }
+  }
+
+  getHcLevelDisLabel(){
+    return {options: [{label: '高', value: 1}, {label: '低', value: 0}]}
+  }
+
+  getHcConditionDisLabel(){
+    return {options: [{label: '大于', value: 'gt'}, {label: '小于', value: 'lt'}]}
+  }
+
+  getHcStatusDisLabel(){
+    return {on: '开', off: '关'}
+  }
+
 
 }
 

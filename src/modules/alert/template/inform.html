@@ -1,0 +1,239 @@
+<div class="configuration flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="configuration__body flex_entirety__body">
+
+    <content-header big-title="{{'MODULE.HEADER.ALERT.ALERT' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.ALERT.INFORM' | translate}}</span>
+    </content-header>
+    <div class="configuration__body__content flex_entirety__body__body" style="display:flex;flex-direction: column">
+      <div style="margin-top:16px;flex-basis:35px;flex-shrink: 0;flex-grow: 0;">
+        <mdl-tabs ng-model="tabSelected" options="tabs"
+                     class-list="main__content__device-detail-tabs"
+                     on-select="onTabChange($value)">
+        </mdl-tabs>
+      </div>
+      <div style="margin-top: 16px;flex-shrink: 1;flex-grow: 1;">
+        <section class="tab-content" ng-show="tabSelected.type == 'receive_group'">
+          <div style="display: block;">
+            <div style="width:60%; display: inline-block;vertical-align: top;">
+            <mdl-table actions-show="informModel.receiveGroupTb.actionsShow"
+                       actions="informModel.receiveGroupTb.rowActions"
+                       row-click="onTableRowClick($event)"
+                       row-select-action="onRGTableRowSelectAction($event)"
+                       provider="informModel.receiveGroupTb.informTableProvider" api-ready="onInformAPIReady($api)"
+                       on-add="addReceiveGroup()" >
+              <!--on-remove="batchRemove4RGTable($value)"-->
+            </mdl-table>
+            </div>
+
+            <div style="width:30%;display: inline-block;vertical-align: top;margin-top:48px;overflow: hidden;padding-left:20px;" ng-if="informModel.groupDetails">
+              <div style="width:100%;min-width:500px;animation: .3s ease-out;animation-name: fly_into;padding-top: 16px;">
+                <div style="margin-left:10px;font-size:18px;">
+                  <div style="display: inline-block;font-weight:300">{{ "MODULES.ALERT.INFORM.RGTABLE.GROUP_NAME"|translate }} :</div>
+                  <div style="display: inline-block;"> {{informModel.groupDetails.name}}</div>
+                </div>
+
+                <mar-section title="{{'MODULES.ALERT.RECEIVE_GROUP.EMAIL'|translate}}" no-fold="true" class="">
+                  <div style="width:300px">
+                    <table style="border-spacing:30px 3px;">
+                      <thead>
+                        <th ng-repeat="hitem in informModel.emailSchema">
+                          {{hitem.title}}
+                        </th>
+                      </thead>
+
+                      <tbody>
+                        <tr ng-repeat="item in informModel.groupDetails.receive.email">
+                          <td>{{item.name}}</td>
+                          <td>{{item.email}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <!--<static-table style="max-width:400px" data="informModel.groupDetails.receive.email" columns="informModel.emailSchema"></static-table>-->
+                  </div>
+                </mar-section>
+
+                <mar-section title="{{'MODULES.ALERT.RECEIVE_GROUP.WECHAT'|translate}}" no-fold="true" class="">
+                  <div style="width:300px">
+
+                    <table style="border-spacing:30px 3px;">
+                      <thead>
+                      <th ng-repeat="hitem in informModel.wechatSchema">
+                        {{hitem.title}}
+                      </th>
+                      </thead>
+
+                      <tbody>
+                      <tr ng-repeat="item in informModel.groupDetails.receive.wechat">
+                        <td>{{item.department}}</td>
+                        <td>{{item.agentId}}</td>
+                        <td>{{item.agent_corpsecret}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    <!--<static-table style="max-width:400px" data="informModel.groupDetails.receive.wechat" columns="informModel.wechatSchema"></static-table>-->
+                  </div>
+                </mar-section>
+              </div>
+
+            </div>
+          </div>
+        </section>
+        <section class="tab-content" ng-show="tabSelected.type == 'server_config'">
+        <!--<section class="tab-content">-->
+
+
+          <div style="width:100%;display: inline-block;text-align: center;margin:0 auto;">
+
+            <div style="display: inline-block;vertical-align:top;height:100%;border:1px solid #fafafa;padding:8px;background-color: #fafafa;border-radius: 5px;text-align:left;">
+              <mar-section title="{{'MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING'|translate}}" no-fold="true" class="">
+
+                <div style="display: block;">
+                  <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="wechat_domain_component" style="width:350px;margin-top:8px;">
+                    <input type="text" id="wechat_domain" class="mdc-text-field__input" ng-model="serverConfig.wechat.domain">
+                    <label for="wechat_domain" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING.DOMAIN"|translate}}</label>
+                    <div class="mdc-notched-outline">
+                      <svg>
+                        <path class="mdc-notched-outline__path"/>
+                      </svg>
+                    </div>
+                    <div class="mdc-notched-outline__idle"></div>
+                  </div>
+                </div>
+
+                <div style="display: block">
+                <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="wechat_token_url_component" style="width:350px;margin-top:8px;">
+                  <input type="text" id="wechat_token_url" class="mdc-text-field__input" ng-model="serverConfig.wechat.tokenUrl">
+                  <label for="wechat_token_url" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING.TOKEN_URL"|translate}}</label>
+                  <div class="mdc-notched-outline">
+                    <svg>
+                      <path class="mdc-notched-outline__path"/>
+                    </svg>
+                  </div>
+                  <div class="mdc-notched-outline__idle"></div>
+                </div>
+                </div>
+
+                <div style="display: block">
+                <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="wechat_send_url_component" style="width:350px;margin-top:8px;">
+                  <input type="text" id="wechat_send_url" class="mdc-text-field__input" ng-model="serverConfig.wechat.sendUrl">
+                  <label for="wechat_send_url" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING.SEND_URL"|translate}}</label>
+                  <div class="mdc-notched-outline">
+                    <svg>
+                      <path class="mdc-notched-outline__path"/>
+                    </svg>
+                  </div>
+                  <div class="mdc-notched-outline__idle"></div>
+                </div>
+                </div>
+
+                <div style="display: block">
+                <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="corp_id_component" style="width:350px;margin-top:8px;">
+                  <input type="text" id="corp_id" class="mdc-text-field__input" ng-model="serverConfig.wechat.corpId">
+                  <label for="corp_id" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING.CORP_ID"|translate}}</label>
+                  <div class="mdc-notched-outline">
+                    <svg>
+                      <path class="mdc-notched-outline__path"/>
+                    </svg>
+                  </div>
+                  <div class="mdc-notched-outline__idle"></div>
+                </div>
+                </div>
+              </mar-section>
+              </div>
+              <!--<div style="display: inline-block;width:350px;height:100px;background-color:blue">-->
+            <div style="margin-left:50px;display: inline-block;vertical-align:top;height:100%;border:1px solid #fafafa;padding:8px;background-color: #fafafa;border-radius: 5px;text-align:left;">
+
+              <mar-section title="{{'MODULES.ALERT.SERVER_CONFIG.EMAIL_SETTING'|translate}}" no-fold="true" class="">
+                <!--<div style="display: block">-->
+                  <div style="display: block">
+                    <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="email_domain_component" style="width:350px;margin-top:8px;">
+                      <input type="text" id="email_domain" class="mdc-text-field__input" ng-model="serverConfig.email.domain">
+                      <label for="email_domain" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.EMAIL_SETTING.SMTP_HOST"|translate}}</label>
+                      <div class="mdc-notched-outline">
+                        <svg>
+                          <path class="mdc-notched-outline__path"/>
+                        </svg>
+                      </div>
+                      <div class="mdc-notched-outline__idle"></div>
+                    </div>
+                  </div>
+
+
+                  <div style="display: block">
+                    <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="email_port_component" style="width:350px;margin-top:8px;">
+                      <input type="text" id="email_port" class="mdc-text-field__input">
+                      <label for="email_port" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.EMAIL_SETTING.SMTP_PORT"|translate}}</label>
+                      <div class="mdc-notched-outline">
+                        <svg>
+                          <path class="mdc-notched-outline__path"/>
+                        </svg>
+                      </div>
+                      <div class="mdc-notched-outline__idle"></div>
+                    </div>
+                  </div>
+
+
+                  <div style="display: block">
+                    <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="email_user_component" style="width:350px;margin-top:8px;">
+                      <input type="text" id="email_user" class="mdc-text-field__input" ng-model="serverConfig.email.user">
+                      <label for="email_user" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.EMAIL_SETTING.EMAIL_USER"|translate}}</label>
+                      <div class="mdc-notched-outline">
+                        <svg>
+                          <path class="mdc-notched-outline__path"/>
+                        </svg>
+                      </div>
+                      <div class="mdc-notched-outline__idle"></div>
+                    </div>
+                  </div>
+
+
+                  <div style="display: block">
+                    <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="email_passwd_component" style="width:350px;margin-top:8px;">
+                      <input type="text" id="email_passwd" class="mdc-text-field__input" ng-model="serverConfig.email.passwd">
+                      <label for="email_passwd" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.EMAIL_SETTING.EMAIL_PASSWORD"|translate}}</label>
+                      <div class="mdc-notched-outline">
+                        <svg>
+                          <path class="mdc-notched-outline__path"/>
+                        </svg>
+                      </div>
+                      <div class="mdc-notched-outline__idle"></div>
+                    </div>
+                  </div>
+                <!--</div>-->
+              </mar-section>
+                  <!--<div style="display: block">-->
+                    <!--<div class="mdc-text-field mdc-text-field&#45;&#45;dense mdc-text-field&#45;&#45;outlined" id="sender_component" style="width:250px;margin-top:8px;">-->
+                      <!--<input type="text" id="sender" class="mdc-text-field__input" ng-model="serverConfig.email.sender">-->
+                      <!--<label for="sender" class="mdc-floating-label">发送邮箱</label>-->
+                      <!--<div class="mdc-notched-outline">-->
+                        <!--<svg>-->
+                          <!--<path class="mdc-notched-outline__path"/>-->
+                        <!--</svg>-->
+                      <!--</div>-->
+                      <!--<div class="mdc-notched-outline__idle"></div>-->
+                    <!--</div>-->
+                  <!--</div>-->
+              </div></div>
+
+
+          <div style="text-align: center;margin-top:24px">
+            <button id="server_config_clear" ng-click="clearServerConfig()" class="mdc-button mdc-button--raised" style="width:200px;height:50px;font-size:20px;color:white;">{{ "MODULES.ALERT.SERVER_CONFIG.CLEAR_SETTING"|translate}}</button>
+            <button id="server_config_save" ng-click="saveServerConfig()" class="mdc-button mdc-button--raised" style="width:200px;height:50px;font-size:20px;color:white;">{{ "MODULES.ALERT.SERVER_CONFIG.SAVE_SETTING"|translate}}</button>
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </div>
+
+  <ng-controller ng-controller="ReceiveGroupEstablishController">
+    <wizard steps="steps" title="title" show-wizard="showWizard" next-step="" before-cancel="cancel(formData)" before-submit="submit(formData)"></wizard>
+  </ng-controller>
+
+
+</div>

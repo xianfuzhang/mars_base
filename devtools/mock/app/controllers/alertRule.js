@@ -184,34 +184,36 @@ function getRuleQuery(body, type){
   if(!body.name || !body.status || !body.alert_level || !body.receive_group) {
     return false;
   }
-  
+
   switch(type) {
     case 'cpu':
-      if(body.util && body.condition && body.continue) {
-        return {util: body.util, condition: body.condition, continue: body.continue}
+      if(body.query.util && body.query.condition && body.query.continue) {
+        return {util: body.query.util, condition: body.query.condition, continue: body.query.continue}
       }
-      
+
       return false;
     case 'ram':
-      if(body.used_ratio && body.condition && body.continue) {
-        return {used_ratio: body.used_ratio, condition: body.condition, continue: body.continue}
+      if(body.query.used_ratio && body.query.condition && body.query.continue) {
+        return {used_ratio: body.query.used_ratio, condition: body.query.condition, continue: body.query.continue}
       }
-  
+
       return false;
     case 'disk':
-      if(body.root_used_ratio && body.condition && body.continue) {
-        return {root_used_ratio: body.root_used_ratio, condition: body.condition, continue: body.continue}
+      if(body.query.root_used_ratio && body.query.condition && body.query.continue) {
+        return {root_used_ratio: body.query.root_used_ratio, condition: body.query.condition, continue: body.query.continue}
       }
-  
+
       return false;
     case 'port':
-      if(body.rx_util && body.tx_util && body.condition && body.continue) {
+      if(body.query_rx && body.query_rx.rx_util){
         return {
-          query_rx: [{rx_util:body.rx_util, condition: body.condition, continue: body.continue}],
-          query_tx: [{tx_util:body.tx_util, condition: body.condition, continue: body.continue}]
+          query_rx: [{rx_util: body.query_rx.rx_util, condition: body.query_rx.condition, continue: body.query_rx.continue}]
+        }
+      } else {
+        return {
+          query_tx: [{tx_util: body.query_tx.tx_util, condition: body.query_tx.condition, continue: body.query_tx.continue}]
         }
       }
-  
       return false;
   }
 }
