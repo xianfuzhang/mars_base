@@ -247,8 +247,7 @@ let cloudLib = {
     
     // create logs
     _.times(config.logNumber, () => {
-      const date = new Date();
-      let created_time = date.toLocaleString() + ',' + date.getMilliseconds();
+      let created_time = Date.now();
       
       let log = new Log(
         chance.guid(),
