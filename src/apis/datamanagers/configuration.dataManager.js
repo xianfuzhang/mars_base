@@ -99,6 +99,20 @@ export class ConfigurationDataManager{
     return defer.promise;
 
   }
+  
+  getConfigurationHistory(subjectClass, subject){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getConfigurationHistoryUrl(subjectClass, subject)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'config': []}});
+      }
+    );
+    return defer.promise;
+    
+  }
 
 
 }

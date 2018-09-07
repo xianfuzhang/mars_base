@@ -6,9 +6,10 @@
         <content-header big-title="{{pageTitle}}">
             <a href="/">Mars Cloud</a>
             <span>•</span>
-            <span>Log</span>
+            <span>{{pageTitle}}</span>
         </content-header>
-        <section class="app-body" >
+        <section class="app-body">
+
             <div class="main__content">
                 <div class="actions">
                     From: <input class="actions__input" type="date" name="date-from" ng-model="dateFrom" ng-disabled="loading"> &nbsp;&nbsp;To: <input class="actions__input" type="date" name="date-to" ng-model="dateTo" ng-disabled="loading" max="::dateTo">
@@ -18,7 +19,7 @@
                 <section class="tab-content">
                     <mdl-table actions-show="logModel.actionsShow"
                                actions="logModel.rowActions"
-                               provider="logModel.logProvider" api-ready="onLogAPIReady($api)">
+                               provider="logModel.logProvider" api-ready="onDeviceAPIReady($api)">
                     </mdl-table>
                 </section>
             </div>
