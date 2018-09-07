@@ -76,6 +76,165 @@ export class AlertDataManager{
     return defer.promise;
   }
 
+
+  getAlertGroupBasicConfig(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getAlertGroupBasicConfigUrl()).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  deleteAlertGroupBasicConfig(){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getAlertGroupBasicConfigUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+  setAlertGroupBasicConfig(param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getAlertGroupBasicConfigUrl(),param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  addReceiveGroup(param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getAlertGroupReceiveSettingUrl(),param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+  getAllReceiveGroup(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getAlertGroupReceiveUrl()).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+  getReceiveGroup(name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getAlertGroupReceiveByNameUrl(name)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteReceiveGroup(name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getAlertGroupReceiveByNameUrl(name)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  getAllHealthyCheck(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getAllHealthyCheckUrl()).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+  setHealthyCheck(object , source, params){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getHealthyCheckUrl(object , source), params).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  getHealthyCheck(object , source, name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getHealthyCheckByNameUrl(object , source, name)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteHealthyCheck(object , source, name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getHealthyCheckByNameUrl(object , source, name)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
   getTestAlertHistory(){
     return {
       "history": [

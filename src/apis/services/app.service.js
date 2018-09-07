@@ -12,7 +12,7 @@ export class appService {
     });
     this.translate = this.di.$filter('translate');
     this.isMocked = true;
-    this.versionUrl = 'mars/v1/';
+    this.versionUrl = 'mars/v1';
     this.CONST = {
       MOCKED_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/' + this.versionUrl,
       LIVE_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/'  + this.versionUrl,
@@ -48,6 +48,7 @@ export class appService {
             'items':[
               // {'label': 'Alert', 'url': '/alert'},
               {'label': this.translate('MODULE.HEADER.ALERT.ALERT'), 'url': '/alert'},
+              {'label': this.translate('MODULE.HEADER.ALERT.HEALTHYCHECK'), 'url': '/healthycheck'},
               {'label': this.translate('MODULE.HEADER.ALERT.INFORM'), 'url': '/inform'},
             ]
           },
@@ -202,12 +203,42 @@ export class appService {
   }
 
   getAlertHistoriesSelectedRemoveUrl(){
-    return this.getZoneEndpoint() + '/alert/history/select';
+    return this.getZoneEndpoint() + '/alert/v1/history/select';
 
   }
 
   getAlertHistoriesRemoveAllUrl(){
-    return this.getZoneEndpoint() + '/alert/history/all';
+    return this.getZoneEndpoint() + '/alert/v1/history/all';
+  }
+
+  getAlertGroupBasicConfigUrl(){
+    return this.getZoneEndpoint() + '/alert/v1/basicconfig';
+  }
+
+  getAlertGroupReceiveSettingUrl(){
+    return this.getZoneEndpoint() + '/alert/v1/group/receiver';
+  }
+
+  getAlertGroupReceiveUrl(){
+    return this.getZoneEndpoint() + '/alert/v1/group/receiver/all';
+  }
+
+  getAlertGroupReceiveByNameUrl(name){
+    return this.getZoneEndpoint() + '/alert/v1/group/receiver/' + name;
+  }
+
+
+  getAllHealthyCheckUrl(){
+    return this.getZoneEndpoint() + '/healthycheck/v1/threshold';
+  }
+
+
+  getHealthyCheckUrl(object, resource){
+    return this.getZoneEndpoint() + '/healthycheck/v1/'+ object +'/' + resource + '/threshold';
+  }
+
+  getHealthyCheckByNameUrl(object, resource, rule_name){
+    return this.getZoneEndpoint() + '/healthycheck/v1/'+ object +'/' + resource + '/threshold/' + rule_name;
   }
 
   getLogsUrl(){
@@ -221,7 +252,6 @@ export class appService {
   getStatisticOfController(){
     return this.getZoneEndpoint() + '/statistics/system/controller';
   }
-
 
 
 }

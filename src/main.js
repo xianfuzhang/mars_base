@@ -145,6 +145,10 @@ angular
         template: require('./modules/alert/template/alert.html'),
         controller: 'AlertController'
       }).
+      when('/inform', {
+        template: require('./modules/alert/template/inform.html'),
+        controller: 'InformController'
+      }).
       when('/healthycheck', {
         template: require('./modules/alert/template/healthycheck.html'),
         controller: 'HealthyCheckController'

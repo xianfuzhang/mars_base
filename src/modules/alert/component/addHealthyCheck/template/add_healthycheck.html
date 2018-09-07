@@ -1,0 +1,94 @@
+<div class="add_healthycheck">
+
+    <div class="name add_healthycheck__content">
+        <div class="add_healthycheck__content__label">名称</div>
+        <div class="add_healthycheck__content__input">
+            <input style="border-radius: 2px;" class="stepForm__input__text  ng-valid ng-not-empty ng-valid-required" type="text" ng-model="healthyCheckAddedModel.name" ng-required="true" required="required" ng-pattern="num_regex" />
+        </div>
+    </div>
+
+
+    <div class="object add_healthycheck__content">
+        <div class="add_healthycheck__content__label">对象</div>
+        <div class="add_healthycheck__content__input">
+            <mdl-select ng-model="healthyCheckAddedModel.object"
+                        disable="disModel"
+                        display-label="displayLabel.object">
+            </mdl-select>
+        </div>
+    </div>
+
+    <div class="type add_healthycheck__content">
+        <div class="add_healthycheck__content__label">资源</div>
+        <div class="add_healthycheck__content__input">
+            <mdl-select ng-if="healthyCheckAddedModel.object.value == 'switch'" ng-model="healthyCheckAddedModel.type"
+                        disable="disModel"
+                        display-label="displayLabel.swtType">
+            </mdl-select>
+
+            <mdl-select ng-if="healthyCheckAddedModel.object.value == 'controller'" ng-model="healthyCheckAddedModel.type"
+                        disable="false"
+                        display-label="displayLabel.ctrlType">
+            </mdl-select>
+
+        </div>
+    </div>
+
+    <div class="receive_group add_healthycheck__content">
+        <div class="add_healthycheck__content__label">通知群组</div>
+        <div class="add_healthycheck__content__input">
+
+            <mdl-select ng-model="healthyCheckAddedModel.group" style="overflow: visible"
+                        disable="disModel"
+                        display-label="{options: [{label: 'grou1', value: 'switch'}, {label: 'group2', value: 'controller'}, {label: '硬盘', value: 'controller'}, {label: '下载速率', value: 'controller'}]}"
+            >
+            </mdl-select>
+
+        </div>
+    </div>
+
+    <div class="alert_level add_healthycheck__content">
+        <div class="add_healthycheck__content__label">告警级别</div>
+        <div class="add_healthycheck__content__input">
+            <mdl-select ng-model="healthyCheckAddedModel.level"
+                        disable="disModel"
+                        display-label="displayLabel.level">
+            </mdl-select>
+        </div>
+    </div>
+
+    <div class="query add_healthycheck__content">
+        <div class="add_healthycheck__content__label">条件</div>
+        <div class="add_healthycheck__content__input">
+
+            <mdl-select ng-model="healthyCheckAddedModel.query.condition" style="float: left;"
+                        display-label="displayLabel.condition">
+            </mdl-select>
+
+            <input style="width: 70px;float: left;border-radius: 2px;margin: 0 12px;" class="stepForm__input__text  ng-valid ng-not-empty " type="text" ng-model="healthyCheckAddedModel.query.value" ng-required="true"  ng-pattern="num_regex" />
+            <div style="display: inline-block;">{{ (healthyCheckAddedModel.type.value == 'rx' || healthyCheckAddedModel.type.value == 'tx')?'Mbps':'%'}}</div>
+        </div>
+    </div>
+
+    <div class="query add_healthycheck__content">
+        <div class="add_healthycheck__content__label">持续</div>
+        <div class="add_healthycheck__content__input">
+            <input style="width: 70px;float: left;border-radius: 2px;margin: 0 12px 0 0;" class="stepForm__input__text  ng-valid ng-not-empty " type="text" ng-model="healthyCheckAddedModel.query.continue" ng-required="true"  ng-pattern="num_regex" />
+            <div style="display: inline-block;">秒</div>
+        </div>
+    </div>
+
+    <div class="status add_healthycheck__content">
+        <div class="add_healthycheck__content__label">状态</div>
+
+        <div class="add_healthycheck__content__input">
+            <mdl-switch ng-model="healthyCheckAddedModel.switch"
+                        display-label="displayLabel.status">
+            </mdl-switch>
+
+        </div>
+    </div>
+
+
+
+</div>

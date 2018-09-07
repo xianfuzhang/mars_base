@@ -182,7 +182,7 @@ export class InformController {
       return true;//or false
 
     };
-    
+
     function clearServerConfig(){
       email_server_component.user.value = "";
       email_server_component.passwd.value = "";
@@ -211,7 +211,7 @@ export class InformController {
       return {'wechat' : wechatConfig, 'smtp': emailConfig}
     }
 
-    
+
 
     scope.onTableRowSelectAction = (event) => {
       if (event.data && event.action) {
@@ -244,6 +244,12 @@ export class InformController {
       }
     };
 
+
+
+    unSubscribers.push(this.di.$rootScope.$on("receivegroup-refresh",()=>{
+      scope.informModel.receiveGroupTb.informAPI.queryUpdate();
+    }));
+
     scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
         unSubscribe();
@@ -274,7 +280,7 @@ export class InformController {
       return res;
 
     }
-    
+
     scope.informModel.receiveGroupTb.informTableProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
@@ -402,15 +408,8 @@ export class InformController {
     });
   }
 
-  _initializeServerConfigTab(){
-    // this.di.deviceDataManager.getDevices(params).then((res) => {
-    //   this.scope.entities = this.getEntities(res.data.devices);
-    //   defer.resolve({
-    //     data: scope.entities,
-    //     count: 100
-    //   });
-    // });
-  }
+
+
 
   confirmDialog(content) {
     let defer = this.di.$q.defer();
@@ -442,25 +441,6 @@ export class InformController {
   }
 
 
-  batchDeleteAlertHistory(arr) {
-    let uuids = [];
-    arr.forEach((item) => {
-      uuids.push(item.uuid)
-    });
-
-    let defer = this.di.$q.defer();
-    this.di.alertDataManager.deleteAlertHistoriesSelected(uuids)
-      .then(() => {
-        this.scope.deviceModel.deviceAPI.queryUpdate();
-        this.scope.$emit('batch-delete-endpoints');
-        defer.resolve();
-      }, () => {
-        this.scope.deviceModel.deviceAPI.queryUpdate();
-        this.scope.$emit('batch-delete-endpoints');
-        defer.resolve();
-      });
-
-  }
 
 }
 

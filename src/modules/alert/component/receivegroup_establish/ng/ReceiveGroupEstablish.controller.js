@@ -151,7 +151,7 @@ export class ReceiveGroupEstablishController {
       return new Promise((resolve, reject) => {
         di.alertDataManager.addReceiveGroup(params)
           .then(() => {
-            rootScope.$emit('device-flow-refresh');
+            rootScope.$emit('receivegroup-refresh');
             resolve(true);
           }, () => {
             resolve(false);
