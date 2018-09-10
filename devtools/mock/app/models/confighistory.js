@@ -1,10 +1,5 @@
-var _ = require('lodash'),
-  Chance = require('chance'),
-  config = require('../config');
 
-const chance = new Chance();
-
-class ConfigHistory {
+class  ConfigHistory {
   constructor (time, type, subject, history_class, config) {
     this.time = time;
     this.type = type;
@@ -14,4 +9,4 @@ class ConfigHistory {
   }
 }
 
-exports.ConfigHistory = ConfigHistory;
+module.exports = ConfigHistory;
