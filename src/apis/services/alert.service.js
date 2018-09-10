@@ -22,15 +22,15 @@ export class alertService {
   getRuleResource(trans){
     let res = "";
     if(trans === 'CPU使用率'){
-      type = "cpu";
+      res = "cpu";
     } else if(trans === '内存使用率'){
-      type = "ram";
+      res = "ram";
     } else if(trans === '硬盘使用率'){
-      type = "disk";
+      res = "disk";
     } else if(trans === '下载速率'){
-      type = "port";
-    } else if(type === '上传速率'){
-      type = "port";
+      res = "port";
+    } else if(trans === '上传速率'){
+      res = "port";
     }
     return res;
   }
@@ -60,6 +60,31 @@ export class alertService {
     }
     return tran;
   }
+
+  getRuleCommonQuery(rule){
+    let res = {};
+    if(rule.query){
+      res['condition'] = rule.query.condition;
+      res['continue'] = rule.query.continue;
+      if(rule.query.util){
+        res['value'] = rule.query.util;
+      } else if(rule.query.used_ratio){
+        res['value'] = rule.query.used_ratio;
+      } else if(rule.query.root_used_ratio){
+        res['value'] = rule.query.root_used_ratio;
+      }
+    } else if(rule.query_rx){
+      res['condition'] = rule.query_rx.condition;
+      res['continue'] = rule.query_rx.continue;
+      res['value'] = rule.query_rx.rx_util;
+    } else if(rule.query_tx){
+      res['condition'] = rule.query_tx.condition;
+      res['continue'] = rule.query_tx.continue;
+      res['value'] = rule.query_tx.tx_util;
+    }
+    return res;
+  }
+
 
    getDescriptionTranslate(query, type) {
     let trans = "";
@@ -274,7 +299,7 @@ export class alertService {
   }
 
   getHcConditionDisLabel(){
-    return {options: [{label: '大于', value: 'gt'}, {label: '小于', value: 'lt'}]}
+    return {options: [{label: '小于', value: 'lt'},{label: '大于', value: 'gt'}]}
   }
 
   getHcStatusDisLabel(){

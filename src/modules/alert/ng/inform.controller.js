@@ -64,13 +64,14 @@ export class InformController {
         actionsShow:{'menu': false, 'add': true, 'remove': false, 'refresh': true, 'search': false},
         rowActions:[
           {
-            'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.DELETE'),
-            'value': 'delete'
-          },
-          {
             'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.EDIT'),
             'value': 'edit'
+          },
+          {
+            'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.DELETE'),
+            'value': 'delete'
           }
+
         ],
         informTableProvider:null,
         informAPI: "",
@@ -166,14 +167,14 @@ export class InformController {
       this.di._.forEach(email, (item)=>{
         if(email[item] === ''){
           //微信弹框
-          console.log("Email配置不完整")
+          console.log("Email Log is not valid")
         }
       })
 
       let wechat = param.wechat;
       this.di._.forEach(wechat, (item)=>{
         if(wechat[item] === ''){
-          console.log("weixin配置不完整")
+          console.log("微信配置不完整")
         }
       })
 

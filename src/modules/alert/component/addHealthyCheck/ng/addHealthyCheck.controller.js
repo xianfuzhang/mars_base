@@ -11,6 +11,7 @@ export class AddHealthyCheckController {
       '$log',
       '$q',
       '$timeout',
+      '$filter',
       '_',
       'alertDataManager',
       'alertService',
@@ -23,6 +24,8 @@ export class AddHealthyCheckController {
       this.di[value] = args[index];
     });
 
+
+    let translate = this.di.$filter('translate');
     let unSubscribes = [];
     const scope = this.di.$scope;
     const deviceDataManager = this.di.deviceDataManager;
@@ -31,7 +34,7 @@ export class AddHealthyCheckController {
     this.di.$scope.num_regex = '^\d$|^[1-9]+[0-9]*$';
 
     scope.showWizard = false;
-    scope.title = '创建监控规则';
+
     scope.steps = [
       {
         id: 'step1',
@@ -60,59 +63,96 @@ export class AddHealthyCheckController {
       'ctrlType': this.di.alertService.getHcTypeCtrlDisLabel(),
       'level': this.di.alertService.getHcLevelDisLabel(),
       'condition': this.di.alertService.getHcConditionDisLabel(),
-      'status': this.di.alertService.getHcStatusDisLabel()
+      'status': this.di.alertService.getHcStatusDisLabel(),
+      'group':null
     };
 
     this.di.$scope.open = function(rule){
       if(scope.showWizard) return;
       clearAll();
       if(rule){
+        scope.title = translate('MODULES.ALERT.ADD_HEALTHY_CHECK.TITLE.EDIT');
         console.log(rule);
-        // di.alertDataManager.getHealthyCheck(object, resource , name).then(
-        //   (res)=>{
-        //
-        //   }
-        // );
         let resource = di.alertService.getRuleResource(rule.type);
         let object = di.alertService.getRuleObject(rule.from);
+
+        let groupDefer = di.$q.defer();
+        let healthDefer = di.$q.defer();
+        let promises = [];
+
+        let groups = null;
+        let health = null;
+
+        di.alertDataManager.getAllReceiveGroup().then((res) => {
+          groups = res.groups;
+
+          groupDefer.resolve();
+        });
+        promises.push(groupDefer.promise);
+
         di.alertDataManager.getHealthyCheck(object, resource , rule.rule_name).then(
           (res)=>{
-            scope.healthyCheckAddedModel.name = rule.rule_name;
-            scope.healthyCheckAddedModel.object.value = object;
-            scope.healthyCheckAddedModel.switch  = res.status === "enabled"?"true":"false";
-            scope.healthyCheckAddedModel.level.value = rule.alert_level;
-            scope.healthyCheckAddedModel.group.value = rule.receive_group;
-            scope.healthyCheckAddedModel.object.value = rule.rule_name;
-            scope.healthyCheckAddedModel.query.condition.value
-
+            health = res;
+            healthDefer.resolve();
           }
         );
+        promises.push(healthDefer.promise);
+        Promise.all(promises).then(()=>{
+          scope.showWizard = true;
+          let res= health;
+          scope.displayLabel.group = formatGroups(groups);
 
- //        {
- //        “name”:”rule name”,
- //        “status”: “enabled”,
- //        “alert_level”: 1,
- // “receive_group”: “group name”,
- //        “query”:
- //          [
- //            {
- //              "util": 10,
- //        “condition”:”gt”,
- //        “continue”: 180
- //        }
- //        ]
- //
+          setTimeout(function () {
+            scope.healthyCheckAddedModel.name = rule.rule_name;
+            scope.healthyCheckAddedModel.object = di._.find(scope.displayLabel['object']['options'], {'value':object});
+            scope.healthyCheckAddedModel.switch = res.status === "enabled"?"true":"false";
+            scope.$apply();
+
+            scope.healthyCheckAddedModel.level = di._.find(scope.displayLabel['level']['options'], {'value':res.alert_level});
+            if(resource === 'port' && res.query_rx ){
+              resource = 'rx';
+            } else if(resource === 'port' && res.query_tx) {
+              resource = 'tx';
+            }
+
+            scope.healthyCheckAddedModel.type = object === 'switch'?di._.find(scope.displayLabel['swtType']['options'], {'value':resource}):di._.find(scope.displayLabel['ctrlType']['options'], {'value':resource});
+
+            let query = di.alertService.getRuleCommonQuery(res);
+            scope.healthyCheckAddedModel.query.condition = di._.find(scope.displayLabel['condition']['options'], {'value':query.condition});
+            scope.healthyCheckAddedModel.query.value = query.value;
+            scope.healthyCheckAddedModel.query.continue = query.continue;
+            scope.$apply();
+          })
+        });
+
 
         scope.disModel = true;
       } else {
+        scope.title = translate('MODULES.ALERT.ADD_HEALTHY_CHECK.TITLE.CREATE');
+        di.alertDataManager.getAllReceiveGroup().then((res) => {
+          scope.displayLabel.group = formatGroups(res.groups);
+          scope.showWizard = true;
+        });
         scope.disModel = false;
       }
-
-      scope.showWizard = true;
     };
 
     function clearAll() {
+      scope.healthyCheckAddedModel = {
+        switch : "true",
+        query : {
 
+        }
+      };
+    }
+
+    function formatGroups(groups){
+      let res = {'options':[]};
+
+      di._.forEach(groups, (group)=>{
+        res.options.push({'label':group.name, 'value':group.name});
+      });
+      return res;
     }
     
     this.di.$scope.cancel = function(formData){
@@ -131,19 +171,20 @@ export class AddHealthyCheckController {
         'status': scope.healthyCheckAddedModel.switch === "true"?"enabled":"disabled",
         'alert_level': scope.healthyCheckAddedModel.level.value,
         'receive_group': scope.healthyCheckAddedModel.group.value,
-        'query':{
-          'condition':  scope.healthyCheckAddedModel.query.condition.value,
-          'continue': scope.healthyCheckAddedModel.query.continue
-        }
+        // 'query':{
+        //   'condition':  scope.healthyCheckAddedModel.query.condition.value,
+        //   'continue': scope.healthyCheckAddedModel.query.continue
+        // }
       };
 
       if(type === 'rx' || type ==='tx' ){
-        type = 'port';
         params['query_' + type] = {
           'condition':  scope.healthyCheckAddedModel.query.condition.value,
           'continue': scope.healthyCheckAddedModel.query.continue,
         };
         params['query_' + type][type + '_util'] = value;
+
+        type = 'port';
       } else {
         params['query'] = {
           'condition':  scope.healthyCheckAddedModel.query.condition.value,
