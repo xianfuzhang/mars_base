@@ -68,51 +68,50 @@ export class AddHealthyCheckController {
       clearAll();
       if(rule){
         console.log(rule);
-        // di.alertDataManager.getHealthyCheck(object, resource , name).then(
-        //   (res)=>{
-        //
-        //   }
-        // );
         let resource = di.alertService.getRuleResource(rule.type);
         let object = di.alertService.getRuleObject(rule.from);
         di.alertDataManager.getHealthyCheck(object, resource , rule.rule_name).then(
           (res)=>{
-            scope.healthyCheckAddedModel.name = rule.rule_name;
-            scope.healthyCheckAddedModel.object.value = object;
-            scope.healthyCheckAddedModel.switch  = res.status === "enabled"?"true":"false";
-            scope.healthyCheckAddedModel.level.value = rule.alert_level;
-            scope.healthyCheckAddedModel.group.value = rule.receive_group;
-            scope.healthyCheckAddedModel.object.value = rule.rule_name;
-            scope.healthyCheckAddedModel.query.condition.value
+            scope.showWizard = true;
+            
+            setTimeout(function () {
+              scope.healthyCheckAddedModel.name = rule.rule_name;
+              scope.healthyCheckAddedModel.object = di._.find(scope.displayLabel['object']['options'], {'value':object});
+              scope.healthyCheckAddedModel.switch = res.status === "enabled"?"true":"false";
+              scope.$apply();
+
+              scope.healthyCheckAddedModel.level = di._.find(scope.displayLabel['level']['options'], {'value':res.alert_level});
+              if(resource === 'port' && res.query_rx ){
+                resource = 'rx';
+              } else if(resource === 'port' && res.query_tx) {
+                resource = 'tx';
+              }
+
+              scope.healthyCheckAddedModel.type = object === 'switch'?di._.find(scope.displayLabel['swtType']['options'], {'value':resource}):di._.find(scope.displayLabel['ctrlType']['options'], {'value':resource});
+
+              let query = di.alertService.getRuleCommonQuery(res);
+              scope.healthyCheckAddedModel.query.condition = di._.find(scope.displayLabel['condition']['options'], {'value':query.condition});
+              scope.healthyCheckAddedModel.query.value = query.value;
+              scope.healthyCheckAddedModel.query.continue = query.continue;
+              scope.$apply();
+            })
 
           }
         );
-
- //        {
- //        “name”:”rule name”,
- //        “status”: “enabled”,
- //        “alert_level”: 1,
- // “receive_group”: “group name”,
- //        “query”:
- //          [
- //            {
- //              "util": 10,
- //        “condition”:”gt”,
- //        “continue”: 180
- //        }
- //        ]
- //
-
         scope.disModel = true;
       } else {
         scope.disModel = false;
+        scope.showWizard = true;
       }
-
-      scope.showWizard = true;
     };
 
     function clearAll() {
+      scope.healthyCheckAddedModel = {
+        switch : "true",
+        query : {
 
+        }
+      };
     }
     
     this.di.$scope.cancel = function(formData){

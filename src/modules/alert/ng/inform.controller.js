@@ -64,13 +64,14 @@ export class InformController {
         actionsShow:{'menu': false, 'add': true, 'remove': false, 'refresh': true, 'search': false},
         rowActions:[
           {
-            'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.DELETE'),
-            'value': 'delete'
-          },
-          {
             'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.EDIT'),
             'value': 'edit'
+          },
+          {
+            'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.DELETE'),
+            'value': 'delete'
           }
+
         ],
         informTableProvider:null,
         informAPI: "",

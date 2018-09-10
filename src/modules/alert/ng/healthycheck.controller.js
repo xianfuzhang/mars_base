@@ -28,12 +28,12 @@ export class HealthyCheckController {
       actionsShow: {'menu': false, 'add': true, 'remove': false, 'refresh': true, 'search': false},
       rowActions: [
         {
-          'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.DELETE'),
-          'value': 'delete'
-        },
-        {
           'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.EDIT'),
           'value': 'edit'
+        },
+        {
+          'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.DELETE'),
+          'value': 'delete'
         }
       ],
       healthTableProvider: null,
@@ -145,6 +145,12 @@ export class HealthyCheckController {
         };
       }
     });
+
+    scope.onTableRowClick = (event) => {
+      if (event.$data){
+        scope.healthyCheckModel.healthyCheckAPI.setSelectedRow(event.$data.rule_name);
+      }
+    };
 
     scope.onHealthyAPIReady = ($api) => {
       scope.healthyCheckModel.healthyCheckAPI = $api;
