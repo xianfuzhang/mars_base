@@ -3,7 +3,9 @@
     <div class="name add_healthycheck__content">
         <div class="add_healthycheck__content__label">名称</div>
         <div class="add_healthycheck__content__input">
-            <input style="border-radius: 2px;" class="stepForm__input__text  ng-valid ng-not-empty ng-valid-required" type="text" ng-model="healthyCheckAddedModel.name" ng-required="true" required="required" ng-pattern="num_regex" />
+            <input ng-if="!disModel" style="border-radius: 2px;" class="stepForm__input__text ng-valid ng-not-empty ng-valid-required" type="text" ng-model="healthyCheckAddedModel.name" ng-required="true" required="required" />
+
+            <div ng-if="disModel" class="add_healthycheck__disabled_input">{{healthyCheckAddedModel.name}}</div>
         </div>
     </div>
 
@@ -40,7 +42,7 @@
 
             <mdl-select ng-model="healthyCheckAddedModel.group" style="overflow: visible"
                         disable="disModel"
-                        display-label="{options: [{label: 'grou1', value: 'switch'}, {label: 'group2', value: 'controller'}, {label: '硬盘', value: 'controller'}, {label: '下载速率', value: 'controller'}]}"
+                        display-label="displayLabel.group"
             >
             </mdl-select>
 
