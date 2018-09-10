@@ -127,18 +127,18 @@ function formatRule(rules, isGetAll) {
       }
     })
   } else {
-    if (rule.type == 'port') {
-      rule.query_rx = rule.query.query_rx;
-      rule.query_tx = rule.query.query_tx;
+    if (tmpRules.type == 'port') {
+      tmpRules.query_rx = tmpRules.query.query_rx;
+      tmpRules.query_tx = tmpRules.query.query_tx;
   
-      delete rule['query'];
+      delete tmpRules['query'];
     }
   
     if(!isGetAll) {
-      delete rule['from'];
-      delete rule['type'];
+      delete tmpRules['from'];
+      delete tmpRules['type'];
     } else {
-      formatType(rule)
+      formatType(tmpRules)
     }
   }
   
