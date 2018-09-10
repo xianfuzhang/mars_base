@@ -167,14 +167,14 @@ export class InformController {
       this.di._.forEach(email, (item)=>{
         if(email[item] === ''){
           //微信弹框
-          console.log("Email配置不完整")
+          console.log("Email Log is not valid")
         }
       })
 
       let wechat = param.wechat;
       this.di._.forEach(wechat, (item)=>{
         if(wechat[item] === ''){
-          console.log("weixin配置不完整")
+          console.log("微信配置不完整")
         }
       })
 

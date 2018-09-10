@@ -11,6 +11,7 @@ export class AddHealthyCheckController {
       '$log',
       '$q',
       '$timeout',
+      '$filter',
       '_',
       'alertDataManager',
       'alertService',
@@ -23,6 +24,8 @@ export class AddHealthyCheckController {
       this.di[value] = args[index];
     });
 
+
+    let translate = this.di.$filter('translate');
     let unSubscribes = [];
     const scope = this.di.$scope;
     const deviceDataManager = this.di.deviceDataManager;
@@ -68,7 +71,7 @@ export class AddHealthyCheckController {
       if(scope.showWizard) return;
       clearAll();
       if(rule){
-        scope.title = '编辑监控规则';
+        scope.title = translate('MODULES.ALERT.ADD_HEALTHY_CHECK.TITLE.EDIT');
         console.log(rule);
         let resource = di.alertService.getRuleResource(rule.type);
         let object = di.alertService.getRuleObject(rule.from);
@@ -125,7 +128,7 @@ export class AddHealthyCheckController {
 
         scope.disModel = true;
       } else {
-        scope.title = '创建监控规则';
+        scope.title = translate('MODULES.ALERT.ADD_HEALTHY_CHECK.TITLE.CREATE');
         di.alertDataManager.getAllReceiveGroup().then((res) => {
           scope.displayLabel.group = formatGroups(res.groups);
           scope.showWizard = true;

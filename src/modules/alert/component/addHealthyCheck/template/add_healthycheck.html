@@ -1,7 +1,7 @@
 <div class="add_healthycheck">
 
     <div class="name add_healthycheck__content">
-        <div class="add_healthycheck__content__label">名称</div>
+        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.RULE_NAME'|translate}}</div>
         <div class="add_healthycheck__content__input">
             <input ng-if="!disModel" style="border-radius: 2px;" class="stepForm__input__text ng-valid ng-not-empty ng-valid-required" type="text" ng-model="healthyCheckAddedModel.name" ng-required="true" required="required" />
 
@@ -11,7 +11,7 @@
 
 
     <div class="object add_healthycheck__content">
-        <div class="add_healthycheck__content__label">对象</div>
+        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.OBJECT'|translate}}</div>
         <div class="add_healthycheck__content__input">
             <mdl-select ng-model="healthyCheckAddedModel.object"
                         disable="disModel"
@@ -21,7 +21,7 @@
     </div>
 
     <div class="type add_healthycheck__content">
-        <div class="add_healthycheck__content__label">资源</div>
+        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.TYPE'|translate}}</div>
         <div class="add_healthycheck__content__input">
             <mdl-select ng-if="healthyCheckAddedModel.object.value == 'switch'" ng-model="healthyCheckAddedModel.type"
                         disable="disModel"
@@ -37,7 +37,7 @@
     </div>
 
     <div class="receive_group add_healthycheck__content">
-        <div class="add_healthycheck__content__label">通知群组</div>
+        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.RECEIVE_GROUP'|translate}}</div>
         <div class="add_healthycheck__content__input">
 
             <mdl-select ng-model="healthyCheckAddedModel.group" style="overflow: visible"
@@ -50,7 +50,7 @@
     </div>
 
     <div class="alert_level add_healthycheck__content">
-        <div class="add_healthycheck__content__label">告警级别</div>
+        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.ALERT_LEVEL'|translate}}</div>
         <div class="add_healthycheck__content__input">
             <mdl-select ng-model="healthyCheckAddedModel.level"
                         disable="disModel"
@@ -60,7 +60,7 @@
     </div>
 
     <div class="query add_healthycheck__content">
-        <div class="add_healthycheck__content__label">条件</div>
+        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.CONDITION'|translate}}</div>
         <div class="add_healthycheck__content__input">
 
             <mdl-select ng-model="healthyCheckAddedModel.query.condition" style="float: left;"
@@ -73,15 +73,15 @@
     </div>
 
     <div class="query add_healthycheck__content">
-        <div class="add_healthycheck__content__label">持续</div>
+        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.CONDITION.CONTINUE'|translate}}</div>
         <div class="add_healthycheck__content__input">
             <input style="width: 70px;float: left;border-radius: 2px;margin: 0 12px 0 0;" class="stepForm__input__text  ng-valid ng-not-empty " type="text" ng-model="healthyCheckAddedModel.query.continue" ng-required="true"  ng-pattern="num_regex" />
-            <div style="display: inline-block;">秒</div>
+            <div style="display: inline-block;">{{'MODULES.ALERT.HEALTHY_CHECK.CONDITION.SECOND'|translate}}</div>
         </div>
     </div>
 
     <div class="status add_healthycheck__content">
-        <div class="add_healthycheck__content__label">状态</div>
+        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.STATUS'|translate}}</div>
 
         <div class="add_healthycheck__content__input">
             <mdl-switch ng-model="healthyCheckAddedModel.switch"

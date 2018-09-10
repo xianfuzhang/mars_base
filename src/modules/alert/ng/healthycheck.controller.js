@@ -23,6 +23,7 @@ export class HealthyCheckController {
     let unSubscribers = [];
     let scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
+    let translate = this.translate;
     let di = this.di;
     scope.healthyCheckModel = {
       actionsShow: {'menu': false, 'add': true, 'remove': false, 'refresh': true, 'search': false},
@@ -58,57 +59,14 @@ export class HealthyCheckController {
       }
     };
 
-
-    // {
-    //   'field': 'rule_name',
-    //   'field': 'from',
-    //   'field': 'status',
-    //   'field': 'alert_level',
-    //   'field': 'receive_group',
-    //   'field': 'type',
-    //   'field': 'description',
-
-    // function getRuleTypeTranslate(type) {
-    //   let tran = "";
-    //   if(type === 'cpu_utilization'){
-    //     tran = "CPU使用率";
-    //   } else if(type === 'ram_used_ratio'){
-    //     tran = "内存使用率";
-    //   } else if(type === 'disk_root_used_ratio'){
-    //     tran = "硬盘使用率";
-    //   } else if(type === 'rx_util'){
-    //     tran = "下载速率";
-    //   } else if(type === 'tx_util'){
-    //     tran = "上传速率";
-    //   }
-    //   return tran;
-    // }
-
-    // function getDescriptionTranslate(query, type) {
-    //   let trans = "";
-    //   // let type = query.type;
-    //   if(type === 'cpu_utilization'){
-    //     trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
-    //   } else if(type === 'ram_used_ratio'){
-    //     trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
-    //   } else if(type === 'disk_root_used_ratio'){
-    //     trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
-    //   } else if(type === 'rx_util'){
-    //     trans = (query.condition ==='gt'?"超过":"低于") + query.value + "Mbps持续"+ query.continue + '秒';
-    //   } else if(type === 'tx_util'){
-    //     trans = (query.condition ==='gt'?"超过":"低于") + query.value + "Mbps持续"+ query.continue + '秒';
-    //   }
-    //   return trans;
-    // }
-
     function formatHcGroups(rules) {
       let hcs = [];
       di._.forEach(rules, (rule)=>{
         let hc = {};
         hc.rule_name = rule.name;
-        hc.from = rule.from === 'controller'?'控制器':'交换机';
-        hc.status = rule.status === 'enabled'?'开启':'停止';
-        hc.alert_level = rule.alert_level === 0?'低':'高';
+        hc.from = rule.from === 'controller'?translate('MODULES.ALERT.HEALTHY_CHECK.OBJECT.CONTROLLER'):translate('MODULES.ALERT.HEALTHY_CHECK.OBJECT.SWITCH');
+        hc.status = rule.status === 'enabled'?translate('MODULES.ALERT.HEALTHY_CHECK.STATUS.ENABLED'):translate('MODULES.ALERT.HEALTHY_CHECK.STATUS.DISABLED');
+        hc.alert_level = rule.alert_level === 0?translate('MODULES.ALERT.HEALTHY_CHECK.LEVEL.LOW'):translate('MODULES.ALERT.HEALTHY_CHECK.LEVEL.HIGHT');
         hc.receive_group = rule.receive_group;
         hc.type = di.alertService.getRuleTypeTranslate(rule.type);
         if(rule.type === 'rx_util'){
