@@ -195,13 +195,11 @@ export class appService {
     return this.getZoneEndpoint() + '/network/configuration/files/' + filename;
   }
   
-  getConfigurationHistoryUrl(subjectClass, subject){
+  getConfigurationHistoryUrl(params){
     let url = this.getZoneEndpoint() + '/utility/confighistory/v1/';
-    if(subjectClass){
-      url = url + '/' + subjectClass;
-      if(subject){
-        url =   url + '/' + subject;
-      }
+    
+    if(params.from && params.to) {
+      url += `?from=${params.from}&to=${params.to}`
     }
     return url;
   }

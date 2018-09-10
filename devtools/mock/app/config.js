@@ -4,18 +4,13 @@ let config = {
   deviceTypes: ['spine', 'unknown', 'leaf'],
   deviceRoles: ['MASTER', 'SLAVE'],
   deviceProtocols: ['Rest', 'gRPC', 'SNMP', 'OF_13'],
-  
   linkLeafNumber: 5,
   linkProtocols: ['LLDP', 'Manual'],
   linkTypes: ['DIRECT'],
   linkStates: ['ACTIVE', 'INACTIVE'],
-  
   endpointsNumber: 5,
-  
   statisticUpdateIntervalSeconds: 15,
-  
   flowNumber: 10,
-  
   alertRuleNumber: 10,
   alertRuleStatus: ['enabled', 'disabled'],
   alertRuleTypes: ['cpu', 'ram', 'disk'],
@@ -70,15 +65,15 @@ let config = {
     }
   }],
   alertNumber: 10,
-  
-  logNumber: 10,
+  logNumber: 15,
   logCreators: ['org.apache.felix.fileinstall'],
   logOpertations: ['fileinstall', 'fillremove', 'fillupdate'],
   logTypes: ['INFO', 'WARNING'],
   logLevels: ['FelixStartLevel'],
-  
   clusterNumber: 3,
-  clusterStatus: ['ACTIVE', 'INACTIVE', 'READY']
+  clusterStatus: ['ACTIVE', 'INACTIVE', 'READY'],
+  confighistoryNumber: 15,
+  configHistoryTypes: ['added', 'updated', 'deleted']
 };
 
 module.exports = config;

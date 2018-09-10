@@ -6,8 +6,10 @@ var Device = require('../models/device'),
     {AlertRule, Alert} = require('../models/alert'),
     Log = require('../models/log'),
     Cluster = require('../models/cluster'),
+    ConfigHistory = require('../models/confighistory'),
     config = require('../config'),
     Chance = require('chance'),
+    moment = require('moment'),
     _ = require('lodash');
 
 const chance = new Chance();
@@ -25,7 +27,8 @@ global.cloudModel = {
   },
   logs: [],
   clusters: [],
-  useraccounts: []
+  useraccounts: [],
+  confighistory: []
 };
 
 let updateInterval;
@@ -247,7 +250,9 @@ let cloudLib = {
     
     // create logs
     _.times(config.logNumber, () => {
-      let created_time = Date.now();
+      let now = moment();
+      let beforeDay = chance.pickone([0,1,2,3]);
+      let created_time = now.subtract(beforeDay, 'd').valueOf();
       
       let log = new Log(
         chance.guid(),
@@ -272,6 +277,23 @@ let cloudLib = {
       );
       
       cloudModel.clusters.push(cluster);
+    });
+    
+    // create config history
+    _.times(config.confighistoryNumber, () => {
+      let now = moment();
+      let beforeDay = chance.pickone([0,1,2,3]);
+      let time = now.subtract(beforeDay, 'd').valueOf();
+      let configHistory = getConfiguration();
+      let history = new ConfigHistory(
+        time,
+        chance.pickone(config.configHistoryTypes),
+        "snmp:192.168.2.1:161",
+        "org.onosproject.provider.snmp.device.impl.SnmpDeviceConfig",
+        configHistory
+      );
+      
+      cloudModel.confighistory.push(history);
     });
     
     updateStatistics();
@@ -562,6 +584,16 @@ function getAlertQuery(type) {
         }]
       
       return chance.pickone(tmp);
+  }
+}
+
+function getConfiguration() {
+  // TODO: return configuration
+  return {
+    ip: "192.168.2.1",
+    port: 161,
+    username: "admin",
+    password: "admin"
   }
 }
 

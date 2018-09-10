@@ -17,9 +17,8 @@
                     <button class="actions__button actions__file-btn" ng-click="file()" ng-class="{'+disabled': loading || !hasData}" ng-disabled="loading || !hasData"><icon></icon>导出文件</button>
                 </div>
                 <section class="tab-content">
-                    <mdl-table actions-show="logModel.actionsShow"
-                               actions="logModel.rowActions"
-                               provider="logModel.logProvider" api-ready="onDeviceAPIReady($api)">
+                    <mdl-table actions-show="configurationHistoryModel.actionsShow"
+                               provider="configurationHistoryModel.provider" api-ready="onAPIReady($api)">
                     </mdl-table>
                 </section>
             </div>
