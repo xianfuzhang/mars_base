@@ -56,6 +56,9 @@ export class Loading {
 
       scope.isLoading = false;
       function  start() {
+        if(interval){
+          return;
+        }
         scope.isLoading = true;
         let arrIndex = index %11;
         let sleepTime = intervalTime;
@@ -75,6 +78,7 @@ export class Loading {
 
       function stop() {
         clearTimeout(interval);
+        interval = null;
         scope.isLoading = false;
         index = 0;
         let context = loading.getContext('2d');
@@ -106,6 +110,8 @@ export class Loading {
           unSubscribe();
         });
       });
+
+      start();
 
     }).call(this);
   }

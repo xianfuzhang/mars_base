@@ -11,6 +11,7 @@ export class HealthyCheckController {
       'alertService',
       'tableProviderFactory',
       'alertDataManager',
+      'dialogService',
       'configurationDataManager'
     ];
   }
@@ -44,9 +45,14 @@ export class HealthyCheckController {
     scope.onHCTableRowSelectAction = (event) => {
       if (event.data && event.action) {
         if (event.action.value === 'delete') {
-          this.confirmDialog(this.translate('MODULES.ALERT.RECEIVE_GROUP.REMOVE_GROUP'))
+          // this.confirmDialog(this.translate('MODULES.ALERT.RECEIVE_GROUP.REMOVE_GROUP'))
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_HEALTHY_HISTORY'))
             .then((data) =>{
-              this.di.alertDataManager.deleteReceiveGroup(event.data.group_name)
+
+              let resource = di.alertService.getRuleResource(event.data.type);
+              let object = di.alertService.getRuleObject(event.data.from);
+
+              this.di.alertDataManager.deleteHealthyCheck(object, resource, event.data.rule_name)
                 .then((res) =>{
                   scope.healthyCheckModel.healthyCheckAPI.queryUpdate();
                 });

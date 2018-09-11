@@ -15,6 +15,7 @@ export class InformController {
       'appService',
       'tableProviderFactory',
       'alertDataManager',
+      'dialogService',
       'alertService'
     ];
   }
@@ -33,31 +34,6 @@ export class InformController {
 
     let email_server_component = {};
     let wechat_server_component = {};
-
-    // this.wechat_server_component = {
-    //    'domain': new MDCTextField(document.querySelector('#wechat_domain_component')),
-    //    'tokenUrl': new MDCTextField(document.querySelector('#wechat_token_url_component')),
-    //    'sendUrl': new MDCTextField(document.querySelector('#wechat_send_url_component')),
-    //    'corpId': new MDCTextField(document.querySelector('#corp_id_component'))
-    // };
-
-
-    setTimeout(function () {
-      email_server_component = {
-          'domain': new MDCTextField(document.querySelector('#email_domain_component')),
-          'port': new MDCTextField(document.querySelector('#email_port_component')),
-          'user': new MDCTextField(document.querySelector('#email_user_component')),
-          'passwd': new MDCTextField(document.querySelector('#email_passwd_component')),
-          // 'sender': new MDCTextField(document.querySelector('#sender_component'))
-        };
-
-      wechat_server_component = {
-        'domain': new MDCTextField(document.querySelector('#wechat_domain_component')),
-        'tokenUrl': new MDCTextField(document.querySelector('#wechat_token_url_component')),
-        'sendUrl': new MDCTextField(document.querySelector('#wechat_send_url_component')),
-        'corpId': new MDCTextField(document.querySelector('#corp_id_component'))
-      };
-    });
 
     scope.informModel = {
       receiveGroupTb:{
@@ -85,15 +61,18 @@ export class InformController {
     scope.onTabChange= (tab) => {
       if (tab){
         scope.tabSelected = tab;
-        // this.prepareTableData();
-        // this.init(scope.tabSelected);
+        if(tab.value === 'server_config'){
+          //这边如果不用timeout 则会显示不全
+          setTimeout(initServerConfig);
+        }
       }
     };
 
     scope.onRGTableRowSelectAction = (event) => {
       if (event.data && event.action) {
         if (event.action.value === 'delete') {
-          this.confirmDialog(this.translate('MODULES.ALERT.RECEIVE_GROUP.REMOVE_GROUP'))
+          // this.confirmDialog(this.translate('MODULES.ALERT.RECEIVE_GROUP.REMOVE_GROUP'))
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.ALERT.RECEIVE_GROUP.REMOVE_GROUP'))
             .then((data) =>{
               this.di.alertDataManager.deleteReceiveGroup(event.data.group_name)
                 .then((res) =>{
@@ -107,17 +86,6 @@ export class InformController {
         }
       }
     };
-
-    // scope.batchRemove4RGTable = ($value) => {
-    //   if ($value.length) {
-    //     this.confirmDialog(this.translate('MODULES.ALERT.RECEIVE_GROUP.REMOVE_GROUP'))
-    //       .then((data) =>{
-    //         this.batchDeleteAlertHistory($value);
-    //       }, (res) =>{
-    //         this.di.$log.debug('delete user account dialog cancel');
-    //       });
-    //   }
-    // };
 
     scope.onTableRowClick = (event) => {
       if (event.$data){
@@ -164,19 +132,18 @@ export class InformController {
 
     let validateServerConfig = (param) => {
       let email = param.smtp;
-      this.di._.forEach(email, (item)=>{
-        if(email[item] === ''){
-          //微信弹框
-          console.log("Email Log is not valid")
-        }
-      })
-
-      let wechat = param.wechat;
-      this.di._.forEach(wechat, (item)=>{
-        if(wechat[item] === ''){
-          console.log("微信配置不完整")
-        }
-      })
+      // this.di._.forEach(email, (item)=>{
+      //   if(email[item] === ''){
+      //     console.log("Email Log is not valid")
+      //   }
+      // });
+      //
+      // let wechat = param.wechat;
+      // this.di._.forEach(wechat, (item)=>{
+      //   if(wechat[item] === ''){
+      //     console.log("微信配置不完整")
+      //   }
+      // })
 
       //TODO 弹框提示
 
@@ -213,39 +180,20 @@ export class InformController {
     }
 
 
-
-    scope.onTableRowSelectAction = (event) => {
-      if (event.data && event.action) {
-        if (event.action.value === 'delete') {
-          this.confirmDialog(this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORY'))
-            .then((data) =>{
-              this.di.alertDataManager.deleteAlertHistory(event.data.uuid)
-                .then((res) =>{
-                  scope.alertModel.alertAPI.queryUpdate();
-                });
-            }, (res) =>{
-              this.di.$log.debug('delete alert history dialog cancel');
-            });
-        }
-      }
-    };
-
     scope.addReceiveGroup = () =>{
       this.di.$rootScope.$emit('receivegroup-wizard-show');
     };
 
-    scope.batchRemove = ($value) => {
-      if ($value.length) {
-        this.confirmDialog(this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES'))
-          .then((data) =>{
-            this.batchDeleteAlertHistory($value);
-          }, (res) =>{
-            this.di.$log.debug('delete user account dialog cancel');
-          });
-      }
-    };
-
-
+    // scope.batchRemove = ($value) => {
+    //   if ($value.length) {
+    //     this.confirmDialog(this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES'))
+    //       .then((data) =>{
+    //         this.batchDeleteAlertHistory($value);
+    //       }, (res) =>{
+    //         this.di.$log.debug('delete user account dialog cancel');
+    //       });
+    //   }
+    // };
 
     unSubscribers.push(this.di.$rootScope.$on("receivegroup-refresh",()=>{
       scope.informModel.receiveGroupTb.informAPI.queryUpdate();
@@ -258,9 +206,6 @@ export class InformController {
     });
 
     function formatTbGroups(groups) {
-      // field': 'group_name',
-      // 'field': 'email_group',
-      // 'field': 'wechat_group'
       let res = [];
       for(let i = 0; i< groups.length; i++){
         let g = {};
@@ -286,8 +231,16 @@ export class InformController {
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.alertDataManager.getAllReceiveGroup().then((res) => {
+
+          //取消选中
+          scope.informModel.groupDetails = null;
+          if(scope.informModel.receiveGroupTb.informAPI){
+            scope.informModel.receiveGroupTb.informAPI.setSelectedRow();
+          }
+
           scope.informModel.groups = res.groups;
           let groups = formatTbGroups(res.groups);
+
           defer.resolve({
             data: groups,
             count: res.count
@@ -313,38 +266,58 @@ export class InformController {
     let init =() =>{
       let scope = this.di.$scope;
       scope.tabSelected = scope.tabs[0];
-      let promises = [];
 
-      let serverConfigDefer = this.di.$q.defer(),
-        receiveGroupDefer = this.di.$q.defer();
+      email_server_component = {
+        'domain': new MDCTextField(document.querySelector('#email_domain_component')),
+        'port': new MDCTextField(document.querySelector('#email_port_component')),
+        'user': new MDCTextField(document.querySelector('#email_user_component')),
+        'passwd': new MDCTextField(document.querySelector('#email_passwd_component')),
+        // 'sender': new MDCTextField(document.querySelector('#sender_component'))
+      };
 
+      wechat_server_component = {
+        'domain': new MDCTextField(document.querySelector('#wechat_domain_component')),
+        'tokenUrl': new MDCTextField(document.querySelector('#wechat_token_url_component')),
+        'sendUrl': new MDCTextField(document.querySelector('#wechat_send_url_component')),
+        'corpId': new MDCTextField(document.querySelector('#corp_id_component'))
+      };
+
+      // let promises = [];
+      // let serverConfigDefer = this.di.$q.defer(),
+      //   receiveGroupDefer = this.di.$q.defer();
       this.di.alertDataManager.getAlertGroupBasicConfig().then((res)=>{
         innerModel['server_config'] = res;
-        serverConfigDefer.resolve();
+        // setTimeout(function () {
+        //   DI.$rootScope.$emit('stop_loading');
+        // },1000);
+        DI.$rootScope.$emit('stop_loading');
+        // initServerConfig();
+
+        // serverConfigDefer.resolve();
       });
-      promises.push(serverConfigDefer.promise);
+      // promises.push(serverConfigDefer.promise);
       // promises.push(receiveGroupDefer.promise);
 
-      this.di.$rootScope.$emit('start_loading');
+      // this.di.$rootScope.$emit('start_loading');
 
-      Promise.all(promises).then(()=>{
-        setTimeout(function () {
-          initServerConfig();
-          // initReceiveGroups();
-          DI.$scope.$apply();
-          DI.$rootScope.$emit('stop_loading');
-        },2000)
-      });
-    }
+      // Promise.all(promises).then(()=>{
+      //   setTimeout(function () {
+      //     initServerConfig();
+      //     // initReceiveGroups();
+      //     DI.$scope.$apply();
+      //     DI.$rootScope.$emit('stop_loading');
+      //   },2000)
+      // });
+    };
 
     let initServerConfig = ()=>{
-      let emailConfig = innerModel['server_config']['email']|{};
+      let emailConfig = innerModel.server_config.smtp||{};
       email_server_component.domain.value = emailConfig.smtp_host?emailConfig.smtp_host:"";
       email_server_component.port.value = emailConfig.smtp_port?emailConfig.smtp_port:"";
       email_server_component.user.value = emailConfig.user?emailConfig.user:"";
       email_server_component.passwd.value = emailConfig.password?emailConfig.password:"";
 
-      let wechatConfig = innerModel['server_config']['wechat']|{};
+      let wechatConfig = innerModel.server_config.wechat||{};
       wechat_server_component.domain.value = wechatConfig.host?wechatConfig.host:"";
       wechat_server_component.tokenUrl.value = wechatConfig.token_url?wechatConfig.token_url:"";
       wechat_server_component.sendUrl.value = wechatConfig.send_url?wechatConfig.send_url:"";
@@ -355,92 +328,9 @@ export class InformController {
 
     };
 
-    init();
-    // setTimeout(function () {
-    //   init();
-    // });
-
-
-
+    setTimeout(init)
 
   }
-
-
-
-
-  initializeTab(tab){
-    if(tab.type === 'server_config'){
-      this._initializeServerConfigTab()
-    } else if(tab.type === 'receive_group'){
-      this._initializeReceiveGroupTab()
-    }
-  }
-
-  _initializeReceiveGroupTab(){
-    let m = this.di.alertDataManager;
-    this.di.$scope.informModel.receiveGroupTb.informTableProvider = this.di.tableProviderFactory.createProvider({
-      query: (params) => {
-        let defer = this.di.$q.defer();
-        // this.di.deviceDataManager.getDevices(params).then((res) => {
-        //   this.scope.entities = this.getEntities(res.data.devices);
-        //   defer.resolve({
-        //     data: scope.entities,
-        //     count: 100
-        //   });
-        // });
-        //TODO 暂无实际数据，临时测试使用
-        setTimeout(function () {
-          defer.resolve({
-            data: m.getTestAlertHistory()['history'],
-            count: 19
-          });
-        },400);
-
-        return defer.promise;
-      },
-      getSchema: () => {
-        return {
-          schema: this.di.alertService.getAlertTableSchema(),
-          index_name: 'uuid',
-          rowCheckboxSupport: true,
-          rowActionsSupport: true
-        };
-      }
-    });
-  }
-
-
-
-
-  confirmDialog(content) {
-    let defer = this.di.$q.defer();
-    this.di.$uibModal
-      .open({
-        template: require('../../../components/mdc/templates/dialog.html'),
-        controller: 'dialogCtrl',
-        backdrop: true,
-        resolve: {
-          dataModel: () => {
-            return {
-              type: 'warning',
-              headerText: this.translate('MODULES.ALERT.DIALOG.HEADER'),
-              contentText: content,
-            };
-          }
-        }
-      })
-      .result.then((data) => {
-      if(data) {
-        defer.resolve(data);
-      }
-      else {
-        defer.reject(null);
-      }
-    });
-
-    return defer.promise;
-  }
-
 
 
 }

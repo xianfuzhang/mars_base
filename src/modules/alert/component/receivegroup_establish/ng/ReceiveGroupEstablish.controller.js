@@ -11,6 +11,7 @@ export class ReceiveGroupEstablishController {
       '$log',
       '$q',
       '$timeout',
+      '$filter',
       '_',
       'alertDataManager',
       'alertService',
@@ -24,6 +25,7 @@ export class ReceiveGroupEstablishController {
     });
 
     let unsubscribes = [];
+    let translate = this.di.$filter('translate');
     const scope = this.di.$scope;
     const deviceDataManager = this.di.deviceDataManager;
     const rootScope = this.di.$rootScope;
@@ -32,7 +34,9 @@ export class ReceiveGroupEstablishController {
     this.di.$scope.ip_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
     this.di.$scope.num_regex = '^\d$|^[1-9]+[0-9]*$';
 
-    scope.groupName = "";
+
+    scope.nameModel = {};
+    scope.nameModel.groupName = "";
 
     scope.showWizard = false;
     scope.title = '添加接收群组';
@@ -65,6 +69,8 @@ export class ReceiveGroupEstablishController {
       scope.addedReceiverModel.splice(index, 1);
     };
 
+
+    
     scope.addEmailReceiver = () =>{
       scope.addedReceiverModel.push({'type':'email', 'name':'','email':''})
     };
@@ -73,44 +79,84 @@ export class ReceiveGroupEstablishController {
       scope.addedReceiverModel.push({'type':'wechat', 'name':'', 'agentId':'', 'secret':''})
     };
 
-    scope.onGroupTabChange= (tab) => {
-      if (tab){
-        scope.groupTabSelected = tab;
-        // this.prepareTableData();
-        // this.init(scope.tabSelected);
+    // scope.onGroupTabChange= (tab) => {
+    //   if (tab){
+    //     scope.groupTabSelected = tab;
+    //     // this.prepareTableData();
+    //     // this.init(scope.tabSelected);
+    //   }
+    // };
+    // let serverConfig = null;
+    let emailServerValid = false;
+    let wechatServerValid = false;
+
+    function checkServerConfig(config) {
+      let email_config = config['server_config']['smtp'];
+      let wechat_config = config['server_config']['wechat'];
+
+      if(email_config){
+        emailServerValid = true;
+        di._.forEach(di._.keys(email_config), (key)=>{
+          if(email_config[key] === ''){
+            emailServerValid = false;
+            return false;
+          }
+        })
       }
-    };
+
+      if(wechat_config){
+        wechatServerValid = true;
+        di._.forEach(di._.keys(wechat_config), (key)=>{
+          if(wechat_config[key] === ''){
+            wechatServerValid = false;
+            return false;
+          }
+        })
+      }
+    }
+
 
 
     this.di.$scope.open = function(groupName){
       if(scope.showWizard) return;
       clearAll();
-      if(groupName)
-        di.alertDataManager.getReceiveGroup(groupName).then(
-          (res)=>{
-            scope.groupName =  res.name;
-            let wechat = res.receive.wechat;
-            let email = res.receive.email;
-            if(email instanceof Array && email.length >0){
-              di._.forEach(email, (item)=>{
-                scope.addedReceiverModel.push({'type':'email', 'name':item.name, 'email':item.email})
-              })
-            }
 
-            if(wechat instanceof Array && wechat.length >0){
-              di._.forEach(wechat, (item)=>{
-                scope.addedReceiverModel.push({'type':'wechat', 'name':item.department, 'agentId':item.agentId, 'secret':item.agent_corpsecret})
-              })
-            }
-          }
-        )
+      // this.di.alertDataManager.getAlertGroupBasicConfig().then((res)=>{
+        // checkServerConfig(res);
+        if(groupName){
+          di.alertDataManager.getReceiveGroup(groupName).then(
+            (res)=>{
+              scope.nameModel.groupName =  res.name;
+              let wechat = res.receive.wechat;
+              let email = res.receive.email;
+              if(email instanceof Array && email.length >0){
+                di._.forEach(email, (item)=>{
+                  scope.addedReceiverModel.push({'type':'email', 'name':item.name, 'email':item.email})
+                })
+              }
 
-      scope.showWizard = true;
+              if(wechat instanceof Array && wechat.length >0){
+                di._.forEach(wechat, (item)=>{
+                  scope.addedReceiverModel.push({'type':'wechat', 'name':item.department, 'agentId':item.agentId, 'secret':item.agent_corpsecret})
+                })
+              }
+            }
+          );
+          scope.title = translate('MODULES.ALERT.RECEIVE_GROUP.EDIT_GROUP');
+        } else {
+          scope.title = translate('MODULES.ALERT.RECEIVE_GROUP.CREATE_GROUP');
+        }
+
+        scope.showWizard = true;
+      // });
+
+
+
         // scope.$apply();
     };
 
     function clearAll() {
-      scope.groupName = "";
+      scope.nameModel.groupName = "";
       scope.addedReceiverModel = [];
 
     }
@@ -123,7 +169,7 @@ export class ReceiveGroupEstablishController {
 
     this.di.$scope.submit = function() {
       let params = {
-        name: scope.groupName,
+        name: scope.nameModel.groupName,
         receive:{
           'wechat':[],
           'email':[]
@@ -140,7 +186,7 @@ export class ReceiveGroupEstablishController {
           item.department = rec.name;
           item.agentId = rec.agentId;
           item.agent_corpsecret = rec.secret;
-          params.receive.email.push(item);
+          params.receive.wechat.push(item);
         } else {
           console.error("Unknown receive group type : " + rec.type)
         }

@@ -21,15 +21,15 @@ export class alertService {
 
   getRuleResource(trans){
     let res = "";
-    if(trans === 'CPU使用率'){
+    if(trans ===  this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.CPU')){
       res = "cpu";
-    } else if(trans === '内存使用率'){
+    } else if(trans === this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.MEM')){
       res = "ram";
-    } else if(trans === '硬盘使用率'){
+    } else if(trans === this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.DISK')){
       res = "disk";
-    } else if(trans === '下载速率'){
+    } else if(trans === this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.RX')){
       res = "port";
-    } else if(trans === '上传速率'){
+    } else if(trans === this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.TX')){
       res = "port";
     }
     return res;
@@ -37,9 +37,9 @@ export class alertService {
 
   getRuleObject(trans){
     let obj = "";
-    if(trans === '交换机'){
+    if(trans === this.translate('MODULES.ALERT.HEALTHY_CHECK.OBJECT.SWITCH')){
       obj = "switch";
-    } else if(trans === '控制器'){
+    } else if(trans ===  this.translate('MODULES.ALERT.HEALTHY_CHECK.OBJECT.CONTROLLER')){
       obj = "controller";
     }
     return obj;
@@ -48,15 +48,15 @@ export class alertService {
   getRuleTypeTranslate(type) {
     let tran = "";
     if(type === 'cpu_utilization'){
-      tran = "CPU使用率";
+      tran = this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.CPU');
     } else if(type === 'ram_used_ratio'){
-      tran = "内存使用率";
+      tran = this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.MEM');
     } else if(type === 'disk_root_used_ratio'){
-      tran = "硬盘使用率";
+      tran = this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.DISK');
     } else if(type === 'rx_util'){
-      tran = "下载速率";
+      tran = this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.RX');
     } else if(type === 'tx_util'){
-      tran = "上传速率";
+      tran = this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.TX');
     }
     return tran;
   }
@@ -88,18 +88,34 @@ export class alertService {
 
    getDescriptionTranslate(query, type) {
     let trans = "";
+    let pre = query.condition ==='gt'?this.translate('MODULES.ALERT.HEALTHY_CHECK.CONDITION.GT'):this.translate('MODULES.ALERT.HEALTHY_CHECK.CONDITION.LT');
+    let middle = '';
     if(type === 'cpu_utilization'){
-      trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
+     middle = "%";
     } else if(type === 'ram_used_ratio'){
-      trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
+     middle = "%";
     } else if(type === 'disk_root_used_ratio'){
-      trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
+     middle = "%";
     } else if(type === 'rx_util'){
-      trans = (query.condition ==='gt'?"超过":"低于") + query.value + "Mbps持续"+ query.continue + '秒';
+     middle = "Mbps";
     } else if(type === 'tx_util'){
-      trans = (query.condition ==='gt'?"超过":"低于") + query.value + "Mbps持续"+ query.continue + '秒';
+     middle = "Mbps";
     }
-    return trans;
+     middle += this.translate('MODULES.ALERT.HEALTHY_CHECK.CONDITION.CONTINUE');
+
+    let last = this.translate('MODULES.ALERT.HEALTHY_CHECK.CONDITION.SECOND');
+    // if(type === 'cpu_utilization'){
+    //   trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
+    // } else if(type === 'ram_used_ratio'){
+    //   trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
+    // } else if(type === 'disk_root_used_ratio'){
+    //   trans = (query.condition ==='gt'?"超过":"低于") + query.value + "%持续"+ query.continue + '秒';
+    // } else if(type === 'rx_util'){
+    //   trans = (query.condition ==='gt'?"超过":"低于") + query.value + "Mbps持续"+ query.continue + '秒';
+    // } else if(type === 'tx_util'){
+    //   trans = (query.condition ==='gt'?"超过":"低于") + query.value + "Mbps持续"+ query.continue + '秒';
+    // }
+    return pre + query.value + middle + query.continue + last;
   }
 
   getAlertTableSchema(){
@@ -189,37 +205,37 @@ export class alertService {
   getHealthyCheckTableSchema(){
     return [
       {
-        'label': "规则名",
+        'label': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.RULE_NAME'),
         'field': 'rule_name',
         'layout': {'visible': true, 'sortable': true, 'fixed': true},
       },
       {
-        'label': "对象",
+        'label': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.OBJECT'),
         'field': 'from',
         'layout': {'visible': true, 'sortable': true, 'fixed': true}
       },
       {
-        'label': "状态",
+        'label': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.STATUS'),
         'field': 'status',
         'layout': {'visible': true, 'sortable': true, 'fixed': true}
       },
       {
-        'label': "级别",
+        'label': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.ALERT_LEVEL'),
         'field': 'alert_level',
         'layout': {'visible': true, 'sortable': true, 'fixed': true}
       },
       {
-        'label': "接收群组",
+        'label': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.RECEIVE_GROUP'),
         'field': 'receive_group',
         'layout': {'visible': true, 'sortable': true, 'fixed': true}
       },
       {
-        'label': "类型",
+        'label': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.TYPE'),
         'field': 'type',
         'layout': {'visible': true, 'sortable': true, 'fixed': true}
       },
       {
-        'label': "描述",
+        'label': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.DESCRIPTION'),
         'field': 'description',
         'layout': {'visible': true, 'sortable': true, 'fixed': true}
       }
@@ -275,11 +291,11 @@ export class alertService {
   getHcTypeSwtDisLabel(){
     return {
       options: [
-        {label: 'CPU', value: 'cpu'},
-        {label: '内存', value: 'ram'},
-        {label: '硬盘', value: 'disk'},
-        {label: '下载速率', value: 'rx'},
-        {label: '上传速率', value: 'tx'}
+        {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.CPU'), value: 'cpu'},
+        {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.MEM'), value: 'ram'},
+        {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.DISK'), value: 'disk'},
+        {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.RX'), value: 'rx'},
+        {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.TX'), value: 'tx'}
       ]
     }
   }
@@ -287,23 +303,28 @@ export class alertService {
   getHcTypeCtrlDisLabel(){
     return {
       options: [
-        {label: 'CPU', value: 'cpu'},
-        {label: '内存', value: 'ram'},
-        {label: '硬盘', value: 'disk'},
+        {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.CPU'), value: 'cpu'},
+        {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.MEM'), value: 'ram'},
+        {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.DISK'), value: 'disk'},
       ]
     }
   }
 
   getHcLevelDisLabel(){
-    return {options: [{label: '高', value: 1}, {label: '低', value: 0}]}
+    return {options: [
+              {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.LEVEL.HIGHT'), value: 1},
+              {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.LEVEL.LOW'), value: 0}
+            ]}
   }
 
   getHcConditionDisLabel(){
-    return {options: [{label: '小于', value: 'lt'},{label: '大于', value: 'gt'}]}
+    return {options: [
+              {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.QUERY.GT'), value: 'gt'} ,
+              {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.QUERY.LT'), value: 'lt'}]}
   }
 
   getHcStatusDisLabel(){
-    return {on: '开', off: '关'}
+    return {on: this.translate('MODULES.ALERT.HEALTHY_CHECK.STATUS.ENABLED'), off: this.translate('MODULES.ALERT.HEALTHY_CHECK.STATUS.DISABLED')}
   }
 
 
