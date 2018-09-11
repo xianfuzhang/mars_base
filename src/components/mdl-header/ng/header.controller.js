@@ -7,7 +7,8 @@ export class headerController{
       '$location',
       '_',
       'appService',
-      'loginDataManager'
+      'loginDataManager',
+      'alertDataManager',
     ];
   }
 
@@ -20,6 +21,7 @@ export class headerController{
     this.CONST_ADMIN_GROUP = this.di.appService.CONST.ADMIN_GROUP;
     this.scope.groups = angular.copy(this.di.appService.CONST.HEADER);
     this.scope.username = null;
+    this.scope.alerts_acount = 0;
     this.scope.location = (url, event) => {
       event && event.stopPropagation();
       if (url === '/logout') {
@@ -32,6 +34,10 @@ export class headerController{
       }
     };
 
+    this.di.alertDataManager.getAlertHistories({})
+      .then((res) => {
+        this.scope.alerts_acount = res.data.total;
+      });
     this.init();
   }
 
