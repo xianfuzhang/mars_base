@@ -14,8 +14,8 @@ export class appService {
     this.isMocked = true;
     this.versionUrl = 'mars/v1';
     this.CONST = {
-      MOCKED_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/' + this.versionUrl,
-      LIVE_ZONE_ENDPOINT: 'http://[%__ZONE_IP__%]/'  + this.versionUrl,
+      MOCKED_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
+      LIVE_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/'  + this.versionUrl,
 
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
@@ -88,15 +88,20 @@ export class appService {
     };
   }
 
+
   getZoneEndpoint() {
     let endpoint;
     if (this.isMocked) {
+
       endpoint = this.CONST.MOCKED_ZONE_ENDPOINT.replace('[%__ZONE_IP__%]',
         (this.di.$location.host()  + ":"+  this.di.$location.port()));;
+
+      endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
     }
     else {
       endpoint = this.CONST.LIVE_WEBSOCKETS_ENDPONT.replace('[%__ZONE_IP__%]',
         (this.di.$location.host()  + ":"+  this.di.$location.port()));
+      endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
     }
     return endpoint;
   }
