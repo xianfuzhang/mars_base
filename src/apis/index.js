@@ -10,6 +10,7 @@ import {alertService} from './services/alert.service';
 import {notificationService} from './services/notification.service';
 import {LogService} from './services/log.service';
 import {DialogService} from './services/dialog.service';
+import {FlowService} from './services/flow.service';
 import {LogDataManager} from './datamanagers/log.dataManager';
 import {DashboardDataManager} from './datamanagers/dashboard.dataManager';
 
@@ -20,6 +21,7 @@ export default angular
   .service('alertService', alertService)
   .service('notificationService', notificationService)
   .service('dialogService', DialogService)
+  .service('flowService', FlowService)
   .service('deviceDataManager', DeviceDataManager)
   .service('stormDataManager', StormDataManager)
   .service('loginDataManager', LoginDataManager)

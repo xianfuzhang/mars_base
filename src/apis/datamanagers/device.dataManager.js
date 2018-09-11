@@ -113,7 +113,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve({'data': {'ports': [], 'total': 0}});
+        defer.resolve({'data': []});
       }
     );
     return defer.promise;
@@ -126,7 +126,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve({'data': {'ports': [], 'total': 0}});
+        defer.resolve({'data': {'statistics': []}});
       }
     );
     return defer.promise;
@@ -178,7 +178,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve({'data': {'links': [], 'total': 0}});
+        defer.resolve({'data': []});
       }
     );
     return defer.promise;

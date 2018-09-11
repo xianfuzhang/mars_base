@@ -145,7 +145,7 @@ export class appService {
   }
 
   getDeviceFlowsUrl(deviceId) {
-    return this.getZoneEndpoint() + '/sflow/' + deviceId;
+    return this.getZoneEndpoint() + '/flows/' + deviceId;
   }
 
   getLinksUrl() {

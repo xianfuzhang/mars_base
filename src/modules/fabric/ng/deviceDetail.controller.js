@@ -6,6 +6,7 @@ export class DeviceDetailController {
       '$filter',
       '$q',
       '$log',
+      'flowService',
       'deviceDetailService',
       'deviceDataManager',
       'tableProviderFactory'
@@ -160,7 +161,7 @@ export class DeviceDetailController {
         schema = this.di.deviceDetailService.getDevicePortsStatisticsSchema();
         break;
       case 'flow':
-        schema = this.di.deviceDetailService.getDeviceSFlowsSchema();
+        schema = this.di.deviceDetailService.getDeviceFlowsSchema();
         break;
     }
     return schema;
@@ -307,13 +308,14 @@ export class DeviceDetailController {
         entities.forEach((entity) => {
           let obj = {};
           obj['id'] = entity.id;
-          obj['ip'] = entity.collector_ip;
-          obj['payload'] = entity.max_payload_length;
-          obj['header'] = entity.max_header_length;
-          obj['interval'] = entity.polling_interva;
-          obj['rate'] = entity.sample_rate;
-          obj['port'] = entity.port;
-          obj['duration'] = entity.duration;
+          obj['state'] = entity.state;
+          obj['packets'] = entity.packets;
+          obj['duration'] = entity.life;
+          obj['priority'] = entity.priority;
+          obj['name'] = entity.tableId;
+          obj['selector'] = this.di.flowService.selectorHandler(entity.selector);
+          obj['treatment'] = this.di.flowService.treatmentHander(entity.treatment);
+          obj['app'] = entity.appId;
           this.scope.detailModel.entities.push(obj);
         });
         break;

@@ -31,11 +31,11 @@ export class DeviceDetailService {
         'value': 'statistic',
         'type': 'statistic'
       },
-      /*{
+      {
         'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.FLOW'),
         'value': 'flow',
         'type': 'flow'
-      }*/
+      }
     ];
   }
 
@@ -262,6 +262,51 @@ export class DeviceDetailService {
         'field': 'duration',
         'layout': {'visible': true, 'sortable': true}
       },
+    ];
+  }
+
+  getDeviceFlowsSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'),
+        'field': 'state',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PACKETS'),
+        'field': 'packets',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.DURATION'),
+        'field': 'duration',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'),
+        'field': 'priority',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TABLENAME'),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR'),
+        'field': 'selector',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TREATMENT'),
+        'field': 'treatment',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.APP'),
+        'field': 'app',
+        'layout': {'visible': true, 'sortable': true}
+      }
     ];
   }
 
