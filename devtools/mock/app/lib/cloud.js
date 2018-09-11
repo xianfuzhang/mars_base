@@ -450,28 +450,26 @@ let cloudLib = {
     return false;
   },
   
-  addFlow: (reqParams) => {
-    reqParams.flows.forEach((flow) => {
-      flow = new Flow(
-        chance.guid(),
-        chance.natural({min:0, max:5}),
-        'org.onosproject.core',
-        chance.natural({min:0, max:3}),
-        flow.priority,
-        flow.timeout,
-        flow.isPermanent,
-        flow.deviceId,
-        'ADDED',
-        chance.natural({min: 1000, max: 1000000}),
-        chance.natural({min: 100, max: 100000}),
-        chance.natural({min: 1000, max: 10000000}),
-        "UNKNOWN",
-        Date.now()
-      );
-  
-      // adding data to the cloud
-      cloudModel.flows.push(flow);
-    });
+  addFlow: (appId, flow) => {
+   let newFlow = new Flow(
+      chance.guid(),
+      chance.natural({min:0, max:5}),
+      appId,
+      chance.natural({min:0, max:3}),
+      flow.priority,
+      flow.timeout,
+      flow.isPermanent,
+      flow.deviceId,
+      'ADDED',
+      chance.natural({min: 1000, max: 1000000}),
+      chance.natural({min: 100, max: 100000}),
+      chance.natural({min: 1000, max: 10000000}),
+      "UNKNOWN",
+      Date.now()
+    );
+
+    // adding data to the cloud
+    cloudModel.flows.push(newFlow);
     
     return true;
   }
