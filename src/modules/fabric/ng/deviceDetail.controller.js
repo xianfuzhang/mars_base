@@ -8,6 +8,8 @@ export class DeviceDetailController {
       '$log',
       'flowService',
       'deviceDetailService',
+      'notificationService',
+      'dialogService',
       'deviceDataManager',
       'tableProviderFactory'
     ];
@@ -109,8 +111,34 @@ export class DeviceDetailController {
               });
             break;
           case 'flow':
+            let flowId = event.data.id;
+            this.di.deviceDataManager.deleteDeviceFlow(this.scope.deviceId, flowId)
+              .then((res) => {
+                this.scope.detailModel.api.queryUpdate();
+              }, (res) => {
+                this.scope.alert = {
+                  type: 'warning',
+                  msg: res.data
+                }
+              this.di.notificationService.render(this.scope);
+              });
             break;
         }
+      }
+    };
+
+    this.scope.createFlow = () => {
+
+    };
+
+    this.scope.batchRemove = ($value) => {
+      if ($value.length) {
+        this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCH.DETAIL.DIALOG.CONTENT.BATCH_DELETE_FLOWS'))
+          .then(() =>{
+            this.batchDeleteDeviceFlows($value);
+          }, () =>{
+            this.di.$log.debug('delete switch flows cancel');
+          });
       }
     };
   }
@@ -329,9 +357,31 @@ export class DeviceDetailController {
         actions = this.di.deviceDetailService.getDevicePortsTableRowActions();
         break;
       case 'flow':
+        actions = this.di.deviceDetailService.getDeviceFlowsTableRowActions();
         break;
     }
     return actions;
+  }
+
+  batchDeleteDeviceFlows(arr) {
+    let deferredArr = [];
+    arr.forEach((item) => {
+      let defer = this.di.$q.defer();
+      let flowId = item.id;
+      this.di.deviceDataManager.deleteDeviceFlow(this.scope.deviceId, flowId)
+        .then(() => {
+          defer.resolve();
+        }, () => {
+          defer.resolve();
+        });
+      deferredArr.push(defer.promise);
+    });
+
+    this.di.$q.all(deferredArr).then(() => {
+      this.scope.detailModel.api.queryUpdate();
+    });
+
+    this.scope.$emit('batch-delete-endpoints');
   }
 }
 DeviceDetailController.$inject = DeviceDetailController.getDI();

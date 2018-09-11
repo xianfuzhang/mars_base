@@ -114,6 +114,15 @@ export class DeviceDetailService {
     ];
   }
 
+  getDeviceFlowsTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'value': 'delete'
+      }
+    ];
+  }
+
   getDeviceLinksSchema() {
     return [
       {

@@ -145,6 +145,19 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  deleteDeviceFlow(deviceId, flowId) {
+   let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDeleteDeviceFlowUrl(deviceId, flowId)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise; 
+  }
+
   getPorts(params) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getPortsUrl(), {'params': params}).then(

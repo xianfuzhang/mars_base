@@ -153,6 +153,10 @@ export class appService {
     return this.getZoneEndpoint() + '/flows/' + deviceId;
   }
 
+  getDeleteDeviceFlowUrl(deviceId, flowId) {
+    return this.getZoneEndpoint() + '/flows/' + deviceId + '/' + flowId; 
+  }
+
   getLinksUrl() {
     return this.getZoneEndpoint() + '/links';
   }
