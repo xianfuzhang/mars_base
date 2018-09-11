@@ -1,30 +1,30 @@
 <div class="stepForm">
     <div class="stepForm__input">
         <div class="stepForm__input__label">Name<span class="stepForm__input__required">*</span></div>
-        <input class="stepForm__input__text" name="name" type="text" ng-model="switch.name" ng-required="true"/>
-        <span class="stepForm__input__error" ng-show="wizardForm.name.$invalid">必填项</span>
+        <input class="stepForm__input__text" name="name" type="text" ng-blur="nameChange=true" ng-model="switch.name" ng-required="true"/>
+        <span class="stepForm__input__error" ng-show="wizardForm.name.$invalid && nameChange">必填项</span>
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">Mac Address</div>
         <!--<mdl-select ng-model="mac_address" name="mac_address"-->
         <!--display-label="{ options: [{label: '男1', value: '0'}, {label: '男2', value: '1'}]}">-->
         <!--</mdl-select>-->
-        <input class="stepForm__input__text" name="mac" list="mac_addresses_datalist" ng-model="switch.mac_address" ng-pattern="mac_regex"/>
+        <input class="stepForm__input__text" name="mac" list="mac_addresses_datalist" ng-blur="macChange=true" ng-model="switch.mac_address" ng-pattern="mac_regex"/>
         <datalist id="mac_addresses_datalist">
             <option ng-value="mac" ng-repeat="mac in mac_addresses"/>
         </datalist>
-        <span class="stepForm__input__error" ng-show="wizardForm.mac.$invalid">Mac地址无效</span>
-        <div class="stepForm__input__annotaions">
-            Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future.
-        </div>
+        <span class="stepForm__input__error" ng-show="wizardForm.mac.$invalid && macChange">Mac地址无效</span>
+        <!--<div class="stepForm__input__annotaions">-->
+            <!--Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future.-->
+        <!--</div>-->
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">ManagementAddress & Port<span class="stepForm__input__required">*</span></div>
-        <input class="stepForm__input__text-prefix" name="managementAddress" type="text" ng-model="switch.managementAddress" ng-required="true" ng-pattern="ip_regex"/>
+        <input class="stepForm__input__text-prefix" name="managementAddress" type="text" ng-model="switch.managementAddress" ng-required="true" ng-blur="addressChange=true" ng-pattern="ip_regex"/>
         <span class="stepForm__input__separator">&nbsp;:&nbsp;</span>
-        <input class="stepForm__input__text-postfix" name="port" type="number" ng-model="switch.port" ng-required="true" min="0" max="65535"/>
-        <span class="stepForm__input__error" ng-show="wizardForm.managementAddress.$invalid">IP地址无效</span>
-        <span class="stepForm__input__error" ng-show="wizardForm.port.$invalid">端口无效</span>
+        <input class="stepForm__input__text-postfix" name="port" type="number" ng-blur="portChange=true" ng-model="switch.port" ng-required="true" min="0" max="65535"/>
+        <span class="stepForm__input__error" ng-show="wizardForm.managementAddress.$invalid && addressChange">IP地址无效</span>
+        <span class="stepForm__input__error" ng-show="wizardForm.port.$invalid && portChange">端口无效</span>
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">Rack Id</div>
@@ -32,11 +32,11 @@
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">Protocol<span class="stepForm__input__required">*</span></div>
-        <input class="stepForm__input__text" list="protocals-datalist" name="protocol" type="text" ng-model="switch.protocol" ng-required="true"/>
+        <input class="stepForm__input__text" list="protocals-datalist" name="protocol" type="text" ng-blur="protocalChange=true" ng-model="switch.protocol" ng-required="true"/>
         <datalist id="protocals-datalist">
             <option ng-value="protocol" ng-repeat="protocol in protocols"/>
         </datalist>
-        <span class="stepForm__input__error" ng-show="wizardForm.protocol.$invalid">必填项</span>
+        <span class="stepForm__input__error" ng-show="wizardForm.protocol.$invalid && protocalChange">必填项</span>
     </div>
 
     <div class="stepForm__input" ng-show="switch.protocol == 'SNMP'">
@@ -49,10 +49,10 @@
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label" style="text-decoration: underline">Admin Status<span class="stepForm__input__required">*</span></div>
-        <mdl-switch ng-model="switch.admin_status" name="status"
+        <mdl-switch ng-model="switch.admin_status" name="status" ng-blur="statusChange=true"
                     display-label="{on: 'Down', off: 'Up', id: 'status'}">
         </mdl-switch>
-        <span class="stepForm__input__error" ng-show="wizardForm.status.$invalid">必填项</span>
+        <span class="stepForm__input__error" ng-show="wizardForm.status.$invalid && statusChange">必填项</span>
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label" style="text-decoration: underline">Fabric Role</div>
