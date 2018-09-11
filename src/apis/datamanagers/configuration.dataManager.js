@@ -100,9 +100,9 @@ export class ConfigurationDataManager{
 
   }
   
-  getConfigurationHistory(subjectClass, subject){
+  getConfigurationHistory(params){
     let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getConfigurationHistoryUrl(subjectClass, subject)).then(
+    this.di.$http.get(this.di.appService.getConfigurationHistoryUrl(params)).then(
       (res) => {
         defer.resolve(res);
       },
@@ -111,10 +111,7 @@ export class ConfigurationDataManager{
       }
     );
     return defer.promise;
-    
   }
-
-
 }
 
 ConfigurationDataManager.$inject = ConfigurationDataManager.getDI();

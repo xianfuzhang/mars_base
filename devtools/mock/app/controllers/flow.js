@@ -5,40 +5,68 @@ const express = require('express'),
       _ = require('lodash');
 
 router.get('/', function (req, res) {
-  let devices = [];
-  
-  // devices = _.cloneDeep(cloudModel.flows).map((device, index) => {
-  //   return formatDevice(device);
-  // });
-  
   return res.json({flows: cloudModel.flows});
 });
 
 router.post('/', function(req, res) {
-  if (!req.params.appId) {
+  if (!req.query.appId) {
     return res.status(404).json('AppId is required!');
   }
   
-  if(cloudLib.addFlow(req.body)) {
-    return res.status(200).json('Success to add new flow!');
-  } else {
-    return res.status(400).json('Failed to add new flow!');
+  if(!Array.isArray(req.body.flows)) {
+    return res.status(404).json('Paramater error,please check first!');
   }
+  
+  req.body.flows.forEach((flow) => {
+    cloudLib.addFlow(req.query.appId, flow);
+  });
+  
+  return res.status(200).json('Success to add new flows!');
 });
 
-router.get('/:deviceId/:flowId', function (req, res) {
-  let devices = [];
-  
+router.get('/:deviceId', function (req, res) {
   if (!req.params.deviceId) {
     return res.status(404).json('Device ID is required');
   }
   
-  if (!req.params.flowId) {
-    return res.status(404).json('Flow ID is required');
+  let flows = cloudModel.flows.filter((flow) => {
+    return flow.deviceId === req.params.deviceId;
+  });
+  
+  return res.status(200).json({flows: flows});
+});
+
+router.post('/:deviceId', function (req, res) {
+  if (!req.params.deviceId) {
+    return res.status(404).json('Device ID is required');
   }
   
-  // TODO:
+  if (!req.query.appId) {
+    return res.status(404).json('App id is required');
+  }
+  
+  if (!req.body) {
+    return res.status(404).json('Paramater stream is required');
+  }
+  
+  cloudLib.addFlow(req.query.appId, req.body);
+  return res.status(200).json("This flow has been added!");
+  
 });
+
+// router.get('/:deviceId/:flowId', function (req, res) {
+//   let devices = [];
+//
+//   if (!req.params.deviceId) {
+//     return res.status(404).json('Device ID is required');
+//   }
+//
+//   if (!req.params.flowId) {
+//     return res.status(404).json('Flow ID is required');
+//   }
+//
+//   // TODO:
+// });
 
 router.delete('/:deviceId/:flowId', function(req, res) {
   if (!req.params.deviceId) {
@@ -49,13 +77,15 @@ router.delete('/:deviceId/:flowId', function(req, res) {
     return res.status(404).json('Flow ID is required!');
   }
   
-  // TODO:
-  let result = cloudLib.deleteDevice(req.params.deviceId);
+  let index = cloudModel.flows.findIndex((flow) => {
+    return flow.id === req.params.flowId && flow.deviceId === req.params.deviceId;
+  })
   
-  if (result) {
-    return res.status(200).json("This device has been deleted!");
+  if (index != -1) {
+    cloudModel.flows.splice(index, 1);
+    return res.status(200).json("This flow has been deleted!");
   } else {
-    return res.status(400).json("Failed to delete the device!");
+    return res.status(404).json("This flow does not exist!");
   }
 });
 
