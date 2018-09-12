@@ -67,7 +67,7 @@ router.get('/devices/:deviceId', function (req, res) {
     configs = _.cloneDeep(cloudModel.devices).map((device, index) => {
       let config = {
         id: device.id,
-        name: device.name,
+        name: device.annotations.name,
         type: device.type,
         available: device.available,
         mgmtIpAddress: device.annotations.managementAddress,
@@ -121,7 +121,7 @@ router.get('/devices/:deviceId/:type', function (req, res) {
     if (device !== undefined) {
       let config = {
         id: device.id,
-        name: device.name,
+        name: device.annotations.name,
         type: device.type,
         available: device.available,
         mgmtIpAddress: device.annotations.managementAddress,
