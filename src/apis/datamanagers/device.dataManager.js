@@ -3,6 +3,7 @@ export class DeviceDataManager {
     return [
       '$q',
       '$http',
+      '$log',
       'appService'
     ];
   }
@@ -140,6 +141,34 @@ export class DeviceDataManager {
       },
       (error) => {
         defer.resolve({'data': {'flows': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
+  getDeviceConfigs(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDeviceConfigsUrl()).then(
+      (res) => {
+        defer.resolve(res['data']['configs']);
+      },
+      (error) => {
+        this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error +"）")
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
+
+  getDeviceConfig(deviceId){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDeviceConfigUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res['data']);
+      },
+      (error) => {
+        this.di.$log.error("Url: " + this.di.appService.getDeviceConfigUrl(deviceId) + " has no response with error(" + error +"）")
+        defer.resolve(null);
       }
     );
     return defer.promise;
