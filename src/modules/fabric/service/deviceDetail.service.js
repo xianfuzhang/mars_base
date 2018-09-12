@@ -319,6 +319,36 @@ export class DeviceDetailService {
     ];
   }
 
+  getTopoDeviceFlowsSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'),
+        'field': 'state',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'),
+        'field': 'priority',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TABLENAME'),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR'),
+        'field': 'selector',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TREATMENT'),
+        'field': 'treatment',
+        'layout': {'visible': true, 'sortable': true}
+      },
+    ];
+  }
+
   getDevicePFCSchema() {
     return [];
   }

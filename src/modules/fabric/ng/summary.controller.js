@@ -17,12 +17,12 @@ export class FabricSummaryController {
       '$window',
       '$timeout',
       'localStoreService',
-      'deviceService',
       'appService',
       'deviceDataManager',
       'tableProviderFactory',
       'deviceService',
       'switchService',
+      'modalManager'
     ];
   }
 
@@ -409,14 +409,25 @@ export class FabricSummaryController {
 
     }));
 
-
     unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_create_flow',(evt)=>{
       this.di.$rootScope.$emit('flow-wizard-show', this.di.$scope.fabricModel.showSwitchId);
 
     }));
 
-
-
+    unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_show_flow',(evt)=>{
+      this.di.modalManager.open({
+          template: require('../template/showSwitchFlows.html'),
+          controller: 'showSwitchFlowsController',
+          windowClass: 'show-switch-flow-modal',
+          resolve: {
+            dataModel: () => {
+              return {
+                switchId: this.di.$scope.fabricModel.showSwitchId    
+              }
+            }
+          }
+        });
+    }));
 
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unsubscribers, (unsubscribe) => {
