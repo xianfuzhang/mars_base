@@ -82,10 +82,16 @@
       <section class="tab-content" ng-if="tabSelected.type == 'flow'">
         <mdl-table actions-show="detailModel.actionsShow"
                    actions="detailModel.rowActions"
+                   row-select-action="onTableRowSelectAction($event)"
                    row-click="onTableRowClick($event)"
-                   provider="detailModel.provider" api-ready="onApiReady($api)">
+                   provider="detailModel.provider" api-ready="onApiReady($api)"
+                   on-add="createFlow()" on-remove="batchRemove($value)">
         </mdl-table>
       </section>
     </div>
   </section>
+
+  <ng-controller ng-controller="flowEstablishController">
+    <wizard></wizard>
+  </ng-controller>
 </div>

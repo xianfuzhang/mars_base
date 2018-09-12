@@ -385,8 +385,12 @@ export class DeviceService {
         'label': this.translate('MODULES.SWITCH.MENU.CREATE_FLOW'),
         'isEnabled': true,
         'msg': 'summary_switch_menu_create_flow'
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.MENU.SHOW_FLOW'),
+        'isEnabled': true,
+        'msg': 'summary_switch_menu_show_flow'
       }
-
     ]
 
   }

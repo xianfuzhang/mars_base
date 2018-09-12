@@ -160,18 +160,31 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  getDeviceConfig(deviceId){
+  getDeviceConfig(deviceId) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getDeviceConfigUrl(deviceId)).then(
       (res) => {
         defer.resolve(res['data']);
       },
       (error) => {
-        this.di.$log.error("Url: " + this.di.appService.getDeviceConfigUrl(deviceId) + " has no response with error(" + error +"）")
+        this.di.$log.error("Url: " + this.di.appService.getDeviceConfigUrl(deviceId) + " has no response with error(" + error + "）")
         defer.resolve(null);
       }
     );
     return defer.promise;
+  }
+
+  deleteDeviceFlow(deviceId, flowId) {
+   let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDeleteDeviceFlowUrl(deviceId, flowId)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise; 
   }
 
   getPorts(params) {

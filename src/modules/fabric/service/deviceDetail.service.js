@@ -114,6 +114,15 @@ export class DeviceDetailService {
     ];
   }
 
+  getDeviceFlowsTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'value': 'delete'
+      }
+    ];
+  }
+
   getDeviceLinksSchema() {
     return [
       {
@@ -307,6 +316,36 @@ export class DeviceDetailService {
         'field': 'app',
         'layout': {'visible': true, 'sortable': true}
       }
+    ];
+  }
+
+  getTopoDeviceFlowsSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'),
+        'field': 'state',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'),
+        'field': 'priority',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TABLENAME'),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR'),
+        'field': 'selector',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TREATMENT'),
+        'field': 'treatment',
+        'layout': {'visible': true, 'sortable': true}
+      },
     ];
   }
 
