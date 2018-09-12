@@ -19,71 +19,6 @@ router.get('/devices', function (req, res) {
   return res.json({devices: devices});
 });
 
-router.get('/config', function(req, res) {
-  let configs = [];
-  
-  configs = _.cloneDeep(cloudModel.devices).map((device, index) => {
-    let config = {
-      id: device.id,
-      name: device.name,
-      type: device.type,
-      available: device.available,
-      mgmtIpAddress: device.annotations.managementAddress,
-      mac: device.mac,
-      mrf: device.mrf,
-      port: 0,
-      protocal: device.annotations.protocal,
-      rack_id: device.rack_id,
-      community: null,
-      leafGroup: {
-        name: null,
-        switch_port: 0
-      }
-    };
-    
-    return config;
-  });
-  
-  return res.json({configs: configs});
-});
-
-router.get('/config/:id', function(req, res) {
-  let devices = [];
-  
-  if (!req.params.id) {
-    return res.status(404).json('Device ID is required');
-  }
-  
-  devices = _.cloneDeep(cloudModel.devices);
-  
-  // search using the instanceId in the instances array for each project
-  let device = devices.find(device => device.id === req.params.id);
-  
-  if (device !== undefined) {
-    let config = {
-      id: device.id,
-      name: device.name,
-      type: device.type,
-      available: device.available,
-      mgmtIpAddress: device.annotations.managementAddress,
-      mac: device.mac,
-      mrf: device.mrf,
-      port: 0,
-      protocal: device.annotations.protocal,
-      rack_id: device.rack_id,
-      community: null,
-      leafGroup: {
-        name: null,
-        switch_port: 0
-      }
-    };
-    
-    return res.json(config);
-  } else {
-    return res.status(404).json("This device doesn't exist!");
-  }
-});
-
 router.post('/devices', function(req, res) {
   //  TODO: need validation
   if(!validateDeviceRequest(req.body)) {
@@ -126,6 +61,34 @@ router.get('/devices/:deviceId', function (req, res) {
     return res.json({ports: formatPorts(ports)});
   }
   
+  if(req.params.deviceId == 'config') {
+    let configs = [];
+  
+    configs = _.cloneDeep(cloudModel.devices).map((device, index) => {
+      let config = {
+        id: device.id,
+        name: device.name,
+        type: device.type,
+        available: device.available,
+        mgmtIpAddress: device.annotations.managementAddress,
+        mac: device.mac,
+        mrf: device.mrf,
+        port: 0,
+        protocal: device.annotations.protocal,
+        rack_id: device.rack_id,
+        community: null,
+        leafGroup: {
+          name: null,
+          switch_port: 0
+        }
+      };
+    
+      return config;
+    });
+  
+    return res.json({configs: configs});
+  }
+  
   devices = _.cloneDeep(cloudModel.devices);
   
   // search using the instanceId in the instances array for each project
@@ -141,6 +104,43 @@ router.get('/devices/:deviceId', function (req, res) {
 router.get('/devices/:deviceId/:type', function (req, res) {
   if (!req.params.deviceId) {
     return res.status(404).json('Device ID is required');
+  }
+  
+  if(req.params.deviceId == 'config'){
+    let devices = [];
+  
+    if (!req.params.type) {
+      return res.status(404).json('Device ID is required');
+    }
+  
+    devices = _.cloneDeep(cloudModel.devices);
+  
+    // search using the instanceId in the instances array for each project
+    let device = devices.find(device => device.id === req.params.type);
+  
+    if (device !== undefined) {
+      let config = {
+        id: device.id,
+        name: device.name,
+        type: device.type,
+        available: device.available,
+        mgmtIpAddress: device.annotations.managementAddress,
+        mac: device.mac,
+        mrf: device.mrf,
+        port: 0,
+        protocal: device.annotations.protocal,
+        rack_id: device.rack_id,
+        community: null,
+        leafGroup: {
+          name: null,
+          switch_port: 0
+        }
+      };
+    
+      return res.json(config);
+    } else {
+      return res.status(404).json("This device doesn't exist!");
+    }
   }
   
   let devices = _.cloneDeep(cloudModel.devices);
