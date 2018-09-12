@@ -20,7 +20,7 @@ export class ConfigurationHistoryController {
     this.translate = this.di.$filter('translate');
     this.date = this.di.$filter('date');
     
-    this.scope.pageTitle = this.translate('MODULE.LOG.PAGE.TITLE');
+    this.scope.pageTitle = this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY');
     this.scope.loading = false;
     this.scope.hasData = false;
     

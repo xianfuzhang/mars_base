@@ -48,7 +48,7 @@ export class AddHealthyCheckController {
 
 
     scope.healthyCheckAddedModel = {
-      switch : "true",
+      switch : true,
       query : {
 
       }
@@ -105,7 +105,7 @@ export class AddHealthyCheckController {
           setTimeout(function () {
             scope.healthyCheckAddedModel.name = rule.rule_name;
             scope.healthyCheckAddedModel.object = di._.find(scope.displayLabel['object']['options'], {'value':object});
-            scope.healthyCheckAddedModel.switch = res.status === "enabled"?"true":"false";
+            scope.healthyCheckAddedModel.switch = res.status === "enabled"?true:false;
             scope.$apply();
 
             scope.healthyCheckAddedModel.level = di._.find(scope.displayLabel['level']['options'], {'value':res.alert_level});
@@ -139,7 +139,7 @@ export class AddHealthyCheckController {
 
     function clearAll() {
       scope.healthyCheckAddedModel = {
-        switch : "true",
+        switch : true,
         query : {
 
         }
@@ -168,7 +168,7 @@ export class AddHealthyCheckController {
       let type = scope.healthyCheckAddedModel.type.value;
       let params = {
         'name': scope.healthyCheckAddedModel.name,
-        'status': scope.healthyCheckAddedModel.switch === "true"?"enabled":"disabled",
+        'status': scope.healthyCheckAddedModel.switch === true?"enabled":"disabled",
         'alert_level': scope.healthyCheckAddedModel.level.value,
         'receive_group': scope.healthyCheckAddedModel.group.value,
         // 'query':{
