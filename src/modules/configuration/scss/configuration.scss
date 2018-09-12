@@ -1338,3 +1338,22 @@
     background-color: #7accef;
   }
 }
+
+
+@include block(configuration){
+
+
+  @include  element(codePre){
+
+    height:90%;
+    overflow: scroll;
+    border:1px solid lightgray;
+
+
+    @include state(edit){
+      border:3px solid greenyellow;
+    }
+
+
+  }
+}

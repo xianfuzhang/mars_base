@@ -11,30 +11,32 @@
     <div class="configuration__body__content flex_entirety__body__body" style="display:flex;flex-direction: row">
 
       <div style="flex-shrink: 1;flex-grow:1;background-color: white;margin:8px;height:90%;width:90%">
-        <pre contenteditable="{{configurationModel.isEditable}}" style="height:90%;overflow: scroll;border:1px solid lightgray">{{configurationModel.configurationShow}}</pre>
+        <pre id="configurationPre" contenteditable="{{configurationModel.isEditable}}" class="configuration__codePre">{{configurationModel.configurationShow}}</pre>
+        <!--ng-class="{'+edit': configurationModel.isEditable }"-->
       </div>
 
       <div style="display:flex;flex-direction: column;height:100%;flex-basis: 500px;flex-shrink: 0;flex-grow: 0;padding-left:16px;margin:8px;">
-        <div>
-          <mdl-text ng-model="configurationModel.currentSubjectClass"
-                    disable="false"
-                    datalist="subject_class_datalist"
-                    display-label="{id: 'subjectClassInput', hint: 'Subject Class', type: 'text', required: false}" >
-          </mdl-text>
-          <datalist id="subject_class_datalist" style="background-color: red">
-            <option ng-value="subjectClass" ng-repeat="subjectClass in configurationModel.subjectClassList"/>
-          </datalist>
-        </div>
-        <div>
-          <mdl-text ng-model="configurationModel.currentSubject"
-                    disable="{{configurationModel.subjectListDisable}}"
-                    datalist="subject_datalist"
-                    display-label="{id: 'subjectInput', hint: 'Subject', type: 'text', required: false}" >
-          </mdl-text>
-          <datalist id="subject_datalist" style="background-color: red">
-            <option ng-value="subjectClass" ng-repeat="subjectClass in configurationModel.subjectList"/>
-          </datalist>
-        </div>
+        <!-- 由于最新文档中没有subject，所以注释以下代码 -->
+        <!--<div>-->
+          <!--<mdl-text ng-model="configurationModel.currentSubjectClass"-->
+                    <!--disable="false"-->
+                    <!--datalist="subject_class_datalist"-->
+                    <!--display-label="{id: 'subjectClassInput', hint: 'Subject Class', type: 'text', required: false}" >-->
+          <!--</mdl-text>-->
+          <!--<datalist id="subject_class_datalist" style="background-color: red">-->
+            <!--<option ng-value="subjectClass" ng-repeat="subjectClass in configurationModel.subjectClassList"/>-->
+          <!--</datalist>-->
+        <!--</div>-->
+        <!--<div>-->
+          <!--<mdl-text ng-model="configurationModel.currentSubject"-->
+                    <!--disable="{{configurationModel.subjectListDisable}}"-->
+                    <!--datalist="subject_datalist"-->
+                    <!--display-label="{id: 'subjectInput', hint: 'Subject', type: 'text', required: false}" >-->
+          <!--</mdl-text>-->
+          <!--<datalist id="subject_datalist" style="background-color: red">-->
+            <!--<option ng-value="subjectClass" ng-repeat="subjectClass in configurationModel.subjectList"/>-->
+          <!--</datalist>-->
+        <!--</div>-->
         <mdl-checkbox style="margin-left: -8px;margin-top: 16px;" ng-model="configurationModel.isEditable"
                       display-label="checkDisLab">
         </mdl-checkbox>

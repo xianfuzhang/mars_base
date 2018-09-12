@@ -142,6 +142,14 @@ export class appService {
     return this.getZoneEndpoint() + '/devices/' + deviceId + '/ports';
   }
 
+  getDeviceConfigsUrl(){
+    return this.getZoneEndpoint() + '/devices/config';
+  }
+
+  getDeviceConfigUrl(deviceId){
+    return this.getZoneEndpoint() + '/devices/config/' + deviceId;
+  }
+
   getDevicePortsStatisticsUrl(deviceId) {
     if(deviceId === undefined || deviceId === null || deviceId === ''){
       return this.getZoneEndpoint() + '/statistics/ports';

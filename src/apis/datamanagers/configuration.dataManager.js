@@ -22,7 +22,7 @@ export class ConfigurationDataManager{
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getConfigurationUrl(subjectClass, subject)).then(
       (res) => {
-        defer.resolve(res);
+        defer.resolve(res.data);
       },
       (error) => {
         defer.resolve({'data': {'config': []}});
