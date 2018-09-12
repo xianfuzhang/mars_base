@@ -210,11 +210,11 @@ export class appService {
   }
   
   getAlertHistoryUrl(){
-    return this.getZoneEndpoint() + '/alert/history/list';
+    return this.getZoneEndpoint() + '/alert/v1/history/list';
   }
 
   getAlertHistoryRemoveUrl(uuid){
-    return this.getZoneEndpoint() + '/alert/history/uuid/' + uuid ;
+    return this.getZoneEndpoint() + '/alert/v1/history/uuid/' + uuid ;
   }
 
   getAlertHistoriesSelectedRemoveUrl(){
