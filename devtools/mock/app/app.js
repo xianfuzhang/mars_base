@@ -13,6 +13,7 @@ var express = require('express'),
   useraccountController = require('./controllers/useraccount'),
   loginController = require('./controllers/login'),
   confighistoryController = require('./controllers/confighistory'),
+  configurationController = require('./controllers/configuration'),
   app = express(),
   //expressSession = require('express-session'),
   cookieParser = require('cookie-parser');
@@ -47,6 +48,7 @@ app.use('/mars/v1/alert/v1', alertController);
 app.use('/mars/v1/logs/v1', logController);
 app.use('/mars/v1/cluster', clusterController);
 app.use('/mars/v1', loginController);
+app.use('/mars/v1/configuration', configurationController);
 app.use('/mars/v1/utility/confighistory/v1', confighistoryController);
 
 
