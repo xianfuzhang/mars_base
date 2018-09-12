@@ -172,12 +172,10 @@ export class mdlTable {
       tableCtrl.onMenu();
     };
     scope._add = ($event) => {
-      this.di.$log.info('_add click');
       scope.onAdd = scope.onAdd || angular.noop;
       scope.onAdd();
     };
     scope._remove = (event) => {
-      this.di.$log.info('_remove click');
       scope.onRemove = scope.onRemove || angular.noop;
       let removes = this.di._.cloneDeep(scope.tableModel.removeItems);
       for(let i=0; i< removes.length; i++) {

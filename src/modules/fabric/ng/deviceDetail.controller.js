@@ -2,6 +2,7 @@ export class DeviceDetailController {
   static getDI() {
     return [
       '$scope',
+      '$rootScope',
       '$routeParams',
       '$filter',
       '$q',
@@ -128,7 +129,7 @@ export class DeviceDetailController {
     };
 
     this.scope.createFlow = () => {
-
+      this.di.$rootScope.$emit('flow-wizard-show', this.scope.deviceId);
     };
 
     this.scope.batchRemove = ($value) => {
