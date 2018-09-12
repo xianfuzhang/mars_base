@@ -73,14 +73,13 @@ export class FabricSummaryController {
     };
 
     let portsDefer = this.di.$q.defer(),
-      devicesDefer = this.di.$q.defer();
+      devicesDefer = this.di.$q.defer(),
+      deviceConfigsDefer = this.di.$q.defer();
     let promises = [];
     let portGroups = {};
     this.devices = [];
 
     let init = () => {
-
-
       this.di.localStoreService.getStorage(fabric_storage_ns).get('resize_db').then((data)=>{
         if(data){
           let win_width = this.di.$window.innerWidth;
@@ -119,6 +118,15 @@ export class FabricSummaryController {
         devicesDefer.resolve();
       });
       promises.push(devicesDefer.promise);
+
+      this.di.deviceDataManager.getDeviceConfigs().then((res)=>{
+        if(res.data.devices){
+          this.devices = res;
+        }
+        deviceConfigsDefer.resolve();
+      });
+      promises.push(deviceConfigsDefer.promise);
+
 
       Promise.all(promises).then(()=>{
 

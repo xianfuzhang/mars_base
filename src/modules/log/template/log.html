@@ -13,7 +13,7 @@
                 <div class="actions">
                     From: <input class="actions__input" type="date" name="date-from" ng-model="dateFrom" ng-disabled="loading"> &nbsp;&nbsp;To: <input class="actions__input" type="date" name="date-to" ng-model="dateTo" ng-disabled="loading" max="::dateTo">
                     <button class="actions__button actions__search-btn" ng-click="search()" ng-class="{'+disabled': dateFrom > dateTo || loading || dateTo > today}" ng-disabled="dateFrom > dateTo || loading || dateTo > today"><icon></icon>搜索</button>
-                    <button class="actions__button actions__file-btn" ng-click="file()" ng-class="{'+disabled': loading || !hasData}" ng-disabled="loading || !hasData"><icon></icon>导出文件</button>
+                    <button class="actions__button actions__file-btn" ng-click="file()" ng-class="{'+disabled': !hasData}" ng-disabled="!hasData"><icon></icon>导出文件</button>
                 </div>
                 <section class="tab-content">
                     <mdl-table actions-show="logModel.actionsShow"

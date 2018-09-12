@@ -2,16 +2,86 @@ const express = require('express'),
       router = express.Router(),
       cloudLib = require('../lib/cloud'),
       config = require('../config'),
+      Chance = require('chance'),
       _ = require('lodash');
 
 router.get('/devices', function (req, res) {
   let devices = [];
+  let chance = new Chance();
+  let num = chance.pickone([0,1,2]);
+  // slice length-num devices
+  let tmpDevices = cloudModel.devices.slice(0, cloudModel.devices.length - num);
   
-  devices = _.cloneDeep(cloudModel.devices).map((device, index) => {
+  devices = _.cloneDeep(tmpDevices).map((device, index) => {
     return formatDevice(device);
   });
   
   return res.json({devices: devices});
+});
+
+router.get('/config', function(req, res) {
+  let configs = [];
+  
+  configs = _.cloneDeep(cloudModel.devices).map((device, index) => {
+    let config = {
+      id: device.id,
+      name: device.name,
+      type: device.type,
+      available: device.available,
+      mgmtIpAddress: device.annotations.managementAddress,
+      mac: device.mac,
+      mrf: device.mrf,
+      port: 0,
+      protocal: device.annotations.protocal,
+      rack_id: device.rack_id,
+      community: null,
+      leafGroup: {
+        name: null,
+        switch_port: 0
+      }
+    };
+    
+    return config;
+  });
+  
+  return res.json({configs: configs});
+});
+
+router.get('/config/:id', function(req, res) {
+  let devices = [];
+  
+  if (!req.params.id) {
+    return res.status(404).json('Device ID is required');
+  }
+  
+  devices = _.cloneDeep(cloudModel.devices);
+  
+  // search using the instanceId in the instances array for each project
+  let device = devices.find(device => device.id === req.params.id);
+  
+  if (device !== undefined) {
+    let config = {
+      id: device.id,
+      name: device.name,
+      type: device.type,
+      available: device.available,
+      mgmtIpAddress: device.annotations.managementAddress,
+      mac: device.mac,
+      mrf: device.mrf,
+      port: 0,
+      protocal: device.annotations.protocal,
+      rack_id: device.rack_id,
+      community: null,
+      leafGroup: {
+        name: null,
+        switch_port: 0
+      }
+    };
+    
+    return res.json(config);
+  } else {
+    return res.status(404).json("This device doesn't exist!");
+  }
 });
 
 router.post('/devices', function(req, res) {

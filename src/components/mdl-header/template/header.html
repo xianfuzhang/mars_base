@@ -19,8 +19,8 @@
           </ul>
           <div class="navbar-inner__right">
             <div class="navbar-inner__notification">
-              <span class="notification-status"></span>
-              <mdl-button ng-click="_selectPage(numPages)" icon-name="notifications"></mdl-button>
+              <span class="notification-status" ng-class="{'has-alert': alerts_acount > 0}"></span>
+              <mdl-button ng-click="location('/alert', $event)" icon-name="notifications"></mdl-button>
             </div>
             <div class="navbar-inner__account navbar-inner__dropdown" uib-dropdown>
               <div class="navbar-inner__account-summary" uib-dropdown-toggle>

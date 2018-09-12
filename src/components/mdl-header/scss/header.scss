@@ -126,7 +126,7 @@
   top: 10px;
   left: 24px;
   z-index: 2;
-  /* display: none; */
+  display: none;
   width: 8px;
   height: 8px;
   color: #fff;
@@ -134,6 +134,9 @@
   background-clip: padding-box;
   border: 1px solid #24292e;
   border-radius: 50%;
+}
+.notification-status.has-alert{
+  display: block;
 }
 /*.open>.navbar-inner__dropdown-menu {
   display: block;
