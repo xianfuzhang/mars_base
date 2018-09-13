@@ -36,7 +36,7 @@ router.post('/configuration', function (req, res) {
     return res.status(400).json('Failed to add new device!');
   }
   
-  return res.json({clusters: cloudModel.clusters});
+  return res.json({nodes: cloudModel.clusters});
 });
 
 
