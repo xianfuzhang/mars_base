@@ -122,7 +122,7 @@ export class alertService {
     return [
       {
         'label': this.translate('MODULES.ALERT.HISTORY.RULE_NAME'),
-        'field': 'rule_name',
+        'field': 'name',
         'layout': {'visible': true, 'sortable': true, 'fixed': true},
       },
       {

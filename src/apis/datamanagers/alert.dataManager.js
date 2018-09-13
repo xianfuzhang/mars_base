@@ -36,7 +36,7 @@ export class AlertDataManager{
 
   deleteAlertHistoriesSelected(uuids){
     let defer = this.di.$q.defer();
-    this.di.$http.post(this.di.appService.getAlertHistoriesSelectedRemoveUrl(), {'uuids': uuids}).then(
+    this.di.$http.post(this.di.appService.getAlertHistoriesSelectedRemoveUrl(), {'uuid': uuids}).then(
       (res) => {
         defer.resolve(res);
       },

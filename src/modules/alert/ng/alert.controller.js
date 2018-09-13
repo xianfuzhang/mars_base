@@ -103,20 +103,12 @@ export class AlertController {
     this.di.$scope.alertModel.alertTableProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
-        // this.di.deviceDataManager.getDevices(params).then((res) => {
-        //   this.scope.entities = this.getEntities(res.data.devices);
-        //   defer.resolve({
-        //     data: scope.entities,
-        //     count: 100
-        //   });
-        // });
-        //TODO 暂无实际数据，临时测试使用
-        setTimeout(function () {
+        this.di.alertDataManager.getAlertHistories(params).then((res) => {
           defer.resolve({
-            data: m.getTestAlertHistory()['history'],
-            count: 19
+            data: res.data.history,
+            count: 100
           });
-        },400);
+        });
 
         return defer.promise;
       },
@@ -166,16 +158,14 @@ export class AlertController {
     arr.forEach((item) => {
       uuids.push(item.uuid)
     });
-
+    let scope = this.di.$scope;
     let defer = this.di.$q.defer();
     this.di.alertDataManager.deleteAlertHistoriesSelected(uuids)
       .then(() => {
-        this.scope.deviceModel.deviceAPI.queryUpdate();
-        this.scope.$emit('batch-delete-endpoints');
+        scope.alertModel.alertAPI.queryUpdate();
         defer.resolve();
       }, () => {
-        this.scope.deviceModel.deviceAPI.queryUpdate();
-        this.scope.$emit('batch-delete-endpoints');
+        scope.alertModel.alertAPI.queryUpdate();
         defer.resolve();
       });
 
