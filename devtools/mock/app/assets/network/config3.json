@@ -1,0 +1,153 @@
+{  "org.onosproject.openflow.controller.impl.OpenFlowControllerImpl": {
+    "openflowPorts": "6633,6653",
+    "workerThreads": "0"
+  },
+  "org.onosproject.net.host.impl.HostManager": {
+    "probeRate": "30000",
+    "monitorHosts": "false",
+    "allowDuplicateIps": "true",
+    "greedyLearningIpv6": "false"
+  },
+  "org.onosproject.store.flow.impl.ECFlowRuleStore": {
+    "antiEntropyPeriod": "5000",
+    "persistenceEnabled": "false",
+    "msgHandlerPoolSize": "8",
+    "backupPeriod": "2000",
+    "backupCount": "2"
+  },
+  "org.onosproject.cluster.impl.MastershipManager": {
+    "useRegionForBalanceRoles": "false",
+    "rebalanceRolesOnUpgrade": "true"
+  },
+  "org.onosproject.provider.linkdiscovery.impl.LinkDiscoveryProvider": {
+    "linkPollDelaySeconds": "20",
+    "linkPollFrequencySeconds": "10"
+  },
+  "org.onosproject.provider.of.group.impl.OpenFlowGroupProvider": {
+    "groupPollInterval": "10"
+  },
+  "org.onosproject.net.intent.impl.IntentCleanup": {
+    "period": "5",
+    "enabled": "true",
+    "retryThreshold": "5"
+  },
+  "org.onosproject.net.flow.impl.FlowRuleManager": {
+    "fallbackFlowPollFrequency": "30",
+    "purgeOnDisconnection": "false",
+    "allowExtraneousRules": "false"
+  },
+  "org.onosproject.store.topology.impl.DistributedTopologyStore": {
+    "linkWeightFunction": "hopCount"
+  },
+  "org.onosproject.store.cluster.impl.DistributedClusterStore": {
+    "heartbeatInterval": "100",
+    "phiFailureThreshold": "10",
+    "minStandardDeviationMillis": "50"
+  },
+  "org.onosproject.net.optical.intent.impl.compiler.OpticalCircuitIntentCompiler": {
+    "maxCapacity": "10"
+  },
+  "org.onosproject.net.intent.impl.compiler.IntentConfigurableRegistrator": {
+    "labelSelection": "RANDOM",
+    "useFlowObjectives": "false",
+    "useCopyTtl": "false",
+    "optLabelSelection": "NONE",
+    "optimizeInstructions": "false"
+  },
+  "org.onosproject.store.cluster.impl.DistributedLeadershipStore": {
+    "electionTimeoutMillis": "250"
+  },
+  "org.onosproject.net.neighbour.impl.NeighbourResolutionManager": {
+    "ndpEnabled": "false",
+    "requestInterceptsEnabled": "true",
+    "arpEnabled": "true"
+  },
+  "org.onosproject.store.packet.impl.DistributedPacketStore": {
+    "messageHandlerThreadPoolSize": "4"
+  },
+  "org.onosproject.store.intent.impl.GossipIntentStore": {
+    "persistenceEnabled": "false"
+  },
+  "org.onosproject.fwd.ReactiveForwarding": {
+    "matchIpv6Address": "false",
+    "matchIpv6FlowLabel": "false",
+    "ignoreIPv4Multicast": "false",
+    "matchIcmpFields": "false",
+    "flowTimeout": "10",
+    "matchTcpUdpPorts": "false",
+    "recordMetrics": "false",
+    "matchDstMacOnly": "false",
+    "matchIpv4Address": "false",
+    "matchVlanId": "false",
+    "matchIpv4Dscp": "false",
+    "ipv6Forwarding": "false",
+    "packetOutOfppTable": "false",
+    "packetOutOnly": "false",
+    "flowPriority": "10"
+  },
+  "org.onosproject.net.topology.impl.DefaultTopologyProvider": {
+    "maxBatchMs": "50",
+    "maxEvents": "1000",
+    "maxIdleMs": "10"
+  },
+  "org.onosproject.net.intent.impl.IntentManager": {
+    "numThreads": "12",
+    "skipReleaseResourcesOnWithdrawal": "false"
+  },
+  "org.onosproject.store.statistic.impl.DistributedFlowStatisticStore": {
+    "messageHandlerThreadPoolSize": "4"
+  },
+  "org.onosproject.provider.lldp.impl.LldpLinkProvider": {
+    "probeRate": "3000",
+    "enabled": "true",
+    "useBDDP": "true",
+    "staleLinkAge": "10000"
+  },
+  "org.onosproject.provider.host.impl.HostLocationProvider": {
+    "useDhcp6": "false",
+    "requestArp": "true",
+    "hostRemovalEnabled": "true",
+    "requestIpv6ND": "false",
+    "requestInterceptsEnabled": "true",
+    "multihomingEnabled": "false",
+    "useDhcp": "false"
+  },
+  "org.onosproject.net.driver.impl.DriverRegistryManager": {
+    "requiredDrivers": "default"
+  },
+  "org.onosproject.net.meter.impl.MeterManager": {
+    "fallbackMeterPollFrequency": "30",
+    "numThreads": "4"
+  },
+  "org.onosproject.net.flowobjective.impl.InOrderFlowObjectiveManager": {
+    "numThreads": "4"
+  },
+  "org.onosproject.provider.of.device.impl.OpenFlowDeviceProvider": {
+    "portStatsPollFrequency": "5",
+    "propertyFrequency": "true"
+  },
+  "org.onosproject.store.statistic.impl.DistributedStatisticStore": {
+    "messageHandlerThreadPoolSize": "4"
+  },
+  "org.onosproject.store.group.impl.DistributedGroupStore": {
+    "allowExtraneousGroups": "true",
+    "garbageCollect": "false",
+    "gcThresh": "6"
+  },
+  "org.onosproject.core.impl.CoreManager": {
+    "maxEventTimeLimit": "2000",
+    "sharedThreadPerformanceCheck": "false",
+    "sharedThreadPoolSize": "30"
+  },
+  "org.onosproject.net.intent.impl.installer.FlowRuleIntentInstaller": {
+    "nonDisruptiveInstallationWaitingTime": "1"
+  },
+  "org.onosproject.provider.of.flow.impl.OpenFlowRuleProvider": {
+    "flowPollFrequency": "5",
+    "adaptiveFlowSampling": "false"
+  },
+  "org.onosproject.net.group.impl.GroupManager": {
+    "fallbackGroupPollFrequency": "30",
+    "purgeOnDisconnection": "false"
+  }
+}
