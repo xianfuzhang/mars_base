@@ -22,6 +22,7 @@ export class FabricSummaryController {
       'tableProviderFactory',
       'deviceService',
       'switchService',
+      'commonService',
       'modalManager'
     ];
   }
@@ -78,6 +79,7 @@ export class FabricSummaryController {
     let promises = [];
     let portGroups = {};
     this.devices = [];
+    this.realtimeDevices = [];
 
     let init = () => {
       this.di.localStoreService.getStorage(fabric_storage_ns).get('resize_db').then((data)=>{
@@ -112,7 +114,7 @@ export class FabricSummaryController {
 
       this.di.deviceDataManager.getDevices().then((res)=>{
         if(res.data.devices){
-          // this.devices = res.data.devices;
+          this.realtimeDevices = res.data.devices;
 
         }
         devicesDefer.resolve();
@@ -132,6 +134,7 @@ export class FabricSummaryController {
 
         let DI = this.di;
         let devices = this.devices;
+        formatLeafGroupData(devices, this.realtimeDevices);
         //TODO 这里为了给台湾同事测试效果增加timeout
         setTimeout(function () {
           DI.$rootScope.$emit('stop_loading');
@@ -198,7 +201,22 @@ export class FabricSummaryController {
       this.di.$scope.fabricModel['deLinks'] = res.data.links;
     });
 
+    let formatLeafGroupData=(devices, realtimeDevices)=> {
+      let curTime = new Date().getTime();
+      this.di._.forEach(devices, (device)=>{
+        if(device.type.toLowerCase() === 'leaf'){
+          device['leaf_group_name'] = device.leafGroup.name?device.leafGroup.name:null;
+          device['leaf_group_port'] = device.leafGroup.switch_port?device.leafGroup.switch_port:null;
+        }
 
+        this.di._.forEach(realtimeDevices, (rDevice)=>{
+          if(rDevice.id === device.id){
+            device.lastUpdate = this.di.commonService.calcRunningDate(curTime - rDevice.lastUpdate) ;
+            return false;
+          }
+        });
+      })
+    };
     this.di.localStoreService.getStorage(fabric_storage_ns).get('topo_set').then((data)=>{
       if(data === undefined){
         this.di.$scope.fabricModel.topoSetting = {
@@ -332,31 +350,63 @@ export class FabricSummaryController {
     };
 
 
-
     let showDetail = (summaryList) => {
-      let leftDom = angular.element(document.getElementsByClassName('detail_summary__body--left'));
-      let rightDom = angular.element(document.getElementsByClassName('detail_summary__body--right'));
-      rightDom.empty();
-      leftDom.empty();
+      // let leftDom = angular.element(document.getElementsByClassName('detail_summary__body--left'));
+      // let rightDom = angular.element(document.getElementsByClassName('detail_summary__body--right'));
+      //
+      // rightDom.empty();
+      // leftDom.empty();
+      // this.di._.forEach(summaryList, (item, key)=>{
+      //   if(item.label === 'id'){
+      //     return
+      //   }
+      //   leftDom.append('<div>'+ item.label +'</div>');
+      //   if(item.value === "false" || item.value === false){
+      //     rightDom.append('<div><svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"> <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="red"/> <path d="M0 0h24v24H0z" fill="none"/> </svg></div>');
+      //   } else if(item.value === "true" || item.value === true) {
+      //     rightDom.append("<div><svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'><path fill='none' d='M0 0h18v18H0z'/><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z' fill='green'/></svg></div>");
+      //   } else {
+      //     if(item.label === 'name'){
+      //       rightDom.append('<div><a class="summary__link" target="_blank" href="/#!/devices/'+ this.di.$scope.fabricModel.showSwitchId +'">'+ item.value +'</a></div>');
+      //     } else{
+      //       rightDom.append('<div>'+ item.value +'</div>');
+      //     }
+      //   }
+      // });
+      //
+
+      let trStart = '<tr>';
+      let trEnd= '</tr>';
+      let tdStart = '<td>';
+      let tdEnd = '</td>';
+
+      let topo_detail = angular.element(document.getElementById('topo_detail'));
+      topo_detail.empty();
+
       this.di._.forEach(summaryList, (item, key)=>{
-        if(item.label === 'id'){
+        if(item.label.toLowerCase() === 'id'){
           return
         }
-        leftDom.append('<div>'+ item.label +'</div>');
+        let firstTdContent = '<div>'+ item.label +'</div>';
+
+        let secondTdContent = '';
         if(item.value === "false" || item.value === false){
-          rightDom.append('<div><svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"> <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="red"/> <path d="M0 0h24v24H0z" fill="none"/> </svg></div>');
+          secondTdContent = '<div><svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"> <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="red"/> <path d="M0 0h24v24H0z" fill="none"/> </svg></div>';
         } else if(item.value === "true" || item.value === true) {
-          rightDom.append("<div><svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'><path fill='none' d='M0 0h18v18H0z'/><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z' fill='green'/></svg></div>");
+          secondTdContent = "<div><svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'><path fill='none' d='M0 0h18v18H0z'/><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z' fill='green'/></svg></div>";
         } else {
           if(item.label === 'name'){
-            rightDom.append('<div><a class="summary__link" target="_blank" href="/#!/devices/'+ this.di.$scope.fabricModel.showSwitchId +'">'+ item.value +'</a></div>');
+            secondTdContent = '<div><a class="summary__link" target="_blank" href="/#!/devices/'+ this.di.$scope.fabricModel.showSwitchId +'">'+ item.value +'</a></div>';
           } else{
-            rightDom.append('<div>'+ item.value +'</div>');
+            secondTdContent = '<div>'+ item.value +'</div>';
           }
-
-
         }
+
+        let tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+        topo_detail.append(tr)
       });
+
+
     };
 
     let showPorts = () =>{

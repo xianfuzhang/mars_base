@@ -85,7 +85,7 @@ export class Topo {
       this.switch_width = 16;
       this.switch_height = 108;
       this.leaf_group_interval = 8;
-      this.leaf_group_str = 'leaf_group';
+      this.leaf_group_str = 'leaf_group_name';
       this.resizeTimeout = null;
       this.active_status = "ACTIVE";
       this.LINE_WIDTH = 3;
@@ -264,7 +264,17 @@ export class Topo {
         }
         this.spineContainerText.setLocation(10, 10);
 
-        let leaf_groups = this.di._.groupBy(scope.leafs, this.leaf_group_str);
+
+        let leaf_group_str = this.leaf_group_str;
+        let non_leafs = this.di._.filter(scope.leafs, function (leaf) {
+          return leaf[leaf_group_str] === null;
+        });
+
+        let leaf_groups_t = this.di._.filter(scope.leafs, function (leaf) {
+          return leaf[leaf_group_str] !== null;
+        });
+
+        let leaf_groups = this.di._.groupBy(leaf_groups_t, leaf_group_str);
         let orderKeys = this.di._.keys(leaf_groups);
         let last_x = 0;
         for(let i = 0; i< orderKeys.length; i++){
@@ -282,6 +292,19 @@ export class Topo {
           // last_x = last_x + leafInterval +(this.switch_width + this.leaf_group_interval)* leaf_group.length;
           last_x = last_x + leafInterval + this.switch_width* leaf_group.length + this.leaf_group_interval * (leaf_group.length-1) ;
         }
+        if(non_leafs instanceof Array){
+          for(let j = 0; j< non_leafs.length; j ++){
+            let node = this.leafs[non_leafs[j].id];
+            let y = (avgHeight - this.switch_height)/2 + avgHeight;
+            let x = last_x + leafInterval;
+            node.setLocation(x, y);
+            this.switchLocation[non_leafs[j].id] = [x, y];
+
+
+            last_x = last_x + leafInterval + this.switch_width*1;
+          }
+        }
+
         this.leafContainerText.setLocation(10, 10 + avgHeight);
 
         let otherKeys = this.di._.keys(this.others);
@@ -303,8 +326,20 @@ export class Topo {
 
       let calcLeafInterval = (leafs, width) =>{
         let remainWidth = width - this.switch_width * leafs.length;
-        let group = this.di._.groupBy(leafs, this.leaf_group_str);
-        let groupLen = this.di._.keys(group).length;
+        let null_length = 0;
+        let leaf_group_str = this.leaf_group_str;
+        let non_leafs = this.di._.filter(leafs, function (leaf) {
+          return leaf[leaf_group_str] === null;
+        });
+
+        if(non_leafs instanceof  Array) null_length = non_leafs.length;
+
+        let c_leafs = this.di._.filter(leafs, function (leaf) {
+          return leaf[leaf_group_str] !== null;
+        });
+
+        let group = this.di._.groupBy(c_leafs, this.leaf_group_str);
+        let groupLen = this.di._.keys(group).length + null_length;
         remainWidth = remainWidth - groupLen * this.leaf_group_interval;
         return remainWidth/ (groupLen + 1);
       };

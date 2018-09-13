@@ -5,6 +5,7 @@ import {AccountDataManager} from './datamanagers/account.dataManager';
 import {ConfigurationDataManager} from './datamanagers/configuration.dataManager';
 import {AlertDataManager} from './datamanagers/alert.dataManager';
 import {appService} from './services/app.service';
+import {commonService} from './services/common.service';
 import {switchService} from './services/switch.service';
 import {alertService} from './services/alert.service';
 import {notificationService} from './services/notification.service';
@@ -17,6 +18,7 @@ import {DashboardDataManager} from './datamanagers/dashboard.dataManager';
 export default angular
   .module('apis', [])
   .service('appService', appService)
+  .service('commonService', commonService)
   .service('switchService', switchService)
   .service('alertService', alertService)
   .service('notificationService', notificationService)
