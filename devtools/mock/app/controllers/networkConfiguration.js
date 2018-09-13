@@ -5,24 +5,19 @@ const express = require('express'),
 
 const configFilePath = path.join(__dirname, '../assets/network');
 
-router.get('/', function (req, res) {
+router.get('/files', function (req, res) {
   
-  let configs = {};
   let files = fs.readdirSync(configFilePath);
+  
+  let fileArr = [];
   files.forEach((file) => {
-    let filepath = path.join(configFilePath, file);
-    let filename = path.parse(filepath).name;
-    try {
-      configs[filename] = JSON.parse(fs.readFileSync(filepath));
-    } catch (e) {
-      console.error(`Error occurred when read file:${filepath}!`);
-    }
+    fileArr.push(path.parse(file).name);
   });
   
-  res.json(configs);
+  res.json(fileArr);
 });
 
-router.get('/:filename', function (req, res) {
+router.get('/files/:filename', function (req, res) {
   
   let filepath = path.join(configFilePath, `${req.params.filename}.json`);
   
