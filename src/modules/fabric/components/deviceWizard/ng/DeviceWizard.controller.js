@@ -87,9 +87,9 @@ export class DeviceWizardController {
   
     this.di.$scope.protocols = ['Rest', 'gRPC', 'SNMP', 'OF_13'];
     
-    this.di.$scope.leaf_groups = [
-      'R1L1', 'R1L2', 'R1L3'
-    ];
+    // this.di.$scope.leaf_groups = [
+    //   'R1L1', 'R1L2', 'R1L3', 'R2L1', 'R2L2', 'R2L3'
+    // ];
     
     this.di.$scope.open = function(deviceId){
       if(scope.showWizard) return;

@@ -68,10 +68,11 @@
     </div>
     <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">
         <div class="stepForm__input__label">Leaf Group</div>
-        <input class="stepForm__input__text" list="leaf_group_datalist" placeholder="Please enter or select the leaf group" ng-model="switch.leaf_group"/>
-        <datalist id="leaf_group_datalist">
-            <option ng-value="group" ng-repeat="group in leaf_groups"/>
-        </datalist>
+        <input class="stepForm__input__text" ng-model="switch.leaf_group.name"/>
+    </div>
+    <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">
+        <div class="stepForm__input__label">Switch Port</div>
+        <input class="stepForm__input__text" name="switch_port" type="number" ng-blur="switchPortChange=true" ng-model="switch.leaf_group.switch_port" min="0" max="65535"/>
     </div>
     <!--<div class="stepForm__input">
         <div class="stepForm__input__label">Description</div>
