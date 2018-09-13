@@ -46,26 +46,21 @@ export class Loading {
 
       let intervalTime = 100;
       let index = 0;
-      let interval = null;
-      // function stop() {
-      //   console.log('stop');
-      //   clearInterval(interval);
-      //   index = 0;
-      // }
-
+      let loading_interval = null;
 
       scope.isLoading = false;
-      function  start() {
-        // if(interval){
-        //   return;
-        // }
+      function  start(isOutCall) {
+        if(scope.isLoading && isOutCall){
+          console.log('Loading component has been called')
+          return;
+        }
         scope.isLoading = true;
         let arrIndex = index %11;
         let sleepTime = intervalTime;
         if(arrIndex === 0 && index !== 0){
           sleepTime = 600;
         }
-        interval = setTimeout(function () {
+        loading_interval = setTimeout(function () {
           let context = loading.getContext('2d');
           context.clearRect(0, 0, 60, 60);
 
@@ -77,8 +72,8 @@ export class Loading {
       }
 
       function stop() {
-        clearTimeout(interval);
-        interval = null;
+        clearTimeout(loading_interval);
+        loading_interval = null;
         scope.isLoading = false;
         index = 0;
         let context = loading.getContext('2d');
@@ -89,15 +84,8 @@ export class Loading {
 
       }
 
-      //
-      // start();
-      //
-      // setTimeout(function () {
-      //   clearTimeout(interval);
-      // },5000)
-
       unSubscribes.push(this.di.$rootScope.$on('start_loading',()=>{
-        start();
+        start(true);
       }));
 
       unSubscribes.push(this.di.$rootScope.$on('stop_loading',()=>{
@@ -112,7 +100,7 @@ export class Loading {
       });
 
       setTimeout(function () {
-        start();
+        start(true);
       });
 
 
