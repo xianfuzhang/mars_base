@@ -23,7 +23,7 @@ router.delete('/history/uuid/:id', function (req, res) {
   }
 });
 
-router.post('/history/select', function (req, res) {
+router.post('/history/select/delete', function (req, res) {
   let uuids = req.body.uuid;
   
   if(_.isArray(uuids)) {

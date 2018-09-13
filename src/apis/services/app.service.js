@@ -233,7 +233,7 @@ export class appService {
   }
 
   getAlertHistoriesSelectedRemoveUrl(){
-    return this.getZoneEndpoint(true) + '/alert/v1/history/select';
+    return this.getZoneEndpoint(true) + '/alert/v1/history/select/delete';
 
   }
 
