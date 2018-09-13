@@ -89,13 +89,11 @@ export class appService {
   }
 
 
-  getZoneEndpoint() {
+  getZoneEndpoint(isComponent) {
     let endpoint;
     if (this.isMocked) {
-
       endpoint = this.CONST.MOCKED_ZONE_ENDPOINT.replace('[%__ZONE_IP__%]',
         (this.di.$location.host()  + ":"+  this.di.$location.port()));;
-
       endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
     }
     else {
@@ -103,6 +101,11 @@ export class appService {
         (this.di.$location.host()  + ":"+  this.di.$location.port()));
       endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
     }
+
+    if(isComponent){
+      endpoint = endpoint.substr(0, endpoint.length - '/v1'.length);
+    }
+
     return endpoint;
   }
 
@@ -115,11 +118,11 @@ export class appService {
   }
 
   getUserAccountUrl() {
-    return this.getZoneEndpoint() + '/useraccount/v1';
+    return this.getZoneEndpoint(true) + '/useraccount/v1';
   }
 
   getDeleteUserAccountUrl(username) {
-    return this.getZoneEndpoint() + '/useraccount/v1/' + username;
+    return this.getZoneEndpoint(true) + '/useraccount/v1/' + username;
   }
 
   getDevicesUrl(){
@@ -162,7 +165,7 @@ export class appService {
   }
 
   getDeleteDeviceFlowUrl(deviceId, flowId) {
-    return this.getZoneEndpoint() + '/flows/' + deviceId + '/' + flowId; 
+    return this.getZoneEndpoint() + '/flows/' + deviceId + '/' + flowId;
   }
 
   getLinksUrl() {
@@ -211,65 +214,65 @@ export class appService {
   getConfigurationFileUrl(filename){
     return this.getZoneEndpoint() + '/network/configuration/files/' + filename;
   }
-  
+
   getConfigurationHistoryUrl(params){
-    let url = this.getZoneEndpoint() + '/utility/confighistory/v1/';
-    
+    let url = this.getZoneEndpoint(true) + '/utility/confighistory/v1/';
+
     if(params.from && params.to) {
       url += `?from=${params.from}&to=${params.to}`
     }
     return url;
   }
-  
+
   getAlertHistoryUrl(){
-    return this.getZoneEndpoint() + '/alert/v1/history/list';
+    return this.getZoneEndpoint(true) + '/alert/v1/history/list';
   }
 
   getAlertHistoryRemoveUrl(uuid){
-    return this.getZoneEndpoint() + '/alert/v1/history/uuid/' + uuid ;
+    return this.getZoneEndpoint(true) + '/alert/v1/history/uuid/' + uuid ;
   }
 
   getAlertHistoriesSelectedRemoveUrl(){
-    return this.getZoneEndpoint() + '/alert/v1/history/select';
+    return this.getZoneEndpoint(true) + '/alert/v1/history/select';
 
   }
 
   getAlertHistoriesRemoveAllUrl(){
-    return this.getZoneEndpoint() + '/alert/v1/history/all';
+    return this.getZoneEndpoint(true) + '/alert/v1/history/all';
   }
 
   getAlertGroupBasicConfigUrl(){
-    return this.getZoneEndpoint() + '/alert/v1/basicconfig';
+    return this.getZoneEndpoint(true) + '/alert/v1/basicconfig';
   }
 
   getAlertGroupReceiveSettingUrl(){
-    return this.getZoneEndpoint() + '/alert/v1/group/receiver';
+    return this.getZoneEndpoint(true) + '/alert/v1/group/receiver';
   }
 
   getAlertGroupReceiveUrl(){
-    return this.getZoneEndpoint() + '/alert/v1/group/receiver/all';
+    return this.getZoneEndpoint(true) + '/alert/v1/group/receiver/all';
   }
 
   getAlertGroupReceiveByNameUrl(name){
-    return this.getZoneEndpoint() + '/alert/v1/group/receiver/' + name;
+    return this.getZoneEndpoint(true) + '/alert/v1/group/receiver/' + name;
   }
 
 
   getAllHealthyCheckUrl(){
-    return this.getZoneEndpoint() + '/healthycheck/v1/threshold';
+    return this.getZoneEndpoint(true) + '/healthycheck/v1/threshold';
   }
 
 
   getHealthyCheckUrl(object, resource){
-    return this.getZoneEndpoint() + '/healthycheck/v1/'+ object +'/' + resource + '/threshold';
+    return this.getZoneEndpoint(true) + '/healthycheck/v1/'+ object +'/' + resource + '/threshold';
   }
 
   getHealthyCheckByNameUrl(object, resource, rule_name){
-    return this.getZoneEndpoint() + '/healthycheck/v1/'+ object +'/' + resource + '/threshold/' + rule_name;
+    return this.getZoneEndpoint(true) + '/healthycheck/v1/'+ object +'/' + resource + '/threshold/' + rule_name;
   }
 
   getLogsUrl(){
-    return this.getZoneEndpoint() + '/logs/v1/controller';
+    return this.getZoneEndpoint(true) + '/logs/v1/controller';
   }
 
   getClusterUrl(){
@@ -285,3 +288,4 @@ export class appService {
 
 appService.$inject = appService.getDI();
 appService.$$ngIsClass = true;
+
