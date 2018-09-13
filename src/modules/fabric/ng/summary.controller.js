@@ -112,7 +112,7 @@ export class FabricSummaryController {
 
       this.di.deviceDataManager.getDevices().then((res)=>{
         if(res.data.devices){
-          this.devices = res.data.devices;
+          // this.devices = res.data.devices;
 
         }
         devicesDefer.resolve();
@@ -120,7 +120,7 @@ export class FabricSummaryController {
       promises.push(devicesDefer.promise);
 
       this.di.deviceDataManager.getDeviceConfigs().then((res)=>{
-        if(res.data.devices){
+        if(res){
           this.devices = res;
         }
         deviceConfigsDefer.resolve();
@@ -487,9 +487,9 @@ export class FabricSummaryController {
     this.di._.forEach(links, (link)=>{
       if(link.src.device == this.di.$scope.fabricModel.showSwitchId){
         let obj = {};
-        obj.src_device = this.di.switchService.getSwitchName(link.src.device, this.devices) ;
+        obj.src_device = this.di.switchService.getSwitchName(link.src.device, this.devices);
         obj.src_port = link.src.port;
-        obj.dst_device =  this.di.switchService.getSwitchName(link.dst.device, this.devices) ;;
+        obj.dst_device =  this.di.switchService.getSwitchName(link.dst.device, this.devices);
         obj.dst_port = link.dst.port;
         obj.state = link.state;
         // this.setTableOpt(obj);
