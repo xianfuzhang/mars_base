@@ -41,15 +41,15 @@ app.use(initController);
 app.use('/mars/v1', deviceController);
 app.use('/mars/v1/endpoints', endPointController);
 app.use('/mars/v1/statistics', statisticController);
-app.use('/mars/v1/useraccount/v1', useraccountController);
+app.use('/mars/useraccount/v1', useraccountController);
 app.use('/mars/v1/flows', flowController);
-app.use('/mars/v1/healthycheck/v1', alertRuleController);
-app.use('/mars/v1/alert/v1', alertController);
-app.use('/mars/v1/logs/v1', logController);
+app.use('/mars/healthycheck/v1', alertRuleController);
+app.use('/mars/alert/v1', alertController);
+app.use('/mars/logs/v1', logController);
 app.use('/mars/v1/cluster', clusterController);
 app.use('/mars/v1', loginController);
 app.use('/mars/v1/configuration', configurationController);
-app.use('/mars/v1/utility/confighistory/v1', confighistoryController);
+app.use('/mars/utility/confighistory/v1', confighistoryController);
 
 
 // set port
