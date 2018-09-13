@@ -48,11 +48,11 @@ let cloudLib = {
     let spineNum = chance.natural({min:3, max:5});
     let unknownNum = chance.natural({min:2, max:4});
     let leafNum = config.deviceNumber - spineNum - unknownNum;
-    let leafGroups = [];
+    let leafGroupNames = [];
     if(leafNum < 1) return;
     
     _.times(config.deviceNumber, (index) => {
-      let type, portMinNum, name, leaf_group = "";
+      let type, portMinNum, name, leaf_group = {};
       if(index < spineNum) {
         type = config.deviceTypes[0];
         portMinNum = leafNum;
@@ -64,8 +64,13 @@ let cloudLib = {
       } else {
         type =  config.deviceTypes[2];
         portMinNum = spineNum;
-        leaf_group = `${(index - spineNum - unknownNum) % Math.ceil(leafNum / 2 + 1)}`;
-        leafGroups.push(leaf_group);
+        let leafGroupName = `Leaf_Group_${(index - spineNum - unknownNum) % Math.ceil(leafNum / 2 + 1)}`;
+        let switchPort = chance.natural({ min: 1, max: portMinNum+8});
+        leaf_group = {
+          name: leafGroupName,
+          switch_port: switchPort
+        }
+        leafGroupNames.push(leafGroupName);
         name = 'Leaf_' + chance.word();
       }
       let device = new Device(
@@ -124,9 +129,9 @@ let cloudLib = {
     }
     
     // 2.leaf--leaf links
-    leafGroups.forEach((leaf_group) => {
+    leafGroupNames.forEach((name) => {
       let result = _.find(cloudModel.devices.slice(spineNum+unknownNum), (device) => {
-        return device.leaf_group == leaf_group;
+        return device.leaf_group.name == name;
       });
       
       if(result && result.length > 1) {
