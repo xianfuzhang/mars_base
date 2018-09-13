@@ -23,7 +23,7 @@ export class DashboardDataManager{
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getClusterUrl()).then(
       (res) => {
-        defer.resolve(res['data']['clusters']);
+        defer.resolve(res['data']['nodes']);
       },
       (error) => {
         this.di.$log.error(error);
