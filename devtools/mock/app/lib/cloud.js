@@ -66,11 +66,17 @@ let cloudLib = {
         portMinNum = spineNum;
         let leafGroupName = `Leaf_Group_${(index - spineNum - unknownNum) % Math.ceil(leafNum / 2 + 1)}`;
         let switchPort = chance.natural({ min: 1, max: portMinNum+8});
-        leaf_group = {
-          name: leafGroupName,
-          switch_port: switchPort
+        
+        if(index >= spineNum + unknownNum + 2){
+          leaf_group = {
+            name: leafGroupName,
+            switch_port: switchPort
+          }
+          leafGroupNames.push(leafGroupName);
+        } else {
+          leaf_group = {}
         }
-        leafGroupNames.push(leafGroupName);
+        
         name = 'Leaf_' + chance.word();
       }
       let device = new Device(
