@@ -77,10 +77,7 @@ router.get('/devices/:deviceId', function (req, res) {
         protocal: device.annotations.protocal,
         rack_id: device.rack_id,
         community: null,
-        leafGroup: {
-          name: null,
-          switch_port: 0
-        }
+        leafGroup: device.leaf_group
       };
     
       return config;
@@ -131,10 +128,7 @@ router.get('/devices/:deviceId/:type', function (req, res) {
         protocal: device.annotations.protocal,
         rack_id: device.rack_id,
         community: null,
-        leafGroup: {
-          name: null,
-          switch_port: 0
-        }
+        leafGroup: device.leaf_group
       };
     
       return res.json(config);
