@@ -10,5 +10,6 @@
   "MODUELS.CONFIGURATION.HISTORY.COLUMN.CLASS": "Class",
   "MODUELS.CONFIGURATION.HISTORY.COLUMN.SUBJECT": "Subject",
   "MODUELS.CONFIGURATION.HISTORY.COLUMN.CONFIG": "Config",
-  "MODULES.CONFIGURATION.UPDATE.CONFORM": "Are you sure to update current configuration?"
+  "MODULES.CONFIGURATION.UPDATE.CONFORM": "Are you sure to update current configuration?",
+  "MODULES.CONFIGURATION_LIST.UPDATE.CONFORM": "Are you sure to add current configuration file？"
 }
