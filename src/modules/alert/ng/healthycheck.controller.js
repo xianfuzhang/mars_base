@@ -86,7 +86,7 @@ export class HealthyCheckController {
       });
       return hcs;
     }
-    
+
     scope.healthyCheckModel.healthTableProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();

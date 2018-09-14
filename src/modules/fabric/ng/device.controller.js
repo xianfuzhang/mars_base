@@ -7,6 +7,7 @@ export class DeviceController {
       '$log',
       '$q',
       '$filter',
+      '_',
       //'$uibModal',
       'dialogService',
       'appService',
@@ -216,13 +217,27 @@ export class DeviceController {
     this.scope.deviceModel.deviceProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
-        this.di.deviceDataManager.getDevices(params).then((res) => {
-          this.scope.entities = this.getEntities(res.data.devices);
-          defer.resolve({
-            data: this.scope.entities,
-            count: res.data.total
-          });
+        this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
+          if(configs && configs.length > 0){
+            this.scope.entities = this.getEntities(configs);
+
+            this.di.deviceDataManager.getDevices(params).then((res) => {
+              // this.scope.entities = this.getEntities(res.data.devices);
+              this.completedDetails(this.scope.entities, res.data.devices)
+              defer.resolve({
+                data: this.scope.entities,
+                count: res.data.total
+              });
+            });
+          } else {
+            defer.resolve({
+              data: [],
+              count: null
+            });
+          }
         });
+
+
         return defer.promise;
       },
       getSchema: () => {
@@ -305,20 +320,20 @@ export class DeviceController {
         origins.forEach((item) => {
           let obj = {};
           obj.id = item.id;
-          obj.switch_name = item.annotations.name;
-          obj.ip = item.annotations.ipaddress || item.annotations.managementAddress;
+          obj.switch_name = item.name;
+          obj.ip = item.mgmtIpAddress;
           obj.mac = item.mac;
           obj.type = item.type;
-          obj.role = item.role;
+          // obj.role = item.role;
           obj.rack_id = item.rack_id;
           obj.available = item.available === true ? 'available' : 'unavailable';
           //obj.ports = item.ports.length;
-          obj.chassisId = item.chassisId;
-          obj.protocol = item.annotations.protocol;
+          // obj.chassisId = item.chassisId;
+          obj.protocol = item.protocol;
           obj.mfr = item.mfr;
-          obj.serial = item.serial;
-          obj.hw = item.hw;
-          obj.sw = item.sw;
+          // obj.serial = item.serial;
+          // obj.hw = item.hw;
+          // obj.sw = item.sw;
           entities.push(obj);
         });
       //  break;
@@ -377,6 +392,19 @@ export class DeviceController {
         break;*/
     //}
     return entities;
+  }
+
+  completedDetails(entities, details){
+    this.di._.forEach(entities, (entity)=>{
+      this.di._.forEach(details, (detail)=>{
+        if(detail.id === entity.id)
+        entity.role = detail.role;
+        entity.chassisId = detail.chassisId;
+        entity.serial = detail.serial;
+        entity.hw = detail.hw;
+        entity.sw = detail.sw;
+      })
+    });
   }
 
   batchDeleteDevices(arr) {
