@@ -15,7 +15,7 @@
   div {
     box-sizing: border-box;
   }
-
+  
   @include element(dialog) {
     position: relative;
     margin: 50px auto;
@@ -24,10 +24,62 @@
     background: #fff;
     border: 1px solid #000;
     overflow: hidden;
-    
-    @include state(single) {
-      width: 570px;
+    animation: come-in 0.3s ease-out;
+  
+    @include keyframes(come-in) {
+      0% {
+        width: 0;
+      }
+      100% {
+        width: 760px;
+      }
     }
+    
+    //@include state(hide) {
+    //  animation: come-out 0.1s ease-in;
+    //
+    //  @include keyframes(come-out) {
+    //    0% {
+    //      width: 760px;
+    //    }
+    //    100% {
+    //      width: 0;
+    //    }
+    //  }
+    //}
+  }
+  
+  @include element(dialog-single) {
+    position: relative;
+    margin: 50px auto;
+    width: 570px;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid #000;
+    overflow: hidden;
+    animation: come-in-single 0.3s ease-out;
+    
+    @include keyframes(come-in-single) {
+      0% {
+        width: 0;
+      }
+      100% {
+        width: 570px;
+      }
+    }
+  
+    //@include state(hide) {
+    //  animation: come-out-single 0.1s ease-in;
+    //
+    //  @include keyframes(come-out-single) {
+    //    0% {
+    //      width: 570px;
+    //    }
+    //    100% {
+    //      width: 0;
+    //    }
+    //  }
+    //}
   }
 
   @include element(header) {
@@ -60,7 +112,7 @@
     @include element(left) {
       height: 100%;
       float: left;
-      width: 25%;
+      width: 190px;
       //background: -webkit-linear-gradient(top,#CCCCCC,#F0F0F0);
       //background: -moz-linear-gradient(top,#CCCCCC,#F0F0F0);
       //background: -ms-linear-gradient(top,#CCCCCC,#F0F0F0);
@@ -99,8 +151,9 @@
       float: left;
       padding: 3px 10px 5px;
       height: 100%;
-      width: 75%;
+      width: 567px;
       background: #ffffff;
+      box-sizing: border-box;
       overflow: scroll;
   
       @include state(single) {

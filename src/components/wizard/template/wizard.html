@@ -1,5 +1,5 @@
 <div class="wizard" ng-if="showWizard">
-    <div class="wizard__dialog" ng-class="{'+single': steps.length < 2}">
+    <div class="{{steps.length < 2 ? 'wizard__dialog-single': 'wizard__dialog'}}">
         <div class="wizard__header">
             <div class="wizard__header__title">
                 {{title}}
