@@ -11,10 +11,10 @@
     <div class="configuration_list__body__content flex_entirety__body__body" style="display:flex;flex-direction: row">
 
       <div style="flex-shrink: 1;flex-grow:1;background-color: white;margin:8px;height:90%;width:90%">
-        <pre contenteditable="{{configurationListModel.isEditable}}" style="height:90%;overflow: scroll;border:1px solid lightgray">{{configurationListModel.configurationShow}}</pre>
+        <pre id="configurationListPre" contenteditable="{{configurationListModel.isEditable}}" style="height:90%;overflow: scroll;border:1px solid lightgray">{{configurationListModel.configurationShow}}</pre>
       </div>
 
-      <div style="display:flex;flex-direction: column;height:100%;flex-basis: 500px;flex-shrink: 0;flex-grow: 0;padding-left:16px;margin:8px;">
+      <div style="display:flex;flex-direction: column;height:100%;flex-basis: 500px;flex-shrink: 0;flex-grow: 0;padding-left:16px;margin: 22px 8px 8px 8px;">
 
         <div>
           <mdl-select ng-model="configurationListModel.fileNameSelected"

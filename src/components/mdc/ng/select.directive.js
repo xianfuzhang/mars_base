@@ -69,12 +69,17 @@ export class mdlSelect {
     }
 
     unSubscribes.push(scope.$watch('disable',(newValue)=>{
-      console.log('=-=-=-==-');
       if(newValue === true){
         disable();
       } else {
         enable();
       }
+    }));
+
+    unSubscribes.push(scope.$watch('displayLabel.options',(newValue)=>{
+      // console.log(newValue);
+      // console.log(scope.displayLabel);
+      scope.options = newValue;
     }));
 
     scope.$on('$destroy', () => {

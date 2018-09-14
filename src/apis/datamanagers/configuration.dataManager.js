@@ -64,10 +64,10 @@ export class ConfigurationDataManager{
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getConfigurationFileListUrl()).then(
       (res) => {
-        defer.resolve(res);
+        defer.resolve(res.data);
       },
       (error) => {
-        defer.resolve({'data': {'fileList': []}});
+        defer.resolve({'data': []});
       }
     );
     return defer.promise;
