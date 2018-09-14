@@ -234,6 +234,8 @@ function formatDevice(device) {
   delete tmpDevice.storm;
   delete tmpDevice.statistic;
   
+  // TODO:change device type
+  tmpDevice.type = 'TMP_TYPE';
   return tmpDevice;
 }
 
