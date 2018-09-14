@@ -87,8 +87,15 @@ export class DashboardController {
       });
       promises.push(clusterStaticsDefer.promise);
 
-      this.di.deviceDataManager.getDevices().then((res)=>{
-        dataModel['devices'] = res.data.devices;
+      // this.di.deviceDataManager.getDevices().then((res)=>{
+      //   dataModel['devices'] = res.data.devices;
+      //   devicesDefer.resolve();
+      // });
+      // promises.push(devicesDefer.promise);
+
+
+      this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
+        dataModel['devices'] = configs;
         devicesDefer.resolve();
       });
       promises.push(devicesDefer.promise);
@@ -487,7 +494,7 @@ export class DashboardController {
         unSubscribe();
       });
 
-      clearInterval(this.interval_device);
+      // clearInterval(this.interval_device);
 
     });
   }
