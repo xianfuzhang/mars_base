@@ -95,7 +95,7 @@ export class FabricSummaryController {
       });
 
 
-      // this.di.$rootScope.$emit('start_loading');
+      this.di.$rootScope.$emit('start_loading');
 
       this.di.deviceDataManager.getPorts().then((res)=>{
         if(res.data.ports){

@@ -14,7 +14,7 @@ router.get('/', function (req, res) {
     delete cluster.statistic;
   })
   
-  return res.json({clusters: clusters});
+  return res.json({nodes: clusters});
 });
 
 router.post('/configuration', function (req, res) {
