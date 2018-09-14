@@ -14,7 +14,7 @@ router.get('/', function (req, res) {
     delete cluster.statistic;
   })
   
-  return res.json({clusters: clusters});
+  return res.json({nodes: clusters});
 });
 
 router.post('/configuration', function (req, res) {
@@ -36,7 +36,7 @@ router.post('/configuration', function (req, res) {
     return res.status(400).json('Failed to add new device!');
   }
   
-  return res.json({nodes: cloudModel.clusters});
+  return res.json({clusters: cloudModel.clusters});
 });
 
 
