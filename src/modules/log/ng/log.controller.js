@@ -105,15 +105,17 @@ export class LogController {
     origins.forEach((item) => {
       let obj = {};
       let arr = item.split('|');
+      if(arr.length ===  6){
+        obj.created_time = arr[0];
+        obj.type = arr[1];
+        obj.level = arr[2];
+        obj.creator = arr[3];
+        obj.operation = arr[4];
+        obj.content = arr[5];
+        entities.push(obj);
+      }
       
-      obj.created_time = arr[0];
-      obj.type = arr[1];
-      obj.level = arr[2];
-      obj.creator = arr[3];
-      obj.operation = arr[4];
-      obj.content = arr[5];
-      
-      entities.push(obj);
+
     });
     return entities;
   }
