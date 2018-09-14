@@ -464,7 +464,7 @@ export class DashboardController {
     };
 
     let getPortName = (deviceid, portNo) =>{
-      let port = this.di._.find(dataModel['ports'], { 'element': deviceid, 'port': portNo});
+      let port = this.di._.find(dataModel['ports'], { 'element': deviceid, 'port': String(portNo)});
       // if(port)
       return port['annotations']['portName'];
     };
