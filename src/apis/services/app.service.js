@@ -272,7 +272,7 @@ export class appService {
   }
 
   getLogsUrl(){
-    return this.getZoneEndpoint(true) + '/logs/v1/controller';
+    return this.getZoneEndpoint(true) + '/utility/logs/v1/controller';
   }
 
   getClusterUrl(){
