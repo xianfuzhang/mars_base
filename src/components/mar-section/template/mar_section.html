@@ -2,7 +2,10 @@
     <div class="mar_section__header" ng-style="sectionModel.noFoldStyle" ng-click="foldAndNot()">
         <!--<div class="mar_section__header__icon" ng-style="sectionModel.iconStyle" ng-class="{'+expand': sectionModel.isFold}"></div>-->
         <div class="mar_section__header__icon" ng-style="sectionModel.iconStyle" ng-if="!sectionModel.noFold"></div>
-        <div class="mar_section__header__title" ng-class="{'title_wide': sectionModel.noFold}">{{sectionModel.title}}</div>
+        <div class="mar_section__header__title" ng-class="{'title_wide': sectionModel.setting.noFold}">{{sectionModel.title}}</div>
+        <div class="mar_section__header__setting" ng-if="sectionModel.setting">
+            <button class="material-icons mdc-icon-button mdc-card__action--icon" ng-click="showSetting($event)">settings</button>
+        </div>
     </div>
 
     <!--<div class="mar_section__body" ng-class="{'+expand': sectionModel.isFold}" ng-style="sectionModel.showStyle">-->

@@ -23,13 +23,14 @@ export class marSection {
 
     this.scope = {
       title : '@',
-      noFold: '='
+      noFold: '=',
+      settingFunc: '&'
     };
 
     this.link = (...args) => this._link.apply(this, args);
   }
 
-  _link (scope, element) {
+  _link (scope, element, attrs) {
     (function init () {
       // this.isFold =  false;
       // this.showOrNot
@@ -40,7 +41,8 @@ export class marSection {
         'iconStyle':{},
         'noFoldStyle':{},
         'isFold': false,
-        'noFold': false
+        'noFold': false,
+        'setting': attrs.supportSetting || false
       };
 
       if(scope.noFold === true){
@@ -130,6 +132,12 @@ export class marSection {
           setTimeout(dynamicUp((new Date()).getTime(), 500),10);
         }
         scope.sectionModel.isFold = !scope.sectionModel.isFold;
+      };
+
+      scope.showSetting = (event) => {
+        event.stopPropagation();
+        let settingFunc = scope.settingFunc || angular.noop;
+        settingFunc();
       };
 
       setTimeout(function () {

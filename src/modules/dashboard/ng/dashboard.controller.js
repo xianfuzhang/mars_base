@@ -12,7 +12,8 @@ export class DashboardController {
       'appService',
       'c3',
       'dashboardDataManager',
-      'deviceDataManager'
+      'deviceDataManager',
+      'modalManager'
     ];
   }
 
