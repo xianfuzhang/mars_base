@@ -35,7 +35,7 @@ import 'topo';
 import 'loading';
 import 'deviceTooltip';
 import 'wizard';
-
+import 'datePicker';
 
 angular
   .module('marsApp', [
@@ -72,7 +72,8 @@ angular
     'topo',
     'loading',
     'deviceTooltip',
-    'wizard'
+    'wizard',
+    'date-picker'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {

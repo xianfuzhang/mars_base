@@ -42,7 +42,8 @@ class AliasProvider {
       'topo': path.resolve('src/components/topo/'),
       'loading': path.resolve('src/components/loading/'),
       'deviceTooltip': path.resolve('src/components/device-tooltip/'),
-      'ngTable$': path.resolve('src/libs/ngtable/ng-table.min.js')
+      'ngTable$': path.resolve('src/libs/ngtable/ng-table.min.js'),
+      'datePicker': path.resolve('src/components/date-picker')
     };
   }
 
