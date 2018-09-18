@@ -5,7 +5,7 @@ const express = require('express'),
   _ = require('lodash');
 
 router.get('/threshold', function (req, res) {
-  return res.json(formatRule(cloudModel.alert.rules, true));
+  return res.json({healthycheck:formatRule(cloudModel.alert.rules, true)});
 });
 
 router.get('/:from/:type/threshold', function (req, res) {
