@@ -2,7 +2,8 @@ export class mdlSelect {
   static getDI() {
     return [
       '$compile',
-      '_'
+      '_',
+      '$timeout'
     ];
   }
 
@@ -19,8 +20,10 @@ export class mdlSelect {
       displayLabel: '=',
       helper: '=',
       disable: '=',
-      ngChange: '&'
-    }
+      ngChange: '&',
+      onInit: '&'
+    };
+
     this.link = (...args) => this._link.apply(this, args);
   }
 
@@ -81,6 +84,12 @@ export class mdlSelect {
       // console.log(scope.displayLabel);
       scope.options = newValue;
     }));
+
+    this.di.$timeout(function () {
+      if(scope.onInit){
+        scope.onInit();
+      }
+    })
 
     scope.$on('$destroy', () => {
       this.di._.each(unSubscribes, (unSubscribe) => {

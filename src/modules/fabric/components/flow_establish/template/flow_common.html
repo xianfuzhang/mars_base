@@ -1,22 +1,28 @@
+<div class="flow_common">
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">Priority<span class="stepForm__input__required">*</span></div>
 
-<div class="stepForm__input">
-    <div class="stepForm__input__label">Priority<span class="stepForm__input__required">*</span></div>
-    <input class="stepForm__input__text ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required" name="name" type="text" ng-model="flow.priority" ng-required="true" required="required" ng-pattern="num_regex" />
+        <valid-input v-name="flow_priority" v-require="true" ng-model="flow.priority" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_common" ></valid-input>
+        <!--<input class="stepForm__input__text ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required" ng-blur="changeModel.priorityChange=true" name="flow_priority" type="text" ng-model="flow.priority" ng-required="true" required="required" ng-pattern="num_regex" />-->
+
+        <!--<span class="stepForm__input__error" ng-show="wizardForm.flow_priority.$invalid && changeModel.priorityChange">端口无效</span>-->
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">Timeout<span class="stepForm__input__required">*</span></div>
+        <valid-input v-name="flow_timeout" v-require="true" ng-model="flow.timeout" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_common" ></valid-input>
+        <!--<input class="stepForm__input__text ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required" ng-blur="changeModel.timeoutChange=true" name="flow_timeout" type="text" ng-model="flow.timeout" ng-required="true" required="required" ng-pattern="num_regex" />-->
+        <!--<span class="stepForm__input__error" ng-show="wizardForm.flow_timeout.$invalid && changeModel.timeoutChange"></span>-->
+    </div>
+
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">Is Permanent</div>
+        <mdl-switch ng-model="flow.isPermanent" name="isPermanent"
+                    display-label="{on: 'True', off: 'False', id: 'isPermanent'}">
+        </mdl-switch>
+    </div>
 </div>
-
-<div class="stepForm__input">
-    <div class="stepForm__input__label">Timeout<span class="stepForm__input__required">*</span></div>
-    <input class="stepForm__input__text ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required" name="priority" type="text" ng-model="flow.timeout" ng-required="true" required="required" ng-pattern="num_regex" />
-</div>
-
-
-<div class="stepForm__input">
-    <div class="stepForm__input__label">Is Permanent<span class="stepForm__input__required">*</span></div>
-    <mdl-switch ng-model="flow.isPermanent" name="isPermanent"
-                display-label="{on: 'True', off: 'False', id: 'isPermanent'}">
-    </mdl-switch>
-</div>
-
 
 
 <!--<div class="wizard__body__input">-->

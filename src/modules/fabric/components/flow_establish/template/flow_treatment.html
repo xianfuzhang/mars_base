@@ -1,28 +1,36 @@
-<div class="wizard__body__input instruction">
-    <div class="instruction__header">
+<div class="wizard__body__input flow_instruction">
+    <div class="flow_instruction__name">Instruction Type</div>
+    <div class="flow_instruction__header">
+
         <mdl-select ng-model="flowEstablishModel.instructionType"
                     display-label="instructionSchemaList">
         </mdl-select>
-        <div class="instruction__header__action">
+        <div class="flow_instruction__header__action">
             <mdl-button ng-click="addInstruction()" icon-name="add"></mdl-button>
         </div>
+
+
+
     </div>
-    <div id="instruction_list" class="instruction__body">
-        <div class="instruction__body__item"  ng-repeat="instruction in instructionsModel">
+    <div id="instruction_list" class="flow_instruction__body">
+        <div class="flow_instruction__body__item"  ng-repeat="instruction in instructionsModel">
+            <div class="type"> {{instruction.type}} </div>
             <mdl-button class="remove" ng-click="removeInstruction(instruction.uuid)" icon-name="remove_circle" size='small'></mdl-button>
-            <table>
-                <tr>
-                    <td><div class="wizard__body__input__label instruction_line stepForm__input__label" >Type</div></td>
-                    <td><div class="wizard__body__input__label instruction_line stepForm__input__label">{{instruction.type}}</div></td>
-                </tr>
+            <table class="flow_table">
+                <!--<tr>-->
+                    <!--<td><div class="wizard__body__input__label instruction_line stepForm__input__label" >Type</div></td>-->
+                    <!--<td><div class="wizard__body__input__label instruction_line stepForm__input__label">{{instruction.type}}</div></td>-->
+                <!--</tr>-->
                 <tr ng-repeat="item in instruction.content">
-                    <td><div class="wizard__body__input__label instruction_line stepForm__input__label">{{item.field}}</div></td>
+                    <td><div class="wizard__body__input__label instruction_line stepForm__input__label">{{item.field}}<span class="stepForm__input__required">*</span></div></td>
                     <td>
                         <div class="instruction_line" ng-if="item.type=='string'">
-                            <input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="item.value"/>
+                            <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="item.value"/>-->
+                            <valid-input  v-require="true" ng-model="item.value" v-rpcid="page_flow_instruction" ></valid-input>
                         </div>
                         <div class="instruction_line" ng-if="item.type=='int'">
-                            <input class="wizard__body__input__text "stepForm__input__text type="text" ng-required="true" ng-model="item.value" ng-pattern="num_regex"/>
+                            <valid-input  v-require="true" ng-model="item.value" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
+                            <!--<input class="wizard__body__input__text "stepForm__input__text type="text" ng-required="true" ng-model="item.value" ng-pattern="num_regex"/>-->
                         </div>
                         <div class="instruction_line" ng-if="item.type=='object'">
                             <mdl-select ng-model="item.value"
@@ -34,13 +42,16 @@
                     </td>
                 </tr>
                 <tr ng-repeat="sub_item in instruction.subtypeList">
-                    <td><div class="wizard__body__input__label instruction_line stepForm__input__label">{{sub_item.field}}</div></td>
+                    <td><div class="wizard__body__input__label instruction_line stepForm__input__label">{{sub_item.field}}<span class="stepForm__input__required">*</span></div></td>
                     <td>
                         <div class="instruction_line" ng-if="sub_item.type=='string'">
-                            <input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="sub_item.value"/>
+                            <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="sub_item.value"/>-->
+                            <valid-input  v-require="true" ng-model="sub_item.value" v-rpcid="page_flow_instruction" ></valid-input>
+
                         </div>
                         <div class="instruction_line" ng-if="sub_item.type=='int'">
-                            <input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="sub_item.value" ng-pattern="num_regex"/>
+                            <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="sub_item.value" ng-pattern="num_regex"/>-->
+                            <valid-input  v-require="true" ng-model="sub_item.value" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
                         </div>
                     </td>
                 </tr>

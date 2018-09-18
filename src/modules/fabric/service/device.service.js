@@ -397,7 +397,7 @@ export class DeviceService {
 
   getFlowsInstructionSchema() {
     return {
-      'OUTPUT': [{'field': 'port', 'type': 'string'}],
+      'OUTPUT': [{'field': 'port', 'type': 'int'}],
       'TABLE': [{'field': 'tableId', 'type': 'int'}],
       'GROUP': [{'field': 'groupId', 'type': 'int'}],
       'METER': [{'field': 'meterId', 'type': 'int'}],

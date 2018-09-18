@@ -1,28 +1,32 @@
-<div class="wizard__body__input criteria stepForm">
-    <div class="criteria__header">
+<div class="wizard__body__input flow_criteria stepForm">
+    <div class="flow_criteria__name">Criteria Type</div>
+    <div class="flow_criteria__header">
         <mdl-select ng-model="flowEstablishModel.criteriaType"
                     display-label="criteriaSchemaList">
         </mdl-select>
-        <div class="criteria__header__action">
+        <div class="flow_criteria__header__action">
             <mdl-button ng-click="addCriteria()" icon-name="add"></mdl-button>
         </div>
     </div>
-    <div id="criteria_list" class="criteria__body">
-        <div class="criteria__body__item"  ng-repeat="criteria in criteriasModel">
+    <div id="criteria_list" class="flow_criteria__body">
+        <div class="flow_criteria__body__item"  ng-repeat="criteria in criteriasModel">
+            <div class="type"> {{criteria.type}} </div>
             <mdl-button class="remove" ng-click="removeCriteria(criteria.uuid)" icon-name="remove_circle" size='small'></mdl-button>
-            <table>
-                <tr>
-                    <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >Type</div></td>
-                    <td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{criteria.type}}</div></td>
-                </tr>
+            <table class="flow_table">
+                <!--<tr>-->
+                    <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label" >Type</div></td>-->
+                    <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{criteria.type}}</div></td>-->
+                <!--</tr>-->
                 <tr ng-repeat="item in criteria.content">
-                    <td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{item.field}}</div></td>
+                    <td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{item.field}}<span class="stepForm__input__required">*</span></div></td>
                     <td>
                         <div class="criteria_line" ng-if="item.type=='string'">
-                            <input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="item.value"/>
+                            <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="item.value"/>-->
+                            <valid-input  v-require="true" ng-model="item.value" v-rpcid="page_flow_criteria" ></valid-input>
                         </div>
                         <div class="criteria_line" ng-if="item.type=='int'">
-                            <input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="item.value" ng-pattern="num_regex"/>
+                            <valid-input  v-require="true" ng-model="item.value" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_criteria" ></valid-input>
+                            <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="item.value" ng-pattern="num_regex"/>-->
                         </div>
                     </td>
                 </tr>
