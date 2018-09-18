@@ -69,11 +69,10 @@ export class ConfigurationHistoryController {
       query: (params) => {
         let defer = this.di.$q.defer();
         
-        let dateObj = {};
-        dateObj.from = this.date(this.scope.dateFrom, 'yyyy-MM-dd');
-        dateObj.to = this.date(this.scope.dateTo, 'yyyy-MM-dd');
+        params.from = this.date(this.scope.dateFrom, 'yyyy-MM-dd');
+        params.to = this.date(this.scope.dateTo, 'yyyy-MM-dd');
         
-        this.di.configurationDataManager.getConfigurationHistory(dateObj).then((res) => {
+        this.di.configurationDataManager.getConfigurationHistory(params).then((res) => {
           this.scope.loading = false;
           this.scope.hasData = res.data.configs.length ? true : false;
           this.scope.entities = this.getEntities(res.data.configs);
