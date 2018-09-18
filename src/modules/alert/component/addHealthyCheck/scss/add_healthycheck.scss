@@ -15,6 +15,7 @@
     line-height: 30px;
     font-size: 16px;
     margin-top: 16px;
+    white-space:nowrap;
 
     @include element(label) {
       width: 100px;
