@@ -76,17 +76,17 @@ function generateCpu(timeString) {
   let idle = chance.floating({min: 30.00, max: 100 - 20 - system, fixed: 2});
   let user = chance.floating({min:10, max: 15, fixed: 2});
   let wait = chance.floating({min:0, max: 5, fixed: 2});
-  
+  let softirq = (100 - system - idle - user - wait).toFixed(2);
   return {
     timepoint: timeString,
-    system: system,
-    steal: 0,
-    idle: idle,
-    wait: wait,
-    softirq: (100 - system - idle - user - wait).toFixed(2),
-    user: user,
-    nice: 0,
-    interrupt: 0
+    system_percent: system,
+    steal_percent: 0,
+    idle_percent: idle,
+    wait_percent: wait,
+    softirq_percent: softirq,
+    user_percent: user,
+    nice_percent: 0,
+    interrupt_percent: 0
   }
 }
 
