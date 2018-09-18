@@ -91,7 +91,7 @@ export class HealthyCheckController {
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.alertDataManager.getAllHealthyCheck().then((res) => {
-          scope.healthyCheckModel.rules = res;
+          scope.healthyCheckModel.rules = res['healthycheck'];
           let rules = formatHcGroups(res);
           defer.resolve({
             data: rules,
