@@ -34,7 +34,13 @@ router.get('/:type/:deviceId/:timeStart/:timeEnd/:seconds', function (req, res) 
       responseArr.push(response);
     }
   
-    return res.status(200).json(responseArr);
+    let result = {};
+    if(req.params.type.toLowerCase() == 'cpu') {
+      result = {cpu: responseArr}
+    } else {
+      result = {memory: responseArr}
+    }
+    return res.status(200).json(result);
   }
   
 });
@@ -60,7 +66,7 @@ router.get('/portstats/:portno/:deviceId/:timeStart/:timeEnd/:seconds', function
       responseArr.push(response);
     }
     
-    return res.status(200).json(responseArr);
+    return res.status(200).json({portstats:responseArr});
   }
   
 });
