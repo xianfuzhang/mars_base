@@ -46,7 +46,7 @@ app.use('/mars/useraccount/v1', useraccountController);
 app.use('/mars/v1/flows', flowController);
 app.use('/mars/healthycheck/v1', alertRuleController);
 app.use('/mars/alert/v1', alertController);
-app.use('/mars/logs/v1', logController);
+app.use('/mars/utility/logs/v1', logController);
 app.use('/mars/v1/cluster', clusterController);
 app.use('/mars/v1', loginController);
 app.use('/mars/v1/configuration', configurationController);
