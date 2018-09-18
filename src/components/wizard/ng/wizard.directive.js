@@ -111,11 +111,11 @@ export class Wizard {
         return sce.trustAsHtml(string);
       };
       
-      scope.$watch('showWizard', (newVal) => {
+      unsubscribers.push(scope.$watch('showWizard', (newVal) => {
         if(newVal === true) {
           scope.curIndex = 0;
         }
-      });
+      }));
 
       scope.$on('$destroy', () => {
         unsubscribers.forEach((cb) => {

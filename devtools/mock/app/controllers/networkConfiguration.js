@@ -9,17 +9,12 @@ router.get('/files', function (req, res) {
   
   let files = fs.readdirSync(configFilePath);
   
-  let fileArr = [];
-  files.forEach((file) => {
-    fileArr.push(path.parse(file).name);
-  });
-  
-  res.json(fileArr);
+  res.json({files:files});
 });
 
 router.get('/files/:filename', function (req, res) {
   
-  let filepath = path.join(configFilePath, `${req.params.filename}.json`);
+  let filepath = path.join(configFilePath, req.params.filename);
   
   if(fs.existsSync(filepath)) {
     try {
