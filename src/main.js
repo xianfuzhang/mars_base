@@ -36,7 +36,7 @@ import 'validInput';
 import 'loading';
 import 'deviceTooltip';
 import 'wizard';
-
+import 'datePicker';
 
 angular
   .module('marsApp', [
@@ -74,7 +74,8 @@ angular
     'validInput',
     'loading',
     'deviceTooltip',
-    'wizard'
+    'wizard',
+    'date-picker'
   ])
   .factory('setLanguage', function ($q) {
     return function (options) {

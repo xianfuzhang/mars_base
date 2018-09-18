@@ -12,7 +12,8 @@ export class DashboardController {
       'appService',
       'c3',
       'dashboardDataManager',
-      'deviceDataManager'
+      'deviceDataManager',
+      'modalManager'
     ];
   }
 
@@ -267,95 +268,94 @@ export class DashboardController {
       chartSwtInterface(txBytesOrder, 'swtInterfaceTxByte', tx_b_str, 'Tx Bytes','bytes');
     };
 
-    // let chartingSwtInterfaceTop5Rx = (top5)=> {
-    //   // getSwtAndPortName
-    //
-    //   let category= [];
-    //   let rxs = ['RX Packages'];
-    //   this.di._.forEach(top5, (statistic)=>{
-    //     category.push(getSwtAndPortName(statistic['device'], statistic['port']));
-    //     rxs.push(statistic['packetsReceived']);
-    //     // console.log(getSwtAndPortName(statistic['device'], statistic['port']) + ': ' + statistic['packetsReceived']);
-    //   });
-    //
-    //   let chart = this.di.c3.generate({
-    //     bindto: '#swtInterfaceRx',
-    //     data: {
-    //       columns: [
-    //         rxs
-    //       ],
-    //       type: 'bar'
-    //     },
-    //     bar: {
-    //       width: {
-    //         ratio: 0.5 // this makes bar width 50% of length between ticks
-    //       }
-    //     },
-    //     tooltip: {
-    //       format: {
-    //         title: function (d) { return category[d]; },
-    //         value: function (value, ratio, id) {
-    //           return value + ' packages';
-    //         }
-    //       },
-    //       grouped:false
-    //     },
-    //     axis: {
-    //       x: {
-    //         type: 'category',
-    //         categories: category
-    //       },
-    //       y:{
-    //         label: "packets"
-    //       }
-    //     }
-    //   });
-    // };
-    //
-    //
-    // let chartingSwtInterfaceTop5Rx = (top5)=> {
-    //   // getSwtAndPortName
-    //
-    //   let category= [];
-    //   let rxs = ['TX Packages'];
-    //   this.di._.forEach(top5, (statistic)=>{
-    //     category.push(getSwtAndPortName(statistic['device'], statistic['port']));
-    //     rxs.push(statistic['packetsReceived']);
-    //   });
-    //
-    //   let chart = this.di.c3.generate({
-    //     bindto: '#swtInterfaceTx',
-    //     data: {
-    //       columns: [
-    //         rxs
-    //       ],
-    //       type: 'bar'
-    //     },
-    //     bar: {
-    //       width: {
-    //         ratio: 0.5 // this makes bar width 50% of length between ticks
-    //       }
-    //     },
-    //     tooltip: {
-    //       format: {
-    //         title: function (d) { return category[d]; },
-    //         value: function (value, ratio, id) {
-    //           return value;
-    //         }
-    //       },
-    //       grouped:false
-    //     },
-    //     axis: {
-    //       x: {
-    //         type: 'category',
-    //         categories: category
-    //       },
-    //       y:{
-    //         label: "packets"
-    //       }
-    //     }
-    //   });
-    // };
+   /* let chartingSwtInterfaceTop5Rx = (top5)=> {
+      // getSwtAndPortName
+    
+      let category= [];
+      let rxs = ['RX Packages'];
+      this.di._.forEach(top5, (statistic)=>{
+        category.push(getSwtAndPortName(statistic['device'], statistic['port']));
+        rxs.push(statistic['packetsReceived']);
+        // console.log(getSwtAndPortName(statistic['device'], statistic['port']) + ': ' + statistic['packetsReceived']);
+      });
+    
+      let chart = this.di.c3.generate({
+        bindto: '#swtInterfaceRx',
+        data: {
+          columns: [
+            rxs
+          ],
+          type: 'bar'
+        },
+        bar: {
+          width: {
+            ratio: 0.5 // this makes bar width 50% of length between ticks
+          }
+        },
+        tooltip: {
+          format: {
+            title: function (d) { return category[d]; },
+            value: function (value, ratio, id) {
+              return value + ' packages';
+            }
+          },
+          grouped:false
+        },
+        axis: {
+          x: {
+            type: 'category',
+            categories: category
+          },
+          y:{
+            label: "packets"
+          }
+        }
+      });
+    };
+    
+    let chartingSwtInterfaceTop5Rx = (top5)=> {
+      // getSwtAndPortName
+    
+      let category= [];
+      let rxs = ['TX Packages'];
+      this.di._.forEach(top5, (statistic)=>{
+        category.push(getSwtAndPortName(statistic['device'], statistic['port']));
+        rxs.push(statistic['packetsReceived']);
+      });
+    
+      let chart = this.di.c3.generate({
+        bindto: '#swtInterfaceTx',
+        data: {
+          columns: [
+            rxs
+          ],
+          type: 'bar'
+        },
+        bar: {
+          width: {
+            ratio: 0.5 // this makes bar width 50% of length between ticks
+          }
+        },
+        tooltip: {
+          format: {
+            title: function (d) { return category[d]; },
+            value: function (value, ratio, id) {
+              return value;
+            }
+          },
+          grouped:false
+        },
+        axis: {
+          x: {
+            type: 'category',
+            categories: category
+          },
+          y:{
+            label: "packets"
+          }
+        }
+      });
+    };*/
 
     let chartSwtInterface = (top5, bindTo, orderType, TypeStr,y_label) =>{
       let category= [];

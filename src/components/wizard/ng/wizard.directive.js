@@ -100,8 +100,9 @@ export class Wizard {
               scope.errorMessage = result.errorMessage || '';
             } else {
               scope.showWizard = false;
-              scope.$apply();
             }
+  
+            scope.$apply();
           });
       }
 
@@ -109,6 +110,12 @@ export class Wizard {
       scope.trustAsHtml = function(string) {
         return sce.trustAsHtml(string);
       };
+      
+      scope.$watch('showWizard', (newVal) => {
+        if(newVal === true) {
+          scope.curIndex = 0;
+        }
+      });
 
       scope.$on('$destroy', () => {
         unsubscribers.forEach((cb) => {

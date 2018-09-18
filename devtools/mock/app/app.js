@@ -15,6 +15,7 @@ var express = require('express'),
   confighistoryController = require('./controllers/confighistory'),
   configurationController = require('./controllers/configuration'),
   networkConfigController = require('./controllers/networkConfiguration'),
+  analyzerController = require('./controllers/analyzer'),
   app = express(),
   //expressSession = require('express-session'),
   cookieParser = require('cookie-parser');
@@ -52,7 +53,7 @@ app.use('/mars/v1', loginController);
 app.use('/mars/v1/configuration', configurationController);
 app.use('/mars/v1/network/configuration', networkConfigController);
 app.use('/mars/utility/confighistory/v1', confighistoryController);
-
+app.use('/mars/analyzer/v1/timerangebar', analyzerController);
 
 // set port
 app.set('port', (process.env.PORT || 4001));
