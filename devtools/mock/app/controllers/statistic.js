@@ -79,7 +79,7 @@ router.get('/system/controller', function (req, res) {
   cloudModel.clusters.forEach((cluster) => {
     statistics[cluster.ip] = cluster.statistic
   })
-  return res.json({statistics: statistics});
+  return res.json(statistics);
 })
 
 router.get('/system', function (req, res) {
