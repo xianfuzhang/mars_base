@@ -37,6 +37,7 @@ class AliasProvider {
       'contentPanel': path.resolve('src/components/content-panel/'),
       'footer': path.resolve('src/components/footer/'),
       'wizard': path.resolve('src/components/wizard'),
+      'marButton': path.resolve('src/components/mar-button'),
       'mdlTable': path.resolve('src/components/table'),
       'modal': path.resolve('src/components/modal'),     
       'topo': path.resolve('src/components/topo/'),
