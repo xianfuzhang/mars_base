@@ -1,6 +1,6 @@
-<div class="valid_input">
-    <input class="ng-pristine ng-untouched ng-not-empty ng-valid-required" ng-mouseenter="mouseEnter()" ng-mouseleave="mouseLeave()" ng-change="onchange()" ng-class="{'afterBlur': validModel.change}" ng-blur="blur()"  type="text" ng-model="vModel" ng-required="validModel.require" ng-pattern="validModel.ngPattern" autocomplete="new-password"/>
+<div class="valid_input" ng-style="blockOrInline">
+    <input class="ng-pristine ng-untouched ng-not-empty ng-valid-required" ng-style="inputStyle" ng-mouseenter="mouseEnter()" ng-mouseleave="mouseLeave()" ng-class="{'afterBlur': validModel.change}" ng-blur="blur()"  type="text" ng-model="vModel" ng-required="validModel.require" ng-pattern="validModel.ngPattern" ng-model-options="{allowInvalid:true}" autocomplete="new-password"/>
     <!--name="{{validModel.name}}"-->
-    <span class="valid_input__message" ng-style="resizeStyle" ng-show="vModel !== '' && validModel.isInvalid && validModel.mouseOver">{{validModel.message}}</span>
-    <span class="valid_input__message" ng-style="resizeStyle" ng-show="vModel == ''&& validModel.mouseOver && validModel.change">{{validModel.emptyMessage}}</span>
+    <span  class="valid_input__message" ng-style="resizeStyle" ng-show="(vModel !== '' && vModel !== undefined) && validModel.isInvalid && validModel.mouseOver">{{validModel.message}}</span>
+    <span  class="valid_input__message" ng-style="resizeStyle" ng-show="(vModel == '' || vModel == undefined)&& validModel.mouseOver && validModel.change">{{validModel.emptyMessage}}</span>
 </div>

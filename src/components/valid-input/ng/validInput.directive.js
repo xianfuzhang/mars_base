@@ -27,8 +27,10 @@ export class validInput {
       vModel : '=ngModel',
       vRegex: '=',
       vMessage: '@',
-      vRpcid: '@'
-
+      vRpcid: '@',
+      vStyle: '@',
+      vSpan: '@',
+      vList: '@'
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -51,6 +53,25 @@ export class validInput {
         mouseOver: false
       };
 
+      scope.blockOrInline = {};
+
+      if(scope.vStyle){
+        // console.log(scope.vStyle)
+        scope.vStyle = JSON.parse(scope.vStyle)
+        // console.log(scope.vStyle)
+        // console.log(typeof scope.vStyle)
+        // scope.inputStyle = scope.vStyle;
+        scope.blockOrInline = scope.vStyle;
+      }
+
+      if(scope.vSpan  === 'true' || scope.vSpan === true){
+        scope.blockOrInline['display'] = 'inline-block';
+      }
+
+      if(scope.vList) {
+        element.find('input').attr('list', scope.vList)
+      }
+
       scope.blur = () => {
         setTimeout(function () {
           scope.validModel.change = true;
@@ -60,14 +81,17 @@ export class validInput {
         })
       };
 
-      scope.onchange = () => {
-        setTimeout(function () {
-          scope.validModel.change = true;
-          let invalid = element.children().hasClass('ng-invalid');
-          scope.validModel.isInvalid = invalid && scope.validModel.change;
-          scope.$apply();
-        })
-      };
+      // scope.onchange = () => {
+      //   setTimeout(function () {
+      //     console.log('====>' + scope.vModel);
+      //     scope.validModel.change = true;
+      //     let invalid = element.children().hasClass('ng-invalid');
+      //     scope.validModel.isInvalid = invalid && scope.validModel.change;
+      //     scope.$apply();
+      //
+      //     // console.log('====>' + scope.vModel);
+      //   })
+      // };
 
       // unsubscribers.push(scope.$watch('vModel',(newData)=>{
       //   // let invalid = element.children().hasClass('ng-invalid');
