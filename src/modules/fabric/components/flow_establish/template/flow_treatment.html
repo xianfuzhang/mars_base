@@ -32,6 +32,18 @@
                             <valid-input  v-require="true" ng-model="item.value" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
                             <!--<input class="wizard__body__input__text "stepForm__input__text type="text" ng-required="true" ng-model="item.value" ng-pattern="num_regex"/>-->
                         </div>
+                        <div class="instruction_line" ng-if="item.type=='ip'">
+                            <valid-input  v-require="true" ng-model="item.value" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
+                        </div>
+
+                        <div class="instruction_line" ng-if="item.type=='ipv6'">
+                            <valid-input  v-require="true" ng-model="item.value" v-regex="ipv6_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV6' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
+                        </div>
+
+                        <div class="instruction_line" ng-if="item.type=='mac'">
+                            <valid-input  v-require="true" ng-model="item.value" v-regex="mac_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
+                        </div>
+
                         <div class="instruction_line" ng-if="item.type=='object'">
                             <mdl-select ng-model="item.value"
                                         on-init="changeInstructionSelect(instruction.uuid, item, $value)"
@@ -53,6 +65,19 @@
                             <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="sub_item.value" ng-pattern="num_regex"/>-->
                             <valid-input  v-require="true" ng-model="sub_item.value" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
                         </div>
+
+                        <div class="instruction_line" ng-if="sub_item.type=='ip'">
+                            <valid-input  v-require="true" ng-model="sub_item.value" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
+                        </div>
+
+                        <div class="instruction_line" ng-if="sub_item.type=='ipv6'">
+                            <valid-input  v-require="true" ng-model="sub_item.value" v-regex="ipv6_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV6' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
+                        </div>
+
+                        <div class="instruction_line" ng-if="sub_item.type=='mac'">
+                            <valid-input  v-require="true" ng-model="sub_item.value" v-regex="mac_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
+                        </div>
+
                     </td>
                 </tr>
             </table>
