@@ -180,6 +180,7 @@
     
     @include element(form) {
       width: 350px;
+      padding: 0 15px;
       overflow-x: hidden;
   
       @include state(single) {
