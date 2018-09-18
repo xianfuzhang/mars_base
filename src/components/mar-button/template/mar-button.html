@@ -1,0 +1,6 @@
+<button id="::btnId"
+        ng-click="btnClick()"
+        class="mar-button mdc-button mdc-button--raised {{btnClass}}">
+    <i ng-if="btnIcon" class="material-icons {{btnIconClass}}">{{btnIcon}}</i>
+    <span ng-if="btnText" ng-bind="::btnText" class="{{btnTextClass}}"></span>
+</button>
