@@ -75,7 +75,6 @@
   "MODULES.SWITCH.DETAIL.FLOW.COLUMN.POLL_INTERVAL": "Polling Interval(secs)",
   "MODULES.SWITCH.DETAIL.FLOW.COLUMN.RATE": "Rate(packets)",
   "MODULES.SWITCH.DETAIL.FLOW.COLUMN.PORT": "Port",
-  "MODULES.SWITCH.DETAIL.FLOW.COLUMN.DURATION": "Duration",
   "MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE": "State",
   "MODULES.SWITCH.DETAIL.FLOW.COLUMN.PACKETS": "Packets",
   "MODULES.SWITCH.DETAIL.FLOW.COLUMN.DURATION": "Duration",
@@ -88,5 +87,13 @@
   "MODULES.SWITCH.MENU.EDIT": "Edit",
   "MODULES.SWITCH.MENU.CREATE_FLOW": "Create Flow",
   "MODULES.SWITCH.MENU.SHOW_FLOW": "Show Flows",
-  "MODULES.TOPO.SWITCH.FLOW.TITLE": "Switch Flows Detail"
+  "MODULES.TOPO.SWITCH.FLOW.TITLE": "Switch Flows Detail",
+  "MODULES.REGEX.FLOW_ADD.NUMBER": "Please input number!",
+  "MODULES.REGEX.FLOW_ADD.PORT": "Invalid Port!",
+  "MODULES.REGEX.FLOW_ADD.IPV4": "Invalid IPv4 address!",
+  "MODULES.REGEX.FLOW_ADD.TIMEOUT": "Please input the right timeout number!",
+  "MODULES.REGEX.FLOW_ADD.PRIORITY": "Please input the right priority number!",
+  "MODULES.REGEX.FLOW_ADD.IPV6": "Please input the right IPv6 address!",
+  "MODULES.REGEX.FLOW_ADD.MAC": "Please input the right MAC address!",
+  "MODULES.REGEX.FLOW_ADD.NOTNULL":"Input cannot be null!"
 }

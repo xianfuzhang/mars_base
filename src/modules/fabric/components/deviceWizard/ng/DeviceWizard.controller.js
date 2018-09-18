@@ -75,6 +75,7 @@ export class DeviceWizardController {
     
     this.di.$scope.mac_regex = '^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$';  // MAC Address regex for validation
     this.di.$scope.ip_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
+    this.di.$scope.num_regex = '^\d$|^[1-9]+[0-9]*$';
     
     this.di.$scope.mac_addresses = [
       '00:00:00:02:00:01',
