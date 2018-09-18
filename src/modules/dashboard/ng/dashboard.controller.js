@@ -462,7 +462,7 @@ export class DashboardController {
     };
 
     let getSwtAndPortName = (deviceId, portNo) =>{
-      return getPortName(deviceId, portNo);
+      return getPortName(deviceId, portNo) + (getSwtName(deviceId));
     };
 
     let getSwtName = (deviceid) =>{
