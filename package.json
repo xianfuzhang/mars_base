@@ -8,7 +8,7 @@
   "scripts": {
     "postinstall": "npm --prefix ./devtools/mock install ./devtools/mock",
     "prebuild:dev": "webpack --config devtools/webpack/webpack.config",
-    "build:dev": "concurrently \"webpack-dev-server --config devtools/webpack/webpack.config\" ",
+    "build:dev": "concurrently \"webpack-dev-server --config devtools/webpack/webpack.config\" \"nodemon devtools/mock/app/app.js\"",
     "prestart": "npm install",
     "build:code": "webpack --config devtools/webpack/webpack.config",
     "build:component": "webpack --config devtools/webpack/webpack.config --env.environment=component",
