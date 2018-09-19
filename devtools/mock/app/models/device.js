@@ -7,7 +7,7 @@ var _ = require('lodash'),
 const chance = new Chance();
 
 class Device {
-  constructor (id, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassisId, driver, portMinNum, leaf_group, community, name, ip, port, protocol) {
+  constructor (id, type, available, role, mac, rack_id, sw, hw, serial, mfr, chassisId, driver, leaf_group, community, name, ip, port, protocol) {
     this.id = id;
     this.type = type;
     this.available = available;
@@ -25,7 +25,7 @@ class Device {
     this.lastUpdate = Date.now();
     this.humanReadableLastUpdate = "connected 4m52s ago";
     this.annotations = this.createAnnotations(name, ip, port, protocol);
-    this.ports = this.createPhysicalPorts(id, portMinNum + 8);
+    this.ports = this.createPhysicalPorts(id);
     this.storm = this.createStorm();
     this.uptime = chance.natural({min: 60 * 5, max: 60 * 60 * 24 * 2});
     this.statistic = this.createSystemStatistic();
@@ -42,9 +42,9 @@ class Device {
     return annotations;
   }
 
-  createPhysicalPorts (deviceId, count) {
+  createPhysicalPorts (deviceId) {
     let physicalPorts = [];
-    _.times(count, function (index) {
+    _.times(config.devicePortNum, function (index) {
       let port = `${index}`;
       if (port == '0') {
         port = 'local';
