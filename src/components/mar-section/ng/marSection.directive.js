@@ -47,7 +47,7 @@ export class marSection {
 
       if(scope.noFold === true){
         scope.sectionModel.noFold = true;
-        scope.sectionModel.noFoldStyle = {'cursor':'auto'};
+        scope.sectionModel.noFoldStyle = {'cursor':'auto', 'padding':'8px 16px'};
       }
 
       scope.lastHeight = 0;
