@@ -238,14 +238,22 @@ export class InformController {
             scope.informModel.receiveGroupTb.informAPI.setSelectedRow();
           }
 
-          scope.informModel.groups = res.groups;
-          let groups = formatTbGroups(res.groups);
+          if(res === null){
+            scope.informModel.groups = [];
 
-          defer.resolve({
-            data: groups,
-            count: res.count
-          });
-          // receiveGroupDefer.resolve();
+            defer.resolve({
+              data: [],
+              count: undefined
+            });
+          } else {
+            scope.informModel.groups = res.groups;
+            let groups = formatTbGroups(res.groups);
+
+            defer.resolve({
+              data: groups,
+              count: res.count
+            });
+          }
         });
         return defer.promise;
       },

@@ -138,6 +138,9 @@ export class AlertDataManager{
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getAlertGroupReceiveUrl()).then(
       (res) => {
+        if(JSON.stringify(res.data) === '{}'){
+          defer.resolve(null);
+        }
         defer.resolve(res.data);
       },
       (error) => {
