@@ -218,9 +218,6 @@ export class appService {
   getConfigurationHistoryUrl(params){
     let url = this.getZoneEndpoint(true) + '/utility/confighistory/v1/';
 
-    if(params.from && params.to) {
-      url += `?from=${params.from}&to=${params.to}`
-    }
     return url;
   }
 

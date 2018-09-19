@@ -16,7 +16,6 @@
         <datalist id="mac_addresses_datalist">
             <option ng-value="mac" ng-repeat="mac in mac_addresses"/>
         </datalist>
-        <!--<span class="stepForm__input__error" ng-show="wizardForm.mac.$invalid && macChange">Mac地址无效</span>-->
         <!--<div class="stepForm__input__annotaions">-->
             <!--Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future.-->
         <!--</div>-->
@@ -26,7 +25,6 @@
         <valid-input v-require="true" v-span="true" v-style='{"width":"70%"}' ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IP' | translate}}" v-rpcid="page_device_1" ></valid-input>
         <!--<input class="stepForm__input__text-prefix" name="managementAddress" type="text" ng-model="switch.managementAddress" ng-required="true" ng-blur="addressChange=true" ng-pattern="ip_regex"/>-->
         <span class="stepForm__input__separator">&nbsp;:&nbsp;</span>
-
         <valid-input v-require="true" v-span="true" v-style='{"width":"20%"}' ng-model="switch.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
         <!--<input class="stepForm__input__text-postfix" name="port" type="number" ng-blur="portChange=true" ng-model="switch.port" ng-required="true" min="0" max="65535"/>-->
         <!--<span class="stepForm__input__error" ng-show="wizardForm.managementAddress.$invalid && addressChange">IP地址无效</span>-->
@@ -44,7 +42,7 @@
         <datalist id="protocals-datalist">
             <option ng-value="protocol" ng-repeat="protocol in protocols"/>
         </datalist>
-        <span class="stepForm__input__error" ng-show="wizardForm.protocol.$invalid && protocalChange">必填项</span>
+        <span class="stepForm__input__error" ng-show="wizardForm.protocol.$invalid && protocalChange" ng-bind="::'COMPONENT.DEVICEWIZARD.INPUT.REQUIRED' | translate"></span>
     </div>
 
     <div class="stepForm__input" ng-if="switch.protocol == 'SNMP'">
@@ -61,7 +59,7 @@
         <mdl-switch ng-model="switch.admin_status" name="status" ng-blur="statusChange=true"
                     display-label="{on: 'Down', off: 'Up', id: 'status'}">
         </mdl-switch>
-        <span class="stepForm__input__error" ng-show="wizardForm.status.$invalid && statusChange">必填项</span>
+        <span class="stepForm__input__error" ng-show="wizardForm.status.$invalid && statusChange" ng-bind="::'COMPONENT.DEVICEWIZARD.INPUT.REQUIRED' | translate"></span>
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label" style="text-decoration: underline">Fabric Role</div>

@@ -102,7 +102,7 @@ export class ConfigurationDataManager{
   
   getConfigurationHistory(params){
     let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getConfigurationHistoryUrl(params)).then(
+    this.di.$http.get(this.di.appService.getConfigurationHistoryUrl(), {'params': params}).then(
       (res) => {
         defer.resolve(res);
       },

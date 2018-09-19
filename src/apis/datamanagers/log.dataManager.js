@@ -17,11 +17,7 @@ export class LogDataManager {
     let defer = this.di.$q.defer();
     let url = this.di.appService.getLogsUrl();
     
-    if(params) {
-      url += `?from=${params.from}&to=${params.to}`;
-    }
-    
-    this.di.$http.get(url).then(
+    this.di.$http.get(url, {'params': params}).then(
       (res) => {
         defer.resolve(res);
       },
