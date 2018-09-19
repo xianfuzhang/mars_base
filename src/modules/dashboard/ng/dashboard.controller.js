@@ -117,6 +117,7 @@ export class DashboardController {
 
       this.di.$rootScope.$emit('start_loading');
       this.di.$scope.panelLoading.controller = true;
+      this.di.$scope.panelLoading.switch = false;
 
       Promise.all(promises).then(()=>{
 
