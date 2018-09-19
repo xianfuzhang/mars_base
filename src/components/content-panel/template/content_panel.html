@@ -6,11 +6,11 @@
             <!--因此需要用div嵌套，然后使用margin来实现-->
         </ng-transclude>
     </div>
-    <div class="content_panel__markers">
+    <div class="content_panel__markers" ng-if="contentPanelModel.contents.length > 1">
         <div class="content_panel__markers__node" ng-repeat="item in contentPanelModel.contents" ng-click="clickNode($index)" ng-class="{'currentSelected': $index === 0}"></div>
     </div>
 
-    <div class="content_panel__loading +show" ng-class="{'+show':isLoad == true}">
+    <div class="content_panel__loading" ng-class="{'+show':isLoad == true}">
     </div>
 
 </div>

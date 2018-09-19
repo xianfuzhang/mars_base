@@ -95,5 +95,9 @@
   "MODULES.REGEX.FLOW_ADD.PRIORITY": "Please input the right priority number!",
   "MODULES.REGEX.FLOW_ADD.IPV6": "Please input the right IPv6 address!",
   "MODULES.REGEX.FLOW_ADD.MAC": "Please input the right MAC address!",
-  "MODULES.REGEX.FLOW_ADD.NOTNULL":"Input cannot be null!"
+  "MODULES.REGEX.FLOW_ADD.NOTNULL":"Input cannot be null!",
+  "MODULES.TOPO.BUTTON_TOOLTIP.REFRESH": "Refresh",
+  "MODULES.TOPO.BUTTON_TOOLTIP.SHOW_TOOLTIP": "Show Tooltip",
+  "MODULES.TOPO.BUTTON_TOOLTIP.SHOW_LINES": "Show Lines",
+  "MODULES.TOPO.BUTTON_TOOLTIP.SHOW_PORTS": "Show Ports"
 }

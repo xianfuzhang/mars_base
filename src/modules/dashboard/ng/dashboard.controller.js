@@ -102,7 +102,7 @@ export class DashboardController {
       promises.push(devicesDefer.promise);
 
       this.di.deviceDataManager.getDevicePortsStatistics().then((res)=>{
-        dataModel['swtStatistics'] = res.data;
+        dataModel['swtStatistics'] = res.data['statistics'];
         swtStaticsDefer.resolve();
       });
       promises.push(swtStaticsDefer.promise);
@@ -117,6 +117,7 @@ export class DashboardController {
 
       this.di.$rootScope.$emit('start_loading');
       this.di.$scope.panelLoading.controller = true;
+      this.di.$scope.panelLoading.switch = false;
 
       Promise.all(promises).then(()=>{
 

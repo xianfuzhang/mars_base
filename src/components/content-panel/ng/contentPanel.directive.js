@@ -138,9 +138,14 @@ export class contentPanel {
         }, intervalTime)
       };
 
-      timeoutHandler = setTimeout(function () {
-        changeContent();
-      },intervalTime);
+
+      // if()
+      if(scope.contentPanelModel.contents.length > 1){
+        timeoutHandler = setTimeout(function () {
+          changeContent();
+        },intervalTime);
+      }
+
 
       let dynamicGrow = (starttime, contentJQ) => {
         let time = (new Date()).getTime() - starttime;

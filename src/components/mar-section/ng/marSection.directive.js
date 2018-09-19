@@ -22,7 +22,7 @@ export class marSection {
     this.template = require('../template/mar_section');
 
     this.scope = {
-      title : '@',
+      sTitle : '@',
       noFold: '=',
       settingFunc: '&'
     };
@@ -36,7 +36,7 @@ export class marSection {
       // this.showOrNot
 
       scope.sectionModel = {
-        'title': scope.title,
+        'title': scope.sTitle,
         'showStyle': {'display':'block'},
         'iconStyle':{},
         'noFoldStyle':{},
@@ -47,7 +47,7 @@ export class marSection {
 
       if(scope.noFold === true){
         scope.sectionModel.noFold = true;
-        scope.sectionModel.noFoldStyle = {'cursor':'auto'};
+        scope.sectionModel.noFoldStyle = {'cursor':'auto', 'padding':'8px 16px'};
       }
 
       scope.lastHeight = 0;
