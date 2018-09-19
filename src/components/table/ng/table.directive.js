@@ -33,7 +33,8 @@ export class mdlTable {
       onAdd: '&',
       onRemove: '&',
       rowActionsFilter: '&',
-      rowSelectAction: '&'
+      rowSelectAction: '&',
+      needPagination : "@"
     }
     this.link = (...args) => this._link.apply(this, args);
   }
@@ -44,6 +45,8 @@ export class mdlTable {
     scope.renderService = this.di.renderService.render();
     scope.log = this.di.$log;
     scope.tableSize = attrs.tableSize || 'normal';
+
+    scope._isNeedPagination = scope.needPagination || false;
 
     scope.tableModel = {
       'CONST_SORT_ASC': this.di.tableConsts.CONST.SORT_ASC,
@@ -101,8 +104,35 @@ export class mdlTable {
       if (!$col.sortable) {
         return;
       }
+      // 默认不需要后台分页，分页的场景较少。如果需要分页，需要添加配置
+      if(scope._isNeedPagination === false ||  scope._isNeedPagination === 'false'){
+        scope._inlineOrder($col);
+        scope._render();
+        return;
+      }
+
       scope._sort($col);
       scope._render();
+    };
+
+    scope._inlineOrder = ($col) =>{
+      this.di._.each(scope.tableModel.columns, (col) => {
+        if (col.field !== $col.field) {
+          col.sort = scope.tableModel.CONST_SORT_UNDEFINED;
+        }
+      });
+      $col.sort = $col.sort === scope.tableModel.CONST_SORT_ASC
+        ? scope.tableModel.CONST_SORT_DESC : scope.tableModel.CONST_SORT_ASC;
+      scope.tableModel.sort = {};
+      scope.tableModel.sort[$col.field] = $col.sort;
+
+      let orderStr = 'asc';
+      if($col.sort === scope.tableModel.CONST_SORT_DESC){
+        orderStr = 'desc';
+      }
+      scope.tableModel.data = this.di._.orderBy(scope.tableModel.data,[$col.field],[orderStr]);
+      scope.tableModel.filteredData = scope.tableModel.data;
+
     };
 
     scope._sort = ($col) => {
