@@ -32,6 +32,7 @@ import 'marSection';
 import 'contentPanel';
 import 'footer';
 import 'topo';
+import 'validInput';
 import 'loading';
 import 'deviceTooltip';
 import 'wizard';
@@ -71,6 +72,7 @@ angular
     'contentPanel',
     'footer',
     'topo',
+    'validInput',
     'loading',
     'deviceTooltip',
     'wizard',

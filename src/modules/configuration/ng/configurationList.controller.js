@@ -69,11 +69,15 @@ export class ConfigurationListController {
 
       this.di.configurationDataManager.getConfigurationFileList()
         .then((res)=>{
+
           let opts = [{label:"请选择清单",value:"default"}];
           // let opts = [];
-          this.di._.forEach(res, (item)=>{
-            opts.push({label:item,value:item})
-          });
+          if(res && res['files'] && res['files'] instanceof Array){
+            this.di._.forEach(res['files'], (item)=>{
+              opts.push({label:item,value:item})
+            });
+          }
+
           scope.fileNameSelectedDisLab.options = opts;
           scope.configurationListModel.fileNameSelected = scope.fileNameSelectedDisLab.options[0];
         });

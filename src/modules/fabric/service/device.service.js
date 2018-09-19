@@ -397,7 +397,7 @@ export class DeviceService {
 
   getFlowsInstructionSchema() {
     return {
-      'OUTPUT': [{'field': 'port', 'type': 'string'}],
+      'OUTPUT': [{'field': 'port', 'type': 'int'}],
       'TABLE': [{'field': 'tableId', 'type': 'int'}],
       'GROUP': [{'field': 'groupId', 'type': 'int'}],
       'METER': [{'field': 'meterId', 'type': 'int'}],
@@ -441,8 +441,8 @@ export class DeviceService {
             'VLAN_PUSH': [],
             'VLAN_ID': [{'field': 'vlanId', 'type': 'int'}],
             'VLAN_PCP': [{'field': 'vlanPcp', 'type': 'int'}],
-            'ETH_SRC': [{'field': 'mac', 'type': 'string'}],
-            'ETH_DST': [{'field': 'mac', 'type': 'string'}],
+            'ETH_SRC': [{'field': 'mac', 'type': 'mac'}],
+            'ETH_DST': [{'field': 'mac', 'type': 'mac'}],
             'MPLS_LABEL': [{'field': 'label', 'type': 'int'}],
             'MPLS_PUSH': [{'field': 'ethernetType', 'type': 'int'}],
             'TUNNEL_ID': [{'field': 'tunnelId', 'type': 'int'}],
@@ -454,10 +454,10 @@ export class DeviceService {
           'field': 'subtype',
           'type':'object',
           'list': {
-            'IPV4_SRC': [{'field': 'ip', 'type': 'string'}],
-            'IPV4_DST': [{'field': 'ip', 'type': 'string'}],
-            'IPV6_SRC': [{'field': 'ip', 'type': 'string'}],
-            'IPV6_DST': [{'field': 'ip', 'type': 'string'}],
+            'IPV4_SRC': [{'field': 'ip', 'type': 'ip'}],
+            'IPV4_DST': [{'field': 'ip', 'type': 'ip'}],
+            'IPV6_SRC': [{'field': 'ip', 'type': 'ipv6'}],
+            'IPV6_DST': [{'field': 'ip', 'type': 'ipv6'}],
             'IPV6_FLABEL': [{'field': 'flowLabel', 'type': 'int'}],
           }
         }
@@ -481,10 +481,10 @@ export class DeviceService {
         {'field':'ethType','type': 'string'},
       ],
       'ETH_DST': [
-        {'field':'mac','type': 'string'},
+        {'field':'mac','type': 'mac'},
       ],
       'ETH_SRC': [
-        {'field':'mac','type': 'string'},
+        {'field':'mac','type': 'mac'},
       ],
       'IN_PORT': [
         {'field':'port','type': 'string'},
@@ -517,10 +517,10 @@ export class DeviceService {
         {'field':'protocol','type': 'int'},
       ],
       'IPV4_SRC': [
-        {'field':'ip','type': 'string'},
+        {'field':'ip','type': 'ip'},
       ],
       'IPV4_DST': [
-        {'field':'ip','type': 'string'},
+        {'field':'ip','type': 'ip'},
       ],
       'TCP_SRC': [
         {'field':'tcpPort','type': 'int'},
@@ -547,10 +547,10 @@ export class DeviceService {
         {'field':'icmpCode','type': 'int'},
       ],
       'IPV6_SRC': [
-        {'field':'ip','type': 'string'},
+        {'field':'ip','type': 'ipv6'},
       ],
       'IPV6_DST': [
-        {'field':'ip','type': 'string'},
+        {'field':'ip','type': 'ipv6'},
       ],
       'IPV6_FLABEL': [
         {'field':'flowlabel','type': 'int'},

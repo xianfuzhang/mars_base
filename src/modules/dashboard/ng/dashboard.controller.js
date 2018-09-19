@@ -102,7 +102,7 @@ export class DashboardController {
       promises.push(devicesDefer.promise);
 
       this.di.deviceDataManager.getDevicePortsStatistics().then((res)=>{
-        dataModel['swtStatistics'] = res.data.statistics;
+        dataModel['swtStatistics'] = res.data;
         swtStaticsDefer.resolve();
       });
       promises.push(swtStaticsDefer.promise);
@@ -462,7 +462,7 @@ export class DashboardController {
     };
 
     let getSwtAndPortName = (deviceId, portNo) =>{
-      return getPortName(deviceId, portNo);
+      return getPortName(deviceId, portNo) + '(' +  getSwtName(deviceId) +')';
     };
 
     let getSwtName = (deviceid) =>{

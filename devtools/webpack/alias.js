@@ -41,6 +41,7 @@ class AliasProvider {
       'mdlTable': path.resolve('src/components/table'),
       'modal': path.resolve('src/components/modal'),     
       'topo': path.resolve('src/components/topo/'),
+      'validInput': path.resolve('src/components/valid-input/'),
       'loading': path.resolve('src/components/loading/'),
       'deviceTooltip': path.resolve('src/components/device-tooltip/'),
       'ngTable$': path.resolve('src/libs/ngtable/ng-table.min.js'),
