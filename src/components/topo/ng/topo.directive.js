@@ -390,12 +390,12 @@ export class Topo {
         //根据实际的端口数来
         let count = ports.length;
         //超过48个端口len为2，根据实际情况来
-        let len = 3;
+        let len = 2.5;
         let height = this.switch_height;
         let width = this.switch_width;
         let status_normal = '#81FF1A';
         let status_error = 'rgb(255,0,0)';
-        let top = 8;
+        let top = 4;
 
         node.paint = function(g){
           g.beginPath();
@@ -706,12 +706,12 @@ export class Topo {
       let genPorts = (node, ports) => {
         //根据实际的端口数来
         //超过48个端口len为2，根据实际情况来
-        let len = 3;
+        let len = 2.5;
         let height = this.switch_height;
         let width = this.switch_width;
         let status_normal = '#81FF1A';
         let status_error = 'rgb(255,0,0)';
-        let top = 8;
+        let top = 4;
         node.paint = function(g){
           g.beginPath();
           g.rect(-width/2, -height/2, width, height);

@@ -37,7 +37,7 @@ export class DashboardDataManager{
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getStatisticOfController()).then(
       (res) => {
-        defer.resolve(res['data']['statistics']);
+        defer.resolve(res['data']);
       },
       (error) => {
         this.di.$log.error(error);

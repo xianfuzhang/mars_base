@@ -102,7 +102,7 @@ export class DashboardController {
       promises.push(devicesDefer.promise);
 
       this.di.deviceDataManager.getDevicePortsStatistics().then((res)=>{
-        dataModel['swtStatistics'] = res.data;
+        dataModel['swtStatistics'] = res.data['statistics'];
         swtStaticsDefer.resolve();
       });
       promises.push(swtStaticsDefer.promise);

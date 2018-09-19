@@ -21,23 +21,23 @@
                 </div>
             </div>
             <div ng-style="resize_length" style="position: absolute;right:0;top:0;height:100%;background-color: white;width:295px;display:inline-block;overflow:scroll; ">
-                <mar-section title="Topo Settings" class="topo_setting">
+                <mar-section s-title="Topo Settings" class="topo_setting">
                     <div style="margin:2px;">
-                        <div ng-click="topoRefresh()" id="refresh_topo"  class="+front mdc-button topo_setting__button">
+                        <div ng-click="topoRefresh()" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.REFRESH'|translate}}" id="refresh_topo"  class="+front mdc-button topo_setting__button">
                             <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                                 <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
                                 <path d="M0 0h24v24H0z" fill="none"/>
                             </svg>
                         </div>
 
-                        <div ng-click="tooltipSetting()" id="settings_topo" ng-class="{'+show':fabricModel.topoSetting.show_tooltips}" class="+front mdc-button topo_setting__button">
+                        <div ng-click="tooltipSetting()" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_TOOLTIP'|translate}}" id="settings_topo" ng-class="{'+show':fabricModel.topoSetting.show_tooltips}" class="+front mdc-button topo_setting__button">
                             <svg style="height:28px;width:28px;margin:0;" class="mdc-button__icon" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <path fill="none" d="M0 0h24v24H0V0z"/>
                                 <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
                             </svg>
 
                         </div>
-                        <div ng-click="lineSetting()" id="line_topo" ng-class="{'+show':fabricModel.topoSetting.show_links}"  class="+front mdc-button topo_setting__button">
+                        <div ng-click="lineSetting()" id="line_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_LINES'|translate}}" ng-class="{'+show':fabricModel.topoSetting.show_links}"  class="+front mdc-button topo_setting__button">
                             <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
                                 <defs>
                                     <path id="a" d="M0 0h24v24H0V0z"/>
@@ -49,7 +49,7 @@
                             </svg>
                         </div>
 
-                        <div ng-click="portSettings()" id="port_topo"  ng-class="{'+show':fabricModel.topoSetting.show_ports }" class="+front mdc-button topo_setting__button">
+                        <div ng-click="portSettings()" id="port_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_PORTS'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_ports }" class="+front mdc-button topo_setting__button">
                             <svg style="height:24px;width:24px;margin:0;" class="mdc-button__icon" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-334 518 44 49" width="44pt" height="49pt">
                                 <g stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
                                     <g>
@@ -89,11 +89,10 @@
                                 </g>
                             </svg>
                         </div>
-
                     </div>
                 </mar-section>
 
-                <mar-section ng-show="fabricModel.showSwitchDetail"  title="Spine Switch" class="detail_summary">
+                <mar-section ng-show="fabricModel.showSwitchDetail"  s-title="Spine Switch" class="detail_summary">
                     <!--<div class="detail_summary__body" style="position: relative;">-->
                         <!--<div class="detail_summary__body&#45;&#45;left"></div>-->
                         <!--<div class="detail_summary__body&#45;&#45;right"></div>-->
@@ -102,13 +101,13 @@
 
                 </mar-section>
 
-                <mar-section ng-if="fabricModel.showSwitchDetail" title="Interfaces" class="detail_interface">
+                <mar-section ng-if="fabricModel.showSwitchDetail" s-title="Interfaces" class="detail_interface">
                     <static-table style="max-width:400px" data="fabricModel.switchPorts" columns="fabricModel.portsSchema"></static-table>
                     <!--<mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">-->
                     <!--</mdl-table>-->
                 </mar-section>
 
-                <mar-section ng-if="fabricModel.showSwitchDetail"  title="Links" class="detail_link">
+                <mar-section ng-if="fabricModel.showSwitchDetail"  s-title="Links" class="detail_link">
                     <static-table style="max-width:400px" data="fabricModel.switchLinks" columns="fabricModel.linksSchema"></static-table>
                 </mar-section>
 
