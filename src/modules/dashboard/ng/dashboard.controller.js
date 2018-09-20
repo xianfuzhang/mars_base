@@ -11,6 +11,7 @@ export class DashboardController {
       '$q',
       'appService',
       'c3',
+      'dateService',
       'dashboardDataManager',
       'deviceDataManager',
       'modalManager'
@@ -38,6 +39,8 @@ export class DashboardController {
     this.interval_device = null;
     let unSubscribers = [];
     let dataModel = {};
+    let date = this.di.dateService.getTodayObject();
+    let before = this.di.dateService.getBeforeDateObject();
     this.di.$scope.dashboardModel = {
       'controllerSummary':{},
       'controllerStatistic':{},
@@ -46,8 +49,21 @@ export class DashboardController {
         spineCount:0,
         unknownCount:0,
         unavailableCount:0,
+      },
+      cpu: {
+        'begin_date': new Date(before.year, before.month, before.day),
+        'begin_time': new Date(before.year, before.month, before.day, 0, 0, 0),
+        'end_date': new Date(date.year, date.month, date.day),
+        'end_time': new Date(date.year, date.month, date.day, 0, 0, 0),
+        'analyzer': []
+      },
+      memory: {
+        'begin_date': new Date(before.year, before.month, before.day),
+        'begin_time': new Date(before.year, before.month, before.day, 0, 0, 0),
+        'end_date': new Date(date.year, date.month, date.day),
+        'end_time': new Date(date.year, date.month, date.day, 0, 0, 0),
+        'analyzer': []
       }
-
     };
 
     this.di.$scope.panelRefresh = {
@@ -61,6 +77,62 @@ export class DashboardController {
       swt : false,
     };
 
+    this.di.$scope.rangeConfiguration = (type) => {
+      let begin_date, end_date, begin_time, end_time;
+      if (type === 'cpu') {
+        begin_date = this.di.$scope.dashboardModel.cpu.begin_date;
+        end_date = this.di.$scope.dashboardModel.cpu.end_date;
+        begin_time = this.di.$scope.dashboardModel.cpu.begin_time;
+        end_time = this.di.$scope.dashboardModel.cpu.end_time;
+      }
+      else {
+        begin_date = this.di.$scope.dashboardModel.memory.begin_date;
+        end_date = this.di.$scope.dashboardModel.memory.end_date;
+        begin_time = this.di.$scope.dashboardModel.memory.begin_time;
+        end_time = this.di.$scope.dashboardModel.memory.end_time;
+      }
+      this.di.modalManager.open({
+          template: require('../template/dateRangeConfiguration.html'),
+          controller: 'dateRangeConfigurationCtrl',
+          windowClass: 'date-rate-modal',
+          resolve: {
+            dataModel: () => {
+              return {
+                'begin_date': begin_date,
+                'begin_time': begin_time,
+                'end_date': end_date,
+                'end_time': end_time 
+              };
+            }
+          }
+        })
+        .result.then((data) => {
+        if (data && !data.canceled) {
+          //console.log(data);
+          if (type === 'cpu') {
+            this.di.$scope.dashboardModel.cpu.begin_date = data.data.begin_date;
+            this.di.$scope.dashboardModel.cpu.begin_time = data.data.begin_date;
+            this.di.$scope.dashboardModel.cpu.end_date = data.data.end_date;
+            this.di.$scope.dashboardModel.cpu.end_time = data.data.end_date;
+
+            this.getDevicesCPUAnalyzer(dataModel.devices).then(() => {
+              convertSwitchCPUAnalyzer();
+            });
+          }
+          else {
+            this.di.$scope.dashboardModel.memory.begin_date = data.data.begin_date;
+            this.di.$scope.dashboardModel.memory.begin_time = data.data.begin_date;
+            this.di.$scope.dashboardModel.memory.end_date = data.data.end_date;
+            this.di.$scope.dashboardModel.memory.end_time = data.data.end_date;
+
+             this.getDevicesMemoryAnalyzer(dataModel.devices).then(() => {
+              convertSwitchMemoryAnalyzer();
+            });
+          }
+        }
+      });
+    };
+
     let di = this.di;
 
     let init =() =>{
@@ -71,14 +143,11 @@ export class DashboardController {
         clusterStaticsDefer = this.di.$q.defer(),
         swtStaticsDefer = this.di.$q.defer();
 
-
-
       this.di.dashboardDataManager.getCluster().then((res)=>{
         dataModel['cluster'] = res;
 
         clusterDefer.resolve();
       });
-
       promises.push(clusterDefer.promise);
 
       this.di.dashboardDataManager.getClusterStatistic().then((res)=>{
@@ -88,16 +157,15 @@ export class DashboardController {
       });
       promises.push(clusterStaticsDefer.promise);
 
-      // this.di.deviceDataManager.getDevices().then((res)=>{
-      //   dataModel['devices'] = res.data.devices;
-      //   devicesDefer.resolve();
-      // });
-      // promises.push(devicesDefer.promise);
-
-
       this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
         dataModel['devices'] = configs;
-        devicesDefer.resolve();
+        let all = this.di.$q.defer();
+        let defers = [];
+        defers.push(this.getDevicesCPUAnalyzer(configs));
+        defers.push(this.getDevicesMemoryAnalyzer(configs));
+        this.di.$q.all(defers).then((arr) => {
+          devicesDefer.resolve();
+        });
       });
       promises.push(devicesDefer.promise);
 
@@ -111,7 +179,6 @@ export class DashboardController {
         dataModel['ports'] = res.data.ports;
         portsDefer.resolve();
       });
-
       promises.push(portsDefer.promise);
 
 
@@ -129,8 +196,7 @@ export class DashboardController {
           DI.$scope.panelRefresh.controller = true;
           DI.$scope.panelLoading.controller = false;
           DI.$scope.$apply();
-
-        },2000)
+        });
       });
     };
     
@@ -138,10 +204,9 @@ export class DashboardController {
       convertControllerData();
       convertSwitchData();
       convertSwitchInterface2Chart();
-      // convertSwitchInterfaceTx();
+      convertSwitchCPUAnalyzer();
+      convertSwitchMemoryAnalyzer();
     }
-
-
 
     let convertControllerData =()=>{
       //1. summary
@@ -241,152 +306,142 @@ export class DashboardController {
           portSt['packetsRxDropped'] = port['packetsRxDropped'];
           portSt['packetsTxDropped'] = port['packetsTxDropped'];
           portSt['durationSec'] = port['durationSec'];
+          portSt['packetsRecvSent'] = port['packetsReceived'] + port['packetsSent'];
+          portSt['bytesRecvSent'] = port['bytesReceived'] + port['bytesSent'];
+          portSt['packetsDrop'] = port['packetsRxDropped'] + port['packetsTxDropped'];
           waitOrderPortsStatistics.push(portSt)
         });
       });
 
+      let p_r_s = 'packetsRecvSent';
+      let packagesOrder = this.di._.orderBy(waitOrderPortsStatistics, p_r_s, 'desc');
+      packagesOrder.splice(5, packagesOrder.length-5);
+      chartSwtInterface(packagesOrder, 'swtInterfaceRxTxPackages', 'packages');
 
-      let rx_p_str = 'packetsReceived';
-      let rxPackagesOrder = this.di._.orderBy(waitOrderPortsStatistics, rx_p_str, 'desc');
-      rxPackagesOrder.splice(5, rxPackagesOrder.length-5);
-      // chartingSwtInterfaceTop5Rx(rxTop5);
-      chartSwtInterface(rxPackagesOrder, 'swtInterfaceRxPackage', rx_p_str, 'Rx Packages','packages');
-
-      let tx_p_str = 'packetsSent';
-      let txPackagesOrder = this.di._.orderBy(waitOrderPortsStatistics, tx_p_str, 'desc');
-      txPackagesOrder.splice(5, txPackagesOrder.length-5);
-      chartSwtInterface(txPackagesOrder, 'swtInterfaceTxPackage', tx_p_str, 'Tx Packages','packages');
+      let b_r_s = 'bytesRecvSent';
+      let bytesOrder = this.di._.orderBy(waitOrderPortsStatistics, b_r_s, 'desc');
+      bytesOrder.splice(5, bytesOrder.length-5);
+      chartSwtInterface(bytesOrder, 'swtInterfaceRxTxBytes', 'bytes');
 
 
-      let rx_b_str = 'bytesReceived';
-      let rxBytesOrder = this.di._.orderBy(waitOrderPortsStatistics, rx_b_str, 'desc');
-      rxBytesOrder.splice(5, rxBytesOrder.length-5);
-      chartSwtInterface(rxBytesOrder, 'swtInterfaceRxByte', rx_b_str, 'Rx Bytes','bytes');
-
-      let tx_b_str = 'bytesSent';
-      let txBytesOrder = this.di._.orderBy(waitOrderPortsStatistics, tx_b_str, 'desc');
-      txBytesOrder.splice(5, txBytesOrder.length- 5);
-      chartSwtInterface(txBytesOrder, 'swtInterfaceTxByte', tx_b_str, 'Tx Bytes','bytes');
+      let p_d = 'packetsDrop';
+      let packagesDropOrder = this.di._.orderBy(waitOrderPortsStatistics, p_d, 'desc');
+      packagesDropOrder.splice(5, packagesDropOrder.length-5);
+      chartSwtInterface(packagesDropOrder, 'swtInterfaceRxTxDrops', 'packages', true);
     };
 
-   /* let chartingSwtInterfaceTop5Rx = (top5)=> {
-      // getSwtAndPortName
-    
-      let category= [];
-      let rxs = ['RX Packages'];
-      this.di._.forEach(top5, (statistic)=>{
-        category.push(getSwtAndPortName(statistic['device'], statistic['port']));
-        rxs.push(statistic['packetsReceived']);
-        // console.log(getSwtAndPortName(statistic['device'], statistic['port']) + ': ' + statistic['packetsReceived']);
-      });
-    
-      let chart = this.di.c3.generate({
-        bindto: '#swtInterfaceRx',
-        data: {
-          columns: [
-            rxs
-          ],
-          type: 'bar'
-        },
-        bar: {
-          width: {
-            ratio: 0.5 // this makes bar width 50% of length between ticks
+    let convertSwitchCPUAnalyzer = () => {
+      //cpu analyzer
+      let cpuCols = [];
+      if(this.di.$scope.dashboardModel.cpu.analyzer.length) {
+        cpuCols.push(this.getDeviceCPUMemoryTimeSeries(this.di.$scope.dashboardModel.cpu.analyzer[0]));
+        this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer).forEach((item, index) =>{
+          //只取top5
+          if (index < 5) {
+            let arr = [];
+            arr.push(item.name);
+            arr = arr.concat(item.data);
+            cpuCols.push(arr);  
           }
-        },
-        tooltip: {
-          format: {
-            title: function (d) { return category[d]; },
-            value: function (value, ratio, id) {
-              return value + ' packages';
-            }
-          },
-          grouped:false
+        });
+      }
+      else {
+        cpuCols.push(['x']);
+      }
+      let cpuChart = this.di.c3.generate({
+        bindto: '#deviceCpuAnalyzer',
+        data: {
+          x: 'x',
+          columns: cpuCols,
+          xFormat: '%Y-%m-%dT%H:%M:%S.%LZ'
         },
         axis: {
           x: {
-            type: 'category',
-            categories: category
+            type: 'timeseries',
+            tick: {
+              format: '%m-%d %H:%M'
+            }
           },
-          y:{
-            label: "packets"
+          y: {
+            tick: {
+              format: function (d) { return d + '%'; }
+            }
           }
         }
       });
     };
-    
-    let chartingSwtInterfaceTop5Rx = (top5)=> {
-      // getSwtAndPortName
-    
-      let category= [];
-      let rxs = ['TX Packages'];
-      this.di._.forEach(top5, (statistic)=>{
-        category.push(getSwtAndPortName(statistic['device'], statistic['port']));
-        rxs.push(statistic['packetsReceived']);
-      });
-    
-      let chart = this.di.c3.generate({
-        bindto: '#swtInterfaceTx',
-        data: {
-          columns: [
-            rxs
-          ],
-          type: 'bar'
-        },
-        bar: {
-          width: {
-            ratio: 0.5 // this makes bar width 50% of length between ticks
+
+    let convertSwitchMemoryAnalyzer = () => {
+      //memory analyzer
+      let memoryCols = [];
+      if(this.di.$scope.dashboardModel.memory.analyzer.length) {
+        memoryCols.push(this.getDeviceCPUMemoryTimeSeries(this.di.$scope.dashboardModel.memory.analyzer[0]));
+        this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer).forEach((item, index) =>{
+          //只取top5
+          if (index < 5) {
+            let arr = [];
+            arr.push(item.name);
+            arr = arr.concat(item.data);
+            memoryCols.push(arr);  
           }
-        },
-        tooltip: {
-          format: {
-            title: function (d) { return category[d]; },
-            value: function (value, ratio, id) {
-              return value;
-            }
-          },
-          grouped:false
+        });
+      }
+      else {
+        memoryCols.push(['x']);
+      }
+      let memoryChart = this.di.c3.generate({
+        bindto: '#deviceMemoryAnalyzer',
+        data: {
+          x: 'x',
+          columns: memoryCols,
+          xFormat: '%Y-%m-%dT%H:%M:%S.%LZ'
         },
         axis: {
           x: {
-            type: 'category',
-            categories: category
+            type: 'timeseries',
+            tick: {
+              format: '%m-%d %H:%M'
+            }
           },
-          y:{
-            label: "packets"
+          y: {
+            tick: {
+              format: function (d) { return d + '%'; }
+            }
           }
         }
       });
-    };*/
+    };
 
-    let chartSwtInterface = (top5, bindTo, orderType, TypeStr,y_label) =>{
-      let category= [];
-      let rxs = [TypeStr];
+    let chartSwtInterface = (top5, bindTo, y_label, drop) =>{
+      let category= [], rxs = [], pkgRecv = ['接收包'], pgkSend = ['发送包'];
       this.di._.forEach(top5, (statistic)=>{
-        category.push(getSwtAndPortName(statistic['device'], statistic['port']));
-        rxs.push(statistic[orderType]);
+        let name = getSwtAndPortName(statistic['device'], statistic['port']);
+        category.push(name);
+        if (y_label === 'packages') {
+          if (drop) {
+            pkgRecv.push(statistic['packetsRxDropped']);
+            pgkSend.push(statistic['packetsTxDropped']);
+          }
+          else {
+            pkgRecv.push(statistic['packetsReceived']);
+            pgkSend.push(statistic['packetsSent']);    
+          }
+        }
+        else {
+          pkgRecv.push(statistic['bytesReceived']);
+          pgkSend.push(statistic['bytesSent']);  
+        }
+             
       });
-
+      rxs.push(pkgRecv);
+      rxs.push(pgkSend);
+      
       let chart = this.di.c3.generate({
         bindto: '#' + bindTo,
         data: {
-          columns: [
-            rxs
-          ],
-          type: 'bar'
-        },
-        bar: {
-          width: {
-            ratio: 0.5 // this makes bar width 50% of length between ticks
-          }
-        },
-        tooltip: {
-          format: {
-            title: function (d) { return category[d]; },
-            value: function (value, ratio, id) {
-              return value;
-            }
-          },
-          grouped:false
+          columns: rxs,
+          type: 'bar',
+         groups: [['接收包', '发送包']]
         },
         axis: {
           x: {
@@ -477,27 +532,129 @@ export class DashboardController {
       return port['annotations']['portName'];
     };
 
-
-    let getAllDeviceStatistics = () =>{
-
-    };
-
-
     setTimeout(function () {init()});
-
-    // let init = () => {
-    //
-    //   this.interval_device = setInterval(exec, 15000);
-    // };
 
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
         unSubscribe();
       });
-
-      // clearInterval(this.interval_device);
-
     });
+  }
+
+  getDevicesCPUAnalyzer(devices) {
+    let deffe = this.di.$q.defer();
+    if (!devices.length){
+      deffe.resolve([]);
+      return deffer.promise;
+    } 
+
+    let startTime = this.di.$scope.dashboardModel.cpu.begin_date.toISOString();
+    let endTime = this.di.$scope.dashboardModel.cpu.end_date.toISOString();
+    let solution_second = this.getResolutionSecond(startTime, endTime);
+    let deferredArr = [];
+
+    devices.forEach((device) => {
+      let defer = this.di.$q.defer();
+      this.di.deviceDataManager.getDeviceCPUAnalyzer(device.id, startTime, endTime, solution_second)
+        .then((data) => {
+          defer.resolve({'id': device.id, 'name': device.name, 'analyzer': data});
+        });
+      deferredArr.push(defer.promise);  
+    });
+
+    this.di.$q.all(deferredArr).then((arr) => {
+      this.di.$scope.dashboardModel.cpu.analyzer = arr;
+      deffe.resolve();
+    });
+    return deffe.promise;
+  }
+
+  getDevicesMemoryAnalyzer(devices) {
+    let deffe = this.di.$q.defer();
+    if (!devices.length){
+      deffe.resolve([]);
+      return deffer.promise;
+    }
+
+    let startTime = this.di.$scope.dashboardModel.memory.begin_date.toISOString();
+    let endTime = this.di.$scope.dashboardModel.memory.end_date.toISOString();
+    let solution_second = this.getResolutionSecond(startTime, endTime);
+    let deferredArr = [];
+
+    devices.forEach((device) => {
+      let defer = this.di.$q.defer();
+      this.di.deviceDataManager.getDeviceMemoryAnalyzer(device.id, startTime, endTime, solution_second)
+        .then((data) => {
+          defer.resolve({'id': device.id, 'name': device.name, 'analyzer': data});
+        });
+      deferredArr.push(defer.promise);  
+    });
+
+    this.di.$q.all(deferredArr).then((arr) => {
+      this.di.$scope.dashboardModel.memory.analyzer = arr;
+      deffe.resolve();
+    });
+    return deffe.promise;
+  }
+
+  getResolutionSecond(startTime, endTime) {
+    let second;
+    let interval = parseInt((Date.parse(endTime) - Date.parse(startTime))/1000);
+    if (interval >= 0 && interval <= 3600) {
+      second = 300; //一小时以内5分钟统计一次平均值
+    }
+    else if (interval > 3600 && interval <= 86400) {
+      second = 7200; //一天以内2小时统计一次平均值
+    }
+    else if (interval > 86400 ** interval <= 604800) {
+      second = 50400; //一周以内14小时统计一次平均值
+    }
+    else {
+      second = 86400; //超过1周24小时统计一次平均值
+    }
+    return second;
+  }
+
+  getDevicesCPUChartData(analyzers) {
+    let devices = [];
+    analyzers.forEach((device, index) => {
+      let data = [], deviceObj = {};
+      device.analyzer.forEach((record) =>{
+        let utilize = record.system_percent + record.user_percent;//.toFixed(1)
+        data.push(utilize);
+      });
+      deviceObj['name'] = device.name;
+      deviceObj['avarage'] = this.di._.sum(data)/data.length;
+      deviceObj['data'] = data.map(item => item.toFixed(2));
+      devices.push(deviceObj);  
+    });
+    devices = this.di._.orderBy(devices, 'avarage', 'desc');
+    return devices;
+  }
+
+  getDevicesMemoryChartData(analyzers) {
+    let devices = [];
+    analyzers.forEach((device) => {
+      let data = [], deviceObj = {};
+      device.analyzer.forEach((record) =>{
+        let utilize = record.used_percent;
+        data.push(utilize);
+      });
+      deviceObj['name'] = device.name;
+      deviceObj['avarage'] = this.di._.sum(data)/data.length;
+      deviceObj['data'] = data.map(item => item.toFixed(2));
+      devices.push(deviceObj);
+    });
+    devices = this.di._.orderBy(devices, 'avarage', 'desc');
+    return devices;
+  }
+
+  getDeviceCPUMemoryTimeSeries(device) {
+    let timeseries = ['x'];
+    device.analyzer.forEach((record) => {
+      timeseries.push(record.timepoint);
+    });
+    return timeseries;
   }
 }
 

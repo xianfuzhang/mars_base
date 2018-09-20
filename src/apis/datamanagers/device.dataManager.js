@@ -278,6 +278,31 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getDeviceCPUAnalyzer(deviceId, startTime, endTime, resolutionSecond) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDeviceCPUAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond)).then(
+      (res) => {
+        defer.resolve(res.data.cpu);
+      },
+      (error) => {
+        defer.resolve({'cpu': []});
+      }
+    );
+    return defer.promise;
+  }
+
+  getDeviceMemoryAnalyzer(deviceId, startTime, endTime, resolutionSecond) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDeviceMemoryAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond)).then(
+      (res) => {
+        defer.resolve(res.data.memory);
+      },
+      (error) => {
+        defer.resolve({'memory': []});
+      }
+    );
+    return defer.promise;
+  }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
 DeviceDataManager.$$ngIsClass = true;

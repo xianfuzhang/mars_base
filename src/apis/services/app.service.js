@@ -280,7 +280,13 @@ export class appService {
     return this.getZoneEndpoint() + '/statistics/system/controller';
   }
 
+  getDeviceCPUAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/CPU/' + deviceId + '/' + startTime + '/' + endTime + '/'  + resolutionSecond;
+  }
 
+  getDeviceMemoryAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/memory/' + deviceId + '/' + startTime + '/' + endTime + '/'  + resolutionSecond;
+  }
 }
 
 appService.$inject = appService.getDI();
