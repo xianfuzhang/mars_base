@@ -37,6 +37,7 @@ export class DashboardController {
 
     this.translate = this.di.$filter('translate');
     this.interval_device = null;
+    const CONTROLLER_STATE_INACTIVE = 'INACTIVE';
     let unSubscribers = [];
     let dataModel = {};
     let date = this.di.dateService.getTodayObject();
@@ -220,6 +221,7 @@ export class DashboardController {
       }
 
       controllerSummary.nodes = [];
+      controllerSummary.inactives = [];
 
       this.di._.forEach(ctrlNodes, (node)=>{
         let node4Add = {};
@@ -229,10 +231,14 @@ export class DashboardController {
         let curTs = new Date().getTime();
         node4Add.lastUpdate = calcRunningDate(curTs - node.lastUpdate);
         controllerSummary.nodes.push(node4Add);
+
+        if (node.status === CONTROLLER_STATE_INACTIVE) {
+          controllerSummary.inactives.push(node.ip);
+        }
       });
 
       this.di.$scope.dashboardModel.controllerSummary = controllerSummary;
-
+/*
       //2. statistic
       let cpuUsage = ['cpu'];
       let memUsage = ['memory'];
@@ -287,7 +293,7 @@ export class DashboardController {
             label: "使用率"
           }
         }
-      });
+      });*/
     };
 
     let convertSwitchInterface2Chart =()=>{
@@ -355,6 +361,9 @@ export class DashboardController {
           columns: cpuCols,
           xFormat: '%Y-%m-%dT%H:%M:%S.%LZ'
         },
+        color: {
+          pattern: ['#0077cb', '#c78500', '#009f0e', '#008e7f', '#34314c']
+        },
         axis: {
           x: {
             type: 'timeseries',
@@ -396,6 +405,9 @@ export class DashboardController {
           columns: memoryCols,
           xFormat: '%Y-%m-%dT%H:%M:%S.%LZ'
         },
+        color: {
+          pattern: ['#0077cb', '#c78500', '#009f0e', '#008e7f', '#34314c']
+        },
         axis: {
           x: {
             type: 'timeseries',
@@ -413,7 +425,7 @@ export class DashboardController {
     };
 
     let chartSwtInterface = (top5, bindTo, y_label, drop) =>{
-      let category= [], rxs = [], pkgRecv = ['接收包'], pgkSend = ['发送包'];
+      let category= [], rxs = [], pkgRecv = ['接收'], pgkSend = ['发送'];
       this.di._.forEach(top5, (statistic)=>{
         let name = getSwtAndPortName(statistic['device'], statistic['port']);
         category.push(name);
@@ -441,7 +453,10 @@ export class DashboardController {
         data: {
           columns: rxs,
           type: 'bar',
-         groups: [['接收包', '发送包']]
+         groups: [['接收', '发送']]
+        },
+        color: {
+          pattern: ['#0077cb', '#c78500']
         },
         axis: {
           x: {
