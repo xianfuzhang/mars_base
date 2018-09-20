@@ -40,6 +40,7 @@ export class contentPanel {
 
       let unSubscribes = [];
       let contentLength = 0;
+      let isMouseEnter = false;
 
       scope.contentPanelModel = {
         contents : []
@@ -133,9 +134,11 @@ export class contentPanel {
         setCurrentDiv();
         setNextDiv(index);
 
-        timeoutHandler = setTimeout(function () {
-          changeContent();
-        }, intervalTime)
+        if(!isMouseEnter){
+          timeoutHandler = setTimeout(function () {
+            changeContent();
+          }, intervalTime)
+        }
       };
 
 
@@ -197,14 +200,29 @@ export class contentPanel {
 
 
         isNodeChange = false;
-
-
-        // if(lastIndex === -1){
-        //   lastIndex = currentIndex === 0?contentLength -1 :currentIndex - 1;
-        // }
-        // let lastContentDiv = angular.element(element.find('ng-transclude').children()[lastIndex]);
-        // lastContentDiv.css({'display': 'none'});
       }
+
+      scope.mouseenter = () =>{
+        if(scope.contentPanelModel.contents.length > 1) {
+          if (timeoutHandler) {
+            clearTimeout(timeoutHandler);
+          }
+          isMouseEnter = true;
+        }
+      };
+
+      scope.mouseleave = () =>{
+        if(scope.contentPanelModel.contents.length > 1) {
+          isMouseEnter = false;
+          if (timeoutHandler) {
+            clearTimeout(timeoutHandler);
+          }
+          timeoutHandler = setTimeout(function () {
+            changeContent();
+          }, intervalTime);
+        }
+      };
+
 
       scope.clickNode = (index)=>{
         if( index === currentIndex || isNodeChange){
