@@ -28,7 +28,7 @@
     }
 
     @include  element(td){
-
+        white-space: nowrap;
     }
 
     @include element(opt_button){
