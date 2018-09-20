@@ -104,10 +104,10 @@ export class CreateUserAccountController {
         return;
       }
       if (this.scope.userModel.group.supergroup) {
-        this.scope.userModel.groups.push('supergroup');
+        this.scope.userModel.groups.push('admingroup');
       }
       if (this.scope.userModel.group.admingroup) {
-        this.scope.userModel.groups.push('admingroup');
+        this.scope.userModel.groups.push('managergroup');
       }
       if (this.scope.userModel.group.guestgroup) {
         this.scope.userModel.groups.push('guestgroup');
