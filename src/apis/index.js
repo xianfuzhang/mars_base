@@ -12,6 +12,7 @@ import {notificationService} from './services/notification.service';
 import {LogService} from './services/log.service';
 import {DialogService} from './services/dialog.service';
 import {FlowService} from './services/flow.service';
+import {DateService} from './services/date.service';
 import {LogDataManager} from './datamanagers/log.dataManager';
 import {DashboardDataManager} from './datamanagers/dashboard.dataManager';
 
@@ -33,4 +34,5 @@ export default angular
   .service('alertDataManager', AlertDataManager)
   .service('logService', LogService)
   .service('logDataManager', LogDataManager)
+  .service('dateService', DateService)
   .name;

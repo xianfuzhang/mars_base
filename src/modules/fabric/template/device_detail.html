@@ -39,13 +39,13 @@
           <div class="device-detail__item">
             <label class="device-detail__item-label"
                    ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.GROUP'|translate"></label>
-            <span class="device-detail__item-value">{{detailValue.leaf_group}}</span>
+            <span class="device-detail__item-value">{{Object.keys(detailValue.leaf_group)}}</span>
           </div>
         </div>
         <div class="device-detail__row">
           <div class="device-detail__item">
             <label class="device-detail__item-label"
-                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.AVAILABLE'|translate"></label>
+                   ng-bind="'MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'|translate"></label>
             <span class="device-detail__item-value "
                   ng-class="{
                   'device-detail__available': detailValue.available === true,

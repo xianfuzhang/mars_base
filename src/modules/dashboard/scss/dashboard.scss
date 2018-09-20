@@ -139,8 +139,33 @@
 .dash_mar_section{
   background-color: #f8f8f8;
 }
-
-
-
-
+.column-manipulation-field__content__date-range-modifier{
+  flex-direction: column;
+}
+.dateRange__form .column-manipulation-field__item__date-range-modifier{
+  flex-direction: row;
+  justify-content: flex-start;
+  padding-left: 20px;
+  width: auto;
+}
+.dateRange__form .date-range-warning{
+  display: none;
+}
+.dateRange__form .date-range-warning.show{
+  display: block;
+  font-size: 12px;
+  color: #b00020;
+}
+.dateRange__form .date-warning-label{
+  color: #b00020; 
+}
+.dateRange__form .date-picker-warning input{
+  color: #b00020; 
+}
+.date-rate-modal{
+  width: 420px;
+}
+.switch-speed-rate-modal .column-manipulation-field__content{
+  height: 300px;
+}
 
