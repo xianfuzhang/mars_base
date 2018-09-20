@@ -32,7 +32,8 @@ export class ConfigurationHistoryController {
     
     this.scope.configurationHistoryModel = {
       provider: null,
-      api: null
+      api: null,
+      actionsShow: this.getActionsShow()
     };
     
     this.scope.search = () => {
@@ -69,8 +70,8 @@ export class ConfigurationHistoryController {
       query: (params) => {
         let defer = this.di.$q.defer();
         
-        params.from = this.date(this.scope.dateFrom, 'yyyy-MM-dd');
-        params.to = this.date(this.scope.dateTo, 'yyyy-MM-dd');
+        // params.from = this.date(this.scope.dateFrom, 'yyyy-MM-dd');
+        // params.to = this.date(this.scope.dateTo, 'yyyy-MM-dd');
         
         this.di.configurationDataManager.getConfigurationHistory(params).then((res) => {
           this.scope.loading = false;
@@ -107,6 +108,10 @@ export class ConfigurationHistoryController {
       entities.push(obj);
     });
     return entities;
+  }
+  
+  getActionsShow() {
+    return {'refresh': true, 'search': true};
   }
   
   getTableSchema() {

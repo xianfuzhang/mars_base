@@ -8,11 +8,11 @@ router.get('/controller', function (req, res) {
   let timeTo = (new Date(req.query.to + ' 23:59:59')).getTime();
   
   let logs = _.cloneDeep(cloudModel.logs);
-  let result = _.filter(logs, (log) => {
-    return log.created_time >= timeFrom && log.created_time <= timeTo;
-  });
+  // let result = _.filter(logs, (log) => {
+  //   return log.created_time >= timeFrom && log.created_time <= timeTo;
+  // });
   
-  return res.json({logs: formatLog(result)});
+  return res.json({logs: formatLog(logs)});
 });
 
 function formatLog(logs){
