@@ -298,7 +298,7 @@ export class DeviceDetailController {
         });
         break;
       case 'link':
-        entities.forEach((entity) => {
+        entities.links.forEach((entity) => {
           let obj = {};
           obj['id'] =  entity.src.device + '_' + entity.src.port;
           obj['src_device'] = entity.src.device;
