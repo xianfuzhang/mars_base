@@ -75,11 +75,10 @@ export class LogController {
       query: (params) => {
         let defer = this.di.$q.defer();
         
-        let dateObj = {};
-        dateObj.from = this.date(this.scope.dateFrom, 'yyyy-MM-dd');
-        dateObj.to = this.date(this.scope.dateTo, 'yyyy-MM-dd');
+        params.from = this.date(this.scope.dateFrom, 'yyyy-MM-dd');
+        params.to = this.date(this.scope.dateTo, 'yyyy-MM-dd');
         
-        this.di.logDataManager.getLogs(dateObj).then((res) => {
+        this.di.logDataManager.getLogs(params).then((res) => {
           this.scope.loading = false;
           this.scope.hasData = res.data.logs.length ? true : false;
           this.scope.entities = this.getEntities(res.data.logs);

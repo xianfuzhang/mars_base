@@ -1313,29 +1313,8 @@
   @include element(input) {
     height: 20px;
     width: 150px;
-    padding: 5px 0 5px 15px;
+    padding: 7px 0 9px 15px;
     font-size: 16px;
-  }
-  
-  @include element(button){
-    width: 70px;
-    height: 35px;
-    margin: 0 15px;
-    padding: 5px 0;
-    border-radius: 3px;
-  
-    @include state(disabled) {
-      background-color: #E0E0E0 !important;
-    }
-  }
-  
-  @include element(search-btn) {
-    background-color: #7accef;
-  }
-  
-  @include element(file-btn) {
-    float: right;
-    background-color: #7accef;
   }
 }
 

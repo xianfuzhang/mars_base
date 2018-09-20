@@ -27,11 +27,23 @@
 
         <div class="wizard__footer">
             <div class="wizard__footer__btn-group">
-                <button class="wizard__footer__btn" ng-if="steps.length > 1" ng-class="{'+disabled': curIndex == 0}" ng-click="preStep()" ng-disabled="curIndex == 0" ng-bind="::'COMPONENT.WIZARD.BUTTON.BACK' | translate"></button>
-                <button class="wizard__footer__btn" ng-if="steps.length > 1" ng-class="{'+disabled': curIndex == steps.length - 1}" ng-click="nextStep()" ng-disabled="curIndex == steps.length - 1" ng-bind="::'COMPONENT.WIZARD.BUTTON.NEXT' | translate"></button>
+                <!--<button class="wizard__footer__btn" ng-if="steps.length > 1" ng-class="{'+disabled': curIndex == 0}" ng-click="preStep()" ng-disabled="curIndex == 0" ng-bind="::'COMPONENT.WIZARD.BUTTON.BACK' | translate"></button>-->
+                <div class="wizard__footer__btn" ng-if="steps.length > 1">
+                    <mar-button btn-text="::'COMPONENT.WIZARD.BUTTON.BACK' | translate" btn-style="'width:80px;'" btn-icon="'arrow_back'" btn-class="'btn-white btn-sm'" btn-click="preStep()" btn-disabled="curIndex == 0" />
+                </div>
 
-                <button class="wizard__footer__btn" ng-click="postCancel()" ng-bind="::'COMPONENT.WIZARD.BUTTON.CANCEL' | translate"></button>
-                <button class="wizard__footer__btn" type="submit" ng-class="{'+disabled': wizardForm.$invalid}" ng-click="postSubmit()" ng-disabled="wizardForm.$invalid" ng-bind="::'COMPONENT.WIZARD.BUTTON.SUBMIT' | translate"></button>
+                <!--<button class="wizard__footer__btn" ng-if="steps.length > 1" ng-class="{'+disabled': curIndex == steps.length - 1}" ng-click="nextStep()" ng-disabled="curIndex == steps.length - 1" ng-bind="::'COMPONENT.WIZARD.BUTTON.NEXT' | translate"></button>-->
+                <div class="wizard__footer__btn" ng-if="steps.length > 1">
+                    <mar-button btn-text="::'COMPONENT.WIZARD.BUTTON.NEXT' | translate" btn-style="'width:80px;'" btn-icon="'arrow_forward'" btn-class="'btn-white btn-sm'" btn-click="nextStep()" btn-disabled="curIndex == steps.length - 1" />
+                </div>
+                <!--<button class="wizard__footer__btn" ng-click="postCancel()" ng-bind="::'COMPONENT.WIZARD.BUTTON.CANCEL' | translate"></button>-->
+                <div class="wizard__footer__btn">
+                    <mar-button btn-text="::'COMPONENT.WIZARD.BUTTON.CANCEL' | translate" btn-style="'width:80px;'" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="postCancel()" />
+                </div>
+                <!--<button class="wizard__footer__btn" type="submit" ng-class="{'+disabled': wizardForm.$invalid}" ng-click="postSubmit()" ng-disabled="wizardForm.$invalid" ng-bind="::'COMPONENT.WIZARD.BUTTON.SUBMIT' | translate"></button>-->
+                <div class="wizard__footer__btn">
+                    <mar-button btn-text="::'COMPONENT.WIZARD.BUTTON.SUBMIT' | translate" btn-style="'width:80px;'" btn-icon="'done'" btn-class="'btn-white btn-sm'" btn-click="postSubmit()" btn-type="'submit'" btn-disabled="wizardForm.$invalid"/>
+                </div>
             </div>
         </div>
 

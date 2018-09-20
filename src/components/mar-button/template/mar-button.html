@@ -1,6 +1,10 @@
-<button id="::btnId"
+<button type="btnType" id="{{btnId}}"
+        class="mar-button {{btnClass}}"
+        style="{{btnStyle}}"
         ng-click="btnClick()"
-        class="mar-button mdc-button mdc-button--raised {{btnClass}}">
-    <i ng-if="btnIcon" class="material-icons {{btnIconClass}}">{{btnIcon}}</i>
+        ng-disabled="btnDisabled"
+        ng-class="{'disabled': btnDisabled}">
+    <i ng-if="btnIcon" class="btn-icon {{btnIconClass}}">{{btnIcon}}</i>
+    <span ng-if="btnIcon" class="btn-separator"> </span>
     <span ng-if="btnText" ng-bind="::btnText" class="{{btnTextClass}}"></span>
 </button>
