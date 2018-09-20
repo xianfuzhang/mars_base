@@ -145,7 +145,7 @@ router.get('/devices/:deviceId/:type', function (req, res) {
   if (searchDevice !== undefined) {
     switch(req.params.type) {
       case 'ports':
-        return res.json(formatPorts(searchDevice.ports));
+        return res.json(searchDevice);
         
       case 'storm':
         return res.json(searchDevice.storm);

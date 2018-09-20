@@ -280,7 +280,7 @@ export class DeviceDetailController {
     this.scope.detailModel.entities = [];
     switch (this.scope.tabSelected.type) {
       case 'port':
-        entities.forEach((entity) => {
+        entities.ports.forEach((entity) => {
           let obj = {};
           obj['id'] = entity.element + '_' + entity.port;
           obj['element'] = entity.element;
