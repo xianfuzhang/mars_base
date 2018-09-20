@@ -98,31 +98,57 @@ export class DeviceWizardController {
       // 'update' mode
       if(deviceId) {
         scope.mode = 'update';
-        deviceDataManager.getDeviceDetail(deviceId)
-          .then((res) => {
+
+        deviceDataManager.getDeviceConfig(deviceId)
+          .then((res)=>{
             if(res) {
-              const device = res.data;
-              let port = device.annotations.channelId ? device.annotations.channelId.split(':')[1] : '';
-              
+              const device = res;
+
               scope.switch = {
                 id: device.id,
                 mac_address: device.mac,
-                description: 'test',
+                // description: 'test',
                 admin_status: device.available,
                 fabric_role: device.type,
-                leaf_group: device.leaf_group,
+                leaf_group: device.leafGroup,
                 rack_id: device.rack_id,
                 mfr: device.mfr,
                 community: device.community,
-                name: device.annotations.name,
-                managementAddress: device.annotations.managementAddress,
-                port: parseInt(port),
-                protocol: device.annotations.protocol,
-              }
-  
+                name: device.name,
+                managementAddress: device.mgmtIpAddress,
+                port: device.port,
+                protocol: device.protocol,
+              };
+
               scope.showWizard = true;
             }
           });
+
+        // deviceDataManager.getDeviceDetail(deviceId)
+        //   .then((res) => {
+        //     if(res) {
+        //       const device = res.data;
+        //       let port = device.annotations.channelId ? device.annotations.channelId.split(':')[1] : '';
+        //
+        //       scope.switch = {
+        //         id: device.id,
+        //         mac_address: device.mac,
+        //         description: 'test',
+        //         admin_status: device.available,
+        //         fabric_role: device.type,
+        //         leaf_group: device.leaf_group,
+        //         rack_id: device.rack_id,
+        //         mfr: device.mfr,
+        //         community: device.community,
+        //         name: device.annotations.name,
+        //         managementAddress: device.annotations.managementAddress,
+        //         port: parseInt(port),
+        //         protocol: device.annotations.protocol,
+        //       }
+        //
+        //       scope.showWizard = true;
+        //     }
+        //   });
       } else { // 'add' mode
         scope.mode = 'add';
         scope.switch = _.cloneDeep(initSwitch);
