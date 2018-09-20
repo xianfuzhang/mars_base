@@ -22,18 +22,22 @@ export class MarButton {
     this.scope = {
       btnId: '=',
       btnText: '=',
+      btnClass: '=',
       btnIcon: '=',
+      btnType: '=',
+      btnStyle: '=',
       btnTextClass: '=',
       btnIconClass: '=',
-      btnClass: '=',
-      btnClick: '&'
+      btnClick: '&',
+      btnDisabled: '='
     };
     this.link = (...args) => this._link.apply(this, args);
   }
 
   _link (scope) {
     let unsubscribers = [];
-
+    
+    scope.disabled = scope.disabled === true ? true : false;
     (function init () {
       
       scope.$on('$destroy', () => {

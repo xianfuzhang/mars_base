@@ -41,10 +41,11 @@
                       display-label="checkDisLab">
         </mdl-checkbox>
         <div>
-          <button class="mdc-button mdc-button--raised" ng-click="updateConfiguration()" ng-disabled="!configurationModel.isEditable" id="updateConfiguration" style="color:#ffffff;font-weight: 500;">
-            <i class="material-icons mdc-button__icon" aria-hidden="true">playlist_add</i>
-            {{'MODULES.CONFIGURATION.OPTION.UPDATE'|translate}}
-          </button>
+          <!--<button class="mdc-button mdc-button&#45;&#45;raised" ng-click="updateConfiguration()" ng-disabled="!configurationModel.isEditable" id="updateConfiguration" style="color:#ffffff;font-weight: 500;">-->
+            <!--<i class="material-icons mdc-button__icon" aria-hidden="true">playlist_add</i>-->
+            <!--{{'MODULES.CONFIGURATION.OPTION.UPDATE'|translate}}-->
+          <!--</button>-->
+          <mar-button btn-id="'updateConfiguration'" btn-text="::'MODULES.CONFIGURATION.OPTION.UPDATE' | translate" btn-icon="'playlist_add'" btn-class="'btn-black btn-md'" btn-click="updateConfiguration()" btn-disabled="!configurationModel.isEditable" />
           <!--<style></style>-->
           <!--<button class="mdc-button mdc-button&#45;&#45;raised" ng-click="deleteConfiguration()" ng-disabled="!configurationModel.isEditable" id="deleteConfiguration" style="color:#ffffff;font-weight: 500;">-->
             <!--<i class="material-icons mdc-button__icon" aria-hidden="true">delete</i>-->

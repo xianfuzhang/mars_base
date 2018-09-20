@@ -208,29 +208,6 @@
     @include element(btn) {
       display: inline-block;
       margin: 10px 5px 0;
-      width: 80px;
-      height: 30px;
-      padding: 5px;
-      font-size: 14px;
-      font-weight: 600;
-      text-align: center;
-      color: #000;
-      background-color: #ffffff;
-      border-color: #ccc;
-      border: 1px solid transparent;
-      cursor: pointer;
-
-      @include state(disabled) {
-        color: #333;
-        background-color: #dedede;
-        cursor: not-allowed;
-      }
-
-      &:hover, &:focus {
-        color: #333;
-        background-color: #e6e6e6;
-        border-color: #adadad;
-      }
     }
   }
 }
