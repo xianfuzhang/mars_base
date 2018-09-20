@@ -412,7 +412,10 @@ export class FabricSummaryController {
     let showPorts = () =>{
       this.di.deviceDataManager.getDeviceWithPorts(this.di.$scope.fabricModel.showSwitchId).then((res) => {
         // let entities = this.getEntities(res.data.ports);
-        scope.fabricModel.switchPorts = this.getEntitiesPorts(res.data);
+        if(res.data.ports && res.data.ports instanceof Array){
+          scope.fabricModel.switchPorts = this.getEntitiesPorts(res.data.ports);
+        }
+
         // this.di.$scope.$apply();
       });
     };
