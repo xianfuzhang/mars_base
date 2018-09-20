@@ -213,9 +213,13 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  getDeviceLinks(deviceId, params) {
+  getDeviceLinks(deviceId, param) {
     let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getDeviceLinksUrl(deviceId), {'params': params}).then(
+    if(!param){
+      param = {}
+    }
+    param['device'] = deviceId;
+    this.di.$http.get(this.di.appService.getLinksUrl(), {'params': param}).then(
       (res) => {
         defer.resolve(res);
       },

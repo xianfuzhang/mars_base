@@ -212,7 +212,19 @@ router.post('/devices/:deviceId/storm', function(req, res) {
 });
 
 router.get('/links', function (req, res) {
-  return res.json({links: cloudModel.links});
+  if(req.query.device){
+    let result = _.filter(cloudModel.links, (link) => {
+      return link.src.device == req.query.device || link.dst.device == req.query.device
+    });
+
+    if(result) {
+      return res.json(result);
+    } else {
+      return res.status(404).json("This device doesn't exist!");
+    }
+  } else {
+      return res.json({links: cloudModel.links});
+  }
 });
 
 function validateDeviceRequest(params) {
