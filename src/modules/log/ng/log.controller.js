@@ -36,7 +36,7 @@ export class LogController {
     let dateObj = {from: null, to: null};
   
     this.scope.logModel = {
-      // actionsShow: this.di.logService.getActionsShow(),
+      actionsShow: this.getActionsShow(),
       // rowActions: this.di.logService.getDeviceTableRowActions(),
       logProvider: null,
       logAPI: null
@@ -75,8 +75,8 @@ export class LogController {
       query: (params) => {
         let defer = this.di.$q.defer();
         
-        params.from = this.date(this.scope.dateFrom, 'yyyy-MM-dd');
-        params.to = this.date(this.scope.dateTo, 'yyyy-MM-dd');
+        // params.from = this.date(this.scope.dateFrom, 'yyyy-MM-dd');
+        // params.to = this.date(this.scope.dateTo, 'yyyy-MM-dd');
         
         this.di.logDataManager.getLogs(params).then((res) => {
           this.scope.loading = false;
@@ -96,6 +96,10 @@ export class LogController {
         };
       }
     });
+  }
+  
+  getActionsShow() {
+    return {'refresh': true, 'search': true};
   }
   
   getEntities(origins) {
