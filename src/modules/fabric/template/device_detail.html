@@ -12,12 +12,12 @@
           <div class="device-detail__item">
             <label class="device-detail__item-label"
                    ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.NAME'|translate"></label>
-            <span class="device-detail__item-value">{{detailValue.annotations.name}}</span>
+            <span class="device-detail__item-value">{{detailValue.name}}</span>
           </div>
           <div class="device-detail__item">
             <label class="device-detail__item-label"
                    ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.IP'|translate"></label>
-            <span class="device-detail__item-value">{{detailValue.annotations.ipaddress||detailValue.annotations.managementAddress}}</span>
+            <span class="device-detail__item-value">{{detailValue.mgmtIpAddress}}</span>
           </div>
           <div class="device-detail__item">
             <label class="device-detail__item-label"
@@ -38,13 +38,6 @@
           </div>
           <div class="device-detail__item">
             <label class="device-detail__item-label"
-                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.GROUP'|translate"></label>
-            <span class="device-detail__item-value">{{Object.keys(detailValue.leaf_group)}}</span>
-          </div>
-        </div>
-        <div class="device-detail__row">
-          <div class="device-detail__item">
-            <label class="device-detail__item-label"
                    ng-bind="'MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'|translate"></label>
             <span class="device-detail__item-value "
                   ng-class="{
@@ -52,7 +45,24 @@
                   'device-detail__inavailable': detailValue.available === false
                   }"></span>
           </div>
+
+          <!--<div class="device-detail__item">-->
+            <!--<label class="device-detail__item-label"-->
+                   <!--ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.GROUP'|translate"></label>-->
+            <!--<span class="device-detail__item-value">{{Object.keys(detailValue.leaf_group)}}</span>-->
+          <!--</div>-->
         </div>
+        <!--<div class="device-detail__row">-->
+          <!--<div class="device-detail__item">-->
+            <!--<label class="device-detail__item-label"-->
+                   <!--ng-bind="'MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'|translate"></label>-->
+            <!--<span class="device-detail__item-value "-->
+                  <!--ng-class="{-->
+                  <!--'device-detail__available': detailValue.available === true,-->
+                  <!--'device-detail__inavailable': detailValue.available === false-->
+                  <!--}"></span>-->
+          <!--</div>-->
+        <!--</div>-->
       </div>
       <mdl-tabs ng-model="tabSelected" options="tabs"
                 class-list="main__content__device-detail-tabs"
