@@ -466,7 +466,22 @@ export class DashboardController {
           y:{
             label: y_label
           }
-        }
+        },
+        tooltip: {
+          format: {
+            title: (index) => { 
+              let d = category[index].indexOf('(');
+              let str;
+              if (d !== -1) {
+                str = category[index].substring(0, d);
+              }
+              else {
+                str = category[index]; 
+              }
+              return str;
+            }
+          }
+    }
       });
     }
 
