@@ -53,16 +53,16 @@ export class DashboardController {
       },
       cpu: {
         'begin_date': new Date(before.year, before.month, before.day),
-        'begin_time': new Date(before.year, before.month, before.day, 0, 0, 0),
+        'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
         'end_date': new Date(date.year, date.month, date.day),
-        'end_time': new Date(date.year, date.month, date.day, 0, 0, 0),
+        'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
         'analyzer': []
       },
       memory: {
         'begin_date': new Date(before.year, before.month, before.day),
-        'begin_time': new Date(before.year, before.month, before.day, 0, 0, 0),
+        'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
         'end_date': new Date(date.year, date.month, date.day),
-        'end_time': new Date(date.year, date.month, date.day, 0, 0, 0),
+        'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
         'analyzer': []
       }
     };
@@ -563,9 +563,9 @@ export class DashboardController {
       return deffer.promise;
     } 
 
-    let startTime = this.di.$scope.dashboardModel.cpu.begin_date.toISOString();
-    let endTime = this.di.$scope.dashboardModel.cpu.end_date.toISOString();
-    let solution_second = this.getResolutionSecond(startTime, endTime);
+    let startTime = this.getISODate(this.di.$scope.dashboardModel.cpu.begin_time);
+    let endTime = this.getISODate(this.di.$scope.dashboardModel.cpu.end_time);
+    let solution_second = 3600;//this.getResolutionSecond(startTime, endTime);
     let deferredArr = [];
 
     devices.forEach((device) => {
@@ -591,9 +591,9 @@ export class DashboardController {
       return deffer.promise;
     }
 
-    let startTime = this.di.$scope.dashboardModel.memory.begin_date.toISOString();
-    let endTime = this.di.$scope.dashboardModel.memory.end_date.toISOString();
-    let solution_second = this.getResolutionSecond(startTime, endTime);
+    let startTime = this.getISODate(this.di.$scope.dashboardModel.cpu.begin_time);
+    let endTime = this.getISODate(this.di.$scope.dashboardModel.cpu.end_time);
+    let solution_second = 3600;//this.getResolutionSecond(startTime, endTime);
     let deferredArr = [];
 
     devices.forEach((device) => {
@@ -671,6 +671,22 @@ export class DashboardController {
     });
     return timeseries;
   }
+
+  getISODate(date) {
+    function pad(number) {
+      if ( number < 10 ) {
+        return '0' + number;
+      }
+      return number;
+    }
+
+    return date.getUTCFullYear() +
+      '-' + pad( date.getUTCMonth() + 1 ) +
+      '-' + pad( date.getUTCDate() ) +
+      'T' + pad( date.getUTCHours() ) +
+      ':' + pad( date.getUTCMinutes() ) +
+      'Z';
+    }
 }
 
 DashboardController.$inject = DashboardController.getDI();
