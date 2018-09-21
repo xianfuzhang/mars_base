@@ -36,7 +36,8 @@ class Device {
       name: name,
       channelId: ip + ':' + port,
       protocol: protocol,
-      managementAddress: ip
+      managementAddress: ip,
+      port: port
     };
 
     return annotations;

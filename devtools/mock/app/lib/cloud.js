@@ -17,6 +17,7 @@ const chance = new Chance();
 // global model
 global.cloudModel = {
   devices: [],
+  droppedDevices: [],
   links: [],
   endpoints: [],
   flows: [],
@@ -311,7 +312,7 @@ let cloudLib = {
   
   addDevice: (reqParams) => {
     let device = new Device(
-      chance.guid(),
+      reqParams.deviceId || chance.guid(),
       reqParams.type,
       reqParams.available,
       reqParams.role || chance.pickone(config.deviceRoles),
@@ -358,6 +359,7 @@ let cloudLib = {
       device.annotations.managementAddress = reqParams.managementAddress || device.annotations.managementAddress;
       device.annotations.channelId = reqParams.managementAddress + ':' + reqParams.port || device.annotations.channelId;
       device.annotations.protocol = reqParams.protocol || device.annotations.protocol;
+      device.annotations.port = reqParams.port || device.annotations.port;
   
       return true;
     }

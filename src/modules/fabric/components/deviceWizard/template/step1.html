@@ -1,4 +1,5 @@
 <div class="stepForm">
+    <input type="hidden" ng-model="switch.id">
     <div class="stepForm__input">
         <div class="stepForm__input__label">Name<span class="stepForm__input__required">*</span></div>
         <valid-input v-require="true" ng-model="switch.name" v-rpcid="page_device_1" ></valid-input>
@@ -6,16 +7,26 @@
         <!--<span class="stepForm__input__error" ng-show="wizardForm.name.$invalid && nameChange">必填项</span>-->
     </div>
     <div class="stepForm__input">
+        <div class="stepForm__input__label">Protocol<span class="stepForm__input__required">*</span></div>
+
+        <valid-input v-require="true" v-list="protocals-datalist" ng-model="switch.protocol" v-rpcid="page_device_1" ></valid-input>
+        <!--<input class="stepForm__input__text" list="protocals-datalist" name="protocol" type="text" ng-blur="protocalChange=true" ng-model="switch.protocol" ng-required="true"/>-->
+        <datalist id="protocals-datalist">
+            <option ng-value="protocol" ng-repeat="protocol in protocols"/>
+        </datalist>
+        <span class="stepForm__input__error" ng-show="wizardForm.protocol.$invalid && protocalChange" ng-bind="::'COMPONENT.DEVICEWIZARD.INPUT.REQUIRED' | translate"></span>
+    </div>
+    <div class="stepForm__input">
         <div class="stepForm__input__label">Mac Address</div>
         <!--<mdl-select ng-model="mac_address" name="mac_address"-->
         <!--display-label="{ options: [{label: '男1', value: '0'}, {label: '男2', value: '1'}]}">-->
         <!--</mdl-select>-->
-        <valid-input v-require="true" v-list="mac_addresses_datalist" ng-model="switch.mac_address" v-rpcid="page_device_1" v-regex="mac_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}"></valid-input>
+        <valid-input v-require="true" ng-model="switch.mac_address" v-rpcid="page_device_1" v-regex="mac_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}"></valid-input>
 
         <!--<input class="stepForm__input__text" name="mac" list="mac_addresses_datalist" ng-blur="macChange=true" ng-model="switch.mac_address" ng-pattern="mac_regex"/>-->
-        <datalist id="mac_addresses_datalist">
-            <option ng-value="mac" ng-repeat="mac in mac_addresses"/>
-        </datalist>
+        <!--<datalist id="mac_addresses_datalist">-->
+            <!--<option ng-value="mac" ng-repeat="mac in mac_addresses"/>-->
+        <!--</datalist>-->
         <!--<div class="stepForm__input__annotaions">-->
             <!--Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future.-->
         <!--</div>-->
@@ -34,17 +45,6 @@
         <div class="stepForm__input__label">Rack Id</div>
         <input class="stepForm__input__text" name="rack_id" type="text" ng-model="switch.rack_id"/>
     </div>
-    <div class="stepForm__input">
-        <div class="stepForm__input__label">Protocol<span class="stepForm__input__required">*</span></div>
-
-        <valid-input v-require="true" v-list="protocals-datalist" ng-model="switch.protocol" v-rpcid="page_device_1" ></valid-input>
-        <!--<input class="stepForm__input__text" list="protocals-datalist" name="protocol" type="text" ng-blur="protocalChange=true" ng-model="switch.protocol" ng-required="true"/>-->
-        <datalist id="protocals-datalist">
-            <option ng-value="protocol" ng-repeat="protocol in protocols"/>
-        </datalist>
-        <span class="stepForm__input__error" ng-show="wizardForm.protocol.$invalid && protocalChange" ng-bind="::'COMPONENT.DEVICEWIZARD.INPUT.REQUIRED' | translate"></span>
-    </div>
-
     <div class="stepForm__input" ng-if="switch.protocol == 'SNMP'">
         <div class="stepForm__input__label">Community</div>
         <!--<input class="stepForm__input__text" name="community" type="text" ng-model="switch.community"/>-->

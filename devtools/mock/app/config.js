@@ -1,9 +1,11 @@
 let config = {
+  // test mode
+  testMode: true,
   // new config
   deviceNumber: 20,
   deviceTypes: ['spine', 'unknown', 'leaf'],
   deviceRoles: ['MASTER', 'SLAVE'],
-  deviceProtocols: ['Rest', 'gRPC', 'SNMP', 'OF_13'],
+  deviceProtocols: ['REST', 'SNMP', 'GRPC', 'Openflow'],
   devicePortNum: 56,
   // deviceLeafGroups: ['R1L1', 'R1L2', 'R1L3', 'R2L1', 'R2L2', 'R2L3'],
   linkLeafNumber: 5,
