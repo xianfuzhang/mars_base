@@ -85,7 +85,8 @@ export class Topo {
       this.switch_width = 16;
       this.switch_height = 108;
       this.leaf_group_interval = 8;
-      this.leaf_group_str = 'leaf_group_name';
+      // this.leaf_group_str = 'leaf_group_name';
+      this.leaf_group_str = 'id';
       this.resizeTimeout = null;
       this.active_status = "ACTIVE";
       this.LINE_WIDTH = 3;
@@ -325,23 +326,24 @@ export class Topo {
       };
 
       let calcLeafInterval = (leafs, width) =>{
-        let remainWidth = width - this.switch_width * leafs.length;
-        let null_length = 0;
-        let leaf_group_str = this.leaf_group_str;
-        let non_leafs = this.di._.filter(leafs, function (leaf) {
-          return leaf[leaf_group_str] === null;
-        });
+        // let remainWidth = width - this.switch_width * leafs.length;
+        // let null_length = 0;
+        // let leaf_group_str = this.leaf_group_str;
+        // let non_leafs = this.di._.filter(leafs, function (leaf) {
+        //   return leaf[leaf_group_str] === null;
+        // });
+        //
+        // if(non_leafs instanceof  Array) null_length = non_leafs.length;
+        //
+        // let c_leafs = this.di._.filter(leafs, function (leaf) {
+        //   return leaf[leaf_group_str] !== null;
+        // });
 
-        if(non_leafs instanceof  Array) null_length = non_leafs.length;
-
-        let c_leafs = this.di._.filter(leafs, function (leaf) {
-          return leaf[leaf_group_str] !== null;
-        });
-
-        let group = this.di._.groupBy(c_leafs, this.leaf_group_str);
-        let groupLen = this.di._.keys(group).length + null_length;
-        remainWidth = remainWidth - groupLen * this.leaf_group_interval;
-        return remainWidth/ (groupLen + 1);
+        // let group = this.di._.groupBy(c_leafs, this.leaf_group_str);
+        // let groupLen = this.di._.keys(group).length + null_length;
+        // remainWidth = remainWidth - groupLen * this.leaf_group_interval;
+        // return remainWidth/ (groupLen + 1);
+        return (width - this.switch_width * leafs.length)/(leafs.length + 1)
       };
 
       let genAnchorNode = () =>{

@@ -40,12 +40,12 @@ export class DeviceDetailController {
 
     this.prepareScope();
 
-    this.di.deviceDataManager.getDeviceDetail(this.scope.deviceId).then((res) => {
+    this.di.deviceDataManager.getDeviceConfig(this.scope.deviceId).then((res) => {
       if (res) {
         this.scope.detailDisplay = true;
-        this.scope.detailValue = res.data;
+        this.scope.detailValue = res;
 
-        this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE') + "(" + this.scope.detailValue.annotations.name + ")";
+        this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE') + "(" + this.scope.detailValue.name + ")";
         this.scope.detailValue.leaf_group = !this.scope.detailValue.leaf_group ? '-' : this.scope.detailValue.leaf_group;
       }
       this.init();
@@ -298,7 +298,7 @@ export class DeviceDetailController {
         });
         break;
       case 'link':
-        entities.forEach((entity) => {
+        entities.links.forEach((entity) => {
           let obj = {};
           obj['id'] =  entity.src.device + '_' + entity.src.port;
           obj['src_device'] = entity.src.device;

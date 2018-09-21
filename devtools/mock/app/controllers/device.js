@@ -218,7 +218,7 @@ router.get('/links', function (req, res) {
     });
 
     if(result) {
-      return res.json(result);
+      return res.json({links: result});
     } else {
       return res.status(404).json("This device doesn't exist!");
     }
