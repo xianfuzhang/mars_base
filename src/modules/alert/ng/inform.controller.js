@@ -246,8 +246,8 @@ export class InformController {
               count: undefined
             });
           } else {
-            scope.informModel.groups = res.groups;
-            let groups = formatTbGroups(res.groups);
+            scope.informModel.groups = res.group;
+            let groups = formatTbGroups(res.group);
 
             defer.resolve({
               data: groups,
