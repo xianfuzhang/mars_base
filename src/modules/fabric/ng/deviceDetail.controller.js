@@ -307,9 +307,11 @@ export class DeviceDetailController {
           obj['dst_port'] = entity.dst.port;
           obj['state'] = entity.state;
           obj['type'] = entity.type;
-          obj['duration'] = entity.annotations.durable;
-          obj['protocol'] = entity.annotations.protocol;
-          obj['latency'] = entity.annotations.latency;
+          if(entity.annotations){
+            obj['duration'] = entity.annotations.durable;
+            obj['protocol'] = entity.annotations.protocol;
+            obj['latency'] = entity.annotations.latency;
+          }
           this.scope.detailModel.entities.push(obj);
         });
         break;
