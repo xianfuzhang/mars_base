@@ -13,10 +13,16 @@
       {{content}}
     </section>
     <div class="mdc-dialog__footer">
-      <button type="button"  ng-show="type === 'warning'" ng-click="canceled()"
-              class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--cancel">{{cancel}}</button>
-      <button type="button" ng-click="ok()"
-              class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--accept">{{confirmation}}</button>
+      <!--<button type="button"  ng-show="type === 'warning'" ng-click="canceled()"-->
+              <!--class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button&#45;&#45;cancel">{{cancel}}</button>-->
+      <div ng-show="type === 'warning'" style="margin: 0 15px;">
+        <mar-button btn-text="cancel" btn-style="'width: 70px;'" btn-class="'btn-white btn-sm'" btn-icon="'clear'" btn-click="canceled()"/>
+      </div>
+      <div style="margin: 0 15px;">
+        <mar-button btn-text="confirmation" btn-style="'width: 70px;'" btn-class="'btn-black btn-sm'" btn-icon="'done'" btn-click="ok()"/>
+      </div>
+      <!--<button type="button" ng-click="ok()"-->
+              <!--class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button&#45;&#45;accept">{{confirmation}}</button>-->
     </div>
   </div>
   <div class="mdc-dialog__backdrop"></div>

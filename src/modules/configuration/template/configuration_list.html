@@ -40,10 +40,11 @@
         </div>
 
         <div>
-          <button class="mdc-button mdc-button--raised" ng-click="addConfigFile()" ng-disabled="!configurationListModel.isEditable" id="updateConfigurationList" style="color:#ffffff;font-weight: 500;">
-            <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
-            {{'MODULES.CONFIGURATION.OPTION.ADD'|translate}}
-          </button>
+          <!--<button class="mdc-button mdc-button&#45;&#45;raised" ng-click="addConfigFile()" ng-disabled="!configurationListModel.isEditable" id="updateConfigurationList" style="color:#ffffff;font-weight: 500;">-->
+            <!--<i class="material-icons mdc-button__icon" aria-hidden="true">add</i>-->
+            <!--{{'MODULES.CONFIGURATION.OPTION.ADD'|translate}}-->
+          <!--</button>-->
+          <mar-button btn-id="'updateConfigurationList'" btn-text="::'MODULES.CONFIGURATION.OPTION.ADD' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-click="addConfigFile()" btn-disabled="!configurationListModel.isEditable" />
           <style></style>
         </div>
       </div>

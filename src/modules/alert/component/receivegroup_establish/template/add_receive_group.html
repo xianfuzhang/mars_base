@@ -7,15 +7,21 @@
 
     <div>
 
-        <button  ng-click="addEmailReceiver()" class="mdc-button mdc-button--raised" style="width:120px;margin-left:10px;background-color:black;color:white;">
-            <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
-            {{ 'MODULES.ALERT.RECEIVE_GROUP.EMAIL'|translate}}
-        </button>
+        <!--<button  ng-click="addEmailReceiver()" class="mdc-button mdc-button&#45;&#45;raised" style="width:120px;margin-left:10px;background-color:black;color:white;">-->
+            <!--<i class="material-icons mdc-button__icon" aria-hidden="true">add</i>-->
+            <!--{{ 'MODULES.ALERT.RECEIVE_GROUP.EMAIL'|translate}}-->
+        <!--</button>-->
+        <div style="display: inline-block; margin-left:20px; margin-right:15px;">
+            <mar-button btn-text="::'MODULES.ALERT.RECEIVE_GROUP.EMAIL' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addEmailReceiver()"/>
+        </div>
 
-        <button  ng-click="addWechatReceiver()" class="mdc-button mdc-button--raised" style="width:120px;margin-left:40px;background-color:black;color:white;">
-            <i class="material-icons mdc-button__icon" aria-hidden="true">add</i>
-            {{ 'MODULES.ALERT.RECEIVE_GROUP.WECHAT'|translate}}
-        </button>
+        <!--<button  ng-click="addWechatReceiver()" class="mdc-button mdc-button&#45;&#45;raised" style="width:120px;margin-left:40px;background-color:black;color:white;">-->
+            <!--<i class="material-icons mdc-button__icon" aria-hidden="true">add</i>-->
+            <!--{{ 'MODULES.ALERT.RECEIVE_GROUP.WECHAT'|translate}}-->
+        <!--</button>-->
+        <div style="display: inline-block; margin-left:15px;">
+            <mar-button btn-text="::'MODULES.ALERT.RECEIVE_GROUP.WECHAT' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addWechatReceiver()"/>
+        </div>
         <!--<button class="mdc-button" id="addEmail" ng-click="addEmailReceiver()">-->
             <!--<i class="material-icons mdc-button__icon" aria-hidden="true">add</i>-->
 

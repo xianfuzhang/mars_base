@@ -168,4 +168,97 @@
 .switch-speed-rate-modal .column-manipulation-field__content{
   height: 300px;
 }
-
+.dashboard-summary {
+  display: flex;
+  margin: 24px 0 0 24px;
+}
+.dashboard-summary .panel-widget{
+  flex-direction: row;
+  width: 245px;
+  height: 150px;
+}
+.dashboard-summary .margin-right-16{
+  margin-right: 16px;
+}
+.dashboard-summary .margin-left-48{
+  margin-left: 48px;
+}
+.dashboard-summary .margin-left-8{
+  margin-left: 8px;
+}
+.dashboard-summary .panel-blue-bg-white{
+  background-color: #30a5ff;
+  color: #fff; 
+  border-right: 1px solid #ccc;
+}
+.dashboard-summary .panel-blue-bg-white>.widget-left{
+  background-color: #0077cb;
+}
+.dashboard-summary .panel-orange-bg-white{
+  background-color: #ffb53e; 
+  color: #fff; 
+  border-right: 1px solid #ccc;
+}
+.dashboard-summary .panel-orange-bg-white>.widget-left{
+  background-color: #c78500;
+}
+.dashboard-summary .panel-teal-bg-white{
+  background-color: #1ebfae; 
+  color: #fff; 
+  border-right: 1px solid #ccc;
+}
+.dashboard-summary .panel-teal-bg-white>.widget-left{
+  background-color: #008e7f;
+}
+.dashboard-summary .panel-green-bg-white{
+  background-color: #47D147; 
+  color: #fff; 
+  border-right: 1px solid #ccc;
+}
+.dashboard-summary .panel-green-bg-white>.widget-left{
+  background-color: #009f0e;
+}
+.dashboard-summary .widget-left{
+  display: flex;
+  width: 40%;
+  align-items: center;
+  justify-content: center;
+}
+.dashboard-summary .widget-right{
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+}
+.dashboard-summary .widget-top{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.dashboard-summary .widget-bottom{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 40%;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+.dashboard-summary .widget-bottom .inactive{
+  display: flex;
+}
+.dashboard-summary .widget-bottom .inactive-ips{
+  display: flex;
+  flex-direction: column;
+}
+.dashboard-summary .md-48{
+  font-size: 48px;
+}
+.dashboard-summary .large{
+  font-size: 24px;
+  font-weight: 700;
+}
+.dashboard-summary .medium{
+  font-size: 18px;
+}

@@ -15,7 +15,9 @@ export class DateService{
 		return {
 			year: year,
 			month: month,
-			day: day
+			day: day,
+			hour: date.getHours(),
+			minute: date.getMinutes()
 		};
 	}
 
@@ -27,7 +29,9 @@ export class DateService{
 		return {
 			year: year,
 			month: month,
-			day: day
+			day: day,
+			hour: before.getHours(),
+			minute: before.getMinutes()
 		};
 	}
 
