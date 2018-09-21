@@ -390,7 +390,7 @@ export class Topo {
         node.click(clickHandler);
 
         //根据实际的端口数来
-        let count = ports.length;
+        // let count = ports.length;
         //超过48个端口len为2，根据实际情况来
         let len = 2.5;
         let height = this.switch_height;
@@ -411,7 +411,7 @@ export class Topo {
           g.fill();
           g.closePath();
 
-          if(scope.topoSetting.show_ports){
+          if(scope.topoSetting.show_ports && ports && ports instanceof Array && ports.length > 0){
             let padding = (width - len * 2)/3;
             let left = - width/2 + padding;
             let right = width/2 -padding - len;
