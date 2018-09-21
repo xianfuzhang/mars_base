@@ -220,9 +220,28 @@
 }
 .dashboard-summary .widget-left{
   display: flex;
+  flex-direction: column;
   width: 40%;
   align-items: center;
   justify-content: center;
+}
+.material-icon-left-container{
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.material-icon-right-container{
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+.panel-widget .panel-material-yellow{
+  color: #e5b500;
+}
+.panel-widget .panel-material-red{
+  color: #b90065;
 }
 .dashboard-summary .widget-right{
   width: 60%;
@@ -255,6 +274,12 @@
 .dashboard-summary .md-48{
   font-size: 48px;
 }
+.dashboard-summary .md-30{
+  font-size: 30px;
+}
+.dashboard-summary .md-34{
+  font-size: 34px;
+}
 .dashboard-summary .large{
   font-size: 24px;
   font-weight: 700;
@@ -262,3 +287,7 @@
 .dashboard-summary .medium{
   font-size: 18px;
 }
+.dashboard-summary .small{
+  font-size: 14px;
+}
+

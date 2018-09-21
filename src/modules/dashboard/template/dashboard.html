@@ -10,14 +10,14 @@
             <div class="dashboard-summary" ng-show="!panelLoading.controller">
                 <div class="mdc-card panel-widget panel-blue-bg-white margin-right-16 margin-left-8">
                   <div class="widget-left">
-                    <i class="material-icons md-48">cloud</i>
+                    <i class="material-icons md-48">zoom_out_map</i>
                   </div>
                   <div class="widget-right">
                     <div class="widget-top">
                       <div class="large">{{dashboardModel.controllerSummary.count}}</div>
                       <div class="medium">控制器</div>
                     </div>
-                    <div class="widget-bottom">
+                    <!-- <div class="widget-bottom">
                       <div>
                         <span>模式：</span>
                         {{dashboardModel.controllerSummary.mode}}
@@ -28,7 +28,7 @@
                           <span ng-repeat="ip in dashboardModel.controllerSummary.inactives">{{ip}}</span>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
                 <div class="mdc-card panel-widget panel-orange-bg-white">
@@ -54,106 +54,32 @@
                   </div>
                 </div>
                 <div class="mdc-card panel-widget panel-teal-bg-white">
-
-                </div>
-<!--                 <div>
-    <mar-section s-title="控制器概要" no-fold="true" class="detail_summary dash_mar_section">
-        <div class="content_panel_parent">
-            <content-panel is-load="panelLoading.controller">
-                <div>
-                    <div class="content_panel_parent content_panel_dash_box">
-                        <div>
-                            <div class="content_panel_table_parent">
-                                <table class="table_content summary content_panel_table cluster">
-                                    <tr>
-                                        <td>
-                                            <span>{{'MODULES.DASHBOARD.CONTROLLER.MODE'| translate}}</span>
-                                        </td>
-                                        <td><span>{{dashboardModel.controllerSummary.mode}}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span>{{'MODULES.DASHBOARD.CONTROLLER.COUNT'|translate}}</span>
-                                        </td>
-                                        <td><span>{{dashboardModel.controllerSummary.count}}</span></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                  <div class="widget-left">
+                    <div class="material-icon-left-container panel-material-yellow">
+                      <i class="material-icons md-30">zoom_out_map</i>
                     </div>
-                </div>
-
-                <div ng-repeat="node in dashboardModel.controllerSummary.nodes">
-                    <div class="content_panel_parent content_panel_dash_box">
-                        <div>
-                            <div class="content_panel_table_parent">
-                                <table class="table_content content_panel_table controller">
-                                    <tr>
-                                        <td>
-                                            <span>{{ 'MODULES.DASHBOARD.CONTROLLER.IP' |translate }}</span>
-                                        </td>
-                                        <td><span>{{ node.ip }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span>{{ 'MODULES.DASHBOARD.CONTROLLER.STATUS' |translate }}</span>
-                                        </td>
-                                        <td><span>{{ node.status }}</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span>{{ 'MODULES.DASHBOARD.CONTROLLER.RUNTIME' |translate }}</span>
-                                        </td>
-                                        <td><span>{{ node.lastUpdate }}</span></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="material-icon-left-container panel-material-yellow">
+                      <i class="material-icons md-34">swap_horiz</i>
                     </div>
-                </div>
-
-                <div>
-                    <div id="controllerChart" class="content_panel_dash_chart"></div>
-                </div>
-            </content-panel>
-        </div>
-    </mar-section>
-</div>
-<div>
-    <mar-section s-title="交换机概要" no-fold="true" class="detail_summary dash_mar_section">
-        <div class="content_panel_parent">
-         <content-panel is-load="panelLoading.switch">
-                <div>
-                    <div class="content_panel_parent">
-                        <div style="text-align: center">
-                            <div class="swtTable">
-                                <table class="swt_table_dashboard content_panel_table switch">
-                                    <tr>
-                                        <td><span>{{ dashboardModel.switchSummary.spineCount }} </span></td>
-                                        <td><span>{{'MODULES.DASHBOARD.SWITCH.TYPE.SPINE'| translate}}</span></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td><span>{{ dashboardModel.switchSummary.leafCount }}</span></td>
-                                        <td><span>{{'MODULES.DASHBOARD.SWITCH.TYPE.LEAF'| translate}}</span></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td><span>{{ dashboardModel.switchSummary.unknownCount }}</span></td>
-                                        <td><span>{{'MODULES.DASHBOARD.SWITCH.TYPE.UNKNOWN'| translate}}</span></td>
-                                    </tr>
-                                    <tr style="color:red">
-                                        <td><span>{{ dashboardModel.switchSummary.unavailableCount }}</span></td>
-                                        <td><span>{{'MODULES.DASHBOARD.SWITCH.TYPE.NO_AVAILABLE'| translate}}</span></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="material-icon-left-container panel-material-red">
+                      <i class="material-icons md-34">swap_horiz</i>
                     </div>
+                  </div>
+                  <div class="widget-right">
+                    <div class="material-icon-right-container panel-material-yellow">
+                      <div class="large">{{dashboardModel.controllerSummary.inactives.length}}</div>
+                      <div class="small margin-left-8">异常控制器</div>
+                    </div>
+                    <div class="material-icon-right-container panel-material-yellow">
+                      <div class="large">{{dashboardModel.switchSummary.unknownCount}}</div>
+                      <div class="small margin-left-8">待加入交换机</div>
+                    </div>
+                    <div class="material-icon-right-container panel-material-red">
+                      <div class="large">{{dashboardModel.switchSummary.unavailableCount}}</div>
+                      <div class="small margin-left-8">异常交换机</div>
+                    </div>
+                  </div>
                 </div>
-            </content-panel>
-        </div>
-    </mar-section>
-</div> -->
             </div>
             <div class="dashboard__horizontal_box">
                 <div>
