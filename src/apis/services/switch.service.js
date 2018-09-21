@@ -41,9 +41,9 @@ export class switchService {
     showArray.push({'label': this.translate('MODULES.COMMON.MAC'), 'value': sw.mac});
     showArray.push({'label': this.translate('MODULES.COMMON.CONNECT_SINCE'), 'value': sw.lastUpdate});
     showArray.push({'label': this.translate('MODULES.COMMON.MANAGEMENT_ADDRESS'), 'value': sw.mgmtIpAddress});
-    if(sw.leaf_group_name){
-      showArray.push({'label': this.translate('MODULES.COMMON.LEAF_GROUP'), 'value': sw.leaf_group_name + ' ( port : ' +sw.leaf_group_port + ' )'});
-    }
+    // if(sw.leaf_group_name){
+    //   showArray.push({'label': this.translate('MODULES.COMMON.LEAF_GROUP'), 'value': sw.leaf_group_name + ' ( port : ' +sw.leaf_group_port + ' )'});
+    // }
     showArray.push({'label': this.translate('MODULES.COMMON.RACK_ID'), 'value': sw.rack_id});
     return showArray;
   }
