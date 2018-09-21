@@ -281,7 +281,7 @@ export class appService {
   }
 
   getDeviceCPUAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
-    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/CPU/' + deviceId + '/' + startTime + '/' + endTime + '/'  + resolutionSecond;
+    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/cpu/' + deviceId + '/' + startTime + '/' + endTime + '/'  + resolutionSecond;
   }
 
   getDeviceMemoryAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
