@@ -86,11 +86,7 @@ export class DeviceWizardController {
       '00:00:00:02:00:06'
     ];
   
-    this.di.$scope.protocols = ['Rest', 'gRPC', 'SNMP', 'OF_13'];
-    
-    // this.di.$scope.leaf_groups = [
-    //   'R1L1', 'R1L2', 'R1L3', 'R2L1', 'R2L2', 'R2L3'
-    // ];
+    this.di.$scope.protocols = ['REST', 'SNMP', 'GRPC', 'Openflow'];
     
     this.di.$scope.open = function(deviceId){
       if(scope.showWizard) return;
@@ -157,19 +153,6 @@ export class DeviceWizardController {
     }
     
     this.di.$scope.stepValidation = function(curStep, nextStep) {
-      // TODO:
-      // if(scope.switch.name) {
-      //   return {
-      //     valid: true,
-      //     errorMessage: ''
-      //   }
-      // } else {
-      //   return {
-      //     valid: false,
-      //     errorMessage: 'Name error'
-      //   }
-      // }
-  
       return {
         valid: true,
         errorMessage: ''
@@ -210,6 +193,25 @@ export class DeviceWizardController {
               resolve({valid: false, errorMessage: 'Error occurred!'});
             });
         } else { // add a new switch
+          // generate device id
+          let deviceId = '';
+          switch (params.protocol.toUpperCase()) {
+            case 'REST':
+              params.deviceId = `rest:${params.managementAddress}:port`;
+              break;
+              
+            case 'SNMP':
+              params.deviceId = `snmp:${params.managementAddress}:port`;
+              break;
+              
+            case 'GRPC':
+              params.deviceId = `gnmi:${params.managementAddress}:port`;
+              break;
+              
+            case 'OPENFLOW':
+              params.deviceId = `of:0000${(params.mac.split(':')).join('')}`;
+              break;
+          }
           deviceDataManager.postDeviceDetail(params)
             .then(() => {
               scope.switch = _.cloneDeep(initSwitch);

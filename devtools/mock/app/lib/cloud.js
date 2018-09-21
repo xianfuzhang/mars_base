@@ -17,6 +17,7 @@ const chance = new Chance();
 // global model
 global.cloudModel = {
   devices: [],
+  droppedDevices: [],
   links: [],
   endpoints: [],
   flows: [],
@@ -311,7 +312,7 @@ let cloudLib = {
   
   addDevice: (reqParams) => {
     let device = new Device(
-      chance.guid(),
+      reqParams.deviceId || chance.guid(),
       reqParams.type,
       reqParams.available,
       reqParams.role || chance.pickone(config.deviceRoles),

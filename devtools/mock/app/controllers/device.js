@@ -74,7 +74,7 @@ router.get('/devices/:deviceId', function (req, res) {
         mac: device.mac,
         mrf: device.mrf,
         port: 0,
-        protocal: device.annotations.protocal,
+        protocol: device.annotations.protocol,
         rack_id: device.rack_id,
         community: null,
         leafGroup: device.leaf_group
@@ -125,7 +125,7 @@ router.get('/devices/:deviceId/:type', function (req, res) {
         mac: device.mac,
         mrf: device.mrf,
         port: 0,
-        protocal: device.annotations.protocal,
+        protocol: device.annotations.protocol,
         rack_id: device.rack_id,
         community: null,
         leafGroup: device.leaf_group
@@ -179,7 +179,7 @@ router.put('/devices/:deviceId', function(req, res) {
   if (result) {
     return res.status(200).json("This device has been changed!");
   } else {
-    return res.status(400).json("Failed to delete the device!");
+    return res.status(400).json("Failed to update the device!");
   }
 })
 
@@ -245,6 +245,7 @@ function formatDevice(device) {
   delete tmpDevice.ports;
   delete tmpDevice.storm;
   delete tmpDevice.statistic;
+  delete tmpDevice.leaf_group;
   
   // TODO:change device type
   tmpDevice.type = 'TMP_TYPE';
