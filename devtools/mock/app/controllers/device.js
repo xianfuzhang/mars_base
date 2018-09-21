@@ -76,7 +76,7 @@ router.get('/devices/:deviceId', function (req, res) {
         port: device.annotations.port,
         protocol: device.annotations.protocol,
         rack_id: device.rack_id,
-        community: null,
+        community: device.community,
         leafGroup: device.leaf_group
       };
     
@@ -127,7 +127,7 @@ router.get('/devices/:deviceId/:type', function (req, res) {
         port: device.annotations.port,
         protocol: device.annotations.protocol,
         rack_id: device.rack_id,
-        community: null,
+        community: device.community,
         leafGroup: device.leaf_group
       };
     
