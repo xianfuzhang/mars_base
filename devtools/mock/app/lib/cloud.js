@@ -359,6 +359,7 @@ let cloudLib = {
       device.annotations.managementAddress = reqParams.managementAddress || device.annotations.managementAddress;
       device.annotations.channelId = reqParams.managementAddress + ':' + reqParams.port || device.annotations.channelId;
       device.annotations.protocol = reqParams.protocol || device.annotations.protocol;
+      device.annotations.port = reqParams.port || device.annotations.port;
   
       return true;
     }
