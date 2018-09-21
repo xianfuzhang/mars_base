@@ -14,7 +14,6 @@
         <datalist id="protocals-datalist">
             <option ng-value="protocol" ng-repeat="protocol in protocols"/>
         </datalist>
-        <span class="stepForm__input__error" ng-show="wizardForm.protocol.$invalid && protocalChange" ng-bind="::'COMPONENT.DEVICEWIZARD.INPUT.REQUIRED' | translate"></span>
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">Mac Address</div>
@@ -32,11 +31,14 @@
         <!--</div>-->
     </div>
     <div class="stepForm__input">
-        <div class="stepForm__input__label">ManagementAddress & Port<span class="stepForm__input__required">*</span></div>
-        <valid-input v-require="true" v-span="true" v-style='{"width":"70%"}' ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IP' | translate}}" v-rpcid="page_device_1" ></valid-input>
+        <div ng-if="switch.protocol != 'Openflow'" class="stepForm__input__label">ManagementAddress & Port<span class="stepForm__input__required">*</span></div>
+        <valid-input ng-if="switch.protocol != 'Openflow'" v-require="true" v-span="true" v-style='{"width":"70%"}' ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IP' | translate}}" v-rpcid="page_device_1" ></valid-input>
         <!--<input class="stepForm__input__text-prefix" name="managementAddress" type="text" ng-model="switch.managementAddress" ng-required="true" ng-blur="addressChange=true" ng-pattern="ip_regex"/>-->
-        <span class="stepForm__input__separator">&nbsp;:&nbsp;</span>
-        <valid-input v-require="true" v-span="true" v-style='{"width":"20%"}' ng-model="switch.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
+        <span class="stepForm__input__separator" ng-if="switch.protocol != 'Openflow'">&nbsp;:&nbsp;</span>
+        <valid-input ng-if="switch.protocol != 'Openflow'" v-require="true" v-span="true" v-style='{"width":"20%"}' ng-model="switch.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
+
+        <div ng-if="switch.protocol == 'Openflow'" class="stepForm__input__label">ManagementAddress<span class="stepForm__input__required">*</span></div>
+        <valid-input ng-if="switch.protocol == 'Openflow'" v-require="true" v-style='{"width":"100%"}' v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IP' | translate}}" v-rpcid="page_device_1" ></valid-input>
         <!--<input class="stepForm__input__text-postfix" name="port" type="number" ng-blur="portChange=true" ng-model="switch.port" ng-required="true" min="0" max="65535"/>-->
         <!--<span class="stepForm__input__error" ng-show="wizardForm.managementAddress.$invalid && addressChange">IP地址无效</span>-->
         <!--<span class="stepForm__input__error" ng-show="wizardForm.port.$invalid && portChange">端口无效</span>-->
@@ -48,7 +50,7 @@
     <div class="stepForm__input" ng-if="switch.protocol == 'SNMP'">
         <div class="stepForm__input__label">Community</div>
         <!--<input class="stepForm__input__text" name="community" type="text" ng-model="switch.community"/>-->
-        <valid-input v-require="true"  ng-model="switch.community" v-rpcid="page_device_1" ></valid-input>
+        <valid-input ng-model="switch.community" v-rpcid="page_device_1" ></valid-input>
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">Manufacturer</div>
