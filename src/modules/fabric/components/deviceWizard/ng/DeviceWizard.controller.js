@@ -160,7 +160,7 @@ export class DeviceWizardController {
   
     this.di.$scope.submit = function() {
       let params = {
-        deviceId: scope.switch.id,
+        id: scope.switch.id,
         mac: scope.switch.mac_address,
         name: scope.switch.name,
         type: scope.switch.fabric_role,
