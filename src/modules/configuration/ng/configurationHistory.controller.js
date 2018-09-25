@@ -111,7 +111,7 @@ export class ConfigurationHistoryController {
   }
   
   getActionsShow() {
-    return {'refresh': true, 'search': true};
+    return {'refresh': true, 'search': false};
   }
   
   getTableSchema() {
