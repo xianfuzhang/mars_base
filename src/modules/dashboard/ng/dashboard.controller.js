@@ -459,6 +459,7 @@ export class DashboardController {
         axis: {
           x: {
             type: 'category',
+            height: 40,
             categories: category
           },
           y:{
