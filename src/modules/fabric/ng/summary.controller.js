@@ -414,9 +414,13 @@ export class FabricSummaryController {
         // let entities = this.getEntities(res.data.ports);
         if(res.data.ports && res.data.ports instanceof Array){
           scope.fabricModel.switchPorts = this.getEntitiesPorts(res.data.ports);
+        } else {
+          scope.fabricModel.switchPorts = [];
         }
 
         // this.di.$scope.$apply();
+      }, () => {
+        scope.fabricModel.switchPorts = [];
       });
     };
 
@@ -425,6 +429,8 @@ export class FabricSummaryController {
         // let entities = this.getEntities(res.data.ports);
         scope.fabricModel.switchLinks = this.getEntitiesLinks(res.data.links);
         // this.di.$scope.$apply();
+      }, (err) => { // add by yazhou.miao
+        scope.fabricModel.switchLinks = [];
       });
     };
 
