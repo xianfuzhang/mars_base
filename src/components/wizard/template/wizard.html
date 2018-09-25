@@ -42,7 +42,7 @@
                 </div>
                 <!--<button class="wizard__footer__btn" type="submit" ng-class="{'+disabled': wizardForm.$invalid}" ng-click="postSubmit()" ng-disabled="wizardForm.$invalid" ng-bind="::'COMPONENT.WIZARD.BUTTON.SUBMIT' | translate"></button>-->
                 <div class="wizard__footer__btn">
-                    <mar-button btn-text="::'COMPONENT.WIZARD.BUTTON.SUBMIT' | translate" btn-style="'width:80px;'" btn-icon="'done'" btn-class="'btn-white btn-sm'" btn-click="postSubmit()" btn-type="'submit'" btn-disabled="wizardForm.$invalid"/>
+                    <mar-button btn-text="::'COMPONENT.WIZARD.BUTTON.SUBMIT' | translate" btn-style="'width:80px;'" btn-icon="'done'" btn-class="'btn-white btn-sm'" btn-click="postSubmit()" btn-type="'submit'" btn-disabled="wizardForm.$invalid || curIndex != steps.length - 1"/>
                 </div>
             </div>
         </div>
