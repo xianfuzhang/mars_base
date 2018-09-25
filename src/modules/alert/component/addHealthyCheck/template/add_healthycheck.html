@@ -4,7 +4,7 @@
         <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.RULE_NAME'|translate}}</div>
         <div class="add_healthycheck__content__input">
             <!--<input ng-if="!disModel" style="border-radius: 2px;" class="stepForm__input__text ng-valid ng-not-empty ng-valid-required" type="text" ng-model="healthyCheckAddedModel.name" ng-required="true" required="required" />-->
-            <valid-input ng-if="!disModel"  v-require="true" ng-model="healthyCheckAddedModel.name" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_healthy_check" ></valid-input>
+            <valid-input ng-if="!disModel"  v-require="true" ng-model="healthyCheckAddedModel.name" v-rpcid="page_healthy_check" ></valid-input>
             <div ng-if="disModel" class="add_healthycheck__disabled_input">{{healthyCheckAddedModel.name}}</div>
         </div>
     </div>
