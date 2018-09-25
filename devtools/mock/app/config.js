@@ -1,6 +1,7 @@
 let config = {
   // test mode
-  testMode: true,
+  TEST_MODE: true,
+  MAX_DROPPED_NUM: 5,
   // new config
   deviceNumber: 20,
   deviceTypes: ['spine', 'unknown', 'leaf'],

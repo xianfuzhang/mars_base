@@ -5,19 +5,60 @@ const express = require('express'),
       Chance = require('chance'),
       _ = require('lodash');
 
+let chance = new Chance();
+
 router.get('/devices', function (req, res) {
   let devices = [];
-  let chance = new Chance();
-  let num = chance.pickone([0,1,2]);
-  // slice length-num devices
-  let tmpDevices = cloudModel.devices.slice(0, cloudModel.devices.length - num);
+  let tmpDevices = _.cloneDeep(cloudModel.devices);
   
-  devices = _.cloneDeep(tmpDevices).map((device, index) => {
+  if(config.TEST_MODE) { // test mode
+    if(cloudModel.droppedDevices.length == 0) { // first request
+      // delete one device as dropped randomly
+      let droppedIndex = chance.natural({min:0, max: tmpDevices.length - 1});
+      cloudModel.droppedDevices.push(tmpDevices[droppedIndex].id);
+      tmpDevices.splice(droppedIndex, 1);
+    } else {
+      cloudModel.droppedDevices.forEach((droppedId) => {
+        let index = _.findIndex(tmpDevices, (device) => {
+          return device.id === droppedId;
+        });
+        tmpDevices.splice(index, 1);
+      });
+    }
+  }
+  
+  devices = tmpDevices.map((device, index) => {
     return formatDevice(device);
   });
   
   return res.json({devices: devices});
 });
+
+router.get('/devices/drop', (req, res) => {
+  let tmpDevices = _.cloneDeep(cloudModel.devices);
+  
+  if(cloudModel.droppedDevices.length < config.MAX_DROPPED_NUM) {
+    // delete one device as dropped randomly
+    let droppedIndex = chance.natural({min:0, max: tmpDevices.length - 1});
+    let deviceId = tmpDevices[droppedIndex].id;
+    cloudModel.droppedDevices.push(deviceId);
+    tmpDevices.splice(droppedIndex, 1);
+    
+    res.status(200).json(`Dropped successfully! Dropped device: ${deviceId}`)
+  } else {
+    res.status(200).json(`Failed to drop! Dropped devices: ${deviceId}`)
+  }
+})
+
+router.get('/devices/drop/list', (req, res) => {
+  res.status(200).json(`Dropped devices: [${cloudModel.droppedDevices}]`)
+})
+
+router.get('/devices/recover', (req, res) => {
+  cloudModel.droppedDevices = [];
+  
+  res.status(200).json('Dropped device recovered!')
+})
 
 router.post('/devices', function(req, res) {
   //  TODO: need validation
@@ -55,7 +96,9 @@ router.get('/devices/:deviceId', function (req, res) {
   if(req.params.deviceId == 'ports') {
     let ports = [];
     _.forEach(cloudModel.devices,(device) => {
-      ports = ports.concat(device.ports);
+      if(!cloudModel.droppedDevices.includes(device.id)) {
+        ports = ports.concat(device.ports);
+      }
     });
   
     return res.json({ports: formatPorts(ports)});
@@ -89,7 +132,7 @@ router.get('/devices/:deviceId', function (req, res) {
   devices = _.cloneDeep(cloudModel.devices);
   
   // search using the instanceId in the instances array for each project
-  let searchDevice = devices.find(device => device.id === req.params.deviceId);
+  let searchDevice = devices.find(device => device.id === req.params.deviceId && !cloudModel.droppedDevices.includes(req.params.deviceId));
 
   if (searchDevice !== undefined) {
     return res.json(formatDevice(searchDevice));
@@ -140,7 +183,7 @@ router.get('/devices/:deviceId/:type', function (req, res) {
   let devices = _.cloneDeep(cloudModel.devices);
   
   // search using the instanceId in the instances array for each project
-  let searchDevice = devices.find(device => device.id === req.params.deviceId);
+  let searchDevice = devices.find(device => device.id === req.params.deviceId && !cloudModel.droppedDevices.includes(req.params.deviceId));
   
   if (searchDevice !== undefined) {
     switch(req.params.type) {
@@ -212,6 +255,10 @@ router.post('/devices/:deviceId/storm', function(req, res) {
 });
 
 router.get('/links', function (req, res) {
+  if(cloudModel.droppedDevices.includes(req.query.device)) {
+    return res.status(404).json("This device doesn't exist!");
+  }
+  
   if(req.query.device){
     let result = _.filter(cloudModel.links, (link) => {
       return link.src.device == req.query.device || link.dst.device == req.query.device
@@ -223,7 +270,10 @@ router.get('/links', function (req, res) {
       return res.status(404).json("This device doesn't exist!");
     }
   } else {
-      return res.json({links: cloudModel.links});
+    let result = _.filter(cloudModel.links, (link) => {
+      return !cloudModel.droppedDevices.includes(link.src.device) && !cloudModel.droppedDevices.includes(link.dst.device);
+    })
+    return res.json({links: result});
   }
 });
 
@@ -248,7 +298,10 @@ function formatDevice(device) {
   delete tmpDevice.leaf_group;
   
   // TODO:change device type
-  tmpDevice.type = 'TMP_TYPE';
+  if(config.TEST_MODE) {
+    tmpDevice.type = 'TMP_TYPE';
+  }
+  
   return tmpDevice;
 }
 
