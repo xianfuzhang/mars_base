@@ -416,6 +416,8 @@ export class FabricSummaryController {
           scope.fabricModel.switchPorts = this.getEntitiesPorts(res.data.ports);
         }
 
+
+        this.updatePortsByDeviceId(this.di.$scope.fabricModel.showSwitchId, res.data.ports)
         // this.di.$scope.$apply();
       });
     };
@@ -424,6 +426,7 @@ export class FabricSummaryController {
       this.di.deviceDataManager.getLinks(this.di.$scope.fabricModel.showSwitchId).then((res) => {
         // let entities = this.getEntities(res.data.ports);
         scope.fabricModel.switchLinks = this.getEntitiesLinks(res.data.links);
+        this.updateLinksByDeviceId(this.di.$scope.fabricModel.showSwitchId, res.data.links)
         // this.di.$scope.$apply();
       });
     };
@@ -511,6 +514,14 @@ export class FabricSummaryController {
 
   setTableOpt(obj){
     obj.opt = '';
+  }
+
+  updateLinksByDeviceId(deviceId, links){
+
+  }
+
+  updatePortsByDeviceId(deviceId, links){
+
   }
 
   getEntitiesPorts(ports){
