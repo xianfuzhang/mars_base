@@ -339,7 +339,7 @@ let cloudLib = {
   },
   
   updateDevice: (deviceId, reqParams) => {
-    let device = cloudModel.devices.find(device => device.id === deviceId);
+    let device = cloudModel.devices.find(device => device.id === deviceId && !cloudModel.droppedDevices.includes(deviceId));
     
     // TODO: how to update, which key
     if (device !== undefined) {
@@ -368,7 +368,7 @@ let cloudLib = {
   },
   
   updatePort: (deviceId, portId, reqParams) => {
-    let device = cloudModel.devices.find(device => device.id === deviceId);
+    let device = cloudModel.devices.find(device => device.id === deviceId && !cloudModel.droppedDevices.includes(deviceId));
     
     if (device) {
       let port = device.ports.find(port => port.port == portId);
@@ -385,7 +385,7 @@ let cloudLib = {
   },
   
   updateStorm: (deviceId, reqParams) => {
-    let device = cloudModel.devices.findIndex(device => device.id === deviceId);
+    let device = cloudModel.devices.findIndex(device => device.id === deviceId && !cloudModel.droppedDevices.includes(deviceId));
     if (device) {
       device.storm.unicast = reqParams.unicast;
       device.storm.bcast = reqParams.bcast;
@@ -399,7 +399,7 @@ let cloudLib = {
   
   deleteDevice: (deviceId) => {
     // search using the instanceId in the instances array for each project
-    let index = cloudModel.devices.findIndex(device => device.id === deviceId);
+    let index = cloudModel.devices.findIndex(device => device.id === deviceId && !cloudModel.droppedDevices.includes(deviceId));
     if (index !== -1) {
       cloudModel.devices.splice(index, 1);
       return true;
