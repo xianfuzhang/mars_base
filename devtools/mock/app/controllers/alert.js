@@ -46,7 +46,7 @@ router.delete('/history/all', function (req, res) {
 });
 
 router.get('/group/receiver/all', function (req, res) {
-  return res.status(200).json({groups: cloudModel.alert.groups});
+  return res.status(200).json({group: cloudModel.alert.groups});
 });
 
 router.get('/group/receiver/:groupName', function (req, res) {

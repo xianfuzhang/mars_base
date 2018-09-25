@@ -38,19 +38,19 @@ export class DeviceService {
   }
 
   getDeviceActionsShow() {
-    return {'menu': true, 'add': true, 'remove': true, 'refresh': true, 'search': true};
+    return {'menu': true, 'add': true, 'remove': true, 'refresh': true, 'search': false};
   }
 
   getPortActionsShow() {
-    return {'menu': true, 'add': false, 'remove': false, 'refresh': true, 'search': true};
+    return {'menu': true, 'add': false, 'remove': false, 'refresh': true, 'search': false};
   }
 
   getLinkActionsShow() {
-    return {'menu': true, 'add': false, 'remove': false, 'refresh': true, 'search': true};
+    return {'menu': true, 'add': false, 'remove': false, 'refresh': true, 'search': false};
   }
 
   getEndpointActionsShow() {
-    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': true};
+    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
   }
 
   getDeviceTableSchema() {

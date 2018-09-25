@@ -527,7 +527,9 @@ export class FabricSummaryController {
       obj.speed = port.portSpeed;
       obj.device_name = port.element;
       obj.isEnabled = port.isEnabled;
-      obj.port_status ='1';
+      obj.port_status = port.isEnabled === true ?
+        this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE') :
+        this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE');
       this.setTableOpt(obj);
       entities.push(obj);
     });

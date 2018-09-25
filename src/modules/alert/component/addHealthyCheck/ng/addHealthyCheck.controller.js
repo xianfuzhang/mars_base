@@ -84,7 +84,7 @@ export class AddHealthyCheckController {
         let health = null;
 
         di.alertDataManager.getAllReceiveGroup().then((res) => {
-          groups = res.groups;
+          groups = res.group;
 
           groupDefer.resolve();
         });
@@ -130,7 +130,7 @@ export class AddHealthyCheckController {
       } else {
         scope.title = translate('MODULES.ALERT.ADD_HEALTHY_CHECK.TITLE.CREATE');
         di.alertDataManager.getAllReceiveGroup().then((res) => {
-          scope.displayLabel.group = formatGroups(res.groups);
+          scope.displayLabel.group = formatGroups(res.group);
           scope.showWizard = true;
         });
         scope.disModel = false;
