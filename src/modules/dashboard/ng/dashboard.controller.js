@@ -14,7 +14,8 @@ export class DashboardController {
       'dateService',
       'dashboardDataManager',
       'deviceDataManager',
-      'modalManager'
+      'modalManager',
+      'localStoreService'
     ];
   }
 
@@ -38,6 +39,7 @@ export class DashboardController {
     this.translate = this.di.$filter('translate');
     this.interval_device = null;
     const CONTROLLER_STATE_INACTIVE = 'INACTIVE';
+    this.SWITCHES_CPU_MEMORY_STATISTIC_NS = 'switches_cpu_memory_statistic_ns';
     let unSubscribers = [];
     let dataModel = {};
     let date = this.di.dateService.getTodayObject();
@@ -160,11 +162,7 @@ export class DashboardController {
 
       this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
         dataModel['devices'] = configs;
-        let all = this.di.$q.defer();
-        let defers = [];
-        defers.push(this.getDevicesCPUAnalyzer(configs));
-        defers.push(this.getDevicesMemoryAnalyzer(configs));
-        this.di.$q.all(defers).then((arr) => {
+        this.getSwitchesCPUMemoryStatisticFromLS(configs).then(() => {
           devicesDefer.resolve();
         });
       });
@@ -569,6 +567,61 @@ export class DashboardController {
         unSubscribe();
       });
     });
+  }
+
+  getSwitchesCPUMemoryStatisticFromLS(switches) {
+    //4小时以内不重复获取
+    let defer = this.di.$q.defer();
+    this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS).get('timestamp')
+      .then((data) => {
+        if (data) {
+          let time = (Date.now() - data) - 4*60*60*1000;
+          //超时，重新获取数据
+          if (time >= 0) {
+            this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS).del('timestamp')
+              .then(() => {
+                let defers = [];
+                defers.push(this.getDevicesCPUAnalyzer(switches));
+                defers.push(this.getDevicesMemoryAnalyzer(switches));
+                this.di.$q.all(defers).then(() => {
+                  this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS)
+                    .set('timestamp', Date.now());
+                  this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS)
+                    .set('cpu_memory', {
+                      'cpu': this.di.$scope.dashboardModel.cpu.analyzer,
+                      'memory': this.di.$scope.dashboardModel.memory.analyzer
+                    });
+                  defer.resolve();
+                });
+              });
+          }
+          else {
+            this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS).get('cpu_memory')
+              .then((data) => {
+                this.di.$scope.dashboardModel.cpu.analyzer = data.cpu;
+                this.di.$scope.dashboardModel.memory.analyzer = data.memory;
+                defer.resolve();
+              });
+          }
+        }
+        else {
+          let defers = [];
+          defers.push(this.getDevicesCPUAnalyzer(switches));
+          defers.push(this.getDevicesMemoryAnalyzer(switches));
+          this.di.$q.all(defers).then(() => {
+            this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS)
+              .set('timestamp', Date.now());
+            this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS)
+              .set('cpu_memory', {
+                'cpu': this.di.$scope.dashboardModel.cpu.analyzer,
+                'memory': this.di.$scope.dashboardModel.memory.analyzer
+              });
+            defer.resolve();
+          });
+        }
+      });
+    
+    return defer.promise;
   }
 
   getDevicesCPUAnalyzer(devices) {
