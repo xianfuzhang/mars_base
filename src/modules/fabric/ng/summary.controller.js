@@ -410,28 +410,64 @@ export class FabricSummaryController {
     };
 
     let showPorts = () =>{
-      this.di.deviceDataManager.getDeviceWithPorts(this.di.$scope.fabricModel.showSwitchId).then((res) => {
-        // let entities = this.getEntities(res.data.ports);
-        if(res.data.ports && res.data.ports instanceof Array){
-          scope.fabricModel.switchPorts = this.getEntitiesPorts(res.data.ports);
-        } else {
-          scope.fabricModel.switchPorts = [];
+      for(let key in this.di.$scope.fabricModel['deSpines']){
+        let sw = this.di.$scope.fabricModel['deSpines'][key];
+        if(sw.id === this.di.$scope.fabricModel.showSwitchId){
+          scope.fabricModel.switchPorts = this.getEntitiesPorts(sw.ports);
+          return;
         }
+      }
 
-        // this.di.$scope.$apply();
-      }, () => {
-        scope.fabricModel.switchPorts = [];
-      });
+
+      for(let key in this.di.$scope.fabricModel['deLeafs']){
+        let sw = this.di.$scope.fabricModel['deLeafs'][key];
+        if(sw.id === this.di.$scope.fabricModel.showSwitchId){
+          scope.fabricModel.switchPorts = this.getEntitiesPorts(sw.ports);
+          return;
+        }
+      }
+
+      for(let key in this.di.$scope.fabricModel['deOthers']){
+        let sw = this.di.$scope.fabricModel['deOthers'][key];
+        if(sw.id === this.di.$scope.fabricModel.showSwitchId){
+          scope.fabricModel.switchPorts = this.getEntitiesPorts(sw.ports);
+          return;
+        }
+      }
+
+      // this.di.deviceDataManager.getDeviceWithPorts(this.di.$scope.fabricModel.showSwitchId).then((res) => {
+      //   // let entities = this.getEntities(res.data.ports);
+      //   if(res.data.ports && res.data.ports instanceof Array){
+      //     scope.fabricModel.switchPorts = this.getEntitiesPorts(res.data.ports);
+      //   } else {
+      //     scope.fabricModel.switchPorts = [];
+      //   }
+      //
+      //   // this.di.$scope.$apply();
+      // }, () => {
+      //   scope.fabricModel.switchPorts = [];
+      // });
     };
 
     let showLinks = () =>{
-      this.di.deviceDataManager.getLinks(this.di.$scope.fabricModel.showSwitchId).then((res) => {
-        // let entities = this.getEntities(res.data.ports);
-        scope.fabricModel.switchLinks = this.getEntitiesLinks(res.data.links);
-        // this.di.$scope.$apply();
-      }, (err) => { // add by yazhou.miao
-        scope.fabricModel.switchLinks = [];
+      let links = [];
+
+      this.di._.forEach(this.di.$scope.fabricModel['deLinks'], (link, key) => {
+        if(link.src.device === this.di.$scope.fabricModel.showSwitchId || link.dst.device === this.di.$scope.fabricModel.showSwitchId){
+          links.push(link);
+        }
       });
+
+      scope.fabricModel.switchLinks = this.getEntitiesLinks(links);
+
+      // this.di.deviceDataManager.getLinks(this.di.$scope.fabricModel.showSwitchId).then((res) => {
+      //   // let entities = this.getEntities(res.data.ports);
+      //   scope.fabricModel.switchLinks = this.getEntitiesLinks(res.data.links);
+      //   this.updateLinksByDeviceId(this.di.$scope.fabricModel.showSwitchId, res.data.links)
+      //   // this.di.$scope.$apply();
+      // }, (err) => { // add by yazhou.miao
+      //   scope.fabricModel.switchLinks = [];
+      // });
     };
 
 
