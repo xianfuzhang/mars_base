@@ -725,24 +725,27 @@ export class Topo {
           g.fill();
           g.closePath();
 
-          let padding = (width - len * 2)/3;
-          let left = - width/2 + padding;
-          let right = width/2 -padding - len;
-          // top = 8;
-          for(let i = 0; i< ports.length ; i++){
-            let port = ports[i];
-            g.beginPath();
-            if(i % 2 === 0){
-              g.rect(left, -height/2 +  top + parseInt(i/2) * (len + 1), len , len);
-            } else {
-              g.rect(right, -height/2 + top + parseInt(i/2) * (len + 1), len , len);
+          if(scope.topoSetting.show_ports && ports && ports instanceof Array && ports.length > 0) {
+
+            let padding = (width - len * 2) / 3;
+            let left = -width / 2 + padding;
+            let right = width / 2 - padding - len;
+            // top = 8;
+            for (let i = 0; i < ports.length; i++) {
+              let port = ports[i];
+              g.beginPath();
+              if (i % 2 === 0) {
+                g.rect(left, -height / 2 + top + parseInt(i / 2) * (len + 1), len, len);
+              } else {
+                g.rect(right, -height / 2 + top + parseInt(i / 2) * (len + 1), len, len);
+              }
+              g.fillStyle = status_normal;
+              if (!port.isEnabled) {
+                g.fillStyle = status_error;
+              }
+              g.fill();
+              g.closePath();
             }
-            g.fillStyle = status_normal;
-            if(!port.isEnabled){
-              g.fillStyle = status_error;
-            }
-            g.fill();
-            g.closePath();
           }
           this.paintText(g);
           // g.save();
