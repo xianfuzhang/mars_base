@@ -40,19 +40,19 @@ export class DeviceDetailService {
   }
 
   getPortActionsShow() {
-    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': true};
+    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
   }
 
   getLinkActionsShow() {
-    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': true};
+    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
   }
 
   getStatisticActionsShow() {
-    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': true};
+    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
   }
 
   getFlowActionsShow() {
-    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': true};
+    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
   }
 
   getDevicePortsSchema() {
