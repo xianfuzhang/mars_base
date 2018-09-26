@@ -26,12 +26,18 @@ export class LoginDataManager {
       this.di.$cookies.put('useraccount', JSON.stringify(result));
       return defer.promise;
     }
-    this.di.$http.post(this.di.appService.getLoginUrl(), {'username': username, 'password': password})
+    this.di.$http.post(this.di.appService.getLoginUrl(), {'j_username': username, 'j_password': password}, {'headers':{'Content-Type': 'application/x-www-form-urlencoded'}})
       .then((result) => {
-        this.di.$cookies.put('useraccount', JSON.stringify(result.data));
-        defer.resolve(result);
+      console.log(result);
+      if(result.status === 302){
+        defer.resolve(true)
+      } else {
+        defer.resolve(false)
+      }
+        // this.di.$cookies.put('useraccount', JSON.stringify(result.data));
+        // defer.resolve(result);
       }, (result) => {
-        defer.reject(result);
+        defer.reject(false);
       });
     return defer.promise;
   }

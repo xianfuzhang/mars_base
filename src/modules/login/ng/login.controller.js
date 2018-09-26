@@ -73,7 +73,12 @@ export class LoginController {
       this.scope.showBrowserMsg = false;
       this.di.loginDataManager.doLogin(this.scope.loginModel.username, this.scope.loginModel.password)
         .then((res) => {
-          this.di.$location.path('/');
+          if(res === true){
+            this.di.$location.path('/');
+          } else {
+            this.scope.showBrowserMsg = true;
+            this.scope.loginModel.errorMessage = this.di.loginService.validateErrorMsg(res ? res.status : null);
+          }
         }, (res) => {
           this.scope.showBrowserMsg = true;
           this.scope.loginModel.errorMessage = this.di.loginService.validateErrorMsg(res ? res.status : null);

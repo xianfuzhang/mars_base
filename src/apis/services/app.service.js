@@ -110,7 +110,7 @@ export class appService {
   }
 
   getLoginUrl() {
-    return this.getZoneEndpoint() + '/login';
+    return this.getZoneEndpoint(true) + '/j_security_check';
   }
 
   getLogoutUrl() {
