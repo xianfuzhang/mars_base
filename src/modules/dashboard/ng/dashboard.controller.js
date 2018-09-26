@@ -571,12 +571,12 @@ export class DashboardController {
   }
 
   getSwitchesCPUMemoryStatisticFromLS(switches) {
-    //4小时以内不重复获取
+    //30分钟以内不重复获取
     let defer = this.di.$q.defer();
     this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS).get('timestamp')
       .then((data) => {
         if (data) {
-          let time = (Date.now() - data) - 4*60*60*1000;
+          let time = (Date.now() - data) - 30*60*1000;
           //超时，重新获取数据
           if (time >= 0) {
             this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS).del('timestamp')
