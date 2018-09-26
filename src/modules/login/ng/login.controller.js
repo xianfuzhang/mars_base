@@ -73,7 +73,7 @@ export class LoginController {
       this.scope.showBrowserMsg = false;
       this.di.loginDataManager.doLogin(this.scope.loginModel.username, this.scope.loginModel.password)
         .then((res) => {
-          if(res === true){
+          if(res){
             this.di.$location.path('/');
           } else {
             this.scope.showBrowserMsg = true;
