@@ -96,7 +96,7 @@ export class DeviceDataManager {
   
   putDeviceDetail(params) {
     let defer = this.di.$q.defer();
-    this.di.$http.put(this.di.appService.getDeviceDetailUrl(params.deviceId), params).then(
+    this.di.$http.put(this.di.appService.getDeviceDetailUrl(params.id), params).then(
       (res) => {
         defer.resolve(res);
       },
