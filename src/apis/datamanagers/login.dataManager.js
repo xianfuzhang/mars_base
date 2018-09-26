@@ -26,7 +26,7 @@ export class LoginDataManager {
       this.di.$cookies.put('useraccount', JSON.stringify(result));
       return defer.promise;
     }
-    this.di.$http.post(this.di.appService.getLoginUrl(), {'j_username': username, 'j_password': password}, {'headers':{'Content-Type': 'application/x-www-form-urlencoded'}})
+    this.di.$http.post(this.di.appService.getLoginUrl(), 'j_username='+username+'&j_password='+password, {'headers':{'Content-Type': 'application/x-www-form-urlencoded'}})
       .then((result) => {
       console.log(result);
       if(result.status === 302){
