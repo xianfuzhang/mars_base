@@ -639,7 +639,7 @@ export class DashboardController {
 
     devices.forEach((device) => {
       let defer = this.di.$q.defer();
-      this.di.deviceDataManager.getDeviceCPUAnalyzer(device.id, startTime, endTime, solution_second)
+      this.di.deviceDataManager.getDeviceCPUAnalyzer(device.name, startTime, endTime, solution_second)
         .then((data) => {
           defer.resolve({'id': device.id, 'name': device.name, 'analyzer': data});
         });
@@ -667,7 +667,7 @@ export class DashboardController {
 
     devices.forEach((device) => {
       let defer = this.di.$q.defer();
-      this.di.deviceDataManager.getDeviceMemoryAnalyzer(device.id, startTime, endTime, solution_second)
+      this.di.deviceDataManager.getDeviceMemoryAnalyzer(device.name, startTime, endTime, solution_second)
         .then((data) => {
           defer.resolve({'id': device.id, 'name': device.name, 'analyzer': data});
         });
