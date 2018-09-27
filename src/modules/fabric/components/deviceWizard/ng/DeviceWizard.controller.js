@@ -189,7 +189,7 @@ export class DeviceWizardController {
         } else { // add a new switch
           // generate device id
           let deviceId = '';
-          switch (params.protocol.toUpperCase()) {
+          switch (params.protocol.toLowerCase()) {
             case 'rest':
               params.id = `rest:${params.managementAddress}:port`;
               break;
@@ -197,7 +197,7 @@ export class DeviceWizardController {
             case 'snmp':
               params.id = `snmp:${params.managementAddress}:port`;
               break;
-              
+
             case 'grpc':
               params.id = `gnmi:${params.managementAddress}:port`;
               break;
