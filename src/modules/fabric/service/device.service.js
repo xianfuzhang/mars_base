@@ -136,10 +136,10 @@ export class DeviceService {
 
   getDeviceTableRowActions() {
     return [
-      {
-        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
-        'value': 'edit'
-      },
+      // {
+      //   'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
+      //   'value': 'edit'
+      // },
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
         'value': 'delete'
@@ -376,11 +376,11 @@ export class DeviceService {
 
   getSummarySwitchMenu() {
     return [
-      {
-        'label': this.translate('MODULES.SWITCH.MENU.EDIT'),
-        'isEnabled': true,
-        'msg': 'summary_switch_menu_edit'
-      },
+      // {
+      //   'label': this.translate('MODULES.SWITCH.MENU.EDIT'),
+      //   'isEnabled': true,
+      //   'msg': 'summary_switch_menu_edit'
+      // },
       {
         'label': this.translate('MODULES.SWITCH.MENU.CREATE_FLOW'),
         'isEnabled': true,
