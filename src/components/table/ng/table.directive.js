@@ -479,21 +479,17 @@ export class mdlTable {
       },
       true);
 
-/*    let document = this.di.$window.document;
-    let onTriggerClickHide = (event) => {
-      if (!event.target.matches('.search-filter-button')) {
-        let menu = document.getElementsByClassName("search-filter-list");
-        for(let i=0; i < menu.length; i++) {
-          if (menu[i].classList.contains('mdc-menu--open')) {
-            menu[i].classList.remove('mdc-menu--open');
-          }
-        }
+    let onScrollRemoveMenu = (event) => {
+      let elements = document.getElementsByClassName('table-row-action-list');
+      while (elements.length > 0) {
+        elements[0].remove();
       }
     };
-    document.body.addEventListener('click', onTriggerClickHide, true);
+    document.body.addEventListener('scroll', onScrollRemoveMenu, true);
+
     scope.$on('$destroy', ()=> {
-      document.body.removeEventListener('click', onTriggerClickHide);
-    });*/
+      document.body.removeEventListener('scroll', onScrollRemoveMenu);
+    });
   }
 }
 
