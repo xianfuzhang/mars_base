@@ -23,7 +23,7 @@ export class LoginDataManager {
         'groups': [this.di.appService.CONST.ADMIN_GROUP]
       };
       defer.resolve(result);
-      this.di.$cookies.put('usersession', JSON.stringify(result));
+      // this.di.$cookies.put('usersession', JSON.stringify(result));
       this.di.$cookies.put('useraccount', JSON.stringify(result));
       return defer.promise;
     }
@@ -34,14 +34,16 @@ export class LoginDataManager {
         let content = result.data;
         //登录成功
         if (content.indexOf('ONOS Login') === -1) {
-          this.di.$cookies.put('usersession', this.di.$cookies.get('JSESSIONID'));
+          // this.di.$cookies.put('usersession', this.di.$cookies.get('JSESSIONID'));
           this.di.$cookies.put('useraccount', JSON.stringify({'user_name': username, 'groups': []}));
           defer.resolve(true);
         }
         else {
+          this.di.$cookies.remove('useraccount');
           defer.resolve(false);
         }
       } else {
+        this.di.$cookies.remove('useraccount');
         defer.resolve(false);
       }
         // this.di.$cookies.put('useraccount', JSON.stringify(result.data));
@@ -57,10 +59,10 @@ export class LoginDataManager {
 
     this.di.$http.get(this.di.appService.getLogoutUrl())
       .then(() => {
-        this.di.$cookies.remove('usersession');
+        this.di.$cookies.remove('useraccount');
         defer.resolve();
       }, () => {
-        this.di.$cookies.remove('usersession');
+        this.di.$cookies.remove('useraccount');
         defer.resolve();
       });
     return defer.promise;
