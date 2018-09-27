@@ -79,8 +79,9 @@ export class DeviceWizardController {
     this.di.$scope.ip_regex = `(${ipv4_regex}|${ipv6_regex})`;
     this.di.$scope.num_regex = '^\d$|^[1-9]+[0-9]*$';
   
-    this.di.$scope.protocols = ['REST', 'SNMP', 'GRPC', 'Openflow'];
-    
+    // this.di.$scope.protocols = ['REST', 'SNMP', 'GRPC', 'Openflow'];
+    this.di.$scope.protocols = ['of' ,'snmp', 'rest', 'grpc'];
+
     this.di.$scope.open = function(deviceId){
       if(scope.showWizard) return;
       
