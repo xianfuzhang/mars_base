@@ -302,7 +302,7 @@ export class DeviceDataManager {
         defer.resolve(res.data.memory);
       },
       (error) => {
-        defer.resolve({'memory': []});
+        defer.resolve([]);
       }
     );
     return defer.promise;
