@@ -33,7 +33,7 @@ export class LoginDataManager {
       if(result.status === 200){
         let content = result.data;
         //登录成功
-        if (content.indexOf('ONOS Login') !== -1) {
+        if (content.indexOf('ONOS Login') === -1) {
           this.di.$cookies.put('usersession', this.di.$cookies.get('JSESSIONID'));
           this.di.$cookies.put('useraccount', JSON.stringify({'user_name': username, 'groups': []}));
           defer.resolve(true);
