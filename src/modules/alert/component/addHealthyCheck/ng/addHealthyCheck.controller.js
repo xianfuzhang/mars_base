@@ -198,7 +198,7 @@ export class AddHealthyCheckController {
           params['query']['root_used_ratio'] = value;
         }
       }
-
+      params.query = [params.query];
       return new Promise((resolve, reject) => {
         di.alertDataManager.setHealthyCheck(object, type , params)
           .then(() => {

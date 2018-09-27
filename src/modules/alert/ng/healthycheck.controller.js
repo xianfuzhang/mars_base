@@ -76,11 +76,11 @@ export class HealthyCheckController {
         hc.receive_group = rule.receive_group;
         hc.type = di.alertService.getRuleTypeTranslate(rule.type);
         if(rule.type === 'rx_util'){
-          hc.description = di.alertService.getDescriptionTranslate(rule.query_rx, rule.type);
+          hc.description = di.alertService.getDescriptionTranslate(rule.query_rx[0], rule.type);
         } else if(rule.type === 'tx_util'){
-          hc.description = di.alertService.getDescriptionTranslate(rule.query_tx, rule.type);
+          hc.description = di.alertService.getDescriptionTranslate(rule.query_tx[0], rule.type);
         } else {
-          hc.description = di.alertService.getDescriptionTranslate(rule.query, rule.type);
+          hc.description = di.alertService.getDescriptionTranslate(rule.query[0], rule.type);
         }
         hcs.push(hc);
       });

@@ -64,23 +64,23 @@ export class alertService {
   getRuleCommonQuery(rule){
     let res = {};
     if(rule.query){
-      res['condition'] = rule.query.condition;
-      res['continue'] = rule.query.continue;
-      if(rule.query.util){
-        res['value'] = rule.query.util;
-      } else if(rule.query.used_ratio){
-        res['value'] = rule.query.used_ratio;
-      } else if(rule.query.root_used_ratio){
-        res['value'] = rule.query.root_used_ratio;
+      res['condition'] = rule.query[0].condition;
+      res['continue'] = rule.query[0].continue;
+      if(rule.query[0].util){
+        res['value'] = rule.query[0].util;
+      } else if(rule.query[0].used_ratio){
+        res['value'] = rule.query[0].used_ratio;
+      } else if(rule.query[0].root_used_ratio){
+        res['value'] = rule.query[0].root_used_ratio;
       }
     } else if(rule.query_rx){
-      res['condition'] = rule.query_rx.condition;
-      res['continue'] = rule.query_rx.continue;
-      res['value'] = rule.query_rx.rx_util;
+      res['condition'] = rule.query_rx[0].condition;
+      res['continue'] = rule.query_rx[0].continue;
+      res['value'] = rule.query_rx[0].rx_util;
     } else if(rule.query_tx){
-      res['condition'] = rule.query_tx.condition;
-      res['continue'] = rule.query_tx.continue;
-      res['value'] = rule.query_tx.tx_util;
+      res['condition'] = rule.query_tx[0].condition;
+      res['continue'] = rule.query_tx[0].continue;
+      res['value'] = rule.query_tx[0].tx_util;
     }
     return res;
   }
