@@ -23,7 +23,16 @@ export class DeviceWizardController {
     const scope = this.di.$scope;
     const deviceDataManager = this.di.deviceDataManager;
     const rootScope = this.di.$rootScope;
-  
+
+    this.di.$scope.protocolDisplayLabel = {
+      options: [
+        {label: 'OpenFlow', value: 'of'},
+        {label: 'SNMP', value: 'snmp'},
+        {label: 'REST', value: 'rest'},
+        {label: 'GRPC', value: 'grpc'}
+      ]
+    };
+
     let initSwitch = {
       id: '',
       mac_address: '',
@@ -35,10 +44,10 @@ export class DeviceWizardController {
       leaf_group: '',
       managementAddress: '',
       port: '',
-      protocol: '',
+      protocol: this.di.$scope.protocolDisplayLabel.options[0],
       description: ''
-    }
-  
+    };
+
     this.di.$scope.showWizard = false;
     this.di.$scope.mode = 'add'; // 'add': add a new switch | 'update': update the switch
     this.di.$scope.title = '添加交换机';
@@ -172,8 +181,8 @@ export class DeviceWizardController {
         // community: scope.switch.community,
         managementAddress: scope.switch.managementAddress,
         port: scope.switch.port,
-        protocol: scope.switch.protocol,
-      }
+        protocol: scope.switch.protocol.value,
+      };
       
       return new Promise((resolve, reject) => {
         if(scope.mode == 'update') { // update switch config
@@ -191,20 +200,21 @@ export class DeviceWizardController {
           let deviceId = '';
           switch (params.protocol.toLowerCase()) {
             case 'rest':
-              params.id = `rest:${params.managementAddress}:port`;
+              params.id = `rest:${params.managementAddress}:${params.port}`;
               break;
               
             case 'snmp':
-              params.id = `snmp:${params.managementAddress}:port`;
+              params.id = `snmp:${params.managementAddress}:${params.port}`;
               params.community = scope.switch.community;
               break;
 
             case 'grpc':
-              params.id = `gnmi:${params.managementAddress}:port`;
+              params.id = `gnmi:${params.managementAddress}:${params.port}`;
               break;
               
             case 'of':
               params.id = `of:0000${(params.mac.split(':')).join('')}`;
+              delete params.port;
               break;
           }
           deviceDataManager.postDeviceDetail(params)
@@ -223,6 +233,12 @@ export class DeviceWizardController {
     unsubscribes.push(this.di.$scope.$watch('mode', (newMode, oldMode) => {
       if(newMode == 'update') {
         scope.title = '修改交换机配置';
+      }
+    }));
+
+    unsubscribes.push(this.di.$scope.$watch('switch.protocol', (newPro, oldPro) => {
+      if(newPro.value == 'rest') {
+        scope.switch.mfr = 'Accton';
       }
     }));
     
