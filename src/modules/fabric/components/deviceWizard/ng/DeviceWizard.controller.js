@@ -166,7 +166,7 @@ export class DeviceWizardController {
         name: scope.switch.name,
         type: scope.switch.fabric_role,
         available: scope.switch.available,
-        leaf_group: scope.switch.leaf_group,
+        // leaf_group: scope.switch.leaf_group,
         rack_id: scope.switch.rack_id,
         mfr: scope.switch.mfr,
         community: scope.switch.community,
@@ -190,20 +190,20 @@ export class DeviceWizardController {
           // generate device id
           let deviceId = '';
           switch (params.protocol.toUpperCase()) {
-            case 'REST':
-              params.deviceId = `rest:${params.managementAddress}:port`;
+            case 'rest':
+              params.id = `rest:${params.managementAddress}:port`;
               break;
               
-            case 'SNMP':
-              params.deviceId = `snmp:${params.managementAddress}:port`;
+            case 'snmp':
+              params.id = `snmp:${params.managementAddress}:port`;
               break;
               
-            case 'GRPC':
-              params.deviceId = `gnmi:${params.managementAddress}:port`;
+            case 'grpc':
+              params.id = `gnmi:${params.managementAddress}:port`;
               break;
               
-            case 'OPENFLOW':
-              params.deviceId = `of:0000${(params.mac.split(':')).join('')}`;
+            case 'of':
+              params.id = `of:0000${(params.mac.split(':')).join('')}`;
               break;
           }
           deviceDataManager.postDeviceDetail(params)
