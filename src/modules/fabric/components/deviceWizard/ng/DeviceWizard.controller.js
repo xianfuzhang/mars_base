@@ -169,7 +169,7 @@ export class DeviceWizardController {
         // leaf_group: scope.switch.leaf_group,
         rack_id: scope.switch.rack_id,
         mfr: scope.switch.mfr,
-        community: scope.switch.community,
+        // community: scope.switch.community,
         managementAddress: scope.switch.managementAddress,
         port: scope.switch.port,
         protocol: scope.switch.protocol,
@@ -196,6 +196,7 @@ export class DeviceWizardController {
               
             case 'snmp':
               params.id = `snmp:${params.managementAddress}:port`;
+              params.community = scope.switch.community;
               break;
 
             case 'grpc':
