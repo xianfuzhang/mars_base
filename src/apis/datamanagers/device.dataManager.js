@@ -289,7 +289,7 @@ export class DeviceDataManager {
         defer.resolve(res.data.cpu);
       },
       (error) => {
-        defer.resolve({'cpu': []});
+        defer.resolve([]);
       }
     );
     return defer.promise;
