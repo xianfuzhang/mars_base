@@ -30,7 +30,7 @@ export class LoginDataManager {
     this.di.$http.post(this.di.appService.getLoginUrl(), 'j_username='+username+'&j_password='+password, {'headers':{'Content-Type': 'application/x-www-form-urlencoded'}})
       .then((result) => {
       console.log(result);
-      if(result.status === 302){
+      if(result.status === 200){
         let content = result.data;
         //登录成功
         if (content.indexOf('ONOS Login') !== -1) {
