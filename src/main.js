@@ -109,7 +109,7 @@ angular
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     var checkLoggedIn = function($q, $cookies, $location){
       var deferred = $q.defer();
-      var useraccount = $cookies.get('usersession');
+      var useraccount = $cookies.get('useraccount');
       if (!useraccount) {
         deferred.reject();
         $location.path('/login');
