@@ -52,6 +52,7 @@ export class mdlText {
     }
 
     function changeValidationState() {
+      scope.content = scope.helper.content;
       //告警信息当invalid才会显示
       if (scope.helper.validation === 'true') {
         angular.element(element.children()[0]).addClass('mdc-text-field--invalid');
@@ -118,6 +119,12 @@ export class mdlText {
     }));
     
      scope.$watch('helper.validation', (newVal, oldVal) => {
+      if (scope.helper) {
+        changeValidationState();
+      }
+    }, true);
+
+     scope.$watch('helper.content', (newVal, oldVal) => {
       if (scope.helper) {
         changeValidationState();
       }

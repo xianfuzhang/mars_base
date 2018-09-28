@@ -17,6 +17,7 @@
   "MODULE.ACCOUNT.DIALOG.CONTENT.BATCH_DELETE_ACCOUNT": "Batch delete user account?",
   "MODULE.ACCOUNT.CREATE.TITTLE": "Create User Account",
   "MODULE.ACCOUNT.CREATE.NAME": "Account Name",
+  "MODULE.ACCOUNT.CREATE.NAME.HELP": "Account name must contains numbers, alphabet",
   "MODULE.ACCOUNT.CREATE.GROUPS": "Groups",
   "MODULE.ACCOUNT.CREATE.GROUP.SUPER": "Super User",
   "MODULE.ACCOUNT.CREATE.GROUP.ADMIN": "Admin User",

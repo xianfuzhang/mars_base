@@ -16,6 +16,7 @@ export class CreateUserAccountController {
 
     this.scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
+    this.USER_NAME_REGX = /^[A-Za-z0-9]+$/;
     this.scope.userModel = {
       userForm: {},
       user_name: null,
@@ -30,7 +31,7 @@ export class CreateUserAccountController {
       userNameHelper: {
         id: 'userNameHelper',
         validation: 'false',
-        content: this.translate('MODULE.LOGIN.FORM.USERNAME.HELP')
+        //content: this.translate('MODULE.LOGIN.FORM.USERNAME.HELP')
       },
       passwordDisplayLabel: {
         id: 'password',
@@ -80,7 +81,13 @@ export class CreateUserAccountController {
       }
       if (!this.scope.userModel.user_name) {
         this.scope.userModel.userNameHelper.validation = 'true';
+        this.scope.userModel.userNameHelper.content = this.translate('MODULE.LOGIN.FORM.USERNAME.HELP');
         invalid = true;
+      }
+      else if (!this.nameParse(this.scope.userModel.user_name))  {
+       this.scope.userModel.userNameHelper.validation = 'true';
+       this.scope.userModel.userNameHelper.content = this.translate('MODULE.ACCOUNT.CREATE.NAME.HELP');
+        invalid = true; 
       }
       else {
         this.scope.userModel.userNameHelper.validation = 'false';
@@ -122,6 +129,18 @@ export class CreateUserAccountController {
         result: data
       });
     };
+  }
+
+  nameParse(accountName) {
+    let i = 0;
+    let status = true;
+    while(i < accountName.length) {
+      if(!this.USER_NAME_REGX.test(accountName.charAt(i))) {
+        status = false;
+      }
+      i++;
+    }
+    return status;
   }
 }
 CreateUserAccountController.$inject = CreateUserAccountController.getDI();
