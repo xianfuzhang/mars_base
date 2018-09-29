@@ -1,7 +1,10 @@
 const express = require('express'),
   router = express.Router(),
   _ = require('lodash'),
-  moment = require('moment');
+  Chance = require('chance'),
+  chance = new Chance(),
+  moment = require('moment'),
+  path = require('path');
 
 router.get('/controller', function (req, res) {
   let timeFrom = (new Date(req.query.from + ' 00:00:00')).getTime();
@@ -13,6 +16,26 @@ router.get('/controller', function (req, res) {
   // });
   
   return res.json({logs: formatLog(logs)});
+});
+
+router.get('/controller/files', function (req, res) {
+  let filesNum = chance.natural({min: 8, max: 15});
+  let files = [];
+  
+  _.times(filesNum, () => {
+    files.push(`file_${chance.word()}.log`)
+  })
+  
+  return res.json({files});
+});
+
+router.get('/controller/files/:filename', function (req, res) {
+  if(!req.params.filename) {
+    return res.status(400).json('Please specify the filename!');
+  }
+  
+  let filepath = path.resolve(__dirname,'../assets/configuration.json');
+  res.download(filepath, req.params.filename);
 });
 
 function formatLog(logs){
