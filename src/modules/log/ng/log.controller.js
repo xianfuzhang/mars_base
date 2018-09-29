@@ -5,7 +5,8 @@ export class LogController {
       '$scope',
       '$q',
       '$timeout',
-      'dialogService',
+      '$window',
+      'appService',
       'logService',
       'logDataManager',
       'tableProviderFactory'
@@ -25,6 +26,8 @@ export class LogController {
     this.scope.pageTitle = this.translate('MODULE.LOG.PAGE.TITLE');
     this.scope.loading = false;
     this.scope.hasData = false;
+    this.scope.fileList = {options: []};
+    this.scope.logFileSelected = {};
     
     let now = Date.now();
     let today = this.date(now, 'yyyy-MM-dd');
@@ -48,11 +51,10 @@ export class LogController {
       this.scope.logModel.logAPI.queryUpdate();
     }
   
-    this.scope.file = () => {
-      this.scope.loading = true;
-      this.di.$timeout(() => {
-        this.scope.loading = false;
-      }, 2000)
+    this.scope.downloadFile = () => {
+      if (this.scope.logFileSelected.value == '') return false;
+      
+      this.di.$window.location.href = this.di.appService.getLogFilesUrl() + `/${this.scope.logFileSelected.value}`;
     }
   
     this.scope.onLogAPIReady = ($api) => {
@@ -71,6 +73,7 @@ export class LogController {
   }
   
   init() {
+    // get system log
     this.scope.logModel.logProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
@@ -95,6 +98,19 @@ export class LogController {
           index_name: 'created_time',
         };
       }
+    });
+    
+    // get log file
+    this.di.logDataManager.getLogFiles().then((res) => {
+      let opts = [{label: this.translate('MODULE.LOG.DOWNLOAD_FILE_SELECT'), value:""}];
+      if(res.data && res.data['files'] && res.data['files'] instanceof Array){
+        res.data['files'].forEach((item)=>{
+          opts.push({label:item, value:item})
+        });
+      }
+  
+      this.scope.fileList.options = opts;
+      this.scope.logFileSelected = this.scope.fileList.options[0];
     });
   }
   

@@ -28,6 +28,31 @@ export class LogDataManager {
     
     return defer.promise;
   }
+  
+  getLogFiles(params) {
+    let defer = this.di.$q.defer();
+    let url = this.di.appService.getLogFilesUrl();
+  
+    this.di.$http.get(url, {'params': params}).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'files': [], 'total': 0}});
+      }
+    );
+  
+    return defer.promise;
+  }
+  
+  // getDownloadFile(filename) {
+  //   let defer = this.di.$q.defer();
+  //   let url = this.di.appService.getLogFilesUrl() + `/${filename}`;
+  //
+  //   this.di.$http({method: 'get',url:url});
+  //
+  //   return defer.promise;
+  // }
 }
 
 LogDataManager.$inject = LogDataManager.getDI();
