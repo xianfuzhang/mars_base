@@ -50,6 +50,17 @@ export class DeviceDetailController {
       }
       this.init();
     });
+
+    let unSubscribers = [];
+    unSubscribers.push(this.di.$rootScope.$on('device-flow-refresh',()=>{
+      this.scope.detailModel.api.queryUpdate();
+    }));
+
+    this.scope.$on('$destroy', () => {
+      unSubscribers.forEach((unSubscribe) => {
+        unSubscribe();
+      });
+    });
   }
 
   prepareScope() {
