@@ -114,7 +114,7 @@ export class FlowEstablishController {
         scope.curDeviceId = deviceId;
         scope.showWizard = true;
         reset();
-        // scope.$apply();
+        scope.$apply();
     };
 
 
