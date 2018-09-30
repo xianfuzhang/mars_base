@@ -5,6 +5,8 @@ export class ConfigurationHistoryController {
       '$scope',
       '$q',
       '$timeout',
+      '$window',
+      'appService',
       'configurationDataManager',
       'tableProviderFactory'
     ];
@@ -23,6 +25,8 @@ export class ConfigurationHistoryController {
     this.scope.pageTitle = this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY');
     this.scope.loading = false;
     this.scope.hasData = false;
+    this.scope.fileList = {options: []};
+    this.scope.historyFileSelected = {};
     
     let now = Date.now();
     let today = this.date(now, 'yyyy-MM-dd');
@@ -41,13 +45,11 @@ export class ConfigurationHistoryController {
       
       this.scope.configurationHistoryModel.api.queryUpdate();
     }
+  
+    this.scope.downloadFile = () => {
+      if (this.scope.historyFileSelected.value == '') return false;
     
-    this.scope.file = () => {
-      // TODO: get file from backend
-      this.scope.loading = true;
-      this.di.$timeout(() => {
-        this.scope.loading = false;
-      }, 2000)
+      this.di.$window.location.href = this.di.appService.getConfigurationHistoryFilesUrl() + `/${this.scope.historyFileSelected.value}`;
     }
     
     this.scope.onAPIReady = ($api) => {
@@ -90,6 +92,19 @@ export class ConfigurationHistoryController {
           index_name: 'created_time',
         };
       }
+    });
+  
+    // get configuration history files
+    this.di.configurationDataManager.getConfigurationHistoryFiles().then((res) => {
+      let opts = [{label: this.translate('MODULE.LOG.DOWNLOAD_FILE_SELECT'), value:""}];
+      if(res.data && res.data['files'] && res.data['files'] instanceof Array){
+        res.data['files'].forEach((item)=>{
+          opts.push({label:item, value:item})
+        });
+      }
+    
+      this.scope.fileList.options = opts;
+      this.scope.historyFileSelected = this.scope.fileList.options[0];
     });
   }
   

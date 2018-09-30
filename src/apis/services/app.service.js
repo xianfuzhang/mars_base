@@ -214,11 +214,15 @@ export class appService {
   getConfigurationFileUrl(filename){
     return this.getZoneEndpoint() + '/network/configuration/files/' + filename;
   }
-
+  
   getConfigurationHistoryUrl(params){
     let url = this.getZoneEndpoint(true) + '/utility/confighistory/v1/';
 
     return url;
+  }
+  
+  getConfigurationHistoryFilesUrl(){
+    return this.getZoneEndpoint(true) + '/utility/confighistory/v1/files';
   }
 
   getAlertHistoryUrl(){
