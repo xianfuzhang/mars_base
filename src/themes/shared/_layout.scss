@@ -25,6 +25,7 @@ input:-webkit-autofill:active {
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+  overflow: auto;
 }
 .app-body{
   height:100%;

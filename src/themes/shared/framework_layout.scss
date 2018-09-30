@@ -5,6 +5,7 @@
   flex-direction: column;
   flex-wrap: nowrap;
   height: 100%;
+  overflow: auto;
 
 
   @include element(header){
