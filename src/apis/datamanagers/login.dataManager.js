@@ -31,7 +31,9 @@ export class LoginDataManager {
       .then((result) => {
       console.log(result);
       if(result.status === 200){
-        let content = result.data;
+        this.di.$cookies.put('useraccount', JSON.stringify({'user_name': username, 'groups': []}));
+        defer.resolve(true);
+        /*let content = result.data;
         //登录成功
         if (content.indexOf('ONOS Login') === -1) {
           // this.di.$cookies.put('usersession', this.di.$cookies.get('JSESSIONID'));
@@ -41,7 +43,7 @@ export class LoginDataManager {
         else {
           this.di.$cookies.remove('useraccount');
           defer.resolve(false);
-        }
+        }*/
       } else {
         this.di.$cookies.remove('useraccount');
         defer.resolve(false);
