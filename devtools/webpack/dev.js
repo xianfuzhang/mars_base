@@ -6,7 +6,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-
+const ngAnnotateWebpackPlugin =  require('ng-annotate-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const port = process.env.PORT || 3000;
 const hostname = process.env.HOSTNAME || 'localhost';
@@ -17,9 +18,11 @@ module.exports = function (config) {
   return {
     mode: "development",
     entry: {
-      app: [path.resolve('src/main.js'), path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js')],
+      // app: [path.resolve('src/main.js'), path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js')],
+      app: path.resolve('src/main.js')
     },
     plugins: [
+      new ngAnnotateWebpackPlugin(),
       new HtmlWebpackPlugin({
         template: "./src/index.html",
         favicon: "./favicon.ico",
@@ -50,7 +53,12 @@ module.exports = function (config) {
           ]
         }
       }),
-      new webpack.HotModuleReplacementPlugin()
+      new webpack.HotModuleReplacementPlugin(),
+      new CopyWebpackPlugin([{
+        from: path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js'),
+        to: path.resolve('public/jtopo-0.4.8-min.js'),
+        toType: 'file'
+      }])
     ],
     devtool: 'inline-source-map',
     devServer: {
