@@ -74,7 +74,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve(null);
+        defer.reject(null);
       }
     );
     return defer.promise;
@@ -88,7 +88,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve(null);
+        defer.reject(error.data);
       }
     );
     return defer.promise;
@@ -101,7 +101,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve(null);
+        defer.reject(err.data);
       }
     );
     return defer.promise;
