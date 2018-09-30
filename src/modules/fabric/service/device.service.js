@@ -363,13 +363,13 @@ export class DeviceService {
         'sortable': "port_status",
         'show': true
       },
-      {
-        'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
-        'field': 'link_status',
-        'sortable': "link_status",
-        'showState': true,
-        'show': true
-      },
+      // {
+      //   'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
+      //   'field': 'link_status',
+      //   'sortable': "link_status",
+      //   'showState': true,
+      //   'show': true
+      // },
     ]
   }
 
