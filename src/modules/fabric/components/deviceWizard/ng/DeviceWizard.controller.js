@@ -191,9 +191,9 @@ export class DeviceWizardController {
               scope.switch = _.cloneDeep(initSwitch);
               rootScope.$emit('device-list-refresh');
               resolve({valid: true, errorMessage: ''});
-            }, () => {
-              scope.switch = _.cloneDeep(initSwitch);
-              resolve({valid: false, errorMessage: 'Error occurred!'});
+            }, (err) => {
+              // scope.switch = _.cloneDeep(initSwitch);
+              resolve({valid: false, errorMessage: err});
             });
         } else { // add a new switch
           // generate device id
@@ -222,9 +222,9 @@ export class DeviceWizardController {
               scope.switch = _.cloneDeep(initSwitch);
               rootScope.$emit('device-list-refresh');
               resolve({valid: true, errorMessage: ''});
-            }, () => {
-              scope.switch = _.cloneDeep(initSwitch);
-              resolve({valid: false, errorMessage: 'Error occurred!'});
+            }, (err) => {
+              // scope.switch = _.cloneDeep(initSwitch);
+              resolve({valid: false, errorMessage: err});
             });
         }
       });
