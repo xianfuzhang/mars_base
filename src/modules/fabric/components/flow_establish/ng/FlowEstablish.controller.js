@@ -110,13 +110,14 @@ export class FlowEstablishController {
 
     this.di.$scope.subtypeList = [];
 
-    this.di.$scope.open = function(deviceId){
+    this.di.$scope.open = (deviceId) => {
       if(scope.showWizard) return;
         scope.flow = initFlow;
         scope.curDeviceId = deviceId;
-        scope.showWizard = true;
         reset();
-        scope.$apply();
+        this.di.$timeout(() => {
+          scope.showWizard = true;
+        });
     };
 
 
@@ -340,8 +341,6 @@ export class FlowEstablishController {
     unsubscribes.push(this.di.$rootScope.$on('flow-wizard-show', ($event, deviceId) => {
       scope.open(deviceId);
     }));
-
-
 
     this.di.$scope.$on('$destroy', () => {
       unsubscribes.forEach((cb) => {
