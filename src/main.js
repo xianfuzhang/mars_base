@@ -79,14 +79,14 @@ angular
     'date-picker',
     'marButton'
   ])
-  .factory('setLanguage', function ($q) {
+  .factory('setLanguage', ['$q',function ($q) {
     return function (options) {
       let deferred = $q.defer();
       let data = require('../public/' + options.key + '.json');
       deferred.resolve(data);
       return deferred.promise;
     };
-  })
+  }])
   .config(['$translateProvider', function($translateProvider) {
     $translateProvider.useLoader('setLanguage');
     $translateProvider.useSanitizeValueStrategy('escape');
@@ -118,7 +118,10 @@ angular
         deferred.resolve();
       }
       return deferred.promise;
-    };*/
+    };
+  
+    checkLoggedIn.$inject = ['$q', '$cookies', '$location'];
+    */
 
     $routeProvider
       .when('/', {
@@ -236,7 +239,7 @@ angular
     });*/
   }])
   /*.config(['$httpProvider', '$locationProvider', '$qProvider', function($httpProvider, $locationProvider, $qProvider){
-    $httpProvider.interceptors.push(function($location, $q){
+    $httpProvider.interceptors.push(['$location', '$q', function($location, $q){
       return {
         response: function(response) {
           // do something on success
@@ -248,8 +251,8 @@ angular
           return $q.reject(response);
         }
       };
-    });
-  }])*/;
+    }]);
+  }]);*/
 
 /*
 angular.element(document).ready(function () {
