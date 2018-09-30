@@ -107,7 +107,7 @@ angular
     }
   }])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-    var checkLoggedIn = function($q, $cookies, $location){
+    /*var checkLoggedIn = function($q, $cookies, $location){
       var deferred = $q.defer();
       var useraccount = $cookies.get('useraccount');
       if (!useraccount) {
@@ -118,99 +118,99 @@ angular
         deferred.resolve();
       }
       return deferred.promise;
-    };
+    };*/
 
     $routeProvider
       .when('/', {
         template: require('./modules/dashboard/template/dashboard'),
         controller: 'DashboardController',
-        resolve: {
+        /*resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       })
       .when('/devices', {
         template: require('./modules/fabric/template/device.html'),
         controller: 'deviceController',
-        resolve: {
+       /* resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       })
       .when('/devices/:deviceId', {
         template: require('./modules/fabric/template/device_detail.html'),
         controller: 'deviceDetailController',
-        resolve: {
+       /* resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       })
       .when('/interface_group', {
         template: require('./modules/fabric/template/interface_group.html'),
         controller: 'interfaceGroupController',
-        resolve: {
+       /* resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       })
       .when('/statistics', {
         template: require('./modules/fabric/template/statistic.html'),
         controller: 'statisticController',
-        resolve: {
+        /*resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       })
       .when('/account_manage', {
         template: require('./modules/login/template/account_manage.html'),
         controller: 'accountManageController',
-        resolve: {
+        /*resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       }).
       when('/fabric_summary', {
         template: require('./modules/fabric/template/fabric_summary.html'),
         controller: 'fabricSummaryController',
-        resolve: {
+        /*resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       }).
       when('/configuration', {
         template: require('./modules/configuration/template/configuration.html'),
         controller: 'ConfigurationController',
-        resolve: {
+       /* resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       }).
       when('/configuration_list', {
         template: require('./modules/configuration/template/configuration_list.html'),
         controller: 'ConfigurationListController',
-        resolve: {
+       /* resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       }).
       when('/configuration_history', {
         template: require('./modules/configuration/template/configuration_history.html'),
         controller: 'ConfigurationHistoryController',
-        resolve: {
+       /* resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       }).
       when('/alert', {
         template: require('./modules/alert/template/alert.html'),
         controller: 'AlertController',
-        resolve: {
+        /*resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       }).
       when('/inform', {
         template: require('./modules/alert/template/inform.html'),
         controller: 'InformController',
-        resolve: {
+       /* resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       }).
       when('/healthycheck', {
         template: require('./modules/alert/template/healthycheck.html'),
         controller: 'HealthyCheckController',
-        resolve: {
+       /* resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       }).
       when('/login', {
         template: require('./modules/login/template/login.html'),
@@ -224,9 +224,9 @@ angular
       when('/log', {
         template: require('./modules/log/template/log.html'),
         controller: 'logController',
-        resolve: {
+        /*resolve: {
           loggedin: checkLoggedIn
-        }
+        }*/
       })
       .otherwise({ redirectTo: '/' });
 
@@ -235,7 +235,7 @@ angular
       requireBase: false
     });*/
   }])
-  .config(['$httpProvider', '$locationProvider', '$qProvider', function($httpProvider, $locationProvider, $qProvider){
+  /*.config(['$httpProvider', '$locationProvider', '$qProvider', function($httpProvider, $locationProvider, $qProvider){
     $httpProvider.interceptors.push(function($location, $q){
       return {
         response: function(response) {
@@ -249,7 +249,7 @@ angular
         }
       };
     });
-  }]);
+  }])*/;
 
 /*
 angular.element(document).ready(function () {

@@ -34,11 +34,11 @@ export class headerController{
       }
     };
 
-    this.di.alertDataManager.getAlertHistories({})
+    /*this.di.alertDataManager.getAlertHistories({})
       .then((res) => {
         this.scope.alerts_acount = res.data.total;
       });
-    this.init();
+    this.init();*/
   }
 
   init() {
