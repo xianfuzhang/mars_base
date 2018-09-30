@@ -22,7 +22,6 @@ module.exports = function (config) {
     },
     optimization: {
       minimizer: [
-        new UglifyJsPlugin(),
         new OptimizeCssAssetsPlugin({
           assetNameRegExp: /\.css\.*(?!.*map)/g,
           cssProcessor: require('cssnano'),
@@ -61,7 +60,8 @@ module.exports = function (config) {
         from: path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js'),
         to: path.resolve('public/jtopo-0.4.8-min.js'),
         toType: 'file'
-      }])
+      }]),
+      new UglifyJsPlugin()
     ],
     module: {
       rules: [
