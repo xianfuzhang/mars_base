@@ -145,6 +145,8 @@ export class FlowEstablishController {
       return true;
     }
 
+
+    let translate = this.translate;
     this.di.$scope.stepValidation = function (curStep, nextStep) {
       let inValidJson_Copy = angular.copy(inValidJson);
 
@@ -163,7 +165,7 @@ export class FlowEstablishController {
         }
 
         if(di.$scope.instructionsModel && di.$scope.instructionsModel.length === 0){
-          inValidJson_Copy['errorMessage'] = "请添加instruction！";
+          inValidJson_Copy['errorMessage'] = translate('MODULES.SWITCH.DETAIL.CONTENT.NEED_ADD_INSTRUCTION');
           return inValidJson_Copy;
         }
 
@@ -287,7 +289,7 @@ export class FlowEstablishController {
     this.di.$scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
       if(di.$scope.criteriasModel && di.$scope.criteriasModel.length === 0){
-        inValidJson_Copy['errorMessage'] = "请添加Criterias！";
+        inValidJson_Copy['errorMessage'] = translate('MODULES.SWITCH.DETAIL.CONTENT.NEED_ADD_SELECTOR');
         // return inValidJson_Copy;
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
