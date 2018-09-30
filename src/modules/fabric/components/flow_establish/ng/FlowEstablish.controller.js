@@ -10,6 +10,7 @@ export class FlowEstablishController {
       '$log',
       '$q',
       '$timeout',
+      '$filter',
       '_',
       'deviceDataManager',
       'deviceService'
@@ -26,6 +27,7 @@ export class FlowEstablishController {
     const scope = this.di.$scope;
     const deviceDataManager = this.di.deviceDataManager;
     const rootScope = this.di.$rootScope;
+    this.translate = this.di.$filter('translate');
 
     this.di.$scope.mac_regex = '^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$';  // MAC Address regex for validation
     this.di.$scope.ip_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
@@ -55,17 +57,17 @@ export class FlowEstablishController {
     this.di.$scope.steps = [
       {
         id: 'step1',
-        title: 'Common',
+        title: this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.COMMON'),
         content: require('../template/flow_common'),
       },
       {
         id: 'step2',
-        title: 'Instruction',
+        title: this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TREATMENT'),
         content: require('../template/flow_treatment'),
       },
       {
         id: 'step3',
-        title: 'Criteria',
+        title: this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR'),
         content: require('../template/flow_criteria'),
       }
     ];
