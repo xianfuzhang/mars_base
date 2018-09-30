@@ -9,5 +9,5 @@
   "MODULE.LOG.BUTTON.SEARCH": "Search",
   "MODULE.LOG.BUTTON.DOWNLOAD": "Download",
   "MODULE.LOG.DOWNLOAD_LABEL": "System Log Download:",
-  "MODULE.LOG.DOWNLOAD_FILE_SELECT": "Please select the log file"
+  "MODULE.LOG.DOWNLOAD_FILE_SELECT": "Please select the file"
 }

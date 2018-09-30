@@ -52,8 +52,8 @@
     </div>
     <div class="stepForm__input" ng-if="switch.protocol.value == 'snmp'">
         <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.COMMUNITY' | translate}}</div>
-        <!--<input class="stepForm__input__text" name="community" type="text" ng-model="switch.community"/>-->
-        <valid-input ng-model="switch.community" v-rpcid="page_device_1" ></valid-input>
+        <input class="stepForm__input__text" name="community" type="text" ng-model="switch.community"/>
+        <!--<valid-input ng-model="switch.community" v-rpcid="page_device_1" ></valid-input>-->
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MFR' | translate}}</div>

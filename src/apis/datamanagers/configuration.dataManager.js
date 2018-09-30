@@ -112,6 +112,22 @@ export class ConfigurationDataManager{
     );
     return defer.promise;
   }
+  
+  getConfigurationHistoryFiles(params) {
+    let defer = this.di.$q.defer();
+    let url = this.di.appService.getConfigurationHistoryFilesUrl();
+  
+    this.di.$http.get(url, {'params': params}).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'files': [], 'total': 0}});
+      }
+    );
+  
+    return defer.promise;
+  }
 }
 
 ConfigurationDataManager.$inject = ConfigurationDataManager.getDI();
