@@ -629,7 +629,7 @@ export class DashboardController {
     let deffe = this.di.$q.defer();
     if (!devices.length){
       deffe.resolve([]);
-      return deffer.promise;
+      return deffe.promise;
     } 
 
     let startTime = this.getISODate(this.di.$scope.dashboardModel.cpu.begin_time);
@@ -657,7 +657,7 @@ export class DashboardController {
     let deffe = this.di.$q.defer();
     if (!devices.length){
       deffe.resolve([]);
-      return deffer.promise;
+      return deffe.promise;
     }
 
     let startTime = this.getISODate(this.di.$scope.dashboardModel.cpu.begin_time);
