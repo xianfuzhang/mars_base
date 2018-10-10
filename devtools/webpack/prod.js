@@ -41,20 +41,20 @@ module.exports = function (config) {
         filename: "[name].css",
         chunkFilename: "[id].css"
       }),
-      new MergeJsonWebpackPlugin({
-        'output': {
-          'groupBy': [
-            {
-              'pattern': 'src/**/**/**/en.json',
-              'fileName': './en.json'
-            },
-            {
-              'pattern': 'src/**/**/**/cn.json',
-              'fileName': './cn.json'
-            }
-          ]
-        }
-      }),
+      // new MergeJsonWebpackPlugin({
+      //   'output': {
+      //     'groupBy': [
+      //       {
+      //         'pattern': 'src/**/**/**/en.json',
+      //         'fileName': './en.json'
+      //       },
+      //       {
+      //         'pattern': 'src/**/**/**/cn.json',
+      //         'fileName': './cn.json'
+      //       }
+      //     ]
+      //   }
+      // }),
       new webpack.HotModuleReplacementPlugin(),
       new CopyWebpackPlugin([{
         from: path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js'),
