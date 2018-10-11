@@ -86,8 +86,9 @@ export class alertService {
   }
 
 
-   getDescriptionTranslate(query, type) {
+   getDescriptionTranslate(query) {
     let trans = "";
+    let type = query.type;
     let pre = query.condition ==='gt'?this.translate('MODULES.ALERT.HEALTHY_CHECK.CONDITION.GT'):this.translate('MODULES.ALERT.HEALTHY_CHECK.CONDITION.LT');
     let middle = '';
     if(type === 'cpu_utilization'){

@@ -74,14 +74,15 @@ export class HealthyCheckController {
         hc.status = rule.status === 'enabled'?translate('MODULES.ALERT.HEALTHY_CHECK.STATUS.ENABLED'):translate('MODULES.ALERT.HEALTHY_CHECK.STATUS.DISABLED');
         hc.alert_level = rule.alert_level === 0?translate('MODULES.ALERT.HEALTHY_CHECK.LEVEL.LOW'):translate('MODULES.ALERT.HEALTHY_CHECK.LEVEL.HIGHT');
         hc.receive_group = rule.receive_group;
-        hc.type = di.alertService.getRuleTypeTranslate(rule.type);
-        if(rule.type === 'rx_util'){
-          hc.description = di.alertService.getDescriptionTranslate(rule.query_rx[0], rule.type);
-        } else if(rule.type === 'tx_util'){
-          hc.description = di.alertService.getDescriptionTranslate(rule.query_tx[0], rule.type);
-        } else {
-          hc.description = di.alertService.getDescriptionTranslate(rule.query[0], rule.type);
-        }
+        hc.type = di.alertService.getRuleTypeTranslate(rule.query[0].type);
+        hc.description = di.alertService.getDescriptionTranslate(rule.query[0]);
+        // if(rule.type === 'rx_util'){
+        //   hc.description = di.alertService.getDescriptionTranslate(rule.query[0]);
+        // } else if(rule.type === 'tx_util'){
+        //   hc.description = di.alertService.getDescriptionTranslate(rule.query[0]);
+        // } else {
+        //   hc.description = di.alertService.getDescriptionTranslate(rule.query[0]);
+        // }
         hcs.push(hc);
       });
       return hcs;
