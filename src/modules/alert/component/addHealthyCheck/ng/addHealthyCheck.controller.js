@@ -183,10 +183,9 @@ export class AddHealthyCheckController {
           'continue': scope.healthyCheckAddedModel.query.continue,
         };
         params['query_' + type][type + '_util'] = value;
+        params['query_' + type] = [params['query_' + type]];
 
         type = 'port';
-
-        params['query_' + type] = [params['query_' + type]];
 
       } else {
         params['query'] = {
