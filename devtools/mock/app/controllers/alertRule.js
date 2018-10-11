@@ -112,12 +112,6 @@ function formatRule(rules, isGetAll) {
   
   if(_.isArray(tmpRules)) {
     tmpRules.forEach((rule) => {
-      if (rule.type == 'port') {
-        rule.query_rx = rule.query.query_rx;
-        rule.query_tx = rule.query.query_tx;
-        
-        delete rule['query'];
-      }
       
       if(!isGetAll) {
         delete rule['from'];
@@ -127,12 +121,6 @@ function formatRule(rules, isGetAll) {
       }
     })
   } else {
-    if (tmpRules.type == 'port') {
-      tmpRules.query_rx = tmpRules.query.query_rx;
-      tmpRules.query_tx = tmpRules.query.query_tx;
-  
-      delete tmpRules['query'];
-    }
   
     if(!isGetAll) {
       delete tmpRules['from'];
@@ -148,36 +136,59 @@ function formatRule(rules, isGetAll) {
 function formatType(rule) {
   switch(rule.type){
     case 'cpu':
-      rule.type = 'cpu_utilization';
-      rule.query.value = rule.query.util
-      delete rule.query.util;
+      rule.query.forEach((query) => {
+        query.type = 'cpu_utilization';
+        query.value = query.util;
+        delete query.util;
+      })
       break;
       
     case 'ram':
-      rule.type = 'ram_used_ratio';
-      rule.query.value = rule.query.used_ratio
-      delete rule.query.used_ratio
+      rule.query.forEach((query) => {
+        query.type = 'ram_used_ratio';
+        query.value = query.used_ratio;
+        delete query.used_ratio;
+      })
       break;
       
     case 'disk':
-      rule.type = 'disk_root_used_ratio';
-      rule.query.value = rule.query.root_used_ratio
-      delete rule.query.root_used_ratio;
+      rule.query.forEach((query) => {
+        query.type = 'disk_root_used_ratio';
+        query.value = query.root_used_ratio
+        delete query.root_used_ratio;
+      })
+      
       break;
       
     case 'port':
-      if(rule.query_rx){
-        rule.type = 'rx_util';
-        rule.query_rx.value = rule.query_rx.rx_util
-        delete rule.query_rx.rx_util;
+      if(rule.query.query_rx){
+        let queryArr = _.cloneDeep(rule.query.query_rx);
+        delete rule.query
+  
+        queryArr.forEach((query) => {
+          query.type = 'rx_util';
+          query.value = query.rx_util;
+          delete query.rx_util
+        })
+        
+        rule.query = queryArr;
       }
-      
-      if(rule.query_tx) {
-        rule.type = 'tx_util';
-        rule.query_tx.value = rule.query_tx.tx_util
-        delete rule.query_tx.tx_util;
+  
+      if(rule.query.query_tx){
+        let queryArr = _.cloneDeep(rule.query.query_tx);
+        delete rule.query
+  
+        queryArr.forEach((query) => {
+          query.type = 'tx_util';
+          query.value = query.tx_util;
+          delete query.tx_util
+        })
+  
+        rule.query = queryArr;
       }
   }
+  
+  delete rule.type;
 }
 
 function getRuleQuery(body, type){
