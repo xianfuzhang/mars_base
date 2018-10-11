@@ -185,6 +185,9 @@ export class AddHealthyCheckController {
         params['query_' + type][type + '_util'] = value;
 
         type = 'port';
+
+        params['query_' + type] = [params['query_' + type]];
+
       } else {
         params['query'] = {
           'condition':  scope.healthyCheckAddedModel.query.condition.value,
@@ -197,8 +200,9 @@ export class AddHealthyCheckController {
         } else if(type === 'disk'){
           params['query']['root_used_ratio'] = value;
         }
+        params.query = [params.query];
       }
-      params.query = [params.query];
+
       return new Promise((resolve, reject) => {
         di.alertDataManager.setHealthyCheck(object, type , params)
           .then(() => {
