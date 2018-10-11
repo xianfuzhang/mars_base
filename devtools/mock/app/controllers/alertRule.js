@@ -72,7 +72,7 @@ router.post('/:from/:type/threshold', function (req, res) {
     req.body.status,
     req.body.alert_level,
     req.body.receive_group,
-    req.body.query,
+    query,
     req.params.from,
     req.params.type
   );
@@ -196,36 +196,53 @@ function getRuleQuery(body, type){
     return false;
   }
 
+  let queryArr = []
   switch(type) {
     case 'cpu':
-      if(body.query.util && body.query.condition && body.query.continue) {
-        return {util: body.query.util, condition: body.query.condition, continue: body.query.continue}
-      }
+      body.query.forEach((query) => {
+        if(query.util && query.condition && query.continue) {
+          queryArr.push({util: query.util, condition: query.condition, continue: query.continue})
+        } else {
+          return false;
+        }
+      })
 
-      return false;
+      return queryArr;
     case 'ram':
-      if(body.query.used_ratio && body.query.condition && body.query.continue) {
-        return {used_ratio: body.query.used_ratio, condition: body.query.condition, continue: body.query.continue}
-      }
+      body.query.forEach((query) => {
+        if(query.used_ratio && query.condition && query.continue) {
+          queryArr.push({used_ratio: query.used_ratio, condition: query.condition, continue: query.continue})
+        } else {
+          return false;
+        }
+      })
 
-      return false;
+      return queryArr;
     case 'disk':
-      if(body.query.root_used_ratio && body.query.condition && body.query.continue) {
-        return {root_used_ratio: body.query.root_used_ratio, condition: body.query.condition, continue: body.query.continue}
-      }
+      body.query.forEach((query) => {
+        if(query.root_used_ratio && query.condition && query.continue) {
+          queryArr.push({root_used_ratio: body.query.root_used_ratio, condition: body.query.condition, continue: body.query.continue});
+        } else {
+          return false;
+        }
+      })
 
-      return false;
+      return queryArr;
     case 'port':
-      if(body.query_rx && body.query_rx.rx_util){
-        return {
-          query_rx: [{rx_util: body.query_rx.rx_util, condition: body.query_rx.condition, continue: body.query_rx.continue}]
-        }
+      if(body.query_rx){
+        body.query_rx.forEach((query) => {
+          queryArr.push({rx_util: query.rx_util, condition: query.condition, continue: query.continue})
+        })
+        return {query_rx: queryArr};
+      } else if(body.query_tx){
+        body.query_tx.forEach((query) => {
+          queryArr.push({tx_util: query.tx_util, condition: query.condition, continue: query.continue})
+        })
+  
+        return {query_tx: queryArr};
       } else {
-        return {
-          query_tx: [{tx_util: body.query_tx.tx_util, condition: body.query_tx.condition, continue: body.query_tx.continue}]
-        }
+        return false;
       }
-      return false;
   }
 }
 
