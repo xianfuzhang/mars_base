@@ -22,6 +22,7 @@
             </div>
             <div ng-style="resize_length" style="position: absolute;right:0;top:0;height:100%;background-color: white;width:295px;display:inline-block;overflow:scroll; ">
                 <mar-section s-title="Topo Settings" class="topo_setting">
+                    <transclude-body>
                     <div style="margin:2px;">
                         <div ng-click="topoRefresh()" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.REFRESH'|translate}}" id="refresh_topo"  class="+front mdc-button topo_setting__button">
                             <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
@@ -90,21 +91,27 @@
                             </svg>
                         </div>
                     </div>
+                    </transclude-body>
                 </mar-section>
 
                 <mar-section ng-show="fabricModel.showSwitchDetail"  s-title="{{'MODULES.TOPO.TITLE.DEVICE_DETAIL'|translate}}" class="detail_summary">
+                    <transclude-body>
                     <table id="topo_detail" class="topo_table"></table>
-
+                    </transclude-body>
                 </mar-section>
 
                 <mar-section ng-if="fabricModel.showSwitchDetail" s-title="Interfaces" class="detail_interface">
+                    <transclude-body>
                     <static-table style="max-width:400px" data="fabricModel.switchPorts" columns="fabricModel.portsSchema"></static-table>
                     <!--<mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">-->
                     <!--</mdl-table>-->
+                    </transclude-body>
                 </mar-section>
 
                 <mar-section ng-if="fabricModel.showSwitchDetail"  s-title="Links" class="detail_link">
+                    <transclude-body>
                     <static-table style="max-width:400px" data="fabricModel.switchLinks" columns="fabricModel.linksSchema"></static-table>
+                    </transclude-body>
                 </mar-section>
 
                 <!--<mar-section ng-if="fabricModel.showSwitchDetail"  title="Flows" class="detail_flow">-->

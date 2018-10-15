@@ -38,6 +38,7 @@
                 </div>
 
                 <mar-section s-title="{{'MODULES.ALERT.RECEIVE_GROUP.EMAIL'|translate}}" no-fold="true" class="">
+                  <transclude-body>
                   <div style="width:300px">
                     <table style="border-spacing:30px 3px;">
                       <thead>
@@ -56,9 +57,11 @@
 
                     <!--<static-table style="max-width:400px" data="informModel.groupDetails.receive.email" columns="informModel.emailSchema"></static-table>-->
                   </div>
+                  </transclude-body>
                 </mar-section>
 
                 <mar-section s-title="{{'MODULES.ALERT.RECEIVE_GROUP.WECHAT'|translate}}" no-fold="true" class="">
+                  <transclude-body>
                   <div style="width:300px">
 
                     <table style="border-spacing:30px 3px;">
@@ -78,6 +81,7 @@
                     </table>
                     <!--<static-table style="max-width:400px" data="informModel.groupDetails.receive.wechat" columns="informModel.wechatSchema"></static-table>-->
                   </div>
+                  </transclude-body>
                 </mar-section>
               </div>
 
@@ -92,7 +96,7 @@
 
             <div style="display: inline-block;vertical-align:top;height:100%;border:1px solid #fafafa;padding:8px;background-color: #fafafa;border-radius: 5px;text-align:left;">
               <mar-section s-title="{{'MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING'|translate}}" no-fold="true" class="">
-
+                <transclude-body>
                 <div style="display: block;">
                   <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="wechat_domain_component" style="width:350px;margin-top:8px;">
                     <input type="text" id="wechat_domain" class="mdc-text-field__input" ng-model="serverConfig.wechat.domain">
@@ -144,6 +148,7 @@
                   <div class="mdc-notched-outline__idle"></div>
                 </div>
                 </div>
+                </transclude-body>
               </mar-section>
               </div>
               <!--<div style="display: inline-block;width:350px;height:100px;background-color:blue">-->
@@ -151,6 +156,7 @@
 
               <mar-section s-title="{{'MODULES.ALERT.SERVER_CONFIG.EMAIL_SETTING'|translate}}" no-fold="true" class="">
                 <!--<div style="display: block">-->
+                <transclude-body>
                   <div style="display: block">
                     <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="email_domain_component" style="width:350px;margin-top:8px;">
                       <input type="text" id="email_domain" class="mdc-text-field__input" ng-model="serverConfig.email.domain">
@@ -205,6 +211,7 @@
                       <div class="mdc-notched-outline__idle"></div>
                     </div>
                   </div>
+                </transclude-body>  
                 <!--</div>-->
               </mar-section>
                   <!--<div style="display: block">-->

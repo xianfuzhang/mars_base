@@ -6,13 +6,14 @@
         <div class="mar_section__header__setting" ng-if="sectionModel.setting">
             <button class="material-icons mdc-icon-button mdc-card__action--icon" ng-click="showSetting($event)">settings</button>
         </div>
+        <div ng-transclude='title'></div>
     </div>
 
     <!--<div class="mar_section__body" ng-class="{'+expand': sectionModel.isFold}" ng-style="sectionModel.showStyle">-->
     <div>
         <div class="mar_section__body" ng-style="sectionModel.showStyle">
-            <ng-transclude>
-            </ng-transclude>
+            <div ng-transclude='body'>
+            </div>
         </div>
     </div>
 

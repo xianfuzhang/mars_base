@@ -18,7 +18,10 @@ export class marSection {
 
     this.replace = true;
     this.restrict = 'E';
-    this.transclude = true;
+    this.transclude = {
+      'title': '?transcludeTitle',
+      'body': '?transcludeBody'
+    };
     this.template = require('../template/mar_section');
 
     this.scope = {
