@@ -43,7 +43,7 @@ export class DashboardController {
     let unSubscribers = [];
     let dataModel = {};
     let date = this.di.dateService.getTodayObject();
-    let before = this.di.dateService.getBeforeDateObject();
+    let before = this.di.dateService.getBeforeDateObject(20*60*1000);
     this.di.$scope.dashboardModel = {
       'controllerSummary':{},
       'controllerStatistic':{},
@@ -54,6 +54,7 @@ export class DashboardController {
         unavailableCount:0,
       },
       cpu: {
+        'type': null, //minute, hour, day
         'begin_date': new Date(before.year, before.month, before.day),
         'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
         'end_date': new Date(date.year, date.month, date.day),
@@ -61,12 +62,18 @@ export class DashboardController {
         'analyzer': []
       },
       memory: {
+        'type': null, //minute, hour, day
         'begin_date': new Date(before.year, before.month, before.day),
         'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
         'end_date': new Date(date.year, date.month, date.day),
         'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
         'analyzer': []
-      }
+      },
+      timeRange: [
+        {label: this.translate('MODULES.DASHBOARD.TIMERANGE.MINUTE'), value: 60},
+        {label: this.translate('MODULES.DASHBOARD.TIMERANGE.HOUR'), value: 180},
+        {label: this.translate('MODULES.DASHBOARD.TIMERANGE.DAY'), value: 3600},
+      ]
     };
 
     this.di.$scope.panelRefresh = {
@@ -134,6 +141,36 @@ export class DashboardController {
           }
         }
       });
+    };
+
+    this.di.$scope.timeRangeSelect = (type, $value) => {
+      let before;
+      //20分钟
+      if ($value.value === 60) {
+        before = this.di.dateService.getBeforeDateObject(20*60*1000);
+      }
+      //1小时
+      else if ($value.value === 180) {
+        before = this.di.dateService.getBeforeDateObject(60*60*1000); 
+      }
+      //1天
+      else{
+        before = this.di.dateService.getBeforeDateObject(24*60*60*1000); 
+      }
+      if (type === 'cpu') {
+        this.di.$scope.dashboardModel.cpu.type = $value;
+        this.di.$scope.dashboardModel.cpu.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
+        this.getDevicesCPUAnalyzer(dataModel.devices).then(() => {
+          convertSwitchCPUAnalyzer();
+        });
+      }
+      else {
+        this.di.$scope.dashboardModel.memory.type = $value;
+        this.di.$scope.dashboardModel.memory.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
+        this.getDevicesMemoryAnalyzer(dataModel.devices).then(() => {
+          convertSwitchMemoryAnalyzer();
+        });
+      }
     };
 
     let di = this.di;
@@ -571,12 +608,12 @@ export class DashboardController {
   }
 
   getSwitchesCPUMemoryStatisticFromLS(switches) {
-    //30分钟以内不重复获取
+    //10分钟以内不重复获取
     let defer = this.di.$q.defer();
     this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS).get('timestamp')
       .then((data) => {
         if (data) {
-          let time = (Date.now() - data) - 30*60*1000;
+          let time = (Date.now() - data) - 10*60*1000;
           //超时，重新获取数据
           if (time >= 0) {
             this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS).del('timestamp')
@@ -634,7 +671,7 @@ export class DashboardController {
 
     let startTime = this.getISODate(this.di.$scope.dashboardModel.cpu.begin_time);
     let endTime = this.getISODate(this.di.$scope.dashboardModel.cpu.end_time);
-    let solution_second = 3600;//this.getResolutionSecond(startTime, endTime);
+    let solution_second = this.di.$scope.dashboardModel.cpu.type.value;//3600;//this.getResolutionSecond(startTime, endTime);
     let deferredArr = [];
 
     devices.forEach((device) => {
@@ -660,9 +697,9 @@ export class DashboardController {
       return deffe.promise;
     }
 
-    let startTime = this.getISODate(this.di.$scope.dashboardModel.cpu.begin_time);
-    let endTime = this.getISODate(this.di.$scope.dashboardModel.cpu.end_time);
-    let solution_second = 3600;//this.getResolutionSecond(startTime, endTime);
+    let startTime = this.getISODate(this.di.$scope.dashboardModel.memory.begin_time);
+    let endTime = this.getISODate(this.di.$scope.dashboardModel.memory.end_time);
+    let solution_second = this.di.$scope.dashboardModel.memory.type.value;//3600;//this.getResolutionSecond(startTime, endTime);
     let deferredArr = [];
 
     devices.forEach((device) => {

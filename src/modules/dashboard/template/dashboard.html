@@ -116,29 +116,49 @@
             </div>
             <div class="dashboard__horizontal_box">
               <div>
-                  <mar-section s-title="交换机CPU使用率Top5" no-fold="true"
-                      class="detail_summary dash_mar_section cpu_rate">
+                
+                <mar-section s-title="交换机CPU使用率Top5" no-fold="true"
+                    class="detail_summary dash_mar_section cpu_rate">
+                    <transclude-title>
+                      <mdl-select ng-model="dashboardModel.cpu.type" 
+                            display-label="{options: dashboardModel.timeRange}"
+                            ng-change="timeRangeSelect('cpu', $value)">
+                      </mdl-select>
+                    </transclude-title>
+                    <transclude-body>
                       <div class="content_panel_parent">
                         <content-panel is-load="panelLoading.controller">
-                            <div>
-                                <div id="deviceCpuAnalyzer" class="content_panel_dash_chart"></div>          
-                            </div>
+                          <div>
+                              <div id="deviceCpuAnalyzer" class="content_panel_dash_chart"></div>          
+                          </div>
                         </content-panel>
                       </div>
-                  </mar-section>
+                    </transclude-body>
+                    
+                </mar-section>
               </div>
               <div>
-                    <mar-section s-title="交换机内存使用率Top5" no-fold="true"
-                        class="detail_summary dash_mar_section memory_rate">
-                        <div class="content_panel_parent">
-                            <content-panel is-load="panelLoading.controller">
-                                <div>
-                                    <div id="deviceMemoryAnalyzer" class="content_panel_dash_chart"></div>
-                                </div>
-                            </content-panel>
-                        </div>
-                  </mar-section>
-              </div>
+                
+                <mar-section s-title="交换机内存使用率Top5" no-fold="true"
+                    class="detail_summary dash_mar_section memory_rate">
+                  <transclude-title>
+                    <mdl-select ng-model="dashboardModel.memory.type" 
+                                display-label="{options: dashboardModel.timeRange}"
+                                ng-change="timeRangeSelect('memory', $value)">
+                    </mdl-select>
+                  </transclude-title>
+                  <transclude-body>
+                    <div class="content_panel_parent">
+                      <content-panel is-load="panelLoading.controller">
+                          <div>
+                              <div id="deviceMemoryAnalyzer" class="content_panel_dash_chart"></div>
+                          </div>
+                      </content-panel>
+                    </div>
+                  </transclude-body>
+                    
+              </mar-section>
+          </div>
             </div>
         </div>
     </div>

@@ -21,8 +21,8 @@ export class DateService{
 		};
 	}
 
-	getBeforeDateObject() {
-		var before = new Date(Date.now() - 1000*60*60*24);
+	getBeforeDateObject(millisecond) {
+		var before = new Date(Date.now() - millisecond);
 		let year = this.getLocalYear(before);
 		let month = before.getMonth();
 		let day = before.getDate();

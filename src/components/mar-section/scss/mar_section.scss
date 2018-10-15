@@ -65,6 +65,9 @@
       display: inline-block;
       float: right;
     }
+    @include element(transclude){
+      float: right;
+    }
   }
 
   @include element(body){
