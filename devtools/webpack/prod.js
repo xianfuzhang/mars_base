@@ -31,6 +31,7 @@ module.exports = function (config) {
       ]
     },
     plugins: [
+      new CleanWebpackPlugin(['public']),
       new HtmlWebpackPlugin({
         template: "./src/index.html",
         favicon: "./favicon.ico",
@@ -55,13 +56,16 @@ module.exports = function (config) {
       //     ]
       //   }
       // }),
-      new webpack.HotModuleReplacementPlugin(),
       new CopyWebpackPlugin([{
         from: path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js'),
         to: path.resolve('public/jtopo-0.4.8-min.js'),
         toType: 'file'
       }]),
-      new UglifyJsPlugin()
+      new UglifyJsPlugin({
+        sourceMap: true,
+        cache: true,
+        parallel: true
+      })
     ],
     module: {
       rules: [
@@ -110,7 +114,8 @@ module.exports = function (config) {
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['env']
+              presets: ['env'],
+              cacheDirectory: true
             }
           }
         }

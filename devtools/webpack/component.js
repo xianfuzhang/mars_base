@@ -45,7 +45,6 @@ module.exports = function (config) {
           ]
         }
       }),
-      new webpack.HotModuleReplacementPlugin()
     ],
     devtool: 'inline-source-map',
     devServer: {
