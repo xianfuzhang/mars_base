@@ -220,7 +220,7 @@ export class FabricSummaryController {
     this.di.localStoreService.getStorage(fabric_storage_ns).get('topo_set').then((data)=>{
       if(data === undefined){
         this.di.$scope.fabricModel.topoSetting = {
-          "show_links": false,
+          "show_links": 0,
           "show_tooltips":false,
           "show_ports":false,
         }
@@ -239,11 +239,23 @@ export class FabricSummaryController {
 
     };
     this.di.$scope.lineSetting = (event) => {
-      this.di.$scope.fabricModel.topoSetting.show_links = !this.di.$scope.fabricModel.topoSetting.show_links;
-      this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("topo_set", this.di.$scope.fabricModel.topoSetting);
+      this.di.modalManager.open({
+        template: require('../template/showlinks_select.html'),
+        controller: 'showLinksSelectController',
+        windowClass: 'show-links-selected-modal',
+        resolve: {
+          dataModel: () => {return {}}
+        }
+      }).result.then((data) => {
+        if (data && !data.canceled) {
+          this.di.$scope.fabricModel.topoSetting.show_links = data.data.mode;
+          this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("topo_set", this.di.$scope.fabricModel.topoSetting);
 
-      this.di.$rootScope.$emit('show_links');
+          this.di.$rootScope.$emit('show_links');
+        }});
+
     };
+
 
     this.di.$scope.portSettings = (event) => {
       this.di.$scope.fabricModel.topoSetting.show_ports = !this.di.$scope.fabricModel.topoSetting.show_ports;
@@ -531,6 +543,17 @@ export class FabricSummaryController {
           }
         });
     }));
+
+
+    unsubscribers.push(this.di.$rootScope.$on('summary_links_set',(evt, data)=>{
+
+      this.di.$scope.fabricModel.topoSetting.show_links = data;
+      this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("topo_set", this.di.$scope.fabricModel.topoSetting);
+
+      this.di.$rootScope.$emit('show_links');
+
+    }));
+
 
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unsubscribers, (unsubscribe) => {

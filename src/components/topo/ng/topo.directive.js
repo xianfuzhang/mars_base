@@ -67,6 +67,8 @@ export class Topo {
       this.otherContainerRightNode = null;
       this.otherContainerText = null;
 
+      this.selectedDeviceId = null;
+
       let DeviceType = {
         'leaf':'leaf',
         'spine':'spine',
@@ -89,8 +91,9 @@ export class Topo {
       this.leaf_group_str = 'id';
       this.resizeTimeout = null;
       this.active_status = "ACTIVE";
-      this.LINE_WIDTH = 3;
-      this.LINE_NORMAL = '136,234,136';
+      this.LINE_WIDTH = 1;
+      this.LINE_SELECTED = '136,234,136';
+      this.LINE_NORMAL = '240,240,240';
       this.LINE_ERROR = "255,0,0";
       this.oldWidth = null;
 
@@ -151,8 +154,10 @@ export class Topo {
         genSpine();
         genLeaf();
         genOther();
-        //初始化的时候不许去渲染links
-        // genLinks();
+
+        // if(scope.topoSetting.show_links){
+        //   genLinks()
+        // }
         resize(true);
       };
 
@@ -202,7 +207,9 @@ export class Topo {
       };
 
       let genLinks = () => {
-          if(scope.topoSetting.show_links){
+          if(scope.topoSetting.show_links === 2){
+            crushLinks();
+
             this.di._.forEach(scope.links, (link, key) => {
               let deviceIds = [link.src.device, link.dst.device];
               let linkId = getLinkId(deviceIds);
@@ -238,7 +245,7 @@ export class Topo {
         let link = new JTopo.Link(nodeA, nodeB);
         link.zIndex = 20;
         link.lineWidth = this.LINE_WIDTH;
-        link.strokeColor = this.LINE_NORMAL;
+        link.strokeColor = this.LINE_SELECTED;
         link.dragable = false;
 
         this.scene.add(link);
@@ -548,8 +555,8 @@ export class Topo {
       }
 
       let showDeviceLinks = (deviceId) =>{
-        crushLinks();
-        if(scope.topoSetting.show_links){
+        if(scope.topoSetting.show_links === 1){
+          crushLinks();
           this.di._.forEach(scope.links, (link, key) => {
             if(deviceId == link.src.device){
               let deviceIds = [link.src.device, link.dst.device];
@@ -558,6 +565,8 @@ export class Topo {
                 return;
               }
               this.links[linkId] = genLinkNode(deviceIds);
+              this.links[linkId].lineWidth = 3;
+              this.links[linkId].strokeColor = this.LINE_SELECTED;
               if(link.state != this.active_status){
                 this.links[linkId].strokeColor = this.LINE_ERROR;
               }
@@ -641,6 +650,7 @@ export class Topo {
         let time = (new Date()).getTime() - starttime;
         if(time > 1000) {
           draw(this.width);
+          this.di.$rootScope.$emit('show_links');
           return;
         }
         let percentage = time/1000;
@@ -656,6 +666,19 @@ export class Topo {
 
       let unSelectNode = () => {
         this.di.$rootScope.$emit("topo_unselect");
+
+        // this.di._.forEach(scope.links, (link, key) => {
+        //   if(this.selectedDeviceId == link.src.device){
+        //     let deviceIds = [link.src.device, link.dst.device];
+        //     let linkId = getLinkId(deviceIds);
+        //     if(!this.links[linkId]){
+        //       return;
+        //     }
+        //     this.links[linkId].lineWidth = 1;
+        //     this.links[linkId].strokeColor = this.LINE_NORMAL;
+        //   }
+        // });
+        // this.selectedDeviceId  = null;
         crushLinks();
       };
 
@@ -774,11 +797,11 @@ export class Topo {
       // }));
 
       unsubscribers.push(this.di.$rootScope.$on('show_links',()=>{
-        // if(scope.topoSetting.show_links){
-        //   genLinks()
-        // } else {
-        //   crushLinks()
-        // }
+        if(scope.topoSetting.show_links === 2){
+          genLinks()
+        } else {
+          crushLinks()
+        }
       }));
 
 
