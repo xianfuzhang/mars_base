@@ -45,6 +45,8 @@ export class FabricSummaryController {
     this.di.$scope.resize_right = {};
     this.di.$scope.resize_length = {};
 
+    this.di.$scope.defaultRightLength = 300;
+
     let distributeSwitches = (allSwitches) => {
       let distributeSwt = {'spine':[], 'leaf':[], 'other':[]};
       this.di._.forEach(allSwitches, (swt, index)=>{
@@ -81,18 +83,70 @@ export class FabricSummaryController {
     this.devices = [];
     this.realtimeDevices = [];
 
-    let init = () => {
-      this.di.localStoreService.getStorage(fabric_storage_ns).get('resize_db').then((data)=>{
-        if(data){
-          let win_width = this.di.$window.innerWidth;
-          this.di.$scope.resize_right = data['resize_right'];
-          this.di.$scope.resize_length = data['resize_length'];
 
-          let rightLenStr = data['resize_length']['width'];
-          let rightLen = Number(rightLenStr.substr(0, rightLenStr.length - 2 ));
-          this.di.$scope.resize_right_plus = {'right': (rightLen + 5) +'px','width': ( win_width - rightLen - 5)+ 'px'};
-        }
-      });
+    let _show_div = () =>{
+      let data = this.di.localStoreService.getSyncStorage(fabric_storage_ns).get('resize_db');
+      let win_width = this.di.$window.innerWidth;
+      if(data){
+
+        this.di.$scope.resize_right = data['resize_right'];
+        this.di.$scope.resize_length = data['resize_length'];
+
+        let rightLenStr = data['resize_length']['width'];
+        let rightLen = Number(rightLenStr.substr(0, rightLenStr.length - 2 ));
+        this.di.$scope.resize_right_plus = {'right': (rightLen + 5) +'px','width': ( win_width - rightLen - 5)+ 'px'};
+      } else {
+
+        this.di.$scope.resize_right_plus = {'right': this.di.$scope.defaultRightLength + 'px','width': (win_width - this.di.$scope.defaultRightLength)+ 'px'};
+        this.di.$scope.resize_right = {'right':+ (this.di.$scope.defaultRightLength - 5) +'px'};
+        this.di.$scope.resize_length = {'width':+ (this.di.$scope.defaultRightLength - 5) +'px', 'right':'0px'};
+
+        let data = {
+          'resize_right':angular.copy(this.di.$scope.resize_right),
+          'resize_length':angular.copy(this.di.$scope.resize_length),
+        };
+        this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("resize_db", data);
+      }
+      this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("hide_right_div", false);
+    };
+
+    let _hide_div = () =>{
+
+      let win_width = this.di.$window.innerWidth;
+      this.di.$scope.resize_right_plus = {'right': '0px','width': win_width + 'px'};
+      this.di.$scope.resize_right = {'right': '-5px'};
+
+
+      let data = this.di.localStoreService.getSyncStorage(fabric_storage_ns).get('resize_db');
+      if(data){
+        let rightLenStr = data['resize_length']['width'];
+        let rightLen = Number(rightLenStr.substr(0, rightLenStr.length - 2 ));
+        this.di.$scope.resize_length = {'width':data['resize_length']['width'], 'right': '-' + data['resize_length']['width']};
+      }
+
+      this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("hide_right_div", true);
+    };
+
+
+    let init = () => {
+      let hide_div = this.di.localStoreService.getSyncStorage(fabric_storage_ns).get('hide_right_div');
+      if(hide_div === true){
+        _hide_div();
+      } else {
+        _show_div();
+        // this.di.localStoreService.getStorage(fabric_storage_ns).get('resize_db').then((data)=>{
+        //   if(data){
+        //     let win_width = this.di.$window.innerWidth;
+        //     this.di.$scope.resize_right = data['resize_right'];
+        //     this.di.$scope.resize_length = data['resize_length'];
+        //
+        //     let rightLenStr = data['resize_length']['width'];
+        //     let rightLen = Number(rightLenStr.substr(0, rightLenStr.length - 2 ));
+        //     this.di.$scope.resize_right_plus = {'right': (rightLen + 5) +'px','width': ( win_width - rightLen - 5)+ 'px'};
+        //   }
+        // });
+      }
+
 
 
       this.di.$rootScope.$emit('start_loading');
@@ -272,8 +326,54 @@ export class FabricSummaryController {
       this.di.$document.on("mousemove", mousemove);
     };
 
+    this.di.$scope.hide_right_div = (event) => {
+      event.preventDefault();
+      this.di.localStoreService.getStorage(fabric_storage_ns).get('hide_right_div').then((data)=>{
+        if(data === true){
+          _show_div();
+          setTimeout(function () {
+            send_resize_msg();
+          });
+
+          // this.di.localStoreService.getStorage(fabric_storage_ns).get('resize_db').then((data)=>{
+          //   if(data){
+          //     let win_width = this.di.$window.innerWidth;
+          //     this.di.$scope.resize_right = data['resize_right'];
+          //     this.di.$scope.resize_length = data['resize_length'];
+          //
+          //     let rightLenStr = data['resize_length']['width'];
+          //     let rightLen = Number(rightLenStr.substr(0, rightLenStr.length - 2 ));
+          //     this.di.$scope.resize_right_plus = {'right': (rightLen + 5) +'px','width': ( win_width - rightLen - 5)+ 'px'};
+          //   }
+          // });
+          //
+          // this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("hide_right_div", false);
+        } else {
+
+          _hide_div();
+          // _show_div();
+          // let win_width = this.di.$window.innerWidth;
+          // this.di.$scope.resize_right_plus = {'right': '0px','width': win_width + 'px'};
+          // this.di.$scope.resize_right = {'display':'none'};
+          // this.di.$scope.resize_length = {'display':'none'};
+          // this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("hide_right_div", true);
+          setTimeout(function () {
+            send_resize_msg();
+          });
+        }
+
+      })
+
+
+
+
+
+    };
+
+
     let mouseup = (event) =>{
       // console.log('mouseup');
+      send_resize_msg();
       this.di.$document.off('mousemove', mousemove);
       this.di.$document.off('mouseup', mouseup);
     };
@@ -288,9 +388,9 @@ export class FabricSummaryController {
       if(win_width - x < 300){
         return;
       }
-      this.di.$scope.resize_right_plus = {'right': (win_width - x + 5) +'px','width': (x - 5)+ 'px'};
-      this.di.$scope.resize_right = {'right':+ (win_width - x) +'px'};
-      this.di.$scope.resize_length = {'width':+ (win_width - x) +'px'};
+      this.di.$scope.resize_right_plus = {'right': (win_width - x + 2.5) +'px','width': (x - 2.5)+ 'px'};
+      this.di.$scope.resize_right = {'right':+ (win_width - x - 2.5) +'px'};
+      this.di.$scope.resize_length = {'width':+ (win_width - x - 2.5) +'px', 'right':'0px'};
 
       let data = {
         // 'resize_right_plus':angular.copy(this.di.$scope.resize_right_plus),
@@ -304,7 +404,7 @@ export class FabricSummaryController {
       //   this.di.$timeout.cancel(this.resizeTimeout);
       // }
       // this.resizeTimeout = this.di.$timeout(send_resize_msg, 500);
-      send_resize_msg();
+      // send_resize_msg();
     };
 
     let send_resize_msg = () => {

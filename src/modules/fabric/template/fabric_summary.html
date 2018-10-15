@@ -3,8 +3,8 @@
     <!--<mar-header></mar-header>-->
     <mdl-header></mdl-header>
 
-    <div class="summary__body flex_entirety__body" >
-        <content-header big-title="{{'MODULE.HEADER.FABRIC.SUMMARY' | translate}}">
+    <div class="summary__body flex_entirety__body" style="padding:0">
+        <content-header style="margin-left:8px;margin-right:8px;" big-title="{{'MODULE.HEADER.FABRIC.SUMMARY' | translate}}">
             <a href="/">Mars Cloud</a>
             <span>•</span>
             <span>{{'MODULE.HEADER.FABRIC.SUMMARY' | translate}}</span>
@@ -17,8 +17,12 @@
                 </topo>
             </div>
             <div ng-style="resize_right" ng-mousedown="resize_div($event)" style="height: 100%;width:5px;border: 0;background-color: #cccccc;top:0;position: absolute;right:295px;cursor: col-resize;">
-                <div style="height:20px;width:1px;background-color: black;border: 0;top:49%; left:2px;position: absolute;">
+                <div style="height:40px;width:1px;background-color: black;border: 0;top:49%; left:2px;position: absolute;">
                 </div>
+
+                <div style="height:40px;width:10px;background-color: black;border: 0;top:49%; left:-10px;position: absolute;cursor:pointer;" ng-click="hide_right_div($event)">
+                </div>
+
             </div>
             <div ng-style="resize_length" style="position: absolute;right:0;top:0;height:100%;background-color: white;width:295px;display:inline-block;overflow:scroll; ">
                 <mar-section s-title="Topo Settings" class="topo_setting">

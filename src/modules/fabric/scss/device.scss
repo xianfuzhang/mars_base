@@ -195,3 +195,21 @@
   height: auto;
   padding: 20px;
 }
+
+@keyframes show_div {
+  from {
+    right: 0;
+  }
+  to {
+    right: var(--right);
+  }
+}
+
+@keyframes hide_div {
+  from {
+    right: var(--right);
+  }
+  to {
+    right: 0;
+  }
+}
