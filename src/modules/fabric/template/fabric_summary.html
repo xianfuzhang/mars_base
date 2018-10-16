@@ -12,19 +12,19 @@
 
         <div class="summary__body__content flex_entirety__body__body">
 
-            <div ng-style="resize_right_plus" style="position: absolute;right:300px;top:0;height:100%;left:0px;">
+            <div ng-style="resize_right_plus" class="summary_drawer_left">
                 <topo ng-if="fabricModel.isShowTopo" spines="fabricModel.deSpines" leafs="fabricModel.deLeafs" others="fabricModel.deOthers" links="fabricModel.deLinks" topo-setting="fabricModel.topoSetting">
                 </topo>
             </div>
-            <div ng-style="resize_right" ng-mousedown="resize_div($event)" style="height: 100%;width:5px;border: 0;background-color: #cccccc;top:0;position: absolute;right:295px;cursor: col-resize;">
-                <div style="height:40px;width:1px;background-color: black;border: 0;top:49%; left:2px;position: absolute;">
+            <div class="line_space summary_drawer_line_space" ng-style="resize_right" ng-mousedown="resize_div($event)">
+                <div class="line">
                 </div>
 
-                <div style="height:40px;width:10px;background-color: black;border: 0;top:49%; left:-10px;position: absolute;cursor:pointer;" ng-click="hide_right_div($event)">
+                <div class="ctrl_button" ng-class="{'show_arrow': showLeftDiv == false}" ng-click="hide_right_div($event)">
                 </div>
 
             </div>
-            <div ng-style="resize_length" style="position: absolute;right:0;top:0;height:100%;background-color: white;width:295px;display:inline-block;overflow:scroll; ">
+            <div class="right_div summary_drawer_right" ng-style="resize_length">
                 <mar-section s-title="Topo Settings" class="topo_setting">
                     <div style="margin:2px;">
                         <div ng-click="topoRefresh()" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.REFRESH'|translate}}" id="refresh_topo"  class="+front mdc-button topo_setting__button">

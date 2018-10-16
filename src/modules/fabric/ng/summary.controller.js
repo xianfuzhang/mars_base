@@ -38,7 +38,7 @@ export class FabricSummaryController {
 
     let fabric_storage_ns = "storage_farbic_";
     let unsubscribers = [];
-    let scope = this.di.$scope;
+
 
     this.resizeTimeout = null;
     this.di.$scope.resize_right_plus = {};
@@ -46,6 +46,11 @@ export class FabricSummaryController {
     this.di.$scope.resize_length = {};
 
     this.di.$scope.defaultRightLength = 300;
+    this.di.$scope.showLeftDiv = false;
+
+    let scope = this.di.$scope;
+
+    let initializeTransitionFlag = false;
 
     let distributeSwitches = (allSwitches) => {
       let distributeSwt = {'spine':[], 'leaf':[], 'other':[]};
@@ -83,8 +88,28 @@ export class FabricSummaryController {
     this.devices = [];
     this.realtimeDevices = [];
 
+    let initializeTransition = () =>{
+      let line_space = angular.element(document.getElementsByClassName('line_space'));
+      let right_div = angular.element(document.getElementsByClassName('right_div'));
+      line_space.css('transition','right .4s ease-in-out');
+      right_div.css('transition','right .4s ease-in-out');
+      initializeTransitionFlag = true;
+    };
 
-    let _show_div = () =>{
+
+    let unInitializeTransition = () => {
+      let line_space = angular.element(document.getElementsByClassName('line_space'));
+      let right_div = angular.element(document.getElementsByClassName('right_div'));
+      line_space.css('transition','');
+      right_div.css('transition','');
+      initializeTransitionFlag = false;
+    };
+
+    let _show_div = (isFirst) =>{
+      scope.showLeftDiv =  true;
+      if(!initializeTransitionFlag && !isFirst){
+        initializeTransition();
+      }
       let data = this.di.localStoreService.getSyncStorage(fabric_storage_ns).get('resize_db');
       let win_width = this.di.$window.innerWidth;
       if(data){
@@ -110,7 +135,11 @@ export class FabricSummaryController {
       this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("hide_right_div", false);
     };
 
-    let _hide_div = () =>{
+    let _hide_div = (isFirst) =>{
+      scope.showLeftDiv = false;
+      if(!initializeTransitionFlag && !isFirst){
+        initializeTransition();
+      }
 
       let win_width = this.di.$window.innerWidth;
       this.di.$scope.resize_right_plus = {'right': '0px','width': win_width + 'px'};
@@ -131,23 +160,10 @@ export class FabricSummaryController {
     let init = () => {
       let hide_div = this.di.localStoreService.getSyncStorage(fabric_storage_ns).get('hide_right_div');
       if(hide_div === true){
-        _hide_div();
+        _hide_div(true);
       } else {
-        _show_div();
-        // this.di.localStoreService.getStorage(fabric_storage_ns).get('resize_db').then((data)=>{
-        //   if(data){
-        //     let win_width = this.di.$window.innerWidth;
-        //     this.di.$scope.resize_right = data['resize_right'];
-        //     this.di.$scope.resize_length = data['resize_length'];
-        //
-        //     let rightLenStr = data['resize_length']['width'];
-        //     let rightLen = Number(rightLenStr.substr(0, rightLenStr.length - 2 ));
-        //     this.di.$scope.resize_right_plus = {'right': (rightLen + 5) +'px','width': ( win_width - rightLen - 5)+ 'px'};
-        //   }
-        // });
+        _show_div(true);
       }
-
-
 
       this.di.$rootScope.$emit('start_loading');
 
@@ -322,6 +338,8 @@ export class FabricSummaryController {
       // console.log(event);
       event.preventDefault();
       // console.log(self);
+      unInitializeTransition();
+
       this.di.$document.on("mouseup", mouseup);
       this.di.$document.on("mousemove", mousemove);
     };

@@ -67,7 +67,7 @@ export class Topo {
       this.otherContainerRightNode = null;
       this.otherContainerText = null;
 
-      this.selectedDeviceId = null;
+      scope.selectedDeviceId = null;
 
       let DeviceType = {
         'leaf':'leaf',
@@ -530,7 +530,7 @@ export class Topo {
         let deviceId =  this.deviceId;
         let deviceType = this.deviceType;
         let showArray= [];
-
+        scope.selectedDeviceId  = deviceId;
         showDeviceLinks(deviceId);
 
 
@@ -666,6 +666,7 @@ export class Topo {
 
       let unSelectNode = () => {
         this.di.$rootScope.$emit("topo_unselect");
+        scope.selectedDeviceId  = null;
 
         // this.di._.forEach(scope.links, (link, key) => {
         //   if(this.selectedDeviceId == link.src.device){
@@ -799,9 +800,15 @@ export class Topo {
       unsubscribers.push(this.di.$rootScope.$on('show_links',()=>{
         if(scope.topoSetting.show_links === 2){
           genLinks()
+        } else if(scope.topoSetting.show_links === 0) {
+          crushLinks();
         } else {
-          crushLinks()
+          crushLinks();
+          if(scope.selectedDeviceId){
+            showDeviceLinks(scope.selectedDeviceId);
+          }
         }
+
       }));
 
 
