@@ -11,7 +11,7 @@ export class appService {
       this.di[value] = args[index];
     });
     this.translate = this.di.$filter('translate');
-    this.isMocked = true;
+    this.isMocked = false;
     this.versionUrl = 'mars/v1';
     this.CONST = {
       MOCKED_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
@@ -98,7 +98,7 @@ export class appService {
       endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
     }
     else {
-      endpoint = this.CONST.LIVE_WEBSOCKETS_ENDPONT.replace('[%__ZONE_IP__%]',
+      endpoint = this.CONST.LIVE_ZONE_ENDPOINT.replace('[%__ZONE_IP__%]',
         (this.di.$location.host()  + ":"+  this.di.$location.port()));
       endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
     }
