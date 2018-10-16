@@ -84,7 +84,8 @@ export class appService {
             {'label': this.translate('MODULE.HEADER.ACCOUNT.LOGOUT'), 'url': '/logout'}
           ]
         }
-      }
+      },
+      CRYPTO_STRING: 'secret'
     };
   }
 

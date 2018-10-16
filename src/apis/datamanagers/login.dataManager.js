@@ -4,7 +4,8 @@ export class LoginDataManager {
       '$q',
       '$http',
       '$cookies',
-      'appService'
+      'appService',
+      'crypto'
     ];
   }
   constructor(...args){
@@ -17,39 +18,28 @@ export class LoginDataManager {
   doLogin(username, password) {
     let defer = this.di.$q.defer();
     //mock
-    if(username === this.di.appService.CONST.MOCKED_USERNAME && password === this.di.appService.CONST.MOCKED_PASSWORD) {
+    if(this.di.appService.isMocked) {
       let result = {
         'user_name': this.di.appService.CONST.MOCKED_USERNAME,
-        'groups': [this.di.appService.CONST.ADMIN_GROUP]
+        'password': this.di.appService.CONST.MOCKED_PASSWORD
+        //'groups': [this.di.appService.CONST.ADMIN_GROUP]
       };
       defer.resolve(result);
-      // this.di.$cookies.put('usersession', JSON.stringify(result));
-      this.di.$cookies.put('useraccount', JSON.stringify(result));
+      this.di.$cookies.put('useraccount', this.di.crypto.AES.encrypt(JSON.stringify(result), this.di.appService.CONST.CRYPTO_STRING));
       return defer.promise;
     }
     this.di.$http.post(this.di.appService.getLoginUrl(), 'j_username='+username+'&j_password='+password, {'headers':{'Content-Type': 'application/x-www-form-urlencoded'}})
       .then((result) => {
-      console.log(result);
-      if(result.status === 200){
-        this.di.$cookies.put('useraccount', JSON.stringify({'user_name': username, 'groups': []}));
-        defer.resolve(true);
-        /*let content = result.data;
-        //登录成功
-        if (content.indexOf('ONOS Login') === -1) {
-          // this.di.$cookies.put('usersession', this.di.$cookies.get('JSESSIONID'));
-          this.di.$cookies.put('useraccount', JSON.stringify({'user_name': username, 'groups': []}));
+        if(result.status === 200){
+          this.di.$cookies.put('useraccount', this.di.crypto.AES.encrypt(JSON.stringify({
+            'user_name': username, 
+            'password': password
+          }), this.di.appService.CONST.CRYPTO_STRING));
           defer.resolve(true);
-        }
-        else {
+        } else {
           this.di.$cookies.remove('useraccount');
           defer.resolve(false);
-        }*/
-      } else {
-        this.di.$cookies.remove('useraccount');
-        defer.resolve(false);
-      }
-        // this.di.$cookies.put('useraccount', JSON.stringify(result.data));
-        // defer.resolve(result);
+        }
       }, (result) => {
         defer.reject(false);
       });

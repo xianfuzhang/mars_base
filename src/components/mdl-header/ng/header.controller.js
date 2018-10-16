@@ -6,6 +6,7 @@ export class headerController{
       '$cookies',
       '$location',
       '_',
+      'crypto',
       'appService',
       'loginDataManager',
       'alertDataManager',
@@ -34,11 +35,11 @@ export class headerController{
       }
     };
 
-    /*this.di.alertDataManager.getAlertHistories({})
+    this.di.alertDataManager.getAlertHistories({})
       .then((res) => {
         this.scope.alerts_acount = res.data.total;
       });
-    this.init();*/
+    this.init();
   }
 
   init() {
@@ -48,14 +49,16 @@ export class headerController{
       this.di.$location.path('/login');
       return;
     }
-    this.scope.username = JSON.parse(useraccount).user_name;
-    if (JSON.parse(useraccount).groups.indexOf(this.CONST_ADMIN_GROUP) === -1) {
+    let decodeBytes = this.di.crypto.AES.decrypt(useraccount.toString(), this.di.appService.CONST.CRYPTO_STRING);
+    let decodeData = decodeBytes.toString(this.di.crypto.enc.Utf8);
+    this.scope.username = JSON.parse(decodeData).user_name;
+    /*if (JSON.parse(useraccount).groups.indexOf(this.CONST_ADMIN_GROUP) === -1) {
       //this.scope.userConfig.splice(0, 1);
       let index = this.di._.findIndex(this.scope.groups.menu, (menu)=> {
         return menu.group === 'Account';
       });
       this.scope.groups.menu.splice(index, 1);
-    }
+    }*/
   }
 }
 
