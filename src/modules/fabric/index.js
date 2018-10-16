@@ -13,6 +13,7 @@ import {StormService} from './service/storm.service';
 import { DeviceWizardController } from './components/deviceWizard/ng/DeviceWizard.controller'
 import { FlowEstablishController } from './components/flow_establish/ng/FlowEstablish.controller';
 import {ShowSwitchFlowsController} from './ng/showSwitchFlows.controller';
+import {ShowLinksSelectController} from './ng/showLinksSelect.controller';
 
 export default angular
   .module('fabric', [])
@@ -25,6 +26,7 @@ export default angular
   .controller('deviceWizardController', DeviceWizardController)
   .controller('flowEstablishController', FlowEstablishController)
   .controller('showSwitchFlowsController', ShowSwitchFlowsController)
+  .controller('showLinksSelectController', ShowLinksSelectController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)
