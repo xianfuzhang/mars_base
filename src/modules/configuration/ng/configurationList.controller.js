@@ -9,6 +9,7 @@ export class ConfigurationListController {
       '$http',
       '$filter',
       '$q',
+      '$window',
       'appService',
       'dialogService',
       'configurationDataManager'
@@ -29,48 +30,101 @@ export class ConfigurationListController {
 
     scope.configurationListModel = {
       configurationShow: '',
-      isEditable: false
+      fileName: '',
+      mode: 'show',
+      nameInvalid: false
     };
 
     scope.checkDisLab = {id: 'check_edit_config', label: this.translate('MODULES.CONFIGURATION.OPTION.START_CHECK')};
     // scope.fileNameSelectedDisLab = {hint: this.translate('MODULES.CONFIGURATION.FILENAME'),options:[]};
     scope.fileNameSelectedDisLab = {options:[]};
 
-
-    scope.addConfigFile = (evt) => {
+    scope.saveConfigFile = (evt) => {
       let filename = this.fileNameInput.value;
-
-
-      let preContent = document.getElementById("configurationListPre").innerHTML;
-      let config = JSON.parse(preContent);
-
-
-      this.di.dialogService.createDialog('warning', this.translate('MODULES.CONFIGURATION_LIST.UPDATE.CONFORM'))
-        .then((data)=>{
-          this.di.configurationDataManager.setConfigurationFile(filename, config).then(
-            (res) => {
-              init();
-            },
-            (err) => {
-              console.log(err)
-            }
-          )
-        },(res)=>{
-
+      let config;
+  
+      // check if the file name has existed
+      if(scope.configurationListModel.mode == 'add') {
+        let index = scope.fileNameSelectedDisLab.options.findIndex((option) => {
+          return option.value == filename;
         })
+        
+        if(index != -1) {
+          this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.FILENAME'))
+            .then((data)=>{
+              // error
+            },(res)=>{
+              // error
+            })
+          
+          return;
+        }
+      }
+  
+      // check if the file name is JSON style
+      let preContent = document.getElementById("configurationListPre").innerHTML;
+      try {
+        config = JSON.parse(preContent);
+      } catch(e) {
+        this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.JSONCONDIG'))
+          .then((data)=>{
+            // error
+          },(res)=>{
+            // error
+          })
+        
+        return;
+      }
 
-
+      // save the config to file
+      if(filename == 'default') { // save the config file
+        this.di.configurationDataManager.updateConfiguration(null, null, config).then(
+          () => {
+            this.di.dialogService.createDialog('success', this.translate('MODULES.CONFIGURATION_LIST.SUCCESS.SAVE'))
+              .then((data)=>{
+                init();
+              },(res)=>{
+      
+              })
+          },
+          () => {
+            this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.SAVE'))
+              .then((data)=>{
+              
+              },(res)=>{
+      
+              })
+          }
+        );
+      } else { // save the other config file
+        this.di.configurationDataManager.setConfigurationFile(filename, config).then(
+          (res) => { // success to save
+            this.di.dialogService.createDialog('success', this.translate('MODULES.CONFIGURATION_LIST.SUCCESS.SAVE'))
+              .then((data)=>{
+                init();
+              },(res)=>{
+      
+              })
+          },
+          (err) => { // error to save
+            () => {
+              this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.SAVE'))
+                .then((data)=>{
+        
+                },(res)=>{
+        
+                })
+            }
+          }
+        )
+      }
     };
 
     let getConfigurationList = ()=>{
-
-      // let test_options = [{label:"客户诺配置",value:"myasgaggasdg"},{label:"客户云配置",value:"myasgaggasdg1"},{label:"客户Mars配置",value:"myasgaggasdg2"}]
-      // scope.fileNameSelectedDisLab.options = test_options;
-
       this.di.configurationDataManager.getConfigurationFileList()
         .then((res)=>{
 
-          let opts = [{label:"请选择清单",value:"default"}];
+          let opts = [{label:"默认配置",value:"default"}];
           // let opts = [];
           if(res && res['files'] && res['files'] instanceof Array){
             this.di._.forEach(res['files'], (item)=>{
@@ -81,45 +135,65 @@ export class ConfigurationListController {
           scope.fileNameSelectedDisLab.options = opts;
           scope.configurationListModel.fileNameSelected = scope.fileNameSelectedDisLab.options[0];
         });
-
     };
-
 
     let getConfigurationByName = (name) =>{
       //TODO 测试使用
       this.di.$scope.configurationListModel.configurationShow = '';
-      if( name === 'default' || name === '' || name === null|| name === undefined){
+      if(name === '' || name === null|| name === undefined){
         return ;
       }
 
-      this.di.configurationDataManager.getConfigurationByFileName(name)
-        .then((res)=>{
-          //TODO 具体操作，根据返回结果来具体实现
-          this.di.$scope.configurationListModel.configurationShow = JSON.stringify(res['data'], null, 4);
-        });
+      if(name === 'default') { // get default config file
+        this.di.configurationDataManager.getConfiguration()
+          .then((res)=>{
+            this.di.$scope.configurationListModel.configurationShow = JSON.stringify(res, null, 4)
+          });
+      } else { // get other config files
+        this.di.configurationDataManager.getConfigurationByFileName(name)
+          .then((res)=>{
+            this.di.$scope.configurationListModel.configurationShow = JSON.stringify(res['data'], null, 4);
+          });
+      }
     };
 
     let init = ()=> {
       getConfigurationList();
-
     };
 
     init();
 
-    unSubscribers.push(this.di.$scope.$watch('configurationListModel.isEditable',(newValue)=>{
-      // console.log(newValue);
-      if(newValue){
+    unSubscribers.push(this.di.$scope.$watch('configurationListModel.mode',(newValue)=>{
+      console.log(newValue);
+      if(newValue == 'add'){
         this.fileNameInput.disabled = false;
-        this.di.$scope.configurationListModel.configurationShow = '';
       } else {
         this.fileNameInput.disabled = true;
-        getConfigurationByName(this.fileNameInput.value);
       }
     }));
 
     unSubscribers.push(this.di.$scope.$watch('configurationListModel.fileNameSelected',(newValue)=>{
       if(newValue !== null && newValue !== undefined && newValue !== ''){
+        this.di.$scope.configurationListModel.mode = 'show';
         getConfigurationByName(newValue.value);
+      }
+    }));
+  
+    unSubscribers.push(this.di.$scope.$watch('configurationListModel.fileName',(newValue)=>{
+      if(scope.configurationListModel.mode == 'add') {
+        if(newValue == null || newValue == undefined || newValue == ""){
+          scope.configurationListModel.nameInvalid = true;
+        } else {
+          let index = scope.fileNameSelectedDisLab.options.findIndex((option) => {
+            return option.value == newValue;
+          })
+    
+          if(index != -1) {
+            scope.configurationListModel.nameInvalid = true;
+          } else {
+            scope.configurationListModel.nameInvalid = false;
+          }
+        }
       }
     }));
 

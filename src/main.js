@@ -174,13 +174,6 @@ angular
           loggedin: checkLoggedIn
         }
       }).
-      when('/configuration', {
-        template: require('./modules/configuration/template/configuration.html'),
-        controller: 'ConfigurationController',
-        resolve: {
-          loggedin: checkLoggedIn
-        }
-      }).
       when('/configuration_list', {
         template: require('./modules/configuration/template/configuration_list.html'),
         controller: 'ConfigurationListController',
