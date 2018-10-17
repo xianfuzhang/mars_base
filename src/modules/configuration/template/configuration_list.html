@@ -3,49 +3,59 @@
   <mdl-header></mdl-header>
   <div class="configuration_list__body flex_entirety__body">
 
-    <content-header big-title="{{'MODULE.HEADER.CONFIG.CONFIGURATION_LIST' | translate}}">
+    <content-header big-title="{{'MODULE.HEADER.CONFIG.CONFIGURATION' | translate}}">
       <a href="/">Mars Cloud</a>
       <span>•</span>
-      <span>{{'MODULE.HEADER.CONFIG.CONFIGURATION_LIST' | translate}}</span>
+      <span>{{'MODULE.HEADER.CONFIG.CONFIGURATION' | translate}}</span>
     </content-header>
-    <div class="configuration_list__body__content flex_entirety__body__body" style="display:flex;flex-direction: row">
+    <div class="configuration flex_entirety__body__body">
 
-      <div style="flex-shrink: 1;flex-grow:1;background-color: white;margin:8px;height:90%;width:90%">
-        <pre id="configurationListPre" contenteditable="{{configurationListModel.isEditable}}" style="height:90%;overflow: scroll;border:1px solid lightgray">{{configurationListModel.configurationShow}}</pre>
+      <div class="configuration__content">
+        <pre id="configurationListPre" contenteditable="{{configurationListModel.mode == 'edit' || configurationListModel.mode == 'add'}}" class="configuration__content__codepre" ng-class="{'+edit': configurationListModel.mode == 'edit' || configurationListModel.mode == 'add'}">{{configurationListModel.configurationShow}}</pre>
       </div>
 
-      <div style="display:flex;flex-direction: column;height:100%;flex-basis: 500px;flex-shrink: 0;flex-grow: 0;padding-left:16px;margin: 22px 8px 8px 8px;">
+      <div class="configuration__operation">
 
-        <div>
-          <mdl-select ng-model="configurationListModel.fileNameSelected"
-                      disable="configurationListModel.isEditable"
-                      display-label="fileNameSelectedDisLab">
-          </mdl-select>
-        </div>
-
-        <mdl-checkbox style="margin-left:-8px;margin-top: 16px;"
-                      ng-model="configurationListModel.isEditable"
-                      display-label="checkDisLab">
-        </mdl-checkbox>
-
-        <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="fileName" style="width:250px;margin-top:8px;">
-          <input type="text" id="tf-outlined" class="mdc-text-field__input" ng-model="configurationListModel.fileName">
-          <label for="tf-outlined" class="mdc-floating-label">{{'MODULES.CONFIGURATION.FILENAME' | translate}}</label>
-          <div class="mdc-notched-outline">
-            <svg>
-              <path class="mdc-notched-outline__path"/>
-            </svg>
+        <div class="configuration__operation__form">
+          <div class="configuration__operation__form__input">
+            <div class="configuration__operation__form__input__label">选择配置：</div>
+            <mdl-select ng-model="configurationListModel.fileNameSelected"
+                        disable="configurationListModel.isEditable"
+                        display-label="fileNameSelectedDisLab">
+            </mdl-select>
           </div>
-          <div class="mdc-notched-outline__idle"></div>
-        </div>
 
-        <div>
-          <!--<button class="mdc-button mdc-button&#45;&#45;raised" ng-click="addConfigFile()" ng-disabled="!configurationListModel.isEditable" id="updateConfigurationList" style="color:#ffffff;font-weight: 500;">-->
-            <!--<i class="material-icons mdc-button__icon" aria-hidden="true">add</i>-->
-            <!--{{'MODULES.CONFIGURATION.OPTION.ADD'|translate}}-->
-          <!--</button>-->
-          <mar-button btn-id="'updateConfigurationList'" btn-text="::'MODULES.CONFIGURATION.OPTION.ADD' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-click="addConfigFile()" btn-disabled="!configurationListModel.isEditable" />
-          <style></style>
+          <div class="configuration__operation__form__input">
+            <div class="configuration__operation__form__input__label">操作模式：</div>
+            <mdl-radio ng-model="configurationListModel.mode" name="role" value=""
+                       display-label="{id: 'show_radio', label: '浏览', name: 'mode', value: 'show'}">
+            </mdl-radio>
+            <mdl-radio ng-model="configurationListModel.mode" name="role" value="leaf"
+                       display-label="{id: 'edit_radio', label: '编辑', name: 'mode', value: 'edit'}">
+            </mdl-radio>
+            <mdl-radio ng-model="configurationListModel.mode" name="role" value="unknown"
+                       display-label="{id: 'add_radio', label: '新增', name: 'mode', value: 'add'}">
+            </mdl-radio>
+          </div>
+
+          <div class="configuration__operation__form__input">
+            <div class="configuration__operation__form__input__label">配置名称：</div>
+
+            <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="fileName" style="width:250px;margin-top:8px;">
+              <input type="text" id="tf-outlined" class="mdc-text-field__input" ng-model="configurationListModel.fileName" ng-value="configurationListModel.fileNameSelected.value">
+              <!--<label for="tf-outlined" class="mdc-floating-label" ng-class="{'+filename-active': configurationListModel.mode == 'add'}">{{'MODULES.CONFIGURATION.FILENAME' | translate}}</label>-->
+              <div class="mdc-notched-outline">
+                <svg>
+                  <path class="mdc-notched-outline__path"/>
+                </svg>
+              </div>
+              <div class="mdc-notched-outline__idle"></div>
+            </div>
+          </div>
+
+          <div>
+            <mar-button btn-id="'save-configuration-list'" btn-style="'width:160px'" btn-text="::'MODULES.CONFIGURATION.OPTION.UPDATE' | translate" btn-icon="'done'" btn-class="'btn-black btn-md'" btn-disabled="configurationListModel.mode == 'show' || configurationListModel.nameInvalid" btn-click="saveConfigFile()"/>
+          </div>
         </div>
       </div>
 

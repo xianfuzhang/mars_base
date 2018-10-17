@@ -18,6 +18,22 @@ export class DialogService {
 
 	createDialog(type, content) {
 		let defer = this.di.$q.defer();
+		let header = '';
+		type = type || 'warning';
+    switch(type.toLowerCase()) {
+      case 'confirm':
+        header = this.translate('MODULES.SWITCHES.DIALOG.HEADER.CONFIRM');
+        break;
+      case 'error':
+        header = this.translate('MODULES.SWITCHES.DIALOG.HEADER.ERROR');
+        break;
+      case 'success':
+        header = this.translate('MODULES.SWITCHES.DIALOG.HEADER.SUCCESS');
+        break;
+      case 'warning':
+      default:
+        header = this.translate('MODULES.SWITCHES.DIALOG.HEADER.WARNING');
+    }
     this.di.$uibModal
       .open({
         template: require('../../components/mdc/templates/dialog.html'),
@@ -26,20 +42,20 @@ export class DialogService {
         resolve: {
           dataModel: () => {
             return {
-              type: type || 'warning',
-              headerText: this.translate('MODULES.SWITCHES.DIALOG.HEADER'),
+              type: type,
+              headerText: header,
               contentText: content,
             };
           }
         }
       })
       .result.then((data) => {
-      if(data) {
-        defer.resolve(data);
-      }
-      else {
-        defer.reject(null);
-      }
+        if(data) {
+          defer.resolve(data);
+        }
+        else {
+          defer.reject(null);
+        }
     });
 
     return defer.promise;

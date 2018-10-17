@@ -56,8 +56,7 @@ export class appService {
             'group':'Config',
             'label': this.translate('MODULE.HEADER.CONFIG'),
             'items':[
-              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration'},
-              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_LIST'), 'url': '/configuration_list'},
+              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration_list'},
               {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY'), 'url': '/configuration_history'}
             ]
           },
@@ -198,7 +197,7 @@ export class appService {
   }
 
   getConfigurationUrl(subjectClass, subject){
-    let url = this.getZoneEndpoint() + '/configuration';
+    let url = this.getZoneEndpoint() + '/network/configuration';
     if(subjectClass){
       url = url + '/' + subjectClass;
       if(subject){

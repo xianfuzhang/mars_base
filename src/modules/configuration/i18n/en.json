@@ -11,5 +11,9 @@
   "MODUELS.CONFIGURATION.HISTORY.COLUMN.SUBJECT": "Subject",
   "MODUELS.CONFIGURATION.HISTORY.COLUMN.CONFIG": "Config",
   "MODULES.CONFIGURATION.UPDATE.CONFORM": "Are you sure to update current configuration?",
-  "MODULES.CONFIGURATION_LIST.UPDATE.CONFORM": "Are you sure to add current configuration file？"
+  "MODULES.CONFIGURATION_LIST.UPDATE.CONFORM": "Are you sure to add current configuration file?",
+  "MODULES.CONFIGURATION_LIST.ERROR.FILENAME": "The file name has existed,please enter a new file name!",
+  "MODULES.CONFIGURATION_LIST.ERROR.JSONCONDIG": "The config content has error,please modify the config with json style!",
+  "MODULES.CONFIGURATION_LIST.ERROR.SAVE": "Failed to save the file!",
+  "MODULES.CONFIGURATION_LIST.SUCCESS.SAVE": "Success to save the file!"
 }

@@ -14,7 +14,6 @@ var express = require('express'),
   loginController = require('./controllers/login'),
   confighistoryController = require('./controllers/confighistory'),
   configurationController = require('./controllers/configuration'),
-  networkConfigController = require('./controllers/networkConfiguration'),
   analyzerController = require('./controllers/analyzer'),
   app = express(),
   //expressSession = require('express-session'),
@@ -50,8 +49,7 @@ app.use('/mars/alert/v1', alertController);
 app.use('/mars/utility/logs/v1', logController);
 app.use('/mars/v1/cluster', clusterController);
 app.use('/mars/v1', loginController);
-app.use('/mars/v1/configuration', configurationController);
-app.use('/mars/v1/network/configuration', networkConfigController);
+app.use('/mars/v1/network/configuration', configurationController);
 app.use('/mars/utility/confighistory/v1', confighistoryController);
 app.use('/mars/analyzer/v1/timerangebar', analyzerController);
 
