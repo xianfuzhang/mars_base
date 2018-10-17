@@ -39,10 +39,11 @@ export class ConfigurationListController {
     scope.fileNameSelectedDisLab = {options:[]};
 
     scope.saveConfigFile = (evt) => {
+      const regex = /[^\\s\\\\/:\\*\\?\\\"<>\\|](\\x20|[^\\s\\\\/:\\*\\?\\\"<>\\|])*[^\\s\\\\/:\\*\\?\\\"<>\\|\\.]$/;
       let filename = this.fileNameInput.value.trim(' ');
       let config;
   
-      if(filename == null || filename == undefined || filename == '') {
+      if(!regex.test(filename)) {
         this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.FILENAME.INVALID'))
           .then((data)=>{
             // error
