@@ -11,7 +11,7 @@
     <div class="configuration flex_entirety__body__body">
 
       <div class="configuration__content">
-        <pre id="configurationListPre" contenteditable="{{configurationListModel.mode == 'edit' || configurationListModel.mode == 'add'}}" class="configuration__content__codepre" ng-class="{'+edit': configurationListModel.mode == 'edit' || configurationListModel.mode == 'add'}">{{configurationListModel.configurationShow}}</pre>
+        <pre id="configurationListPre" contenteditable="{{configurationListModel.mode == 'edit' || configurationListModel.mode == 'add'}}" class="configuration__content__codepre" ng-class="{'+edit': configurationListModel.mode == 'edit', '+add': configurationListModel.mode == 'add'}">{{configurationListModel.configurationShow}}</pre>
       </div>
 
       <div class="configuration__operation">
@@ -42,7 +42,7 @@
             <div class="configuration__operation__form__input__label">配置名称：</div>
 
             <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="fileName" style="width:250px;margin-top:8px;">
-              <input type="text" id="tf-outlined" class="mdc-text-field__input" ng-model="configurationListModel.fileName" ng-value="configurationListModel.fileNameSelected.value">
+              <input type="text" id="tf-outlined" class="mdc-text-field__input" ng-model="configurationListModel.fileName" ng-value="configurationListModel.mode == 'add' ? '' : configurationListModel.fileNameSelected.value" maxlength="255">
               <!--<label for="tf-outlined" class="mdc-floating-label" ng-class="{'+filename-active': configurationListModel.mode == 'add'}">{{'MODULES.CONFIGURATION.FILENAME' | translate}}</label>-->
               <div class="mdc-notched-outline">
                 <svg>

@@ -37,9 +37,17 @@
       @include state(edit){
         border: 2px solid red;
         
-        animation: codepre-active 1s 2;
-        -webkit-animation: codepre-active 1s 2;
-        -moz-animation: codepre-active 1s 2;
+        animation: codepre-edit 1s 2;
+        -webkit-animation: codepre-edit 1s 2;
+        -moz-animation: codepre-edit 1s 2;
+      }
+  
+      @include state(add){
+        border: 2px solid red;
+    
+        animation: codepre-add 1s 2;
+        -webkit-animation: codepre-add 1s 2;
+        -moz-animation: codepre-add 1s 2;
       }
     }
   }
@@ -86,17 +94,11 @@
   }
 }
 
-@keyframes codepre-active {
+@keyframes codepre-edit {
   0% {
     border: 2px solid lightgray;
   }
-  25% {
-    border: 2px solid red;
-  }
   50% {
-    border: 2px solid lightgray;
-  }
-  75% {
     border: 2px solid red;
   }
   100% {
@@ -104,17 +106,11 @@
   }
 }
 
-@-webkit-keyframes codepre-active {
+@-webkit-keyframes codepre-edit {
   0% {
     border: 2px solid lightgray;
   }
-  25% {
-    border: 2px solid red;
-  }
   50% {
-    border: 2px solid lightgray;
-  }
-  75% {
     border: 2px solid red;
   }
   100% {
@@ -122,17 +118,11 @@
   }
 }
 
-@-moz-keyframes codepre-active {
+@-moz-keyframes codepre-edit {
   0% {
     border: 2px solid lightgray;
   }
-  25% {
-    border: 2px solid red;
-  }
   50% {
-    border: 2px solid lightgray;
-  }
-  75% {
     border: 2px solid red;
   }
   100% {
@@ -140,20 +130,38 @@
   }
 }
 
-@include block(configuration-list){
-  display:flex;
-  flex-direction: row;
-  
-  @include element(content){
-    height:90%;
-    width:90%;
-    margin:8px;
-    flex-shrink: 1;
-    flex-grow: 1;
-    background-color: white;
+@keyframes codepre-add {
+  0% {
+    border: 2px solid lightgray;
   }
-  
-  @include element(operation){
-  
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@-webkit-keyframes codepre-add {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@-moz-keyframes codepre-add {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
   }
 }

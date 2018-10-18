@@ -5,9 +5,16 @@
        aria-describedby="my-mdc-dialog-description">
   <div class="mdc-dialog__surface">
     <header class="mdc-dialog__header">
-      <h2 id="my-mdc-dialog-label" class="mdc-dialog__header__title">
-        {{header}}
-      </h2>
+      <div id="my-mdc-dialog-label" class="mdc-dialog__header__title">
+        <div style="vertical-align:bottom;display:inline-flex;">
+          <span class="mdc-dialog__header__error" ng-if="type == 'error'"></span>
+          <span class="mdc-dialog__header__warning" ng-if="type == 'warning'"></span>
+          <span class="mdc-dialog__header__confirm" ng-if="type == 'confirm'"></span>
+          <span class="mdc-dialog__header__success" ng-if="type == 'success'"></span>
+        </div>
+
+        <div style="display:inline-flex;line-height:30px;" ng-bind="::header"></div>
+      </div>
     </header>
     <section id="my-mdc-dialog-description" class="mdc-dialog__body">
       {{content}}
