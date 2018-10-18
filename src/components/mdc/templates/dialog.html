@@ -22,7 +22,7 @@
     <div class="mdc-dialog__footer">
       <!--<button type="button"  ng-show="type === 'warning'" ng-click="canceled()"-->
               <!--class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button&#45;&#45;cancel">{{cancel}}</button>-->
-      <div ng-show="type === 'warning'" style="margin: 0 15px;">
+      <div ng-show="type === 'confirm' || type === 'warning'" style="margin: 0 15px;">
         <mar-button btn-text="cancel" btn-style="'width: 70px;'" btn-class="'btn-white btn-sm'" btn-icon="'clear'" btn-click="canceled()"/>
       </div>
       <div style="margin: 0 15px;">
