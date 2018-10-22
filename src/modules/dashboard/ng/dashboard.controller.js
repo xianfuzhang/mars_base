@@ -403,12 +403,22 @@ export class DashboardController {
           x: {
             type: 'timeseries',
             tick: {
-              format: '%m-%d %H:%M'
+              format: (d) => {
+                return this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
+              }
             }
           },
           y: {
             tick: {
               format: function (d) { return d + '%'; }
+            }
+          }
+        },
+        tooltip: {
+          format: {
+            title: (d) => {
+              return this.pad(d.getMonth() + 1) + '-' + this.pad(d.getDate()) + ' ' 
+                + this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
             }
           }
         }
@@ -447,12 +457,22 @@ export class DashboardController {
           x: {
             type: 'timeseries',
             tick: {
-              format: '%m-%d %H:%M'
+              format: (d) => {
+                return this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
+              }
             }
           },
           y: {
             tick: {
               format: function (d) { return d + '%'; }
+            }
+          }
+        },
+        tooltip: {
+          format: {
+            title: (d) => {
+              return this.pad(d.getMonth() + 1) + '-' + this.pad(d.getDate()) + ' ' 
+                + this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
             }
           }
         }
@@ -779,20 +799,20 @@ export class DashboardController {
   }
 
   getISODate(date) {
-    function pad(number) {
-      if ( number < 10 ) {
-        return '0' + number;
-      }
-      return number;
-    }
-
     return date.getUTCFullYear() +
-      '-' + pad( date.getUTCMonth() + 1 ) +
-      '-' + pad( date.getUTCDate() ) +
-      'T' + pad( date.getUTCHours() ) +
-      ':' + pad( date.getUTCMinutes() ) +
+      '-' + this.pad( date.getUTCMonth() + 1 ) +
+      '-' + this.pad( date.getUTCDate() ) +
+      'T' + this.pad( date.getUTCHours() ) +
+      ':' + this.pad( date.getUTCMinutes() ) +
       'Z';
+  }
+
+  pad(number) {
+    if ( number < 10 ) {
+      return '0' + number;
     }
+    return number;
+  }
 }
 
 DashboardController.$inject = DashboardController.getDI();
