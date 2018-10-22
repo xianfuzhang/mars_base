@@ -62,7 +62,7 @@
     flex-grow: 0;
     
     @include element(form){
-      padding: 15px 10px;
+      padding: 15px;
       border: 1px solid #dfdfdf;
       
       @include element(input){
