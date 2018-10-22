@@ -27,14 +27,15 @@ export class ConfigurationListController {
     this.fileNameInput = new MDCTextField(document.querySelector('#fileName'));
     this.fileNameInput.disabled = true;
 
-    scope.configurationListModel = {
+    let initConfig = {
       configurationShow: '',
       fileName: '',
       mode: 'show',
       globalInvalid: false,
-      saveBtnInvalid: false
+      saveBtnInvalid: true
     };
-
+  
+    scope.configurationListModel = this.di._.cloneDeep(initConfig);
     scope.checkDisLab = {id: 'check_edit_config', label: this.translate('MODULES.CONFIGURATION.OPTION.START_CHECK')};
     // scope.fileNameSelectedDisLab = {hint: this.translate('MODULES.CONFIGURATION.FILENAME'),options:[]};
     scope.fileNameSelectedDisLab = {options:[]};
@@ -44,6 +45,7 @@ export class ConfigurationListController {
       try {
         JSON.parse(stringText)
         scope.configurationListModel.globalInvalid = false;
+        scope.configurationListModel.saveBtnInvalid = false;
       } catch(e) {
         scope.configurationListModel.globalInvalid = true;
       }
@@ -53,7 +55,14 @@ export class ConfigurationListController {
     scope.options = {
       mode: 'view',
       navigationBar: false,
-      onChangeText: onChangeText
+      onChangeText: onChangeText,
+      languages: {
+        'zh-cn': {
+          'expandAll': '展开',
+          'collapseAll': '折叠',
+        }
+      },
+      language: 'zh-cn'
     }
     
     scope.saveConfigFile = (evt) => {
@@ -71,7 +80,7 @@ export class ConfigurationListController {
         
         return
       }
-      
+  
       // check if the file name has existed
       if(scope.configurationListModel.mode == 'add') {
         let index = scope.fileNameSelectedDisLab.options.findIndex((option) => {
@@ -90,20 +99,17 @@ export class ConfigurationListController {
         }
       }
   
-      config = scope.configurationListModel.configurationShow;
-      // try {
-      //   config = JSON.parse(configJson);
-      // } catch(e) {
-      //   this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.JSONCONDIG'))
-      //     .then((data)=>{
-      //       // error
-      //     },(res)=>{
-      //       // error
-      //     })
-      //
-      //   return;
-      // }
+      this.di.dialogService.createDialog('confirm', this.translate('MODULES.CONFIGURATION.UPDATE.CONFORM'))
+        .then((data)=>{
+          saveConfiguration(filename)
+        },(res)=>{
+          // error
+        })
+    };
 
+    let saveConfiguration = (filename) => {
+      let config = scope.configurationListModel.configurationShow;
+  
       // save the config to file
       if(filename == 'default') { // save the config file
         this.di.configurationDataManager.updateConfiguration(null, null, config).then(
@@ -112,15 +118,15 @@ export class ConfigurationListController {
               .then((data)=>{
                 init();
               },(res)=>{
-      
+            
               })
           },
           () => {
             this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.SAVE'))
               .then((data)=>{
-              
+            
               },(res)=>{
-      
+            
               })
           }
         );
@@ -131,23 +137,23 @@ export class ConfigurationListController {
               .then((data)=>{
                 init();
               },(res)=>{
-      
+            
               })
           },
           (err) => { // error to save
             () => {
               this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.SAVE'))
                 .then((data)=>{
-        
+              
                 },(res)=>{
-        
+              
                 })
             }
           }
         )
       }
-    };
-
+    }
+    
     let getConfigurationList = ()=>{
       this.di.configurationDataManager.getConfigurationFileList()
         .then((res)=>{
@@ -186,6 +192,7 @@ export class ConfigurationListController {
     };
 
     let init = ()=> {
+      scope.configurationListModel = this.di._.cloneDeep(initConfig);
       getConfigurationList();
     };
 
