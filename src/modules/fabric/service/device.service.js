@@ -50,7 +50,7 @@ export class DeviceService {
   }
 
   getEndpointActionsShow() {
-    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
+    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
   }
 
   getDeviceTableSchema() {
@@ -268,8 +268,8 @@ export class DeviceService {
   getEndpointTableSchema() {
     return [
       {
-        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.TENANT'),
-        'field': 'tenant_name',
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.MAC'),
+        'field': 'mac',
         'layout': {'visible': true, 'sortable': true}
       },
       {
@@ -278,20 +278,20 @@ export class DeviceService {
         'layout': {'visible': true, 'sortable': true}
       },
       {
-        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.MAC'),
-        'field': 'mac',
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP'),
+        'field': 'ip',
         'layout': {'visible': true, 'sortable': true}
       },
       {
-        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP'),
-        'field': 'ip',
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.TENANT'),
+        'field': 'tenant_name',
         'layout': {'visible': true, 'sortable': true}
       },
       {
         'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.LOCATION'),
         'field': 'location',
         'layout': {'visible': true, 'sortable': true}
-      },
+      }
     ];
   }
 

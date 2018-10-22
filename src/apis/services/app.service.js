@@ -29,7 +29,7 @@ export class appService {
             'items':[
               {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary'},
               {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices'},
-             // {'label': 'Interface Group', 'url': '/interface_group'},
+             {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints'},
              //  {'label': 'Statistics', 'url': '/statistics'},
              //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]

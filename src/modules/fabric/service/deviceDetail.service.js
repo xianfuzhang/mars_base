@@ -35,6 +35,11 @@ export class DeviceDetailService {
         'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.FLOW'),
         'value': 'flow',
         'type': 'flow'
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.ENDPOINTS'),
+        'value': 'endpoint',
+        'type': 'endpoint'
       }
     ];
   }
@@ -53,6 +58,10 @@ export class DeviceDetailService {
 
   getFlowActionsShow() {
     return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
+  }
+
+  getEndpointActionsShow() {
+    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
   }
 
   getDevicePortsSchema() {

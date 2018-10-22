@@ -7,7 +7,9 @@ export class DeviceDetailController {
       '$filter',
       '$q',
       '$log',
+      '_',
       'flowService',
+      'deviceService',
       'deviceDetailService',
       'notificationService',
       'dialogService',
@@ -203,6 +205,9 @@ export class DeviceDetailController {
       case 'flow':
         schema = this.di.deviceDetailService.getDeviceFlowsSchema();
         break;
+      case 'endpoint':
+        schema = this.di.deviceService.getEndpointTableSchema();
+        break;  
     }
     return schema;
   }
@@ -221,6 +226,9 @@ export class DeviceDetailController {
         break;
       case 'flow':
         actions = this.di.deviceDetailService.getFlowActionsShow();
+        break;
+      case 'endpoint':
+        actions = this.di.deviceDetailService.getEndpointActionsShow();
         break;
     }
     return actions;
@@ -256,6 +264,11 @@ export class DeviceDetailController {
         schema['rowCheckboxSupport'] = true;
         schema['rowActionsSupport'] = true;
         break;
+      case 'endpoint':
+        schema['index_name'] = 'mac';
+        schema['rowCheckboxSupport'] = false;
+        schema['rowActionsSupport'] = false;
+        break;
     }
     return schema;
   }
@@ -281,6 +294,11 @@ export class DeviceDetailController {
       case 'flow':
         this.di.deviceDataManager.getDeviceFlows(this.scope.deviceId, params).then((res) => {
           defer.resolve({'data': res.data.flows, 'total': res.data.total});
+        });
+        break;
+      case 'endpoint':
+        this.di.deviceDataManager.getEndpoints(params).then((res) => {
+          defer.resolve({'data': res.data.hosts, 'total': res.data.total});
         });
         break;
     }
@@ -359,6 +377,26 @@ export class DeviceDetailController {
           obj['treatment'] = this.di.flowService.treatmentHander(entity.treatment);
           obj['app'] = entity.appId;
           this.scope.detailModel.entities.push(obj);
+        });
+        break;
+      case 'endpoint':
+        entities.forEach((entity) => {
+          if (this.di._.find(entity.locations, {'device_id': this.scope.deviceId})) {
+            let obj = {};
+            obj.id = entity.id;
+            obj.mac = entity.mac;
+            obj.tenant_name = entity.tenant;
+            obj.segment_name = entity.segment;
+            obj.ip = entity.ip_addresses.join(" | ");
+            let locals = [];
+            entity.locations.forEach((location) => {
+              if (location.device_id === this.scope.deviceId) {
+                locals.push(this.scope.detailValue.name + '/' + location.port);
+              }
+            });
+            obj.location = locals.join(" | ");
+            this.scope.detailModel.entities.push(obj);
+          }
         });
         break;
     }
