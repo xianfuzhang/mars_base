@@ -20,6 +20,7 @@ export class mdlRadio {
   }
 
   _link (scope, element, attrs, ngModel) {
+    let unSubscribers = [];
     scope.label = scope.displayLabel && scope.displayLabel.label;
     scope.id = scope.displayLabel && scope.displayLabel.id;
     scope.name = scope.displayLabel && scope.displayLabel.name;
@@ -45,6 +46,22 @@ export class mdlRadio {
       ngModel.$setViewValue(scope.value);
       event.stopPropagation();
     };
+  
+    unSubscribers.push(scope.$watch('disable',(newValue)=>{
+      if (scope.disable) {   //scope.$eval(attrs.status)
+        element.addClass('mdc-radio--disabled');
+        element.find('input').attr('disabled', true);
+      } else {
+        element.removeClass('mdc-radio--disabled');
+        element.find('input').attr('disabled', false);
+      }
+    }));
+  
+    scope.$on('$destroy', () => {
+      this.di._.each(unSubscribers, (unSubscribe) => {
+        unSubscribe();
+      });
+    });
   }
 }
 

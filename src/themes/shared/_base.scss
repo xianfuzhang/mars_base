@@ -4,7 +4,8 @@ $mdc-theme-secondary: #47B8E0;
 $mdc-theme-on-primary: #333;
 $mdc-theme-on-secondary: #442b2d;
 
-@import "material-components-web/material-components-web";
+@import "~material-components-web/material-components-web";
+@import "~jsoneditor/dist/jsoneditor.min.css";
 @import 'xbem';
 @import 'colors';
 @import "layout";

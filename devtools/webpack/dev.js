@@ -92,6 +92,9 @@ module.exports = function (config) {
               loader: "css-loader"
             },
             {
+              loader: "resolve-url-loader"
+            },
+            {
               loader: "sass-loader",
               options: {
                 includePaths: [
@@ -106,7 +109,7 @@ module.exports = function (config) {
         },
         {
           test: /\.(jpg|svg|png|woff|woff2|eot|ttf)$/,
-          exclude: /node_modules/,
+          // exclude: /node_modules/,
           use: [
             {
               loader: 'file-loader'
