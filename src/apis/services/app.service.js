@@ -11,7 +11,7 @@ export class appService {
       this.di[value] = args[index];
     });
     this.translate = this.di.$filter('translate');
-    this.isMocked = false;
+    this.isMocked = true;
     this.versionUrl = 'mars/v1';
     this.CONST = {
       MOCKED_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,

@@ -94,3 +94,53 @@
 .mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab--active{
   background: rgba(0,0,0, 0.1);
 }
+
+// dialog css style
+.mdc-dialog__header__title {
+  vertical-align: center;
+}
+
+.mdc-dialog__header__text {
+  display: inline-flex;
+  line-height:30px;
+  font-size: 16px;
+}
+
+.mdc-dialog__header__warning {
+  display:inline-flex;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  margin-right: 5px;
+  background: url('../images/dialog-warning-96.png') no-repeat;
+  background-size: contain;
+}
+
+.mdc-dialog__header__confirm {
+  display:inline-flex;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  margin-right: 5px;
+  background: url('../images/dialog-confirm-96.png') no-repeat;
+  background-size: contain;
+}
+
+.mdc-dialog__header__error {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  background: url('../images/dialog-error-96.png') no-repeat;
+  background-size: contain;
+}
+
+.mdc-dialog__header__success {
+  display:inline-flex;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  margin-right: 5px;
+  background: url('../images/dialog-success-96.png') no-repeat;
+  background-size: contain;
+}

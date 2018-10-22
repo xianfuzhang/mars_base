@@ -9,7 +9,6 @@ export class ConfigurationListController {
       '$http',
       '$filter',
       '$q',
-      '$window',
       'appService',
       'dialogService',
       'configurationDataManager'
@@ -40,9 +39,21 @@ export class ConfigurationListController {
     scope.fileNameSelectedDisLab = {options:[]};
 
     scope.saveConfigFile = (evt) => {
-      let filename = this.fileNameInput.value;
+      const regex = /[^\\s\\\\/:\\*\\?\\\"<>\\|](\\x20|[^\\s\\\\/:\\*\\?\\\"<>\\|])*[^\\s\\\\/:\\*\\?\\\"<>\\|\\.]$/;
+      let filename = this.fileNameInput.value.trim(' ');
       let config;
   
+      if(!regex.test(filename)) {
+        this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.FILENAME.INVALID'))
+          .then((data)=>{
+            // error
+          },(res)=>{
+            // error
+          })
+        
+        return
+      }
+      
       // check if the file name has existed
       if(scope.configurationListModel.mode == 'add') {
         let index = scope.fileNameSelectedDisLab.options.findIndex((option) => {
@@ -50,7 +61,7 @@ export class ConfigurationListController {
         })
         
         if(index != -1) {
-          this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.FILENAME'))
+          this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.FILENAME.REPEAT'))
             .then((data)=>{
               // error
             },(res)=>{

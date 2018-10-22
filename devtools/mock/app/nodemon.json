@@ -1,0 +1,4 @@
+{
+  "verbose": true,
+  "ignore": ["devtools/mock/app/assets", "src/", "public/", "docker/", "node_modules/"]
+}

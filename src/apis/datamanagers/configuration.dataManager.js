@@ -36,10 +36,10 @@ export class ConfigurationDataManager{
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getConfigurationUrl(subjectClass, subject), value).then(
       (res) => {
-        // defer.resolve(res);
+        defer.resolve(res);
       },
       (error) => {
-        // defer.resolve({'data': {'config': []}});
+        defer.reject({'error': error});
       }
     );
     return defer.promise;
