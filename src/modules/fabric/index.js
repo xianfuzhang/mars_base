@@ -4,6 +4,7 @@ import './components/flow_establish/scss/flow_establish';
 import {InterfaceGroupController} from './ng/interfaceGroup.controller';
 import {DeviceController} from './ng/device.controller';
 import {DeviceDetailController} from './ng/deviceDetail.controller';
+import {EndPointController} from './ng/endpoints.controller';
 import {StatisticController} from './ng/statistic.controller';
 import {StormControlController} from './ng/stormControl.controller';
 import {DeviceService} from './service/device.service';
@@ -20,6 +21,7 @@ export default angular
   .controller('deviceController', DeviceController)
   .controller('deviceDetailController', DeviceDetailController)
   .controller('interfaceGroupController', InterfaceGroupController)
+  .controller('endPointController', EndPointController)
   .controller('statisticController', StatisticController)
   .controller('stormControlController', StormControlController)
   .controller('fabricSummaryController', FabricSummaryController)

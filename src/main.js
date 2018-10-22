@@ -146,9 +146,9 @@ angular
           loggedin: checkLoggedIn
         }
       })
-      .when('/interface_group', {
-        template: require('./modules/fabric/template/interface_group.html'),
-        controller: 'interfaceGroupController',
+      .when('/endpoints', {
+        template: require('./modules/fabric/template/endpoints.html'),
+        controller: 'endPointController',
         resolve: {
           loggedin: checkLoggedIn
         }
