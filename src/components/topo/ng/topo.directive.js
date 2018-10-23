@@ -565,7 +565,7 @@ export class Topo {
                 return;
               }
               this.links[linkId] = genLinkNode(deviceIds);
-              this.links[linkId].lineWidth = 3;
+              // this.links[linkId].lineWidth = 3;
               this.links[linkId].strokeColor = this.LINE_SELECTED;
               if(link.state != this.active_status){
                 this.links[linkId].strokeColor = this.LINE_ERROR;
@@ -680,7 +680,9 @@ export class Topo {
         //   }
         // });
         // this.selectedDeviceId  = null;
-        crushLinks();
+        if(scope.topoSetting.show_links !== 2){
+          crushLinks();
+        }
       };
 
       let crushAllPorts = () =>{

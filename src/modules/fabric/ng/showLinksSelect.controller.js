@@ -26,9 +26,9 @@ export class ShowLinksSelectController {
 
     scope.topoSetting = {};
 
-    scope.displayLabelArr = [{id: 'check_1', label: this.translate('MODULES.TOPO.LINK.HIDE_LINK'), name: 'linksMode', value:  0},
-                          {id: 'check_1', label: this.translate('MODULES.TOPO.LINK.SHOW_SELECTED_LINK'), name: 'linksMode', value:  1},
-                          {id: 'check_1', label: this.translate('MODULES.TOPO.LINK.SHOW_ALL_LINK'), name: 'linksMode', value:  2}];
+    scope.displayLabelArr = [{id: 'linksMode_check_1', label: this.translate('MODULES.TOPO.LINK.HIDE_LINK'), name: 'linksMode', value:  0},
+                          {id: 'linksMode_check_2', label: this.translate('MODULES.TOPO.LINK.SHOW_SELECTED_LINK'), name: 'linksMode', value:  1},
+                          {id: 'linksMode_check_3', label: this.translate('MODULES.TOPO.LINK.SHOW_ALL_LINK'), name: 'linksMode', value:  2}];
 
     let init = () => {
       this.di.localStoreService.getStorage(fabric_storage_ns).get('topo_set').then((data)=>{
