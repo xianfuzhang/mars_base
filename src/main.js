@@ -39,6 +39,7 @@ import 'deviceTooltip';
 import 'wizard';
 import 'datePicker';
 import 'marButton';
+import 'jsonEditor';
 
 angular
   .module('marsApp', [
@@ -79,7 +80,8 @@ angular
     'deviceTooltip',
     'wizard',
     'date-picker',
-    'marButton'
+    'marButton',
+    'jsonEditor'
   ])
   .factory('setLanguage', ['$q',function ($q) {
     return function (options) {

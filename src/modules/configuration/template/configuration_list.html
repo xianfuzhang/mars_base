@@ -10,8 +10,8 @@
     </content-header>
     <div class="configuration flex_entirety__body__body">
 
-      <div class="configuration__content">
-        <pre id="configurationListPre" contenteditable="{{configurationListModel.mode == 'edit' || configurationListModel.mode == 'add'}}" class="configuration__content__codepre" ng-class="{'+edit': configurationListModel.mode == 'edit', '+add': configurationListModel.mode == 'add'}">{{configurationListModel.configurationShow}}</pre>
+      <div class="configuration__content" jsoneditor ng-model="configurationListModel.configurationShow" options="options" prefix-text="true">
+        <!--<div id="configurationListPre" contenteditable="{{configurationListModel.mode == 'edit' || configurationListModel.mode == 'add'}}" class="configuration__content__codepre" ng-class="{'+edit': configurationListModel.mode == 'edit', '+add': configurationListModel.mode == 'add'}">{{configurationListModel.configurationShow}}</div>-->
       </div>
 
       <div class="configuration__operation">
@@ -20,20 +20,20 @@
           <div class="configuration__operation__form__input">
             <div class="configuration__operation__form__input__label">选择配置：</div>
             <mdl-select ng-model="configurationListModel.fileNameSelected"
-                        disable="configurationListModel.isEditable"
+                        disable="configurationListModel.globalInvalid"
                         display-label="fileNameSelectedDisLab">
             </mdl-select>
           </div>
 
           <div class="configuration__operation__form__input">
             <div class="configuration__operation__form__input__label">操作模式：</div>
-            <mdl-radio ng-model="configurationListModel.mode" name="role" value=""
+            <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
                        display-label="{id: 'show_radio', label: '浏览', name: 'mode', value: 'show'}">
             </mdl-radio>
-            <mdl-radio ng-model="configurationListModel.mode" name="role" value="leaf"
+            <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
                        display-label="{id: 'edit_radio', label: '编辑', name: 'mode', value: 'edit'}">
             </mdl-radio>
-            <mdl-radio ng-model="configurationListModel.mode" name="role" value="unknown"
+            <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
                        display-label="{id: 'add_radio', label: '新增', name: 'mode', value: 'add'}">
             </mdl-radio>
           </div>
@@ -54,7 +54,7 @@
           </div>
 
           <div>
-            <mar-button btn-id="'save-configuration-list'" btn-style="'width:160px'" btn-text="::'MODULES.CONFIGURATION.OPTION.UPDATE' | translate" btn-icon="'done'" btn-class="'btn-black btn-md'" btn-disabled="configurationListModel.mode == 'show' || configurationListModel.nameInvalid" btn-click="saveConfigFile()"/>
+            <mar-button btn-id="'save-configuration-list'" btn-style="'width:160px'" btn-text="::'MODULES.CONFIGURATION.OPTION.UPDATE' | translate" btn-icon="'done'" btn-class="'btn-black btn-md'" btn-disabled="configurationListModel.mode == 'show' || configurationListModel.saveBtnInvalid || configurationListModel.globalInvalid" btn-click="saveConfigFile()"/>
           </div>
         </div>
       </div>

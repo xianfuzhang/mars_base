@@ -31,13 +31,31 @@ export class ConfigurationListController {
       configurationShow: '',
       fileName: '',
       mode: 'show',
-      nameInvalid: false
+      globalInvalid: false,
+      saveBtnInvalid: false
     };
 
     scope.checkDisLab = {id: 'check_edit_config', label: this.translate('MODULES.CONFIGURATION.OPTION.START_CHECK')};
     // scope.fileNameSelectedDisLab = {hint: this.translate('MODULES.CONFIGURATION.FILENAME'),options:[]};
     scope.fileNameSelectedDisLab = {options:[]};
-
+    
+    // listen the json content change function
+    let onChangeText = function(stringText) {
+      try {
+        JSON.parse(stringText)
+        scope.configurationListModel.globalInvalid = false;
+      } catch(e) {
+        scope.configurationListModel.globalInvalid = true;
+      }
+    }
+    
+    // json editor options
+    scope.options = {
+      mode: 'view',
+      navigationBar: false,
+      onChangeText: onChangeText
+    }
+    
     scope.saveConfigFile = (evt) => {
       const regex = /[^\\s\\\\/:\\*\\?\\\"<>\\|](\\x20|[^\\s\\\\/:\\*\\?\\\"<>\\|])*[^\\s\\\\/:\\*\\?\\\"<>\\|\\.]$/;
       let filename = this.fileNameInput.value.trim(' ');
@@ -72,20 +90,19 @@ export class ConfigurationListController {
         }
       }
   
-      // check if the file name is JSON style
-      let preContent = document.getElementById("configurationListPre").innerHTML;
-      try {
-        config = JSON.parse(preContent);
-      } catch(e) {
-        this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.JSONCONDIG'))
-          .then((data)=>{
-            // error
-          },(res)=>{
-            // error
-          })
-        
-        return;
-      }
+      config = scope.configurationListModel.configurationShow;
+      // try {
+      //   config = JSON.parse(configJson);
+      // } catch(e) {
+      //   this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.JSONCONDIG'))
+      //     .then((data)=>{
+      //       // error
+      //     },(res)=>{
+      //       // error
+      //     })
+      //
+      //   return;
+      // }
 
       // save the config to file
       if(filename == 'default') { // save the config file
@@ -158,12 +175,12 @@ export class ConfigurationListController {
       if(name === 'default') { // get default config file
         this.di.configurationDataManager.getConfiguration()
           .then((res)=>{
-            this.di.$scope.configurationListModel.configurationShow = JSON.stringify(res, null, 4)
+            this.di.$scope.configurationListModel.configurationShow = res
           });
       } else { // get other config files
         this.di.configurationDataManager.getConfigurationByFileName(name)
           .then((res)=>{
-            this.di.$scope.configurationListModel.configurationShow = JSON.stringify(res['data'], null, 4);
+            this.di.$scope.configurationListModel.configurationShow = res['data'];
           });
       }
     };
@@ -176,7 +193,13 @@ export class ConfigurationListController {
 
     unSubscribers.push(this.di.$scope.$watch('configurationListModel.mode',(newValue)=>{
       console.log(newValue);
-      if(newValue == 'add'){
+      if(newValue == 'show'){
+        scope.options.mode = 'view';
+      } else {
+        scope.options.mode = 'text';
+      }
+      
+      if(newValue == 'add') {
         this.fileNameInput.disabled = false;
       } else {
         this.fileNameInput.disabled = true;
@@ -186,6 +209,7 @@ export class ConfigurationListController {
     unSubscribers.push(this.di.$scope.$watch('configurationListModel.fileNameSelected',(newValue)=>{
       if(newValue !== null && newValue !== undefined && newValue !== ''){
         this.di.$scope.configurationListModel.mode = 'show';
+        this.di.$scope.options.mode = 'view';
         getConfigurationByName(newValue.value);
       }
     }));
@@ -193,16 +217,16 @@ export class ConfigurationListController {
     unSubscribers.push(this.di.$scope.$watch('configurationListModel.fileName',(newValue)=>{
       if(scope.configurationListModel.mode == 'add') {
         if(newValue == null || newValue == undefined || newValue == ""){
-          scope.configurationListModel.nameInvalid = true;
+          scope.configurationListModel.saveBtnInvalid = true;
         } else {
           let index = scope.fileNameSelectedDisLab.options.findIndex((option) => {
             return option.value == newValue;
           })
     
           if(index != -1) {
-            scope.configurationListModel.nameInvalid = true;
+            scope.configurationListModel.saveBtnInvalid = true;
           } else {
-            scope.configurationListModel.nameInvalid = false;
+            scope.configurationListModel.saveBtnInvalid = false;
           }
         }
       }
