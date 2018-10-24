@@ -243,7 +243,7 @@ export class appService {
   }
 
   getAlertGroupBasicConfigUrl(){
-    return this.getZoneEndpoint(true) + '/alert/v1/group/basicconfig';
+    return this.getZoneEndpoint(true) + '/alert/v1/basicconfig';
   }
 
   getAlertGroupReceiveSettingUrl(){
