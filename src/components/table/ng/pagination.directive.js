@@ -93,7 +93,6 @@ export class tablePagination {
 
     scope.$watch('currentPage', (c) => {
       scope.inputPage = c;
-      this.di.$log.info('table current page',scope.inputPage);
     });
   }
 }

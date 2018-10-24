@@ -1,4 +1,4 @@
-<nav ng-if="numPages && pages.length >= 1">
+<nav ng-if="_isNeedPagination && totalItemCount">
   <ul class="pagination">
     <li>
       <div class="pagination--page" ng-class="{'pagination--page__small': tableSize === 'small'}">
