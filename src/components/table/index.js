@@ -22,6 +22,9 @@ import {tableConsts} from './service/table.consts';
 import {rowCheckbox} from './ng/rowCheckbox.directive';
 import {rowActions} from './ng/rowActions.directive';
 import {tablePagination} from './ng/pagination.directive';
+import {thDragEvent} from './ng/thDragEvent.directive';
+import {updateTableCols} from './ng/updateTableCols.directive';
+import {tableRenderReady} from './ng/tableRenderReady.directive';
 
 export default angular
   .module('mdlTable', [])
@@ -33,6 +36,9 @@ export default angular
   .directive('rowCheckbox', rowCheckbox)
   .directive('rowActions', rowActions)
   .directive('tablePagination', tablePagination)
+  .directive('thDragEvent', thDragEvent)
+  .directive('updateTableCols', updateTableCols)
+  .directive('tableRenderReady', tableRenderReady)
   .service('tableProvider', tableProvider)
   .service('tableProviderFactory', tableProviderFactory)
   .service('fastListenerService', fastListenerService)

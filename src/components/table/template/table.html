@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <div class="mdl-table-field__content">
+    <div class="mdl-table-field__content" update-table-cols>
       <div class="mdl-table-header">
         <table class="mdl-table">
           <thead>
@@ -79,19 +79,12 @@
                   'sortable': $col.sortable,
                   'sort-asc': $col.sortable && (_getColumnSortMode($col) === tableModel.CONST_SORT_ASC),
                   'sort-desc': $col.sortable && (_getColumnSortMode($col) === tableModel.CONST_SORT_DESC)
-                 }"
-            >
+                 }" th-drag-event>
               <span ng-bind="$col.def.label"></span>
               <div class="icon-sort">
                 <span class="icon-sort-desc"></span>
                 <span class="icon-sort-asc"></span>
               </div>
-              <!--<span ng-class="{
-                    'icon-sort': !(_getColumnSortMode($col) === tableModel.CONST_SORT_ASC
-                      || _getColumnSortMode($col) === tableModel.CONST_SORT_DESC),
-                    'icon-sort-asc': (_getColumnSortMode($col) === tableModel.CONST_SORT_ASC),
-                    'icon-sort-desc': (_getColumnSortMode($col) === tableModel.CONST_SORT_DESC)
-                  }">&nbsp;&nbsp;&nbsp;</span>-->
             </th>
           </tr>
           </thead>
@@ -109,6 +102,7 @@
                             'mdl-table-body__row__small': tableSize === 'small'
                           }"
                 ng-click="_onRowClick($data, $index, $event)"
+                table-render-ready
                 metarow>
               <td ng-if="tableModel.rowCheckboxSupport" style="width: 5%;" size="tableSize"
                   data="$data" row-checkbox></td>

@@ -347,21 +347,28 @@ export class mdlTable {
     };
 
     scope._getTableParams = () => {
-      let params = {
-        start: scope.tableModel.pagination.start,
-        number: scope.tableModel.pagination.number
-       /* sort: scope.tableModel.sort,
-        search: scope.tableModel.search,
-        pagination: scope.tableModel.pagination*/
-      };
-      if (Object.keys(scope.tableModel.search) && !!scope.tableModel.search['value']) {
-        params['search'] = scope.tableModel.search['value'];
+      let params;
+      if (scope._isNeedPagination) {
+        params = {
+          start: scope.tableModel.pagination.start,
+          number: scope.tableModel.pagination.number
+         /* sort: scope.tableModel.sort,
+          search: scope.tableModel.search,
+          pagination: scope.tableModel.pagination*/
+        };
+        if (Object.keys(scope.tableModel.search) && !!scope.tableModel.search['value']) {
+          params['search'] = scope.tableModel.search['value'];
+        }
+        //1: desc, 2:asc
+        if (Object.keys(scope.tableModel.sort)) {
+          params['sort'] = Object.keys(scope.tableModel.sort)[0];
+          params['orderBy'] = scope.tableModel.sort[params['sort']] === 1 ? 'desc' : 'asc';
+        }
       }
-      //1: desc, 2:asc
-      if (scope._isNeedPagination && Object.keys(scope.tableModel.sort)) {
-        params['sort'] = Object.keys(scope.tableModel.sort)[0];
-        params['orderBy'] = scope.tableModel.sort[params['sort']] === 1 ? 'desc' : 'asc';
+      else {
+        params = {};
       }
+      
       return params;
     };
 
