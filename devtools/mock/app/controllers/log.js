@@ -15,7 +15,7 @@ router.get('/controller', function (req, res) {
   //   return log.created_time >= timeFrom && log.created_time <= timeTo;
   // });
   
-  return res.json({logs: formatLog(logs)});
+  return res.json({logs: formatLog(logs), count: logs.length});
 });
 
 router.get('/controller/files', function (req, res) {
