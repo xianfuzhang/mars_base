@@ -22,7 +22,7 @@ export class LogDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve({'data': {'logs': [], 'total': 0}});
+        defer.resolve({'data': {'logs': [], 'count': 0}});
       }
     );
     

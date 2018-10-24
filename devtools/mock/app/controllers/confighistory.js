@@ -22,7 +22,7 @@ router.get('/', function (req, res) {
   }
   
   configs = formatConfig(configs);
-  return res.status(200).json({configs: configs});
+  return res.status(200).json({configs: configs, count: configs.length});
 });
 
 router.get('/files', function (req, res) {

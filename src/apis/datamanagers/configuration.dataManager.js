@@ -107,7 +107,7 @@ export class ConfigurationDataManager{
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve({'data': {'config': []}});
+        defer.resolve({'data': {'configs': [], 'count':0}});
       }
     );
     return defer.promise;
