@@ -58,7 +58,7 @@ export class mdlRadio {
     }));
   
     scope.$on('$destroy', () => {
-      this.di._.each(unSubscribers, (unSubscribe) => {
+      unSubscribers.forEach((unSubscribe) => {
         unSubscribe();
       });
     });

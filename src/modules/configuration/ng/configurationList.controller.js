@@ -23,6 +23,9 @@ export class ConfigurationListController {
     let unSubscribers = [];
     let scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
+  
+    // filename regex expression
+    const fileNameRegex = /^[\w\-.]+$/i;
 
     this.fileNameInput = new MDCTextField(document.querySelector('#fileName'));
     this.fileNameInput.disabled = true;
@@ -66,11 +69,10 @@ export class ConfigurationListController {
     }
     
     scope.saveConfigFile = (evt) => {
-      const regex = /[^\\s\\\\/:\\*\\?\\\"<>\\|](\\x20|[^\\s\\\\/:\\*\\?\\\"<>\\|])*[^\\s\\\\/:\\*\\?\\\"<>\\|\\.]$/;
       let filename = this.fileNameInput.value.trim(' ');
       let config;
   
-      if(!regex.test(filename)) {
+      if(!fileNameRegex.test(filename)) {
         this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.FILENAME.INVALID'))
           .then((data)=>{
             // error
@@ -223,11 +225,12 @@ export class ConfigurationListController {
   
     unSubscribers.push(this.di.$scope.$watch('configurationListModel.fileName',(newValue)=>{
       if(scope.configurationListModel.mode == 'add') {
-        if(newValue == null || newValue == undefined || newValue == ""){
+        let filename = newValue.trim(' ');
+        if(filename == null || filename == undefined || filename == "" || !fileNameRegex.test(filename)){
           scope.configurationListModel.saveBtnInvalid = true;
         } else {
           let index = scope.fileNameSelectedDisLab.options.findIndex((option) => {
-            return option.value == newValue;
+            return option.value == filename;
           })
     
           if(index != -1) {

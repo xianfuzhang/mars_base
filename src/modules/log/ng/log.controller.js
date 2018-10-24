@@ -87,7 +87,7 @@ export class LogController {
           this.scope.entities = this.getEntities(res.data.logs);
           defer.resolve({
             data: this.scope.entities,
-            count: this.scope.entities.length
+            count: res.data.count
           });
         });
         return defer.promise;
