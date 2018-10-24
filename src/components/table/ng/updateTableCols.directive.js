@@ -80,7 +80,6 @@ export class updateTableCols {
 
     //显示隐藏columns时调整table的tds width
 		unsubscribers.push(this.di.$rootScope.$on('table-show-hide-columns', (event) => {
-			console.log('table-show-hide-columns');
       getColsWidth();
       updateBodyColsWidth();
     }));

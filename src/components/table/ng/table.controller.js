@@ -1,6 +1,6 @@
 export class TableController {
   static getDI() {
-    return ['$log','$scope', 'modalManager'];
+    return ['$log','$scope', '$timeout', 'modalManager'];
   }
 
   constructor(...args){
@@ -11,7 +11,6 @@ export class TableController {
     this.scope = this.di.$scope;
 
     this.onMenu = () => {
-      this.di.$log.info('table controller in menu popup func.');
       this.di.modalManager.open({
           template: require('../template/showHideColumn.html'),
           controller: 'showHideColumnCtrl',
@@ -29,6 +28,9 @@ export class TableController {
         data.result.forEach((item, index) => {
           this.scope.tableModel.columnsByField[item.ui.id]['visible'] = item.visible;
         });
+        this.di.$timeout(() => {
+          this.di.$scope.$emit('table-show-hide-columns')
+        }, 0);
       }
     });
     };
