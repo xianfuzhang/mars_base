@@ -231,6 +231,7 @@ angular
 
   }])
   .config(['$httpProvider', function($httpProvider){
+    $httpProvider.useApplyAsync(true);
     $httpProvider.interceptors.push(['$cookies', '$location', '$q', function($cookies, $location, $q){
       return {
         request: function(config) {

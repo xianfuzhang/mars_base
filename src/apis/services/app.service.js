@@ -11,7 +11,7 @@ export class appService {
       this.di[value] = args[index];
     });
     this.translate = this.di.$filter('translate');
-    this.isMocked = true;
+    this.isMocked = false;
     this.versionUrl = 'mars/v1';
     this.CONST = {
       MOCKED_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
@@ -185,11 +185,11 @@ export class appService {
   }
 
   getEndPointsUrl(){
-    return this.getZoneEndpoint() + '/endpoints';
+    return this.getZoneEndpoint() + '/endpoints/v1';
   }
 
   getDeleteEndpointUrl(tenant, segment, mac){
-    return this.getZoneEndpoint() + '/endpoints/' + tenant + '/' + segment + '/' + mac;
+    return this.getZoneEndpoint() + '/endpoints/v1/' + tenant + '/' + segment + '/' + mac;
   }
 
   getStormProfilesUrl(){
