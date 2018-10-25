@@ -114,7 +114,7 @@ export class ConfigurationHistoryController {
     origins.forEach((item) => {
       let obj = {};
       
-      obj.time = item.time;
+      obj.time = this._formatLocaleTime(item.time);
       obj.type = item.type;
       obj.class = item.class;
       obj.subject = item.subject;
@@ -124,7 +124,33 @@ export class ConfigurationHistoryController {
     });
     return entities;
   }
-  
+
+  _formatLocaleTime(time){
+    let _fillInt= (num, count)=>{
+      if(!count){
+        count = 2;
+      }
+      let numStr = num + '';
+      if(numStr.length !== count) {
+        return '0'.repeat(count - numStr.length) + numStr
+      } else
+        return num
+    };
+
+    let d = new Date(time);
+    let res = d.getFullYear() + '-' +
+      _fillInt(d.getMonth()+ 1) + '-' +
+      _fillInt(d.getDate()) + ' ' +
+      _fillInt(d.getHours()) +  ':' +
+      _fillInt(d.getMinutes()) + ':' +
+      _fillInt(d.getSeconds())+ ',' +
+      _fillInt(d.getMilliseconds(),3);
+
+     return res
+  }
+
+
+
   getActionsShow() {
     return {'refresh': true, 'search': false};
   }
