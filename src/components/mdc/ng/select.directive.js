@@ -21,6 +21,7 @@ export class mdlSelect {
       helper: '=',
       disable: '=',
       ngChange: '&',
+      valueChange: '&',
       onInit: '&'
     };
 
@@ -83,6 +84,11 @@ export class mdlSelect {
       // console.log(newValue);
       // console.log(scope.displayLabel);
       scope.options = newValue;
+    }));
+
+    unSubscribes.push(scope.$watch('value',(newValue)=>{
+      scope.valueChange = scope.valueChange || angular.noop;
+      scope.valueChange();
     }));
 
     this.di.$timeout(function () {

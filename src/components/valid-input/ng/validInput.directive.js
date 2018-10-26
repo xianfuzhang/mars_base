@@ -25,7 +25,9 @@ export class validInput {
       vName : '@',
       vRequire: '@',
       vModel : '=ngModel',
+      ngChange: '&',
       vRegex: '=',
+      vType: '=',
       vMessage: '@',
       vRpcid: '@',
       vStyle: '@',
@@ -40,15 +42,49 @@ export class validInput {
     (function init(){
 
       let unsubscribers = [];
+      scope.ngChange = scope.ngChange|| angular.noop;
 
+      let getMessageByType = (type) =>{
+
+        let message = '';
+        if(type === 'mac'){
+          message = this.translate('MODULES.REGEX.FLOW_ADD.MAC')
+        } else if(type === 'ipv4'){
+          message = this.translate('MODULES.REGEX.FLOW_ADD.IPV4')
+        } else if(type === 'ipv4_multi'){
+          message = this.translate('MODULES.REGEX.FLOW_ADD.IPV4_MULTI')
+        } else if(type === 'ipv6'){
+          message = this.translate('MODULES.REGEX.FLOW_ADD.IPV6')
+        } else if (type === 'int'){
+          message = this.translate('MODULES.REGEX.FLOW_ADD.NUMBER')
+        }
+        return message;
+      };
+
+      let getPattern = (type) =>{
+
+        let regex = '';
+        if(type === 'mac'){
+          regex = '^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$';
+        } else if(type === 'ipv4'){
+          regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
+        } else if(type === 'ipv4_multi'){
+          regex = '^(22[4-9]|23[0-9])(\\.[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]){3}$';
+        } else if(type === 'ipv6'){
+          regex = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))/;
+        } else if (type === 'int'){
+          regex = '^\d$|^[1-9]+[0-9]*$';
+        }
+        return regex;
+      };
 
       scope.validModel = {
         name: scope.vName,
-        require: scope.vRequire,
-        ngPattern: scope.vRegex,
+        require: scope.vRequire === 'true'? true : false,
+        ngPattern: scope.vRegex || getPattern(scope.vType),
         isInvalid: false,
         change: false,
-        message: scope.vMessage,
+        message: scope.vMessage || getMessageByType(scope.vType),
         emptyMessage: this.translate('MODULES.REGEX.FLOW_ADD.NOTNULL'),
         mouseOver: false
       };
@@ -56,11 +92,7 @@ export class validInput {
       scope.blockOrInline = {};
 
       if(scope.vStyle){
-        // console.log(scope.vStyle)
-        scope.vStyle = JSON.parse(scope.vStyle)
-        // console.log(scope.vStyle)
-        // console.log(typeof scope.vStyle)
-        // scope.inputStyle = scope.vStyle;
+        scope.vStyle = JSON.parse(scope.vStyle);
         scope.blockOrInline = scope.vStyle;
       }
 
@@ -119,6 +151,9 @@ export class validInput {
         // scope.$apply();
       }));
 
+      unsubscribers.push(scope.$watch('vModel',()=>{
+        scope.ngChange();
+      }));
 
       scope.$on('$destroy', () => {
         unsubscribers.forEach((unsubscribe) => {
