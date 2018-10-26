@@ -251,7 +251,21 @@ angular
         },
         response: function(response) {
           // do something on success
-          return response;
+          let data = response.data;
+          let url = response.config.url;
+          if(url.indexOf('j_security_check') !== -1){
+            if(data.indexOf('ONOS Login') === -1){
+              return response;
+            } else {
+              $location.url('/login');
+              response.status = 401;
+              return $q.reject(response);
+            }
+          } else {
+            return response;
+          }
+
+
         },
         responseError: function(response) {
           if (response.status === 401)
