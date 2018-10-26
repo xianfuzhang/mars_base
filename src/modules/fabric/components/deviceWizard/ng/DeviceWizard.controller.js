@@ -39,7 +39,7 @@ export class DeviceWizardController {
       name: '',
       rack_id: '',
       mfr: '',
-      available: false,
+      available: true,
       fabric_role: 'unknown',
       leaf_group: '',
       managementAddress: '',
