@@ -86,11 +86,14 @@ export class EndPointController {
       obj.id = endpoint.id;
       obj.mac = endpoint.mac;
       obj.tenant_name = endpoint.tenant;
-      obj.segment_name = endpoint.segment;
-      obj.ip = endpoint.ip_addresses.join(" | ");
+      obj.segment_name = endpoint.segment || endpoint.vlan;
+      obj.ip = (endpoint.ip_addresses && endpoint.ip_addresses.join(" | ")) 
+              || (endpoint.ipAddresses && endpoint.ipAddresses.join(" | "));
       let locals = [];
       endpoint.locations.forEach((location) => {
-        locals.push((this.scope.deviceObjects[location.device_id]||location.device_id) + '/' + location.port);
+        let device_name = (location.device_id && this.scope.deviceObjects[location.device_id]) 
+                        || (location.elementId && this.scope.deviceObjects[location.elementId]);
+        locals.push(device_name + '/' + location.port);
       });
       obj.location = locals.join(" | ");
         entities.push(obj);

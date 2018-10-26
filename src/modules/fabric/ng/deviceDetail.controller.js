@@ -386,11 +386,12 @@ export class DeviceDetailController {
             obj.id = entity.id;
             obj.mac = entity.mac;
             obj.tenant_name = entity.tenant;
-            obj.segment_name = entity.segment;
-            obj.ip = entity.ip_addresses.join(" | ");
+            obj.segment_name = entity.segment|| entity.vlan;;
+            obj.ip = (entity.ip_addresses && entity.ip_addresses.join(" | ")) 
+              || (entity.ipAddresses && entity.ipAddresses.join(" | "));
             let locals = [];
             entity.locations.forEach((location) => {
-              if (location.device_id === this.scope.deviceId) {
+              if ((location.device_id || location.elementId) === this.scope.deviceId) {
                 locals.push(this.scope.detailValue.name + '/' + location.port);
               }
             });
