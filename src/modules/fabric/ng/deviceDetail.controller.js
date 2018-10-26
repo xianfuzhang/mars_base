@@ -381,7 +381,8 @@ export class DeviceDetailController {
         break;
       case 'endpoint':
         entities.forEach((entity) => {
-          if (this.di._.find(entity.locations, {'device_id': this.scope.deviceId})) {
+          if (this.di._.find(entity.locations, {'device_id': this.scope.deviceId}) ||
+              this.di._.find(entity.locations, {'elementId': this.scope.deviceId})) {
             let obj = {};
             obj.id = entity.id;
             obj.mac = entity.mac;
