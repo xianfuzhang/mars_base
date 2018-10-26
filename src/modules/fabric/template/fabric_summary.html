@@ -104,9 +104,17 @@
                     </transclude-body>
                 </mar-section>
 
+                <mar-section ng-if="fabricModel.showSwitchDetail" s-title="Endpoint" class="detail_interface">
+                    <transclude-body>
+                        <static-table style="max-width:400px;min-width: 80px;" data="fabricModel.endpoints" scale="small" columns="fabricModel.endpointsSchema"></static-table>
+                        <!--<mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">-->
+                        <!--</mdl-table>-->
+                    </transclude-body>
+                </mar-section>
+
                 <mar-section ng-if="fabricModel.showSwitchDetail" s-title="Interfaces" class="detail_interface">
                     <transclude-body>
-                    <static-table style="max-width:400px" data="fabricModel.switchPorts" columns="fabricModel.portsSchema"></static-table>
+                    <static-table style="max-width:400px" data="fabricModel.switchPorts" scale="small" columns="fabricModel.portsSchema"></static-table>
                     <!--<mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">-->
                     <!--</mdl-table>-->
                     </transclude-body>
