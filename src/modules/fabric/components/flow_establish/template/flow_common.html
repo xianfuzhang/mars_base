@@ -1,4 +1,13 @@
 <div class="flow_common">
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">Table Id</div>
+
+        <mdl-select ng-model="flowEstablishModel.tableIdType" ng-change="changeTableId($value)"
+                    display-label="tableIdSchemaList">
+        </mdl-select>
+    </div>
+
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{'MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'|translate}}<span class="stepForm__input__required">*</span></div>
 

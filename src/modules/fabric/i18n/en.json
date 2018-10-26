@@ -105,6 +105,7 @@
   "MODULES.REGEX.FLOW_ADD.NUMBER": "Please input number!",
   "MODULES.REGEX.FLOW_ADD.PORT": "Invalid Port!",
   "MODULES.REGEX.FLOW_ADD.IPV4": "Invalid IPv4 address!",
+  "MODULES.REGEX.FLOW_ADD.IPV4_MULTI": "Invalid IPv4 multicast address!!",
   "MODULES.REGEX.FLOW_ADD.TIMEOUT": "Please input the right timeout number!",
   "MODULES.REGEX.FLOW_ADD.PRIORITY": "Please input the right priority number!",
   "MODULES.REGEX.FLOW_ADD.IPV6": "Please input the right IPv6 address!",
