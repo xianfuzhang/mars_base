@@ -63,7 +63,11 @@
     
     @include element(form){
       padding: 15px;
-      border: 1px solid #dfdfdf;
+      border: 1px solid #3883fa;
+      
+      @include state(disable) {
+        border: 1px solid #dfdfdf;
+      }
       
       @include element(input){
         margin-bottom: 20px;

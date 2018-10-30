@@ -16,7 +16,7 @@
 
       <div class="configuration__operation">
 
-        <div class="configuration__operation__form">
+        <div class="configuration__operation__form" ng-class="{'+disable': configurationListModel.globalInvalid }">
           <div class="configuration__operation__form__input">
             <div class="configuration__operation__form__input__label">选择配置：</div>
             <mdl-select ng-model="configurationListModel.fileNameSelected"
