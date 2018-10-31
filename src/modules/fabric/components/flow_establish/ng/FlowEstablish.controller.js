@@ -100,6 +100,8 @@ export class FlowEstablishController {
     scope.table60Schema = this.di.deviceService.getFlowTableAclOptionList();
 
 
+    scope.treatmentPageGroup = {};
+
     let convertList2DisLabel = (list) =>{
       let disLabels = [];
 
@@ -109,6 +111,29 @@ export class FlowEstablishController {
 
       return {'options': disLabels};
     };
+
+    let classifyGroups = (groups) =>{
+      let res_group = {};
+      this.di._.forEach(groups, (group)=>{
+
+        let id = group['id'] + '';
+        let binaryId = parseInt(id).toString(2) + '';
+        let fullBinary = '0'.repeat(32-binaryId.length) + binaryId;
+        let typeId = parseInt(fullBinary.substr(0, 4),2) + '';
+        if(res_group[typeId]){
+          res_group[typeId].push(group);
+        } else {
+          res_group[typeId] = [group];
+        }
+      });
+      return res_group;
+    };
+
+    this.di.deviceDataManager.getDeviceGroups(scope.curDeviceId).then((res)=>{
+      if(res && res.length > 0) {
+        scope.deviceGroupsMapper = classifyGroups(res);
+      }
+    });
 
     scope.instructionSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.instructionSchema));
     scope.criteriaSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.criteriaSchema));
@@ -134,7 +159,7 @@ export class FlowEstablishController {
       } else {
         input['value'] = '';
       }
-    }
+    };
 
     let addValue2FirstInputs = (inputs) => {
       let cpInputs = angular.copy(inputs);
@@ -221,6 +246,41 @@ export class FlowEstablishController {
       return true;
     }
 
+    let initializeAction = () =>{
+      let tableId = scope.flowTypeJson['tableId'];
+      let type = scope.flowTypeJson['type'];
+      scope.treatmentPageApplyAction = this.di.deviceService.getFlowTableApplyActionMapByTid(tableId);
+
+      scope.treatmentPageGroup['groups'] = this.di.deviceService.getFlowTableWriteActionMapByFilter(tableId, type);
+
+      let _initGroupsDisplayLabel = () =>{
+
+        scope.treatmentPageGroup.groupsDisplayLabel = {'options':[]};
+        this.di._.forEach(scope.treatmentPageGroup['groups'], (group)=>{
+          scope.treatmentPageGroup.groupsDisplayLabel.push({'label': this.di.deviceService.getGroupNameByKey(group), 'value':group});
+        });
+
+        scope.treatmentPageGroup.groupTypeSelected = scope.treatmentPageGroup.groupsDisplayLabel['options'].length > 0?scope.treatmentPageGroup.groupsDisplayLabel['options'][0]:null;
+      };
+
+
+      let _initGroupIdsDisplayLabel = () =>{
+        scope.treatmentPageGroup.groupIdDisplayLabel = {'options':[{'label': '请选择Group', 'value':-1}]};
+        if(scope.treatmentPageGroup.groupTypeSelected){
+          let groups = scope.deviceGroupsMapper[this.di.deviceService.getGroupTypeId(scope.treatmentPageGroup.groupTypeSelected.value)];
+          this.di._.forEach(groups, (group)=>{
+            scope.treatmentPageGroup.groupIdDisplayLabel.push({'label': group['id'], 'value': group['id']});
+          });
+        }
+        scope.treatmentPageGroup.groupSelected = scope.treatmentPageGroup.groupIdDisplayLabel['options'][0]
+      };
+
+      if(scope.treatmentPageGroup['groups'] !== null){
+        _initGroupsDisplayLabel();
+        _initGroupIdsDisplayLabel();
+      }
+
+    };
 
     let translate = this.translate;
     this.di.$scope.stepValidation = function (curStep, nextStep) {
@@ -309,7 +369,7 @@ export class FlowEstablishController {
       this.di._.forEach(schema, (item)=>{
         item['value'] = '';
         item['uuid'] = (new Date().getTime());
-        if(item['type'] == 'object'){
+        if(item['type'] === 'object'){
           item['display_label'] = convertList2DisLabel(this.di._.keys(item.list));
           item['value'] = item['display_label']['options'][0];
         }
@@ -345,14 +405,21 @@ export class FlowEstablishController {
       if(item.value === '60'){
         scope.table60SchemaList = convertList2DisLabel(this.di._.keys(scope.table60Schema));
       }
+      scope.flowTypeJson = null;
+
     };
 
     scope.firstInputChange = (type) =>{
       let resJson = filterTypeOfFirstInputs();
+      scope.flowTypeJson = resJson;
       if(resJson.res === false || resJson.type === ''){
         return;
       } else {
-        scope.criteriaPageSecondInputs = addValue2SecondInputs(this.di.deviceService.getFlowTableSecondInputRowByFilter(resJson['tableId'], resJson['type']));
+        if(resJson.type === null){
+          initializeAction();
+        } else {
+          scope.criteriaPageSecondInputs = addValue2SecondInputs(this.di.deviceService.getFlowTableSecondInputRowByFilter(resJson['tableId'], resJson['type']));
+        }
       }
     };
 
@@ -360,7 +427,7 @@ export class FlowEstablishController {
       let inputs = scope.criteriaPageFirstInputs;
       let tableId = scope.flowEstablishModel.tableIdType.value;
       if(tableId === '10' || tableId === '60') {
-        return {'res': false};
+        return {'res': true, 'tableId':tableId, 'type':null};
       }
       if(!validCurrentDom('flow_instruction')){
         return {'res':false};

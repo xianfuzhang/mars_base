@@ -1,86 +1,21 @@
 <div class="wizard__body__input flow_instruction">
-    <div class="flow_instruction__name">{{ 'MODULES.SWITCH.DETAIL.FLOW.COLUMN.TREATMENT_TYPE'|translate}}</div>
-    <div class="flow_instruction__header">
 
-        <mdl-select ng-model="flowEstablishModel.instructionType"
-                    display-label="instructionSchemaList">
+    <div ng-repeat="inputItem in treatmentPageApplyAction" class="stepForm__input">
+        <div class="stepForm__input__label">{{inputItem.field}}</div>
+        <mdl-checkbox nf-if="inputItem.input_type =='checkbox'" style="margin-left: -8px;margin-top: 16px;" ng-model="inputItem.value"
+                      display-label="inputItem.displayLabel">
+        </mdl-checkbox>
+        <valid-input ng-if="inputItem.input_type == undefined" v-require="{{inputItem.require}}" ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_instruction"></valid-input>
+    </div>
+
+    <div ng-if="treatmentPageGroup.groups != null" class="stepForm__input">
+        <mdl-select ng-model="treatmentPageGroup.groupTypeSelected"
+                    display-label="treatmentPageGroup.groupsDisplayLabel">
         </mdl-select>
-        <div class="flow_instruction__header__action">
-            <mdl-button ng-click="addInstruction()" icon-name="add"></mdl-button>
-        </div>
-
-
-
     </div>
-    <div id="instruction_list" class="flow_instruction__body">
-        <div class="flow_instruction__body__item"  ng-repeat="instruction in instructionsModel">
-            <div class="type"> {{instruction.type}} </div>
-            <mdl-button class="remove" ng-click="removeInstruction(instruction.uuid)" icon-name="remove_circle" size='small'></mdl-button>
-            <table class="flow_table">
-                <!--<tr>-->
-                    <!--<td><div class="wizard__body__input__label instruction_line stepForm__input__label" >Type</div></td>-->
-                    <!--<td><div class="wizard__body__input__label instruction_line stepForm__input__label">{{instruction.type}}</div></td>-->
-                <!--</tr>-->
-                <tr ng-repeat="item in instruction.content">
-                    <td><div class="wizard__body__input__label instruction_line stepForm__input__label">{{item.field}}<span class="stepForm__input__required">*</span></div></td>
-                    <td>
-                        <div class="instruction_line" ng-if="item.type=='string'">
-                            <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="item.value"/>-->
-                            <valid-input  v-require="true" ng-model="item.value" v-rpcid="page_flow_instruction" ></valid-input>
-                        </div>
-                        <div class="instruction_line" ng-if="item.type=='int'">
-                            <valid-input  v-require="true" ng-model="item.value" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
-                            <!--<input class="wizard__body__input__text "stepForm__input__text type="text" ng-required="true" ng-model="item.value" ng-pattern="num_regex"/>-->
-                        </div>
-                        <div class="instruction_line" ng-if="item.type=='ip'">
-                            <valid-input  v-require="true" ng-model="item.value" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
-                        </div>
 
-                        <div class="instruction_line" ng-if="item.type=='ipv6'">
-                            <valid-input  v-require="true" ng-model="item.value" v-regex="ipv6_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV6' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
-                        </div>
+    <mdl-select ng-if="treatmentPageGroup.groups != null" ng-model="treatmentPageGroup.groupSelected"
+                display-label="treatmentPageGroup.groupIdDisplayLabel">
+    </mdl-select>
 
-                        <div class="instruction_line" ng-if="item.type=='mac'">
-                            <valid-input  v-require="true" ng-model="item.value" v-regex="mac_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
-                        </div>
-
-                        <div class="instruction_line" ng-if="item.type=='object'">
-                            <mdl-select ng-model="item.value"
-                                        on-init="changeInstructionSelect(instruction.uuid, item, $value)"
-                                        ng-change="changeInstructionSelect(instruction.uuid, item, $value)"
-                                        display-label="item.display_label">
-                            </mdl-select>
-                        </div>
-                    </td>
-                </tr>
-                <tr ng-repeat="sub_item in instruction.subtypeList">
-                    <td><div class="wizard__body__input__label instruction_line stepForm__input__label">{{sub_item.field}}<span class="stepForm__input__required">*</span></div></td>
-                    <td>
-                        <div class="instruction_line" ng-if="sub_item.type=='string'">
-                            <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="sub_item.value"/>-->
-                            <valid-input  v-require="true" ng-model="sub_item.value" v-rpcid="page_flow_instruction" ></valid-input>
-
-                        </div>
-                        <div class="instruction_line" ng-if="sub_item.type=='int'">
-                            <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="sub_item.value" ng-pattern="num_regex"/>-->
-                            <valid-input  v-require="true" ng-model="sub_item.value" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
-                        </div>
-
-                        <div class="instruction_line" ng-if="sub_item.type=='ip'">
-                            <valid-input  v-require="true" ng-model="sub_item.value" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
-                        </div>
-
-                        <div class="instruction_line" ng-if="sub_item.type=='ipv6'">
-                            <valid-input  v-require="true" ng-model="sub_item.value" v-regex="ipv6_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV6' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
-                        </div>
-
-                        <div class="instruction_line" ng-if="sub_item.type=='mac'">
-                            <valid-input  v-require="true" ng-model="sub_item.value" v-regex="mac_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}" v-rpcid="page_flow_instruction" ></valid-input>
-                        </div>
-
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
 </div>

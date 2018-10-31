@@ -700,21 +700,26 @@ export class DeviceService {
     return secondInputs[tableId][type];
   }
 
-  getFlowTableApplyActionMap(){
+  getFlowTableApplyActionMaps(){
     return   {
       '10': [
         {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
-        {'field': 'push_vlan', 'type': 'int', 'require': 'false'}, //TODO 待定
+        {'field': 'push_vlan', 'type': 'int', 'require': 'false'},
       ],
-      '20': [{'field': 'output', 'require': 'false','input_type':'switch'}],
-      '30': [{'field': 'output', 'require': 'false','input_type':'switch'}],
-      '40': [{'field': 'output', 'require': 'false','input_type':'switch'}],
-      '50': [{'field': 'output', 'require': 'false','input_type':'switch'}],
-      '60': [{'field': 'output', 'require': 'false','input_type':'switch'}],
+      '20': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
+      '30': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
+      '40': [],
+      '50': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
+      '60': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
     }
   }
 
-  getFlowTableWriteActionMap(){
+  getFlowTableApplyActionMapByTid(tableId){
+    let maps = this.getFlowTableApplyActionMaps();
+    return maps[tableId];
+  }
+
+  getFlowTableWriteActionMaps(){
     return   {
       '10': null,
       '20': null,
@@ -727,13 +732,65 @@ export class DeviceService {
         'ipv6_multicast':['l3_mcast_group']
       },
       '50': {
-        'unicast_vlan_bridge': ['L2_intf_group', 'l2_unflt_intf_group'],
-        'multicast_vlan_bridge': ['l2 mcast group'],
-        'dlf_vlan_bridge': ['l2 flood group']
+        'unicast_vlan_bridge': ['l2_intf_group', 'l2_unflt_intf_group'],
+        'multicast_vlan_bridge': ['l2_mcast_group'],
+        'dlf_vlan_bridge': ['l2_flood_group']
       },
-      '60': 'all',
+      '60': ['l2_intf_group', 'l2_rewrite_group','l2_mcast_group','l3_ucast_group','l3_mcast_group','l3_ecmp_group','l2_unflt_intf_group'],
     }
   }
+
+  getFlowTableWriteActionMapByFilter(tableId, type){
+    let maps = this.getFlowTableWriteActionMaps();
+    let res = maps[tableId];
+    if(res === null || res instanceof Array){
+      return res;
+    } else {
+      return res[type]
+    }
+  }
+
+  getGroupTypeMapper(){
+    return {
+      'l2_intf_group':'0',
+      'l2_rewrite_group':'1',
+      'l3_ucast_group': '2',
+      'l2_mcast_group':'3',
+      'l2_flood_group':'4',
+      'l3_intf_group':'5',
+      'l3_mcast_group':'6',
+      'l3_ecmp_group':'7',
+      'l2_unflt_intf_group':'11'
+    }
+  }
+
+
+  getGroupNameMapper(){
+    return {
+      'l2_intf_group': 'L2_Interface',
+      'l2_mcast_group': 'L2_Multicast',
+      'l2_rewrite_group': 'L2_Rewrite',
+      'l2_flood_group': 'L2_Flood',
+      'l2_unflt_intf_group': 'L2_Unfiltered_Interface',
+      'l3_intf_group': 'L3_Interface',
+      'l3_ucast_group': 'L3_Unicast',
+      'l3_mcast_group': 'L3_Multicast',
+      'l3_ecmp_group': 'L3_ECMP',
+    }
+  }
+
+
+  getGroupNameByKey(key){
+    let mapper = this.getGroupNameMapper();
+    return mapper[key]
+  }
+
+
+  getGroupTypeId(groupName){
+    return this.getGroupTypeMapper()[groupName];
+  }
+
+
 
   getFlowTableAclOptionList(){
     return {
