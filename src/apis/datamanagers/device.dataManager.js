@@ -146,19 +146,19 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  getDeviceGroups(deviceId, params) {
-    // TODO: complete get groups process
-    let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getDeviceFlowsUrl(deviceId), {'params': params}).then(
-      (res) => {
-        defer.resolve({'data': {'groups': [], 'total': 0}});
-      },
-      (error) => {
-        defer.resolve({'data': {'groups': [], 'total': 0}});
-      }
-    );
-    return defer.promise;
-  }
+  // getDeviceGroups(deviceId, params) {
+  //   // TODO: complete get groups process
+  //   let defer = this.di.$q.defer();
+  //   this.di.$http.get(this.di.appService.getDeviceFlowsUrl(deviceId), {'params': params}).then(
+  //     (res) => {
+  //       defer.resolve({'data': {'groups': [], 'total': 0}});
+  //     },
+  //     (error) => {
+  //       defer.resolve({'data': {'groups': [], 'total': 0}});
+  //     }
+  //   );
+  //   return defer.promise;
+  // }
 
   getDeviceConfigs(){
     let defer = this.di.$q.defer();
@@ -223,7 +223,7 @@ export class DeviceDataManager {
         defer.resolve(res.data.groups);
       },
       (error) => {
-        defer.reject(error);
+        defer.reject([]);
       }
     );
     return defer.promise;
@@ -233,7 +233,7 @@ export class DeviceDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getDeviceGroupsUrl(deviceId), params).then(
       (res) => {
-        defer.resolve(res.data.groups);
+        defer.resolve(res);
       },
       (error) => {
         defer.reject(error);
@@ -247,7 +247,7 @@ export class DeviceDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.delete(this.di.appService.getDeviceGroupDeleteUrl(deviceId, appCookie)).then(
       (res) => {
-        defer.resolve(res.data.groups);
+        defer.resolve(res);
       },
       (error) => {
         defer.reject(error);
