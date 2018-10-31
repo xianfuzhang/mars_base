@@ -1,13 +1,13 @@
 <div class="stepForm">
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.TYPE' | translate}}<span class="stepForm__input__required">*</span></div>
-        <mdl-select ng-model="groupTypeSelected"
+        <mdl-select ng-model="groupModel.groupTypeSelected"
                     display-label="groupTypesDisLab">
         </mdl-select>
     </div>
 
 
-    <div class="bucket-form" ng-if="groupTypeSelected.value == 'OF-Type-0'">
+    <div class="bucket-form" ng-if="groupModel.groupTypeSelected.value == 'GROUP-Type-0'">
         <div class="title">Bucket</div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID' | translate}}<span class="stepForm__input__required">*</span></div>
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="bucket-form" ng-if="groupTypeSelected.value == 'OF-Type-1'">
+    <div class="bucket-form" ng-if="groupModel.groupTypeSelected.value == 'GROUP-Type-1'">
         <div class="title">Bucket</div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID' | translate}}</div>
@@ -37,7 +37,7 @@
         </div>
 
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L2_Interface_Group</div>
+            <div class="stepForm__input__label">L2_Interface:</div>
             <mdl-select ng-model="groupModel.L2InterfaceGroupsSelected"
                         disable="groupModel.L2UnfilteredInterfaceGroupSelected.value != ''"
                         display-label="L2InterfaceGroupsDisLab">
@@ -51,7 +51,7 @@
         </div>
 
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L2_Unfiltered_Interface</div>
+            <div class="stepForm__input__label">L2_Unfiltered_Interface:</div>
             <mdl-select ng-model="groupModel.L2UnfilteredInterfaceGroupSelected"
                         disable="groupModel.L2_Interface_Groups.length != 0"
                         display-label="L2UnfilteredInterfaceGroupDisLab">
@@ -60,15 +60,15 @@
 
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.SRC_MAC' | translate}}</div>
-            <valid-input ng-model="groupModel.Src_Mac_Address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
+            <valid-input ng-model="groupModel.src_mac_address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
         </div>
 
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.DST_MAC' | translate}}</div>
-            <valid-input ng-model="groupModel.Dst_Mac_Address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
+            <valid-input ng-model="groupModel.dst_mac_address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
         </div>
     </div>
-    <div class="bucket-form" ng-if="groupTypeSelected.value == 'OF-Type-2'">
+    <div class="bucket-form" ng-if="groupModel.groupTypeSelected.value == 'GROUP-Type-2'">
         <div class="title">Bucket</div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID' | translate}}<span class="stepForm__input__required">*</span></div>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L2_Interface_Group<span class="stepForm__input__required">*</span></div>
+            <div class="stepForm__input__label">L2_Interface:<span class="stepForm__input__required">*</span></div>
             <mdl-select ng-model="groupModel.L2InterfaceGroupsSelected"
                         display-label="L2InterfaceGroupsDisLab">
             </mdl-select>
@@ -90,21 +90,21 @@
 
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.SRC_MAC' | translate}}<span class="stepForm__input__required">*</span></div>
-            <valid-input v-require="true" ng-model="groupModel.Src_Mac_Address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
+            <valid-input v-require="true" ng-model="groupModel.src_mac_address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
         </div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.DST_MAC' | translate}}<span class="stepForm__input__required">*</span></div>
-            <valid-input v-require="true" ng-model="groupModel.Dst_Mac_Address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
+            <valid-input v-require="true" ng-model="groupModel.dst_mac_address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
         </div>
     </div>
-    <div class="bucket-form" ng-if="groupTypeSelected.value == 'OF-Type-3'">
+    <div class="bucket-form" ng-if="groupModel.groupTypeSelected.value == 'GROUP-Type-3'">
         <div class="title">Bucket</div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID' | translate}}<span class="stepForm__input__required">*</span></div>
             <valid-input v-require="true" ng-model="groupModel.vlan_id" v-regex="num_regex" v-rpcid="page_device_1" v-message="{{ 'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID.INVALID' | translate}}"></valid-input>
         </div>
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L2_Interface_Group<span class="stepForm__input__required">*</span></div>
+            <div class="stepForm__input__label">L2_Interface:<span class="stepForm__input__required">*</span></div>
             <mdl-select ng-model="groupModel.L2InterfaceGroupsSelected"
                         display-label="L2InterfaceGroupsDisLab">
             </mdl-select>
@@ -116,14 +116,14 @@
             </div>
         </div>
     </div>
-    <div class="bucket-form" ng-if="groupTypeSelected.value == 'OF-Type-4'">
+    <div class="bucket-form" ng-if="groupModel.groupTypeSelected.value == 'GROUP-Type-4'">
         <div class="title">Bucket</div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID' | translate}}<span class="stepForm__input__required">*</span></div>
             <valid-input v-require="true" ng-model="groupModel.vlan_id" v-regex="num_regex" v-rpcid="page_device_1" v-message="{{ 'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID.INVALID' | translate}}"></valid-input>
         </div>
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L2_Interface_Group<span class="stepForm__input__required">*</span></div>
+            <div class="stepForm__input__label">L2_Interface:<span class="stepForm__input__required">*</span></div>
             <mdl-select ng-model="groupModel.L2InterfaceGroupsSelected"
                         display-label="L2InterfaceGroupsDisLab">
             </mdl-select>
@@ -135,14 +135,14 @@
             </div>
         </div>
     </div>
-    <div class="bucket-form" ng-if="groupTypeSelected.value == 'OF-Type-5'">
+    <div class="bucket-form" ng-if="groupModel.groupTypeSelected.value == 'GROUP-Type-5'">
         <div class="title">Bucket</div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID' | translate}}</div>
             <valid-input ng-model="groupModel.vlan_id" v-regex="num_regex" v-rpcid="page_device_1" v-message="{{ 'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID.INVALID' | translate}}"></valid-input>
         </div>
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L2_Interface_Group<span class="stepForm__input__required">*</span></div>
+            <div class="stepForm__input__label">L2_Interface:<span class="stepForm__input__required">*</span></div>
             <mdl-select ng-model="groupModel.L2InterfaceGroupsSelected"
                         display-label="L2InterfaceGroupsDisLab">
             </mdl-select>
@@ -155,21 +155,21 @@
         </div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.SRC_MAC' | translate}}<span class="stepForm__input__required">*</span></div>
-            <valid-input v-require="true" ng-model="groupModel.Src_Mac_Address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
+            <valid-input v-require="true" ng-model="groupModel.src_mac_address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
         </div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.DST_MAC' | translate}}</div>
-            <valid-input ng-model="groupModel.Dst_Mac_Address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
+            <valid-input ng-model="groupModel.dst_mac_address" v-regex="mac_regex" v-rpcid="page_device_1" ></valid-input>
         </div>
     </div>
-    <div class="bucket-form" ng-if="groupTypeSelected.value == 'OF-Type-6'">
+    <div class="bucket-form" ng-if="groupModel.groupTypeSelected.value == 'GROUP-Type-6'">
         <div class="title">Bucket</div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID' | translate}}<span class="stepForm__input__required">*</span></div>
             <valid-input v-require="true" ng-model="groupModel.vlan_id" v-regex="num_regex" v-rpcid="page_device_1" v-message="{{ 'MODULES.SWITCH.DETAIL.GROUP.INPUT.VLAN_ID.INVALID' | translate}}"></valid-input>
         </div>
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L2_Interface_Group<span class="stepForm__input__required">*</span></div>
+            <div class="stepForm__input__label">L2_Interface:<span class="stepForm__input__required">*</span></div>
             <mdl-select ng-model="groupModel.L2InterfaceGroupsSelected"
                         display-label="L2InterfaceGroupsDisLab">
             </mdl-select>
@@ -181,40 +181,40 @@
             </div>
         </div>
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L3_interface<span class="stepForm__input__required">*</span></div>
+            <div class="stepForm__input__label">L3_interface:<span class="stepForm__input__required">*</span></div>
             <mdl-select ng-model="groupModel.L3InterfaceGroupSelected"
                         display-label="L3InterfaceGroupDisLab">
             </mdl-select>
         </div>
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L3_ECMP<span class="stepForm__input__required">*</span></div>
+            <div class="stepForm__input__label">L3_ECMP:<span class="stepForm__input__required">*</span></div>
             <mdl-select ng-model="groupModel.L3ECMPGroupSelected"
                         display-label="L3ECMPGroupDisLab">
             </mdl-select>
         </div>
         <!--<div class="stepForm__input">-->
             <!--<div class="stepForm__input__label">mpls ff group<span class="stepForm__input__required">*</span></div>-->
-            <!--<mdl-select ng-model="groupModel.groupTypeSelected"-->
+            <!--<mdl-select ng-model="groupModel.groupModel.groupTypeSelected"-->
                         <!--display-label="groupTypesDisLab">-->
             <!--</mdl-select>-->
         <!--</div>-->
         <!--<div class="stepForm__input">-->
             <!--<div class="stepForm__input__label">mpls l3vpn group<span class="stepForm__input__required">*</span></div>-->
-            <!--<mdl-select ng-model="groupModel.groupTypeSelected"-->
+            <!--<mdl-select ng-model="groupModel.groupModel.groupTypeSelected"-->
                         <!--display-label="groupTypesDisLab">-->
             <!--</mdl-select>-->
         <!--</div>-->
     </div>
-    <div class="bucket-form" ng-if="groupTypeSelected.value == 'OF-Type-7'">
+    <div class="bucket-form" ng-if="groupModel.groupTypeSelected.value == 'GROUP-Type-7'">
         <div class="title">Bucket</div>
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L3_Unicast<span class="stepForm__input__required">*</span></div>
+            <div class="stepForm__input__label">L3_Unicast:<span class="stepForm__input__required">*</span></div>
             <mdl-select ng-model="groupModel.L3UnicastGroupSelected"
                         display-label="L3UnicastGroupDisLab">
             </mdl-select>
         </div>
         <div class="stepForm__input">
-            <div class="stepForm__input__label">OF-DPA_L3_ECMP<span class="stepForm__input__required">*</span></div>
+            <div class="stepForm__input__label">L3_ECMP:<span class="stepForm__input__required">*</span></div>
             <mdl-select ng-model="groupModel.L3ECMPGroupSelected"
                         display-label="L3ECMPGroupDisLab">
             </mdl-select>
@@ -232,7 +232,7 @@
             <!--</mdl-select>-->
         <!--</div>-->
     </div>
-    <div class="bucket-form" ng-if="groupTypeSelected.value == 'OF-Type-11'">
+    <div class="bucket-form" ng-if="groupModel.groupTypeSelected.value == 'GROUP-Type-11'">
         <div class="title">Bucket</div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.OUTPUT_PORT' | translate}}<span class="stepForm__input__required">*</span></div>

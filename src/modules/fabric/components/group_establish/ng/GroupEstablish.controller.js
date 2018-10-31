@@ -94,11 +94,6 @@ export class GroupEstablishController {
       label: 'POP_VLAN',
     }
   
-    scope.allowVlanXlateLabel = {
-      id: 'allow_vlan_xlate',
-      label: 'ALLOW_VLAN_XLATE',
-    }
-  
     scope.L2InterfaceGroupsDisLab = {
       options: [
         {
@@ -194,19 +189,17 @@ export class GroupEstablishController {
   
     scope.subtypeList = [];
   
-    const initGroup = {
-      id: '',
-      type: '',
+    let initGroup = {
       vlan_id: '',
       output_port: '',
       pop_vlan: false,
-      allow_vlan_xlate: false,
+      src_mac_address: '',
+      dst_mac_address: '',
       L2_Interface_Groups: [],
       L2_Unfiltered_Interface_Group: '',
-      Src_Mac_Address: '',
-      Dst_Mac_Address: '',
       L3_Interface_Group: '',
       L3_ECMP_Group: '',
+      groupTypeSelected: scope.groupTypesDisLab.options[0],
       L2InterfaceGroupsSelected: scope.L2InterfaceGroupsDisLab.options[0],
       L2UnfilteredInterfaceGroupSelected: scope.L2UnfilteredInterfaceGroupDisLab.options[0],
       L3InterfaceGroupSelected: scope.L3InterfaceGroupDisLab.options[0],
@@ -216,8 +209,6 @@ export class GroupEstablishController {
     
     const init = () => {
       // group type options
-      scope.groupTypeSelected = this.di._.cloneDeep(scope.groupTypesDisLab.options[0]);
-  
       scope.groupModel = this.di._.cloneDeep(initGroup)
     }
   
@@ -241,16 +232,18 @@ export class GroupEstablishController {
       
       // format vlan id(10进制转成12位的2进制，不足补0)
       if(scope.groupModel.vlan_id) {
-        vlanIdStr = scope.groupModel.vlan_id.toString(2);
-        for(let i=0; i < 12 - vlanIdStr.length; i++){
+        let tmpVlanIdStr = parseInt(scope.groupModel.vlan_id).toString(2);
+        vlanIdStr = tmpVlanIdStr;
+        for(let i=0; i < 12 - tmpVlanIdStr.length; i++){
           vlanIdStr = '0' + vlanIdStr;
         }
       }
       
       // format output port(10进制转成16位的2进制，不足补0)
       if(scope.groupModel.output_port) {
-        portStr = scope.groupModel.output_port.toString(2);
-        for(let i = 0; i< 16 - portStr.length; i++) {
+        let tmpPortStr = parseInt(scope.groupModel.output_port).toString(2);
+        portStr = tmpPortStr;
+        for(let i = 0; i< 16 - tmpPortStr.length; i++) {
           portStr = '0' + portStr;
         }
       }
@@ -258,7 +251,7 @@ export class GroupEstablishController {
       // TODO: 28 bits ID
       const ID28bits = '0000000000000000000000000000';
       
-      switch(scope.groupModel.type) {
+      switch(scope.groupModel.groupTypeSelected.value) {
         case 'GROUP-Type-0':
           typeIDStr = '0000' + vlanIdStr + portStr;
           break;
@@ -292,21 +285,18 @@ export class GroupEstablishController {
     }
     
     const getGroupRequestObj = () => {
+      let groupId = parseGroupID();
       let requestObj = {
         type: '',
-        appCookie: '',
-        groupId: '',
+        appCookie: groupId,
+        groupId: groupId,
         buckets: []
       }
-  
-      let groupId = parseGroupID();
-      switch(scope.groupModel.type) {
+      let instructions = [];
+      switch(scope.groupModel.groupTypeSelected.value) {
         case 'GROUP-Type-0':
           requestObj.type = 'INDIRECT';
-          requestObj.appCookie = groupId;
-          requestObj.groupId = groupId;
       
-          let instructions = []
           instructions.push({
             type: 'OUTPUT',
             port: scope.groupModel.output_port
@@ -318,38 +308,203 @@ export class GroupEstablishController {
               subtype: "VLAN_POP"
             })
           }
-          
-          requestObj.buckets.push({
-            treatment: {
-              instructions: instructions
-            }
-          });
           break;
         case 'GROUP-Type-1':
-          typeIDStr = '0001' + ID28bits;
+          requestObj.type = 'INDIRECT';
+          
+          if(scope.groupModel.vlan_id != '' && parseInt(scope.groupModel.vlan_id)) {
+            instructions.push({
+              type: "L2MODIFICATION",
+              subtype: "VLAN_ID",
+              vlanId: parseInt(scope.groupModel.vlan_id)
+            })
+          }
+          if(scope.groupModel.src_mac_address) {
+            instructions.push({
+              type: "L2MODIFICATION",
+              subtype: "ETH_SRC",
+              mac: scope.groupModel.src_mac_address
+            })
+          }
+          if(scope.groupModel.dst_mac_address) {
+            instructions.push({
+              type: "L2MODIFICATION",
+              subtype: "ETH_DST",
+              mac: scope.groupModel.dst_mac_address
+            })
+          }
+          
+          // L2 interface groups
+          if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
+            scope.groupModel.L2_Interface_Groups.forEach((group) => {
+              instructions.push({
+                type: "GROUP",
+                groupId: group
+              })
+            })
+          }
+          // L2 Unfiltered Interface
+          if(scope.groupModel.L2_Unfiltered_Interface_Group) {
+            instructions.push({
+              type: "GROUP",
+              groupId: scope.groupModel.L2_Unfiltered_Interface_Group
+            })
+          }
           break;
         case 'GROUP-Type-2':
-          typeIDStr = '0010' + ID28bits;
+          requestObj.type = 'INDIRECT';
+  
+          if(scope.groupModel.vlan_id != '' && parseInt(scope.groupModel.vlan_id)) {
+            instructions.push({
+              type: "L3MODIFICATION",
+              subtype: "VLAN_ID",
+              vlanId: parseInt(scope.groupModel.vlan_id)
+            })
+          }
+          if(scope.groupModel.src_mac_address) {
+            instructions.push({
+              type: "L3MODIFICATION",
+              subtype: "ETH_SRC",
+              mac: scope.groupModel.src_mac_address
+            })
+          }
+          if(scope.groupModel.dst_mac_address) {
+            instructions.push({
+              type: "L3MODIFICATION",
+              subtype: "ETH_DST",
+              mac: scope.groupModel.dst_mac_address
+            })
+          }
+          // L2 interface groups
+          if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
+            scope.groupModel.L2_Interface_Groups.forEach((group) => {
+              instructions.push({
+                type: "GROUP",
+                groupId: group
+              })
+            })
+          }
           break;
         case 'GROUP-Type-3':
-          typeIDStr = '0011' + vlanIdStr + ID28bits.slice(16);
+          requestObj.type = 'ALL';
+          // L2 interface groups
+          if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
+            scope.groupModel.L2_Interface_Groups.forEach((group) => {
+              instructions.push({
+                type: "GROUP",
+                groupId: group
+              })
+            })
+          }
           break;
         case 'GROUP-Type-4':
-          typeIDStr = '0100' + vlanIdStr + ID28bits.slice(0,16);
+          requestObj.type = 'ALL';
+          // L2 interface groups
+          if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
+            scope.groupModel.L2_Interface_Groups.forEach((group) => {
+              instructions.push({
+                type: "GROUP",
+                groupId: group
+              })
+            })
+          }
           break;
         case 'GROUP-Type-5':
-          typeIDStr = '0101' + ID28bits;
+          requestObj.type = 'INDIRECT';
+  
+          if(scope.groupModel.vlan_id != '' && parseInt(scope.groupModel.vlan_id)) {
+            instructions.push({
+              type: "L3MODIFICATION",
+              subtype: "VLAN_ID",
+              vlanId: parseInt(scope.groupModel.vlan_id)
+            })
+          }
+          if(scope.groupModel.src_mac_address) {
+            instructions.push({
+              type: "L3MODIFICATION",
+              subtype: "ETH_SRC",
+              mac: scope.groupModel.src_mac_address
+            })
+          }
+          if(scope.groupModel.dst_mac_address) {
+            instructions.push({
+              type: "L3MODIFICATION",
+              subtype: "ETH_DST",
+              mac: scope.groupModel.dst_mac_address
+            })
+          }
+          // L2 interface groups
+          if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
+            scope.groupModel.L2_Interface_Groups.forEach((group) => {
+              instructions.push({
+                type: "GROUP",
+                groupId: group
+              })
+            })
+          }
           break;
         case 'GROUP-Type-6':
-          typeIDStr = '0110' + ID28bits;
+          requestObj.type = 'ALL';
+          // L2 interface groups
+          if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
+            scope.groupModel.L2_Interface_Groups.forEach((group) => {
+              instructions.push({
+                type: "GROUP",
+                groupId: group
+              })
+            })
+          }
+  
+          // L3 Interface Group
+          if(scope.groupModel.L3_Interface_Group) {
+            instructions.push({
+              type: "GROUP",
+              groupId: scope.groupModel.L3_Interface_Group
+            })
+          }
+  
+          // L3 ECMP Group
+          if(scope.groupModel.L3_ECMP_Group) {
+            instructions.push({
+              type: "GROUP",
+              groupId: scope.groupModel.L3_ECMP_Group
+            })
+          }
           break;
         case 'GROUP-Type-7':
-          typeIDStr = '0111' + ID28bits;
+          requestObj.type = 'SELECT';
+          // L3 Interface Group
+          if(scope.groupModel.L3_Unicast_Group) {
+            instructions.push({
+              type: "GROUP",
+              groupId: scope.groupModel.L3_Unicast_Group
+            })
+          }
+  
+          // L3 ECMP Group
+          if(scope.groupModel.L3_ECMP_Group) {
+            instructions.push({
+              type: "GROUP",
+              groupId: scope.groupModel.L3_ECMP_Group
+            })
+          }
           break;
         case 'GROUP-Type-11':
-          typeIDStr = '1011' + '000000000000' + portStr;
+          requestObj.type = 'INDIRECT';
+          instructions.push({
+            type: 'OUTPUT',
+            port: scope.groupModel.output_port
+          })
           break;
       }
+  
+      requestObj.buckets.push({
+        treatment: {
+          instructions: instructions
+        }
+      });
+      
+      return requestObj;
     }
     
     scope.open = (deviceId) => {
@@ -361,24 +516,6 @@ export class GroupEstablishController {
         });
     };
 
-    scope.removeGroup = (group) => {
-      let index = scope.groupModel.L2_Interface_Groups.indexOf(group);
-      if(index != -1) {
-        scope.groupModel.L2_Interface_Groups.splice(index, 1)
-      }
-      
-      const length = scope.groupModel.L2_Interface_Groups.length;
-      if(length == 0) {
-        scope.groupModel.L2InterfaceGroupsSelected = scope.L2InterfaceGroupsDisLab.options[0]
-      } else {
-        let option = this.di._.find(scope.L2InterfaceGroupsDisLab.options, (option) => {
-          return option.value == scope.groupModel.L2_Interface_Groups[length-1]
-        })
-  
-        scope.groupModel.L2InterfaceGroupsSelected = option;
-      }
-    }
-    
     scope.cancel = function(formData){
       return new Promise((resolve, reject) => {
         resolve({valid: true, errorMessage: ''});
@@ -386,10 +523,18 @@ export class GroupEstablishController {
     };
 
     scope.submit = function() {
-      
+      let params = getGroupRequestObj();
 
       return new Promise((resolve, reject) => {
-        // TODO:
+        deviceDataManager.addDeviceGroup(scope.curDeviceId, params)
+          .then(() => {
+            init()
+            rootScope.$emit('group-list-refresh');
+            resolve({valid: true, errorMessage: ''});
+          }, (err) => {
+            // scope.switch = _.cloneDeep(initSwitch);
+            resolve({valid: false, errorMessage: err});
+          });
       });
     };
   
@@ -399,8 +544,10 @@ export class GroupEstablishController {
       }
     }, true));
   
-    unsubscribes.push(scope.$watch('groupTypeSelected', (newValue) => {
+    unsubscribes.push(scope.$watch('groupModel.groupTypeSelected', (newValue, oldValue) => {
+      if(newValue == oldValue) return;
       scope.groupModel = this.di._.cloneDeep(initGroup)
+      scope.groupModel.groupTypeSelected = newValue;
     },true));
     
     unsubscribes.push(this.di.$rootScope.$on('group-wizard-show', ($event, deviceId) => {

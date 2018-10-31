@@ -22,9 +22,6 @@ class FlowGroup {
   
   _createBucket() {
     // TODO:
-    return {
-    
-    }
   }
 }
 

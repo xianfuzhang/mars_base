@@ -379,45 +379,25 @@ export class DeviceDetailService {
   getDeviceGroupsSchema() {
     return [
       {
-        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'),
-        'field': 'state',
+        'label': this.translate('MODULES.SWITCH.DETAIL.GROUP.COLUMN.ID'),
+        'field': 'id',
         'layout': {'visible': true, 'sortable': true}
       },
       {
-        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PACKETS'),
-        'field': 'packets',
-        'layout': {'visible': true, 'sortable': true}
-      },
-      {
-        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.DURATION'),
+        'label': this.translate('MODULES.SWITCH.DETAIL.GROUP.COLUMN.TYPE'),
         'field': 'duration',
         'layout': {'visible': true, 'sortable': true}
       },
       {
-        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'),
-        'field': 'priority',
+        'label': this.translate('MODULES.SWITCH.DETAIL.GROUP.COLUMN.VLAN_ID'),
+        'field': 'state',
         'layout': {'visible': true, 'sortable': true}
       },
       {
-        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TABLENAME'),
-        'field': 'name',
+        'label': this.translate('MODULES.SWITCH.DETAIL.GROUP.COLUMN.BUCKETS'),
+        'field': 'buckets',
         'layout': {'visible': true, 'sortable': true}
       },
-      {
-        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR'),
-        'field': 'selector',
-        'layout': {'visible': true, 'sortable': true}
-      },
-      {
-        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TREATMENT'),
-        'field': 'treatment',
-        'layout': {'visible': true, 'sortable': true}
-      },
-      {
-        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.APP'),
-        'field': 'app',
-        'layout': {'visible': true, 'sortable': true}
-      }
     ];
   }
   
