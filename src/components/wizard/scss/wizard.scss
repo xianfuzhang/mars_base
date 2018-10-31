@@ -12,9 +12,9 @@
   z-index: 1000;
   overflow: hidden;
 
-  div {
-    box-sizing: border-box;
-  }
+  //div {
+  //  box-sizing: border-box;
+  //}
   
   @include element(dialog) {
     position: relative;
@@ -213,11 +213,12 @@
 }
 
 @include block(stepForm) {
-  div {
-    box-sizing: border-box;
-  }
+  //div {
+  //  box-sizing: border-box;
+  //}
   
   @include element(input) {
+    position: relative;
     margin: 10px 0 20px;
     
     @include element(error) {
@@ -226,7 +227,8 @@
     }
     
     @include element(label) {
-      font-size: 16px;
+      font-weight: bold;
+      font-size: 15px;
       /*text-decoration:underline;*/
       text-transform: capitalize;
     }

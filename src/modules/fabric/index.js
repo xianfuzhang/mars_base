@@ -1,5 +1,6 @@
 import './scss/device.scss'
 import './components/flow_establish/scss/flow_establish';
+import './components/group_establish/scss/group_establish';
 
 import {InterfaceGroupController} from './ng/interfaceGroup.controller';
 import {DeviceController} from './ng/device.controller';
@@ -13,6 +14,7 @@ import {FabricSummaryController} from './ng/summary.controller';
 import {StormService} from './service/storm.service';
 import { DeviceWizardController } from './components/deviceWizard/ng/DeviceWizard.controller'
 import { FlowEstablishController } from './components/flow_establish/ng/FlowEstablish.controller';
+import { GroupEstablishController } from './components/group_establish/ng/GroupEstablish.controller';
 import {ShowSwitchFlowsController} from './ng/showSwitchFlows.controller';
 import {ShowLinksSelectController} from './ng/showLinksSelect.controller';
 
@@ -27,6 +29,7 @@ export default angular
   .controller('fabricSummaryController', FabricSummaryController)
   .controller('deviceWizardController', DeviceWizardController)
   .controller('flowEstablishController', FlowEstablishController)
+  .controller('groupEstablishController', GroupEstablishController)
   .controller('showSwitchFlowsController', ShowSwitchFlowsController)
   .controller('showLinksSelectController', ShowLinksSelectController)
   .service('deviceService', DeviceService)

@@ -71,6 +71,7 @@ export class FabricSummaryController {
       showSwitchDetail: false,
       isShowTopo: false,
       portsSchema: this.di.deviceService.getSummaryPortsTableSchema(),
+      endpointsSchema: this.di.deviceService.getSummaryEndpointsTableSchema(),
       linksSchema: this.di.deviceService.getSummaryLinkTableSchema(),
       switchContextMenu: {
         location:{'x':0, 'y':1},
@@ -82,6 +83,7 @@ export class FabricSummaryController {
 
     let portsDefer = this.di.$q.defer(),
       devicesDefer = this.di.$q.defer(),
+      endpointsDefer = this.di.$q.defer(),
       deviceConfigsDefer = this.di.$q.defer();
     let promises = [];
     let portGroups = {};
@@ -198,6 +200,17 @@ export class FabricSummaryController {
         deviceConfigsDefer.resolve();
       });
       promises.push(deviceConfigsDefer.promise);
+
+
+      this.di.deviceDataManager.getEndpoints().then((res) => {
+        this.endpoints = res.data.hosts;
+
+        endpointsDefer.resolve();
+      });
+      promises.push(endpointsDefer.promise);
+
+
+
 
 
       Promise.all(promises).then(()=>{
@@ -466,6 +479,7 @@ export class FabricSummaryController {
       showDetail(summaryList);
       showPorts();
       showLinks();
+      showEndpoints();
       // showStatics();
       // showFlows();
       this.di.$scope.$apply();
@@ -600,8 +614,19 @@ export class FabricSummaryController {
       // });
     };
 
+    let showEndpoints = () => {
+      let endpoints = [];
+      this.di._.forEach(this.endpoints, (endpoint) => {
+        this.di._.forEach(endpoint.locations, (location)=>{
+          if(location.elementId === this.di.$scope.fabricModel.showSwitchId ){
+            endpoints.push(angular.copy(endpoint));
+            return false;
+          }
+        })
+      });
 
-
+      scope.fabricModel.endpoints = this.getEntitiesEndpoints(endpoints);
+    };
 
     unsubscribers.push(this.di.$rootScope.$on('switch_select',(evt, data)=>{
       // console.log('==switch_select is receive. isShow: ' + this.di.$scope.fabricModel.switchContextMenu.isShow);
@@ -736,6 +761,29 @@ export class FabricSummaryController {
     });
     return entities;
   }
+
+  getEntitiesEndpoints(endpoints) {
+    let entities = [];
+    if(!Array.isArray(endpoints)) return entities;
+    endpoints.forEach((endpoint) => {
+      let obj = {};
+      obj.id = endpoint.id;
+      obj.mac = endpoint.mac;
+      obj.segment_name = endpoint.segment || endpoint.vlan;
+      obj.ip = (endpoint.ip_addresses && endpoint.ip_addresses.join(" | "))
+        || (endpoint.ipAddresses && endpoint.ipAddresses.join(" | "));
+      let locals = [];
+      endpoint.locations.forEach((location) => {
+        let device_name = (location.device_id && this.di.switchService.getSwitchName(location.device_id, this.devices))
+          || (location.elementId && this.di.switchService.getSwitchName(location.elementId, this.devices));
+        locals.push(device_name + '/' + location.port);
+      });
+      obj.location = locals.join(" | ");
+      entities.push(obj);
+    });
+    return entities;
+  }
+
 }
 
 FabricSummaryController.$inject = FabricSummaryController.getDI();

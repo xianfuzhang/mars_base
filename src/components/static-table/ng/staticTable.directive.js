@@ -22,7 +22,8 @@ export class staticTable {
 
     this.scope = {
       columns : '=',
-      data: '='
+      data: '=',
+      scale: '@'
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -32,6 +33,9 @@ export class staticTable {
     (function init(){
 
       let unsubscribers = [];
+      scope.scale = scope.scale||'big';
+      scope.isSmall = scope.scale === 'small';
+
       scope.tableModel = {
         cols:scope.columns,
         // cols:[

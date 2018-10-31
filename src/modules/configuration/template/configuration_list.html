@@ -16,7 +16,7 @@
 
       <div class="configuration__operation">
 
-        <div class="configuration__operation__form">
+        <div class="configuration__operation__form" ng-class="{'+disable': configurationListModel.globalInvalid }">
           <div class="configuration__operation__form__input">
             <div class="configuration__operation__form__input__label">选择配置：</div>
             <mdl-select ng-model="configurationListModel.fileNameSelected"
@@ -36,12 +36,15 @@
             <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
                        display-label="{id: 'add_radio', label: '新增', name: 'mode', value: 'add'}">
             </mdl-radio>
+            <mdl-radio ng-show="configurationListModel.fileNameSelected.value != 'default'" ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
+                       display-label="{id: 'add_radio', label: '另存为默认配置', name: 'mode', value: 'default'}">
+            </mdl-radio>
           </div>
 
-          <div class="configuration__operation__form__input">
+          <div class="configuration__operation__form__input" ng-show="configurationListModel.mode == 'add'">
             <div class="configuration__operation__form__input__label">配置名称：</div>
 
-            <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="fileName" style="width:250px;margin-top:8px;">
+            <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="fileName" style="width:200px;margin-top:8px;">
               <input type="text" id="tf-outlined" class="mdc-text-field__input" ng-model="configurationListModel.fileName" ng-value="configurationListModel.mode == 'add' ? '' : configurationListModel.fileNameSelected.value" maxlength="255">
               <!--<label for="tf-outlined" class="mdc-floating-label" ng-class="{'+filename-active': configurationListModel.mode == 'add'}">{{'MODULES.CONFIGURATION.FILENAME' | translate}}</label>-->
               <div class="mdc-notched-outline">
@@ -53,8 +56,8 @@
             </div>
           </div>
 
-          <div>
-            <mar-button btn-id="'save-configuration-list'" btn-style="'width:160px'" btn-text="::'MODULES.CONFIGURATION.OPTION.UPDATE' | translate" btn-icon="'done'" btn-class="'btn-black btn-md'" btn-disabled="configurationListModel.saveBtnInvalid || configurationListModel.globalInvalid" btn-click="saveConfigFile()"/>
+          <div ng-show="configurationListModel.mode != 'show'">
+            <mar-button btn-id="'save-configuration-list'" btn-style="'width:200px'" btn-text="saveBtnLabel" btn-icon="'done'" btn-class="'btn-black btn-lg'" btn-disabled="configurationListModel.saveBtnInvalid || configurationListModel.globalInvalid" btn-click="saveConfigFile()"/>
           </div>
         </div>
       </div>

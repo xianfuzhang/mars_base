@@ -64,6 +64,12 @@
 .min{
   width:35px;
 }
+
+.small_table{
+  th {
+    min-width: 100px;
+  }
+}
 .static_table{
   .pagination>li>a, .pagination>li>span {
     position: relative;

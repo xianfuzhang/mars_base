@@ -1,6 +1,6 @@
 <div class="static_table">
     <!--<table ng-table-dynamic="tableModel.tableParams with tableModel.cols" >-->
-    <table ng-table-dynamic="tableModel.tableParams with tableModel.cols" show-filter="false" class="table static_table__table" show-filter="true">
+    <table ng-table-dynamic="tableModel.tableParams with tableModel.cols" show-filter="false" class="table static_table__table" ng-class="{'small_table': isSmall}" show-filter="true">
         <colgroup>
             <!--<col span="1" style="background-color:red;width:15px" ng-if="col.field=='opt'">-->
             <col ng-repeat="col in $columns" ng-class="{'min': col.field=='opt'}" />

@@ -344,7 +344,7 @@ export class DeviceService {
 
   getSummaryPortsTableSchema() {
     return [
-      {field: "opt", title: "", show: true},
+      // {field: "opt", title: "", show: true},
       {
         'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.NAME'),
         'field': 'port_name',
@@ -373,6 +373,28 @@ export class DeviceService {
     ]
   }
 
+  getSummaryEndpointsTableSchema() {
+    return [
+      {
+        'title': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.MAC'),
+        'field': 'mac',
+        'sortable': "mac",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP'),
+        'field': 'ip',
+        'sortable': "ip",
+        'show': true
+      },
+      {
+        'title': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.LOCATION'),
+        'field': 'location',
+        'sortable': "location",
+        'show': true
+      }
+    ]
+  }
 
   getSummarySwitchMenu() {
     return [

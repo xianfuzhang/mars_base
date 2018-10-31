@@ -26,7 +26,17 @@ export class FlowService {
 	selectorHandler(selector) {
 		let ethTypes = [];
 		selector.criteria.forEach((value, index) => {
-			let eth_type = value.type + ':' + (this.ethTypeObj[value.ethType] || value.ethType);
+			let eth_type;
+			if (value.type === 'ETH_TYPE') {
+				eth_type = value.type + ':' + (this.ethTypeObj[value.ethType] || value.ethType);
+			}
+			else if (value.type === 'ODU_SIGID') {
+				eth_type = value.type + ':' + value.oduSignalId;
+			}
+			else {
+				eth_type = value.type + ':' + Object.values(value).pop();
+			}
+			 
 			ethTypes.push(eth_type);
 		});
 		return ethTypes.toString();
