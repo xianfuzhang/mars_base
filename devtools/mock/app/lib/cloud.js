@@ -21,6 +21,7 @@ global.cloudModel = {
   links: [],
   endpoints: [],
   flows: [],
+  flowgroups: [],
   alert: {
     rules: [],
     history: [],
