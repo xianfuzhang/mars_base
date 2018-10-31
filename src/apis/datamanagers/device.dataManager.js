@@ -145,6 +145,20 @@ export class DeviceDataManager {
     );
     return defer.promise;
   }
+  
+  getDeviceGroups(deviceId, params) {
+    // TODO: complete get groups process
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDeviceFlowsUrl(deviceId), {'params': params}).then(
+      (res) => {
+        defer.resolve({'data': {'groups': [], 'total': 0}});
+      },
+      (error) => {
+        defer.resolve({'data': {'groups': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
 
   getDeviceConfigs(){
     let defer = this.di.$q.defer();
@@ -185,6 +199,20 @@ export class DeviceDataManager {
       }
     );
     return defer.promise; 
+  }
+  
+  // TODO: delete group
+  deleteDeviceGroup(deviceId, groupId) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDeleteDeviceFlowUrl(deviceId, flowId)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
   }
 
   getPorts(params) {
@@ -306,6 +334,20 @@ export class DeviceDataManager {
       }
     );
     return defer.promise;
+  }
+  
+  // get group type
+  getFlowGroupType(groupId) {
+    let groupStr = groupId.toString(2);
+    
+    // 不足32位补0
+    for(let i=0; i < 32 - groupStr.length; i++) {
+      groupStr = '0' + groupStr;
+    }
+    let typeStr = groupStr.slice(0, 4);
+    let typeInt = parseInt(typeStr, 2)
+    
+    return `GROUP-Type-${typeInt}`;
   }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();

@@ -99,6 +99,9 @@ export class DeviceDetailController {
             break;
           case 'flow':
             break;
+          case 'group':
+            // TODO: complete the group delete action
+            break;
         }
       }
       return filterActions;
@@ -137,12 +140,30 @@ export class DeviceDetailController {
               this.di.notificationService.render(this.scope);
               });
             break;
+          case 'group':
+            // TODO: group data
+            let groupId = event.data.id;
+            this.di.deviceDataManager.deleteDeviceGroup(this.scope.deviceId, groupId)
+              .then((res) => {
+                this.scope.detailModel.api.queryUpdate();
+              }, (res) => {
+                this.scope.alert = {
+                  type: 'warning',
+                  msg: res.data
+                }
+                this.di.notificationService.render(this.scope);
+              });
+            break;
         }
       }
     };
 
     this.scope.createFlow = () => {
       this.di.$rootScope.$emit('flow-wizard-show', this.scope.deviceId);
+    };
+  
+    this.scope.createGroup = () => {
+      this.di.$rootScope.$emit('group-wizard-show', this.scope.deviceId);
     };
 
     this.scope.batchRemove = ($value) => {
@@ -207,7 +228,10 @@ export class DeviceDetailController {
         break;
       case 'endpoint':
         schema = this.di.deviceService.getEndpointTableSchema();
-        break;  
+        break;
+      case 'group':
+        schema = this.di.deviceDetailService.getDeviceGroupsSchema();
+        break;
     }
     return schema;
   }
@@ -229,6 +253,9 @@ export class DeviceDetailController {
         break;
       case 'endpoint':
         actions = this.di.deviceDetailService.getEndpointActionsShow();
+        break;
+      case 'group':
+        actions = this.di.deviceDetailService.getGroupActionsShow();
         break;
     }
     return actions;
@@ -269,6 +296,11 @@ export class DeviceDetailController {
         schema['rowCheckboxSupport'] = false;
         schema['rowActionsSupport'] = false;
         break;
+      case 'group':
+        schema['index_name'] = 'id';
+        schema['rowCheckboxSupport'] = true;
+        schema['rowActionsSupport'] = true;
+        break;
     }
     return schema;
   }
@@ -299,6 +331,11 @@ export class DeviceDetailController {
       case 'endpoint':
         this.di.deviceDataManager.getEndpoints(params).then((res) => {
           defer.resolve({'data': res.data.hosts, 'total': res.data.total});
+        });
+        break;
+      case 'group':
+        this.di.deviceDataManager.getDeviceGroups(this.scope.deviceId, params).then((res) => {
+          defer.resolve({'data': res.data.groups, 'total': res.data.total});
         });
         break;
     }
@@ -401,6 +438,22 @@ export class DeviceDetailController {
           }
         });
         break;
+      case 'group':
+        // TODO: complete group data
+        entities.forEach((entity) => {
+          let obj = {};
+          obj['id'] = entity.id;
+          obj['state'] = entity.state;
+          obj['packets'] = entity.packets;
+          obj['duration'] = entity.life;
+          obj['priority'] = entity.priority;
+          obj['name'] = entity.tableId;
+          obj['selector'] = this.di.flowService.selectorHandler(entity.selector);
+          obj['treatment'] = this.di.flowService.treatmentHander(entity.treatment);
+          obj['app'] = entity.appId;
+          this.scope.detailModel.entities.push(obj);
+        });
+        break;
     }
   }
 
@@ -412,6 +465,9 @@ export class DeviceDetailController {
         break;
       case 'flow':
         actions = this.di.deviceDetailService.getDeviceFlowsTableRowActions();
+        break;
+      case 'group':
+        actions = this.di.deviceDetailService.getDeviceGroupsTableRowActions();
         break;
     }
     return actions;

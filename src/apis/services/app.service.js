@@ -84,7 +84,8 @@ export class appService {
           ]
         }
       },
-      CRYPTO_STRING: 'secret'
+      CRYPTO_STRING: 'secret',
+      DEFAULT_FILENAME: 'startup_netcfg' // default configuration file name
     };
   }
 
@@ -197,7 +198,7 @@ export class appService {
   }
 
   getConfigurationUrl(subjectClass, subject){
-    let url = this.getZoneEndpoint() + '/network/configuration';
+    let url = this.getZoneEndpoint() + '/configuration';
     if(subjectClass){
       url = url + '/' + subjectClass;
       if(subject){
@@ -213,6 +214,10 @@ export class appService {
 
   getConfigurationFileUrl(filename){
     return this.getZoneEndpoint() + '/network/configuration/files/' + filename;
+  }
+  
+  updateConfigurationFileUrl(filename){
+    return this.getZoneEndpoint() + '/network/configuration/file-modify/' + filename;
   }
   
   getConfigurationHistoryUrl(params){

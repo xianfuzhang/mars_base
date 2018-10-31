@@ -40,6 +40,11 @@ export class DeviceDetailService {
         'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.ENDPOINTS'),
         'value': 'endpoint',
         'type': 'endpoint'
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.GROUPS'),
+        'value': 'group',
+        'type': 'group'
       }
     ];
   }
@@ -62,6 +67,10 @@ export class DeviceDetailService {
 
   getEndpointActionsShow() {
     return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
+  }
+  
+  getGroupActionsShow() {
+    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
   }
 
   getDevicePortsSchema() {
@@ -124,6 +133,15 @@ export class DeviceDetailService {
   }
 
   getDeviceFlowsTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'value': 'delete'
+      }
+    ];
+  }
+  
+  getDeviceGroupsTableRowActions() {
     return [
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
@@ -357,7 +375,53 @@ export class DeviceDetailService {
       },
     ];
   }
-
+  
+  getDeviceGroupsSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'),
+        'field': 'state',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PACKETS'),
+        'field': 'packets',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.DURATION'),
+        'field': 'duration',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'),
+        'field': 'priority',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TABLENAME'),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR'),
+        'field': 'selector',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TREATMENT'),
+        'field': 'treatment',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.APP'),
+        'field': 'app',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
+  
+  
   getDevicePFCSchema() {
     return [];
   }
