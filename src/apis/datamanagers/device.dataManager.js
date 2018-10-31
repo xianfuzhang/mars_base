@@ -187,6 +187,48 @@ export class DeviceDataManager {
     return defer.promise; 
   }
 
+
+  getDeviceGroups(deviceId){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDeviceGroupsUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res.data.groups);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  addDeviceGroup(deviceId, params){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getDeviceGroupsUrl(deviceId), params).then(
+      (res) => {
+        defer.resolve(res.data.groups);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  deleteDeviceGroup(deviceId, appCookie){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDeviceGroupDeleteUrl(deviceId, appCookie)).then(
+      (res) => {
+        defer.resolve(res.data.groups);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
   getPorts(params) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getPortsUrl(), {'params': params}).then(
