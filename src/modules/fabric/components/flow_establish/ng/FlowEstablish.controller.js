@@ -34,6 +34,27 @@ export class FlowEstablishController {
     this.di.$scope.num_regex = '^\d$|^[1-9]+[0-9]*$';
     this.di.$scope.ipv6_regex = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))/;
 
+    this.FLOW_TYPES = {
+      'TABLE20': {
+        'UNICAST_MAC': 'unicast_mac',
+        'IPV4_MULTICAST_MAC':'ipv4_multicast_mac',
+        'IPV6_MULTICAST_MAC':'ipv6_multicast_mac',
+      },
+      'TABLE30':{
+        'IPV4_MULTICAST':'ipv4_multicast',
+        'IPV6_MULTICAST':'ipv6_multicast'
+      },
+      'TABLE40':{
+        'IPV4_MULTICAST':'ipv4_multicast',
+        'IPV6_MULTICAST':'ipv6_multicast'
+      },
+      'TABLE50':{
+        'UNICAST_VLAN_BRIDGE': 'unicast_vlan_bridge',
+        'MULTICAST_VLAN_BRIDGE': 'multicast_vlan_bridge',
+        'DLF_VLAN_BRIDGE': 'dlf_vlan_bridge'
+      }
+    };
+
     let di = this.di;
 
     let initFlow = {
@@ -62,22 +83,28 @@ export class FlowEstablishController {
       },
       {
         id: 'step2',
-        title: this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TREATMENT'),
-        content: require('../template/flow_treatment'),
+        title: this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR'),
+        content: require('../template/flow_criteria'),
       },
       {
         id: 'step3',
-        title: this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR'),
-        content: require('../template/flow_criteria'),
-      }
+        title: this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.TREATMENT'),
+        content: require('../template/flow_treatment'),
+      },
+
     ];
 
     this.di.$scope.instructionSchema = this.di.deviceService.getFlowsInstructionSchema();
     this.di.$scope.criteriaSchema = this.di.deviceService.getFlowsCriteriaSchema();
+    this.di.$scope.tableIdSchema = this.di.deviceService.getFlowTableList();
+    scope.table60Schema = this.di.deviceService.getFlowTableAclOptionList();
 
+
+    scope.treatmentPageGroup = {};
 
     let convertList2DisLabel = (list) =>{
       let disLabels = [];
+
       this.di._.forEach(list, (item)=>{
         disLabels.push({'label': item, 'value':item});
       });
@@ -85,15 +112,88 @@ export class FlowEstablishController {
       return {'options': disLabels};
     };
 
-    this.di.$scope.instructionSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.instructionSchema));
-    this.di.$scope.criteriaSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.criteriaSchema));
+    let classifyGroups = (groups) =>{
+      let res_group = {};
+      this.di._.forEach(groups, (group)=>{
 
-    // this.di.$scope.instructionSchemaList['hint'] = 'Instruction Type';
-    // this.di.$scope.criteriaSchemaList['hint'] = 'Criteria Type';
-    this.di.$scope.flowEstablishModel = {
-      instructionType: angular.copy(this.di.$scope.instructionSchemaList.options[0]),
-      criteriaType: angular.copy(this.di.$scope.criteriaSchemaList.options[0]),
+        let id = group['id'] + '';
+        let binaryId = parseInt(id).toString(2) + '';
+        let fullBinary = '0'.repeat(32-binaryId.length) + binaryId;
+        let typeId = parseInt(fullBinary.substr(0, 4),2) + '';
+        if(res_group[typeId]){
+          res_group[typeId].push(group);
+        } else {
+          res_group[typeId] = [group];
+        }
+      });
+      return res_group;
     };
+
+    this.di.deviceDataManager.getDeviceGroups(scope.curDeviceId).then((res)=>{
+      if(res && res.length > 0) {
+        scope.deviceGroupsMapper = classifyGroups(res);
+      }
+    });
+
+    scope.instructionSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.instructionSchema));
+    scope.criteriaSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.criteriaSchema));
+    scope.tableIdSchemaList = convertList2DisLabel(this.di._.values(this.di.$scope.tableIdSchema));
+    scope.table60SchemaList = convertList2DisLabel(this.di._.keys(scope.table60Schema));
+
+
+    scope.flowEstablishModel = {
+      instructionType: angular.copy(scope.instructionSchemaList.options[0]),
+      criteriaType: angular.copy(scope.criteriaSchemaList.options[0]),
+      tableIdType: angular.copy(scope.tableIdSchemaList.options[0]),
+      table60SchemaOption: angular.copy(scope.table60SchemaList.options[0]),
+    };
+
+    let _addValue2input = (input) =>{
+      if(input.input_type && input.input_type === 'select'){
+        let options = [];
+        this.di._.forEach(input.select_value, (item)=>{
+          options.push({'label': item, 'value':item});
+        });
+        input['displayLabel'] = {'options':options};
+        input['value'] = angular.copy(input.displayLabel.options[0])
+      } else {
+        input['value'] = '';
+      }
+    };
+
+    let addValue2FirstInputs = (inputs) => {
+      let cpInputs = angular.copy(inputs);
+      this.di._.forEach(cpInputs, (input)=>{
+        _addValue2input(input);
+      });
+      return cpInputs;
+    };
+
+    let addValue2SecondInputs = (inputs) => {
+      let cpInputs = angular.copy(inputs);
+      let kvInputs = [];
+      this.di._.forEach(cpInputs, (input)=>{
+        _addValue2input(input);
+        let kvInput = {};
+        kvInput[input.field] = [input];
+        kvInputs.push(kvInput);
+      });
+      return kvInputs;
+    };
+
+    let addValue2Table60Input = (field, input) => {
+      let cpInputs = angular.copy(input);
+      this.di._.forEach(cpInputs, (input)=>{
+        _addValue2input(input);
+      });
+
+      let kvInput = {};
+      kvInput[field] = cpInputs;
+      return kvInput;
+    };
+
+    this.di.$scope.criteriaPageFirstInputs = addValue2FirstInputs(this.di.deviceService.getFlowTableFirstInputRowByTableId(scope.flowEstablishModel.tableIdType.value));
+    this.di.$scope.criteriaPageSecondInputs = [];
 
     this.di.$scope.instructionsModel = [
     ];
@@ -146,6 +246,41 @@ export class FlowEstablishController {
       return true;
     }
 
+    let initializeAction = () =>{
+      let tableId = scope.flowTypeJson['tableId'];
+      let type = scope.flowTypeJson['type'];
+      scope.treatmentPageApplyAction = this.di.deviceService.getFlowTableApplyActionMapByTid(tableId);
+
+      scope.treatmentPageGroup['groups'] = this.di.deviceService.getFlowTableWriteActionMapByFilter(tableId, type);
+
+      let _initGroupsDisplayLabel = () =>{
+
+        scope.treatmentPageGroup.groupsDisplayLabel = {'options':[]};
+        this.di._.forEach(scope.treatmentPageGroup['groups'], (group)=>{
+          scope.treatmentPageGroup.groupsDisplayLabel.push({'label': this.di.deviceService.getGroupNameByKey(group), 'value':group});
+        });
+
+        scope.treatmentPageGroup.groupTypeSelected = scope.treatmentPageGroup.groupsDisplayLabel['options'].length > 0?scope.treatmentPageGroup.groupsDisplayLabel['options'][0]:null;
+      };
+
+
+      let _initGroupIdsDisplayLabel = () =>{
+        scope.treatmentPageGroup.groupIdDisplayLabel = {'options':[{'label': '请选择Group', 'value':-1}]};
+        if(scope.treatmentPageGroup.groupTypeSelected){
+          let groups = scope.deviceGroupsMapper[this.di.deviceService.getGroupTypeId(scope.treatmentPageGroup.groupTypeSelected.value)];
+          this.di._.forEach(groups, (group)=>{
+            scope.treatmentPageGroup.groupIdDisplayLabel.push({'label': group['id'], 'value': group['id']});
+          });
+        }
+        scope.treatmentPageGroup.groupSelected = scope.treatmentPageGroup.groupIdDisplayLabel['options'][0]
+      };
+
+      if(scope.treatmentPageGroup['groups'] !== null){
+        _initGroupsDisplayLabel();
+        _initGroupIdsDisplayLabel();
+      }
+
+    };
 
     let translate = this.translate;
     this.di.$scope.stepValidation = function (curStep, nextStep) {
@@ -164,17 +299,14 @@ export class FlowEstablishController {
         if(nextStep > 3) {
           return inValidJson_Copy;
         }
-
-        if(di.$scope.instructionsModel && di.$scope.instructionsModel.length === 0){
-          inValidJson_Copy['errorMessage'] = translate('MODULES.SWITCH.DETAIL.CONTENT.NEED_ADD_INSTRUCTION');
-          return inValidJson_Copy;
+        if(nextStep === 1) {
+          return validJson;
         }
 
-        di.$rootScope.$emit('page_flow_instruction');
-        if(!validCurrentDom('flow_instruction')){
+        di.$rootScope.$emit('page_flow_criteria');
+        if(!validCurrentDom('flow_criteria')){
           return inValidJson_Copy
         }
-
       }
       return validJson;
     };
@@ -191,9 +323,35 @@ export class FlowEstablishController {
       });
     };
 
+    scope.addTable60Acl = ()=>{
+      let curOptId = scope.flowEstablishModel.table60SchemaOption.value;
+      let option = angular.copy(scope.table60Schema[scope.flowEstablishModel.table60SchemaOption.value]);
+
+      scope.criteriaPageSecondInputs.push(addValue2Table60Input(curOptId, scope.table60Schema[curOptId]));
+
+      this.di._.remove(scope.table60SchemaList.options, (option)=>{
+        return option.value === curOptId;
+      });
+
+      scope.flowEstablishModel.table60SchemaOption = scope.table60SchemaList.options[0];
+    };
+
+    scope.delTable60Acl = (field)=> {
+      this.di._.remove(scope.criteriaPageSecondInputs, (input)=>{
+        let keys = this.di._.keys(input);
+        for(let i =0 ; i < keys.length; i ++){
+          if(keys[i] === field){
+            return true;
+          }
+        }
+        return false;
+      });
+      scope.table60SchemaList.options.push({'label':field, 'value':field});
+    };
+
     this.di.$scope.changeInstructionSelect = (uuid, item, $value) => {
       this.di._.forEach(this.di.$scope.instructionsModel, (instruction)=>{
-        if(instruction.uuid == uuid){
+        if(instruction.uuid === uuid){
           let key = '';
           if(!$value){
             key = item.value.value;
@@ -211,7 +369,7 @@ export class FlowEstablishController {
       this.di._.forEach(schema, (item)=>{
         item['value'] = '';
         item['uuid'] = (new Date().getTime());
-        if(item['type'] == 'object'){
+        if(item['type'] === 'object'){
           item['display_label'] = convertList2DisLabel(this.di._.keys(item.list));
           item['value'] = item['display_label']['options'][0];
         }
@@ -239,6 +397,128 @@ export class FlowEstablishController {
         resolve({valid: true, errorMessage: ''});
       });
     };
+
+
+    scope.changeTableId = (item) =>{
+      scope.criteriaPageFirstInputs = addValue2FirstInputs(this.di.deviceService.getFlowTableFirstInputRowByTableId(item.value));
+      scope.criteriaPageSecondInputs = [];
+      if(item.value === '60'){
+        scope.table60SchemaList = convertList2DisLabel(this.di._.keys(scope.table60Schema));
+      }
+      scope.flowTypeJson = null;
+
+    };
+
+    scope.firstInputChange = (type) =>{
+      let resJson = filterTypeOfFirstInputs();
+      scope.flowTypeJson = resJson;
+      if(resJson.res === false || resJson.type === ''){
+        return;
+      } else {
+        if(resJson.type === null){
+          initializeAction();
+        } else {
+          scope.criteriaPageSecondInputs = addValue2SecondInputs(this.di.deviceService.getFlowTableSecondInputRowByFilter(resJson['tableId'], resJson['type']));
+        }
+      }
+    };
+
+    let filterTypeOfFirstInputs = () =>{
+      let inputs = scope.criteriaPageFirstInputs;
+      let tableId = scope.flowEstablishModel.tableIdType.value;
+      if(tableId === '10' || tableId === '60') {
+        return {'res': true, 'tableId':tableId, 'type':null};
+      }
+      if(!validCurrentDom('flow_instruction')){
+        return {'res':false};
+      }
+
+      if(tableId === '20'){
+        return {'res':true,'tableId':tableId, 'type':_filterTable_20(inputs)};
+      } else if(tableId === '30'){
+        return {'res':true,'tableId':tableId, 'type':_filterTable_30(inputs)};
+      } else if(tableId === '40'){
+        return {'res':true,'tableId':tableId, 'type':_filterTable_40(inputs)};
+      } else if(tableId === '50'){
+        return {'res':true,'tableId':tableId, 'type':_filterTable_50(inputs)};
+      } {
+        return {'res':false};
+      }
+    };
+
+    let _filterTable_20 = (inputs) =>{
+
+      let mac = null, ethType = null;
+      this.di._.forEach(inputs, (input)=>{
+        if(input.field === 'destination_mac'){
+          mac =  input.value;
+        } else if(input.field === 'ether_type'){
+          ethType =  input.value.value;
+        }
+      });
+
+      if(ethType === '0x0800' && this.di.deviceService.isIpv4MultiMAC(mac)){
+        return this.FLOW_TYPES.TABLE20.IPV4_MULTICAST_MAC;
+      } else if(ethType === '0x86dd' && this.di.deviceService.isIpv6MultiMAC(mac)){
+        return this.FLOW_TYPES.TABLE20.IPV6_MULTICAST_MAC;
+      } else if(mac.search(this.di.$scope.mac_regex) !== -1){
+        return this.FLOW_TYPES.TABLE20.UNICAST_MAC;
+      } else {
+        return '';
+      }
+    };
+
+    let _filterTable_30 = (inputs) =>{
+      let ethType = null;
+      this.di._.forEach(inputs, (input)=>{
+        if(input.field === 'ether_type'){
+          ethType =  input.value.value;
+        }
+      });
+
+      if(ethType === '0x0800'){
+        return this.FLOW_TYPES.TABLE30.IPV4_MULTICAST;
+      } else if(ethType === '0x86dd'){
+        return this.FLOW_TYPES.TABLE30.IPV6_MULTICAST;
+      }
+    };
+
+    let _filterTable_40 = (inputs) =>{
+      let ethType = null;
+      this.di._.forEach(inputs, (input)=>{
+        if(input.field === 'ether_type'){
+          ethType =  input.value.value;
+        }
+      });
+
+      if(ethType === '0x0800'){
+        return this.FLOW_TYPES.TABLE40.IPV4_MULTICAST;
+      } else if(ethType === '0x86dd'){
+        return this.FLOW_TYPES.TABLE40.IPV6_MULTICAST;
+      }
+    };
+
+    let _filterTable_50 = (inputs) =>{
+      let mac = null;
+      this.di._.forEach(inputs, (input)=>{
+        if(input.field === 'destination_mac'){
+          mac =  input.value;
+        }
+      });
+
+      if(mac){
+        let firstByteStr = parseInt(mac.substr(0, 2)).toString(2);
+        let bit = firstByteStr.substr(firstByteStr.length-1);
+        if(bit === '1'){
+          return this.FLOW_TYPES.TABLE50.MULTICAST_VLAN_BRIDGE;
+        } else {
+          return this.FLOW_TYPES.TABLE50.UNICAST_VLAN_BRIDGE;
+        }
+      } else {
+        return this.FLOW_TYPES.TABLE50.DLF_VLAN_BRIDGE;
+      }
+    };
+
 
     let formatInstructionValue = () => {
       let instructions = [];

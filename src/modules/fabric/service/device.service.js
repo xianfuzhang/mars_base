@@ -627,6 +627,295 @@ export class DeviceService {
       ],
     }
   }
+
+  getFlowTableList(){
+    return ['10', '20', '30' , '40', '50', '60']
+  }
+
+  getFlowTableFirstInputRow(){
+    return {
+      '10':[
+        {'field':'in_port', 'type':'int', 'require':'true'},
+        {'field':'vlan_id', 'type':'int', 'require':'true'}
+      ],
+      '20':[
+        {'field':'ether_type', 'input_type':'select', 'select_value':['0x0800','0x86dd']},
+        {'field':'destination_mac', 'type':'mac', 'require':'true'}
+      ],
+      '30':[
+        {'field':'ether_type', 'input_type':'select', 'select_value':['0x0800','0x86dd']}
+      ],
+      '40':[
+        {'field':'ether_type', 'input_type':'select', 'select_value':['0x0800','0x86dd']},
+      ],
+      '50':[
+        {'field':'vlan_id', 'type':'int','require':'true'},
+        {'field':'destination_mac', 'type':'mac','require':'false'}
+      ],
+      '60':[
+        {'field':'vlan_id', 'type':'int','require':'true'}
+      ]
+    }
+  }
+
+  getFlowTableFirstInputRowByTableId(tableId){
+    let all = this.getFlowTableFirstInputRow();
+    return all[tableId];
+  }
+
+  getFlowTableSecondInputRow() {
+
+    return {
+      '10': null,
+      '20': {
+        'unicast_mac': [{'field': 'in_port', 'type': 'int', 'require': 'false'}],
+        'ipv4_multicast_mac:': [
+          {'field': 'destination_ipv4', 'type': 'ipv4', 'require': 'false'},
+          {'field': 'vlan_id', 'type': 'int', 'require': 'false'},
+          {'field': 'in_port', 'type': 'int', 'require': 'false'},
+        ],
+        'ipv6_multicast_mac': [
+          {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'false'},
+          {'field': 'vlan_id', 'type': 'int', 'require': 'false'},
+          {'field': 'in_port', 'type': 'int', 'require': 'false'},
+        ]
+      },
+      '30': {
+        'ipv4_multicast': [
+          {'field': 'destination_ipv4', 'type': 'ipv4', 'require': 'false'},
+          {'field': 'ip_proto', 'type': 'string', 'require': 'false'},
+          {'field': 'udp_dport', 'type': 'int', 'require': 'false'},
+          {'field': 'udp_sport', 'type': 'int', 'require': 'false'},
+        ],
+        'ipv6_multicast': [
+          {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'false'},
+          {'field': 'ip_proto', 'type': 'string', 'require': 'false'},
+          {'field': 'udp_dport', 'type': 'int', 'require': 'false'},
+          {'field': 'udp_sport', 'type': 'int', 'require': 'false'},
+        ]
+      },
+      '40': {
+        'ipv4_multicast': [
+          {'field':'vlan_id', 'type':'int','require':'true'},
+          {'field': 'destination_ipv4', 'type': 'ipv4_multi', 'require': 'true'},
+          {'field': 'source_ipv4', 'type': 'ipv4', 'require': 'false'},
+          {'field': 'l3_in_port', 'type': 'int', 'require': 'false'},
+        ],
+        'ipv6_multicast': [
+          {'field':'vlan_id', 'type':'int','require':'true'},
+          {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'true'},
+          {'field': 'source_ipv6', 'type': 'ipv6', 'require': 'false'},
+          {'field': 'l3_in_port', 'type': 'int', 'require': 'false'},
+        ]
+      },
+      '50': {
+        'unicast_vlan_bridge': [],
+        'multicast_vlan_bridge': [],
+        'dlf_vlan_bridge': []
+      },
+      '60': null
+    }
+  }
+
+  getFlowTableSecondInputRowByFilter(tableId, type){
+    let secondInputs = this.getFlowTableSecondInputRow();
+    return secondInputs[tableId][type];
+  }
+
+  getFlowTableApplyActionMaps(){
+    return   {
+      '10': [
+        {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
+        {'field': 'push_vlan', 'type': 'int', 'require': 'false'},
+      ],
+      '20': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
+      '30': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
+      '40': [],
+      '50': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
+      '60': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
+    }
+  }
+
+  getFlowTableApplyActionMapByTid(tableId){
+    let maps = this.getFlowTableApplyActionMaps();
+    return maps[tableId];
+  }
+
+  getFlowTableWriteActionMaps(){
+    return   {
+      '10': null,
+      '20': null,
+      '30': {
+        'ipv4_multicast':['l3_ucast_group','l3_ecmp_group'],
+        'ipv6_multicast':['l3_ucast_group','l3_ecmp_group']
+      },
+      '40':{
+        'ipv4_multicast':['l3_mcast_group'],
+        'ipv6_multicast':['l3_mcast_group']
+      },
+      '50': {
+        'unicast_vlan_bridge': ['l2_intf_group', 'l2_unflt_intf_group'],
+        'multicast_vlan_bridge': ['l2_mcast_group'],
+        'dlf_vlan_bridge': ['l2_flood_group']
+      },
+      '60': ['l2_intf_group', 'l2_rewrite_group','l2_mcast_group','l3_ucast_group','l3_mcast_group','l3_ecmp_group','l2_unflt_intf_group'],
+    }
+  }
+
+  getFlowTableWriteActionMapByFilter(tableId, type){
+    let maps = this.getFlowTableWriteActionMaps();
+    let res = maps[tableId];
+    if(res === null || res instanceof Array){
+      return res;
+    } else {
+      return res[type]
+    }
+  }
+
+  getGroupTypeMapper(){
+    return {
+      'l2_intf_group':'0',
+      'l2_rewrite_group':'1',
+      'l3_ucast_group': '2',
+      'l2_mcast_group':'3',
+      'l2_flood_group':'4',
+      'l3_intf_group':'5',
+      'l3_mcast_group':'6',
+      'l3_ecmp_group':'7',
+      'l2_unflt_intf_group':'11'
+    }
+  }
+
+
+  getGroupNameMapper(){
+    return {
+      'l2_intf_group': 'L2_Interface',
+      'l2_mcast_group': 'L2_Multicast',
+      'l2_rewrite_group': 'L2_Rewrite',
+      'l2_flood_group': 'L2_Flood',
+      'l2_unflt_intf_group': 'L2_Unfiltered_Interface',
+      'l3_intf_group': 'L3_Interface',
+      'l3_ucast_group': 'L3_Unicast',
+      'l3_mcast_group': 'L3_Multicast',
+      'l3_ecmp_group': 'L3_ECMP',
+    }
+  }
+
+
+  getGroupNameByKey(key){
+    let mapper = this.getGroupNameMapper();
+    return mapper[key]
+  }
+
+
+  getGroupTypeId(groupName){
+    return this.getGroupTypeMapper()[groupName];
+  }
+
+
+
+  getFlowTableAclOptionList(){
+    return {
+      'in_port': [
+        {'field': 'in_port', 'type': 'int', 'require': 'true'},
+      ],
+      'ether_type': [
+        {'field': 'ether_type', 'type': 'int', 'require': 'true', 'input_type':'select', 'select_value':['0x0800','0x86dd']},
+      ],
+      'source_mac': [
+        {'field': 'source_mac', 'type': 'mac', 'require': 'true'},
+        {'field': 'source_mac_mask', 'type': 'string', 'require': 'true'},
+      ],
+      'destination_mac': [
+        {'field': 'destination_mac', 'type': 'mac', 'require': 'true'},
+        {'field': 'destination_mac_mask', 'type': 'string', 'require': 'true'},
+      ],
+      'vlan_id': [
+        {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
+      ],
+      'vlan_pcp': [
+        {'field': 'vlan_pcp', 'type': 'int', 'require': 'true'},
+      ],
+      'source_ipv4': [
+        {'field': 'source_ipv4', 'type': 'ipv4', 'require': 'true'},
+        {'field': 'source_ipv4_mask', 'type': 'string', 'require': 'true'},
+      ],
+      'destination_ipv4': [
+        {'field': 'destination_ipv4', 'type': 'ipv4', 'require': 'true'},
+        {'field': 'destination_ipv4_mask', 'type': 'string', 'require': 'true'},
+      ],
+      'source_ipv6': [
+        {'field': 'source_ipv6', 'type': 'ipv6', 'require': 'true'},
+        {'field': 'source_ipv6_mask', 'type': 'string', 'require': 'true'},
+      ],
+      'destination_ipv6': [
+        {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'true'},
+        {'field': 'destination_ipv6_mask', 'type': 'string', 'require': 'true'},
+      ],
+      'ipv4_arp_spa': [
+        {'field': 'ipv4_arp_spa', 'type': 'int', 'require': 'true'},
+      ],
+      'ip_proto': [
+        {'field': 'ip_proto', 'type': 'string', 'require': 'true'},
+      ],
+      'ip_dscp': [
+        {'field': 'ip_dscp', 'type': 'int', 'require': 'true'},
+      ],
+      'ip_ecn': [
+        {'field': 'ip_ecn', 'type': 'int', 'require': 'true'},
+      ],
+      'tcp_sport': [
+        {'field': 'tcp_sport', 'type': 'int', 'require': 'true'},
+      ],
+      'tcp_dport': [
+        {'field': 'tcp_dport', 'type': 'int', 'require': 'true'},
+      ],
+      'udp_sport': [
+        {'field': 'udp_sport', 'type': 'int', 'require': 'true'},
+      ],
+      'udp_dport': [
+        {'field': 'udp_dport', 'type': 'int', 'require': 'true'},
+      ],
+      'icmpv4_type': [
+        {'field': 'icmpv4_type', 'type': 'int', 'require': 'true'},
+      ],
+      'icmpv4_code': [
+        {'field': 'icmpv4_code', 'type': 'int', 'require': 'true'},
+      ],
+      'ipv6_flow_label': [
+        {'field': 'ipv6_flow_label', 'type': 'int', 'require': 'true'},
+      ],
+      'sctp_sport': [
+        {'field': 'sctp_sport', 'type': 'int', 'require': 'true'},
+      ],
+      'sctp_dport': [
+        {'field': 'sctp_dport', 'type': 'int', 'require': 'true'},
+      ],
+      'icmpv6_type': [
+        {'field': 'icmpv6_type', 'type': 'int', 'require': 'true'},
+      ],
+      'icmpv6_code': [
+        {'field': 'icmpv6_code', 'type': 'int', 'require': 'true'},
+      ],
+
+    }
+  }
+
+
+  // 01 : 00 : 5e : 00 :  00 : 00
+  // ff : ff : ff : 80 :  00 : 00
+  isIpv4MultiMAC(mac){
+    let pattern = '^(0[1-9a-fA-F]|[1-9a-fA-F][0-9a-fA-F]):[0-9a-fA-F]{2}:(5[e-fE-F]|[6-9a-fA-F][0-9a-fA-F]):([0-7][0-9a-fA-F]|80)(:00){2}$';
+    return mac.search(pattern) === -1?false:true;
+  }
+
+  //333300000000/ffff00000000
+  isIpv6MultiMAC(mac){
+    let pattern = '^((3[3-9a-fA-F]|[4-9a-fA-F][0-9a-fA-F]):){2}(00:){3}00$';
+    return mac.search(pattern) === -1?false:true;
+  }
+
+
 }
 
 DeviceService.$inject = DeviceService.getDI();

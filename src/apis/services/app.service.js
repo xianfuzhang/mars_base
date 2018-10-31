@@ -169,6 +169,14 @@ export class appService {
     return this.getZoneEndpoint() + '/flows/' + deviceId + '/' + flowId;
   }
 
+  getDeviceGroupsUrl(deviceId){
+    return this.getZoneEndpoint() + '/groups/' + deviceId;
+  }
+
+  getDeviceGroupDeleteUrl(deviceId, appCookie){
+    return this.getZoneEndpoint() + '/groups/' + deviceId + '/' + appCookie;
+  }
+
   getLinksUrl() {
     return this.getZoneEndpoint() + '/links';
   }
