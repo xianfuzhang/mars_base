@@ -149,12 +149,12 @@ export class DeviceDataManager {
   getDeviceGroups(deviceId, params) {
     // TODO: complete get groups process
     let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getDeviceFlowsUrl(deviceId), {'params': params}).then(
+    this.di.$http.get(this.di.appService.getDeviceGroupsUrl(deviceId), {'params': params}).then(
       (res) => {
-        defer.resolve({'data': {'groups': [], 'total': 0}});
+        defer.resolve({data: res.data});
       },
       (error) => {
-        defer.resolve({'data': {'groups': [], 'total': 0}});
+        defer.resolve({data: {'groups': [], 'total': 0}});
       }
     );
     return defer.promise;
@@ -216,24 +216,24 @@ export class DeviceDataManager {
   // }
 
 
-  getDeviceGroups(deviceId){
-    let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getDeviceGroupsUrl(deviceId)).then(
-      (res) => {
-        defer.resolve(res.data.groups);
-      },
-      (error) => {
-        defer.reject(error);
-      }
-    );
-    return defer.promise;
-  }
+  // getDeviceGroups(deviceId){
+  //   let defer = this.di.$q.defer();
+  //   this.di.$http.get(this.di.appService.getDeviceGroupsUrl(deviceId)).then(
+  //     (res) => {
+  //       defer.resolve(res.data.groups);
+  //     },
+  //     (error) => {
+  //       defer.reject(error);
+  //     }
+  //   );
+  //   return defer.promise;
+  // }
 
   addDeviceGroup(deviceId, params){
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getDeviceGroupsUrl(deviceId), params).then(
       (res) => {
-        defer.resolve(res.data.groups);
+        defer.resolve(res);
       },
       (error) => {
         defer.reject(error);
@@ -247,7 +247,7 @@ export class DeviceDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.delete(this.di.appService.getDeviceGroupDeleteUrl(deviceId, appCookie)).then(
       (res) => {
-        defer.resolve(res.data.groups);
+        defer.resolve(res);
       },
       (error) => {
         defer.reject(error);
@@ -378,18 +378,18 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  // get group type
-  getFlowGroupType(groupId) {
+  // get group detail by group id
+  getDeviceGroupType(groupId) {
     let groupStr = groupId.toString(2);
 
     // 不足32位补0
     for(let i=0; i < 32 - groupStr.length; i++) {
       groupStr = '0' + groupStr;
     }
-    let typeStr = groupStr.slice(0, 4);
-    let typeInt = parseInt(typeStr, 2)
-
-    return `GROUP-Type-${typeInt}`;
+    let typeInt = parseInt(groupStr.slice(0, 4), 2)
+    let groupType = `GROUP-Type-${typeInt}`;
+    
+    // TODO:
   }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();

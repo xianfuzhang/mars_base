@@ -57,7 +57,11 @@ export class DeviceDetailController {
     unSubscribers.push(this.di.$rootScope.$on('device-flow-refresh',()=>{
       this.scope.detailModel.api.queryUpdate();
     }));
-
+  
+    unSubscribers.push(this.di.$rootScope.$on('group-list-refresh',()=>{
+      this.scope.detailModel.api.queryUpdate();
+    }));
+    
     this.scope.$on('$destroy', () => {
       unSubscribers.forEach((unSubscribe) => {
         unSubscribe();
@@ -443,14 +447,9 @@ export class DeviceDetailController {
         entities.forEach((entity) => {
           let obj = {};
           obj['id'] = entity.id;
-          obj['state'] = entity.state;
-          obj['packets'] = entity.packets;
-          obj['duration'] = entity.life;
-          obj['priority'] = entity.priority;
-          obj['name'] = entity.tableId;
-          obj['selector'] = this.di.flowService.selectorHandler(entity.selector);
-          obj['treatment'] = this.di.flowService.treatmentHander(entity.treatment);
-          obj['app'] = entity.appId;
+          obj['vlanId'] = entity.vlanId;
+          obj['type'] = entity.type;
+          obj['buckets'] = JSON.stringify(entity.buckets);
           this.scope.detailModel.entities.push(obj);
         });
         break;

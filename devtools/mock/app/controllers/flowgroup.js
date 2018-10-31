@@ -5,7 +5,7 @@ const express = require('express'),
   _ = require('lodash');
 
 router.get('/', function (req, res) {
-  return res.json({groups: cloudModel.flowgroups});
+  return res.json({groups: cloudModel.flowgroups, total: cloudModel.flowgroups.length});
 });
 
 router.get('/:deviceId', function (req, res) {
@@ -14,7 +14,7 @@ router.get('/:deviceId', function (req, res) {
   });
   
   if(groups.length) {
-    return res.json({groups});
+    return res.json({groups, total: groups.length});
   } else {
     return res.status(404).json("No data exists!");
   }
@@ -27,7 +27,7 @@ router.get('/:deviceId/:appCookie', function (req, res) {
   });
   
   if(groups.length) {
-    return res.json({groups});
+    return res.json({groups, total: groups.length});
   } else {
     return res.status(404).json("No data exists!");
   }
@@ -55,10 +55,10 @@ router.post('/:deviceId', function (req, res) {
 
 router.delete('/:deviceId/:appCookie/', function (req, res) {
   let index = cloudModel.flowgroups.findIndex((group) => {
-    return group.deviceId === req.params.deviceId && group.appCookie === req.params.appCookie;
+    return group.deviceId == req.params.deviceId && group.appCookie == req.params.appCookie;
   });
   
-  if(ruleIndex !== -1) {
+  if(index !== -1) {
     cloudModel.flowgroups.splice(index,1);
     return res.status(200).json("This group has been deleted!");
   } else {
