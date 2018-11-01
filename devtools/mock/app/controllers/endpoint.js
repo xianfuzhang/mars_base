@@ -5,7 +5,7 @@ router.get('/', (req, res) => {
   return res.json({hosts: cloudModel.endpoints});
 });
 
-router.get('/:mac/:segment', (req, res) => {
+router.get('/v1/:mac/:segment', (req, res) => {
   if (!req.params.mac) {
     return res.status(404).json('Mac address is required!');
   }
@@ -23,7 +23,7 @@ router.get('/:mac/:segment', (req, res) => {
   return res.json(host);
 });
 
-router.delete('/:tenant/:segment/:mac', (req, res) => {
+router.delete('/v1/:tenant/:segment/:mac', (req, res) => {
   if (!req.params.tenant) {
     return res.status(404).json('Tenant is required!');
   }

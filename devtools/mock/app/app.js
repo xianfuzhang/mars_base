@@ -17,6 +17,7 @@ var express = require('express'),
   networkConfigurationController = require('./controllers/network_configuration'),
   analyzerController = require('./controllers/analyzer'),
   flowgroupController = require('./controllers/flowgroup'),
+  intentController = require('./controllers/intent'),
   app = express(),
   //expressSession = require('express-session'),
   cookieParser = require('cookie-parser');
@@ -42,7 +43,7 @@ app.use(sessionParser);
 app.use(initController);
 // setup the routes
 app.use('/mars/v1', deviceController);
-app.use('/mars/v1/endpoints', endPointController);
+app.use('/mars/v1/hosts', endPointController);
 app.use('/mars/v1/statistics', statisticController);
 app.use('/mars/useraccount/v1', useraccountController);
 app.use('/mars/v1/flows', flowController);
@@ -55,6 +56,7 @@ app.use('/mars/v1/configuration', configurationController);
 app.use('/mars/v1/network/configuration', networkConfigurationController);
 app.use('/mars/utility/confighistory/v1', confighistoryController);
 app.use('/mars/analyzer/v1/timerangebar', analyzerController);
+app.use('/mars/v1/intents', intentController);
 app.use('/mars/v1/groups', flowgroupController);
 
 // set port

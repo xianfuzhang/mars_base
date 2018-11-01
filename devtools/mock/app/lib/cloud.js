@@ -7,6 +7,7 @@ var Device = require('../models/device'),
     Log = require('../models/log'),
     Cluster = require('../models/cluster'),
     ConfigHistory = require('../models/confighistory'),
+    Intent = require('../models/intent'),
     config = require('../config'),
     Chance = require('chance'),
     moment = require('moment'),
@@ -30,7 +31,8 @@ global.cloudModel = {
   logs: [],
   clusters: [],
   useraccounts: [],
-  confighistory: []
+  confighistory: [],
+  intents: []
 };
 
 let updateInterval;
@@ -483,6 +485,20 @@ let cloudLib = {
     // adding data to the cloud
     cloudModel.flows.push(newFlow);
     
+    return true;
+  },
+
+  addIntent: (reqParams) => {
+    let intent = new Intent(
+      chance.guid(),
+      reqParams.type,
+      reqParams.appId,
+      [reqParams.one, reqParams.two],
+      reqParams.priority,
+      chance.pickone(['FAILED', 'SUCCESS'])
+    );
+    
+    cloudModel.intents.push(intent);
     return true;
   }
 };
