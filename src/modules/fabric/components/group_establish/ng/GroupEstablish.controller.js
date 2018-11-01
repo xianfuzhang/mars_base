@@ -248,7 +248,7 @@ export class GroupEstablishController {
       let groupId = parseGroupID();
       let requestObj = {
         type: '',
-        appCookie: groupId,
+        appCookie: '0x' + groupId.toString(16),
         groupId: groupId,
         buckets: []
       }
