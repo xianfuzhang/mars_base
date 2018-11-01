@@ -12,11 +12,14 @@ import {DeviceService} from './service/device.service';
 import {DeviceDetailService} from './service/deviceDetail.service';
 import {FabricSummaryController} from './ng/summary.controller';
 import {StormService} from './service/storm.service';
+import {IntentService} from './service/intent.service';
 import { DeviceWizardController } from './components/deviceWizard/ng/DeviceWizard.controller'
 import { FlowEstablishController } from './components/flow_establish/ng/FlowEstablish.controller';
+import {CreateIntentController} from './components/createIntent/ng/createIntent.controller';
 import { GroupEstablishController } from './components/group_establish/ng/GroupEstablish.controller';
 import {ShowSwitchFlowsController} from './ng/showSwitchFlows.controller';
 import {ShowLinksSelectController} from './ng/showLinksSelect.controller';
+import {IntentsController} from './ng/intents.controller';
 
 export default angular
   .module('fabric', [])
@@ -31,8 +34,11 @@ export default angular
   .controller('flowEstablishController', FlowEstablishController)
   .controller('groupEstablishController', GroupEstablishController)
   .controller('showSwitchFlowsController', ShowSwitchFlowsController)
+  .controller('createIntentCtrl', CreateIntentController)
   .controller('showLinksSelectController', ShowLinksSelectController)
+  .controller('intentsController', IntentsController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)
+  .service('intentService', IntentService)
   .name;

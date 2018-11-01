@@ -30,7 +30,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary'},
               {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices'},
              {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints'},
-             //  {'label': 'Statistics', 'url': '/statistics'},
+             {'label': 'Intents', 'url': '/intents'},
              //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
@@ -307,6 +307,14 @@ export class appService {
 
   getDeviceMemoryAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
     return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/memory/' + deviceId + '/' + startTime + '/' + endTime + '/'  + resolutionSecond;
+  }
+
+  getIntentsUrl() {
+    return this.getZoneEndpoint() + '/intents';
+  }
+
+  getDeleteIntentUrl(appId, key) {
+    return this.getZoneEndpoint() + '/intents/' + appId + '/' + key;
   }
 }
 

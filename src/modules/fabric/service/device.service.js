@@ -328,9 +328,13 @@ export class DeviceService {
 
   getEndpointTableRowActions() {
     return [
-      {
+      /*{
         'label': this.translate('MODULES.SWITCHES.ENDPOINT.ROW.ACTION.DELETE'),
         'value': 'delete'
+      },*/
+      {
+        'label': 'Intent',
+        'value': 'intent'
       }
     ];
   }

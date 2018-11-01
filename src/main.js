@@ -155,9 +155,9 @@ angular
           loggedin: checkLoggedIn
         }
       })
-      .when('/statistics', {
-        template: require('./modules/fabric/template/statistic.html'),
-        controller: 'statisticController',
+      .when('/intents', {
+        template: require('./modules/fabric/template/intents.html'),
+        controller: 'intentsController',
         resolve: {
           loggedin: checkLoggedIn
         }

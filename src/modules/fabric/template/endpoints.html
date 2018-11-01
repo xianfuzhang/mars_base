@@ -9,10 +9,15 @@
     <div class="main__content">
       <section class="tab-content">
           <mdl-table actions-show="endpointModel.actionsShow"
+                     actions="endpointModel.rowActions"
                      row-click="onTableRowClick($event)"
+                     row-select-action="onTableRowSelectAction($event)"
                      provider="endpointModel.endpointProvider" api-ready="onEndpointApiReady($api)">
           </mdl-table>
         </section>
     </div>
   </section>
+  <ng-controller ng-controller="createIntentCtrl" class="createIntentWizard">
+    <wizard></wizard>
+  </ng-controller>
 </div>

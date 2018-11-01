@@ -252,6 +252,13 @@
   padding: 20px;
 }
 
+.createIntentWizard .wizard__body{
+  height: 250px;
+}
+.createIntentWizard .wizard__body__right{
+  overflow: hidden;
+}
+
 @keyframes show_div {
   from {
     right: 0;

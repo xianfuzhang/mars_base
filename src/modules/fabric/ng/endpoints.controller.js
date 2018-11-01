@@ -2,6 +2,7 @@ export class EndPointController {
   static getDI() {
     return [
       '$scope',
+      '$rootScope',
       '$q',
       '$filter',
       'appService',
@@ -23,7 +24,7 @@ export class EndPointController {
     this.scope.entities = [];
     this.scope.endpointModel = {
       actionsShow: this.di.deviceService.getEndpointActionsShow(),
-      //rowActions: this.di.deviceService.getEndpointTableRowActions(),
+      rowActions: this.di.deviceService.getEndpointTableRowActions(),
       endpointProvider: null,
       API: null
     };
@@ -38,12 +39,23 @@ export class EndPointController {
       this.scope.endpointModel.API = $api;
     };
     
-    // add by yazhou.miao
-    /*this.scope.addSwitch = () => {
-      this.di.$rootScope.$emit('switch-wizard-show');
-    }*/
+    this.scope.onTableRowSelectAction = (event) => {
+      if (!event.action) return;
+      if (event.action.value === 'intent') {
+         this.di.$rootScope.$emit('create-intent-show', {srcEndpoint: event.data.mac, endpoints: this.scope.entities});
+      }
+    };
+
     this.init();
+
+    let unsubscribers = [];
+    unsubscribers.push(this.di.$rootScope.$on('intent-list-refresh', (event) => {
+      this.scope.endpointModel.API.queryUpdate();
+    }));
     this.scope.$on('$destroy', () => {
+      unsubscribers.forEach((cb) => {
+        cb();
+      });
     });
   }
 
@@ -72,7 +84,7 @@ export class EndPointController {
           schema: this.di.deviceService.getEndpointTableSchema(),
           index_name: 'mac',
           rowCheckboxSupport: false,
-          rowActionsSupport: false
+          rowActionsSupport: true
         };
       }
     });
