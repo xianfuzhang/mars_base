@@ -1,6 +1,6 @@
 <div class="wizard__body__input flow_criteria stepForm">
     <div ng-repeat="inputItem in criteriaPageFirstInputs" class="stepForm__input">
-        <div class="stepForm__input__label">{{inputItem.field}}</div>
+        <div class="stepForm__input__label">{{inputItem.field}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span></div>
         <valid-input ng-change="firstInputChange()" ng-if="inputItem.input_type == undefined" v-require="{{inputItem.require}}" ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_criteria" ></valid-input>
         <mdl-select ng-if="inputItem.input_type =='select'" ng-model="inputItem.value" value-change="firstInputChange('select')"
                     display-label="inputItem.displayLabel">
@@ -10,7 +10,7 @@
     <div ng-if=" flowEstablishModel.tableIdType.value !='60'" ng-repeat="inputItemObject in criteriaPageSecondInputs" class="stepForm__input">
         <div ng-repeat="(field, inputItemArr) in inputItemObject">
             <div ng-repeat="inputItem in inputItemArr">
-                <div class="stepForm__input__label">{{inputItem.field}}</div>
+                <div class="stepForm__input__label">{{inputItem.field}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span></div>
                 <valid-input ng-if="inputItem.input_type == undefined" v-require="{{inputItem.require}}" ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_criteria" ></valid-input>
 
                 <mdl-select ng-if="inputItem.input_type =='select'" ng-model="inputItem.value"
@@ -34,7 +34,7 @@
                 <div class="type"> {{field}} </div>
                 <mdl-button class="remove" ng-click="delTable60Acl(field)" icon-name="remove_circle" size='small'></mdl-button>
                 <div ng-repeat="inputItem in inputItemArr">
-                    <div class="stepForm__input__label">{{inputItem.field}}</div>
+                    <div class="stepForm__input__label">{{inputItem.field}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span></div>
                     <valid-input ng-if="inputItem.input_type == undefined" v-require="{{inputItem.require}}"
                                  ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_criteria"></valid-input>
 

@@ -15,6 +15,7 @@ export class mdlCheckbox {
       data: '=ngModel',
       displayLabel: '=',
       disable: '=',
+      onClick : '&'
     };
     this.link = (...args) => this._link.apply(this, args);
   }
@@ -22,6 +23,7 @@ export class mdlCheckbox {
   _link (scope, element, attrs, ngModel) {
     scope.label = scope.displayLabel && scope.displayLabel.label;
     scope.id = scope.displayLabel && scope.displayLabel.id;
+    scope.onClick = scope.onClick || angular.noop;
 
     if (scope.disable) {
       element.find('input').attr('disabled', true);
@@ -38,6 +40,8 @@ export class mdlCheckbox {
     scope.clicked = (event) => {
       scope.data = !scope.data;
       ngModel.$setViewValue(scope.data);
+
+      scope.onClick();
       event.stopPropagation();
     };
   }
