@@ -16,6 +16,7 @@ var express = require('express'),
   configurationController = require('./controllers/configuration'),
   networkConfigurationController = require('./controllers/network_configuration'),
   analyzerController = require('./controllers/analyzer'),
+  flowgroupController = require('./controllers/flowgroup'),
   app = express(),
   //expressSession = require('express-session'),
   cookieParser = require('cookie-parser');
@@ -54,6 +55,7 @@ app.use('/mars/v1/configuration', configurationController);
 app.use('/mars/v1/network/configuration', networkConfigurationController);
 app.use('/mars/utility/confighistory/v1', confighistoryController);
 app.use('/mars/analyzer/v1/timerangebar', analyzerController);
+app.use('/mars/v1/groups', flowgroupController);
 
 // set port
 app.set('port', (process.env.PORT || 4001));
