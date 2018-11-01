@@ -201,34 +201,6 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  // // TODO: delete group
-  // deleteDeviceGroup(deviceId, groupId) {
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.delete(this.di.appService.getDeleteDeviceFlowUrl(deviceId, flowId)).then(
-  //     (res) => {
-  //       defer.resolve(res);
-  //     },
-  //     (error) => {
-  //       defer.reject(error);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-
-
-  // getDeviceGroups(deviceId){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.get(this.di.appService.getDeviceGroupsUrl(deviceId)).then(
-  //     (res) => {
-  //       defer.resolve(res.data.groups);
-  //     },
-  //     (error) => {
-  //       defer.reject(error);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-
   addDeviceGroup(deviceId, params){
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getDeviceGroupsUrl(deviceId), params).then(

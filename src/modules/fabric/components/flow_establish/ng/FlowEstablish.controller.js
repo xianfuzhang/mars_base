@@ -129,11 +129,7 @@ export class FlowEstablishController {
       return res_group;
     };
 
-    this.di.deviceDataManager.getDeviceGroups(scope.curDeviceId).then((res)=>{
-      if(res && res.length > 0) {
-        scope.deviceGroupsMapper = classifyGroups(res);
-      }
-    });
+
 
     scope.instructionSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.instructionSchema));
     scope.criteriaSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.criteriaSchema));
@@ -150,11 +146,11 @@ export class FlowEstablishController {
 
     let _addValue2input = (input) =>{
       if(input.input_type && input.input_type === 'select'){
-        let options = [];
-        this.di._.forEach(input.select_value, (item)=>{
-          options.push({'label': item, 'value':item});
-        });
-        input['displayLabel'] = {'options':options};
+        // let options = [];
+        // this.di._.forEach(input.select_value, (item)=>{
+        //   options.push({'label': item, 'value':item});
+        // });
+        input['displayLabel'] = {'options':input.select_value};
         input['value'] = angular.copy(input.displayLabel.options[0])
       } else {
         input['value'] = '';
@@ -167,6 +163,26 @@ export class FlowEstablishController {
         _addValue2input(input);
       });
       return cpInputs;
+    };
+
+    scope.groupChanged = () =>{
+      _initGroupIdsDisplayLabel();
+    };
+
+    scope.outputChange = () => {
+      let tableId = scope.flowTypeJson.tableId;
+      let type = scope.flowTypeJson.type;
+      if(tableId === '30'){
+        this.di._.forEach(scope.treatmentPageApplyAction, (item)=>{
+          if(item.field == 'output_to_ctrl'){
+            if(item.value === true){
+              scope.treatmentPageGroup['groups'] = null;
+            } else {
+              scope.treatmentPageGroup['groups'] = this.di.deviceService.getFlowTableWriteActionMapByFilter(tableId, type);
+            }
+          }
+        })
+      }
     };
 
     let addValue2SecondInputs = (inputs) => {
@@ -214,6 +230,46 @@ export class FlowEstablishController {
       if(scope.showWizard) return;
         scope.flow = initFlow;
         scope.curDeviceId = deviceId;
+
+        // this.di.deviceDataManager.getDeviceGroups(scope.curDeviceId).then((res)=>{
+        //   if(res && res.length > 0) {
+        //     scope.deviceGroupsMapper = classifyGroups(res);
+        //   }
+        // });
+
+
+        let res = [
+          {
+            "id": "2952791017",
+          },
+          {
+            "id": "2953791127",
+          },
+          {
+            "id": "1343178391",
+          },
+          {
+            "id": "1074742935",
+          },
+          {
+            "id": "806307479",
+          },
+          {
+            "id": "537872023",
+          },
+          {
+            "id": "269436567",
+          },
+          {
+            "id": "1001111",
+          },{
+            "id": "21",
+          }
+        ]
+        if(res && res.length > 0) {
+          scope.deviceGroupsMapper = classifyGroups(res);
+        }
+
         reset();
         this.di.$timeout(() => {
           scope.showWizard = true;
@@ -246,6 +302,29 @@ export class FlowEstablishController {
       return true;
     }
 
+
+    let _initGroupsDisplayLabel = () =>{
+
+      scope.treatmentPageGroup.groupsDisplayLabel = {'options':[]};
+      this.di._.forEach(scope.treatmentPageGroup['groups'], (group)=>{
+        scope.treatmentPageGroup.groupsDisplayLabel.options.push({'label': this.di.deviceService.getGroupNameByKey(group), 'value':group});
+      });
+
+      scope.treatmentPageGroup.groupTypeSelected = scope.treatmentPageGroup.groupsDisplayLabel['options'].length > 0?scope.treatmentPageGroup.groupsDisplayLabel['options'][0]:null;
+    };
+
+
+    let _initGroupIdsDisplayLabel = () =>{
+      scope.treatmentPageGroup.groupIdDisplayLabel = {'options':[{'label': '请选择Group', 'value':-1}]};
+      if(scope.treatmentPageGroup.groupTypeSelected){
+        let groups = scope.deviceGroupsMapper[this.di.deviceService.getGroupTypeId(scope.treatmentPageGroup.groupTypeSelected.value)];
+        this.di._.forEach(groups, (group)=>{
+          scope.treatmentPageGroup.groupIdDisplayLabel.options.push({'label': group['id'], 'value': group['id']});
+        });
+      }
+      scope.treatmentPageGroup.groupSelected = scope.treatmentPageGroup.groupIdDisplayLabel['options'][0]
+    };
+
     let initializeAction = () =>{
       let tableId = scope.flowTypeJson['tableId'];
       let type = scope.flowTypeJson['type'];
@@ -253,27 +332,7 @@ export class FlowEstablishController {
 
       scope.treatmentPageGroup['groups'] = this.di.deviceService.getFlowTableWriteActionMapByFilter(tableId, type);
 
-      let _initGroupsDisplayLabel = () =>{
 
-        scope.treatmentPageGroup.groupsDisplayLabel = {'options':[]};
-        this.di._.forEach(scope.treatmentPageGroup['groups'], (group)=>{
-          scope.treatmentPageGroup.groupsDisplayLabel.push({'label': this.di.deviceService.getGroupNameByKey(group), 'value':group});
-        });
-
-        scope.treatmentPageGroup.groupTypeSelected = scope.treatmentPageGroup.groupsDisplayLabel['options'].length > 0?scope.treatmentPageGroup.groupsDisplayLabel['options'][0]:null;
-      };
-
-
-      let _initGroupIdsDisplayLabel = () =>{
-        scope.treatmentPageGroup.groupIdDisplayLabel = {'options':[{'label': '请选择Group', 'value':-1}]};
-        if(scope.treatmentPageGroup.groupTypeSelected){
-          let groups = scope.deviceGroupsMapper[this.di.deviceService.getGroupTypeId(scope.treatmentPageGroup.groupTypeSelected.value)];
-          this.di._.forEach(groups, (group)=>{
-            scope.treatmentPageGroup.groupIdDisplayLabel.push({'label': group['id'], 'value': group['id']});
-          });
-        }
-        scope.treatmentPageGroup.groupSelected = scope.treatmentPageGroup.groupIdDisplayLabel['options'][0]
-      };
 
       if(scope.treatmentPageGroup['groups'] !== null){
         _initGroupsDisplayLabel();
@@ -415,11 +474,11 @@ export class FlowEstablishController {
       if(resJson.res === false || resJson.type === ''){
         return;
       } else {
-        if(resJson.type === null){
-          initializeAction();
-        } else {
+        if(resJson.type !== null){
           scope.criteriaPageSecondInputs = addValue2SecondInputs(this.di.deviceService.getFlowTableSecondInputRowByFilter(resJson['tableId'], resJson['type']));
         }
+        initializeAction();
+
       }
     };
 
@@ -429,7 +488,7 @@ export class FlowEstablishController {
       if(tableId === '10' || tableId === '60') {
         return {'res': true, 'tableId':tableId, 'type':null};
       }
-      if(!validCurrentDom('flow_instruction')){
+      if(!validCurrentDom('page_flow_criteria')){
         return {'res':false};
       }
 
@@ -520,7 +579,7 @@ export class FlowEstablishController {
     };
 
 
-    let formatInstructionValue = () => {
+   /* let formatInstructionValue = () => {
       let instructions = [];
       // console.log(this.di.$scope.instructionsModel);
       this.di._.forEach(this.di.$scope.instructionsModel, (instruction)=>{
@@ -541,22 +600,46 @@ export class FlowEstablishController {
         instructions.push(_ins);
       });
       return instructions;
-    };
+    };*/
 
-    let formatCriteriaValue = ()=>{
-      let criterias= [];
-      this.di._.forEach(this.di.$scope.criteriasModel, (criteria)=>{
-        let _ins = {'type': criteria.type};
-        this.di._.forEach(criteria.content, (item)=>{
-          // _ins[item.field] = item.value;
-          _ins[item.field] = item.type === 'int'?Number(item.value):item.value;
-        });
-        criterias.push(_ins);
+    // let formatCriteriaValue = ()=>{
+    //   let criterias= [];
+    //   this.di._.forEach(this.di.$scope.criteriasModel, (criteria)=>{
+    //     let _ins = {'type': criteria.type};
+    //     this.di._.forEach(criteria.content, (item)=>{
+    //       // _ins[item.field] = item.value;
+    //       _ins[item.field] = item.type === 'int'?Number(item.value):item.value;
+    //     });
+    //     criterias.push(_ins);
+    //   });
+    //
+    //   return criterias;
+    // };
+
+
+    let formatOfdpaCriteriaValue = () =>{
+      let criteria = [];
+
+      this.di._.forEach(scope.criteriaPageFirstInputs, (input)=>{
+        criteria.push(this.di.deviceService.getCriteriaObject(input));
       });
 
-      return criterias;
+      this.di._.forEach(scope.criteriaPageSecondInputs, (input)=>{
+        criteria.push(this.di.deviceService.getCriteriaObject(input));
+      });
+      return criteria;
     };
 
+    let formatOfdpaInstructionValue = () =>{
+      this.di._.forEach(scope.treatmentPageApplyAction, (action)=>{
+
+      });
+
+      if(scope.treatmentPageGroup.groups !== null){
+        let groupId = treatmentPageGroup.groupSelected.value;
+      }
+
+    };
 
     let reset = () => {
       scope.instructionsModel = [];
@@ -569,23 +652,23 @@ export class FlowEstablishController {
 
     this.di.$scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
-      if(di.$scope.criteriasModel && di.$scope.criteriasModel.length === 0){
-        inValidJson_Copy['errorMessage'] = translate('MODULES.SWITCH.DETAIL.CONTENT.NEED_ADD_SELECTOR');
-        // return inValidJson_Copy;
+      // if(di.$scope.criteriasModel && di.$scope.criteriasModel.length === 0){
+      //   inValidJson_Copy['errorMessage'] = translate('MODULES.SWITCH.DETAIL.CONTENT.NEED_ADD_SELECTOR');
+      //   // return inValidJson_Copy;
+      //   return new Promise((resolve, reject) => {
+      //     resolve(inValidJson_Copy);
+      //   });
+      // }
+
+      di.$rootScope.$emit('page_flow_instruction');
+      if(!validCurrentDom('flow_instruction')){
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
       }
 
-      di.$rootScope.$emit('page_flow_criteria');
-      if(!validCurrentDom('flow_criteria')){
-        return new Promise((resolve, reject) => {
-          resolve(inValidJson_Copy);
-        });
-      }
-
-      let instructions = formatInstructionValue();
-      let criteria = formatCriteriaValue();
+      let instructions = formatOfdpaInstructionValue();
+      let criteria = formatOfdpaCriteriaValue();
 
       let params = {
         priority: Number(scope.flow.priority),

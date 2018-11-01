@@ -1,21 +1,23 @@
 <div class="wizard__body__input flow_instruction">
 
     <div ng-repeat="inputItem in treatmentPageApplyAction" class="stepForm__input">
-        <div class="stepForm__input__label">{{inputItem.field}}</div>
-        <mdl-checkbox nf-if="inputItem.input_type =='checkbox'" style="margin-left: -8px;margin-top: 16px;" ng-model="inputItem.value"
-                      display-label="inputItem.displayLabel">
+        <div ng-if="inputItem.input_type == undefined" class="stepForm__input__label">{{inputItem.field}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span></div>
+        <mdl-checkbox ng-if="inputItem.input_type =='checkbox'" on-click="outputChange()" style="margin-left: -8px;margin-top: 16px;" ng-model="inputItem.value"
+                      display-label="{id: 'check_output', label: '输出到控制器'}">
         </mdl-checkbox>
         <valid-input ng-if="inputItem.input_type == undefined" v-require="{{inputItem.require}}" ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_instruction"></valid-input>
     </div>
 
     <div ng-if="treatmentPageGroup.groups != null" class="stepForm__input">
-        <mdl-select ng-model="treatmentPageGroup.groupTypeSelected"
-                    display-label="treatmentPageGroup.groupsDisplayLabel">
+        <div class="stepForm__input__label">Group类型</div>
+        <mdl-select ng-model="treatmentPageGroup.groupTypeSelected" value-change="groupChanged()"
+                    display-label="treatmentPageGroup.groupsDisplayLabel" >
         </mdl-select>
     </div>
-
-    <mdl-select ng-if="treatmentPageGroup.groups != null" ng-model="treatmentPageGroup.groupSelected"
-                display-label="treatmentPageGroup.groupIdDisplayLabel">
-    </mdl-select>
-
+    <div  ng-if="treatmentPageGroup.groups != null" >
+        <div class="stepForm__input__label">Group Id</div>
+        <mdl-select ng-model="treatmentPageGroup.groupSelected"
+                    display-label="treatmentPageGroup.groupIdDisplayLabel">
+        </mdl-select>
+    </div>
 </div>

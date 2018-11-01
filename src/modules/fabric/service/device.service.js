@@ -8,6 +8,35 @@ export class DeviceService {
     DeviceService.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
+
+    this.criteria4Submit = {
+      'in_port':{'type': 'IN_PORT', 'field':'port', 'field_type': 'string'},
+      'in_phy_port':{'type': 'IN_PHY_PORT', 'field':'port'},
+      'destination_ipv4':{'type': 'IPV4_DST', 'field':'ip'},
+      'vlan_id':{'type': 'VLAN_VID', 'field':'vlanId'},
+      'destination_ipv6':{'type': 'IPV6_DST', 'field':'ip'},
+      'ip_proto':{'type': 'IP_PROTO', 'field':'protocol'},
+      'udp_dport':{'type': 'UDP_DST', 'field':'udpPort'},
+      'udp_sport':{'type': 'UDP_SRC', 'field':'udpPort'},
+      'source_ipv4':{'type': 'IPV4_SRC', 'field':'ip'},
+      'source_ipv6':{'type': 'IPV6_SRC', 'field':'ip'},
+      'ether_type':{'type': 'ETH_TYPE', 'field':'ethType'},
+      'destination_mac':{'type': 'ETH_DST', 'field':'mac'},
+      'source_mac':{'type': 'ETH_SRC', 'field':'mac'},
+      'vlan_pcp':{'type': 'VLAN_PCP', 'field':'priority'},
+      'ip_dscp':{'type': 'IP_DSCP', 'field':'ipDscp'},
+      'ip_ecn':{'type': 'IP_ECN', 'field':'ipEcn'},
+      'tcp_sport':{'type': 'TCP_SRC', 'field':'tcpPort'},
+      'tcp_dport':{'type': 'TCP_DST', 'field':'tcpPort'},
+      'icmpv4_type':{'type': 'ICMPV4_TYPE', 'field':'icmpType'},
+      'icmpv4_code':{'type': 'ICMPV4_CODE', 'field':'icmpCode'},
+      'ipv6_flow_label':{'type': 'IPV6_FLABEL', 'field':'flowlabel'},
+      'sctp_sport':{'type': 'SCTP_SRC', 'field':'sctpPort'},
+      'sctp_dport':{'type': 'SCTP_DST', 'field':'sctpPort'},
+      'icmpv6_type':{'type': 'ICMPV6_TYPE', 'field':'icmpv6Type'},
+      'icmpv6_code':{'type': 'ICMPV6_CODE', 'field':'icmpv6Code'},
+      'ipv4_arp_spa':{'type': 'ARP_SPA', 'field':'ip'}
+    };
     this.translate = this.di.$filter('translate');
   }
 
@@ -52,6 +81,8 @@ export class DeviceService {
   getEndpointActionsShow() {
     return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
   }
+
+
 
   getDeviceTableSchema() {
     return [
@@ -639,14 +670,14 @@ export class DeviceService {
         {'field':'vlan_id', 'type':'int', 'require':'true'}
       ],
       '20':[
-        {'field':'ether_type', 'input_type':'select', 'select_value':['0x0800','0x86dd']},
+        {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
         {'field':'destination_mac', 'type':'mac', 'require':'true'}
       ],
       '30':[
-        {'field':'ether_type', 'input_type':'select', 'select_value':['0x0800','0x86dd']}
+        {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]}
       ],
       '40':[
-        {'field':'ether_type', 'input_type':'select', 'select_value':['0x0800','0x86dd']},
+        {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
       ],
       '50':[
         {'field':'vlan_id', 'type':'int','require':'true'},
@@ -662,6 +693,9 @@ export class DeviceService {
     let all = this.getFlowTableFirstInputRow();
     return all[tableId];
   }
+
+
+
 
   getFlowTableSecondInputRow() {
 
@@ -728,11 +762,11 @@ export class DeviceService {
         {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
         {'field': 'push_vlan', 'type': 'int', 'require': 'false'},
       ],
-      '20': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
-      '30': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
+      '20': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':"{'id': 'check_1', 'label': 'output to controller'}"}],
+      '30': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':"{'id': 'check_1', 'label': 'output to controller'}"}],
       '40': [],
-      '50': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
-      '60': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'switch'}],
+      '50': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':"{'id': 'check_1', 'label': 'output to controller'}"}],
+      '60': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':"{'id': 'check_1', 'label': 'output to controller'}"}],
     }
   }
 
@@ -820,15 +854,15 @@ export class DeviceService {
         {'field': 'in_port', 'type': 'int', 'require': 'true'},
       ],
       'ether_type': [
-        {'field': 'ether_type', 'type': 'int', 'require': 'true', 'input_type':'select', 'select_value':['0x0800','0x86dd']},
+        {'field': 'ether_type', 'type': 'int', 'require': 'true', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
       ],
       'source_mac': [
         {'field': 'source_mac', 'type': 'mac', 'require': 'true'},
-        {'field': 'source_mac_mask', 'type': 'string', 'require': 'true'},
+        // {'field': 'source_mac_mask', 'type': 'string', 'require': 'false'},
       ],
       'destination_mac': [
         {'field': 'destination_mac', 'type': 'mac', 'require': 'true'},
-        {'field': 'destination_mac_mask', 'type': 'string', 'require': 'true'},
+        // {'field': 'destination_mac_mask', 'type': 'string', 'require': 'false'},
       ],
       'vlan_id': [
         {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
@@ -838,19 +872,19 @@ export class DeviceService {
       ],
       'source_ipv4': [
         {'field': 'source_ipv4', 'type': 'ipv4', 'require': 'true'},
-        {'field': 'source_ipv4_mask', 'type': 'string', 'require': 'true'},
+        {'field': 'source_ipv4_mask', 'type': 'int', 'require': 'true'},
       ],
       'destination_ipv4': [
         {'field': 'destination_ipv4', 'type': 'ipv4', 'require': 'true'},
-        {'field': 'destination_ipv4_mask', 'type': 'string', 'require': 'true'},
+        {'field': 'destination_ipv4_mask', 'type': 'int', 'require': 'true'},
       ],
       'source_ipv6': [
         {'field': 'source_ipv6', 'type': 'ipv6', 'require': 'true'},
-        {'field': 'source_ipv6_mask', 'type': 'string', 'require': 'true'},
+        {'field': 'source_ipv6_mask', 'type': 'int', 'require': 'true'},
       ],
       'destination_ipv6': [
         {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'true'},
-        {'field': 'destination_ipv6_mask', 'type': 'string', 'require': 'true'},
+        {'field': 'destination_ipv6_mask', 'type': 'int', 'require': 'true'},
       ],
       'ipv4_arp_spa': [
         {'field': 'ipv4_arp_spa', 'type': 'int', 'require': 'true'},
@@ -913,6 +947,19 @@ export class DeviceService {
   isIpv6MultiMAC(mac){
     let pattern = '^((3[3-9a-fA-F]|[4-9a-fA-F][0-9a-fA-F]):){2}(00:){3}00$';
     return mac.search(pattern) === -1?false:true;
+  }
+
+
+  getCriteriaObject(item){
+    let field = item['field'];
+    let value = item['value'];
+    let res = angular.copy(this.criteria4Submit['field']);
+    if(value instanceof  Object){
+
+    }
+    res[res['field']] = value;
+    delete res['field'];
+    return res;
   }
 
 
