@@ -632,6 +632,7 @@ export class GroupEstablishController {
   
     unsubscribes.push(scope.$watch('groupModel.vlan_id', (newValue, oldValue) => {
       if(newValue == oldValue) return;
+      scope.groupModel.L2_Interface_Groups = []
       initGroupDisLabOptions();
     },true));
     
