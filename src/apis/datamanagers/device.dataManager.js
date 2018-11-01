@@ -351,17 +351,54 @@ export class DeviceDataManager {
   }
 
   // get group detail by group id
-  getDeviceGroupType(groupId) {
-    let groupStr = groupId.toString(2);
+  parseDeviceGroup(groupId) {
+    let returnObj = {}
+    let tmpIDStr = groupId.toString(2);
+    let idStr = tmpIDStr;
 
     // 不足32位补0
-    for(let i=0; i < 32 - groupStr.length; i++) {
-      groupStr = '0' + groupStr;
+    for(let i=0; i < 32 - tmpIDStr.length; i++) {
+      idStr = '0' + idStr;
     }
-    let typeInt = parseInt(groupStr.slice(0, 4), 2)
+    let typeInt = parseInt(idStr.slice(0, 4), 2);
     let groupType = `GROUP-Type-${typeInt}`;
+  
+    returnObj.nameId = groupType;
+    switch(groupType) {
+      case 'GROUP-Type-0':
+        returnObj.name = 'L2 Interface'
+        returnObj.vlan_id = parseInt(idStr.slice(4, 16), 2);
+        returnObj.port = parseInt(idStr.slice(16, 32), 2);
+        break;
+      case 'GROUP-Type-1':
+        returnObj.name = 'L2 Rewrite'
+        break;
+      case 'GROUP-Type-2':
+        returnObj.name = 'L3 Unicast'
+        break;
+      case 'GROUP-Type-3':
+        returnObj.name = 'L2 Multicast'
+        returnObj.vlan_id = parseInt(idStr.slice(4, 16), 2);
+        break;
+      case 'GROUP-Type-4':
+        returnObj.name = 'L2 Flood'
+        returnObj.vlan_id = parseInt(idStr.slice(4, 16), 2);
+        break;
+      case 'GROUP-Type-5':
+        returnObj.name = 'L3 Interface'
+        break;
+      case 'GROUP-Type-6':
+        returnObj.name = 'L3 Multicast'
+        break;
+      case 'GROUP-Type-7':
+        returnObj.name = 'L3 ECMP'
+        break;
+      case 'GROUP-Type-11':
+        returnObj.name = 'L2 Unfiltered Interface'
+        break;
+    }
     
-    // TODO:
+    return returnObj;
   }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();

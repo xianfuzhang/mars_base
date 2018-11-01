@@ -70,7 +70,7 @@ export class DeviceDetailService {
   }
   
   getGroupActionsShow() {
-    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
+    return {'menu': false, 'add': true, 'remove': false, 'refresh': true, 'search': false};
   }
 
   getDevicePortsSchema() {
@@ -384,13 +384,18 @@ export class DeviceDetailService {
         'layout': {'visible': true, 'sortable': true}
       },
       {
+        'label': this.translate('MODULES.SWITCH.DETAIL.GROUP.COLUMN.NAME'),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
         'label': this.translate('MODULES.SWITCH.DETAIL.GROUP.COLUMN.TYPE'),
-        'field': 'duration',
+        'field': 'type',
         'layout': {'visible': true, 'sortable': true}
       },
       {
         'label': this.translate('MODULES.SWITCH.DETAIL.GROUP.COLUMN.VLAN_ID'),
-        'field': 'state',
+        'field': 'vlan_id',
         'layout': {'visible': true, 'sortable': true}
       },
       {

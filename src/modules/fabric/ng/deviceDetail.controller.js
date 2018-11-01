@@ -446,8 +446,10 @@ export class DeviceDetailController {
         // TODO: complete group data
         entities.forEach((entity) => {
           let obj = {};
-          obj['id'] = entity.id;
-          obj['vlanId'] = entity.vlanId;
+          let groupObj = this.di.deviceDataManager.parseDeviceGroup(entity.id);
+          obj['id'] = '0x' + entity.id.toString(16); // 转16进制
+          obj['name'] = groupObj.name;
+          obj['vlan_id'] = groupObj.vlan_id;
           obj['type'] = entity.type;
           obj['buckets'] = JSON.stringify(entity.buckets);
           this.scope.detailModel.entities.push(obj);
