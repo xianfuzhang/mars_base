@@ -13,7 +13,7 @@ var express = require('express'),
   useraccountController = require('./controllers/useraccount'),
   loginController = require('./controllers/login'),
   confighistoryController = require('./controllers/confighistory'),
-  configurationController = require('./controllers/configuration'),
+  // configurationController = require('./controllers/configuration'),
   networkConfigurationController = require('./controllers/network_configuration'),
   analyzerController = require('./controllers/analyzer'),
   flowgroupController = require('./controllers/flowgroup'),
@@ -52,7 +52,7 @@ app.use('/mars/alert/v1', alertController);
 app.use('/mars/utility/logs/v1', logController);
 app.use('/mars/v1/cluster', clusterController);
 app.use('/mars/v1', loginController);
-app.use('/mars/v1/configuration', configurationController);
+// app.use('/mars/v1/configuration', configurationController);
 app.use('/mars/v1/network/configuration', networkConfigurationController);
 app.use('/mars/utility/confighistory/v1', confighistoryController);
 app.use('/mars/analyzer/v1/timerangebar', analyzerController);

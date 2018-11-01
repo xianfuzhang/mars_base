@@ -5,14 +5,14 @@ const express = require('express'),
 
 const configFilePath = path.join(__dirname, '../assets/network');
 
-// router.get('/', function (req, res) {
-//   let file = '../assets/startup_netcfg';
-//   let filepath = path.join(__dirname, file);
-//
-//   let config = JSON.parse(fs.readFileSync(filepath));
-//
-//   res.json(config);
-// });
+router.get('/', function (req, res) {
+  let file = '../assets/startup_netcfg';
+  let filepath = path.join(__dirname, file);
+
+  let config = JSON.parse(fs.readFileSync(filepath));
+
+  res.json(config);
+});
 //
 // router.post('/', function (req, res) {
 //   let file = '../assets/startup_netcfg';
@@ -51,12 +51,13 @@ router.get('/files/:filename', function (req, res) {
 });
 
 router.post('/file-modify/:filename', function (req, res) {
-  let filepath = ''
-  if(req.params.filename == 'startup_netcfg') {
-    filepath = path.join(__dirname, '../assets/', req.params.filename);
-  } else {
-    filepath = path.join(configFilePath, req.params.filename);
-  }
+  // let filepath = ''
+  // if(req.params.filename == 'startup_netcfg') {
+  //   filepath = path.join(__dirname, '../assets/', req.params.filename);
+  // } else {
+  //
+  // }
+  let filepath = path.join(configFilePath, req.params.filename);
   
   fs.writeFile(filepath, JSON.stringify(req.body), null, (err) => {
     if(err) {

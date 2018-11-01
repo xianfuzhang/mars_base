@@ -85,7 +85,7 @@ export class appService {
         }
       },
       CRYPTO_STRING: 'secret',
-      DEFAULT_FILENAME: 'startup_netcfg' // default configuration file name
+      DEFAULT_FILENAME: 'startup_netcfg.cfg' // default configuration file name
     };
   }
 
@@ -206,7 +206,7 @@ export class appService {
   }
 
   getConfigurationUrl(subjectClass, subject){
-    let url = this.getZoneEndpoint() + '/configuration';
+    let url = this.getZoneEndpoint() + '/network/configuration';
     if(subjectClass){
       url = url + '/' + subjectClass;
       if(subject){
