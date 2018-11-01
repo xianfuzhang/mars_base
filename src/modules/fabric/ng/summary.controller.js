@@ -671,6 +671,10 @@ export class FabricSummaryController {
       this.di.$rootScope.$emit('flow-wizard-show', this.di.$scope.fabricModel.showSwitchId);
 
     }));
+  
+    unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_create_group',(evt)=>{
+      this.di.$rootScope.$emit('group-wizard-show', this.di.$scope.fabricModel.showSwitchId);
+    }));
 
     unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_show_flow',(evt)=>{
       this.di.modalManager.open({
@@ -685,6 +689,21 @@ export class FabricSummaryController {
             }
           }
         });
+    }));
+  
+    unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_show_group',(evt)=>{
+      this.di.modalManager.open({
+        template: require('../template/showSwitchGroups.html'),
+        controller: 'showSwitchGroupsController',
+        windowClass: 'show-switch-group-modal',
+        resolve: {
+          dataModel: () => {
+            return {
+              switchId: this.di.$scope.fabricModel.showSwitchId
+            }
+          }
+        }
+      });
     }));
 
 

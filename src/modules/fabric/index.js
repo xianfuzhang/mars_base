@@ -18,6 +18,7 @@ import { FlowEstablishController } from './components/flow_establish/ng/FlowEsta
 import {CreateIntentController} from './components/createIntent/ng/createIntent.controller';
 import { GroupEstablishController } from './components/group_establish/ng/GroupEstablish.controller';
 import {ShowSwitchFlowsController} from './ng/showSwitchFlows.controller';
+import {ShowSwitchGroupsController} from './ng/showSwitchGroups.controller';
 import {ShowLinksSelectController} from './ng/showLinksSelect.controller';
 import {IntentsController} from './ng/intents.controller';
 
@@ -35,6 +36,7 @@ export default angular
   .controller('groupEstablishController', GroupEstablishController)
   .controller('showSwitchFlowsController', ShowSwitchFlowsController)
   .controller('createIntentCtrl', CreateIntentController)
+  .controller('showSwitchGroupsController', ShowSwitchGroupsController)
   .controller('showLinksSelectController', ShowLinksSelectController)
   .controller('intentsController', IntentsController)
   .service('deviceService', DeviceService)
