@@ -613,9 +613,10 @@ export class GroupEstablishController {
       });
     };
   
-    unsubscribes.push(scope.$watch('groupModel.L2InterfaceGroupsSelected', (selected) => {
-      if(selected.value != '' && scope.groupModel.L2_Interface_Groups.indexOf(selected.value) == -1){
-        scope.groupModel.L2_Interface_Groups.push(selected.value)
+    unsubscribes.push(scope.$watch('groupModel.L2InterfaceGroupsSelected', (newValue, oldValue) => {
+      if(_.isEqual(newValue, oldValue)) return;
+      if(newValue && newValue.value != '' && scope.groupModel.L2_Interface_Groups.indexOf(newValue.value) == -1){
+        scope.groupModel.L2_Interface_Groups.push(newValue.value)
       }
     }, true));
   
