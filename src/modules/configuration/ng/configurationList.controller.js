@@ -34,7 +34,7 @@ export class ConfigurationListController {
     let initConfig = {
       // configurationShow: '',
       // fileName: '',
-      mode: 'show',  // 'show' / 'edit' / 'add' / 'default'
+      mode: 'show',  // 'show' / 'edit' / 'add' / 'start_up'
       globalInvalid: false,
       saveBtnInvalid: false
     };
@@ -104,8 +104,8 @@ export class ConfigurationListController {
         }
       }
       
-      if(scope.configurationListModel.mode == 'default'){
-        filename = 'default'
+      if(scope.configurationListModel.mode == 'start_up'){
+        filename = DEFAULT_FILENAME
       }
   
       this.di.dialogService.createDialog('confirm', this.translate('MODULES.CONFIGURATION.UPDATE.CONFORM'))
@@ -124,51 +124,72 @@ export class ConfigurationListController {
       scope.saveBtnInvalid = true;
       
       // save the config to file
-      if(filename == 'default') { // save the config file
-        this.di.configurationDataManager.updateConfiguration(null, null, config).then(
-          () => {
-            this.di.dialogService.createDialog('success', this.translate('MODULES.CONFIGURATION_LIST.SUCCESS.SAVE'))
-              .then((data)=>{
-                init();
-              })
-          },
-          () => {
-            this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.SAVE'))
-              .then((data)=>{
-                scope.saveBtnInvalid = false;
-              })
-          }
-        );
-      } else { // save the other config file
-        this.di.configurationDataManager.setConfigurationFile(filename, config).then(
-          (res) => { // success to save
-            this.di.dialogService.createDialog('success', this.translate('MODULES.CONFIGURATION_LIST.SUCCESS.SAVE'))
-              .then((data)=>{
-                init();
-              })
-          },
-          (err) => { // error to save
-            this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.SAVE'))
-              .then((data)=>{
-                scope.saveBtnInvalid = false;
-              })
-          }
-        )
-      }
+      // if(filename == 'default') { // save the config file
+      //   this.di.configurationDataManager.updateConfiguration(null, null, config).then(
+      //     () => {
+      //       this.di.dialogService.createDialog('success', this.translate('MODULES.CONFIGURATION_LIST.SUCCESS.SAVE'))
+      //         .then((data)=>{
+      //           init();
+      //         })
+      //     },
+      //     () => {
+      //       this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.SAVE'))
+      //         .then((data)=>{
+      //           scope.saveBtnInvalid = false;
+      //         })
+      //     }
+      //   );
+      // } else { // save the other config file
+      //   this.di.configurationDataManager.setConfigurationFile(filename, config).then(
+      //     (res) => { // success to save
+      //       this.di.dialogService.createDialog('success', this.translate('MODULES.CONFIGURATION_LIST.SUCCESS.SAVE'))
+      //         .then((data)=>{
+      //           init();
+      //         })
+      //     },
+      //     (err) => { // error to save
+      //       this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.SAVE'))
+      //         .then((data)=>{
+      //           scope.saveBtnInvalid = false;
+      //         })
+      //     }
+      //   )
+      // }
+  
+      this.di.configurationDataManager.setConfigurationFile(filename, config).then(
+        (res) => { // success to save
+          this.di.dialogService.createDialog('success', this.translate('MODULES.CONFIGURATION_LIST.SUCCESS.SAVE'))
+            .then((data)=>{
+              init();
+            })
+        },
+        (err) => { // error to save
+          this.di.dialogService.createDialog('error', this.translate('MODULES.CONFIGURATION_LIST.ERROR.SAVE'))
+            .then((data)=>{
+              scope.saveBtnInvalid = false;
+            })
+        }
+      )
     }
     
     let getConfigurationList = ()=>{
       this.di.configurationDataManager.getConfigurationFileList()
         .then((res)=>{
 
-          let opts = [{label:"默认配置",value:"default"}];
-          // let opts = [];
+          let opts = [{label:"当前运行配置",value:"default"}];
+          let startUpFile = '';
           if(res && res['files'] && res['files'] instanceof Array){
             this.di._.forEach(res['files'], (item)=>{
               if(item != DEFAULT_FILENAME){ // is not default file
                 opts.push({label:item, value:item})
+              } else {
+                startUpFile = DEFAULT_FILENAME;
               }
             });
+          }
+          
+          if(startUpFile != ''){
+            opts.splice(1, 0, {label:'开机默认配置', value:DEFAULT_FILENAME})
           }
 
           scope.fileNameSelectedDisLab.options = opts;
@@ -207,7 +228,7 @@ export class ConfigurationListController {
       if(newValue == 'show'){
         scope.options.mode = 'view';
         scope.saveBtnInvalid = true;
-      } else if(newValue == 'default') {
+      } else if(newValue == 'start_up') {
         scope.options.mode = 'view';
         scope.saveBtnInvalid = false;
         scope.saveBtnLabel = this.translate('MODULES.CONFIGURATION.OPTION.SAVE');

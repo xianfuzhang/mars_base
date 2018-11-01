@@ -30,14 +30,16 @@
             <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
                        display-label="{id: 'show_radio', label: '浏览', name: 'mode', value: 'show'}">
             </mdl-radio>
-            <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
+            <mdl-radio ng-hide="configurationListModel.fileNameSelected.value == 'default'"
+                       ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
                        display-label="{id: 'edit_radio', label: '编辑', name: 'mode', value: 'edit'}">
             </mdl-radio>
             <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
                        display-label="{id: 'add_radio', label: '新增', name: 'mode', value: 'add'}">
             </mdl-radio>
-            <mdl-radio ng-show="configurationListModel.fileNameSelected.value != 'default'" ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
-                       display-label="{id: 'add_radio', label: '另存为默认配置', name: 'mode', value: 'default'}">
+            <mdl-radio ng-hide="configurationListModel.fileNameSelected.value == 'startup_netcfg.cfg'"
+                       ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
+                       display-label="{id: 'add_radio', label: '另存为开机默认配置', name: 'mode', value: 'start_up'}">
             </mdl-radio>
           </div>
 

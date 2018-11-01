@@ -33,17 +33,17 @@ export class ConfigurationDataManager{
   }
 
   updateConfiguration(subjectClass, subject, value){
-    // let defer = this.di.$q.defer();
-    // this.di.$http.post(this.di.appService.getConfigurationUrl(subjectClass, subject), value).then(
-    //   (res) => {
-    //     defer.resolve(res);
-    //   },
-    //   (error) => {
-    //     defer.reject({'error': error});
-    //   }
-    // );
-    // return defer.promise;
-    return this.setConfigurationFile(this.di.appService.CONST.DEFAULT_FILENAME, value)
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getConfigurationUrl(subjectClass, subject), value).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject({'error': error});
+      }
+    );
+    return defer.promise;
+    // return this.setConfigurationFile(this.di.appService.CONST.DEFAULT_FILENAME, value)
   }
 
   deleteConfiguration(subjectClass, subject){
