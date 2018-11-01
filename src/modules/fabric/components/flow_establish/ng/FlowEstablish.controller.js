@@ -236,44 +236,44 @@ export class FlowEstablishController {
         scope.flow = initFlow;
         scope.curDeviceId = deviceId;
 
-        // this.di.deviceDataManager.getDeviceGroups(scope.curDeviceId).then((res)=>{
-        //   if(res && res.length > 0) {
-        //     scope.deviceGroupsMapper = classifyGroups(res);
-        //   }
-        // });
-
-
-        let res = [
-          {
-            "id": "2952791017",
-          },
-          {
-            "id": "2953791127",
-          },
-          {
-            "id": "1343178391",
-          },
-          {
-            "id": "1074742935",
-          },
-          {
-            "id": "806307479",
-          },
-          {
-            "id": "537872023",
-          },
-          {
-            "id": "269436567",
-          },
-          {
-            "id": "1001111",
-          },{
-            "id": "21",
+        this.di.deviceDataManager.getDeviceGroups(scope.curDeviceId).then((res)=>{
+          if(res && res.length > 0) {
+            scope.deviceGroupsMapper = classifyGroups(res);
           }
-        ]
-        if(res && res.length > 0) {
-          scope.deviceGroupsMapper = classifyGroups(res);
-        }
+        });
+
+
+        // let res = [
+        //   {
+        //     "id": "2952791017",
+        //   },
+        //   {
+        //     "id": "2953791127",
+        //   },
+        //   {
+        //     "id": "1343178391",
+        //   },
+        //   {
+        //     "id": "1074742935",
+        //   },
+        //   {
+        //     "id": "806307479",
+        //   },
+        //   {
+        //     "id": "537872023",
+        //   },
+        //   {
+        //     "id": "269436567",
+        //   },
+        //   {
+        //     "id": "1001111",
+        //   },{
+        //     "id": "21",
+        //   }
+        // ]
+        // if(res && res.length > 0) {
+        //   scope.deviceGroupsMapper = classifyGroups(res);
+        // }
 
         reset();
         this.di.$timeout(() => {
@@ -722,6 +722,7 @@ export class FlowEstablishController {
         timeout: Number(scope.flow.timeout),
         isPermanent: scope.flow.isPermanent,
         deviceId: scope.curDeviceId,
+        tableId : Number(scope.flowTypeJson['tableId']),
         treatment:{
           instructions:instructions
         },
