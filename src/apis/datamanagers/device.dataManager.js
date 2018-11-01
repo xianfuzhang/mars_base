@@ -353,7 +353,7 @@ export class DeviceDataManager {
   // get group detail by group id
   parseDeviceGroup(groupId) {
     let returnObj = {}
-    let tmpIDStr = groupId.toString(2);
+    let tmpIDStr = parseInt(groupId).toString(2);
     let idStr = tmpIDStr;
 
     // 不足32位补0
