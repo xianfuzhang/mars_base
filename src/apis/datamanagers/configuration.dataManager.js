@@ -88,7 +88,7 @@ export class ConfigurationDataManager{
 
   setConfigurationFile(filename, config){
     let defer = this.di.$q.defer();
-    this.di.$http.post(this.di.appService.getConfigurationFileUrl(filename), config).then(
+    this.di.$http.post(this.di.appService.updateConfigurationFileUrl(filename), config).then(
       (res) => {
         defer.resolve(res);
       },
