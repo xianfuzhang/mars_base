@@ -116,10 +116,13 @@ export class FlowEstablishController {
       let res_group = {};
       this.di._.forEach(groups, (group)=>{
 
+
         let id = group['id'] + '';
         let binaryId = parseInt(id).toString(2) + '';
         let fullBinary = '0'.repeat(32-binaryId.length) + binaryId;
         let typeId = parseInt(fullBinary.substr(0, 4),2) + '';
+
+        group['id'] = '0x' + parseInt(id).toString(16);
         if(res_group[typeId]){
           res_group[typeId].push(group);
         } else {
@@ -155,6 +158,8 @@ export class FlowEstablishController {
       } else {
         input['value'] = '';
       }
+
+      input['field_label'] = input['field'].replace('_',' ');
     };
 
     let addValue2FirstInputs = (inputs) => {
@@ -621,32 +626,67 @@ export class FlowEstablishController {
       let criteria = [];
 
       this.di._.forEach(scope.criteriaPageFirstInputs, (input)=>{
-        criteria.push(this.di.deviceService.getCriteriaObject(input));
+        // criteria.push(this.di.deviceService.getCriteriaObject(input));
+        let res = this.di.deviceService.getCriteriaObject(input);
+        if(res !== null) criteria.push(res);
       });
 
-      this.di._.forEach(scope.criteriaPageSecondInputs, (input)=>{
-        criteria.push(this.di.deviceService.getCriteriaObject(input));
+      this.di._.forEach(scope.criteriaPageSecondInputs, (inputJson)=>{
+        let keys = this.di._.keys(inputJson);
+        this.di._.forEach(keys, (key)=>{
+          let value = inputJson[key];
+          if(value instanceof Array && value.length > 0){
+            let res = this.di.deviceService.getCriteriaObject(value[0]);
+            if(res !== null) criteria.push(res);
+
+          }
+        });
+
+        // if(inputArr && inputArr.length > 0){
+        //   criteria.push(this.di.deviceService.getCriteriaObject(inputArr[0]));
+        // }
       });
       return criteria;
     };
 
     let formatOfdpaInstructionValue = () =>{
-      this.di._.forEach(scope.treatmentPageApplyAction, (action)=>{
+      let treatment = [];
 
+      this.di._.forEach(scope.treatmentPageApplyAction, (action)=>{
+        if(action['field'] === 'output_to_ctrl' && action.value === true){
+          treatment.push({
+            "type": "OUTPUT",
+            "port": "CONTROLLER"
+          })
+        }
+        if(action['field'] !== 'output_to_ctrl'){
+          let res = this.di.deviceService.getTreatmentObject(action);
+          if(res !== null){
+            treatment.push(res)
+          }
+        }
       });
 
       if(scope.treatmentPageGroup.groups !== null){
-        let groupId = treatmentPageGroup.groupSelected.value;
+        let groupId = scope.treatmentPageGroup.groupSelected.value;
+        if(typeof groupId === 'string'){
+          groupId = parseInt(groupId);
+        }
+        treatment.push({
+          "type": "GROUP",
+          "groupId": groupId
+        })
       }
-
+      return treatment;
     };
 
     let reset = () => {
-      scope.instructionsModel = [];
-      scope.criteriasModel = [];
       scope.flow.priority = '';
       scope.flow.timeout = '';
       scope.flow.isPermanent = false;
+
+      scope.flowEstablishModel.tableIdType = angular.copy(scope.tableIdSchemaList.options[0]);
+      scope.changeTableId(scope.flowEstablishModel.tableIdType);
 
     };
 
@@ -659,6 +699,13 @@ export class FlowEstablishController {
       //     resolve(inValidJson_Copy);
       //   });
       // }
+
+      if(scope.treatmentPageGroup.groups !== null && scope.treatmentPageGroup.groupSelected.value === -1){
+        inValidJson_Copy['errorMessage'] = "请选择Group ID!";
+        return new Promise((resolve, reject) => {
+              resolve(inValidJson_Copy);
+            });
+      }
 
       di.$rootScope.$emit('page_flow_instruction');
       if(!validCurrentDom('flow_instruction')){
