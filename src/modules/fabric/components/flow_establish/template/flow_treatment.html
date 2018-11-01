@@ -1,10 +1,11 @@
 <div class="wizard__body__input flow_instruction">
 
     <div ng-repeat="inputItem in treatmentPageApplyAction" class="stepForm__input">
-        <div ng-if="inputItem.input_type == undefined" class="stepForm__input__label">{{inputItem.field}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span></div>
-        <mdl-checkbox ng-if="inputItem.input_type =='checkbox'" on-click="outputChange()" style="margin-left: -8px;margin-top: 16px;" ng-model="inputItem.value"
-                      display-label="{id: 'check_output', label: '输出到控制器'}">
+        <div ng-if="inputItem.input_type == undefined" class="stepForm__input__label">{{inputItem.field_label}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span></div>
+        <mdl-checkbox ng-if="inputItem.input_type =='checkbox'" on-click="outputChange()" style="margin-left: -8px;margin-top: 16px;" class="title_checkbox" ng-model="inputItem.value"
+                      display-label="inputItem.displayLabel">
         </mdl-checkbox>
+
         <valid-input ng-if="inputItem.input_type == undefined" v-require="{{inputItem.require}}" ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_instruction"></valid-input>
     </div>
 
@@ -15,7 +16,7 @@
         </mdl-select>
     </div>
     <div  ng-if="treatmentPageGroup.groups != null" >
-        <div class="stepForm__input__label">Group Id</div>
+        <div class="stepForm__input__label">Group ID</div>
         <mdl-select ng-model="treatmentPageGroup.groupSelected"
                     display-label="treatmentPageGroup.groupIdDisplayLabel">
         </mdl-select>

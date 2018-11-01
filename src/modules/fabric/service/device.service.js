@@ -9,6 +9,11 @@ export class DeviceService {
       this.di[value] = args[index];
     });
 
+    this.treatment4Submit = {
+      'vlan_id':{ "type":"L2MODIFICATION", "subtype":"VLAN_ID", 'field': "vlanId", 'field_type':'number'},
+      'push_vlan': {"type":"L2MODIFICATION", "subtype":"VLAN_PUSH"}
+    };
+
     this.criteria4Submit = {
       'in_port':{'type': 'IN_PORT', 'field':'port', 'field_type': 'string'},
       'in_phy_port':{'type': 'IN_PHY_PORT', 'field':'port'},
@@ -707,29 +712,29 @@ export class DeviceService {
       '10': null,
       '20': {
         'unicast_mac': [{'field': 'in_port', 'type': 'int', 'require': 'false'}],
-        'ipv4_multicast_mac:': [
-          {'field': 'destination_ipv4', 'type': 'ipv4', 'require': 'false'},
+        'ipv4_multicast_mac': [
+          // {'field': 'destination_ipv4', 'type': 'ipv4', 'require': 'false'},
           {'field': 'vlan_id', 'type': 'int', 'require': 'false'},
-          {'field': 'in_port', 'type': 'int', 'require': 'false'},
+          // {'field': 'in_port', 'type': 'int', 'require': 'false'},
         ],
         'ipv6_multicast_mac': [
-          {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'false'},
+          // {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'false'},
           {'field': 'vlan_id', 'type': 'int', 'require': 'false'},
-          {'field': 'in_port', 'type': 'int', 'require': 'false'},
+          // {'field': 'in_port', 'type': 'int', 'require': 'false'},
         ]
       },
       '30': {
         'ipv4_multicast': [
           {'field': 'destination_ipv4', 'type': 'ipv4', 'require': 'false'},
-          {'field': 'ip_proto', 'type': 'string', 'require': 'false'},
-          {'field': 'udp_dport', 'type': 'int', 'require': 'false'},
-          {'field': 'udp_sport', 'type': 'int', 'require': 'false'},
+          // {'field': 'ip_proto', 'type': 'string', 'require': 'false'},
+          // {'field': 'udp_dport', 'type': 'int', 'require': 'false'},
+          // {'field': 'udp_sport', 'type': 'int', 'require': 'false'},
         ],
         'ipv6_multicast': [
           {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'false'},
-          {'field': 'ip_proto', 'type': 'string', 'require': 'false'},
-          {'field': 'udp_dport', 'type': 'int', 'require': 'false'},
-          {'field': 'udp_sport', 'type': 'int', 'require': 'false'},
+          // {'field': 'ip_proto', 'type': 'string', 'require': 'false'},
+          // {'field': 'udp_dport', 'type': 'int', 'require': 'false'},
+          // {'field': 'udp_sport', 'type': 'int', 'require': 'false'},
         ]
       },
       '40': {
@@ -737,13 +742,13 @@ export class DeviceService {
           {'field':'vlan_id', 'type':'int','require':'true'},
           {'field': 'destination_ipv4', 'type': 'ipv4_multi', 'require': 'true'},
           {'field': 'source_ipv4', 'type': 'ipv4', 'require': 'false'},
-          {'field': 'l3_in_port', 'type': 'int', 'require': 'false'},
+          // {'field': 'l3_in_port', 'type': 'int', 'require': 'false'},
         ],
         'ipv6_multicast': [
           {'field':'vlan_id', 'type':'int','require':'true'},
           {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'true'},
           {'field': 'source_ipv6', 'type': 'ipv6', 'require': 'false'},
-          {'field': 'l3_in_port', 'type': 'int', 'require': 'false'},
+          // {'field': 'l3_in_port', 'type': 'int', 'require': 'false'},
         ]
       },
       '50': {
@@ -763,14 +768,14 @@ export class DeviceService {
   getFlowTableApplyActionMaps(){
     return   {
       '10': [
-        {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
-        {'field': 'push_vlan', 'type': 'int', 'require': 'false'},
+        {'field': 'vlan_id', 'type': 'int', 'require': 'true','field_label':'vlan id'},
+        {'field': 'push_vlan', 'input_type':'checkbox' , 'require': 'false', 'displayLabel':{'id': 'check_push', 'label': 'Push Vlan'}},
       ],
-      '20': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':"{'id': 'check_1', 'label': 'output to controller'}"}],
-      '30': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':"{'id': 'check_1', 'label': 'output to controller'}"}],
+      '20': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
+      '30': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
       '40': [],
-      '50': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':"{'id': 'check_1', 'label': 'output to controller'}"}],
-      '60': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':"{'id': 'check_1', 'label': 'output to controller'}"}],
+      '50': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
+      '60': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
     }
   }
 
@@ -891,10 +896,10 @@ export class DeviceService {
         {'field': 'destination_ipv6_mask', 'type': 'int', 'require': 'true'},
       ],
       'ipv4_arp_spa': [
-        {'field': 'ipv4_arp_spa', 'type': 'int', 'require': 'true'},
+        {'field': 'ipv4_arp_spa', 'type': 'ip', 'require': 'true'},
       ],
       'ip_proto': [
-        {'field': 'ip_proto', 'type': 'string', 'require': 'true'},
+        {'field': 'ip_proto', 'type': 'int', 'require': 'true'},
       ],
       'ip_dscp': [
         {'field': 'ip_dscp', 'type': 'int', 'require': 'true'},
@@ -957,14 +962,72 @@ export class DeviceService {
   getCriteriaObject(item){
     let field = item['field'];
     let value = item['value'];
-    let res = angular.copy(this.criteria4Submit['field']);
-    if(value instanceof  Object){
-
+    if(value === ''){
+      return null;
     }
-    res[res['field']] = value;
-    delete res['field'];
+    let res = angular.copy(this.criteria4Submit[field]);
+    if( typeof value === 'object'){
+      res[res['field']] = value.value;
+    } else {
+      res[res['field']] = value;
+    }
+
+    if(res['field']){
+      delete res['field'];
+    }
+    if(res['field_type']){
+      delete res['field_type'];
+    }
+
     return res;
   }
+
+  getTreatmentObject(item){
+    let field = item['field'];
+    let value = item['value'];
+    // let value = item['value'];
+    let res = null;
+
+    if(item['input_type'] === undefined){
+      res = angular.copy(this.treatment4Submit[field]);
+      if( typeof value === 'object'){
+        value = value.value;
+      }
+
+
+      res[res['field']] = value;
+    } else if(item['input_type'] === 'checkbox'){
+      if(value === true){
+        res = angular.copy(this.treatment4Submit[field])
+      }
+    }
+
+    if(res && res['field']){
+      if(res['field_type'] !== undefined){
+        let type = res['field_type'];
+        if(type === 'number' && typeof value === 'string'){
+          value = parseInt(value);
+        }
+      } else {
+        //default to string
+        if( typeof value === 'number'){
+          value = value + '';
+        }
+      }
+      res[res['field']] = value;
+
+      if(res['field']){
+        delete res['field'];
+      }
+      if(res['field_type']){
+        delete res['field_type'];
+      }
+    }
+
+
+    return res;
+  }
+
 
 
 }
