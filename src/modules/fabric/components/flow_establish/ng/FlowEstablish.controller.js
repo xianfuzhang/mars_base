@@ -703,7 +703,7 @@ export class FlowEstablishController {
       scope.flow.timeout = '10000';
       scope.flow.isPermanent = true;
 
-      scope.flowEstablishModel.tableIdType = angular.copy(scope.tableIdSchemaList.options[0]);
+      scope.flowEstablishModel.tableIdType = angular.copy(scope.tableIdSchemaList.options[5]);
       scope.changeTableId(scope.flowEstablishModel.tableIdType);
 
     };
