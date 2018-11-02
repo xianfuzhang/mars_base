@@ -37,14 +37,14 @@ export class DeviceDetailService {
         'type': 'flow'
       },
       {
-        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.ENDPOINTS'),
-        'value': 'endpoint',
-        'type': 'endpoint'
-      },
-      {
         'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.GROUPS'),
         'value': 'group',
         'type': 'group'
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.ENDPOINTS'),
+        'value': 'endpoint',
+        'type': 'endpoint'
       }
     ];
   }

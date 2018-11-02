@@ -267,13 +267,13 @@ export class DeviceDetailController {
 
   getDataType() {
     let schema = {};
-    if (this.scope.detailModel.entities.length === 0) {
+    /*if (this.scope.detailModel.entities.length === 0) {
       return {
         index_name: '',
         rowCheckboxSupport: false,
         rowActionsSupport: false,
       };
-    }
+    }*/
     switch (this.scope.tabSelected.type) {
       case 'port':
         schema['index_name'] = 'id';

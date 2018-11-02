@@ -30,7 +30,7 @@ export class IntentDataManager {
 	createIntent(params) {
 		let defer = this.di.$q.defer();
     
-    this.di.$http.post(this.di.appService.getIntentsUrl(), {'params': params}).then(
+    this.di.$http.post(this.di.appService.getIntentsUrl(), params).then(
       (res) => {
         defer.resolve(res);
       },

@@ -32,6 +32,7 @@ export class FlowEstablishController {
     this.di.$scope.mac_regex = '^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$';  // MAC Address regex for validation
     this.di.$scope.ip_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
     this.di.$scope.num_regex = '^\d$|^[1-9]+[0-9]*$';
+    this.di.$scope.num_regex_with_zero = '^\d$|^[1-9]+[0-9]*|0$';
     this.di.$scope.ipv6_regex = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))/;
 
     this.FLOW_TYPES = {
@@ -143,7 +144,7 @@ export class FlowEstablishController {
     scope.flowEstablishModel = {
       instructionType: angular.copy(scope.instructionSchemaList.options[0]),
       criteriaType: angular.copy(scope.criteriaSchemaList.options[0]),
-      tableIdType: angular.copy(scope.tableIdSchemaList.options[0]),
+      tableIdType: angular.copy(scope.tableIdSchemaList.options[5]),
       table60SchemaOption: angular.copy(scope.table60SchemaList.options[0]),
     };
 
@@ -158,8 +159,12 @@ export class FlowEstablishController {
       } else {
         input['value'] = '';
       }
+      if(input['field'] === 'vlan_id'){
+        input['field_label'] = 'VLAN';
+      } else {
+        input['field_label'] = input['field'].replace('_',' ');
+      }
 
-      input['field_label'] = input['field'].replace('_',' ');
     };
 
     let addValue2FirstInputs = (inputs) => {
@@ -230,15 +235,15 @@ export class FlowEstablishController {
     };
 
     this.di.$scope.subtypeList = [];
-
+    scope.deviceGroupsMapper = null;
     this.di.$scope.open = (deviceId) => {
       if(scope.showWizard) return;
         scope.flow = initFlow;
         scope.curDeviceId = deviceId;
 
         this.di.deviceDataManager.getDeviceGroups(scope.curDeviceId).then((res)=>{
-          if(res && res.length > 0) {
-            scope.deviceGroupsMapper = classifyGroups(res);
+          if(res && res.data.groups.length > 0) {
+            scope.deviceGroupsMapper = classifyGroups(res.data.groups);
           }
         });
 
@@ -636,15 +641,28 @@ export class FlowEstablishController {
         this.di._.forEach(keys, (key)=>{
           let value = inputJson[key];
           if(value instanceof Array && value.length > 0){
-            let res = this.di.deviceService.getCriteriaObject(value[0]);
-            if(res !== null) criteria.push(res);
+            if(value.length === 1){
+              let res = this.di.deviceService.getCriteriaObject(value[0]);
+              if(res !== null) criteria.push(res);
+            } else if (value.length === 2){
 
+              //暂时先处理mask相关的代码，其他多字段连接类型另加逻辑处理// TODO
+              let v0 , v1;
+              if(value[0].field.indexOf('mask') !== -1){
+                v0 = value[1];
+                v1 = value[0];
+              } else {
+                v0 = value[0];
+                v1 = value[1];
+              }
+              v0.value = v0.value + '/' + v1.value;
+              let res = this.di.deviceService.getCriteriaObject(v0);
+              if(res !== null) criteria.push(res);
+
+            }
           }
         });
 
-        // if(inputArr && inputArr.length > 0){
-        //   criteria.push(this.di.deviceService.getCriteriaObject(inputArr[0]));
-        // }
       });
       return criteria;
     };
@@ -667,7 +685,7 @@ export class FlowEstablishController {
         }
       });
 
-      if(scope.treatmentPageGroup.groups !== null){
+      if(scope.treatmentPageGroup.groups !== null && scope.treatmentPageGroup.groupSelected.value !== -1){
         let groupId = scope.treatmentPageGroup.groupSelected.value;
         if(typeof groupId === 'string'){
           groupId = parseInt(groupId);
@@ -681,11 +699,11 @@ export class FlowEstablishController {
     };
 
     let reset = () => {
-      scope.flow.priority = '';
-      scope.flow.timeout = '';
-      scope.flow.isPermanent = false;
+      scope.flow.priority = '100';
+      scope.flow.timeout = '10000';
+      scope.flow.isPermanent = true;
 
-      scope.flowEstablishModel.tableIdType = angular.copy(scope.tableIdSchemaList.options[0]);
+      scope.flowEstablishModel.tableIdType = angular.copy(scope.tableIdSchemaList.options[5]);
       scope.changeTableId(scope.flowEstablishModel.tableIdType);
 
     };
@@ -700,12 +718,7 @@ export class FlowEstablishController {
       //   });
       // }
 
-      if(scope.treatmentPageGroup.groups !== null && scope.treatmentPageGroup.groupSelected.value === -1){
-        inValidJson_Copy['errorMessage'] = "请选择Group ID!";
-        return new Promise((resolve, reject) => {
-              resolve(inValidJson_Copy);
-            });
-      }
+
 
       di.$rootScope.$emit('page_flow_instruction');
       if(!validCurrentDom('flow_instruction')){
@@ -716,6 +729,20 @@ export class FlowEstablishController {
 
       let instructions = formatOfdpaInstructionValue();
       let criteria = formatOfdpaCriteriaValue();
+
+      if(instructions.length === 0){
+        inValidJson_Copy['errorMessage'] = "请配置Flow的处理方式!";
+        return new Promise((resolve, reject) => {
+          resolve(inValidJson_Copy);
+        });
+      }
+
+      // if(scope.treatmentPageGroup.groups !== null && scope.treatmentPageGroup.groupSelected.value === -1){
+      //   inValidJson_Copy['errorMessage'] = "请选择Group ID!";
+      //   return new Promise((resolve, reject) => {
+      //     resolve(inValidJson_Copy);
+      //   });
+      // }
 
       let params = {
         priority: Number(scope.flow.priority),
