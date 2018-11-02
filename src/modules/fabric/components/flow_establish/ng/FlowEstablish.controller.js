@@ -144,7 +144,7 @@ export class FlowEstablishController {
     scope.flowEstablishModel = {
       instructionType: angular.copy(scope.instructionSchemaList.options[0]),
       criteriaType: angular.copy(scope.criteriaSchemaList.options[0]),
-      tableIdType: angular.copy(scope.tableIdSchemaList.options[5]),
+      tableIdType: scope.tableIdSchemaList.options[5],
       table60SchemaOption: angular.copy(scope.table60SchemaList.options[0]),
     };
 
@@ -247,42 +247,12 @@ export class FlowEstablishController {
           }
         });
 
-
-        // let res = [
-        //   {
-        //     "id": "2952791017",
-        //   },
-        //   {
-        //     "id": "2953791127",
-        //   },
-        //   {
-        //     "id": "1343178391",
-        //   },
-        //   {
-        //     "id": "1074742935",
-        //   },
-        //   {
-        //     "id": "806307479",
-        //   },
-        //   {
-        //     "id": "537872023",
-        //   },
-        //   {
-        //     "id": "269436567",
-        //   },
-        //   {
-        //     "id": "1001111",
-        //   },{
-        //     "id": "21",
-        //   }
-        // ]
-        // if(res && res.length > 0) {
-        //   scope.deviceGroupsMapper = classifyGroups(res);
-        // }
-
-        reset();
+        // reset();
+        console.log(scope.flowEstablishModel.tableIdType);
         this.di.$timeout(() => {
           scope.showWizard = true;
+          reset();
+          scope.$apply();
         });
     };
 
@@ -703,7 +673,7 @@ export class FlowEstablishController {
       scope.flow.timeout = '10000';
       scope.flow.isPermanent = true;
 
-      scope.flowEstablishModel.tableIdType = angular.copy(scope.tableIdSchemaList.options[5]);
+      scope.flowEstablishModel.tableIdType = scope.tableIdSchemaList.options[5];
       scope.changeTableId(scope.flowEstablishModel.tableIdType);
 
     };
