@@ -151,6 +151,9 @@ export class DeviceDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getDeviceGroupsUrl(deviceId), {'params': params}).then(
       (res) => {
+        res.data.groups.forEach((group) => {
+          group.id = parseInt(group.id) // parse string to int
+        })
         defer.resolve({data: res.data});
       },
       (error) => {
@@ -353,7 +356,7 @@ export class DeviceDataManager {
   // get group detail by group id
   parseDeviceGroup(groupId) {
     let returnObj = {}
-    let tmpIDStr = parseInt(groupId).toString(2);
+    let tmpIDStr = groupId.toString(2);
     let idStr = tmpIDStr;
 
     // 不足32位补0
