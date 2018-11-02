@@ -48,6 +48,7 @@ router.post('/:deviceId', function (req, res) {
     req.body.groupId
   );
   
+  
   cloudModel.flowgroups.push(group);
   
   return res.status(200).json("This group has been added!");

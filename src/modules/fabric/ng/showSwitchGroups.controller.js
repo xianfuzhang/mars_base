@@ -67,7 +67,8 @@ export class ShowSwitchGroupsController {
     entities.forEach((entity) => {
       let obj = {};
       let groupObj = this.di.deviceDataManager.parseDeviceGroup(entity.id);
-      obj['id'] = '0x' + entity.id.toString(16); // 转16进制
+      obj['id'] = entity.id;
+      obj['group_id'] = '0x' + entity.id.toString(16); // 转16进制
       obj['name'] = groupObj.name;
       obj['vlan_id'] = groupObj.vlan_id;
       obj['type'] = entity.type;
