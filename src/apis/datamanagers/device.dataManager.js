@@ -375,26 +375,34 @@ export class DeviceDataManager {
         break;
       case 'GROUP-Type-1':
         returnObj.name = 'L2 Rewrite'
+        returnObj.random_id = idStr.slice(4)
         break;
       case 'GROUP-Type-2':
         returnObj.name = 'L3 Unicast'
+        returnObj.random_id = idStr.slice(4)
         break;
       case 'GROUP-Type-3':
         returnObj.name = 'L2 Multicast'
         returnObj.vlan_id = parseInt(idStr.slice(4, 16), 2);
+        returnObj.random_id = idStr.slice(16)
         break;
       case 'GROUP-Type-4':
         returnObj.name = 'L2 Flood'
         returnObj.vlan_id = parseInt(idStr.slice(4, 16), 2);
+        returnObj.random_id = idStr.slice(16)
         break;
       case 'GROUP-Type-5':
         returnObj.name = 'L3 Interface'
+        returnObj.random_id = idStr.slice(4)
         break;
       case 'GROUP-Type-6':
         returnObj.name = 'L3 Multicast'
+        returnObj.vlan_id = parseInt(idStr.slice(4, 16), 2);
+        returnObj.random_id = idStr.slice(16)
         break;
       case 'GROUP-Type-7':
         returnObj.name = 'L3 ECMP'
+        returnObj.random_id = idStr.slice(4)
         break;
       case 'GROUP-Type-11':
         returnObj.name = 'L2 Unfiltered Interface'
