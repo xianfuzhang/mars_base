@@ -38,7 +38,7 @@ export class validInput {
     this.link = (...args) => this._link.apply(this, args);
   }
 
-  _link (scope, element) {
+  _link (scope, element, attr) {
     (function init(){
 
       let unsubscribers = [];
@@ -83,7 +83,7 @@ export class validInput {
       scope.validModel = {
         name: scope.vName,
         require: scope.vRequire === 'true'? true : false,
-        ngPattern: scope.vRegex || getPattern(scope.vType),
+        ngPattern: scope.vRegex || getPattern(scope.vType||attr.vType),
         isInvalid: false,
         change: false,
         message: scope.vMessage || getMessageByType(scope.vType),
