@@ -516,7 +516,7 @@ export class GroupEstablishController {
       ];
   
       scope.mappedGroups['GROUP-Type-0'].forEach((group) => {
-        if(!parseInt(scope.groupModel.vlan_id) || scope.groupModel.vlan_id == group.vlan_id){
+        if(parseInt(scope.groupModel.vlan_id) && scope.groupModel.vlan_id == group.vlan_id){
           scope.L2InterfaceGroupsDisLab.options.push({
             label: '0x' + group.id.toString(16),
             value: group.id
