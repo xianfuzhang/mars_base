@@ -883,9 +883,9 @@ export class DeviceService {
         {'field': 'destination_mac', 'type': 'mac', 'require': 'true'},
         // {'field': 'destination_mac_mask', 'type': 'string', 'require': 'false'},
       ],
-      'vlan_id': [
-        {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
-      ],
+      // 'vlan_id': [
+      //   {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
+      // ],
       'vlan_pcp': [
         {'field': 'vlan_pcp', 'type': 'int', 'require': 'true'},
       ],

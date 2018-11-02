@@ -1,6 +1,7 @@
 export class FlowService {
 	static getDI() {
 		return [
+			'_'
 		];
 	}
 
@@ -45,7 +46,16 @@ export class FlowService {
 	treatmentHander(treatment) {
 		let instructions = [];
 		treatment.instructions.forEach((instr, index) => {
-			let instruction = instr.type + ':' + instr.port;
+			let keys = this.di._.keys(instr);
+			let s1, s2;
+			this.di._.forEach(keys, (key)=>{
+        if(key === 'type'){
+          s1 = instr[key];
+				} else {
+					s2 = instr[key];
+				}
+			});
+			let instruction = s1 + ':' + s2;
 			instructions.push(instruction);
 		});
 		return instructions.toString();
