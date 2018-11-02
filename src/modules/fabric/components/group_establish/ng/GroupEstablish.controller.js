@@ -516,7 +516,12 @@ export class GroupEstablishController {
       ];
   
       scope.mappedGroups['GROUP-Type-0'].forEach((group) => {
-        if(parseInt(scope.groupModel.vlan_id) && scope.groupModel.vlan_id == group.vlan_id){
+        if('GROUP-Type-1' ==  scope.groupModel.groupTypeSelected.value || 'GROUP-Type-5' == scope.groupModel.groupTypeSelected.value) {
+          scope.L2InterfaceGroupsDisLab.options.push({
+            label: '0x' + group.id.toString(16),
+            value: group.id
+          })
+        } else if(parseInt(scope.groupModel.vlan_id) && scope.groupModel.vlan_id == group.vlan_id){
           scope.L2InterfaceGroupsDisLab.options.push({
             label: '0x' + group.id.toString(16),
             value: group.id
@@ -578,6 +583,8 @@ export class GroupEstablishController {
             Object.assign(group, parseGroup);
             scope.mappedGroups[parseGroup.nameId].push(group)
           })
+  
+          initGroupDisLabOptions();
         },
         (error) => {
           console.error(error)
@@ -649,15 +656,18 @@ export class GroupEstablishController {
       if(newValue == oldValue) return;
       scope.groupModel = this.di._.cloneDeep(initGroup)
       scope.groupModel.groupTypeSelected = newValue;
-    },true));
-  
-    unsubscribes.push(scope.$watch('mappedGroups', (newValue, oldValue) => {
-      if(_.isEqual(newValue, oldValue)) return;
       initGroupDisLabOptions();
     },true));
   
+    // unsubscribes.push(scope.$watch('mappedGroups', (newValue, oldValue) => {
+    //   if(_.isEqual(newValue, oldValue)) return;
+    //   initGroupDisLabOptions(true);
+    // },true));
+  
     unsubscribes.push(scope.$watch('groupModel.vlan_id', (newValue, oldValue) => {
       if(newValue == oldValue) return;
+      if('GROUP-Type-1' ==  scope.groupModel.groupTypeSelected.value || 'GROUP-Type-5' == scope.groupModel.groupTypeSelected.value) return;
+      
       scope.groupModel.L2_Interface_Groups = []
       initGroupDisLabOptions();
     },true));
