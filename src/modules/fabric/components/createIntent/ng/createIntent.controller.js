@@ -52,8 +52,8 @@ export class CreateIntentController {
           'type': this.model.type.value,
           'appId': 'org.onosproject.ovsdb',
           'priority': 55,
-          'one': this.model.src_end,
-          'two': this.model.dst_end.value,
+          'one': this.model.src_end + '/-1',
+          'two': this.model.dst_end.value + '/-1',
         };
       return new Promise((resolve, reject) => {
         intentDataManager.createIntent(params).then(
