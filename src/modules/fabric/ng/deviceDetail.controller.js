@@ -449,6 +449,7 @@ export class DeviceDetailController {
           let groupObj = this.di.deviceDataManager.parseDeviceGroup(entity.id);
           obj['id'] = entity.id;
           obj['group_id'] = '0x' + entity.id.toString(16); // 转16进制
+          obj['state'] = entity.state
           obj['name'] = groupObj.name;
           obj['vlan_id'] = groupObj.vlan_id;
           obj['type'] = entity.type;
