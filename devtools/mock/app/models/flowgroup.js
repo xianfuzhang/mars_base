@@ -5,9 +5,9 @@ const _ = require('lodash'),
 const chance = new Chance();
 
 class FlowGroup {
-  constructor (id, device_id, type, buckets, state, life, packets, bytes, referenceCount, appId, givenGroupId) {
+  constructor (id, appCookie, device_id, type, buckets, state, life, packets, bytes, referenceCount, appId, givenGroupId) {
     this.id = id;
-    this.appCookie = id;
+    this.appCookie = appCookie;
     this.deviceId = device_id;
     this.type = type;
     this.buckets = buckets;

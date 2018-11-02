@@ -146,8 +146,8 @@ export class DeviceDetailController {
             break;
           case 'group':
             // TODO: group data
-            let groupId = event.data.id;
-            this.di.deviceDataManager.deleteDeviceGroup(this.scope.deviceId, groupId)
+            let appCookie = '0x' + parseInt(event.data.id).toString(16);
+            this.di.deviceDataManager.deleteDeviceGroup(this.scope.deviceId, appCookie)
               .then((res) => {
                 this.scope.detailModel.api.queryUpdate();
               }, (res) => {
