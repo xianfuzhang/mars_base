@@ -5,7 +5,7 @@ router.get('/', (req, res) => {
   return res.json({intents: cloudModel.intents});
 });
 router.post('/', function (req, res) {
-	if(cloudLib.addIntent(req.body.params)) {
+	if(cloudLib.addIntent(req.body)) {
     return res.status(200).json('Success to add new intent!');
   } else {
     return res.status(400).json('Failed to add new intent!');
