@@ -218,19 +218,29 @@ export class FabricSummaryController {
         let DI = this.di;
         let devices = this.devices;
         formatLeafGroupData(devices, this.realtimeDevices);
+        DI.$rootScope.$emit('stop_loading');
+        DI._.forEach(devices, (device)=>{
+          device.ports = portGroups[device.id];
+        });
+        let dstSwt = distributeSwitches(devices);
+        DI.$scope.fabricModel['deSpines'] = dstSwt.spine;
+        DI.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
+        DI.$scope.fabricModel['deOthers'] = dstSwt.other;
+        DI.$scope.fabricModel.isShowTopo = true;
+        DI.$scope.$apply();
         //TODO 这里为了给台湾同事测试效果增加timeout
-        setTimeout(function () {
-          DI.$rootScope.$emit('stop_loading');
-          DI._.forEach(devices, (device)=>{
-            device.ports = portGroups[device.id];
-          });
-          let dstSwt = distributeSwitches(devices);
-          DI.$scope.fabricModel['deSpines'] = dstSwt.spine;
-          DI.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
-          DI.$scope.fabricModel['deOthers'] = dstSwt.other;
-          DI.$scope.fabricModel.isShowTopo = true;
-          DI.$scope.$apply();
-        },1000)
+        // setTimeout(function () {
+        //   DI.$rootScope.$emit('stop_loading');
+        //   DI._.forEach(devices, (device)=>{
+        //     device.ports = portGroups[device.id];
+        //   });
+        //   let dstSwt = distributeSwitches(devices);
+        //   DI.$scope.fabricModel['deSpines'] = dstSwt.spine;
+        //   DI.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
+        //   DI.$scope.fabricModel['deOthers'] = dstSwt.other;
+        //   DI.$scope.fabricModel.isShowTopo = true;
+        //   DI.$scope.$apply();
+        // },1000)
 
         // this.di._.forEach(this.devices, (device)=>{
         //   device.ports = portGroups[device.id];
