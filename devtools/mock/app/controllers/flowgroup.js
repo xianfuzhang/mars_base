@@ -36,6 +36,7 @@ router.get('/:deviceId/:appCookie', function (req, res) {
 router.post('/:deviceId', function (req, res) {
   let group = new FlowGroup(
     req.body.groupId.toString(),
+    req.body.appCookie,
     req.params.deviceId,
     req.body.type,
     req.body.buckets,
