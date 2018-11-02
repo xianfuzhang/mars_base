@@ -607,6 +607,15 @@ export class GroupEstablishController {
       }
     }
     
+    scope.addL2interface = () => {
+      if(scope.groupModel.L2UnfilteredInterfaceGroupSelected.value != '') return;
+      
+      let newValue = scope.groupModel.L2InterfaceGroupsSelected;
+      if(newValue && newValue.value != '' && scope.groupModel.L2_Interface_Groups.indexOf(newValue.value) == -1){
+        scope.groupModel.L2_Interface_Groups.push(newValue.value)
+      }
+    }
+    
     scope.cancel = function(formData){
       return new Promise((resolve, reject) => {
         resolve({valid: true, errorMessage: ''});
@@ -629,12 +638,12 @@ export class GroupEstablishController {
       });
     };
   
-    unsubscribes.push(scope.$watch('groupModel.L2InterfaceGroupsSelected', (newValue, oldValue) => {
-      if(_.isEqual(newValue, oldValue)) return;
-      if(newValue && newValue.value != '' && scope.groupModel.L2_Interface_Groups.indexOf(newValue.value) == -1){
-        scope.groupModel.L2_Interface_Groups.push(newValue.value)
-      }
-    }, true));
+    // unsubscribes.push(scope.$watch('groupModel.L2InterfaceGroupsSelected', (newValue, oldValue) => {
+    //   if(_.isEqual(newValue, oldValue)) return;
+    //   if(newValue && newValue.value != '' && scope.groupModel.L2_Interface_Groups.indexOf(newValue.value) == -1){
+    //     scope.groupModel.L2_Interface_Groups.push(newValue.value)
+    //   }
+    // }, true));
   
     unsubscribes.push(scope.$watch('groupModel.groupTypeSelected', (newValue, oldValue) => {
       if(newValue == oldValue) return;
