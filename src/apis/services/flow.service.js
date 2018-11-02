@@ -58,6 +58,22 @@ export class FlowService {
 			let instruction = s1 + ':' + s2;
 			instructions.push(instruction);
 		});
+
+    treatment.deferred.forEach((instr, index) => {
+      let keys = this.di._.keys(instr);
+      let s1, s2;
+      this.di._.forEach(keys, (key)=>{
+        if(key === 'type'){
+          s1 = instr[key];
+        } else {
+          s2 = instr[key];
+        }
+      });
+      let instruction = s1 + ':' + s2;
+      instructions.push(instruction);
+    });
+
+
 		return instructions.toString();
 	}
 }
