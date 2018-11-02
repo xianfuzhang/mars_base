@@ -384,6 +384,11 @@ export class DeviceDetailService {
         'layout': {'visible': true, 'sortable': true}
       },
       {
+        'label': this.translate('MODULES.SWITCH.DETAIL.GROUP.COLUMN.STATE'),
+        'field': 'state',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
         'label': this.translate('MODULES.SWITCH.DETAIL.GROUP.COLUMN.NAME'),
         'field': 'name',
         'layout': {'visible': true, 'sortable': true}
