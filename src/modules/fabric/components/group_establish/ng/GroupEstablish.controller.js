@@ -332,21 +332,21 @@ export class GroupEstablishController {
   
           if(scope.groupModel.vlan_id != '' && parseInt(scope.groupModel.vlan_id)) {
             instructions.push({
-              type: "L3MODIFICATION",
+              type: "L2MODIFICATION",
               subtype: "VLAN_ID",
               vlanId: parseInt(scope.groupModel.vlan_id)
             })
           }
           if(scope.groupModel.src_mac_address) {
             instructions.push({
-              type: "L3MODIFICATION",
+              type: "L2MODIFICATION",
               subtype: "ETH_SRC",
               mac: scope.groupModel.src_mac_address
             })
           }
           if(scope.groupModel.dst_mac_address) {
             instructions.push({
-              type: "L3MODIFICATION",
+              type: "L2MODIFICATION",
               subtype: "ETH_DST",
               mac: scope.groupModel.dst_mac_address
             })
@@ -390,21 +390,21 @@ export class GroupEstablishController {
   
           if(scope.groupModel.vlan_id != '' && parseInt(scope.groupModel.vlan_id)) {
             instructions.push({
-              type: "L3MODIFICATION",
+              type: "L2MODIFICATION",
               subtype: "VLAN_ID",
               vlanId: parseInt(scope.groupModel.vlan_id)
             })
           }
           if(scope.groupModel.src_mac_address) {
             instructions.push({
-              type: "L3MODIFICATION",
+              type: "L2MODIFICATION",
               subtype: "ETH_SRC",
               mac: scope.groupModel.src_mac_address
             })
           }
           if(scope.groupModel.dst_mac_address) {
             instructions.push({
-              type: "L3MODIFICATION",
+              type: "L2MODIFICATION",
               subtype: "ETH_DST",
               mac: scope.groupModel.dst_mac_address
             })
