@@ -19,7 +19,7 @@
 
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{'MODULES.SWITCH.DETAIL.FLOW.COLUMN.TIMEOUT'|translate}}<span class="stepForm__input__required">*</span></div>
-        <valid-input v-name="flow_timeout" v-require="true" ng-model="flow.timeout" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_common" ></valid-input>
+        <valid-input v-name="flow_timeout" v-require="true" ng-model="flow.timeout" v-regex="num_regex_with_zero" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_common" ></valid-input>
         <!--<input class="stepForm__input__text ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required" ng-blur="changeModel.timeoutChange=true" name="flow_timeout" type="text" ng-model="flow.timeout" ng-required="true" required="required" ng-pattern="num_regex" />-->
         <!--<span class="stepForm__input__error" ng-show="wizardForm.flow_timeout.$invalid && changeModel.timeoutChange"></span>-->
     </div>

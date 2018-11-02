@@ -686,7 +686,7 @@ export class DeviceService {
     return {
       '10':[
         {'field':'in_port', 'type':'int', 'require':'true'},
-        {'field':'vlan_id', 'type':'int', 'require':'true'}
+        {'field':'vlan_id', 'type':'int_with_zero', 'require':'true'}
       ],
       '20':[
         {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
@@ -703,7 +703,7 @@ export class DeviceService {
         {'field':'destination_mac', 'type':'mac','require':'false'}
       ],
       '60':[
-        {'field':'vlan_id', 'type':'int','require':'true'}
+        {'field':'vlan_id', 'type':'int','require':'false'}
       ]
     }
   }
@@ -778,7 +778,7 @@ export class DeviceService {
   getFlowTableApplyActionMaps(){
     return   {
       '10': [
-        {'field': 'vlan_id', 'type': 'int', 'require': 'true','field_label':'vlan id'},
+        {'field': 'vlan_id', 'type': 'int', 'require': 'true','field_label':'vlan'},
         {'field': 'push_vlan', 'input_type':'checkbox' , 'require': 'false', 'displayLabel':{'id': 'check_push', 'label': 'Push Vlan'}},
       ],
       '20': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
@@ -811,7 +811,7 @@ export class DeviceService {
         'multicast_vlan_bridge': ['l2_mcast_group'],
         'dlf_vlan_bridge': ['l2_flood_group']
       },
-      '60': ['l2_intf_group', 'l2_rewrite_group','l2_mcast_group','l3_ucast_group','l3_mcast_group','l3_ecmp_group','l2_unflt_intf_group'],
+      '60': ['l2_intf_group', 'l2_flood_group' ,'l2_rewrite_group','l2_mcast_group','l3_ucast_group','l3_mcast_group','l3_ecmp_group','l2_unflt_intf_group'],
     }
   }
 
@@ -891,22 +891,23 @@ export class DeviceService {
       ],
       'source_ipv4': [
         {'field': 'source_ipv4', 'type': 'ipv4', 'require': 'true'},
-        {'field': 'source_ipv4_mask', 'type': 'int', 'require': 'true'},
+        {'field': 'ipv4_mask', 'type': 'int', 'require': 'true'},
       ],
       'destination_ipv4': [
         {'field': 'destination_ipv4', 'type': 'ipv4', 'require': 'true'},
-        {'field': 'destination_ipv4_mask', 'type': 'int', 'require': 'true'},
+        {'field': 'ipv4_mask', 'type': 'int', 'require': 'true'},
       ],
       'source_ipv6': [
         {'field': 'source_ipv6', 'type': 'ipv6', 'require': 'true'},
-        {'field': 'source_ipv6_mask', 'type': 'int', 'require': 'true'},
+        {'field': 'ipv6_mask', 'type': 'int', 'require': 'true'},
       ],
       'destination_ipv6': [
         {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'true'},
-        {'field': 'destination_ipv6_mask', 'type': 'int', 'require': 'true'},
+        {'field': 'ipv6_mask', 'type': 'int', 'require': 'true'},
       ],
       'ipv4_arp_spa': [
         {'field': 'ipv4_arp_spa', 'type': 'ip', 'require': 'true'},
+        {'field': 'ipv4_mask', 'type': 'ip', 'require': 'true'},
       ],
       'ip_proto': [
         {'field': 'ip_proto', 'type': 'int', 'require': 'true'},
@@ -1003,7 +1004,6 @@ export class DeviceService {
       if( typeof value === 'object'){
         value = value.value;
       }
-
 
       res[res['field']] = value;
     } else if(item['input_type'] === 'checkbox'){
