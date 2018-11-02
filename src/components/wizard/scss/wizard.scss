@@ -28,10 +28,10 @@
   
     @include keyframes(come-in) {
       0% {
-        width: 0;
+        transform: scale(0,1);
       }
       100% {
-        width: 760px;
+        transform: scale(1,1);
       }
     }
     
@@ -61,10 +61,10 @@
     
     @include keyframes(come-in-single) {
       0% {
-        width: 0;
+        transform: scale(0,1);
       }
       100% {
-        width: 570px;
+        transform: scale(1,1);
       }
     }
   
