@@ -185,6 +185,25 @@ export class GroupEstablishController {
       errorMessage: ''
     };
     
+    const getRandomID = (bits) => {
+      // get a random binary ID string
+      let flag = true, randomId;
+      while(flag) {
+        let tmpId = Math.floor(Math.random() * Math.pow(2,parseInt(bits))).toString(2)
+        randomId = tmpId;
+        for(let i=0;i< parseInt(bits) - tmpId.length;i++){
+          randomId = '0' + randomId;
+        }
+        let foundGroup = _.find(scope.mappedGroups, (group) => {
+          return group.random_id === randomId
+        })
+        
+        flag = foundGroup ? true : false;
+      }
+      
+      return randomId
+    }
+    
     const parseGroupID = () => {
       let typeIDStr = ''
       let portStr = ''
@@ -208,33 +227,30 @@ export class GroupEstablishController {
         }
       }
   
-      // TODO: 28 bits ID
-      const ID28bits = '0000000000000000000000000000';
-      
       switch(scope.groupModel.groupTypeSelected.value) {
         case 'GROUP-Type-0':
           typeIDStr = '0000' + vlanIdStr + portStr;
           break;
         case 'GROUP-Type-1':
-          typeIDStr = '0001' + ID28bits;
+          typeIDStr = '0001' + getRandomID(28);
           break;
         case 'GROUP-Type-2':
-          typeIDStr = '0010' + ID28bits;
+          typeIDStr = '0010' + getRandomID(28);
           break;
         case 'GROUP-Type-3':
-          typeIDStr = '0011' + vlanIdStr + ID28bits.slice(0,16);
+          typeIDStr = '0011' + vlanIdStr + getRandomID(16);
           break;
         case 'GROUP-Type-4':
-          typeIDStr = '0100' + vlanIdStr + ID28bits.slice(0,16);
+          typeIDStr = '0100' + vlanIdStr + getRandomID(16);
           break;
         case 'GROUP-Type-5':
-          typeIDStr = '0101' + ID28bits;
+          typeIDStr = '0101' + getRandomID(28);
           break;
         case 'GROUP-Type-6':
-          typeIDStr = '0110' + ID28bits;
+          typeIDStr = '0110' + vlanIdStr + getRandomID(16);
           break;
         case 'GROUP-Type-7':
-          typeIDStr = '0111' + ID28bits;
+          typeIDStr = '0111' + getRandomID(28);
           break;
         case 'GROUP-Type-11':
           typeIDStr = '1011' + '000000000000' + portStr;

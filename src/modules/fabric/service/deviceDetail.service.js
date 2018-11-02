@@ -380,7 +380,7 @@ export class DeviceDetailService {
     return [
       {
         'label': this.translate('MODULES.SWITCH.DETAIL.GROUP.COLUMN.ID'),
-        'field': 'id',
+        'field': 'group_id',
         'layout': {'visible': true, 'sortable': true}
       },
       {
