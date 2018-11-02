@@ -245,15 +245,20 @@ export class FlowEstablishController {
           if(res && res.data.groups.length > 0) {
             scope.deviceGroupsMapper = classifyGroups(res.data.groups);
           }
+          console.log(scope.flowEstablishModel.tableIdType);
+          this.di.$timeout(() => {
+            scope.showWizard = true;
+            reset();
+            scope.$apply();
+          });
         });
 
-        // reset();
-        console.log(scope.flowEstablishModel.tableIdType);
-        this.di.$timeout(() => {
-          scope.showWizard = true;
-          reset();
-          scope.$apply();
-        });
+        // console.log(scope.flowEstablishModel.tableIdType);
+        // this.di.$timeout(() => {
+        //   scope.showWizard = true;
+        //   reset();
+        //   scope.$apply();
+        // });
     };
 
 
@@ -297,10 +302,12 @@ export class FlowEstablishController {
     let _initGroupIdsDisplayLabel = () =>{
       scope.treatmentPageGroup.groupIdDisplayLabel = {'options':[{'label': '请选择Group', 'value':-1}]};
       if(scope.treatmentPageGroup.groupTypeSelected){
-        let groups = scope.deviceGroupsMapper[this.di.deviceService.getGroupTypeId(scope.treatmentPageGroup.groupTypeSelected.value)];
-        this.di._.forEach(groups, (group)=>{
-          scope.treatmentPageGroup.groupIdDisplayLabel.options.push({'label': group['id'], 'value': group['id']});
-        });
+        if(scope.deviceGroupsMapper){
+          let groups = scope.deviceGroupsMapper[this.di.deviceService.getGroupTypeId(scope.treatmentPageGroup.groupTypeSelected.value)];
+          this.di._.forEach(groups, (group)=>{
+            scope.treatmentPageGroup.groupIdDisplayLabel.options.push({'label': group['id'], 'value': group['id']});
+          });
+        }
       }
       scope.treatmentPageGroup.groupSelected = scope.treatmentPageGroup.groupIdDisplayLabel['options'][0]
     };
