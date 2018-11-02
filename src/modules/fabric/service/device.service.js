@@ -905,10 +905,10 @@ export class DeviceService {
         {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'true'},
         {'field': 'ipv6_mask', 'type': 'int', 'require': 'true'},
       ],
-      'ipv4_arp_spa': [
-        {'field': 'ipv4_arp_spa', 'type': 'ip', 'require': 'true'},
-        {'field': 'ipv4_mask', 'type': 'ip', 'require': 'true'},
-      ],
+      // 'ipv4_arp_spa': [
+      //   {'field': 'ipv4_arp_spa', 'type': 'ip', 'require': 'true'},
+      //   {'field': 'ipv4_mask', 'type': 'ip', 'require': 'true'},
+      // ],
       'ip_proto': [
         {'field': 'ip_proto', 'type': 'int', 'require': 'true'},
       ],
