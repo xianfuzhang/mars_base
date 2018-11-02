@@ -811,7 +811,7 @@ export class DeviceService {
         'multicast_vlan_bridge': ['l2_mcast_group'],
         'dlf_vlan_bridge': ['l2_flood_group']
       },
-      '60': ['l2_intf_group', 'l2_flood_group' ,'l2_rewrite_group','l2_mcast_group','l3_ucast_group','l3_mcast_group','l3_ecmp_group','l2_unflt_intf_group'],
+      '60': ['l2_intf_group' ,'l2_rewrite_group','l2_mcast_group','l3_ucast_group','l3_mcast_group','l3_ecmp_group','l2_unflt_intf_group'],
     }
   }
 
