@@ -353,6 +353,12 @@ export class FlowEstablishController {
         if(!validCurrentDom('flow_criteria')){
           return inValidJson_Copy
         }
+
+        if(scope.flowEstablishModel.tableIdType.value ==='60' && scope.criteriaPageSecondInputs.length === 0){
+          inValidJson_Copy['errorMessage'] = "请至少添加一个选择器!";
+          return inValidJson_Copy;
+        }
+
       }
       return validJson;
     };
@@ -450,8 +456,10 @@ export class FlowEstablishController {
       scope.criteriaPageSecondInputs = [];
       if(item.value === '60'){
         scope.table60SchemaList = convertList2DisLabel(this.di._.keys(scope.table60Schema));
+        scope.flowTypeJson = {'res': true, 'tableId':'60', 'type':null};
+      } else {
+        scope.flowTypeJson = null;
       }
-      scope.flowTypeJson = null;
 
     };
 
@@ -681,6 +689,9 @@ export class FlowEstablishController {
       scope.flow.isPermanent = true;
 
       scope.flowEstablishModel.tableIdType = scope.tableIdSchemaList.options[5];
+      scope.flowTypeJson = {'res': true, 'tableId':'60', 'type':null};
+      initializeAction();
+
       scope.changeTableId(scope.flowEstablishModel.tableIdType);
 
     };

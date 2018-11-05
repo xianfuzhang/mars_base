@@ -108,9 +108,12 @@ router.get('/devices/:deviceId', function (req, res) {
     let configs = [];
   
     configs = _.cloneDeep(cloudModel.devices).map((device, index) => {
+      // if(index %10 === 0){
+      //   return null
+      // }
       let config = {
         id: device.id,
-        name: device.annotations.name,
+        // name: device.annotations.name,
         type: device.type,
         available: device.available,
         mgmtIpAddress: device.annotations.managementAddress,
@@ -125,6 +128,8 @@ router.get('/devices/:deviceId', function (req, res) {
     
       return config;
     });
+
+    configs.splice(5, 5);
   
     return res.json({configs: configs});
   }
@@ -296,7 +301,8 @@ function formatDevice(device) {
   delete tmpDevice.storm;
   delete tmpDevice.statistic;
   delete tmpDevice.leaf_group;
-  
+
+  delete tmpDevice.name
   // TODO:change device type
   if(config.TEST_MODE) {
     tmpDevice.type = 'TMP_TYPE';
