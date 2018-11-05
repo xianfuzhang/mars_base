@@ -126,6 +126,15 @@ router.get('/devices/:deviceId', function (req, res) {
       return config;
     });
   
+    _.times(chance.natural({min:1,max:3}), () => {
+      let index = _.findIndex(configs, (config) => {
+        return config.protocol == 'Openflow'
+      })
+      
+      if(index != -1)
+        configs.splice(index,1)
+    })
+    
     return res.json({configs: configs});
   }
   
@@ -299,7 +308,7 @@ function formatDevice(device) {
   
   // TODO:change device type
   if(config.TEST_MODE) {
-    tmpDevice.type = 'TMP_TYPE';
+    tmpDevice.type = 'SWITCH';
   }
   
   return tmpDevice;

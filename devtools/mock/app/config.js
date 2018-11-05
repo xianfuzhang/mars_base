@@ -4,7 +4,7 @@ let config = {
   MAX_DROPPED_NUM: 5,
   // new config
   deviceNumber: 20,
-  deviceTypes: ['spine', 'unknown', 'leaf'],
+  deviceTypes: ['spine', 'SWITCH', 'leaf'],
   deviceRoles: ['MASTER', 'SLAVE'],
   deviceProtocols: ['REST', 'SNMP', 'GRPC', 'Openflow'],
   devicePortNum: 56,
