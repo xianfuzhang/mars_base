@@ -22,6 +22,7 @@ export class FabricSummaryController {
       'tableProviderFactory',
       'deviceService',
       'switchService',
+      'dialogService',
       'commonService',
       'modalManager'
     ];
@@ -715,6 +716,18 @@ export class FabricSummaryController {
     unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_create_group',(evt)=>{
       this.di.$rootScope.$emit('group-wizard-show', this.di.$scope.fabricModel.showSwitchId);
     }));
+
+
+    unsubscribers.push(this.di.$rootScope.$on('summary_switch_reboot',(evt)=>{
+      this.di.dialogService.createDialog('confirm', this.translate('MODULES.SUMMARY.REBOOT.CONFORM'))
+        .then((data)=>{
+          this.di.deviceDataManager.rebootDevice(this.di.$scope.fabricModel.showSwitchId);
+        },(res)=>{
+          // error
+        })
+
+    }));
+
 
     unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_show_flow',(evt)=>{
       this.di.modalManager.open({

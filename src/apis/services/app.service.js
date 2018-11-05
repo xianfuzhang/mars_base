@@ -126,6 +126,10 @@ export class appService {
     return this.getZoneEndpoint(true) + '/useraccount/v1/' + username;
   }
 
+  getDeviceRebootUrl(deviceId){
+    return this.getZoneEndpoint(true) + '/switchmgmt/v1/reboot/' + deviceId;
+  }
+
   getDevicesUrl(){
     return this.getZoneEndpoint() + '/devices';
   }
