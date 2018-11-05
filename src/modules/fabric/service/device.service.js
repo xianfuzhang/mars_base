@@ -309,7 +309,7 @@ export class DeviceService {
         'layout': {'visible': true, 'sortable': true}
       },
       {
-        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.SEGMENT'),
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.VLAN'),
         'field': 'segment_name',
         'layout': {'visible': true, 'sortable': true}
       },
