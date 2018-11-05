@@ -336,21 +336,26 @@ export class DashboardController {
       let waitOrderPortsStatistics = [];
       this.di._.forEach(swtStatistics, (device)=>{
         let curDeviceId = device.device;
-        this.di._.forEach(device.ports, (port)=>{
-          let portSt = {};
-          portSt['device'] = curDeviceId;
-          portSt['port'] = port['port'];
-          portSt['packetsReceived'] = port['packetsReceived'];
-          portSt['packetsSent'] = port['packetsSent'];
-          portSt['bytesReceived'] = port['bytesReceived'];
-          portSt['bytesSent'] = port['bytesSent'];
-          portSt['packetsRxDropped'] = port['packetsRxDropped'];
-          portSt['packetsTxDropped'] = port['packetsTxDropped'];
-          portSt['durationSec'] = port['durationSec'];
-          portSt['packetsRecvSent'] = port['packetsReceived'] + port['packetsSent'];
-          portSt['bytesRecvSent'] = port['bytesReceived'] + port['bytesSent'];
-          portSt['packetsDrop'] = port['packetsRxDropped'] + port['packetsTxDropped'];
-          waitOrderPortsStatistics.push(portSt)
+
+        this.di._.forEach(dataModel['device'],(deviceM)=>{
+          if(deviceM['id'] === curDeviceId){
+            this.di._.forEach(device.ports, (port)=>{
+              let portSt = {};
+              portSt['device'] = curDeviceId;
+              portSt['port'] = port['port'];
+              portSt['packetsReceived'] = port['packetsReceived'];
+              portSt['packetsSent'] = port['packetsSent'];
+              portSt['bytesReceived'] = port['bytesReceived'];
+              portSt['bytesSent'] = port['bytesSent'];
+              portSt['packetsRxDropped'] = port['packetsRxDropped'];
+              portSt['packetsTxDropped'] = port['packetsTxDropped'];
+              portSt['durationSec'] = port['durationSec'];
+              portSt['packetsRecvSent'] = port['packetsReceived'] + port['packetsSent'];
+              portSt['bytesRecvSent'] = port['bytesReceived'] + port['bytesSent'];
+              portSt['packetsDrop'] = port['packetsRxDropped'] + port['packetsTxDropped'];
+              waitOrderPortsStatistics.push(portSt)
+            });
+          }
         });
       });
 
