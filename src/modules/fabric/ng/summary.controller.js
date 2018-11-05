@@ -55,6 +55,7 @@ export class FabricSummaryController {
     let distributeSwitches = (allSwitches) => {
       let distributeSwt = {'spine':[], 'leaf':[], 'other':[]};
       this.di._.forEach(allSwitches, (swt, index)=>{
+        // this.di._.forEach()
         if(swt.type == 'leaf'){
           distributeSwt.leaf.push(swt);
         } else if(swt.type == 'spine'){
@@ -66,6 +67,31 @@ export class FabricSummaryController {
       return distributeSwt;
     };
 
+
+    let checkRealtimeUnknown = (configSwitches, realtimeSwitches) => {
+      let unknowns = [];
+      this.di._.forEach(realtimeSwitches, (realtimeSwt)=>{
+        let hasSame = false;
+        this.di._.forEach(configSwitches, (configSwt)=>{
+          if(realtimeSwt.id === configSwt.id){
+            hasSame = true;
+            return false;
+          }
+        });
+        if(!hasSame){
+          unknowns.push(angular.copy(realtimeSwt))
+        }
+      });
+      let curTime = new Date().getTime();
+      unknowns.map((swt)=>{
+        swt.lastUpdate = this.di.commonService.calcRunningDate(curTime - swt.lastUpdate) ;
+        swt.type = 'unknown';
+        swt.mgmtIpAddress = swt.annotations.managementAddress;
+      });
+
+
+      return unknowns;
+    };
 
     this.di.$scope.fabricModel = {
       showSwitchDetail: false,
@@ -223,9 +249,10 @@ export class FabricSummaryController {
           device.ports = portGroups[device.id];
         });
         let dstSwt = distributeSwitches(devices);
+        let unknownSwt = checkRealtimeUnknown(devices, this.realtimeDevices);
         DI.$scope.fabricModel['deSpines'] = dstSwt.spine;
         DI.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
-        DI.$scope.fabricModel['deOthers'] = dstSwt.other;
+        DI.$scope.fabricModel['deOthers'] = unknownSwt.concat(dstSwt.other);
         DI.$scope.fabricModel.isShowTopo = true;
         DI.$scope.$apply();
         //TODO 这里为了给台湾同事测试效果增加timeout
@@ -550,7 +577,7 @@ export class FabricSummaryController {
           secondTdContent = "<div><svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'><path fill='none' d='M0 0h18v18H0z'/><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z' fill='green'/></svg></div>";
         } else {
           if(item.label === this.translate('MODULES.COMMON.NAME')){
-            secondTdContent = '<div><a class="summary__link" target="_blank" href="/#!/devices/'+ this.di.$scope.fabricModel.showSwitchId +'">'+ item.value +'</a></div>';
+            secondTdContent = '<div><a class="summary__link" target="_blank" href="/#!/devices/'+ this.di.$scope.fabricModel.showSwitchId +'">'+ (item.value === undefined || item.value === 'undefined')?'':item.value+'</a></div>';
           } else{
             secondTdContent = '<div>'+ item.value +'</div>';
           }
