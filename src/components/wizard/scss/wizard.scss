@@ -1,6 +1,6 @@
 @import 'xbem';
-@import 'default';
-@import 'shared';
+//@import 'default';
+@import '../../../themes/shared/mixin';
 
 @include block(wizard) {
   position: fixed;
