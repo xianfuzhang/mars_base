@@ -421,8 +421,21 @@ export class DeviceDataManager {
         returnObj.name = 'L2 Unfiltered Interface'
         break;
     }
-    
+  
     return returnObj;
+  }
+  
+  getMacAndIpBindings() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDHCPServerUrl(true)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
   }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
