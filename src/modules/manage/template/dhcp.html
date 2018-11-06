@@ -1,0 +1,50 @@
+<div class="dhcp flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="configuration__body flex_entirety__body">
+
+    <content-header big-title="{{'MODULE.HEADER.MANAGE.DHCP' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.MANAGE.DHCP' | translate}}</span>
+    </content-header>
+    <div class="configuration__body__content flex_entirety__body__body" style="display:flex;flex-direction: column">
+
+      <div style="margin-top: 16px;flex-shrink: 1;flex-grow: 1;width:800px;">
+
+        <table>
+          <tr>
+            <td><div style="display: inline-block;">{{'MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'|translate}}<span class="stepForm__input__required">*</span></div></td>
+            <td><valid-input v-require="true" ng-model="dhcpModel.dhcpserver.startip" v-type="ip" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+          </tr>
+          <tr>
+            <td><div style="display: inline-block;">{{'MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'|translate}}<span class="stepForm__input__required">*</span></div></td>
+            <td><valid-input v-require="true" ng-model="dhcpModel.dhcpserver.endip" v-type="ip" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+          </tr>
+          <tr>
+            <td><div style="display: inline-block;">{{'MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'|translate}}<span class="stepForm__input__required">*</span></div></td>
+            <td><valid-input v-require="true" ng-model="dhcpModel.dhcpserver.subnet" v-type="ip" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+
+
+
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+
+
+
+
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

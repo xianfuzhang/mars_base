@@ -19,6 +19,7 @@ import 'logical';
 import 'configuration';
 import 'alert';
 import 'log';
+import 'manage';
 
 import 'mdc';
 import 'mdlHeader';
@@ -62,6 +63,7 @@ angular
     'configuration',
     'alert',
     'log',
+    'manage',
     'mdc',
     'mdlHeader',
     'mdlTable',
@@ -223,6 +225,13 @@ angular
       when('/log', {
         template: require('./modules/log/template/log.html'),
         controller: 'logController',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
+      }).
+      when('/dhcp', {
+        template: require('./modules/manage/template/dhcp.html'),
+        controller: 'dhcpController',
         resolve: {
           loggedin: checkLoggedIn
         }
