@@ -379,9 +379,12 @@ export class DashboardController {
     let convertSwitchCPUAnalyzer = () => {
       //cpu analyzer
       let cpuCols = [];
-      if(this.di.$scope.dashboardModel.cpu.analyzer.length) {
-        cpuCols.push(this.getDeviceCPUMemoryTimeSeries(this.di.$scope.dashboardModel.cpu.analyzer[0]));
-        this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer).forEach((item, index) =>{
+      let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer);
+      let x_axis = this.di.$scope.dashboardModel.cpu.analyzer == true ?
+        this.getDeviceCPUMemoryTimeSeries(this.di.$scope.dashboardModel.cpu.analyzer[0]) : ['x'];
+      if(records.length) {
+        cpuCols.push(x_axis);
+        records.forEach((item, index) =>{
           //只取top5
           if (index < 5) {
             let arr = [];
@@ -392,7 +395,7 @@ export class DashboardController {
         });
       }
       else {
-        cpuCols.push(['x']);
+        cpuCols.push(x_axis);
       }
       let cpuChart = this.di.c3.generate({
         bindto: '#deviceCpuAnalyzer',
@@ -433,9 +436,12 @@ export class DashboardController {
     let convertSwitchMemoryAnalyzer = () => {
       //memory analyzer
       let memoryCols = [];
-      if(this.di.$scope.dashboardModel.memory.analyzer.length) {
-        memoryCols.push(this.getDeviceCPUMemoryTimeSeries(this.di.$scope.dashboardModel.memory.analyzer[0]));
-        this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer).forEach((item, index) =>{
+      let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
+      let x_axis = this.di.$scope.dashboardModel.memory.analyzer == true ? 
+          this.getDeviceCPUMemoryTimeSeries(this.di.$scope.dashboardModel.memory.analyzer[0]) : ['x'];
+      if(records.length) {
+        memoryCols.push(x_axis);
+        records.forEach((item, index) =>{
           //只取top5
           if (index < 5) {
             let arr = [];
@@ -446,7 +452,7 @@ export class DashboardController {
         });
       }
       else {
-        memoryCols.push(['x']);
+        memoryCols.push(x_axis);
       }
       let memoryChart = this.di.c3.generate({
         bindto: '#deviceMemoryAnalyzer',
@@ -764,15 +770,17 @@ export class DashboardController {
   getDevicesCPUChartData(analyzers) {
     let devices = [];
     analyzers.forEach((device, index) => {
-      let data = [], deviceObj = {};
-      device.analyzer.forEach((record) =>{
-        let utilize = record.system_percent + record.user_percent;//.toFixed(1)
-        data.push(utilize);
-      });
-      deviceObj['name'] = device.name;
-      deviceObj['avarage'] = this.di._.sum(data)/data.length;
-      deviceObj['data'] = data.map(item => item.toFixed(2));
-      devices.push(deviceObj);  
+      if (device.name) {
+        let data = [], deviceObj = {};
+        device.analyzer.forEach((record) =>{
+          let utilize = record.system_percent + record.user_percent;//.toFixed(1)
+          data.push(utilize);
+        });
+        deviceObj['name'] = device.name;
+        deviceObj['avarage'] = this.di._.sum(data)/data.length;
+        deviceObj['data'] = data.map(item => item.toFixed(2));
+        devices.push(deviceObj);  
+      }
     });
     devices = this.di._.orderBy(devices, 'avarage', 'desc');
     return devices;
@@ -781,15 +789,17 @@ export class DashboardController {
   getDevicesMemoryChartData(analyzers) {
     let devices = [];
     analyzers.forEach((device) => {
-      let data = [], deviceObj = {};
-      device.analyzer.forEach((record) =>{
-        let utilize = record.used_percent;
-        data.push(utilize);
-      });
-      deviceObj['name'] = device.name;
-      deviceObj['avarage'] = this.di._.sum(data)/data.length;
-      deviceObj['data'] = data.map(item => item.toFixed(2));
-      devices.push(deviceObj);
+      if (device.name) {
+        let data = [], deviceObj = {};
+        device.analyzer.forEach((record) =>{
+          let utilize = record.used_percent;
+          data.push(utilize);
+        });
+        deviceObj['name'] = device.name;
+        deviceObj['avarage'] = this.di._.sum(data)/data.length;
+        deviceObj['data'] = data.map(item => item.toFixed(2));
+        devices.push(deviceObj);
+      }
     });
     devices = this.di._.orderBy(devices, 'avarage', 'desc');
     return devices;
