@@ -24,7 +24,7 @@ export class DeviceWizardController {
     const deviceDataManager = this.di.deviceDataManager;
     const rootScope = this.di.$rootScope;
 
-    this.di.$scope.protocolDisplayLabel = {
+    scope.protocolDisplayLabel = {
       options: [
         {label: 'OpenFlow', value: 'of'},
         {label: 'SNMP', value: 'snmp'},
@@ -44,54 +44,39 @@ export class DeviceWizardController {
       leaf_group: '',
       managementAddress: '',
       port: '',
-      protocol: this.di.$scope.protocolDisplayLabel.options[0],
+      protocol: scope.protocolDisplayLabel.options[0],
       description: ''
     };
 
-    this.di.$scope.showWizard = false;
-    this.di.$scope.mode = 'add'; // 'add': add a new switch | 'update': update the switch
-    this.di.$scope.title = '添加交换机';
-    this.di.$scope.steps = [
+    scope.showWizard = false;
+    scope.mode = 'add'; // 'add': add a new switch | 'update': update the switch
+    scope.title = '添加交换机';
+    scope.steps = [
       {
         id: 'step1',
         title: 'Info',
-        content: require('../template/step1.html'),
+        content: require('../template/device_wizard.html'),
       },
-      // {
-      //   id: 'second',
-      //   title: 'Clock',
-      //   content: require('../template/step2.html')
-      // },
-      // {
-      //   id: 'third',
-      //   title: 'SNP',
-      //   content: require('../template/step3.html')
-      // },
-      // {
-      //   id: 'fourth',
-      //   title: 'SNP Traps',
-      //   content: require('../template/step4.html')
-      // },
-      // {
-      //   id: 'fifth',
-      //   title: 'Logging',
-      //   content: require('../template/step5.html')
-      // },
     ];
   
     // init form data
-    this.di.$scope.switch = _.cloneDeep(initSwitch);
+    scope.switch = _.cloneDeep(initSwitch);
+    
+    // TODO: init mac&ip bindings
+    scope.mac_addresses = [];
+    scope.ip_addresses = ['1.1.1.1','2.2.2.2','3.3.3.3','4.4.4.4','5.5.5.5'];
+    scope.mac_ip_bindings = {}
     
     let ipv4_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
     let ipv6_regex = '((^\\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\\s*$)|(^\\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}))|:)))(%.+)?\\s*$))';
-    this.di.$scope.mac_regex = '^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$';  // MAC Address regex for validation
-    this.di.$scope.ip_regex = `(${ipv4_regex}|${ipv6_regex})`;
-    this.di.$scope.num_regex = '^\d$|^[1-9]+[0-9]*$';
+    scope.mac_regex = '^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$';  // MAC Address regex for validation
+    scope.ip_regex = `(${ipv4_regex}|${ipv6_regex})`;
+    scope.num_regex = '^\d$|^[1-9]+[0-9]*$';
   
-    // this.di.$scope.protocols = ['REST', 'SNMP', 'GRPC', 'Openflow'];
-    this.di.$scope.protocols = ['of' ,'snmp', 'rest', 'grpc'];
+    // scope.protocols = ['REST', 'SNMP', 'GRPC', 'Openflow'];
+    scope.protocols = ['of' ,'snmp', 'rest', 'grpc'];
 
-    this.di.$scope.open = function(deviceId){
+    scope.open = function(deviceId){
       if(scope.showWizard) return;
       
       // 'update' mode
@@ -153,22 +138,36 @@ export class DeviceWizardController {
         scope.switch = _.cloneDeep(initSwitch);
         scope.showWizard = true;
       }
+      
+      // init mac&ip bindings
+      scope.mac_ip_bindings = {}
+      scope.mac_addresses = []
+      scope.ip_addresses = []
+      deviceDataManager.getMacAndIpBindings()
+        .then((res) => {
+          res.binding.forEach((bind) => {
+            scope.mac_ip_bindings[bind.mac] = bind.ip
+            scope.mac_addresses.push(bind.mac)
+            scope.ip_addresses.push(bind.ip)
+          })
+        })
+      
     }
     
-    this.di.$scope.stepValidation = function(curStep, nextStep) {
+    scope.stepValidation = function(curStep, nextStep) {
       return {
         valid: true,
         errorMessage: ''
       }
     }
     
-    this.di.$scope.cancel = function(formData){
+    scope.cancel = function(formData){
       return new Promise((resolve, reject) => {
         resolve({valid: true, errorMessage: ''});
       });
     }
   
-    this.di.$scope.submit = function() {
+    scope.submit = function() {
       let params = {
         id: scope.switch.id,
         mac: scope.switch.mac_address,
@@ -230,15 +229,39 @@ export class DeviceWizardController {
       });
     }
   
-    unsubscribes.push(this.di.$scope.$watch('mode', (newMode, oldMode) => {
+    unsubscribes.push(scope.$watch('mode', (newMode, oldMode) => {
       if(newMode == 'update') {
         scope.title = '修改交换机配置';
       }
     }));
 
-    unsubscribes.push(this.di.$scope.$watch('switch.protocol', (newPro, oldPro) => {
+    unsubscribes.push(scope.$watch('switch.protocol', (newPro, oldPro) => {
       if(newPro.value == 'rest') {
         scope.switch.mfr = 'Accton';
+      }
+    }));
+  
+    unsubscribes.push(scope.$watch('switch.mac_address', (newMac, oldMac) => {
+      if(newMac == oldMac) return
+  
+      scope.ip_addresses = [];
+      let macs = Object.keys(scope.mac_ip_bindings)
+      for(let mac of macs) {
+        if(mac.indexOf(newMac) != -1) {
+          scope.ip_addresses.push(scope.mac_ip_bindings[mac])
+        }
+      }
+    }));
+  
+    unsubscribes.push(scope.$watch('switch.managementAddress', (newIp, oldIp) => {
+      if(newIp == oldIp) return
+  
+      scope.mac_addresses = [];
+      let macs = Object.keys(scope.mac_ip_bindings)
+      for(let mac of macs) {
+        if(scope.mac_ip_bindings[mac].indexOf(newIp) != -1) {
+          scope.mac_addresses.push(mac)
+        }
       }
     }));
     
@@ -246,7 +269,7 @@ export class DeviceWizardController {
       scope.open(deviceId);
     }));
     
-    this.di.$scope.$on('$destroy', () => {
+    scope.$on('$destroy', () => {
       unsubscribes.forEach((cb) => {
         cb();
       })

@@ -25,8 +25,10 @@
         <!--<mdl-select ng-model="mac_address" name="mac_address"-->
         <!--display-label="{ options: [{label: '男1', value: '0'}, {label: '男2', value: '1'}]}">-->
         <!--</mdl-select>-->
-        <valid-input v-require="true" ng-model="switch.mac_address" v-rpcid="page_device_1" v-regex="mac_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}"></valid-input>
-
+        <valid-input v-require="true" v-list="mac-datalist" ng-model="switch.mac_address" v-rpcid="page_device_1" v-regex="mac_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}"></valid-input>
+        <datalist id="mac-datalist">
+            <option ng-value="mac" ng-repeat="mac in mac_addresses"/>
+        </datalist>
         <!--<input class="stepForm__input__text" name="mac" list="mac_addresses_datalist" ng-blur="macChange=true" ng-model="switch.mac_address" ng-pattern="mac_regex"/>-->
         <!--<datalist id="mac_addresses_datalist">-->
             <!--<option ng-value="mac" ng-repeat="mac in mac_addresses"/>-->
@@ -37,13 +39,15 @@
     </div>
     <div class="stepForm__input">
         <div ng-if="switch.protocol.value != 'of'" class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MANAGEMENT_ADDRESS' | translate}} & {{::'MODULES.SWITCHES.SWITCH.COLUMN.PORT' | translate}}<span class="stepForm__input__required">*</span></div>
-        <valid-input ng-if="switch.protocol.value != 'of'" v-require="true" v-span="true" v-style='{"width":"70%"}' ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
-
-        <span class="stepForm__input__separator" ng-if="switch.protocol.value != 'of'">&nbsp;:&nbsp;</span>
-        <valid-input ng-if="switch.protocol.value != 'of'" v-require="true" v-span="true" v-style='{"width":"20%"}' ng-model="switch.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
+        <valid-input ng-if="switch.protocol.value != 'of'" v-require="true" v-list="ip-datalist" v-span="true" v-style='{"width":"70%"}' ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
 
         <div ng-if="switch.protocol.value == 'of'" class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MANAGEMENT_ADDRESS' | translate}}<span class="stepForm__input__required">*</span></div>
-        <valid-input ng-if="switch.protocol.value == 'of'" v-require="true" v-style='{"width":"100%"}' v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
+        <valid-input ng-if="switch.protocol.value == 'of'" v-require="true" v-list="ip-datalist"  v-style='{"width":"100%"}' v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
+        <datalist id="ip-datalist">
+            <option ng-value="ip" ng-repeat="ip in ip_addresses"/>
+        </datalist>
+        <span class="stepForm__input__separator" ng-if="switch.protocol.value != 'of'">&nbsp;:&nbsp;</span>
+        <valid-input ng-if="switch.protocol.value != 'of'" v-require="true" v-span="true" v-style='{"width":"20%"}' ng-model="switch.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
 
     </div>
     <div class="stepForm__input">

@@ -316,6 +316,14 @@ export class appService {
   getDeleteIntentUrl(appId, key) {
     return this.getZoneEndpoint() + '/intents/' + appId + '/' + key;
   }
+  
+  getDHCPServerUrl(isBindings) {
+    if(isBindings) {
+      return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver/ipmacbinding';
+    } else {
+      return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver';
+    }
+  }
 }
 
 appService.$inject = appService.getDI();
