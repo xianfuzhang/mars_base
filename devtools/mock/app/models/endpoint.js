@@ -6,11 +6,11 @@ var _ = require('lodash'),
 const chance = new Chance();
 
 class Endpoint {
-  constructor (id, mac, tenant, segment, ip_addresses, locations) {
+  constructor (id, mac, tenant, vlan, ip_addresses, locations) {
     this.id = id;
     this.mac = mac;
     this.tenant = tenant;
-    this.segment = segment;
+    this.vlan = vlan;
     this.ip_addresses = ip_addresses;
     if(locations) {
       this.locations = locations;

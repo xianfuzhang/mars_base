@@ -21,6 +21,7 @@ import {ShowSwitchFlowsController} from './ng/showSwitchFlows.controller';
 import {ShowSwitchGroupsController} from './ng/showSwitchGroups.controller';
 import {ShowLinksSelectController} from './ng/showLinksSelect.controller';
 import {IntentsController} from './ng/intents.controller';
+import {CreateEndpointController} from './components/createEndpoint/ng/createEndpoint.controller';
 
 export default angular
   .module('fabric', [])
@@ -39,6 +40,7 @@ export default angular
   .controller('showSwitchGroupsController', ShowSwitchGroupsController)
   .controller('showLinksSelectController', ShowLinksSelectController)
   .controller('intentsController', IntentsController)
+  .controller('createEndpointCtrl', CreateEndpointController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)

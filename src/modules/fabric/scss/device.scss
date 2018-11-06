@@ -267,7 +267,23 @@
 .createIntentWizard .wizard__body__right{
   overflow: hidden;
 }
-
+.create-endpoint-modal{
+  width: 570px;
+}
+.create-endpoint-modal .column-manipulation-field__content{
+  height: 300px;
+}
+.create-endpoint-modal .receiveGroup{
+  width: 250px;
+  display: inline-block;
+}
+.create-endpoint-modal .error-msg{
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.03333em;
+  color: #b00020;
+}
 @keyframes show_div {
   from {
     right: 0;

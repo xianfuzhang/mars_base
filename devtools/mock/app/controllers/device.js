@@ -113,7 +113,7 @@ router.get('/devices/:deviceId', function (req, res) {
       // }
       let config = {
         id: device.id,
-        // name: device.annotations.name,
+        name: device.annotations.name,
         type: device.type,
         available: device.available,
         mgmtIpAddress: device.annotations.managementAddress,

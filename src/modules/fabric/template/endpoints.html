@@ -12,6 +12,7 @@
                      actions="endpointModel.rowActions"
                      row-click="onTableRowClick($event)"
                      row-select-action="onTableRowSelectAction($event)"
+                     on-add="addEndpoint()" on-remove="batchRemove($value)"
                      provider="endpointModel.endpointProvider" api-ready="onEndpointApiReady($api)">
           </mdl-table>
         </section>
