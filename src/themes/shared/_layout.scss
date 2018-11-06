@@ -1,4 +1,25 @@
 $grid-size: 12;
+html{
+  height:100%;
+  width: 100%;
+  
+  body{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+  };
+}
+
+a {
+  text-decoration: none;
+}
+ul {
+  padding: 0;
+}
+i {
+  font-style: normal;
+}
 body{
   font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -43,7 +64,7 @@ input:-webkit-autofill:active {
   padding: 0 24px;
   flex-direction: column;
   height: 90%;
-  min-height: 600px;
+  //min-height: 600px;
 }
 .main__content__full-width{
   width: 100%;

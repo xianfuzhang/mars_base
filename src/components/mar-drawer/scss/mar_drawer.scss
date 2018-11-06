@@ -1,6 +1,7 @@
-//@import 'xbem';
-@import 'default';
-@import 'shared';
+@import 'xbem';
+@import '../../../themes/shared/_zindex';
+//@import 'default';
+//@import 'shared';
 
 .mdc-drawer {
   &.\+right {

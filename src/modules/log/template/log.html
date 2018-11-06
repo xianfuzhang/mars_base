@@ -10,16 +10,14 @@
             <span ng-bind="::'MODULE.LOG.PAGE.TITLE' | translate"></span>
         </content-header>
         <section class="app-body" >
-            <div class="main__content" style="position:relative;">
-                <section class="tab-content">
-                    <mdl-table actions-show="logModel.actionsShow"
-                               actions="logModel.rowActions"
-                               provider="logModel.logProvider" api-ready="onLogAPIReady($api)"
-                               need-pagination="true">
-                    </mdl-table>
-                </section>
+            <div class="main__content" style="position:relative;height:550px;padding-top:5px;">
+                <mdl-table actions-show="logModel.actionsShow"
+                           actions="logModel.rowActions"
+                           provider="logModel.logProvider" api-ready="onLogAPIReady($api)"
+                           need-pagination="true">
+                </mdl-table>
 
-                <div class="actions" style="margin:0 auto;padding:15px;position:absolute;right:18px;">
+                <div class="actions" style="margin:0 auto;position: absolute;right: 23px;top: 7px;">
                     <!--<div style="display:inline-block;vertical-align: bottom;">-->
                     <!--<span ng-bind="::'MODULE.LOG.DOWNLOAD_LABEL' | translate"></span>-->
                     <!--</div>-->

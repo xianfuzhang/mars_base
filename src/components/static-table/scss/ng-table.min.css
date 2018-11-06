@@ -1,6 +1,7 @@
 @import 'xbem';
-@import 'default';
-@import 'shared';
+@import '../../../themes/shared/_size';
+/*@import 'default';*/
+/*@import 'shared';*/
 
 
 
