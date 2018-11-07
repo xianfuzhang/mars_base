@@ -311,7 +311,7 @@ function formatDevice(device) {
   delete tmpDevice.statistic;
   delete tmpDevice.leaf_group;
 
-  delete tmpDevice.name
+  // delete tmpDevice.name
   // TODO:change device type
   if(config.TEST_MODE) {
     tmpDevice.type = 'SWITCH';
