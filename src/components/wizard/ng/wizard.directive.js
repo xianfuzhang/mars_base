@@ -31,6 +31,7 @@ export class Wizard {
       scope.curIndex = 0;
       scope.errorMessage = '';
       scope.showWizard = scope.showWizard || false;
+      scope.loading = false;
       scope.wizardForm = {};
     }
     
@@ -97,8 +98,11 @@ export class Wizard {
     }
 
     scope.postSubmit = function() {
+      scope.loading = true;
       scope.submit()
         .then((result) => {
+          scope.loading = false;
+          
           if (result.valid == false) {
             scope.errorMessage = result.errorMessage || '';
           } else {
