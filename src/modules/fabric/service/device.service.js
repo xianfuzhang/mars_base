@@ -179,7 +179,11 @@ export class DeviceService {
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
         'value': 'delete'
-      }
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.MENU.REBOOT'),
+        'value': 'reboot'
+      },
     ]
   }
 
@@ -309,7 +313,7 @@ export class DeviceService {
         'layout': {'visible': true, 'sortable': true}
       },
       {
-        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.SEGMENT'),
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.VLAN'),
         'field': 'segment_name',
         'layout': {'visible': true, 'sortable': true}
       },
@@ -462,6 +466,11 @@ export class DeviceService {
         'label': this.translate('MODULES.SWITCH.MENU.SHOW_GROUP'),
         'isEnabled': true,
         'msg': 'summary_switch_menu_show_group'
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.MENU.REBOOT'),
+        'isEnabled': true,
+        'msg': 'summary_switch_reboot'
       }
     ]
 

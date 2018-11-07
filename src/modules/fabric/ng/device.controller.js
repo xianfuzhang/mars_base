@@ -106,7 +106,16 @@ export class DeviceController {
               this.di.$log.debug('delete switch dialog cancel');
             });
         }
-        
+
+        if (event.action.value === 'reboot') {
+          this.di.dialogService.createDialog('confirm', this.translate('MODULES.SUMMARY.REBOOT.CONFORM'))
+            .then((data)=>{
+              this.di.deviceDataManager.rebootDevice(event.data.id);
+            },(res)=>{
+              // error
+            })
+        }
+
         // add by yazhou.miao
         if (event.action.value === 'edit') {
           this.di.$rootScope.$emit('switch-wizard-show', event.data.id);

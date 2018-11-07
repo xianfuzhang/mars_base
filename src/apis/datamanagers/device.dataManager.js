@@ -41,6 +41,19 @@ export class DeviceDataManager {
 
   }
 
+  rebootDevice(deviceId){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getDeviceRebootUrl(deviceId))
+      .then((res) => {
+          defer.resolve(null);
+        },
+        () => {
+          defer.reject(null);
+        }
+      );
+    return defer.promise;
+  }
+
   getDevices(params) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getDevicesUrl(), {'params': params}).then(

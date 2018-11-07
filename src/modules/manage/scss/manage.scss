@@ -1,0 +1,52 @@
+//@import 'xbem';
+@import 'default';
+@import 'shared';
+@import 'framework_layout';
+
+
+.dhcp_table{
+
+}
+
+.dhcp_table tr td:first-child {
+  //text-align: right;
+  padding-right: 4px;
+  //background-color: red;
+  //padding-top: 4px;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.dhcp_table td{
+  height:45px;
+
+}
+
+.dhcp_table tr td:last-child {
+  text-align: left;
+  padding-left: 4px;
+  //padding-top: 4px;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.dhcp_table tr {
+  margin-top: 4px;
+}
+.dhcp_table .valid_input{
+  height:45px;
+}
+
+.dhcp_table .valid_input input{
+  width:200px;
+  height:45px;
+}
+
+.dhcp .mar_section__body{
+  background: none;
+}
+
+.dhcp .valid_input__message{
+  top:0;
+  right:-40px;
+}
