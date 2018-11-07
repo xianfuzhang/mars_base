@@ -337,7 +337,7 @@ export class DashboardController {
       this.di._.forEach(swtStatistics, (device)=>{
         let curDeviceId = device.device;
 
-        this.di._.forEach(dataModel['device'],(deviceM)=>{
+        this.di._.forEach(dataModel['devices'],(deviceM)=>{
           if(deviceM['id'] === curDeviceId){
             this.di._.forEach(device.ports, (port)=>{
               let portSt = {};
@@ -380,7 +380,7 @@ export class DashboardController {
       //cpu analyzer
       let cpuCols = [];
       let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer);
-      let x_axis = this.di.$scope.dashboardModel.cpu.analyzer == true ?
+      let x_axis = this.di.$scope.dashboardModel.cpu.analyzer.length > 0 ?
         this.getDeviceCPUMemoryTimeSeries(this.di.$scope.dashboardModel.cpu.analyzer[0]) : ['x'];
       if(records.length) {
         cpuCols.push(x_axis);
@@ -437,7 +437,7 @@ export class DashboardController {
       //memory analyzer
       let memoryCols = [];
       let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
-      let x_axis = this.di.$scope.dashboardModel.memory.analyzer == true ? 
+      let x_axis = this.di.$scope.dashboardModel.memory.analyzer.length > 0 ? 
           this.getDeviceCPUMemoryTimeSeries(this.di.$scope.dashboardModel.memory.analyzer[0]) : ['x'];
       if(records.length) {
         memoryCols.push(x_axis);
