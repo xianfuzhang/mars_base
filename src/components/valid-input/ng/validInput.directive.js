@@ -161,6 +161,11 @@ export class validInput {
       unsubscribers.push(scope.$watch('vModel',()=>{
         scope.ngChange();
       }));
+  
+      unsubscribers.push(scope.$watch('vList',(newValue, oldValue)=>{
+        if(newValue == oldValue)  return;
+        element.find('input').attr('list', scope.vList)
+      }));
 
       scope.$on('$destroy', () => {
         unsubscribers.forEach((unsubscribe) => {

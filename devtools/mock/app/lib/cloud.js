@@ -428,11 +428,10 @@ let cloudLib = {
     return false;
   },
   
-  deleteEndpoint: (tenant, segment, mac) => {
+  deleteEndpoint: (vlan, mac) => {
     // search using the instanceId in the instances array for each project
     let index = cloudModel.endpoints.findIndex((endpoint) => {
-      return endpoint.tenant === tenant
-          && endpoint.segment === segment
+      return endpoint.vlan === vlan
           && endpoint.mac === mac
     });
     
@@ -448,10 +447,10 @@ let cloudLib = {
     let endpoint = new Endpoint(
       chance.guid(),
       reqParams.mac,
-      reqParams.tenant,
-      reqParams.segment,
-      reqParams.ip_addresses,
-      reqParams.location
+      reqParams.tenant || -1,
+      reqParams.vlan,
+      reqParams.ipAddresses,
+      reqParams.locations
     );
     
     cloudModel.endpoints.push(endpoint);

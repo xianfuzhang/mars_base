@@ -13,7 +13,7 @@
                   class-list="main__content__device-tabs"
                   on-select="onTabChange($value)">
         </mdl-tabs>-->
-        <section class="tab-content">
+        <!--<section class="tab-content">-->
           <mdl-table actions-show="deviceModel.actionsShow"
                      actions="deviceModel.rowActions"
                      row-click="onTableRowClick($event)"
@@ -21,7 +21,7 @@
                      provider="deviceModel.deviceProvider" api-ready="onDeviceAPIReady($api)"
                      on-add="addSwitch()" on-remove="batchRemove($value)">
           </mdl-table>
-        </section>
+        <!--</section>-->
         <!--<section class="tab-content" ng-if="tabSelected.type == 'port'">
           <mdl-table actions-show="portModel.actionsShow"
                      actions="portModel.rowActions"

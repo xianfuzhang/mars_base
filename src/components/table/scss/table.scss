@@ -268,8 +268,6 @@ mdc设置组件颜色
   height: 230px;
   padding: 12px;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
 }
 .column-manipulation-field__column{
   display: flex;
@@ -277,11 +275,8 @@ mdc设置组件颜色
   width: 50%;
 }
 .column-manipulation-field__item{
-  align-items: center;
-  height: 30px;
-  margin: 0 0 45px 0;
+  text-align: center;
   font-size: 16px;
-  padding-left: 40px;
 }
 .column-manipulation-field__footer{
   height: 48px;

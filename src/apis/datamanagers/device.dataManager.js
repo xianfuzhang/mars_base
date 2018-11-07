@@ -301,6 +301,19 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  createEndpoint(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getEndPointsUrl(), params).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error.msg);
+      }
+    );
+    return defer.promise;
+  }
+
   changePortState(deviceId, portId, params) {
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getChangePortStateUrl(deviceId, portId), params)
@@ -314,14 +327,14 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  deleteEndpoint(tenant, segment, mac) {
+  deleteEndpoint(mac, segment) {
     let defer = this.di.$q.defer();
-    this.di.$http.delete(this.di.appService.getDeleteEndpointUrl(tenant, segment, mac))
+    this.di.$http.delete(this.di.appService.getDeleteEndpointUrl(mac, segment))
       .then((res) => {
           defer.resolve(null);
         },
-        () => {
-          defer.reject(null);
+        (error) => {
+          defer.reject(error.msg);
         }
       );
     return defer.promise;
@@ -421,8 +434,21 @@ export class DeviceDataManager {
         returnObj.name = 'L2 Unfiltered Interface'
         break;
     }
-    
+  
     return returnObj;
+  }
+  
+  getMacAndIpBindings() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDHCPServerUrl(true)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
   }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();

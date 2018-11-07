@@ -210,8 +210,11 @@ export class appService {
     return this.getZoneEndpoint() + '/hosts';
   }
 
-  getDeleteEndpointUrl(tenant, segment, mac) {
-    return this.getZoneEndpoint() + '/endpoints/v1/' + tenant + '/' + segment + '/' + mac;
+  // getDeleteEndpointUrl(tenant, segment, mac) {
+  //   return this.getZoneEndpoint() + '/endpoints/v1/' + tenant + '/' + segment + '/' + mac;
+  // }
+  getDeleteEndpointUrl(mac, segment){
+    return this.getZoneEndpoint() + '/hosts/v1/' + mac + '/' + segment;
   }
 
   getStormProfilesUrl() {
@@ -330,9 +333,16 @@ export class appService {
     return this.getZoneEndpoint() + '/intents/' + appId + '/' + key;
   }
 
-
   getDhcpUrl() {
     return this.getZoneEndpoint(true) + 'dhcpserver/ztp/v1/dhcpserver/';
+  }
+
+  getDHCPServerUrl(isBindings) {
+    if(isBindings) {
+      return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver/ipmacbinding';
+    } else {
+      return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver';
+    }
   }
 }
 

@@ -5,9 +5,13 @@ export class EndPointController {
       '$rootScope',
       '$q',
       '$filter',
+      '_',
       'appService',
       'deviceService',
+      'dialogService',
+      'notificationService',
       'deviceDataManager',
+      'modalManager',
       'tableProviderFactory'
     ];
   }
@@ -44,6 +48,74 @@ export class EndPointController {
       if (event.action.value === 'intent') {
          this.di.$rootScope.$emit('create-intent-show', {srcEndpoint: event.data.mac, endpoints: this.scope.entities});
       }
+      else if (event.action.value === 'delete') {
+        this.di.deviceDataManager.deleteEndpoint(event.data.mac, event.data.segment_name).then(
+          () => {
+            this.scope.endpointModel.API.queryUpdate();
+          },
+          (msg) => {
+            this.scope.alert = {
+              type: 'warning',
+              msg: msg
+            }
+            this.di.notificationService.render(this.scope);
+          }
+        );
+      }
+    };
+
+    this.scope.batchRemove = ($value) => {
+      if ($value.length) {
+        this.di.dialogService.createDialog('warning', this.translate('MODULES.ENDPOINT.DIALOG.CONTENT.BATCH_DELETE'))
+          .then(() =>{
+            this.batchDeleteEndpoints($value);
+          }, () =>{
+            this.di.$log.debug('delete switch dialog cancel');
+        });
+      }    
+    };
+
+    this.scope.addEndpoint = () => {
+      let devices = [];
+      this.di._.forEach(this.scope.deviceObjects, (value, key) => {
+        devices.push({'label': value, 'value': key});
+      });
+      if (!devices.length) {
+        this.scope.alert = {
+          type: 'warning',
+          msg: this.translate('MODULES.ENDPOINT.CREATE.WARNING.NO_DEVICE')
+        }
+        this.di.notificationService.render(this.scope);
+        return;
+      }
+      this.di.modalManager.open({
+          template: require('../components/createEndpoint/template/createEndpoint.html'),
+          controller: 'createEndpointCtrl',
+          windowClass: 'create-endpoint-modal',
+          resolve: {
+            dataModel: () => {
+              return {
+                devices: devices
+              };
+            }
+          }
+        })
+        .result.then((data) => {
+        if (data && !data.canceled) {
+          this.di.deviceDataManager.createEndpoint(data.result).then(
+            () => {
+              this.scope.endpointModel.API.queryUpdate();
+            },
+            (msg) => {
+              this.scope.alert = {
+                type: 'warning',
+                msg: msg
+              }
+              this.di.notificationService.render(this.scope);
+            }
+          )
+        }
+      });
     };
 
     this.init();
@@ -63,6 +135,7 @@ export class EndPointController {
     this.scope.endpointModel.endpointProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
+        this.scope.deviceObjects = {};
         this.di.deviceDataManager.getDeviceConfigs().then((devices)=> {
           if (devices) {
             devices.forEach((device) => {
@@ -83,7 +156,7 @@ export class EndPointController {
         return {
           schema: this.di.deviceService.getEndpointTableSchema(),
           index_name: 'mac',
-          rowCheckboxSupport: false,
+          rowCheckboxSupport: true,
           rowActionsSupport: true
         };
       }
@@ -97,7 +170,7 @@ export class EndPointController {
       let obj = {};
       obj.id = endpoint.id;
       obj.mac = endpoint.mac;
-      obj.tenant_name = endpoint.tenant;
+      //obj.tenant_name = endpoint.tenant;
       obj.segment_name = endpoint.segment || endpoint.vlan;
       obj.ip = (endpoint.ip_addresses && endpoint.ip_addresses.join(" | ")) 
               || (endpoint.ipAddresses && endpoint.ipAddresses.join(" | "));
@@ -113,12 +186,12 @@ export class EndPointController {
     return entities;
   }
 
-/*  batchDeleteEndpoints(arr) {
+  batchDeleteEndpoints(arr) {
     let deferredArr = [];
     arr.forEach((item) => {
       let defer = this.di.$q.defer();
-      let tenant = item.tenant_name, segment = item.segment_name, mac = item.mac;
-      this.di.deviceDataManager.deleteEndpoint(tenant, segment, mac)
+      let segment = item.segment_name, mac = item.mac;
+      this.di.deviceDataManager.deleteEndpoint(mac, segment)
         .then(() => {
           defer.resolve();
         }, () => {
@@ -128,11 +201,11 @@ export class EndPointController {
     });
 
     this.di.$q.all(deferredArr).then(() => {
-      this.scope.endpointModel.endpointAPI.queryUpdate();
+      this.scope.endpointModel.API.queryUpdate();
     });
 
     this.scope.$emit('batch-delete-endpoints');
-  }*/
+  }
 }
 
 EndPointController.$inject = EndPointController.getDI();

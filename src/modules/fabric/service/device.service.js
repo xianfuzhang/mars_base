@@ -84,7 +84,7 @@ export class DeviceService {
   }
 
   getEndpointActionsShow() {
-    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
+    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
   }
 
 
@@ -322,11 +322,11 @@ export class DeviceService {
         'field': 'ip',
         'layout': {'visible': true, 'sortable': true}
       },
-      {
+   /*   {
         'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.TENANT'),
         'field': 'tenant_name',
         'layout': {'visible': true, 'sortable': true}
-      },
+      },*/
       {
         'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.LOCATION'),
         'field': 'location',
@@ -337,10 +337,10 @@ export class DeviceService {
 
   getEndpointTableRowActions() {
     return [
-      /*{
+      {
         'label': this.translate('MODULES.SWITCHES.ENDPOINT.ROW.ACTION.DELETE'),
         'value': 'delete'
-      },*/
+      },
       {
         'label': 'Intent',
         'value': 'intent'

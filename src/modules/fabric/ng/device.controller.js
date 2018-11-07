@@ -436,12 +436,12 @@ export class DeviceController {
     this.scope.$emit('batch-delete-endpoints');
   }
 
-  batchDeleteEndpoints(arr) {
+  /*batchDeleteEndpoints(arr) {
     let deferredArr = [];
     arr.forEach((item) => {
       let defer = this.di.$q.defer();
-      let tenant = item.tenant_name, segment = item.segment_name, mac = item.mac;
-      this.di.deviceDataManager.deleteEndpoint(tenant, segment, mac)
+      let segment = item.vlan, mac = item.mac;
+      this.di.deviceDataManager.deleteEndpoint(mac, segment)
         .then(() => {
           defer.resolve();
         }, () => {
@@ -455,7 +455,7 @@ export class DeviceController {
     });
 
     this.scope.$emit('batch-delete-endpoints');
-  }
+  }*/
   /**
   confirmDialog(content) {
     let defer = this.di.$q.defer();
