@@ -86,9 +86,10 @@ export class validInput {
         ngPattern: scope.vRegex || getPattern(scope.vType||attr.vType),
         isInvalid: false,
         change: false,
-        message: scope.vMessage || getMessageByType(scope.vType),
+        message: scope.vMessage || getMessageByType(scope.vType||attr.vType),
         emptyMessage: this.translate('MODULES.REGEX.FLOW_ADD.NOTNULL'),
-        mouseOver: false
+        mouseOver: false,
+        focus:false
       };
 
       scope.blockOrInline = {};
@@ -107,6 +108,7 @@ export class validInput {
       }
 
       scope.blur = () => {
+        scope.validModel.focus = false;
         setTimeout(function () {
           scope.validModel.change = true;
           let invalid = element.children().hasClass('ng-invalid');
@@ -143,6 +145,9 @@ export class validInput {
         // scope.$apply();
       };
 
+      scope.focus = () => {
+        scope.validModel.focus = true;
+      }
 
 
       unsubscribers.push(this.di.$rootScope.$on(scope.vRpcid,()=>{

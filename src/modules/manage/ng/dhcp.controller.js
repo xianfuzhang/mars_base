@@ -40,7 +40,7 @@ export class DHCPController {
       // })
       scope.dhcpModel.dhcpserver  = {
         "startip": "10.1.11.51",
-        "endip": "10.1.11.100",
+        "endip": "",
         "subnet": "255.255.252.0",
         "router": "10.1.8.1",
         "domain": "8.8.8.8",
@@ -54,6 +54,26 @@ export class DHCPController {
     };
     init();
 
+
+
+    scope.saveDHCPConfig = () =>{
+      this.di.$rootScope.$emit('page_dhcp');
+      if(!validCurrentDom('dhcp')){
+        return false;
+      }
+
+      this.di.dialogService.createDialog('confirm', this.translate('MODULES.SUMMARY.REBOOT.CONFORM'))
+        .then((data)=>{
+          this.di.deviceDataManager.rebootDevice(event.data.id);
+        },(res)=>{
+          // error
+        })
+
+    };
+
+    scope.clearDHCPConfig = () =>{
+
+    };
   }
 
 
