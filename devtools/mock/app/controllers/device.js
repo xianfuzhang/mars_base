@@ -295,7 +295,6 @@ function validateDeviceRequest(params) {
   if(config.deviceTypes.indexOf(params.type) != -1
       && params.managementAddress
       && params.mac
-      && params.port
       && config.deviceProtocols.indexOf(params.protocol) != -1) {
     
     return true;
