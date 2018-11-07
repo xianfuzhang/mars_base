@@ -155,6 +155,14 @@ export class validInput {
         scope.validModel.change = true;
         let invalid = element.children().hasClass('ng-invalid');
         scope.validModel.isInvalid = invalid && scope.validModel.change;
+
+        if(invalid){
+          scope.inputStyle = {'animation': '.4s linear', 'animation-name': 'shake'};
+          setTimeout(function () {
+            scope.inputStyle = {};
+            scope.$apply()
+          },500)
+        }
         // scope.$apply();
       }));
 

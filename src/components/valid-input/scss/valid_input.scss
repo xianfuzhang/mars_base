@@ -22,7 +22,7 @@
   }
 
   .focus{
-    border-color: black;
+    //border-color: black;
     border-width: 2px;
   }
 
@@ -30,16 +30,16 @@
     border-color: red;
   }
   .ng-invalid.mouseover {
-    border-color: red;
+    //border-color: red;
   }
 
   .ng-invalid.focus{
-    border-color: red;
+    //border-color: red;
   }
 
 
   .ng-invalid.focus.mouseover {
-    border-color: red;
+    //border-color: red;
   }
 
   @include element(message) {
@@ -58,4 +58,153 @@
     padding: 5px;
   }
 
+  //@include element(shake){
+  //  animation: .5s linear;
+  //  animation-name: shake;
+  //}
+
+}
+
+@-webkit-keyframes shake {
+  0% {
+    margin-left:0;
+  }
+  10% {
+    margin-left:-3px;
+  }
+  20% {
+    margin-left:3px;
+  }
+  30% {
+    margin-left:-3px;
+  }
+  40% {
+    margin-left:3px;
+  }
+  50% {
+    margin-left:-3px;
+  }
+  60% {
+    margin-left:3px;
+  }
+  70% {
+    margin-left:-3px;
+  }
+  80% {
+     margin-left:3px;
+  }
+  90% {
+    margin-left:-3px;
+  }
+  100% {
+    margin-left:0;
+  }
+}
+
+@-moz-keyframes shake {
+  0% {
+    margin-left:0;
+  }
+  10% {
+    margin-left:-3px;
+  }
+  20% {
+    margin-left:3px;
+  }
+  30% {
+    margin-left:-3px;
+  }
+  40% {
+    margin-left:3px;
+  }
+  50% {
+    margin-left:-3px;
+  }
+  60% {
+    margin-left:3px;
+  }
+  70% {
+    margin-left:-3px;
+  }
+  80% {
+    margin-left:3px;
+  }
+  90% {
+    margin-left:-3px;
+  }
+  100% {
+    margin-left:0;
+  }
+}
+
+@-ms-keyframes shake {
+  0% {
+    margin-left:0;
+  }
+  10% {
+    margin-left:-3px;
+  }
+  20% {
+    margin-left:3px;
+  }
+  30% {
+    margin-left:-3px;
+  }
+  40% {
+    margin-left:3px;
+  }
+  50% {
+    margin-left:-3px;
+  }
+  60% {
+    margin-left:3px;
+  }
+  70% {
+    margin-left:-3px;
+  }
+  80% {
+    margin-left:3px;
+  }
+  90% {
+    margin-left:-3px;
+  }
+  100% {
+    margin-left:0;
+  }
+}
+
+@keyframes shake {
+  0% {
+    margin-left:0;
+  }
+  10% {
+    margin-left:-3px;
+  }
+  20% {
+    margin-left:3px;
+  }
+  30% {
+    margin-left:-3px;
+  }
+  40% {
+    margin-left:3px;
+  }
+  50% {
+    margin-left:-3px;
+  }
+  60% {
+    margin-left:3px;
+  }
+  70% {
+    margin-left:-3px;
+  }
+  80% {
+    margin-left:3px;
+  }
+  90% {
+    margin-left:-3px;
+  }
+  100% {
+    margin-left:0;
+  }
 }
