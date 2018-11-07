@@ -135,6 +135,10 @@ export class DeviceDetailService {
   getDeviceFlowsTableRowActions() {
     return [
       {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DETAIL'),
+        'value': 'detail'
+      },
+      {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
         'value': 'delete'
       }

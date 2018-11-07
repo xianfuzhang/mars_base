@@ -40,7 +40,7 @@ export class FlowService {
 			 
 			ethTypes.push(eth_type);
 		});
-		return ethTypes.toString();
+		return ethTypes;
 	}
 
 	treatmentHander(treatment) {
@@ -74,7 +74,7 @@ export class FlowService {
     });
 
 
-		return instructions.toString();
+		return instructions;
 	}
 }
 FlowService.$inject = FlowService.getDI();

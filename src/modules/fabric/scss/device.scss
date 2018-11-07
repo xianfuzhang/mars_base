@@ -284,6 +284,29 @@
   letter-spacing: 0.03333em;
   color: #b00020;
 }
+.show-flow-detail-modal.modal{
+  width: 650px;
+  font-size: 14px;
+  padding-bottom: 10px;
+}
+.show-flow-detail-modal .detail-row{
+  display: flex;
+  padding: 0 20px;
+  margin-bottom: 10px;
+ }
+ .show-flow-detail-modal .detail-value{
+  padding-left: 10px;
+  margin-bottom: 10px;
+ }
+.show-flow-detail-modal .left-item{
+  width: 50%;
+}
+.show-flow-detail-modal .right-item{
+  width: 50%;
+}
+.show-flow-detail-modal .detail-name{
+  font-weight: 700;
+}
 @keyframes show_div {
   from {
     right: 0;

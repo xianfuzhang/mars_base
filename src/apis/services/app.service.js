@@ -102,8 +102,7 @@ export class appService {
     let endpoint;
     if (this.isMocked) {
       endpoint = this.CONST.MOCKED_ZONE_ENDPOINT.replace('[%__ZONE_IP__%]',
-        (this.di.$location.host() + ":" + this.di.$location.port()));
-      ;
+        (this.di.$location.host()  + ":"+  this.di.$location.port()));
       endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
     }
     else {
