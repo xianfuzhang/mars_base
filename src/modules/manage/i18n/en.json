@@ -11,5 +11,13 @@
   "MODULES.MANAGE.DHCP.DELAY":"Delay",
   "MODULES.MANAGE.DHCP.TIMEOUT":"Timeout",
   "MODULES.MANAGE.DHCP.NORMAL_CONFIG":"Normal Setting",
-  "MODULES.MANAGE.DHCP.HIGH_CONFIG":"High Setting"
+  "MODULES.MANAGE.DHCP.HIGH_CONFIG":"High Setting",
+  "MODULES.MANAGE.DHCP.TTL.REGEX":"TTL input range (1-255)",
+  "MODULES.MANAGE.DHCP.LEASE.REGEX":"Address Leave Time input range(0-2592000)",
+  "MODULES.MANAGE.DHCP.RENEW.REGEX":"Lease Renewal Time input range(0-2592000)",
+  "MODULES.MANAGE.DHCP.REBIND.REGEX":"Lease Rebinding Time input range(0-2592000)",
+  "MODULES.MANAGE.DHCP.DELAY.REGEX":"Delay input range(2-10)",
+  "MODULES.MANAGE.DHCP.TIMEOUT.REGEX":"Timeout input range(150 - 300)",
+  "MODULES.MANAGE.DHCP.SUBMIT.CONFORM":"Are you sure you want to save dhcp setting?",
+  "MODULES.MANAGE.DHCP.DELETE.CONFORM":"Are you sure you want to remove dhcp setting?"
 }

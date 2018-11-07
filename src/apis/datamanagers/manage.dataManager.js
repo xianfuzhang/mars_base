@@ -34,9 +34,9 @@ export class ManageDataManager{
   }
 
 
-  postDHCP(){
+  postDHCP(param){
     let defer = this.di.$q.defer();
-    this.di.$http.post(this.di.appService.getDhcpUrl()).then(
+    this.di.$http.post(this.di.appService.getDhcpPostUrl(), param).then(
       (res) => {
         defer.resolve(res);
       },
