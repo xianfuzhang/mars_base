@@ -31,6 +31,7 @@ global.cloudModel = {
   logs: [],
   clusters: [],
   useraccounts: [],
+  dhcpserver:{},
   confighistory: [],
   intents: []
 };
@@ -292,7 +293,23 @@ let cloudLib = {
       
       cloudModel.clusters.push(cluster);
     });
-    
+
+    //create dhcp
+    cloudModel.dhcpserver = {
+      "startip": "192.168.40.10",
+      "endip": "192.168.40.100",
+      "subnet": "255.255.252.0",
+      "router": "255.255.252.0",
+      "domain": "8.8.8.8",
+      "ttl": 63,
+      "lease": 150,
+      "renew": 75,
+      "rebind": 200,
+      "delay": 2,
+      "timeout": 150
+    }
+
+
     // create config history
     _.times(config.confighistoryNumber, () => {
       let now = moment();
