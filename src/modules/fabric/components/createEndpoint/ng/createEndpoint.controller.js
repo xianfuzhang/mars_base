@@ -58,6 +58,7 @@ export class CreateEndpointController {
       'hint': this.translate('MODULES.ENDPOINT.CREATE.LOCATION.DEVICE'),
       'options': this.di.dataModel.devices
     }
+    this.scope.canceled = false;
     this.scope.ipIndex = 0;
     this.scope.locationIndex = 0;
     this.scope.removeReceiver = (rec) =>{
@@ -119,7 +120,7 @@ export class CreateEndpointController {
 
     this.scope.save = (event) =>{
       let invalid = false;
-      if (this.scope.model.endpointForm.$invalid) {
+      if (this.scope.model.endpointForm.$invalid || this.scope.canceled) {
         return;
       }
       if (!this.scope.model.mac || this.regExp('mac', this.scope.model.mac)) {
@@ -161,9 +162,10 @@ export class CreateEndpointController {
         locations: locations
       };
       this.di.$modalInstance.close({
-        canceled: false,
+        canceled: this.scope.canceled,
         result: data
       });
+      this.scope.canceled = true;
     };
 	}
 

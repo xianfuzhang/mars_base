@@ -14,7 +14,8 @@ export class DeviceDetailController {
       'notificationService',
       'dialogService',
       'deviceDataManager',
-      'tableProviderFactory'
+      'tableProviderFactory',
+      'modalManager'
     ];
   }
   constructor(...args){
@@ -132,17 +133,33 @@ export class DeviceDetailController {
               });
             break;
           case 'flow':
-            let flowId = event.data.id;
-            this.di.deviceDataManager.deleteDeviceFlow(this.scope.deviceId, flowId)
-              .then((res) => {
-                this.scope.detailModel.api.queryUpdate();
-              }, (res) => {
-                this.scope.alert = {
-                  type: 'warning',
-                  msg: res.data
+            if (event.action.value === 'detail'){
+              this.di.modalManager.open({
+                template: require('../template/showFlowDetail.html'),
+                controller: 'showFlowDetailCtrl',
+                windowClass: 'show-flow-detail-modal',
+                resolve: {
+                  dataModel: () => {
+                    return {
+                      detail: event.data.entity
+                    }
+                  }
                 }
-              this.di.notificationService.render(this.scope);
               });
+            }
+            else if (event.action.value === 'delete') {
+              let flowId = event.data.id;
+              this.di.deviceDataManager.deleteDeviceFlow(this.scope.deviceId, flowId)
+                .then((res) => {
+                  this.scope.detailModel.api.queryUpdate();
+                }, (res) => {
+                  this.scope.alert = {
+                    type: 'warning',
+                    msg: res.data
+                  }
+                this.di.notificationService.render(this.scope);
+              });
+            }
             break;
           case 'group':
             // TODO: group data
@@ -414,9 +431,10 @@ export class DeviceDetailController {
           obj['duration'] = entity.life;
           obj['priority'] = entity.priority;
           obj['name'] = entity.tableId;
-          obj['selector'] = this.di.flowService.selectorHandler(entity.selector);
-          obj['treatment'] = this.di.flowService.treatmentHander(entity.treatment);
+          obj['selector'] = this.di.flowService.selectorHandler(entity.selector).toString();
+          obj['treatment'] = this.di.flowService.treatmentHander(entity.treatment).toString();
           obj['app'] = entity.appId;
+          obj['entity'] = entity;
           this.scope.detailModel.entities.push(obj);
         });
         break;

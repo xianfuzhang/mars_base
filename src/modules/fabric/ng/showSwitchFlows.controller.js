@@ -73,8 +73,8 @@ export class ShowSwitchFlowsController {
       obj['duration'] = entity.life;
       obj['priority'] = entity.priority;
       obj['name'] = entity.tableId;
-      obj['selector'] = this.di.flowService.selectorHandler(entity.selector);
-      obj['treatment'] = this.di.flowService.treatmentHander(entity.treatment);
+      obj['selector'] = this.di.flowService.selectorHandler(entity.selector).toString();
+      obj['treatment'] = this.di.flowService.treatmentHander(entity.treatment).toString();
       obj['app'] = entity.appId;
       this.scope.flowsModel.entities.push(obj);
     });
