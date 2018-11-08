@@ -14,6 +14,9 @@ export class ClickableTextRenderer {
     }, this);
 
     let clickHandler = ($event) => {
+      if ($event.target._clickdata.value === '-'){
+        return;
+      }
       this.di.$rootScope.$emit('clickabletext', $event.target._clickdata);
     };
     this.initialize = (spec) => {
@@ -40,7 +43,7 @@ export class ClickableTextRenderer {
       if (spec && spec.col.sort !== this.di.tableConsts.CONST.SORT_UNDEFINED) {
         return 'text-bold';
       }
-      if (spec.col.type === 'clickabletext') {
+      if (spec.col.type === 'clickabletext' && (spec.value !== '-')) {
         return 'clickable';
       }
     };

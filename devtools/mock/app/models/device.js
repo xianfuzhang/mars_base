@@ -13,7 +13,7 @@ class Device {
     this.available = available;
     this.role = role;
     this.mac = mac;
-    this.rack_id = rack_id;
+    this.rackId = rack_id;
     this.sw = sw;
     this.hw = hw;
     this.serial = serial;
