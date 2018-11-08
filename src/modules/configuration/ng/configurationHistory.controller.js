@@ -167,14 +167,14 @@ export class ConfigurationHistoryController {
         'field': 'type',
         'layout': {'visible': true, 'sortable': false, 'fixed': true}
       },
-      {
-        'label': this.translate('MODUELS.CONFIGURATION.HISTORY.COLUMN.CLASS'),
-        'field': 'subject',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true}
-      },
+      // {
+      //   'label': this.translate('MODUELS.CONFIGURATION.HISTORY.COLUMN.CLASS'),
+      //   'field': 'subject',
+      //   'layout': {'visible': true, 'sortable': false, 'fixed': true}
+      // },
       {
         'label': this.translate('MODUELS.CONFIGURATION.HISTORY.COLUMN.SUBJECT'),
-        'field': 'class',
+        'field': 'subject',
         'layout': {'visible': true, 'sortable': false, 'fixed': true}
       },
       {
