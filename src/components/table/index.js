@@ -16,6 +16,8 @@ import {textRenderer} from './service/renderers/textRenderer';
 import {textRendererFactory} from './service/renderers/textRendererFactory';
 import {ClickableTextRenderer} from './service/renderers/clickableTextRenderer';
 import {ClickableTextRendererFactory} from './service/renderers/clickableTextRendererFactory';
+import {PopupTextRenderer} from './service/renderers/popupTextRenderer';
+import {PopupTextRendererFactory} from './service/renderers/popupTextRendererFactory';
 import {iconRenderer} from './service/renderers/iconRenderer';
 import {tableConsts} from './service/table.consts';
 
@@ -51,5 +53,7 @@ export default angular
   .service('textRendererFactory', textRendererFactory)
   .service('clickableTextRenderer', ClickableTextRenderer)
   .service('clickableTextRendererFactory', ClickableTextRendererFactory)
+  .service('popupTextRenderer', PopupTextRenderer)
+  .service('popupTextRendererFactory', PopupTextRendererFactory)
   .service('iconRendererFactory', iconRenderer)
   .name;

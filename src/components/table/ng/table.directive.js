@@ -11,6 +11,7 @@ export class mdlTable {
       'fastListenerService',
       'textRendererFactory',
       'clickableTextRendererFactory',
+      'popupTextRendererFactory',
       'iconRendererFactory'
     ];
   }
@@ -247,6 +248,7 @@ export class mdlTable {
       //let registry = scope._getRendererService();
       scope.renderService.register('text', this.di.textRendererFactory);
       scope.renderService.register('clickabletext', this.di.clickableTextRendererFactory);
+      scope.renderService.register('popuptext', this.di.popupTextRendererFactory);
       scope.renderService.register('icon', this.di.iconRendererFactory);
     };
 
