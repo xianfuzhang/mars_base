@@ -78,7 +78,8 @@ export class appService {
             'group': 'Manage',
             'label': this.translate('MODULE.HEADER.MANAGE'),
             'items': [
-              {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp'}
+              {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp'},
+              {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch'}
             ]
           }
 
@@ -351,7 +352,18 @@ export class appService {
   getElasticsearchDataIndexUrl(index){
     return this.getZoneEndpoint(true) + '/utility/elasticsearch/v1/'+ index +'/query';
   }
-
+  
+  getElasticsearchStatusUrl() {
+    return this.getZoneEndpoint(true) + '/utility/elasticsearch/v1/status';
+  }
+  
+  getElasticsearchDeleteUrl(index) {
+    return this.getZoneEndpoint(true) + `/utility/elasticsearch/v1/${index}/_delete_by_query`;
+  }
+  
+  getElasticsearchBackupUrl(backup_name) {
+    return this.getZoneEndpoint(true) + `/utility/elasticsearch/v1/_snapshot/${backup_name}`;
+  }
 }
 
 appService.$inject = appService.getDI();
