@@ -333,7 +333,11 @@ export class appService {
   }
 
   getDhcpUrl() {
-    return this.getZoneEndpoint(true) + 'dhcpserver/ztp/v1/dhcpserver/';
+    return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver/config';
+  }
+
+  getDhcpPostUrl() {
+    return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver/setConfig';
   }
 
   getDHCPServerUrl(isBindings) {
