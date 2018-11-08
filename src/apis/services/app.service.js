@@ -347,6 +347,11 @@ export class appService {
       return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver';
     }
   }
+
+  getElasticsearchDataIndexUrl(index){
+    return this.getZoneEndpoint(true) + '/utility/elasticsearch/v1/'+ index +'/query';
+  }
+
 }
 
 appService.$inject = appService.getDI();
