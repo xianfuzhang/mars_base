@@ -4,9 +4,9 @@ let config = {
   MAX_DROPPED_NUM: 5,
   // new config
   deviceNumber: 20,
-  deviceTypes: ['spine', 'SWITCH', 'leaf'],
+  deviceTypes: ['spine', 'unknown', 'leaf'],
   deviceRoles: ['MASTER', 'SLAVE'],
-  deviceProtocols: ['REST', 'SNMP', 'GRPC', 'Openflow'],
+  deviceProtocols: ['rest', 'snmp', 'grpc', 'of'],
   devicePortNum: 56,
   // deviceLeafGroups: ['R1L1', 'R1L2', 'R1L3', 'R2L1', 'R2L2', 'R2L3'],
   linkLeafNumber: 5,
