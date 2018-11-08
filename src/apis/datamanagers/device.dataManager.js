@@ -184,7 +184,7 @@ export class DeviceDataManager {
       },
       (error) => {
         this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error +"）")
-        defer.resolve(null);
+        defer.resolve([]);
       }
     );
     return defer.promise;

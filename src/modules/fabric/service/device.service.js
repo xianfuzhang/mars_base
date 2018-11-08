@@ -72,7 +72,7 @@ export class DeviceService {
   }
 
   getDeviceActionsShow() {
-    return {'menu': true, 'add': true, 'remove': true, 'refresh': true, 'search': false};
+    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
   }
 
   getPortActionsShow() {
@@ -138,11 +138,11 @@ export class DeviceService {
        'field': 'ports',
        'layout': {'visible': true, 'sortable': true}
        },*/
-      {
+      /*{
         'label': 'CHASSIS',
         'field': 'chassisId',
         'layout': {'visible': true, 'sortable': true}
-      },
+      },*/
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.PROTOCOL'),
         'field': 'protocol',
