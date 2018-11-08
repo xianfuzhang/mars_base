@@ -61,6 +61,19 @@ export class ManageDataManager{
     return defer.promise;
   }
 
+  getElasticsearchDataByIndexAndQuery(index, param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getElasticsearchDataIndexUrl(index), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve(error);
+      }
+    );
+    return defer.promise;
+  }
+
 }
 
 ManageDataManager.$inject = ManageDataManager.getDI();
