@@ -406,12 +406,13 @@ export class DeviceController {
   completedDetails(entities, details){
     this.di._.forEach(entities, (entity)=>{
       this.di._.forEach(details, (detail)=>{
-        if(detail.id === entity.id)
-        entity.role = detail.role;
-        entity.chassisId = detail.chassisId;
-        entity.serial = detail.serial;
-        entity.hw = detail.hw;
-        entity.sw = detail.sw;
+        if(detail.id === entity.id){
+          entity.role = detail.role;
+          entity.chassisId = detail.chassisId;
+          entity.serial = detail.serial;
+          entity.hw = detail.hw;
+          entity.sw = detail.sw;
+        }
       })
     });
   }
