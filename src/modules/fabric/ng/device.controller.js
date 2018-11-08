@@ -8,7 +8,6 @@ export class DeviceController {
       '$q',
       '$filter',
       '_',
-      //'$uibModal',
       'dialogService',
       'appService',
       'deviceService',
@@ -63,17 +62,6 @@ export class DeviceController {
     this.scope.onTableRowClick = (event) => {
       if (event.$data){
         this.scope.deviceModel.deviceAPI.setSelectedRow(event.$data.mac);
-        /*switch (this.scope.tabSelected.type) {
-          case 'device':
-            this.scope.deviceModel.deviceAPI.setSelectedRow(event.$data.mac);
-            break;
-          case 'port':
-            this.scope.portModel.portAPI.setSelectedRow(event.$data.port_mac);
-            break;
-          case 'link':
-            this.scope.linkModel.linkAPI.setSelectedRow(event.$data.id);
-            break;
-        }*/
       }
     };
 /*
@@ -226,27 +214,23 @@ export class DeviceController {
     this.scope.deviceModel.deviceProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
+        let config_defer = this.di.$q.defer(),
+            device_defer = this.di.$q.defer();
+
         this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
-          if(configs && configs.length > 0){
-            this.scope.entities = this.getEntities(configs);
-
-            this.di.deviceDataManager.getDevices(params).then((res) => {
-              // this.scope.entities = this.getEntities(res.data.devices);
-              this.completedDetails(this.scope.entities, res.data.devices)
-              defer.resolve({
-                data: this.scope.entities,
-                count: res.data.total
-              });
-            });
-          } else {
-            defer.resolve({
-              data: [],
-              count: null
-            });
-          }
+          config_defer.resolve(configs);
         });
-
-
+        this.di.deviceDataManager.getDevices(params).then((res)=>{
+          device_defer.resolve(res.data.devices);
+        });
+        this.di.$q.all([config_defer.promise, device_defer.promise]).then((arr) => {
+          this.scope.entities = [];
+          this.scope.entities = this.getEntities(arr[0], arr[1]);
+          let data = arr;
+          defer.resolve({
+            data: this.scope.entities
+          });
+        });
         return defer.promise;
       },
       getSchema: () => {
@@ -321,85 +305,47 @@ export class DeviceController {
     this.scope.onTabChange(this.scope.tabs[0]);*/
   }
 
-  getEntities(origins) {
+  getEntities(configDevices, originDevices) {
     let entities = [];
-    if(!Array.isArray(origins)) return entities;
-    //switch(this.scope.tabSelected.type) {
-      //case 'device':
-        origins.forEach((item) => {
-          let obj = {};
-          obj.id = item.id;
-          obj.switch_name = item.name;
-          obj.ip = item.mgmtIpAddress;
-          obj.mac = item.mac;
-          obj.type = item.type;
-          // obj.role = item.role;
-          obj.rack_id = item.rack_id;
-          obj.available = item.available === true ? 'available' : 'unavailable';
-          //obj.ports = item.ports.length;
-          // obj.chassisId = item.chassisId;
-          obj.protocol = item.protocol;
-          obj.mfr = item.mfr;
-          // obj.serial = item.serial;
-          // obj.hw = item.hw;
-          // obj.sw = item.sw;
-          entities.push(obj);
-        });
-      //  break;
-/*
-      case 'port':
-        origins.forEach((port) => {
-          let obj = {};
-          obj.element = port.element;
-          obj.port_name = port.annotations.portName;
-          obj.port_mac = port.annotations.portMac;
-          obj.port_id = port.port;
-          obj.link_status = port.annotations.linkStatus;
-          obj.type = port.type;
-          obj.speed = port.portSpeed;
-          obj.device_name = port.device_name;
-          obj.isEnabled = port.isEnabled;
-          obj.port_status = port.isEnabled === true ?
-            this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE') :
-            this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE');
-          entities.push(obj);
-        });
-        break;
+    configDevices.forEach((item) => {
+      let obj = {};
+      let origin = this.di._.find(originDevices, {'id': item.id});
+      obj.id = item.id;
+      obj.switch_name = item.name;
+      obj.ip = item.mgmtIpAddress;
+      obj.mac = item.mac;
+      obj.type = item.type;
+      obj.role = origin && origin.role || '-';
+      obj.rack_id = origin && origin.rackId || '-';
+      obj.available = item.available === true ? 'available' : 'unavailable';
+      obj.protocol = item.protocol;
+      obj.mfr = item.mfr || (origin &&origin.mfr);
+      obj.serial = origin && origin.serial || '-';
+      obj.hw = origin && origin.hw || '-';
+      obj.sw = origin && origin.sw || '-';
+      entities.push(obj);
+    });
 
-      case 'link':
-        origins.forEach((link) => {
-          let obj = {};
-          obj.id = link.src.device + '_' + link.src.port;
-          obj.src_device = link.src.device;
-          obj.src_port = link.src.port;
-          obj.dst_device = link.dst.device;
-          obj.dst_port = link.dst.port;
-          obj.state = link.state;
-          obj.type = link.type;
-          obj.duration = link.annotations.durable;
-          obj.protocol = link.annotations.protocol;
-          obj.latency = link.annotations.latency;
-          entities.push(obj);
-        });
-        break;
-
-      case 'endpoint':
-        origins.forEach((endpoint) => {
-          let obj = {};
-          obj.id = endpoint.id;
-          obj.mac = endpoint.mac;
-          obj.tenant_name = endpoint.tenant;
-          obj.segment_name = endpoint.segment;
-          obj.ip = endpoint.ip_addresses.join(" | ");
-          let locals = [];
-          endpoint.locations.forEach((location) => {
-            locals.push(location.device_id + '/' + location.port);
-          });
-          obj.location = locals.join(" | ");
-            entities.push(obj);
-        });
-        break;*/
-    //}
+    originDevices.forEach((item) => {
+      let origin = this.di._.find(entities, {'id': item.id});
+      if (!origin) {
+        let obj = {};
+        obj.id = item.id;
+        obj.switch_name = '-';
+        obj.ip = item.annotations.managementAddress;
+        obj.mac = item.mac;
+        obj.type = 'unknown';
+        obj.role = item.role;
+        obj.rack_id = item.rackId;
+        obj.available = item.available === true ? 'available' : 'unavailable';
+        obj.protocol = item.annotations.protocol;
+        obj.mfr = item.mfr;
+        obj.serial = item.serial;
+        obj.hw = item.hw;
+        obj.sw = item.sw;
+        entities.push(obj);
+      }
+    });
     return entities;
   }
 
@@ -436,56 +382,6 @@ export class DeviceController {
 
     this.scope.$emit('batch-delete-endpoints');
   }
-
-  /*batchDeleteEndpoints(arr) {
-    let deferredArr = [];
-    arr.forEach((item) => {
-      let defer = this.di.$q.defer();
-      let segment = item.vlan, mac = item.mac;
-      this.di.deviceDataManager.deleteEndpoint(mac, segment)
-        .then(() => {
-          defer.resolve();
-        }, () => {
-          defer.resolve();
-        });
-      deferredArr.push(defer.promise);
-    });
-
-    this.di.$q.all(deferredArr).then(() => {
-      this.scope.endpointModel.endpointAPI.queryUpdate();
-    });
-
-    this.scope.$emit('batch-delete-endpoints');
-  }*/
-  /**
-  confirmDialog(content) {
-    let defer = this.di.$q.defer();
-    this.di.$uibModal
-      .open({
-        template: require('../../../components/mdc/templates/dialog.html'),
-        controller: 'dialogCtrl',
-        backdrop: true,
-        resolve: {
-          dataModel: () => {
-            return {
-              type: 'warning',
-              headerText: this.translate('MODULES.SWITCHES.DIALOG.HEADER'),
-              contentText: content,
-            };
-          }
-        }
-      })
-      .result.then((data) => {
-        if(data) {
-          defer.resolve(data);
-        }
-        else {
-          defer.reject(null);
-        }
-    });
-
-    return defer.promise;
-  }**/
 }
 
 DeviceController.$inject = DeviceController.getDI();

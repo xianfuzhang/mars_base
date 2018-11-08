@@ -235,7 +235,14 @@ angular
         resolve: {
           loggedin: checkLoggedIn
         }
-      })
+      }).
+    when('/elasticsearch', {
+      template: require('./modules/manage/template/elasticsearch.html'),
+      controller: 'elasticsearchController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
       .otherwise({ redirectTo: '/' });
 
   }])

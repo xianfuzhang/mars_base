@@ -1,0 +1,45 @@
+<div class="column-manipulation-field">
+ 	<div class="column-manipulation-field__header">
+		<span class="column-manipulation-field__title"
+          ng-bind="'MODULES.DASHBOARD.SWITCH.RANGE.CONFIGURATION'|translate"></span>
+ 	</div>
+ 	<form class="dateRange__form" name="switchRangeModel.configForm" autocomplete="off" novalidate>
+ 		<div class="column-manipulation-field__content column-manipulation-field__content__date-range-modifier">
+	 		<div class="column-manipulation-field__item column-manipulation-field__item__date-range-modifier">
+		 		<label ng-class="{'date-warning-label': switchRangeModel.configForm.$invalid=== true}">开始时间：</label>
+	 			<div class="calendar-container" ng-class="{'date-picker-warning': switchRangeModel.configForm.$invalid=== true}">
+					<date-picker ng-model="switchRangeModel.calendar.begin_date" options="switchRangeModel.datePickerOptions">
+					</date-picker>
+			 		 <div class="calendar-time-field" uib-timepicker ng-model="switchRangeModel.calendar.begin_time" hour-step="1" minute-step="30" show-meridian="false"></div>
+	 			</div>
+	 		</div>
+	 		<div class="column-manipulation-field__item column-manipulation-field__item__date-range-modifier">
+	 			<label>结束时间：</label>
+	 			<div class="calendar-container">
+					<date-picker ng-model="switchRangeModel.calendar.end_date" options="switchRangeModel.datePickerOptions"></date-picker>
+			 		 <div class="calendar-time-field" uib-timepicker ng-model="switchRangeModel.calendar.end_time" hour-step="1" minute-step="30" show-meridian="false"></div>
+	 			</div>
+	 		</div>
+	 		<div class="column-manipulation-field__item column-manipulation-field__item__date-range-modifier">
+	 			<p class="date-range-warning" ng-class="{'show': switchRangeModel.configForm.$invalid=== true}">
+	 				开始时间需小于结束时间!</p>
+	 		</div>
+ 		</div>
+	 	<div class="column-manipulation-field__footer">
+	      <!--<button class="mdc-button mdc-ripple-upgraded right" type="submit"-->
+	              <!--ng-click="save($event)"-->
+	              <!--ng-bind="'MODULES.TABLE.COLUMN.SAVE'|translate"></button>-->
+	      <!--<button class="mdc-button mdc-ripple-upgraded right"-->
+	              <!--ng-click="cancel($event)"-->
+	              <!--ng-bind="'MODULES.TABLE.COLUMN.CANCEL'|translate"></button>-->
+
+			<div style="display: inline-block;float: right; margin-left: 15px;">
+				<mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="userModel.userForm.$invalid" />
+			</div>
+
+			<div style="display: inline-block;float: right;">
+				<mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)" />
+			</div>
+	    </div>
+	</form>
+ </div>
