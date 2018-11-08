@@ -46,6 +46,7 @@ export class LogService {
       {
         'label': this.translate('MODULE.LOG.COLUMN.CONTENT'),
         'field': 'content',
+        'type':'popuptext',
         'layout': {'visible': true, 'sortable': false, 'fixed': true}
       },
     ];

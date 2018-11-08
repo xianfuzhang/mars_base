@@ -64,7 +64,13 @@ export class LogController {
     this.unsubscribers = [];
   
     this.init();
-  
+
+    this.unsubscribers.push(this.di.$rootScope.$on('popuptext', (event, params) => {
+      if (params && params.field === 'content') {
+
+      }
+    }));
+
     this.scope.$on('$destroy', () => {
       this.unsubscribers.forEach((cb) => {
         cb();

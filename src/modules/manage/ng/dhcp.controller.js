@@ -194,7 +194,11 @@ export class DHCPController {
 
       this.di.dialogService.createDialog('confirm', this.translate('MODULES.MANAGE.DHCP.SUBMIT.CONFORM'))
         .then((data)=>{
-          this.di.manageDataManager.postDHCP(param);
+          this.di.manageDataManager.postDHCP(param).then((res)=>{
+            if(res){
+              init();
+            }
+          });
         },(res)=>{
 
         })
