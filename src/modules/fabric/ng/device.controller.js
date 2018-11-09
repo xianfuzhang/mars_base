@@ -411,13 +411,25 @@ export class DeviceController {
       this.di.deviceDataManager.deleteDevice(item.id)
         .then(() => {
           defer.resolve();
-        }, () => {
-          defer.resolve();
+        }, (msg) => {
+          defer.reject(msg);
         });
       deferredArr.push(defer.promise);
     });
 
     this.di.$q.all(deferredArr).then(() => {
+      this.scope.alert = {
+        type: 'success',
+        msg: this.translate('MODULES.SWITCHES.BATCH.DELETE.SUCCESS')
+      }
+      this.di.notificationService.render(this.scope);
+      this.scope.deviceModel.deviceAPI.queryUpdate();
+    }, (msg) => {
+      this.scope.alert = {
+        type: 'warning',
+        msg: msg
+      }
+      this.di.notificationService.render(this.scope);
       this.scope.deviceModel.deviceAPI.queryUpdate();
     });
 

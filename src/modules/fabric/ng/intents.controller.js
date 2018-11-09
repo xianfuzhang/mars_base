@@ -216,8 +216,8 @@ export class IntentsController {
       this.di.intentDataManager.deleteIntent(item.appId, item.id)
         .then(() => {
           defer.resolve();
-        }, () => {
-          defer.resolve();
+        }, (msg) => {
+          defer.reject(msg);
         });
       deferredArr.push(defer.promise);
     });

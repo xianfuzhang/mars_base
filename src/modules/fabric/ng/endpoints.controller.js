@@ -5,6 +5,7 @@ export class EndPointController {
       '$rootScope',
       '$q',
       '$filter',
+      '$log',
       '_',
       'appService',
       'deviceService',
@@ -247,8 +248,8 @@ export class EndPointController {
       this.di.deviceDataManager.deleteEndpoint(mac, segment)
         .then(() => {
           defer.resolve();
-        }, () => {
-          defer.resolve();
+        }, (msg) => {
+          defer.reject(msg);
         });
       deferredArr.push(defer.promise);
     });
