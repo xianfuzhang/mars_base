@@ -10,6 +10,7 @@ export class ElasticsearchController {
       '$q',
       '$timeout',
       'c3',
+      'dialogService',
       'dateService',
       'dashboardDataManager',
       'manageDataManager',
@@ -91,6 +92,8 @@ export class ElasticsearchController {
     
     this.scope.clear = () => {
       let begin_date, end_date, begin_time, end_time;
+  
+      this.scope.loading = true;
       
       this.di.modalManager.open({
         template: require('../template/selectDateDialog.html'),
@@ -335,27 +338,6 @@ export class ElasticsearchController {
       this.di.$scope.dashboardModel.indice.analyzer = []
       defer.reject(err)
     });
-  
-    // JSON format
-    // [
-    //   {
-    //     "key": "v1",
-    //     "from": 1539940696000,
-    //     "from_as_string": "2018-10-19T09:18:16.000Z",
-    //     "to": 1540940696000,
-    //     "to_as_string": "2018-10-30T23:04:56.000Z",
-    //     "doc_count": 103525906
-    //   },
-    //   {
-    //     "key": "v2",
-    //     "from": 1540940696000,
-    //     "from_as_string": "2018-10-30T23:04:56.000Z",
-    //     "to": 1540950696000,
-    //     "to_as_string": "2018-10-31T01:51:36.000Z",
-    //     "doc_count": 1080000
-    //   }
-    // ]
-    
     return defer.promise;
   }
   
