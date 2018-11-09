@@ -3,10 +3,12 @@ export class LogController {
     return [
       '$filter',
       '$scope',
+      '$rootScope',
       '$q',
       '$timeout',
       '$window',
       'appService',
+      'dialogService',
       'logService',
       'logDataManager',
       'tableProviderFactory'
@@ -49,7 +51,7 @@ export class LogController {
       this.scope.loading = true;
       
       this.scope.logModel.logAPI.queryUpdate();
-    }
+    };
   
     this.scope.downloadFile = () => {
       if (this.scope.logFileSelected.value == '') return false;
@@ -65,9 +67,19 @@ export class LogController {
   
     this.init();
 
+    let textPretty = (text) =>{
+      let ret = "";
+      try{
+        ret = JSON.stringify(JSON.parse(text), null ,2 )
+      } catch(e){
+        ret = text;
+      }
+      return ret;
+    };
+
     this.unsubscribers.push(this.di.$rootScope.$on('popuptext', (event, params) => {
       if (params && params.field === 'content') {
-
+        this.di.dialogService.createDialog('info', textPretty(params.value)).then((data)=>{},(err)=>{});
       }
     }));
 
