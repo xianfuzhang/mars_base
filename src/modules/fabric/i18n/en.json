@@ -142,6 +142,8 @@
   "MODULES.INTENT.CREATE.TYPE": "Type",
   "MODULES.INTENT.CREATE.TITLE": "Create Intent",
   "MODULES.INTENT.CREATE.SUCCESS": "Create Intent success.",
+  "MODULES.INTENT.DELETE.SUCCESS": "Delete Intent success.",
+  "MODULES.INTENT.BATCH.DELETE.SUCCESS": "Batch delete Intents success.",
   "MODULES.INTENT.CREATE.RESOURCE.INVALID": "The current environment has no resources available to create Intent.",
   "MODULES.INTENTS.DIALOG.CONTENT.BATCH_DELETE_INTENT": "Batch delte these intents?",
   "MODULES.SUMMARY.REBOOT.CONFORM":"Are you sure you want to restart the switch?",
@@ -158,6 +160,9 @@
   "MODULES.ENDPOINT.CREATE.BUTTON.LOCATION": "LOCATION",
   "MODULES.ENDPOINT.CREATE.HINT.IP": "Endpoint need to specify IP address.",
   "MODULES.ENDPOINT.CREATE.HINT.LOCATION": "Endpoint need to specify location infomation.",
+  "MODULES.ENDPOINT.CREATE.SUCCESS": "Create Endpoint success.",
+  "MODULES.ENDPOINT.DELETE.SUCCESS": "Delete Endpoint success.",
+  "MODULES.ENDPOINT.BATCH.DELETE.SUCCESS": "Batch delete Endpoint success.",
   "MODULES.ENDPOINT.CREATE.WARNING.NO_DEVICE": "No devices available on the current system",
   "MODULES.ENDPOINT.DIALOG.CONTENT.BATCH_DELETE": "Batch delete these endpoints?"
 }

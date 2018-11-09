@@ -93,6 +93,11 @@ export class EndPointController {
       else if (event.action.value === 'delete') {
         this.di.deviceDataManager.deleteEndpoint(event.data.mac, event.data.segment_name).then(
           () => {
+            this.scope.alert = {
+              type: 'success',
+              msg: this.translate('MODULES.ENDPOINT.DELETE.SUCCESS')
+            }
+            this.di.notificationService.render(this.scope);
             this.scope.endpointModel.API.queryUpdate();
           },
           (msg) => {
@@ -146,6 +151,11 @@ export class EndPointController {
         if (data && !data.canceled) {
           this.di.deviceDataManager.createEndpoint(data.result).then(
             () => {
+              this.scope.alert = {
+                type: 'success',
+                msg: this.translate('MODULES.ENDPOINT.CREATE.SUCCESS')
+              }
+              this.di.notificationService.render(this.scope);
               this.scope.endpointModel.API.queryUpdate();
             },
             (msg) => {
@@ -244,7 +254,18 @@ export class EndPointController {
     });
 
     this.di.$q.all(deferredArr).then(() => {
+      this.scope.alert = {
+        type: 'success',
+        msg: this.translate('MODULES.ENDPOINT.BATCH.DELETE.SUCCESS')
+      }
+      this.di.notificationService.render(this.scope);
       this.scope.endpointModel.API.queryUpdate();
+    }, (msg) => {
+      this.scope.alert = {
+        type: 'warning',
+        msg: msg
+      }
+      this.di.notificationService.render(this.scope);
     });
 
     this.scope.$emit('batch-delete-endpoints');
