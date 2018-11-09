@@ -19,5 +19,9 @@
   "MODULES.MANAGE.DHCP.DELAY.REGEX":"Delay input range(2-10)",
   "MODULES.MANAGE.DHCP.TIMEOUT.REGEX":"Timeout input range(150 - 300)",
   "MODULES.MANAGE.DHCP.SUBMIT.CONFORM":"Are you sure you want to save dhcp setting?",
-  "MODULES.MANAGE.DHCP.DELETE.CONFORM":"Are you sure you want to remove dhcp setting?"
+  "MODULES.MANAGE.DHCP.DELETE.CONFORM":"Are you sure you want to remove dhcp setting?",
+  "MODULES.MANAGE.ELASTICSEARCH.BUTTON.BACKUP":"Backup",
+  "MODULES.MANAGE.ELASTICSEARCH.BUTTON.REMOVE":"Clear",
+  "MODULES.MANAGE.ELASTICSEARCH.DIALOG.INPUT_FILENAME":"Input the backup filename",
+  "MODULES.MANAGE.ELASTICSEARCH.DIALOG.SELECT_DATETIME":"Select the endtime to clear"
 }

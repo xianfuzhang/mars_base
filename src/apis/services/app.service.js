@@ -343,7 +343,7 @@ export class appService {
 
   getDHCPServerUrl(isBindings) {
     if(isBindings) {
-      return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver/ipmacbinding';
+      return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver/mappings';
     } else {
       return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver';
     }
@@ -357,7 +357,7 @@ export class appService {
     return this.getZoneEndpoint(true) + '/utility/elasticsearch/v1/status';
   }
   
-  getElasticsearchDeleteUrl(index) {
+  getElasticsearchDeleteIndexUrl(index) {
     return this.getZoneEndpoint(true) + `/utility/elasticsearch/v1/${index}/_delete_by_query`;
   }
   
