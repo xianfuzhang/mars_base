@@ -33,6 +33,8 @@ export class dialogCtrl {
     this.scope.content = data && data.contentText || '';
     this.scope.confirmation = data && data.confirmationText || this.i18n('COMPONENT.MDC.DIALOG.ACCEPT');
     this.scope.cancel = data && data.cancelText || this.i18n('COMPONENT.MDC.DIALOG.CANCEL');
+
+    this.scope.infoStyle = data&&data.isInfoNotJson ? {"white-space":"normal"}:{};
   }
 }
 

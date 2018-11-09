@@ -20,6 +20,8 @@ export class DialogService {
 		let defer = this.di.$q.defer();
 		let header = '';
 		type = type || 'warning';
+
+		let isInfoNotJson = false;
     switch(type.toLowerCase()) {
       case 'confirm':
         header = this.translate('MODULES.SWITCHES.DIALOG.HEADER.CONFIRM');
@@ -31,6 +33,9 @@ export class DialogService {
         header = this.translate('MODULES.SWITCHES.DIALOG.HEADER.SUCCESS');
         break;
       case 'info':
+        isInfoNotJson = true;
+        break;
+      case 'info_json':
         break;
       case 'warning':
       default:
@@ -47,6 +52,7 @@ export class DialogService {
               type: type,
               headerText: header,
               contentText: content,
+              isInfoNotJson: isInfoNotJson
             };
           }
         }
