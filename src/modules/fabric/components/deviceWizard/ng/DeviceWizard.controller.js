@@ -145,7 +145,7 @@ export class DeviceWizardController {
       scope.ip_addresses = []
       deviceDataManager.getMacAndIpBindings()
         .then((res) => {
-          res.applications.forEach((bind) => {
+          res.mappings.forEach((bind) => {
             // "host": "70:72:CF:6A:A8:D8/None"
             let mac = bind.host.slice(0,17)
             scope.mac_ip_bindings[mac] = bind.ip

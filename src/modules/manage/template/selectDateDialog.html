@@ -1,0 +1,22 @@
+<div class="column-manipulation-field">
+ 	<div class="column-manipulation-field__header">
+		<span class="column-manipulation-field__title"
+          ng-bind="'MODULES.MANAGE.ELASTICSEARCH.DIALOG.SELECT_DATETIME'|translate"></span>
+ 	</div>
+ 	<form class="dateRange__form" name="dialogModel.form" autocomplete="off" novalidate>
+		<div style="height:100px;" class="column-manipulation-field__content column-manipulation-field__content__date-range-modifier">
+			<div style="margin: 30px auto;font-size:20px !important;">
+				<input style="width:100%;border-radius:5px;" type="datetime-local" ng-value="" ng-model="dialogModel.endtime" max="::dateTo">
+			</div>
+		</div>
+	 	<div class="column-manipulation-field__footer">
+			<div style="display: inline-block;float: right; margin-left: 15px;">
+				<mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-white btn-sm'" btn-click="save($event)" btn-disabled="dialogModel.form.$invalid" />
+			</div>
+
+			<div style="display: inline-block;float: right;">
+				<mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)" />
+			</div>
+	    </div>
+	</form>
+ </div>
