@@ -4,7 +4,7 @@ const express = require('express'),
   {AlertRule} = require('../models/alert'),
   _ = require('lodash');
 
-router.get('/ipmacbinding', function (req, res) {
+router.get('/mappings', function (req, res) {
   let bindings = [
     {mac:'0A:0A:0A:0A:0A:0A',ip:'0.0.0.1'},
     {mac:'0A:1B:1A:1A:1A:1A',ip: '0.0.0.2'},
