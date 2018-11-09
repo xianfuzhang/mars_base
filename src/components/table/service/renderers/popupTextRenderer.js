@@ -24,8 +24,45 @@ export class PopupTextRenderer {
     };
 
     this.render = (spec) => {
-      spec.element.innerHTML = (spec.value === null || spec.value === undefined ? '-' : String(spec.value));
-      spec.element.addEventListener('click', clickHandler);
+
+
+      let value = (spec.value === null || spec.value === undefined ? '-':String(spec.value));
+      // spec.element.innerHTML = value;
+      if(value.length >= 20){
+        // let clickSpan = "<i class='material-icons' style='vertical-align: middle;'>comment</i>";
+        let popupBtn = document.createElement('i');
+        popupBtn.setAttribute('class', 'material-icons');
+        popupBtn.setAttribute('style', 'vertical-align: middle;cursor:pointer;');
+        popupBtn.innerHTML = 'comment';
+        popupBtn._clickdata = {value: spec.value, field: spec.col.field, object: spec.object};
+        popupBtn.addEventListener('click', clickHandler);
+        spec.element.appendChild(popupBtn);
+
+        let valueP = document.createElement('p');
+        valueP.innerHTML = value;
+        valueP.setAttribute('style','display:inline;');
+        spec.element.appendChild(valueP);
+        
+      } else {
+        spec.element.innerHTML = value;
+      }
+      // spec.element.innerHTML = value;
+      // spec.element.innerHTML = value;
+
+
+      // if(value.length >= 30){
+      //   // let clickSpan = "<i class='material-icons' style='vertical-align: middle;'>comment</i>";
+      //   let popupBtn = document.createElement('i');
+      //   popupBtn.setAttribute('class', 'material-icons');
+      //   popupBtn.setAttribute('style', 'vertical-align: middle;');
+      //   popupBtn.innerHTML = 'comment';
+      //   popupBtn._clickdata = {value: spec.value, field: spec.col.field, object: spec.object};
+      //   spec.element.appendChild(popupBtn);
+      // }
+
+      // (spec.value === null || spec.value === undefined ? '-' : clickSpan + String(spec.value));
+      // spec.element._clickdata = {value: spec.value, field: spec.col.field, object: spec.object};
+      // spec.element.addEventListener('click', clickHandler);
 
     };
     this.cleanup = (spec) => {
