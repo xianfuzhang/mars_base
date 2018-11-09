@@ -3,6 +3,7 @@ export class SelectDateDialogController {
 		return [
 			'$scope',
 			'$modalInstance',
+			'$filter',
 			'dataModel',
 			'dateService'
 		];
@@ -32,6 +33,10 @@ export class SelectDateDialogController {
 			}
 		};
     this.scope.errMsg = '';
+    let now = Date.now();
+    this.date = this.di.$filter('date');
+    let today = this.date(now, 'yyyy-MM-dd');
+    this.scope.endtime = new Date(today + ' 00:00:00');
 
 		this.scope.cancel = (event) => {
 			this.di.$modalInstance.dismiss({
@@ -41,7 +46,7 @@ export class SelectDateDialogController {
 		};
 
 		this.scope.save = (event) => {
-			if(!this.scope.dialogModel || typeof this.scope.dialogModel != 'Date') {
+			if(!this.scope.dialogModel || !(this.scope.dialogModel.endtime instanceof Date)) {
 				this.scope.errMsg = '请选择时间！'
         return;
 			}
