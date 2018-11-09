@@ -13,6 +13,7 @@
                    row-click="onTableRowClick($event)"
                    row-select-action="onTableRowSelectAction($event)"
                    provider="model.provider" api-ready="onAPIReady($api)"
+                   on-add="addIntent()"
                    on-remove="batchRemove($value)">
         </mdl-table>
       <!--</section>-->

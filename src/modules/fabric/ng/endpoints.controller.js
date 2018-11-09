@@ -5,12 +5,14 @@ export class EndPointController {
       '$rootScope',
       '$q',
       '$filter',
+      '$log',
       '_',
       'appService',
       'deviceService',
       'dialogService',
       'notificationService',
       'deviceDataManager',
+      'intentDataManager',
       'modalManager',
       'tableProviderFactory'
     ];
@@ -46,11 +48,57 @@ export class EndPointController {
     this.scope.onTableRowSelectAction = (event) => {
       if (!event.action) return;
       if (event.action.value === 'intent') {
-         this.di.$rootScope.$emit('create-intent-show', {srcEndpoint: event.data.mac, endpoints: this.scope.entities});
+        if (this.scope.entities.length < 2) {
+          this.scope.alert = {
+            type: 'warning',
+            msg: this.translate('MODULES.INTENT.CREATE.RESOURCE.INVALID')
+          }
+          this.di.notificationService.render(this.scope);
+          return;
+        }
+        this.di.modalManager.open({
+          template: require('../components/createIntent/template/createIntent.html'),
+          controller: 'createIntentCtrl',
+          windowClass: 'create-intent-modal',
+          resolve: {
+            dataModel: () => {
+              return {
+                srcHost: event.data,
+                endpoints: this.scope.entities,
+                from: 'endpoint'
+              };
+            }
+          }
+        })
+        .result.then((data) => {
+          if (data && !data.canceled) {
+            this.di.intentDataManager.createIntent(data.result).then(
+              () => {
+                this.scope.alert = {
+                  type: 'success',
+                  msg: this.translate('MODULES.INTENT.CREATE.SUCCESS')
+                }
+                this.di.notificationService.render(this.scope);
+              },
+              (msg) => {
+                this.scope.alert = {
+                  type: 'warning',
+                  msg: msg
+                }
+                this.di.notificationService.render(this.scope);
+              }
+            )
+          }
+        });
       }
       else if (event.action.value === 'delete') {
         this.di.deviceDataManager.deleteEndpoint(event.data.mac, event.data.segment_name).then(
           () => {
+            this.scope.alert = {
+              type: 'success',
+              msg: this.translate('MODULES.ENDPOINT.DELETE.SUCCESS')
+            }
+            this.di.notificationService.render(this.scope);
             this.scope.endpointModel.API.queryUpdate();
           },
           (msg) => {
@@ -104,6 +152,11 @@ export class EndPointController {
         if (data && !data.canceled) {
           this.di.deviceDataManager.createEndpoint(data.result).then(
             () => {
+              this.scope.alert = {
+                type: 'success',
+                msg: this.translate('MODULES.ENDPOINT.CREATE.SUCCESS')
+              }
+              this.di.notificationService.render(this.scope);
               this.scope.endpointModel.API.queryUpdate();
             },
             (msg) => {
@@ -124,6 +177,7 @@ export class EndPointController {
     unsubscribers.push(this.di.$rootScope.$on('intent-list-refresh', (event) => {
       this.scope.endpointModel.API.queryUpdate();
     }));
+
     this.scope.$on('$destroy', () => {
       unsubscribers.forEach((cb) => {
         cb();
@@ -194,14 +248,25 @@ export class EndPointController {
       this.di.deviceDataManager.deleteEndpoint(mac, segment)
         .then(() => {
           defer.resolve();
-        }, () => {
-          defer.resolve();
+        }, (msg) => {
+          defer.reject(msg);
         });
       deferredArr.push(defer.promise);
     });
 
     this.di.$q.all(deferredArr).then(() => {
+      this.scope.alert = {
+        type: 'success',
+        msg: this.translate('MODULES.ENDPOINT.BATCH.DELETE.SUCCESS')
+      }
+      this.di.notificationService.render(this.scope);
       this.scope.endpointModel.API.queryUpdate();
+    }, (msg) => {
+      this.scope.alert = {
+        type: 'warning',
+        msg: msg
+      }
+      this.di.notificationService.render(this.scope);
     });
 
     this.scope.$emit('batch-delete-endpoints');

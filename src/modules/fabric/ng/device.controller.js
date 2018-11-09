@@ -11,7 +11,10 @@ export class DeviceController {
       'dialogService',
       'appService',
       'deviceService',
+      'notificationService',
       'deviceDataManager',
+      'intentDataManager',
+      'modalManager',
       'tableProviderFactory'
     ];
   }
@@ -104,6 +107,51 @@ export class DeviceController {
             })
         }
 
+        if (event.action.value === 'intent') {
+          if (this.scope.configDevices.length < 2) {
+            this.scope.alert = {
+              type: 'warning',
+              msg: this.translate('MODULES.INTENT.CREATE.RESOURCE.INVALID')
+            }
+            this.di.notificationService.render(this.scope);
+            return;
+          }
+          this.di.modalManager.open({
+            template: require('../components/createIntent/template/createIntent.html'),
+            controller: 'createIntentCtrl',
+            windowClass: 'create-intent-modal',
+            resolve: {
+              dataModel: () => {
+                return {
+                  srcDevice: event.data,
+                  devices: this.scope.configDevices,
+                  from: 'device'
+                };
+              }
+            }
+          })
+          .result.then((data) => {
+            if (data && !data.canceled) {
+              this.di.intentDataManager.createIntent(data.result).then(
+                () => {
+                  this.scope.alert = {
+                    type: 'success',
+                    msg: this.translate('MODULES.INTENT.CREATE.SUCCESS')
+                  }
+                  this.di.notificationService.render(this.scope);
+                },
+                (msg) => {
+                  this.scope.alert = {
+                    type: 'warning',
+                    msg: msg
+                  }
+                  this.di.notificationService.render(this.scope);
+                }
+              );
+            }
+          });
+        }
+
         // add by yazhou.miao
         if (event.action.value === 'edit') {
           this.di.$rootScope.$emit('switch-wizard-show', event.data.id);
@@ -129,14 +177,6 @@ export class DeviceController {
 
                 this.scope.$emit('change-device-port-state', {data: event.data});
             });
-            break;
-
-          case 'endpoint':
-            let tenant = event.data.tenant_name, segment = event.data.segment_name, mac = event.data.mac;
-            this.di.deviceDataManager.deleteEndpoint(tenant, segment, mac)
-              .then((res) =>{
-                this.scope.endpointModel.endpointAPI.queryUpdate();
-              });
             break;
         }*/
       }
@@ -224,6 +264,7 @@ export class DeviceController {
           device_defer.resolve(res.data.devices);
         });
         this.di.$q.all([config_defer.promise, device_defer.promise]).then((arr) => {
+          this.scope.configDevices = arr[0];
           this.scope.entities = [];
           this.scope.entities = this.getEntities(arr[0], arr[1]);
           let data = arr;
@@ -370,13 +411,25 @@ export class DeviceController {
       this.di.deviceDataManager.deleteDevice(item.id)
         .then(() => {
           defer.resolve();
-        }, () => {
-          defer.resolve();
+        }, (msg) => {
+          defer.reject(msg);
         });
       deferredArr.push(defer.promise);
     });
 
     this.di.$q.all(deferredArr).then(() => {
+      this.scope.alert = {
+        type: 'success',
+        msg: this.translate('MODULES.SWITCHES.BATCH.DELETE.SUCCESS')
+      }
+      this.di.notificationService.render(this.scope);
+      this.scope.deviceModel.deviceAPI.queryUpdate();
+    }, (msg) => {
+      this.scope.alert = {
+        type: 'warning',
+        msg: msg
+      }
+      this.di.notificationService.render(this.scope);
       this.scope.deviceModel.deviceAPI.queryUpdate();
     });
 

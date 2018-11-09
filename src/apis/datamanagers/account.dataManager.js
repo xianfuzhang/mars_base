@@ -32,7 +32,7 @@ export class AccountDataManager {
       .then((res) => {
         defer.resolve(res);
       }, (res) => {
-        defer.reject(res);
+        defer.reject(res.data.message);
       });
     return defer.promise;
   }
@@ -44,7 +44,7 @@ export class AccountDataManager {
       .then((res) => {
         defer.resolve(res);
       }, (res) => {
-        defer.reject(res);
+        defer.reject(res.data.message);
       });
     return defer.promise;
   }

@@ -137,9 +137,7 @@ export class CreateEndpointController {
       else {
         this.scope.model.vlanHelper.validation = 'false';
       }
-      invalid = this.validateIPLocation();
-     
-      if (invalid) {
+      if (invalid || this.validateIPLocation()) {
         return;
       }
 

@@ -777,7 +777,7 @@ export class DashboardController {
           data.push(utilize);
         });
         deviceObj['name'] = device.name;
-        deviceObj['avarage'] = this.di._.sum(data)/data.length;
+        deviceObj['avarage'] = data.length > 0 ? (this.di._.sum(data)/data.length) : 0;
         deviceObj['data'] = data.map(item => item.toFixed(2));
         devices.push(deviceObj);  
       }
@@ -796,7 +796,7 @@ export class DashboardController {
           data.push(utilize);
         });
         deviceObj['name'] = device.name;
-        deviceObj['avarage'] = this.di._.sum(data)/data.length;
+        deviceObj['avarage'] = data.length > 0 ? (this.di._.sum(data)/data.length) : 0;
         deviceObj['data'] = data.map(item => item.toFixed(2));
         devices.push(deviceObj);
       }

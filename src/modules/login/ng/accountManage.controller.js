@@ -51,11 +51,10 @@ export class AccountManageController {
           this.di.accountDataManager.createUser(data.result)
             .then(() => {
               this.scope.accountModel.api.queryUpdate();
-            }, (res) => {
-              this.di.$log.info(res);
+            }, (msg) => {
               this.scope.alert = {
                 type: 'warning',
-                msg: res.data
+                msg: msg
               }
               this.di.notificationService.render(this.scope);
             });
@@ -137,13 +136,25 @@ export class AccountManageController {
       this.di.accountDataManager.deleteUser(item.user_name)
         .then(() => {
           defer.resolve();
-        }, () => {
-          defer.resolve();
+        }, (msg) => {
+          defer.reject(msg);
         });
       deferredArr.push(defer.promise);
     });
 
     this.di.$q.all(deferredArr).then(() => {
+      this.scope.alert = {
+        type: 'success',
+        msg: this.translate('MODULES.ACCOUNT.BATCH.DELETE.SUCCESS')
+      }
+      this.di.notificationService.render(this.scope);
+      this.scope.accountModel.api.queryUpdate();
+    }, (msg) => {
+      this.scope.alert = {
+        type: 'warning',
+        msg: msg
+      }
+      this.di.notificationService.render(this.scope);
       this.scope.accountModel.api.queryUpdate();
     });
 
