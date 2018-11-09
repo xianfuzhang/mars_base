@@ -7,15 +7,13 @@ export class ElasticsearchController {
       '$window',
       '_',
       '$filter',
-      '$http',
       '$q',
-      'appService',
+      '$timeout',
       'c3',
       'dateService',
       'dashboardDataManager',
-      'deviceDataManager',
+      'manageDataManager',
       'modalManager',
-      'localStoreService'
     ];
   }
   
@@ -37,240 +35,163 @@ export class ElasticsearchController {
     }).call(this);
     
     this.translate = this.di.$filter('translate');
-    let scope = this.di.$scope;
-    scope.pageTitle = this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH');
+    this.scope = this.di.$scope;
+    this.scope.pageTitle = this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH');
     
     
-    this.interval_device = null;
-    const CONTROLLER_STATE_INACTIVE = 'INACTIVE';
     this.SWITCHES_CPU_MEMORY_STATISTIC_NS = 'switches_cpu_memory_statistic_ns';
     let unSubscribers = [];
     let dataModel = {};
     let date = this.di.dateService.getTodayObject();
     let before = this.di.dateService.getBeforeDateObject(20*60*1000);
-    scope.dashboardModel = {
-      controllerSummary:{},
-      controllerStatistic:{},
-      memory: {
-        'type': null, //minute, hour, day
-        'begin_date': new Date(before.year, before.month, before.day),
-        'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
-        'end_date': new Date(date.year, date.month, date.day),
-        'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
-        'analyzer': []
+    this.scope.dashboardModel = {
+      indice: {
+        'analyzer': [],
+        'summary': [],
       },
-      timeRange: [
-        {label: this.translate('MODULES.DASHBOARD.TIMERANGE.MINUTE'), value: 60},
-        {label: this.translate('MODULES.DASHBOARD.TIMERANGE.HOUR'), value: 180},
-        {label: this.translate('MODULES.DASHBOARD.TIMERANGE.DAY'), value: 3600},
-      ]
+      indiceOptions: []
     };
-    
-    scope.panelRefresh = {
-      controller : false,
-      swt : false,
-    };
-    
-    
-    scope.panelLoading = {
-      controller : false,
-      swt : false,
-    };
-    
-    scope.rangeConfiguration = (type) => {
-      let begin_date, end_date, begin_time, end_time;
-      begin_date = scope.dashboardModel.memory.begin_date;
-      end_date = scope.dashboardModel.memory.end_date;
-      begin_time = scope.dashboardModel.memory.begin_time;
-      end_time = scope.dashboardModel.memory.end_time;
+  
+    this.scope.backup = () => {
+      this.scope.loading = true;
       
       this.di.modalManager.open({
-        template: require('../template/dateRangeConfiguration.html'),
-        controller: 'dateRangeConfigurationCtrl',
+        template: require('../template/inputFilenameDialog.html'),
+        controller: 'inputFilenameDialogController',
         windowClass: 'date-rate-modal',
         resolve: {
           dataModel: () => {
-            return {
-              'begin_date': begin_date,
-              'begin_time': begin_time,
-              'end_date': end_date,
-              'end_time': end_time
-            };
+            // return {
+            //   'filename': 'backup',
+            // };
           }
         }
       })
         .result.then((data) => {
         if (data && !data.canceled) {
-          scope.dashboardModel.memory.begin_date = data.data.begin_date;
-          scope.dashboardModel.memory.begin_time = data.data.begin_date;
-          scope.dashboardModel.memory.end_date = data.data.end_date;
-          scope.dashboardModel.memory.end_time = data.data.end_date;
-          
-          this.getDevicesMemoryAnalyzer(dataModel.devices).then(() => {
-            convertSwitchMemoryAnalyzer();
-          });
+          let filename = data.filename;
+        
+          this.di.manageDataManager.putBackupElasticsearch(filename).then(
+            (res) => { // success to save
+              this.di.dialogService.createDialog('success', '备份成功！')
+                .then((data)=>{
+                  this.scope.loading = false;
+                })
+            },
+            (err) => { // error to save
+              this.di.dialogService.createDialog('error', '备份失败！')
+                .then((data)=>{
+                  this.scope.loading = false;
+                })
+            }
+          )
         }
       });
     };
     
-    scope.timeRangeSelect = (type, $value) => {
-      let before;
-      //20分钟
-      if ($value.value === 60) {
-        before = this.di.dateService.getBeforeDateObject(20*60*1000);
-      }
-      //1小时
-      else if ($value.value === 180) {
-        before = this.di.dateService.getBeforeDateObject(60*60*1000);
-      }
-      //1天
-      else{
-        before = this.di.dateService.getBeforeDateObject(24*60*60*1000);
-      }
+    this.scope.clear = () => {
+      let begin_date, end_date, begin_time, end_time;
       
-      scope.dashboardModel.memory.type = $value;
-      scope.dashboardModel.memory.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
-      this.getDevicesMemoryAnalyzer(dataModel.devices).then(() => {
-        convertSwitchMemoryAnalyzer();
+      this.di.modalManager.open({
+        template: require('../template/selectDateDialog.html'),
+        controller: 'selectDateDialogController',
+        windowClass: 'date-rate-modal',
+        resolve: {
+          dataModel: () => {
+            return {
+              'indice': this.scope.dashboardModel.selectedIndice,
+            };
+          }
+        }
+      }).result.then((data) => {
+        if (data && !data.canceled) {
+          let endtime = data.data.endtime.getTime();
+          let params = this.getDeleteIndiceParams(endtime);
+  
+          this.di.manageDataManager.deleteElasticsearcIndexByTime(this.scope.dashboardModel.selectedIndice, params).then(
+            (res) => { // success to save
+              this.di.dialogService.createDialog('success', '清理成功！')
+                .then((data)=>{
+                  this.scope.loading = false;
+                })
+            },
+            (err) => { // error to save
+              this.di.dialogService.createDialog('error', '清理失败！')
+                .then((data)=>{
+                  this.scope.loading = false;
+                })
+            }
+          )
+        }
       });
     };
     
-    const di = this.di;
+    this.scope.indiceSelect = ($value) => {
+      this.scope.dashboardModel.selectedIndice = $value.value;
+      this.scope.loading = true;
+      
+      this.getIndiceAnalyzer().then(() => {
+        convertIndiceAnalyzer();
+        this.scope.loading = false;
+      }, () => {
+        convertIndiceAnalyzer();
+        this.scope.loading = false;
+      });
+    };
+    
+    const DI = this.di;
     
     let init =() =>{
-      let promises = [];
-      let clusterDefer = this.di.$q.defer(),
-        devicesDefer = this.di.$q.defer(),
-        portsDefer = this.di.$q.defer(),
-        clusterStaticsDefer = this.di.$q.defer(),
-        swtStaticsDefer = this.di.$q.defer();
+      this.scope.loading = true;
       
-      this.di.dashboardDataManager.getCluster().then((res)=>{
-        dataModel['cluster'] = res;
-        
-        clusterDefer.resolve();
-      });
-      promises.push(clusterDefer.promise);
-      
-      this.di.dashboardDataManager.getClusterStatistic().then((res)=>{
-        dataModel['clusterStatistic'] = res;
-        
-        clusterStaticsDefer.resolve();
-      });
-      promises.push(clusterStaticsDefer.promise);
-      
-      this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
-        dataModel['devices'] = configs;
-        this.getSwitchesCPUMemoryStatisticFromLS(configs).then(() => {
-          devicesDefer.resolve();
+      let scope = this.scope;
+      // get indices sumary
+      this.di.manageDataManager.getElasticsearcStatus().then((res) => {
+        dataModel['indices'] = res.data.indices;
+  
+        this.scope.dashboardModel.indiceOptions = [];
+        res.data.indices.forEach((indice) => {
+          this.scope.dashboardModel.indiceOptions.push({label: indice.name, value: indice.name})
         });
-      });
-      promises.push(devicesDefer.promise);
-      
-      this.di.deviceDataManager.getDevicePortsStatistics().then((res)=>{
-        dataModel['swtStatistics'] = res.data['statistics'];
-        swtStaticsDefer.resolve();
-      });
-      promises.push(swtStaticsDefer.promise);
-      
-      this.di.deviceDataManager.getPorts().then((res)=>{
-        dataModel['ports'] = res.data.ports;
-        portsDefer.resolve();
-      });
-      promises.push(portsDefer.promise);
-      
-      
-      this.di.$rootScope.$emit('start_loading');
-      scope.panelLoading.controller = true;
-      scope.panelLoading.switch = false;
-      
-      Promise.all(promises).then(()=>{
+  
+        chartSwtInterface(dataModel.indices, 'swtInterfaceRxTxDrops');
+  
+        if(this.scope.dashboardModel.indiceOptions.length == 0) return;
+  
+        this.scope.dashboardModel.indiceSelectedOption = this.scope.dashboardModel.indiceOptions[0]
+        this.scope.dashboardModel.selectedIndice = this.scope.dashboardModel.indiceOptions[0].value;
         
-        let DI = this.di;
-        setTimeout(function () {
-          convertData2View();
-          DI.$scope.$apply();
-          DI.$rootScope.$emit('stop_loading');
-          DI.$scope.panelRefresh.controller = true;
-          DI.$scope.panelLoading.controller = false;
-          DI.$scope.$apply();
-        });
-      });
+        // get indice size by time
+        this.getIndiceAnalyzer().then( () => {
+          convertIndiceAnalyzer();
+          scope.loading = false;
+        }, () => {
+          scope.loading = false;
+        })
+      })
     };
     
-    function convertData2View() {
-      convertSwitchInterface2Chart();
-      convertSwitchMemoryAnalyzer();
-    }
-    
-    let convertSwitchInterface2Chart =()=>{
-      let swtStatistics = dataModel['swtStatistics'];
-      let waitOrderPortsStatistics = [];
-      this.di._.forEach(swtStatistics, (device)=>{
-        let curDeviceId = device.device;
-        
-        this.di._.forEach(dataModel['devices'],(deviceM)=>{
-          if(deviceM['id'] === curDeviceId){
-            this.di._.forEach(device.ports, (port)=>{
-              let portSt = {};
-              portSt['device'] = curDeviceId;
-              portSt['port'] = port['port'];
-              portSt['packetsReceived'] = port['packetsReceived'];
-              portSt['packetsSent'] = port['packetsSent'];
-              portSt['bytesReceived'] = port['bytesReceived'];
-              portSt['bytesSent'] = port['bytesSent'];
-              portSt['packetsRxDropped'] = port['packetsRxDropped'];
-              portSt['packetsTxDropped'] = port['packetsTxDropped'];
-              portSt['durationSec'] = port['durationSec'];
-              portSt['packetsRecvSent'] = port['packetsReceived'] + port['packetsSent'];
-              portSt['bytesRecvSent'] = port['bytesReceived'] + port['bytesSent'];
-              portSt['packetsDrop'] = port['packetsRxDropped'] + port['packetsTxDropped'];
-              waitOrderPortsStatistics.push(portSt)
-            });
-          }
-        });
-      });
-      
-      let p_r_s = 'packetsRecvSent';
-      let packagesOrder = this.di._.orderBy(waitOrderPortsStatistics, p_r_s, 'desc');
-      packagesOrder.splice(5, packagesOrder.length-5);
-      chartSwtInterface(packagesOrder, 'swtInterfaceRxTxPackages', 'packages');
-      
-      let b_r_s = 'bytesRecvSent';
-      let bytesOrder = this.di._.orderBy(waitOrderPortsStatistics, b_r_s, 'desc');
-      bytesOrder.splice(5, bytesOrder.length-5);
-      chartSwtInterface(bytesOrder, 'swtInterfaceRxTxBytes', 'bytes');
-      
-      
-      let p_d = 'packetsDrop';
-      let packagesDropOrder = this.di._.orderBy(waitOrderPortsStatistics, p_d, 'desc');
-      packagesDropOrder.splice(5, packagesDropOrder.length-5);
-      chartSwtInterface(packagesDropOrder, 'swtInterfaceRxTxDrops', 'packages', true);
-    };
-    
-    let convertSwitchMemoryAnalyzer = () => {
-      //memory analyzer
+    let convertIndiceAnalyzer = () => {
+      //indice analyzer
       let memoryCols = [];
-      let records = this.getDevicesMemoryChartData(scope.dashboardModel.memory.analyzer);
-      let x_axis = scope.dashboardModel.memory.analyzer.length > 0 ?
-        this.getDeviceCPUMemoryTimeSeries(scope.dashboardModel.memory.analyzer[0]) : ['x'];
+      let records = this.getIndiceChartData(this.scope.dashboardModel.indice.analyzer);
+      let x_axis = this.scope.dashboardModel.indice.analyzer.length > 0 ?
+        this.getIndiceTimeSeries(this.scope.dashboardModel.indice.analyzer) : ['x'];
       if(records.length) {
         memoryCols.push(x_axis);
-        records.forEach((item, index) =>{
-          //只取top5
-          if (index < 5) {
-            let arr = [];
-            arr.push(item.name);
-            arr = arr.concat(item.data);
-            memoryCols.push(arr);
-          }
+        records.forEach((item) =>{
+          let arr = [];
+          // arr.push(item.name);
+          arr = arr.concat(item.data);
+          memoryCols.push(arr);
         });
       }
       else {
         memoryCols.push(x_axis);
       }
-      let memoryChart = this.di.c3.generate({
-        bindto: '#deviceMemoryAnalyzer',
+      
+      let indiceChart = this.di.c3.generate({
+        bindto: '#indiceAnalyzer',
         data: {
           x: 'x',
           columns: memoryCols,
@@ -284,7 +205,7 @@ export class ElasticsearchController {
             type: 'timeseries',
             tick: {
               format: (d) => {
-                return this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
+                return this.pad(d.getMonth() + 1) + '-' + d.getDate() + ' ' + this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
               }
             }
           },
@@ -305,39 +226,27 @@ export class ElasticsearchController {
       });
     };
     
-    let chartSwtInterface = (top5, bindTo, y_label, drop) =>{
-      let category= [], rxs = [], pkgRecv = ['接收'], pgkSend = ['发送'];
-      this.di._.forEach(top5, (statistic)=>{
-        let name = getSwtAndPortName(statistic['device'], statistic['port']);
-        category.push(name);
-        if (y_label === 'packages') {
-          if (drop) {
-            pkgRecv.push(statistic['packetsRxDropped']);
-            pgkSend.push(statistic['packetsTxDropped']);
-          }
-          else {
-            pkgRecv.push(statistic['packetsReceived']);
-            pgkSend.push(statistic['packetsSent']);
-          }
-        }
-        else {
-          pkgRecv.push(statistic['bytesReceived']);
-          pgkSend.push(statistic['bytesSent']);
-        }
-        
+    let chartSwtInterface = (indices, bindTo) =>{
+      this.parseIndicesSize(indices);
+      let y_label = indices[0].size.slice(indices[0].size.length - 2, indices[0].size.length);
+      let category= [], rxs = [], size = ['占用空间'];
+      
+      this.di._.forEach(indices, (indice)=>{
+        let name = '';
+        category.push(indice.name);
+        size.push(indice.size.slice(0, indice.size.length - 2));
       });
-      rxs.push(pkgRecv);
-      rxs.push(pgkSend);
+      rxs.push(size);
       
       let chart = this.di.c3.generate({
         bindto: '#' + bindTo,
         data: {
           columns: rxs,
           type: 'bar',
-          groups: [['接收', '发送']]
+          groups: [['占用空间']]
         },
         color: {
-          pattern: ['#0077cb', '#c78500']
+          pattern: ['#0077cb']
         },
         axis: {
           x: {
@@ -352,192 +261,124 @@ export class ElasticsearchController {
         tooltip: {
           format: {
             title: (index) => {
-              let d = category[index].indexOf('(');
-              let str;
-              if (d !== -1) {
-                str = category[index].substring(0, d);
-              }
-              else {
-                str = category[index];
-              }
-              return str;
+              return category[index];
             }
           }
         }
       });
     }
     
-    let calcRunningDate = (ts)=> {
-      
-      // 1000 * 60 * 60 * 24
-      let dayCount = Math.floor(ts/(1000 * 60 * 60 * 24));
-      let hourCount = Math.floor(ts%(1000 * 60 * 60 * 24)/(1000 * 60 * 60));
-      let dayStr = '';
-      let hourStr = '';
-      if(dayCount === 1){
-        dayStr =  dayCount + this.translate('MODULES.DASHBOARD.DAY');
-      } else if(dayCount > 1){
-        dayStr =  dayCount + this.translate('MODULES.DASHBOARD.DAYS');
-      }
-      
-      if(hourCount === 1){
-        hourStr =  hourCount + this.translate('MODULES.DASHBOARD.HOUR');
-      } else if(hourCount > 1){
-        hourStr =  hourCount + this.translate('MODULES.DASHBOARD.HOURS');
-      }
-      
-      if(hourCount === 0 && hourCount === 0){
-        let seconds = Math.floor(ts%(1000 * 60 * 60 * 24)/1000);
-        return seconds + this.translate('MODULES.DASHBOARD.SECONDS');
-      }
-      return dayStr + hourStr;
-    };
+    this.di.$timeout(function () {init()});
     
-    let getSwtAndPortName = (deviceId, portNo) =>{
-      return getPortName(deviceId, portNo) + '(' +  getSwtName(deviceId) +')';
-    };
-    
-    let getSwtName = (deviceid) =>{
-      let device = this.di._.find(dataModel['devices'], { 'id': deviceid});
-      return device['name'];
-    };
-    
-    let getPortName = (deviceid, portNo) =>{
-      let port = this.di._.find(dataModel['ports'], { 'element': deviceid, 'port': String(portNo)});
-      // if(port)
-      return port && port['annotations']['portName'] || '';
-    };
-    
-    setTimeout(function () {init()});
-    
-    scope.$on('$destroy', () => {
+    this.scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
         unSubscribe();
       });
     });
   }
   
-  getSwitchesCPUMemoryStatisticFromLS(switches) {
-    //10分钟以内不重复获取
+  getDeleteIndiceParams(endtime) { // endtime is timestamp
+    return {
+      "query" : {
+        "filtered" : {
+          "filter" : {
+            "range" : {
+              "@timestamp" : {
+                "lt": endtime
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  parseIndicesSize(indices) {
+    let units = ['KB', 'MB', 'GB'];
+    let kbFlag = false, mbFlag = false, gbFlag = false;
+    
+    indices.forEach(indice => {
+      let unit = indice.size.slice(indice.size.length - 2, indice.size.length);
+      if(unit.toUpperCase() == 'KB')
+        kbFlag = true;
+      if(unit.toUpperCase() == 'MB')
+        mbFlag = true;
+      if(unit.toUpperCase() == 'GB')
+        gbFlag = true;
+    })
+  
+    indices.forEach(indice => {
+      let num = indice.size.slice(0,indice.size.length - 2)
+      let unit = indice.size.slice(indice.size.length - 2, indice.size.length);
+      if(kbFlag) {
+        if(unit.toUpperCase() == 'MB')
+          indice.size = parseFloat(num) * 1024 + 'KB';
+        
+        if(unit.toUpperCase() == 'GB')
+          indice.size = parseFloat(num) * 1024 * 1024 + 'KB';
+        
+      } else if(mbFlag) {
+        if(unit.toUpperCase() == 'GB')
+          indice.size = parseFloat(num) * 1024 + 'MB';
+      }
+    })
+  }
+  
+  
+  getIndiceAnalyzer() {
     let defer = this.di.$q.defer();
-    let scope = this.di.$scope;
-    this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS).get('timestamp')
-      .then((data) => {
-        if (data) {
-          let time = (Date.now() - data) - 10*60*1000;
-          //超时，重新获取数据
-          if (time >= 0) {
-            this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS).del('timestamp')
-              .then(() => {
-                let defers = [];
-                defers.push(this.getDevicesMemoryAnalyzer(switches));
-                this.di.$q.all(defers).then(() => {
-                  this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS)
-                    .set('timestamp', Date.now());
-                  this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS)
-                    .set('cpu_memory', {
-                      'memory': scope.dashboardModel.memory.analyzer
-                    });
-                  defer.resolve();
-                });
-              });
-          }
-          else {
-            this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS).get('cpu_memory')
-              .then((data) => {
-                scope.dashboardModel.memory.analyzer = data.memory;
-                defer.resolve();
-              });
-          }
-        }
-        else {
-          let defers = [];
-          defers.push(this.getDevicesMemoryAnalyzer(switches));
-          this.di.$q.all(defers).then(() => {
-            this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS)
-              .set('timestamp', Date.now());
-            this.di.localStoreService.getStorage(this.SWITCHES_CPU_MEMORY_STATISTIC_NS)
-              .set('cpu_memory', {
-                'memory': scope.dashboardModel.memory.analyzer
-              });
-            defer.resolve();
-          });
-        }
-      });
+  
+    this.getIndexDataDistribution(this.scope.dashboardModel.selectedIndice).then((res)=>{
+      this.di.$scope.dashboardModel.indice.analyzer = res;
+      defer.resolve();
+    },(err)=>{
+      this.di.$scope.dashboardModel.indice.analyzer = []
+      defer.reject(err)
+    });
+  
+    // JSON format
+    // [
+    //   {
+    //     "key": "v1",
+    //     "from": 1539940696000,
+    //     "from_as_string": "2018-10-19T09:18:16.000Z",
+    //     "to": 1540940696000,
+    //     "to_as_string": "2018-10-30T23:04:56.000Z",
+    //     "doc_count": 103525906
+    //   },
+    //   {
+    //     "key": "v2",
+    //     "from": 1540940696000,
+    //     "from_as_string": "2018-10-30T23:04:56.000Z",
+    //     "to": 1540950696000,
+    //     "to_as_string": "2018-10-31T01:51:36.000Z",
+    //     "doc_count": 1080000
+    //   }
+    // ]
     
     return defer.promise;
   }
   
-  getDevicesMemoryAnalyzer(devices) {
-    let deffe = this.di.$q.defer();
-    let scope = this.di.$scope;
-    if (!devices.length){
-      deffe.resolve([]);
-      return deffe.promise;
-    }
-    
-    let startTime = this.getISODate(scope.dashboardModel.memory.begin_time);
-    let endTime = this.getISODate(scope.dashboardModel.memory.end_time);
-    let solution_second = scope.dashboardModel.memory.type.value;//3600;//this.getResolutionSecond(startTime, endTime);
-    let deferredArr = [];
-    
-    devices.forEach((device) => {
-      let defer = this.di.$q.defer();
-      this.di.deviceDataManager.getDeviceMemoryAnalyzer(device.name, startTime, endTime, solution_second)
-        .then((data) => {
-          defer.resolve({'id': device.id, 'name': device.name, 'analyzer': data});
-        });
-      deferredArr.push(defer.promise);
+  getIndiceChartData(analyzer) {
+    let indices = [];
+    let data = [], indiceObj = {};
+    analyzer.forEach((record) =>{
+      let utilize = record.doc_count;
+      data.push(utilize);
     });
+    // indiceObj['name'] = analyzer.name;
+    // indiceObj['avarage'] = this.di._.sum(data)/data.length;
+    indiceObj['data'] = data;
+    indices.push(indiceObj);
     
-    this.di.$q.all(deferredArr).then((arr) => {
-      scope.dashboardModel.memory.analyzer = arr;
-      deffe.resolve();
-    });
-    return deffe.promise;
+    // devices = this.di._.orderBy(devices, 'avarage', 'desc');
+    return indices;
   }
   
-  getResolutionSecond(startTime, endTime) {
-    let second;
-    let interval = parseInt((Date.parse(endTime) - Date.parse(startTime))/1000);
-    if (interval >= 0 && interval <= 3600) {
-      second = 300; //一小时以内5分钟统计一次平均值
-    }
-    else if (interval > 3600 && interval <= 86400) {
-      second = 7200; //一天以内2小时统计一次平均值
-    }
-    else if (interval > 86400 ** interval <= 604800) {
-      second = 50400; //一周以内14小时统计一次平均值
-    }
-    else {
-      second = 86400; //超过1周24小时统计一次平均值
-    }
-    return second;
-  }
-  
-  getDevicesMemoryChartData(analyzers) {
-    let devices = [];
-    analyzers.forEach((device) => {
-      if (device.name) {
-        let data = [], deviceObj = {};
-        device.analyzer.forEach((record) =>{
-          let utilize = record.used_percent;
-          data.push(utilize);
-        });
-        deviceObj['name'] = device.name;
-        deviceObj['avarage'] = this.di._.sum(data)/data.length;
-        deviceObj['data'] = data.map(item => item.toFixed(2));
-        devices.push(deviceObj);
-      }
-    });
-    devices = this.di._.orderBy(devices, 'avarage', 'desc');
-    return devices;
-  }
-  
-  getDeviceCPUMemoryTimeSeries(device) {
+  getIndiceTimeSeries(analyzer) {
     let timeseries = ['x'];
-    device.analyzer.forEach((record) => {
-      timeseries.push(record.timepoint);
+    analyzer.forEach((record) => {
+      timeseries.push(record.from_as_string);
     });
     return timeseries;
   }
@@ -550,6 +391,72 @@ export class ElasticsearchController {
       ':' + this.pad( date.getUTCMinutes() ) +
       'Z';
   }
+  
+  getIndexDataDistribution(index) {
+    let defer = this.di.$q.defer();
+    let params = {
+      "size": 0,
+      "aggs" : {
+        "max_time" : { "max" : { "field" : "@timestamp" } },
+        "min_time" : { "min" : { "field" : "@timestamp" } }
+      }
+    };
+  
+    let intervalCount = 12;
+    let timeSegmentation = (min, max) =>{
+      let interval = (max - min)/intervalCount;
+      let es_search_json = [];
+      // { "from": 1.539940696E+12, "to": 1.540940696E+12, "key":"v1" },
+    
+      this.di._.times(intervalCount, (c)=>{
+        let j = {'key':"seq_" + (c + 1)};
+        j['from'] = min + c*interval;
+        j['to'] = min + (c+1)*interval;
+        es_search_json.push(j);
+      })
+    
+      return es_search_json
+    };
+    
+    this.di.manageDataManager.getElasticsearchDataByIndexAndQuery(index, params).then(
+      (res)=>{
+        if(res.data && res.data.aggregations){
+          let min_time = res.data.aggregations.min_time.value;
+          let max_time = res.data.aggregations.max_time.value;
+          
+          if(min_time !== null && max_time !== null){
+            let range_search_json = timeSegmentation(min_time, max_time);
+            let search_json = {
+              "size":0,
+              "aggs": {
+                "range": {
+                  "date_range": {
+                    "field": "@timestamp",
+                    "ranges": range_search_json
+                  }
+                }
+              }
+            }
+            
+            this.di.manageDataManager.getElasticsearchDataByIndexAndQuery(index, search_json).then((res)=>{
+                let res_data = res.data.aggregations.range.buckets;
+                defer.resolve(res_data);
+              },
+              (err)=>{
+                defer.reject({})
+              })
+          }
+        }
+        else{
+          defer.reject({})
+        }
+      },
+      (err)=>{
+        defer.reject({})
+      }
+    );
+    return defer.promise;
+  };
   
   pad(number) {
     if ( number < 10 ) {

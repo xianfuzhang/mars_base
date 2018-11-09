@@ -73,6 +73,45 @@ export class ManageDataManager{
     );
     return defer.promise;
   }
+  
+  getElasticsearcStatus() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getElasticsearchStatusUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({data: {indices: [], nodes:[], snapshots:[]}});
+      }
+    );
+    return defer.promise;
+  }
+  
+  deleteElasticsearcIndexByTime(index, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getElasticsearchDeleteIndexUrl(index), params).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve(error);
+      }
+    );
+    return defer.promise;
+  }
+  
+  putBackupElasticsearch(filename) {
+    let defer = this.di.$q.defer();
+    this.di.$http.put(this.di.appService.getElasticsearchBackupUrl(filename)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve(error);
+      }
+    );
+    return defer.promise;
+  }
 
 }
 
