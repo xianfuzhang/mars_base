@@ -30,6 +30,8 @@ export class DialogService {
       case 'success':
         header = this.translate('MODULES.SWITCHES.DIALOG.HEADER.SUCCESS');
         break;
+      case 'info':
+        break;
       case 'warning':
       default:
         header = this.translate('MODULES.SWITCHES.DIALOG.HEADER.WARNING');

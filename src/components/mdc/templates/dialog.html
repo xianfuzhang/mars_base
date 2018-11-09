@@ -3,7 +3,7 @@
        role="alertdialog"
        aria-labelledby="my-mdc-dialog-label"
        aria-describedby="my-mdc-dialog-description">
-  <div class="mdc-dialog__surface">
+  <div class="mdc-dialog__surface"  ng-if="type != 'info'">
     <header class="mdc-dialog__header">
       <div id="my-mdc-dialog-label" class="mdc-dialog__header__title">
         <div style="vertical-align:bottom;display:inline-flex;">
@@ -31,6 +31,12 @@
       <!--<button type="button" ng-click="ok()"-->
               <!--class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button&#45;&#45;accept">{{confirmation}}</button>-->
     </div>
+  </div>
+  <div class="mdc-dialog__surface" style="max-height:400px;overflow: scroll;padding:16px;" ng-if="type == 'info'">
+    <div id="" class="mdc-dialog__header__title">
+
+    </div>
+    <pre style="white-space: normal">{{content}}</pre>
   </div>
   <div class="mdc-dialog__backdrop"></div>
 </aside>
