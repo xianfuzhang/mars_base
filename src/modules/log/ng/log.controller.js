@@ -69,17 +69,20 @@ export class LogController {
 
     let textPretty = (text) =>{
       let ret = "";
+      let isJson = false;
       try{
         ret = JSON.stringify(JSON.parse(text), null ,2 )
+        isJson = true;
       } catch(e){
         ret = text;
       }
-      return ret;
+      return {ret: ret, isJson: isJson};
     };
 
     this.unsubscribers.push(this.di.$rootScope.$on('popuptext', (event, params) => {
       if (params && params.field === 'content') {
-        this.di.dialogService.createDialog('info', textPretty(params.value)).then((data)=>{},(err)=>{});
+        let res = textPretty(params.value);
+        this.di.dialogService.createDialog(res.isJson?'info_json':'info', res.ret).then((data)=>{},(err)=>{});
       }
     }));
 
