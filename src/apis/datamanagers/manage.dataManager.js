@@ -61,6 +61,46 @@ export class ManageDataManager{
     return defer.promise;
   }
 
+  getMacAndIpBindings() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDHCPServerUrl(true)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  postMacAndIpBindings(param) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getDHCPServerUrl(true),param).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  deleteMacAndIpBindings(mac) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDHCPServerMappingRemoveUrl(mac)).then(
+      (res) => {
+        defer.resolve({});
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
   getElasticsearchDataByIndexAndQuery(index, param){
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getElasticsearchDataIndexUrl(index), param).then(

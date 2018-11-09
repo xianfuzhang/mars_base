@@ -349,6 +349,10 @@ export class appService {
     }
   }
 
+  getDHCPServerMappingRemoveUrl(mac){
+    return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver/mappings/'+ mac;
+  }
+
   getElasticsearchDataIndexUrl(index){
     return this.getZoneEndpoint(true) + '/utility/elasticsearch/v1/'+ index +'/query';
   }
