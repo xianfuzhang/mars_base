@@ -267,7 +267,7 @@
 .createIntentWizard .wizard__body__right{
   overflow: hidden;
 }
-.create-endpoint-modal{
+.create-endpoint-modal, .create-intent-modal{
   width: 570px;
 }
 .create-endpoint-modal .column-manipulation-field__content{
@@ -283,6 +283,27 @@
   font-weight: 400;
   letter-spacing: 0.03333em;
   color: #b00020;
+}
+.create-endpoint-modal .mdc-select{
+  width: 175px;
+}
+.create-intent-modal .column-manipulation-field__content{
+  height: 300px;
+}
+.create-intent-modal .column-manipulation-field__item{
+  padding-bottom: 10px;
+}
+.create-intent-modal .endpoint-item{
+  justify-content: center;
+  display: flex;
+  text-align: center;
+}
+.create-intent-modal .mdc-select{
+  width: 150px;
+}
+.create-intent-modal .mdc-text-field{
+  width: 80px;
+  margin-left: 15px;
 }
 .show-flow-detail-modal.modal{
   width: 650px;
