@@ -31,6 +31,7 @@ export class SelectDateDialogController {
 			  altInputFormats: ['M!/d!/yyyy'],
 			}
 		};
+    this.scope.errMsg = '';
 
 		this.scope.cancel = (event) => {
 			this.di.$modalInstance.dismiss({
@@ -40,17 +41,14 @@ export class SelectDateDialogController {
 		};
 
 		this.scope.save = (event) => {
-			// let begin_date = this.getBeginDate();
-			// let end_date = this.getEndDate();
-			// if (Date.parse(begin_date) > Date.parse(end_date)) {
-			// 	this.scope.dialogModel.form.$invalid = true;
-			// 	return;
-			// }
+			if(!this.scope.dialogModel || typeof this.scope.dialogModel != 'Date') {
+				this.scope.errMsg = '请选择时间！'
+        return;
+			}
+			
 			this.di.$modalInstance.close({
         canceled: false,
         data: {
-        	// 'begin_date': begin_date,
-        	// 'end_date': end_date
 					endtime: this.scope.dialogModel.endtime
         }
       });

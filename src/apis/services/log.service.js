@@ -28,16 +28,16 @@ export class LogService {
         'field': 'type',
         'layout': {'visible': true, 'sortable': false, 'fixed': true}
       },
-      {
-        'label': this.translate('MODULE.LOG.COLUMN.LEVEL'),
-        'field': 'level',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true}
-      },
-      {
-        'label': this.translate('MODULE.LOG.COLUMN.OPERATION'),
-        'field': 'operation',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true}
-      },
+      // {
+      //   'label': this.translate('MODULE.LOG.COLUMN.LEVEL'),
+      //   'field': 'level',
+      //   'layout': {'visible': true, 'sortable': false, 'fixed': true}
+      // },
+      // {
+      //   'label': this.translate('MODULE.LOG.COLUMN.OPERATION'),
+      //   'field': 'operation',
+      //   'layout': {'visible': true, 'sortable': false, 'fixed': true}
+      // },
       {
         'label': this.translate('MODULE.LOG.COLUMN.CREATOR'),
         'field': 'creator',
