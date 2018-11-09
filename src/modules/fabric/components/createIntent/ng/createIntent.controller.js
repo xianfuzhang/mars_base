@@ -91,8 +91,8 @@ export class CreateIntentController {
             dst_mac = this.scope.model.dstHost.value,
             srcEndpoint = this.di._.find(this.di.dataModel.endpoints, {'mac': src_mac}),
             dstEndpoint = this.di._.find(this.di.dataModel.endpoints, {'mac': dst_mac}),
-            src_vlan = srcEndpoint && srcEndpoint.vlan || -1,
-            dst_vlan = dstEndpoint && dstEndpoint.vlan || -1;
+            src_vlan = srcEndpoint && srcEndpoint.segment_name || -1,
+            dst_vlan = dstEndpoint && dstEndpoint.segment_name || -1;
 
         data['one'] = src_mac + '/' + src_vlan;
         data['two'] = dst_mac + '/' + dst_vlan;
@@ -114,9 +114,11 @@ export class CreateIntentController {
           this.scope.model.egressPortHelper.validation = 'false';   
         }
         if (invalid) return;
-
-        data['ingressPoint'] = this.scope.model.ingressDevice.value + '/' + this.scope.model.ingressPort;
-        data['egressPoint'] = this.scope.model.egressDevice.value + '/' + this.scope.model.egressPort;;
+        data['ingressPoint'] = {}, data['egressPoint'] = {};
+        data['ingressPoint']['device'] = this.scope.model.ingressDevice.value;
+        data['ingressPoint']['port'] = this.scope.model.ingressPort;
+        data['egressPoint']['device'] = this.scope.model.egressDevice.value;
+        data['egressPoint']['port'] = this.scope.model.egressPort;;
       }
       data['type'] = this.scope.model.type.value;
       data['appId'] = 'org.onosproject.ovsdb';
