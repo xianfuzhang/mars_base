@@ -30,7 +30,11 @@ global.cloudModel = {
   },
   logs: [],
   clusters: [],
-  useraccounts: [],
+  useraccounts: [{
+    "user_name": "nocsys",
+   "groups": ["supergroup"],
+   "password": "nocsys"
+  }],
   dhcpserver:{},
   confighistory: [],
   intents: []
@@ -505,15 +509,27 @@ let cloudLib = {
   },
 
   addIntent: (reqParams) => {
-    let intent = new Intent(
-      chance.guid(),
-      reqParams.type,
-      reqParams.appId,
-      [reqParams.one, reqParams.two],
-      reqParams.priority,
-      chance.pickone(['FAILED', 'SUCCESS'])
-    );
-    
+    let intent;
+    if (reqParams.type === "PointToPointIntent") {
+      intent = new Intent(
+        chance.guid(),
+        reqParams.type,
+        reqParams.appId,
+        [reqParams.ingressPoint, reqParams.egressPoint],
+        reqParams.priority,
+        chance.pickone(['FAILED', 'SUCCESS'])
+      );
+    }
+    else {
+      intent = new Intent(
+        chance.guid(),
+        reqParams.type,
+        reqParams.appId,
+        [reqParams.one, reqParams.two],
+        reqParams.priority,
+        chance.pickone(['FAILED', 'SUCCESS'])
+      );
+    }
     cloudModel.intents.push(intent);
     return true;
   }

@@ -22,16 +22,19 @@ export class appService {
       MOCKED_PASSWORD: 'nocsys',
       GUEST_GROUP: 'guestgroup',
       ADMIN_GROUP: 'admingroup',
+      SUPER_GROUP: 'supergroup',
+      //权限管理 {supergroup: 3, admingroup: 2, guestgroup: 1}
       HEADER: {
         'menu': [
           {
             'group': 'Fabric',
             'label': this.translate('MODULE.HEADER.FABRIC'),
+            'role': 1,
             'items': [
-              {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary'},
-              {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices'},
-              {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints'},
-              {'label': 'Intents', 'url': '/intents'},
+              {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary', 'role': 1},
+              {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
+              {'label': 'Intents', 'url': '/intents', 'role': 2},
               //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
@@ -46,40 +49,45 @@ export class appService {
           {
             'group': 'Alert',
             'label': this.translate('MODULE.HEADER.ALERT'),
+            'role': 2,
             'items': [
               // {'label': 'Alert', 'url': '/alert'},
-              {'label': this.translate('MODULE.HEADER.ALERT.ALERT'), 'url': '/alert'},
-              {'label': this.translate('MODULE.HEADER.ALERT.HEALTHYCHECK'), 'url': '/healthycheck'},
-              {'label': this.translate('MODULE.HEADER.ALERT.INFORM'), 'url': '/inform'},
+              {'label': this.translate('MODULE.HEADER.ALERT.ALERT'), 'url': '/alert', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.ALERT.HEALTHYCHECK'), 'url': '/healthycheck', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.ALERT.INFORM'), 'url': '/inform', 'role': 2},
             ]
           },
           {
             'group': 'Config',
             'label': this.translate('MODULE.HEADER.CONFIG'),
+            'role': 3,
             'items': [
-              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration_list'},
-              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY'), 'url': '/configuration_history'}
+              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration_list', 'role': 3},
+              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY'), 'url': '/configuration_history', 'role': 3}
             ]
           },
           {
             'group': 'Log',
+            'role': 2,
             'label': this.translate('MODULE.HEADER.LOG'),
             'items': [
-              {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '/log'}
+              {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '/log', 'role': 2}
             ]
           },
           {
             'group': 'Account',
+            'role': 3,
             'label': this.translate('MODULE.HEADER.ACCOUNT'),
             'items': [
-              {'label': this.translate('MODULE.HEADER.ACCOUNT.ACCOUNT_MANAGER'), 'url': '/account_manage'}
+              {'label': this.translate('MODULE.HEADER.ACCOUNT.ACCOUNT_MANAGER'), 'url': '/account_manage', 'role': 3}
             ]
           }, {
             'group': 'Manage',
+            'role': 3,
             'label': this.translate('MODULE.HEADER.MANAGE'),
             'items': [
-              {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp'},
-              {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch'}
+              {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
+              {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3}
             ]
           }
 
@@ -96,8 +104,34 @@ export class appService {
       CRYPTO_STRING: 'secret',
       DEFAULT_FILENAME: 'startup_netcfg.cfg' // default configuration file name
     };
+    this.loginRole = 1;
+    this.roleFilterMenu = [];
   }
 
+  setLoginRole(num) {
+    this.loginRole = num;
+  }
+
+  filterMenuByLoginRole() {
+    let menu = [];
+    this.CONST.HEADER.menu.forEach((group) => {
+      if (this.loginRole >= group.role) {
+        let tmp = {
+          'group': group.group,
+          'label': group.label,
+          'role': group.role,
+          'items': []
+        };
+        group.items.forEach((item) => {
+          if (this.loginRole >= item.role) {
+            tmp.items.push(item);  
+          }
+        });
+        menu.push(tmp);
+      }
+    });
+    this.roleFilterMenu = menu;
+  }
 
   getZoneEndpoint(isComponent) {
     let endpoint;
@@ -127,11 +161,11 @@ export class appService {
     return this.getZoneEndpoint() + '/logout';
   }
 
-  getUserAccountUrl() {
+  getUserAccountsUrl() {
     return this.getZoneEndpoint(true) + '/useraccount/v1';
   }
 
-  getDeleteUserAccountUrl(username) {
+  getUserAccountUrl(username) {
     return this.getZoneEndpoint(true) + '/useraccount/v1/' + username;
   }
 

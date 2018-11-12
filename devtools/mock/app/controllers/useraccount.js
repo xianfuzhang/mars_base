@@ -34,6 +34,16 @@ router.delete('/:user_name', (req, res) => {
   }
 });
 
+router.get('/:user_name', (req, res) => {
+  if (!req.params.user_name) {
+    return res.status(404).json('User name is required!');
+  }
+  let useraccount = cloudModel.useraccounts.filter((account) => {
+    return account.user_name === req.params.user_name;
+  });
+  return res.status(200).json(useraccount[0]);
+});
+
 function checkUsernameExists(username) {
   let index = _.findIndex(cloudModel.useraccounts, (item) => {
     return item.user_name === username;
