@@ -1,4 +1,4 @@
-<aside id="my-mdc-dialog"
+<aside id="my-mdc-dialog" ng-if="type != 'info' && type != 'info_json'"
        class="mdc-dialog mdc-dialog--open"
        role="alertdialog"
        aria-labelledby="my-mdc-dialog-label"
@@ -33,4 +33,16 @@
     </div>
   </div>
   <div class="mdc-dialog__backdrop"></div>
+</aside>
+<aside id="my-mdc-dialog" ng-if="type == 'info'|| type == 'info_json'"
+       class="mdc-dialog mdc-dialog--open"
+       role="alertdialog"
+       aria-labelledby="my-mdc-dialog-label"
+       aria-describedby="my-mdc-dialog-description"
+       uib-modal-window="modal-window">
+  <div class="mdc-dialog__surface" style="max-height:400px;overflow: scroll;padding:16px;">
+    <div id="" class="mdc-dialog__header__title">
+    </div>
+    <pre ng-style="infoStyle">{{content}}</pre>
+  </div>
 </aside>

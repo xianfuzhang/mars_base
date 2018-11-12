@@ -52,9 +52,11 @@ export class LoginDataManager {
     this.di.$http.get(this.di.appService.getLogoutUrl())
       .then(() => {
         this.di.$cookies.remove('useraccount');
+        this.di.$cookies.remove('menu');
         defer.resolve();
       }, () => {
         this.di.$cookies.remove('useraccount');
+        this.di.$cookies.remove('menu');
         defer.resolve();
       });
     return defer.promise;

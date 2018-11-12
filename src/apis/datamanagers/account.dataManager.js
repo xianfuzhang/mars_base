@@ -16,7 +16,7 @@ export class AccountDataManager {
   getUsers(params) {
     let defer = this.di.$q.defer();
 
-    this.di.$http.get(this.di.appService.getUserAccountUrl(), params)
+    this.di.$http.get(this.di.appService.getUserAccountsUrl(), params)
       .then((res) => {
         defer.resolve(res);
       }, () => {
@@ -28,7 +28,7 @@ export class AccountDataManager {
   createUser(jsonData) {
     let defer = this.di.$q.defer();
 
-    this.di.$http.post(this.di.appService.getUserAccountUrl(), jsonData)
+    this.di.$http.post(this.di.appService.getUserAccountsUrl(), jsonData)
       .then((res) => {
         defer.resolve(res);
       }, (res) => {
@@ -40,9 +40,21 @@ export class AccountDataManager {
   deleteUser(username) {
     let defer = this.di.$q.defer();
 
-    this.di.$http.delete(this.di.appService.getDeleteUserAccountUrl(username))
+    this.di.$http.delete(this.di.appService.getUserAccountUrl(username))
       .then((res) => {
         defer.resolve(res);
+      }, (res) => {
+        defer.reject(res.data.message);
+      });
+    return defer.promise;
+  }
+
+  getUserAccount(username) {
+    let defer = this.di.$q.defer();
+
+    this.di.$http.get(this.di.appService.getUserAccountUrl(username))
+      .then((res) => {
+        defer.resolve(res.data.groups);
       }, (res) => {
         defer.reject(res.data.message);
       });

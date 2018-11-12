@@ -114,9 +114,33 @@ angular
   }])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     var checkLoggedIn = function($q, $cookies, $location){
-      var deferred = $q.defer();
-      var useraccount = $cookies.get('useraccount');
-      if (!useraccount) {
+      let deferred = $q.defer(),
+          useraccount = $cookies.get('useraccount'),
+          menu = $cookies.get('menu'),
+          exists = false;
+      if (menu) {
+        let crypto = require('crypto-js');
+        let decodeBytes = crypto.AES.decrypt(menu.toString(), 'secret');
+        let decodeData = decodeBytes.toString(crypto.enc.Utf8);
+        let role = JSON.parse(decodeData).role;
+        let groups = JSON.parse(decodeData).groups;
+        let url = $location.path();
+        if (url === '/') {
+          exists = true;
+        }
+        else {
+          for(let i=0; i< groups.length; i++) {
+            for(let j=0; j< groups[i].items.length; j++) {
+              if (groups[i].items[j].url === url) {
+                exists = true;
+                break;
+              }
+            }
+          }    
+        }
+      }
+
+      if (!useraccount || !exists) {
         deferred.reject();
         $location.path('/login');
       }

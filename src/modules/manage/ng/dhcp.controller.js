@@ -10,7 +10,9 @@ export class DHCPController {
       '$log',
       '$uibModal',
       'appService',
+      'manageService',
       'manageDataManager',
+      'tableProviderFactory',
       'dialogService',
     ];
   }
@@ -31,6 +33,37 @@ export class DHCPController {
       timeout_regex: '^(1[5-9][0-9]|2[0-9]{2}|300)$',
       dhcp_int_regex: '^([0-9]|[1-9][0-9]{0,5}|1[0-9]{6}|2[0-4][0-9]{5}|25[0-8][0-9]{4}|259[0-1]{3}|2592000)$'
     };
+
+    scope.tabSelected = null;
+    scope.tabs = this.di.manageService.getDHCPTabSchema();
+
+
+    scope.onTabChange= (tab) => {
+      if (tab){
+        scope.tabSelected = tab;
+
+      }
+    };
+
+    scope.onDHCPTableRowSelectAction = (event) => {
+      if (event.data && event.action) {
+        if (event.action.value === 'delete') {
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.MANAGE.DHCP.REMOVE_IPMAC'))
+            .then((data) =>{
+              this.di.manageDataManager.deleteMacAndIpBindings(event.data.host.split('/')[0])
+                .then((res) =>{
+                  scope.dhcpModel.dhcpAPI.queryUpdate();
+                });
+            }, (res) =>{
+              this.di.$log.debug('delete macip binding dialog cancel');
+            });
+        } else if(event.action.value === 'edit'){
+          this.di.$rootScope.$emit('ipmac-wizard-show', event.data.host.split('/')[0]);
+        }
+      }
+    };
+
+
 
     let default_ttl = 63;
     let default_lease = 300;
@@ -87,10 +120,58 @@ export class DHCPController {
           "rebind": "",
           "delay": "",
           "timeout": ""
-        }
+        },
+        actionsShow:{'menu': false, 'add': true, 'remove': false, 'refresh': true, 'search': false},
+        rowActions:[
+          {
+            'label': this.translate('MODULES.MANAGE.DHCP.TABLE.EDIT'),
+            'value': 'edit'
+          },
+          {
+            'label': this.translate('MODULES.MANAGE.DHCP.TABLE.DELETE'),
+            'value': 'delete'
+          }
+
+        ],
+      dhcpTableProvider:null,
+      dhcpAPI: "",
+    };
+
+
+    scope.addIPMac = () =>{
+      this.di.$rootScope.$emit('ipmac-wizard-show');
+    };
+
+    scope.dhcpModel.dhcpTableProvider = this.di.tableProviderFactory.createProvider({
+      query: (params) => {
+        let defer = this.di.$q.defer();
+        this.di.manageDataManager.getMacAndIpBindings().then((res) => {
+            defer.resolve({
+              data: res.mappings,
+              count: undefined
+            });
+        },(error)=>{
+          console.log('error ====');
+        });
+        return defer.promise;
+      },
+      getSchema: () => {
+        return {
+          schema: this.di.manageService.getDHCPTableSchema(),
+          index_name: 'host',
+          rowCheckboxSupport: true,
+          rowActionsSupport: true
+        };
+      }
+    });
+
+    scope.onDHPAPIReady = ($api) => {
+      scope.dhcpModel.dhcpAPI = $api;
     };
 
     let init = () =>{
+      scope.tabSelected = scope.tabs[0];
+
       this.di.manageDataManager.getDHCP().then((res)=>{
         if(res === null){
           // PASS
@@ -194,7 +275,11 @@ export class DHCPController {
 
       this.di.dialogService.createDialog('confirm', this.translate('MODULES.MANAGE.DHCP.SUBMIT.CONFORM'))
         .then((data)=>{
-          this.di.manageDataManager.postDHCP(param);
+          this.di.manageDataManager.postDHCP(param).then((res)=>{
+            if(res){
+              init();
+            }
+          });
         },(res)=>{
 
         })
@@ -208,7 +293,22 @@ export class DHCPController {
 
         })
     };
+
+
+    let unsubscribes = [];
+    unsubscribes.push(this.di.$rootScope.$on('ipmac-refresh', ($event) => {
+      scope.dhcpModel.dhcpAPI.queryUpdate();
+    }));
+
+    scope.$on('$destroy', () => {
+      unsubscribes.forEach((cb) => {
+        cb();
+      })
+    })
+
   }
+
+
 
 
 }

@@ -5,8 +5,12 @@ export class LoginController {
       '$scope',
       '$filter',
       '$location',
+      '$cookies',
+      'appService',
       'loginService',
-      'loginDataManager'
+      'loginDataManager',
+      'accountDataManager',
+      'crypto'
     ];
   }
 
@@ -74,7 +78,32 @@ export class LoginController {
       this.di.loginDataManager.doLogin(this.scope.loginModel.username, this.scope.loginModel.password)
         .then((res) => {
           if(res){
-            this.di.$location.path('/');
+            this.di.accountDataManager.getUserAccount(this.scope.loginModel.username)
+              .then((groups) => {
+                let role = 1;
+                if (groups.includes(this.di.appService.CONST.GUEST_GROUP)) {
+                  role = 1;
+                }
+                else if (groups.includes(this.di.appService.CONST.ADMIN_GROUP)) {
+                  role = 2;
+                }
+                else if (groups.includes(this.di.appService.CONST.SUPER_GROUP)) {
+                  role = 3;
+                }
+                this.di.appService.setLoginRole(role);
+                this.di.appService.filterMenuByLoginRole();
+                
+                this.di.$cookies.put('menu', this.di.crypto.AES.encrypt(JSON.stringify({
+                  'role': role, 
+                  'groups': this.di.appService.roleFilterMenu
+                }), this.di.appService.CONST.CRYPTO_STRING));
+                this.di.$location.path('/');
+              }, (msg) => {
+                this.di.$cookies.remove('menu');
+                this.scope.showBrowserMsg = true;
+                this.scope.loginModel.errorMessage = this.di.loginService.validateErrorMsg(msg ? msg : null);
+              });
+            
           } else {
             this.scope.showBrowserMsg = true;
             this.scope.loginModel.errorMessage = this.di.loginService.validateErrorMsg(res ? res.status : null);
