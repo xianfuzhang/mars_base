@@ -13,6 +13,7 @@ import {LogService} from './services/log.service';
 import {DialogService} from './services/dialog.service';
 import {FlowService} from './services/flow.service';
 import {DateService} from './services/date.service';
+import {manageService} from './services/manage.service';
 import {LogDataManager} from './datamanagers/log.dataManager';
 import {DashboardDataManager} from './datamanagers/dashboard.dataManager';
 import {IntentDataManager} from './datamanagers/intent.dataManager';
@@ -37,6 +38,7 @@ export default angular
   .service('logService', LogService)
   .service('logDataManager', LogDataManager)
   .service('dateService', DateService)
+  .service('manageService', manageService)
   .service('intentDataManager', IntentDataManager)
   .service('manageDataManager', ManageDataManager)
   .name;

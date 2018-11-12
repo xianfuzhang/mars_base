@@ -3,10 +3,12 @@ export class LogController {
     return [
       '$filter',
       '$scope',
+      '$rootScope',
       '$q',
       '$timeout',
       '$window',
       'appService',
+      'dialogService',
       'logService',
       'logDataManager',
       'tableProviderFactory'
@@ -49,7 +51,7 @@ export class LogController {
       this.scope.loading = true;
       
       this.scope.logModel.logAPI.queryUpdate();
-    }
+    };
   
     this.scope.downloadFile = () => {
       if (this.scope.logFileSelected.value == '') return false;
@@ -64,7 +66,26 @@ export class LogController {
     this.unsubscribers = [];
   
     this.init();
-  
+
+    let textPretty = (text) =>{
+      let ret = "";
+      let isJson = false;
+      try{
+        ret = JSON.stringify(JSON.parse(text), null ,2 )
+        isJson = true;
+      } catch(e){
+        ret = text;
+      }
+      return {ret: ret, isJson: isJson};
+    };
+
+    this.unsubscribers.push(this.di.$rootScope.$on('popuptext', (event, params) => {
+      if (params && params.field === 'content') {
+        let res = textPretty(params.value);
+        this.di.dialogService.createDialog(res.isJson?'info_json':'info', res.ret).then((data)=>{},(err)=>{});
+      }
+    }));
+
     this.scope.$on('$destroy', () => {
       this.unsubscribers.forEach((cb) => {
         cb();

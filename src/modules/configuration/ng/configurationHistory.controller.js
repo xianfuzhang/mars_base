@@ -3,10 +3,12 @@ export class ConfigurationHistoryController {
     return [
       '$filter',
       '$scope',
+      '$rootScope',
       '$q',
       '$timeout',
       '$window',
       'appService',
+      'dialogService',
       'configurationDataManager',
       'tableProviderFactory'
     ];
@@ -57,6 +59,26 @@ export class ConfigurationHistoryController {
     };
     
     this.unsubscribers = [];
+
+    let textPretty = (text) =>{
+      let ret = "";
+      let isJson = false;
+      try{
+        ret = JSON.stringify(JSON.parse(text), null ,2 )
+        isJson = true;
+      } catch(e){
+        ret = text;
+      }
+      return {ret: ret, isJson: isJson};
+    };
+
+    this.unsubscribers.push(this.di.$rootScope.$on('popuptext', (event, params) => {
+      if (params && params.field === 'config') {
+        let res = textPretty(params.value);
+        this.di.dialogService.createDialog(res.isJson?'info_json':'info', res.ret).then((data)=>{},(err)=>{});
+      }
+    }));
+
     
     this.init();
     
@@ -180,6 +202,7 @@ export class ConfigurationHistoryController {
       {
         'label': this.translate('MODUELS.CONFIGURATION.HISTORY.COLUMN.CONFIG'),
         'field': 'config',
+        'type':'popuptext',
         'layout': {'visible': true, 'sortable': false, 'fixed': true}
       }
     ];
