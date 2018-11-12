@@ -214,7 +214,7 @@ export class appService {
   //   return this.getZoneEndpoint() + '/endpoints/v1/' + tenant + '/' + segment + '/' + mac;
   // }
   getDeleteEndpointUrl(mac, segment){
-    return this.getZoneEndpoint() + '/hosts/v1/' + mac + '/' + segment;
+    return this.getZoneEndpoint() + '/hosts/' + mac + '/' + segment;
   }
 
   getStormProfilesUrl() {

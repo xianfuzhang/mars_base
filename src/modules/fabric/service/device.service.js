@@ -184,6 +184,10 @@ export class DeviceService {
         'label': this.translate('MODULES.SWITCH.MENU.REBOOT'),
         'value': 'reboot'
       },
+      {
+        'label': 'Intent',
+        'value': 'intent'
+      }
     ]
   }
 

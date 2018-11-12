@@ -217,6 +217,7 @@ export class mdlTable {
       if (scope.tableModel.removeItems.length) {
         scope.onRemove({$value: scope.tableModel.removeItems});
       }
+      scope.tableModel.removeItems = [];
       event && event.stopPropagation();
     };
     scope._refresh = (event) => {

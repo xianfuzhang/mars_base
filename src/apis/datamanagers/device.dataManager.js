@@ -101,7 +101,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.reject(error.data);
+        defer.reject(error.data.message);
       }
     );
     return defer.promise;
@@ -114,7 +114,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.reject(err.data);
+        defer.reject(err.data.message);
       }
     );
     return defer.promise;
@@ -211,7 +211,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.reject(error);
+        defer.reject(error.data.message);
       }
     );
     return defer.promise;
@@ -224,7 +224,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.reject(error);
+        defer.reject(error.data.message);
       }
     );
     return defer.promise;
@@ -238,7 +238,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.reject(error);
+        defer.reject(error.data.message);
       }
     );
     return defer.promise;
@@ -308,7 +308,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.reject(error.msg);
+        defer.reject(error.data.message);
       }
     );
     return defer.promise;
@@ -334,7 +334,7 @@ export class DeviceDataManager {
           defer.resolve(null);
         },
         (error) => {
-          defer.reject(error.msg);
+          defer.reject(error.data.message);
         }
       );
     return defer.promise;

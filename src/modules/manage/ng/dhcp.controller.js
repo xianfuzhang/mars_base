@@ -32,6 +32,47 @@ export class DHCPController {
       dhcp_int_regex: '^([0-9]|[1-9][0-9]{0,5}|1[0-9]{6}|2[0-4][0-9]{5}|25[0-8][0-9]{4}|259[0-1]{3}|2592000)$'
     };
 
+    let default_ttl = 63;
+    let default_lease = 300;
+    let default_renew= 150;
+    let default_rebind = 200;
+    let default_delay = 2;
+    let default_timeout = 150;
+
+    let getDefaultValue = (key)=>{
+      if(key === 'ttl'){
+        return default_ttl + '';
+      }
+
+      if(key === 'lease'){
+        return default_lease + '';
+      }
+
+      if(key === 'renew'){
+        return default_renew + '';
+      }
+
+      if(key === 'rebind'){
+        return default_rebind + '';
+      }
+
+      if(key === 'delay'){
+        return default_delay + '';
+      }
+
+      if(key === 'timeout'){
+        return default_timeout + '';
+      }
+      return "";
+    };
+  //     "ttl": 63,
+  //     "lease": 300,
+  //     "renew": 150,
+  //     "rebind": 200,
+  //     "delay": 2,
+  //     "timeout": 150
+  // }
+
 
     scope.dhcpModel = {
       dhcpserver:{
@@ -57,9 +98,12 @@ export class DHCPController {
         }
         let dhcpJson = res.data;
         let _ = this.di._;
-        _.forEach(_.keys(dhcpJson), (key)=>{
-          scope.dhcpModel.dhcpserver[key] = dhcpJson[key] !== 0?dhcpJson[key]:"";
-        })
+        if(_.keys(dhcpJson).length > 0){
+          _.forEach(_.keys(dhcpJson), (key)=>{
+            scope.dhcpModel.dhcpserver[key] = dhcpJson[key] !== 0?dhcpJson[key]:getDefaultValue(key);
+          })
+        }
+
       })
       // scope.dhcpModel.dhcpserver  = {
       //   "startip": "10.1.11.51",
@@ -75,6 +119,9 @@ export class DHCPController {
       //   "timeout": 150
       // }
     };
+
+
+
     init();
 
     function validCurrentDom(dom_class) {

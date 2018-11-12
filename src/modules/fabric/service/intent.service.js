@@ -12,7 +12,7 @@ export class IntentService {
   }
 
   getIntentActionsShow() {
-    return {'menu': false, 'add': false, 'remove': true, 'refresh': true, 'search': false};
+    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
   }
 
   getIntentTableRowActions() {

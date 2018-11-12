@@ -36,14 +36,10 @@
               </mdl-text>
           </div>
           <div ng-if="receiver.type == 'location'">
-            <div class="">
               <mdl-select ng-model="receiver.location" display-label="deviceSelect"></mdl-select>
-            </div>
-            <div class="">
               <mdl-text ng-model="receiver.port"
                   helper="receiver.portHelper"
                   display-label="receiver.portDisplayLabel"></mdl-text>
-            </div>
           </div>
         </div>
       </div>
@@ -51,7 +47,7 @@
 
   	<div class="column-manipulation-field__footer">
   		<div style="display: inline-block;float: right; margin-left: 15px;">
-        <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="userModel.userForm.$invalid"></mar-button>
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="model.endpointForm.$invalid"></mar-button>
       </div>
 
       <div style="display: inline-block;float: right;">

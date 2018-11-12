@@ -35,7 +35,7 @@ export class IntentDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.reject(error.message);
+        defer.reject(error.data.message);
       }
     );
     return defer.promise;
@@ -50,7 +50,7 @@ export class IntentDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.reject(eror.message);
+        defer.reject(eror.data.message);
       }
     );
     return defer.promise;

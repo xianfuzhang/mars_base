@@ -15,6 +15,7 @@
   "MODULE.ACCOUNT.MANAGE.COLUMN.NAME": "User Name",
   "MODULE.ACCOUNT.MANAGE.COLUMN.GROUP": "Group",
   "MODULE.ACCOUNT.DIALOG.CONTENT.BATCH_DELETE_ACCOUNT": "Batch delete user account?",
+  "MODULES.ACCOUNT.BATCH.DELETE.SUCCESS": "Batch delete accounts success.",
   "MODULE.ACCOUNT.CREATE.TITTLE": "Create User Account",
   "MODULE.ACCOUNT.CREATE.NAME": "Account Name",
   "MODULE.ACCOUNT.CREATE.NAME.HELP": "Account name must contains numbers, alphabet",
