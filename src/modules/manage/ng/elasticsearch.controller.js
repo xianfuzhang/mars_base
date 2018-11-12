@@ -39,8 +39,6 @@ export class ElasticsearchController {
     this.scope = this.di.$scope;
     this.scope.pageTitle = this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH');
     
-    
-    this.SWITCHES_CPU_MEMORY_STATISTIC_NS = 'switches_cpu_memory_statistic_ns';
     let unSubscribers = [];
     let dataModel = {};
     let date = this.di.dateService.getTodayObject();
@@ -48,7 +46,6 @@ export class ElasticsearchController {
     this.scope.dashboardModel = {
       indice: {
         'analyzer': [],
-        'summary': [],
       },
       indiceOptions: []
     };
@@ -90,11 +87,9 @@ export class ElasticsearchController {
       });
     };
     
-    this.scope.clear = () => {
+    this.scope.clear = (defaultTime) => {
       let begin_date, end_date, begin_time, end_time;
   
-      this.scope.loading = true;
-      
       this.di.modalManager.open({
         template: require('../template/selectDateDialog.html'),
         controller: 'selectDateDialogController',
@@ -103,11 +98,14 @@ export class ElasticsearchController {
           dataModel: () => {
             return {
               'indice': this.scope.dashboardModel.selectedIndice,
+              'defaultTime': defaultTime ? defaultTime : ''
             };
           }
         }
       }).result.then((data) => {
         if (data && !data.canceled) {
+          this.scope.loading = true;
+          
           let endtime = data.data.endtime.getTime();
           let params = this.getDeleteIndiceParams(endtime);
   
@@ -115,7 +113,7 @@ export class ElasticsearchController {
             (res) => { // success to save
               this.di.dialogService.createDialog('success', '清理成功！')
                 .then((data)=>{
-                  this.scope.loading = false;
+                  init(); // 初始化
                 })
             },
             (err) => { // error to save
@@ -174,61 +172,6 @@ export class ElasticsearchController {
       })
     };
     
-    let convertIndiceAnalyzer = () => {
-      //indice analyzer
-      let memoryCols = [];
-      let records = this.getIndiceChartData(this.scope.dashboardModel.indice.analyzer);
-      let x_axis = this.scope.dashboardModel.indice.analyzer.length > 0 ?
-        this.getIndiceTimeSeries(this.scope.dashboardModel.indice.analyzer) : ['x'];
-      if(records.length) {
-        memoryCols.push(x_axis);
-        records.forEach((item) =>{
-          let arr = [];
-          // arr.push(item.name);
-          arr = arr.concat(item.data);
-          memoryCols.push(arr);
-        });
-      }
-      else {
-        memoryCols.push(x_axis);
-      }
-      
-      let indiceChart = this.di.c3.generate({
-        bindto: '#indiceAnalyzer',
-        data: {
-          x: 'x',
-          columns: memoryCols,
-          xFormat: '%Y-%m-%dT%H:%M:%S.%LZ'
-        },
-        color: {
-          pattern: ['#0077cb', '#c78500', '#009f0e', '#008e7f', '#34314c']
-        },
-        axis: {
-          x: {
-            type: 'timeseries',
-            tick: {
-              format: (d) => {
-                return this.pad(d.getMonth() + 1) + '-' + d.getDate() + ' ' + this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
-              }
-            }
-          },
-          y: {
-            tick: {
-              format: function (d) { return d + '%'; }
-            }
-          }
-        },
-        tooltip: {
-          format: {
-            title: (d) => {
-              return this.pad(d.getMonth() + 1) + '-' + this.pad(d.getDate()) + ' '
-                + this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
-            }
-          }
-        }
-      });
-    };
-    
     let chartSwtInterface = (indices, bindTo) =>{
       this.parseIndicesSize(indices);
       let y_label = indices[0].size.slice(indices[0].size.length - 2, indices[0].size.length);
@@ -258,18 +201,103 @@ export class ElasticsearchController {
             categories: category
           },
           y:{
-            label: y_label
+            label: y_label,
           }
         },
         tooltip: {
           format: {
-            title: (index) => {
-              return category[index];
+            value: (d) => {
+              if(y_label.toUpperCase() == 'KB'){
+                if(d >= 1024 && d < 1024 * 1024) {
+                  return (d / 1024).toFixed(2) + 'MB'
+                } else if(d >= 1024 * 1024){
+                  return (d / (1024 * 1024)).toFixed(2) + 'GB'
+                } else {
+                  return d.toFixed(2) + 'KB'
+                }
+              } else if(y_label.toUpperCase() == 'MB') {
+                if(d < 0.1) {
+                  return (d * 1024).toFixed(2) + 'KB'
+                } else if(d >= 1024) {
+                  return (d / 1024).toFixed(2) + 'GB'
+                } else {
+                  return d.toFixed(2) + 'MB'
+                }
+              }
             }
           }
         }
       });
     }
+  
+    let convertIndiceAnalyzer = () => {
+      //indice analyzer
+      let memoryCols = [];
+      let records = this.getIndiceChartData(this.scope.dashboardModel.indice.analyzer);
+      let x_axis = this.scope.dashboardModel.indice.analyzer.length > 0 ?
+        this.getIndiceTimeSeries(this.scope.dashboardModel.indice.analyzer) : ['x'];
+      
+      memoryCols.push(x_axis);
+      if(records.length) {
+        records.forEach((item) =>{
+          let arr = [];
+          arr.push(this.scope.dashboardModel.selectedIndice);
+          arr = arr.concat(item.data);
+          memoryCols.push(arr);
+        });
+      }
+    
+      let scope = this.scope;
+      let indiceChart = this.di.c3.generate({
+        bindto: '#indiceAnalyzer',
+        data: {
+          x: 'x',
+          type: 'area-spline',
+          columns: memoryCols,
+          xFormat: '%Y-%m-%dT%H:%M:%S.%LZ',
+          onclick: (d, element) => {
+            
+            let time = d.x.getFullYear() + '-' + this.pad(d.x.getMonth() + 1) + '-' + this.pad(d.x.getDate()) + 'T' + this.pad(d.x.getHours()) + ':' + this.pad(d.x.getMinutes());
+            
+            scope.clear(time)
+          }
+        },
+        color: {
+          pattern: ['#009f0e']
+        },
+        axis: {
+          x: {
+            type: 'timeseries',
+            tick: {
+              format: (d) => {
+                return this.pad(d.getMonth() + 1) + '-' + d.getDate() + ' ' + this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
+              }
+            }
+          },
+          y: {
+            label: 'count数量',
+            tick: {
+              format: function (d) { return d; }
+            }
+          }
+        },
+        tooltip: {
+          format: {
+            title: (val) => {
+              return this.pad(val.getMonth() + 1) + '-' + this.pad(val.getDate()) + ' '
+                + this.pad(val.getHours()) + ':' + this.pad(val.getMinutes());
+            },
+            value: (val, ratio, id, index) => {
+              let sum = 0;
+              for(let i=0;i < index + 1; i++){
+                sum += memoryCols[1][i + 1]
+              }
+              return '总量：' + sum + ', 新增：' + val;
+            }
+          }
+        }
+      });
+    };
     
     this.di.$timeout(function () {init()});
     
@@ -283,13 +311,9 @@ export class ElasticsearchController {
   getDeleteIndiceParams(endtime) { // endtime is timestamp
     return {
       "query" : {
-        "filtered" : {
-          "filter" : {
-            "range" : {
-              "@timestamp" : {
-                "lt": endtime
-              }
-            }
+        "range" : {
+          "@timestamp" : {
+            "lt": endtime
           }
         }
       }
