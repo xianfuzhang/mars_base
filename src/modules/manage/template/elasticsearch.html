@@ -29,11 +29,12 @@
                 </div>
 
                 <div>
-                    <mar-section s-title="空间占用情况时间分布" no-fold="true"
+                    <mar-section s-title="收录数据总量时间分布" no-fold="true"
                                  class="detail_summary dash_mar_section memory_rate">
                         <transclude-title>
                             <mdl-select ng-model="dashboardModel.indiceSelectedOption"
                                         display-label="{options: dashboardModel.indiceOptions}"
+                                        disable="loading"
                                         ng-change="indiceSelect($value)">
                             </mdl-select>
                         </transclude-title>
@@ -56,4 +57,6 @@
             </div>
         </div>
     </div>
+
+    <!--<loading></loading>-->
 </div>

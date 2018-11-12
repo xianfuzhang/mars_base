@@ -35,9 +35,11 @@ export class SelectDateDialogController {
     this.scope.errMsg = '';
     let now = Date.now();
     this.date = this.di.$filter('date');
-    let today = this.date(now, 'yyyy-MM-dd');
-    this.scope.endtime = new Date(today + ' 00:00:00');
-
+    let today = this.date(now, 'yyyy-MM-dd\'T\'hh:mm');
+    this.scope.endtime = '';
+    this.scope.defaultTime = this.di.dataModel.defaultTime ? this.di.dataModel.defaultTime : today;
+    this.scope.dialogModel.endtime = new Date(this.scope.defaultTime)
+    
 		this.scope.cancel = (event) => {
 			this.di.$modalInstance.dismiss({
         canceled: true
@@ -61,25 +63,25 @@ export class SelectDateDialogController {
 		};
 	}
 
-	getBeginDate() {
-		let year = this.di.dateService.getLocalYear(this.scope.dialogModel.calendar.begin_date);
-		let month = this.scope.dialogModel.calendar.begin_date.getMonth();
-		let day = this.scope.dialogModel.calendar.begin_date.getDate();
-		let hour = this.scope.dialogModel.calendar.begin_time.getHours();
-		let minute = this.scope.dialogModel.calendar.begin_time.getMinutes();
-
-		return new Date(year, month, day, hour, minute, 0);
-	}
-
-	getEndDate() {
-		let year = this.di.dateService.getLocalYear(this.scope.dialogModel.calendar.end_date);
-		let month = this.scope.dialogModel.calendar.end_date.getMonth();
-		let day = this.scope.dialogModel.calendar.end_date.getDate();
-		let hour = this.scope.dialogModel.calendar.end_time.getHours();
-		let minute = this.scope.dialogModel.calendar.end_time.getMinutes();
-
-		return new Date(year, month, day, hour, minute, 0);
-	}	
+	// getBeginDate() {
+	// 	let year = this.di.dateService.getLocalYear(this.scope.dialogModel.calendar.begin_date);
+	// 	let month = this.scope.dialogModel.calendar.begin_date.getMonth();
+	// 	let day = this.scope.dialogModel.calendar.begin_date.getDate();
+	// 	let hour = this.scope.dialogModel.calendar.begin_time.getHours();
+	// 	let minute = this.scope.dialogModel.calendar.begin_time.getMinutes();
+  //
+	// 	return new Date(year, month, day, hour, minute, 0);
+	// }
+  //
+	// getEndDate() {
+	// 	let year = this.di.dateService.getLocalYear(this.scope.dialogModel.calendar.end_date);
+	// 	let month = this.scope.dialogModel.calendar.end_date.getMonth();
+	// 	let day = this.scope.dialogModel.calendar.end_date.getDate();
+	// 	let hour = this.scope.dialogModel.calendar.end_time.getHours();
+	// 	let minute = this.scope.dialogModel.calendar.end_time.getMinutes();
+  //
+	// 	return new Date(year, month, day, hour, minute, 0);
+	// }
 }
 
 SelectDateDialogController.$inject = SelectDateDialogController.getDI();
