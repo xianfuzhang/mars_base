@@ -182,12 +182,12 @@ export class ConfigurationHistoryController {
       {
         'label': this.translate('MODULES.CONFIGURATION.HISTORY.COLUMN.TIME'),
         'field': 'time',
-        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true, width:"30%"}
       },
       {
         'label': this.translate('MODULES.CONFIGURATION.HISTORY.COLUMN.TYPE'),
         'field': 'type',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true}
+        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"20%"}
       },
       // {
       //   'label': this.translate('MODUELS.CONFIGURATION.HISTORY.COLUMN.CLASS'),
@@ -203,7 +203,7 @@ export class ConfigurationHistoryController {
         'label': this.translate('MODUELS.CONFIGURATION.HISTORY.COLUMN.CONFIG'),
         'field': 'config',
         'type':'popuptext',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true}
+        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"50%"}
       }
     ];
   }
