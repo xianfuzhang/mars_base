@@ -13,6 +13,7 @@ export class InformController {
       '$log',
       '$uibModal',
       'appService',
+      'roleService',
       'tableProviderFactory',
       'alertDataManager',
       'dialogService',
@@ -34,17 +35,25 @@ export class InformController {
 
     let email_server_component = {};
     let wechat_server_component = {};
-
+    scope.role = this.di.roleService.getRole();
     scope.informModel = {
       receiveGroupTb:{
-        actionsShow:{'menu': false, 'add': true, 'remove': false, 'refresh': true, 'search': false},
+        actionsShow:{
+          'menu': {'enable': false, 'role': 2}, 
+          'add': {'enable': true, 'role': 2}, 
+          'remove': {'enable': false, 'role': 2}, 
+          'refresh': {'enable': true, 'role': 2}, 
+          'search': {'enable': false, 'role': 2}
+        },
         rowActions:[
           {
             'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.EDIT'),
+            'role': 2,
             'value': 'edit'
           },
           {
             'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.DELETE'),
+            'role': 2,
             'value': 'delete'
           }
 
@@ -280,7 +289,11 @@ export class InformController {
           schema: this.di.alertService.getReceiveGroupTableSchema(),
           index_name: 'group_name',
           rowCheckboxSupport: true,
-          rowActionsSupport: true
+          rowActionsSupport: true,
+          authManage: {
+            support: true,
+            currentRole: this.di.$scope.role
+          }
         };
       }
     });

@@ -72,7 +72,13 @@ export class DeviceService {
   }
 
   getDeviceActionsShow() {
-    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
+    return {
+      'menu': {'enable': false, 'role': 2},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2}, 
+      'search': {'enable': false, 'role': 2}
+    };
   }
 
   getPortActionsShow() {
@@ -84,7 +90,13 @@ export class DeviceService {
   }
 
   getEndpointActionsShow() {
-    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
+    return {
+      'menu': {'enable': false, 'role': 2}, 
+      'add': {'enable': true, 'role': 2}, 
+      'remove': {'enable': true, 'role': 2}, 
+      'refresh': {'enable': true, 'role': 2}, 
+      'search': {'enable': false, 'role': 2}
+    };
   }
 
 
@@ -178,14 +190,17 @@ export class DeviceService {
       // },
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
         'value': 'delete'
       },
       {
         'label': this.translate('MODULES.SWITCH.MENU.REBOOT'),
+        'role': 2,
         'value': 'reboot'
       },
       {
         'label': 'Intent',
+        'role': 2,
         'value': 'intent'
       }
     ]
@@ -343,10 +358,12 @@ export class DeviceService {
     return [
       {
         'label': this.translate('MODULES.SWITCHES.ENDPOINT.ROW.ACTION.DELETE'),
+        'role': 2,
         'value': 'delete'
       },
       {
         'label': 'Intent',
+        'role': 2,
         'value': 'intent'
       }
     ];

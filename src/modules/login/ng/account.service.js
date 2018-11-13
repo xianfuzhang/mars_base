@@ -13,7 +13,13 @@ export class accountService {
   }
 
   getActionsShow() {
-    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': true};
+    return {
+      'menu': {'enable': false, 'role': 3}, 
+      'add': {'enable': true, 'role': 3}, 
+      'remove': {'enable': true, 'role': 3}, 
+      'refresh': {'enable': true, 'role': 3}, 
+      'search': {'enable': true, 'role': 3}
+    };
   }
 
   getTableSchema() {

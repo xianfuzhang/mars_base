@@ -8,6 +8,7 @@ export class ConfigurationHistoryController {
       '$timeout',
       '$window',
       'appService',
+      'roleService',
       'dialogService',
       'configurationDataManager',
       'tableProviderFactory'
@@ -23,7 +24,7 @@ export class ConfigurationHistoryController {
     this.scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
     this.date = this.di.$filter('date');
-    
+    this.scope.role = this.di.roleService.getRole();
     this.scope.pageTitle = this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY');
     this.scope.loading = false;
     this.scope.hasData = false;
@@ -112,6 +113,10 @@ export class ConfigurationHistoryController {
         return {
           schema: this.getTableSchema(),
           index_name: 'created_time',
+          authManage: {
+            support: true,
+            currentRole: this.scope.role
+          }
         };
       }
     });
@@ -174,7 +179,10 @@ export class ConfigurationHistoryController {
 
 
   getActionsShow() {
-    return {'refresh': true, 'search': false};
+    return {
+      'refresh': {'enable': true, 'role': 3}, 
+      'search': {'enable': false, 'role': 3}
+    };
   }
   
   getTableSchema() {

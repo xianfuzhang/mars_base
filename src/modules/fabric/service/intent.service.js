@@ -12,13 +12,20 @@ export class IntentService {
   }
 
   getIntentActionsShow() {
-    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
+    return {
+      'menu': {'enable': false, 'role': 1}, 
+      'add': {'enable': true, 'role': 2}, 
+      'remove': {'enable': true, 'role': 2}, 
+      'refresh': {'enable': true, 'role': 1}, 
+      'search': {'enable': false, 'role': 2}
+    };
   }
 
   getIntentTableRowActions() {
     return [
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
         'value': 'delete'
       }
     ]

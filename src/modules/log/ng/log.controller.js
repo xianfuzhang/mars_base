@@ -10,6 +10,7 @@ export class LogController {
       'appService',
       'dialogService',
       'logService',
+      'roleService',
       'logDataManager',
       'tableProviderFactory'
     ];
@@ -30,7 +31,7 @@ export class LogController {
     this.scope.hasData = false;
     this.scope.fileList = {options: []};
     this.scope.logFileSelected = {};
-    
+    this.scope.role = this.di.roleService.getRole();
     let now = Date.now();
     let today = this.date(now, 'yyyy-MM-dd');
     this.scope.today = new Date(today + ' 23:59:59');
@@ -117,6 +118,10 @@ export class LogController {
         return {
           schema: this.di.logService.getTableSchema(),
           index_name: 'created_time',
+          authManage: {
+            support: true,
+            currentRole: this.di.$scope.role
+          }
         };
       }
     });
@@ -136,7 +141,10 @@ export class LogController {
   }
   
   getActionsShow() {
-    return {'refresh': true, 'search': true};
+    return {
+      'refresh': {'enable': true, 'role': 2}, 
+      'search': {'enable': true, 'role': 2}
+    };
   }
   
   getEntities(origins) {

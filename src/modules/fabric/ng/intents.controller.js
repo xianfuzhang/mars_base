@@ -5,6 +5,7 @@ export class IntentsController {
       '$rootScope',
   		'$q',
       '$filter',
+      'roleService',
       '_',
   		'intentService',
   		'dialogService',
@@ -30,6 +31,7 @@ export class IntentsController {
     	'rowActions': this.di.intentService.getIntentTableRowActions(),
     	'provider': null
     };
+    this.scope.role = this.di.roleService.getRole();
 
     this.scope.onAPIReady = ($api) => {
     	this.scope.model.API = $api;
@@ -154,7 +156,11 @@ export class IntentsController {
           schema: this.di.intentService.getIntentTableSchema(),
           index_name: 'id',
           rowCheckboxSupport: true,
-          rowActionsSupport: true
+          rowActionsSupport: true,
+          authManage: {
+            support: true,
+            currentRole: this.scope.role
+          }
         };
       }
     });

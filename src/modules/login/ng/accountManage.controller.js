@@ -7,6 +7,7 @@ export class AccountManageController {
       '$q',
       //'$uibModal',
       'dialogService',
+      'roleService',
       'accountService',
       'notificationService',
       'accountDataManager',
@@ -22,7 +23,7 @@ export class AccountManageController {
     this.scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
     this.scope.page_title = this.translate('MODULE.ACCOUNT.MANAGE.TITLE');
-
+    this.scope.role = this.di.roleService.getRole();
     this.scope.accountModel = {
       provider: null,
       actionsShow: this.di.accountService.getActionsShow(),
@@ -93,7 +94,11 @@ export class AccountManageController {
         return {
           schema: this.di.accountService.getTableSchema(),
           index_name: 'id',
-          rowCheckboxSupport: true
+          rowCheckboxSupport: true,
+          authManage: {
+            support: true,
+            currentRole: this.di.$scope.role
+          }
         };
       }
     });

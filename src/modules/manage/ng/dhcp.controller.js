@@ -9,6 +9,7 @@ export class DHCPController {
       '$q',
       '$log',
       '$uibModal',
+      'roleService',
       'appService',
       'manageService',
       'manageDataManager',
@@ -24,7 +25,7 @@ export class DHCPController {
     });
     let unSubscribers = [];
     let scope = this.di.$scope;
-
+    this.di.$scope.role = this.di.roleService.getRole();
     this.translate = this.di.$filter('translate');
 
     scope.regex = {
@@ -121,14 +122,22 @@ export class DHCPController {
           "delay": "",
           "timeout": ""
         },
-        actionsShow:{'menu': false, 'add': true, 'remove': false, 'refresh': true, 'search': false},
+        actionsShow:{
+          'menu': {'enable': false, 'role': 3}, 
+          'add': {'enable': true, 'role': 3}, 
+          'remove': {'enable': false, 'role': 3}, 
+          'refresh': {'enable': true, 'role': 3}, 
+          'search': {'enable': false, 'role': 3}
+        },
         rowActions:[
           {
             'label': this.translate('MODULES.MANAGE.DHCP.TABLE.EDIT'),
+            'role': 3,
             'value': 'edit'
           },
           {
             'label': this.translate('MODULES.MANAGE.DHCP.TABLE.DELETE'),
+            'role': 3,
             'value': 'delete'
           }
 
@@ -160,7 +169,11 @@ export class DHCPController {
           schema: this.di.manageService.getDHCPTableSchema(),
           index_name: 'host',
           rowCheckboxSupport: true,
-          rowActionsSupport: true
+          rowActionsSupport: true,
+          authManage: {
+            support: true,
+            currentRole: this.di.$scope.role
+          }
         };
       }
     });

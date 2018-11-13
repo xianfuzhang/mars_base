@@ -30,11 +30,9 @@ global.cloudModel = {
   },
   logs: [],
   clusters: [],
-  useraccounts: [{
-    "user_name": "nocsys",
-   "groups": ["supergroup"],
-   "password": "nocsys"
-  }],
+  useraccounts: [
+    new UserAccount("nocsys", ["supergroup"], "nocsys")
+   ],
   dhcpserver:{},
   confighistory: [],
   intents: []

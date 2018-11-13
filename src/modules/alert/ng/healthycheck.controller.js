@@ -9,6 +9,7 @@ export class HealthyCheckController {
       '$q',
       'appService',
       'alertService',
+      'roleService',
       'tableProviderFactory',
       'alertDataManager',
       'dialogService',
@@ -26,15 +27,24 @@ export class HealthyCheckController {
     this.translate = this.di.$filter('translate');
     let translate = this.translate;
     let di = this.di;
+    scope.role = this.di.roleService.getRole();
     scope.healthyCheckModel = {
-      actionsShow: {'menu': false, 'add': true, 'remove': false, 'refresh': true, 'search': false},
+      actionsShow: {
+        'menu': {'enable': false, 'role': 2}, 
+        'add': {'enable': true, 'role': 2},
+        'remove': {'enable': false, 'role': 2}, 
+        'refresh': {'enable': true, 'role': 2},
+        'search': {'enable': false, 'role': 2}
+      },
       rowActions: [
         {
           'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.EDIT'),
+          'role': 2,
           'value': 'edit'
         },
         {
           'label': this.translate('MODULES.ALERT.RECEIVE_GROUP.DELETE'),
+          'role': 2,
           'value': 'delete'
         }
       ],
@@ -106,7 +116,11 @@ export class HealthyCheckController {
           schema: this.di.alertService.getHealthyCheckTableSchema(),
           index_name: 'rule_name',
           rowCheckboxSupport: true,
-          rowActionsSupport: true
+          rowActionsSupport: true,
+          authManage: {
+            support: true,
+            currentRole: this.di.$scope.role
+          }
         };
       }
     });
