@@ -290,7 +290,8 @@ export class mdlTable {
       scope.tableModel.schema = scope.provider.getSchema().schema || [];
       scope.tableModel.rowCheckboxSupport = scope.provider.getSchema().rowCheckboxSupport;
       scope.tableModel.rowActionsSupport = scope.provider.getSchema().rowActionsSupport;
-      //scope.tableModel.rowActions = scope.provider.getSchema().rowActions;
+      scope.tableModel.authManageSupport = scope.provider.getSchema().authManage && scope.provider.getSchema().authManage.support || false;
+      scope.tableModel.currentRole = scope.provider.getSchema().authManage && scope.provider.getSchema().authManage.currentRole || 1;
 
       if (scope.tableModel.columns.length === 0) {
         scope.tableModel.schema.forEach((value, index) => {

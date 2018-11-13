@@ -131,7 +131,7 @@ angular
         else {
           for(let i=0; i< groups.length; i++) {
             for(let j=0; j< groups[i].items.length; j++) {
-              if (groups[i].items[j].url === url) {
+              if (groups[i].items[j].url === url || url.indexOf(groups[i].items[j].url) > -1) {
                 exists = true;
                 break;
               }
