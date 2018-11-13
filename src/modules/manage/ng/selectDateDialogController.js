@@ -35,7 +35,7 @@ export class SelectDateDialogController {
     this.scope.errMsg = '';
     let now = Date.now();
     this.date = this.di.$filter('date');
-    let today = this.date(now, 'yyyy-MM-dd\'T\'hh:mm');
+    let today = this.date(now, 'yyyy-MM-dd\'T\'HH:mm');
     this.scope.endtime = '';
     this.scope.defaultTime = this.di.dataModel.defaultTime ? this.di.dataModel.defaultTime : today;
     this.scope.dialogModel.endtime = new Date(this.scope.defaultTime)
