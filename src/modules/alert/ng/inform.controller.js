@@ -110,24 +110,42 @@ export class InformController {
     };
 
     scope.saveServerConfig = () =>{
-      let param = getServerConfigFromComponent();
-      if(validateServerConfig(param)){
-        this.di.alertDataManager.setAlertGroupBasicConfig(param)
-          .then((res) => {
+      this.di.dialogService.createDialog('confirm', this.translate('MODULES.ALERT.SERVER_CONFIG.CONFIRM.CREATE'))
+        .then((data)=>{
 
-          },(error) => {
+          let param = getServerConfigFromComponent();
+          if(validateServerConfig(param)){
+            this.di.alertDataManager.setAlertGroupBasicConfig(param)
+              .then((res) => {
 
-          });
-      }
+              },(error) => {
+
+              });
+          }
+
+        },(res)=>{
+
+        })
+
+
+
     };
 
     scope.clearServerConfig = () =>{
-      this.di.alertDataManager.deleteAlertGroupBasicConfig()
-        .then((res) => {
-          clearServerConfig();
-        }, () => {
-          clearServerConfig();
-        });
+
+      this.di.dialogService.createDialog('confirm', this.translate('MODULES.ALERT.SERVER_CONFIG.CONFIRM.REMOVE'))
+        .then((data)=>{
+          this.di.alertDataManager.deleteAlertGroupBasicConfig()
+            .then((res) => {
+              clearServerConfig();
+            }, () => {
+              clearServerConfig();
+            });
+        },(res)=>{
+
+        })
+
+
     };
 
     let validateServerConfig = (param) => {

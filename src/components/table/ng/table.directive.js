@@ -159,6 +159,14 @@ export class mdlTable {
       return $col.sort || scope.tableModel.CONST_SORT_UNDEFINED;
     };
 
+    scope._getColumnWidth = ($col) => {
+      if($col.width){
+        return {"width":$col.width}
+      } else {
+        return {};
+      }
+    };
+
     scope._isSelected = function (rowId) {
       return scope.tableModel.selectedRowId && scope.tableModel.selectedRowId === rowId;
     };
@@ -314,6 +322,7 @@ export class mdlTable {
       let col = {
         'def': columnDef,
         'visible': scope._getLayoutProperty(columnDef, 'visible', true),
+        'width': scope._getLayoutProperty(columnDef, 'width', null),
         'hidden': scope._getLayoutProperty(columnDef, 'hidden', false),
         'fixed': scope._getLayoutProperty(columnDef, 'fixed', false),
         'sortable': scope._getLayoutProperty(columnDef, 'sortable', false),
