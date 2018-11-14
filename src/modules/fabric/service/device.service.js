@@ -1023,6 +1023,18 @@ export class DeviceService {
     return res;
   }
 
+  getCriteriaReferenceObject(objId, defaultValue){
+    let res = angular.copy(this.criteria4Submit[objId]);
+    res[res['field']] = defaultValue;
+    if(res['field']){
+      delete res['field'];
+    }
+    if(res['field_type']){
+      delete res['field_type'];
+    }
+    return res;
+  }
+
   getTreatmentObject(item){
     let field = item['field'];
     let value = item['value'];
