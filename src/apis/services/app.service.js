@@ -21,8 +21,8 @@ export class appService {
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
       GUEST_GROUP: 'guestgroup',
-      ADMIN_GROUP: 'admingroup',
-      SUPER_GROUP: 'supergroup',
+      ADMIN_GROUP: 'managergroup',
+      SUPER_GROUP: 'admingroup',
       //权限管理 {supergroup: 3, admingroup: 2, guestgroup: 1}
       HEADER: {
         'menu': [
@@ -38,14 +38,14 @@ export class appService {
               //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
-          /*{
-           'group':'Logical',
-           'items':[
-           {'label': 'Tenant', 'url': '/tenant'},
-           {'label': 'Segment', 'url': '/segment'},
-           {'label': 'Interface Group', 'url': '/interface_group'},
-           ]
-           },*/
+          // {
+          //  'group':'Logical',
+          //  'items':[
+          //    {'label': 'Tenant', 'url': '/tenant', 'role': 2},
+          //    {'label': 'Segment', 'url': '/segment', 'role': 2},
+          //    // {'label': 'Interface Group', 'url': '/interface_group'},
+          //   ]
+          //  },
           {
             'group': 'Alert',
             'label': this.translate('MODULE.HEADER.ALERT'),
@@ -402,6 +402,27 @@ export class appService {
   getElasticsearchBackupUrl(backup_name) {
     return this.getZoneEndpoint(true) + `/utility/elasticsearch/v1/_snapshot/${backup_name}`;
   }
+
+  getTenantUrl(){
+    return this.getZoneEndpoint() + "/tenants/v1";
+  }
+
+  getTenantDeleteUrl(name){
+    return this.getZoneEndpoint() + "/tenants/v1/" + name;
+  }
+
+  getTenantSegmentUrl(tenantName){
+    return this.getZoneEndpoint() + "/tenants/v1/"+ tenantName+"/segments"
+  }
+
+  getTenantSegmentDetailsUrl(tenantName, segmentName){
+    return this.getZoneEndpoint() + "/tenants/v1/"+ tenantName+"/segments/" + segmentName;
+  }
+
+  getAllTenantSegmentUrl(tenantName){
+    return this.getZoneEndpoint() + "/tenants/v1/segments";
+  }
+
 }
 
 appService.$inject = appService.getDI();
