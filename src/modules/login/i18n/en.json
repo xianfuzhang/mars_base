@@ -10,7 +10,8 @@
   "MODULE.LOGIN.ACCEPT_CERTIFICATE": "Zone IP is invalid. Make sure you can reach the zone IP with your browser.",
   "MODULE.LOGIN.INVALID_LOGIN": "Username or Password is invalid.",
   "MODULE.LOGIN.NO_PERMISSIONS": "No permission, please make sure that the user has admin permission!",
-  "MODULE.LOGIN.HTTP_ERROR_DEFAULT": "Error logginng in. HTTP status code: {0}",
+  "MODULE.LOGIN.HTTP_ERROR_DEFAULT": "Error logginng in. HTTP status code: {{status}}",
+  "MODULE.LOGIN.SERVER_ERROR": "Server error exception.",
   "MODULE.ACCOUNT.MANAGE.TITLE": "Account Management",
   "MODULE.ACCOUNT.MANAGE.COLUMN.NAME": "User Name",
   "MODULE.ACCOUNT.MANAGE.COLUMN.GROUP": "Group",
@@ -24,5 +25,6 @@
   "MODULE.ACCOUNT.CREATE.GROUP.ADMIN": "Admin User",
   "MODULE.ACCOUNT.CREATE.GROUP.GUEST": "Guest User",
   "MODULE.ACCOUNT.CREATE.PASSWORD": "Password",
-  "MODULE.ACCOUNT.CREATE.GROUP.HELP": "Required. Please select user group."
+  "MODULE.ACCOUNT.CREATE.GROUP.HELP": "Required. Please select user group.",
+  "MODULE.ACCOUNT.CREATE.SUCCESS": "Create account success."
 }
