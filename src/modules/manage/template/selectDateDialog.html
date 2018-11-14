@@ -1,18 +1,29 @@
 <div class="column-manipulation-field">
  	<div class="column-manipulation-field__header">
 		<span class="column-manipulation-field__title"
-          ng-bind="'MODULES.MANAGE.ELASTICSEARCH.DIALOG.SELECT_DATETIME'|translate"></span>
+          ng-bind="'MODULES.MANAGE.ELASTICSEARCH.BUTTON.REMOVE'|translate"></span>
  	</div>
  	<form class="dateRange__form" name="dialogModel.form" autocomplete="off" novalidate>
-		<div style="height:100px;" class="column-manipulation-field__content column-manipulation-field__content__date-range-modifier">
-			<div style="margin: 30px auto;font-size:20px !important;">
-				<input style="width:100%;border-radius:5px;font-size:18px;" type="datetime-local" value="{{defaultTime}}" ng-model="dialogModel.endtime" max="{{dateTo}}">
-				<p style="font-size: 12px;color:red" ng-show="errMsg" ng-bind="errMsg"></p>
+		<div style="height:140px;padding:10px;" class="column-manipulation-field__content column-manipulation-field__content__date-range-modifier">
+			<div style="margin:0 auto;width: 60%;border:1px solid #aaa;padding:10px 5px;">
+				<div>
+					<div style="margin-right: 15px;font-size:14px;font-weight:bold;">选择Indice:</div>
+					<mdl-select ng-model="indiceSelectedOption"
+								display-label="{options: indiceOptions}"
+								ng-change="indiceSelect($value)"
+								style="font-size:16px !important;">
+					</mdl-select>
+				</div>
+				<div style="margin-top: 20px;">
+					<div style="margin-right: 15px;font-size:14px;font-weight:bold;">截止时间:</div>
+					<input style="width:80%;border-radius:5px;font-size:14px;" type="datetime-local" value="{{defaultTime}}" ng-model="dialogModel.endtime" max="{{dateTo}}">
+					<p style="font-size: 12px;color:red" ng-show="errMsg" ng-bind="errMsg"></p>
+				</div>
 			</div>
 		</div>
 	 	<div class="column-manipulation-field__footer">
 			<div style="display: inline-block;float: right; margin-left: 15px;">
-				<mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-white btn-sm'" btn-click="save($event)" btn-disabled="dialogModel.form.$invalid" />
+				<mar-button btn-text="::'MODULES.TABLE.COLUMN.DELETE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-white btn-sm'" btn-click="save($event)" btn-disabled="dialogModel.form.$invalid" />
 			</div>
 
 			<div style="display: inline-block;float: right;">
