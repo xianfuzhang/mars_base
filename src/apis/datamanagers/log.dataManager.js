@@ -44,15 +44,6 @@ export class LogDataManager {
   
     return defer.promise;
   }
-  
-  // getDownloadFile(filename) {
-  //   let defer = this.di.$q.defer();
-  //   let url = this.di.appService.getLogFilesUrl() + `/${filename}`;
-  //
-  //   this.di.$http({method: 'get',url:url});
-  //
-  //   return defer.promise;
-  // }
 }
 
 LogDataManager.$inject = LogDataManager.getDI();

@@ -9,7 +9,8 @@ class AliasProvider {
       'easing': path.resolve('src/libs/easing/'),
       'apis': path.resolve('src/apis/'),
       'localStore': path.resolve('src/libs/localstore/'),
-      'crypto': path.resolve('src/libs/crypto/')
+      'crypto': path.resolve('src/libs/crypto/'),
+      'eventEmitter': path.resolve('src/libs/eventEmitter/')
     };
   }
 

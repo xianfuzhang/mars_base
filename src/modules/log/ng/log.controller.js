@@ -11,6 +11,7 @@ export class LogController {
       'dialogService',
       'logService',
       'roleService',
+      'wsService',
       'logDataManager',
       'tableProviderFactory'
     ];
@@ -48,6 +49,8 @@ export class LogController {
       logAPI: null
     };
     
+    this.scope.realtimeLogs = [];
+    
     this.scope.search = () => {
       this.scope.loading = true;
       
@@ -63,6 +66,14 @@ export class LogController {
     this.scope.onLogAPIReady = ($api) => {
       this.scope.logModel.logAPI = $api;
     };
+  
+    this.scope.onTabChange= (tab) => {
+      if (tab){
+        this.scope.tabSelected = tab;
+      }
+    };
+    
+    this.scope.tabs = this.getTabSchema();
     
     this.unsubscribers = [];
   
@@ -95,7 +106,16 @@ export class LogController {
   }
   
   init() {
-    // get system log
+    // get real time log
+    const wsService = this.di.wsService;
+    wsService.init();
+  
+    wsService.subscribe('', {}, (response) => {
+      let log = response.message;
+      this.scope.realtimeLogs.splice(0, 0, log);
+    })
+    
+    // get system history log
     this.scope.logModel.logProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
@@ -138,6 +158,21 @@ export class LogController {
       this.scope.fileList.options = opts;
       this.scope.logFileSelected = this.scope.fileList.options[0];
     });
+  }
+  
+  getTabSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.LINK'),
+        'value': 'realtime',
+        'type': 'realtime'
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.PORT'),
+        'value': 'history',
+        'type': 'history'
+      }
+    ];
   }
   
   getActionsShow() {
