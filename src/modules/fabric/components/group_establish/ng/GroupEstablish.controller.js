@@ -284,6 +284,12 @@ export class GroupEstablishController {
               subtype: "VLAN_POP"
             })
           }
+  
+          requestObj.buckets.push({
+            treatment: {
+              instructions: instructions
+            }
+          });
           break;
         case 'GROUP-Type-1':
           requestObj.type = 'INDIRECT';
@@ -311,12 +317,10 @@ export class GroupEstablishController {
           }
           
           // L2 interface groups
-          if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
-            scope.groupModel.L2_Interface_Groups.forEach((group) => {
-              instructions.push({
-                type: "GROUP",
-                groupId: group
-              })
+          if(scope.groupModel.L2InterfaceGroupsSelected.value) {
+            instructions.push({
+              type: "GROUP",
+              groupId: scope.groupModel.L2InterfaceGroupsSelected.value
             })
           }
           // L2 Unfiltered Interface
@@ -326,6 +330,12 @@ export class GroupEstablishController {
               groupId: scope.groupModel.L2UnfilteredInterfaceGroupSelected.value
             })
           }
+  
+          requestObj.buckets.push({
+            treatment: {
+              instructions: instructions
+            }
+          });
           break;
         case 'GROUP-Type-2':
           requestObj.type = 'INDIRECT';
@@ -351,25 +361,34 @@ export class GroupEstablishController {
               mac: scope.groupModel.dst_mac_address
             })
           }
+          
           // L2 interface groups
-          if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
-            scope.groupModel.L2_Interface_Groups.forEach((group) => {
-              instructions.push({
-                type: "GROUP",
-                groupId: group
-              })
+          if(scope.groupModel.L2InterfaceGroupsSelected.value) {
+            instructions.push({
+              type: "GROUP",
+              groupId: scope.groupModel.L2InterfaceGroupsSelected.value
             })
           }
+  
+          requestObj.buckets.push({
+            treatment: {
+              instructions: instructions
+            }
+          });
           break;
         case 'GROUP-Type-3':
           requestObj.type = 'ALL';
           // L2 interface groups
           if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
             scope.groupModel.L2_Interface_Groups.forEach((group) => {
-              instructions.push({
-                type: "GROUP",
-                groupId: group
-              })
+              requestObj.buckets.push({
+                treatment: {
+                  instructions: [{
+                    type: "GROUP",
+                    groupId: group
+                  }]
+                }
+              });
             })
           }
           break;
@@ -378,10 +397,14 @@ export class GroupEstablishController {
           // L2 interface groups
           if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
             scope.groupModel.L2_Interface_Groups.forEach((group) => {
-              instructions.push({
-                type: "GROUP",
-                groupId: group
-              })
+              requestObj.buckets.push({
+                treatment: {
+                  instructions: [{
+                    type: "GROUP",
+                    groupId: group
+                  }]
+                }
+              });
             })
           }
           break;
@@ -410,75 +433,103 @@ export class GroupEstablishController {
             })
           }
           // L2 interface groups
-          if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
-            scope.groupModel.L2_Interface_Groups.forEach((group) => {
-              instructions.push({
-                type: "GROUP",
-                groupId: group
-              })
+          if(scope.groupModel.L2InterfaceGroupsSelected.value) {
+            instructions.push({
+              type: "GROUP",
+              groupId: scope.groupModel.L2InterfaceGroupsSelected.value
             })
           }
+  
+          requestObj.buckets.push({
+            treatment: {
+              instructions: instructions
+            }
+          });
           break;
         case 'GROUP-Type-6':
           requestObj.type = 'ALL';
           // L2 interface groups
           if(scope.groupModel.L2_Interface_Groups instanceof Array && scope.groupModel.L2_Interface_Groups.length) {
             scope.groupModel.L2_Interface_Groups.forEach((group) => {
-              instructions.push({
-                type: "GROUP",
-                groupId: group
-              })
+              requestObj.buckets.push({
+                treatment: {
+                  instructions: [{
+                    type: "GROUP",
+                    groupId: group
+                  }]
+                }
+              });
             })
           }
   
           // L3 Interface Group
           if(scope.groupModel.L3InterfaceGroupSelected.value) {
-            instructions.push({
-              type: "GROUP",
-              groupId: scope.groupModel.L3InterfaceGroupSelected.value
-            })
+            requestObj.buckets.push({
+              treatment: {
+                instructions: [{
+                  type: "GROUP",
+                  groupId: scope.groupModel.L3InterfaceGroupSelected.value
+                }]
+              }
+            });
           }
   
           // L3 ECMP Group
           if(scope.groupModel.L3ECMPGroupSelected.value) {
-            instructions.push({
-              type: "GROUP",
-              groupId: scope.groupModel.L3ECMPGroupSelected.value
-            })
+            requestObj.buckets.push({
+              treatment: {
+                instructions: [{
+                  type: "GROUP",
+                  groupId: scope.groupModel.L3ECMPGroupSelected.value
+                }]
+              }
+            });
           }
           break;
         case 'GROUP-Type-7':
           requestObj.type = 'SELECT';
           // L3 Interface Group
           if(scope.groupModel.L3UnicastGroupSelected.value) {
-            instructions.push({
-              type: "GROUP",
-              groupId: scope.groupModel.L3UnicastGroupSelected.value
-            })
+            requestObj.buckets.push({
+              treatment: {
+                instructions: [{
+                  type: "GROUP",
+                  groupId: scope.groupModel.L3UnicastGroupSelected.value
+                }]
+              }
+            });
           }
   
           // L3 ECMP Group
           if(scope.groupModel.L3ECMPGroupSelected.value) {
-            instructions.push({
-              type: "GROUP",
-              groupId: scope.groupModel.L3ECMPGroupSelected.value
-            })
+            requestObj.buckets.push({
+              treatment: {
+                instructions: [{
+                  type: "GROUP",
+                  groupId: scope.groupModel.L3ECMPGroupSelected.value
+                }]
+              }
+            });
           }
           break;
         case 'GROUP-Type-11':
           requestObj.type = 'INDIRECT';
-          instructions.push({
-            type: 'OUTPUT',
-            port: scope.groupModel.output_port
-          })
+          requestObj.buckets.push({
+            treatment: {
+              instructions: [{
+                type: 'OUTPUT',
+                port: scope.groupModel.output_port
+              }]
+            }
+          });
           break;
       }
   
-      requestObj.buckets.push({
-        treatment: {
-          instructions: instructions
-        }
-      });
+      // requestObj.buckets.push({
+      //   treatment: {
+      //     instructions: instructions
+      //   }
+      // });
       
       return requestObj;
     }
