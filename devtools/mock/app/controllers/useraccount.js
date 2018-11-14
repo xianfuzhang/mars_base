@@ -41,7 +41,13 @@ router.get('/:user_name', (req, res) => {
   let useraccount = cloudModel.useraccounts.filter((account) => {
     return account.user_name === req.params.user_name;
   });
-  return res.status(200).json(useraccount[0]);
+  if (useraccount.length > 0) {
+    return res.status(200).json(useraccount[0]);
+  }
+  else {
+    return res.status(404).json('user not exists.');
+  }
+  
 });
 
 function checkUsernameExists(username) {

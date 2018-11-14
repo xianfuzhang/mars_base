@@ -50,27 +50,63 @@ export class DeviceDetailService {
   }
 
   getPortActionsShow() {
-    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
+    return {
+      'menu': {'enable': false, 'role': 2}, 
+      'add': {'enable': false, 'role': 2}, 
+      'remove': {'enable': false, 'role': 2}, 
+      'refresh': {'enable': true, 'role': 2}, 
+      'search': {'enable': false, 'role': 2}
+    };
   }
 
   getLinkActionsShow() {
-    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
+    return {
+      'menu': {'enable': false, 'role': 2}, 
+      'add': {'enable': false, 'role': 2}, 
+      'remove': {'enable': false, 'role': 2}, 
+      'refresh': {'enable': true, 'role': 2}, 
+      'search': {'enable': false, 'role': 2}
+    };
   }
 
   getStatisticActionsShow() {
-    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
+    return {
+      'menu': {'enable': false, 'role': 2}, 
+      'add': {'enable': false, 'role': 2}, 
+      'remove': {'enable': false, 'role': 2}, 
+      'refresh': {'enable': true, 'role': 2}, 
+      'search': {'enable': false, 'role': 2}
+    };
   }
 
   getFlowActionsShow() {
-    return {'menu': false, 'add': true, 'remove': true, 'refresh': true, 'search': false};
+    return {
+      'menu': {'enable': false, 'role': 2}, 
+      'add': {'enable': true, 'role': 2}, 
+      'remove': {'enable': true, 'role': 2}, 
+      'refresh': {'enable': true, 'role': 2}, 
+      'search': {'enable': false, 'role': 2}
+    };
   }
 
   getEndpointActionsShow() {
-    return {'menu': false, 'add': false, 'remove': false, 'refresh': true, 'search': false};
+    return {
+      'menu': {'enable': false, 'role': 2}, 
+      'add': {'enable': false, 'role': 2}, 
+      'remove': {'enable': false, 'role': 2}, 
+      'refresh': {'enable': true, 'role': 2}, 
+      'search': {'enable': false, 'role': 2}
+    };
   }
   
   getGroupActionsShow() {
-    return {'menu': false, 'add': true, 'remove': false, 'refresh': true, 'search': false};
+    return {
+      'menu': {'enable': false, 'role': 2}, 
+      'add': {'enable': true, 'role': 2}, 
+      'remove': {'enable': false, 'role': 2}, 
+      'refresh': {'enable': true, 'role': 2}, 
+      'search': {'enable': false, 'role': 2}
+    };
   }
 
   getDevicePortsSchema() {
@@ -123,10 +159,12 @@ export class DeviceDetailService {
     return [
       {
         'label': this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE'),
+        'role': 2,
         'value': 'enable'
       },
       {
         'label': this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE'),
+        'role': 2,
         'value': 'disable'
       }
     ];
@@ -136,10 +174,12 @@ export class DeviceDetailService {
     return [
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DETAIL'),
+        'role': 2,
         'value': 'detail'
       },
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
         'value': 'delete'
       }
     ];
@@ -149,6 +189,7 @@ export class DeviceDetailService {
     return [
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
         'value': 'delete'
       }
     ];

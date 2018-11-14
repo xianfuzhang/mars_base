@@ -64,8 +64,10 @@ export class rowActions {
 
     scope._menuToggle = (event) => {
       //menuElement.toggleClass('mdc-menu--open');
-      insertMenuList(event);
-      event && event.stopPropagation();
+      if (scope.actions.length > 0) {
+        insertMenuList(event);
+        event && event.stopPropagation();  
+      }
     };
 
     scope.clickItem = (item, event) => {

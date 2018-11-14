@@ -7,7 +7,7 @@ export class EndPointController {
       '$filter',
       '$log',
       '_',
-      'appService',
+      'roleService',
       'deviceService',
       'dialogService',
       'notificationService',
@@ -27,6 +27,7 @@ export class EndPointController {
     this.translate = this.di.$filter('translate');
     this.scope.page_title = this.translate('MODULES.SWITCHES.TAB.SCHEMA.ENDPOINT');
     this.scope.deviceObjects = {}; //id: name
+    this.scope.role = this.di.roleService.getRole();
     this.scope.entities = [];
     this.scope.endpointModel = {
       actionsShow: this.di.deviceService.getEndpointActionsShow(),
@@ -211,7 +212,11 @@ export class EndPointController {
           schema: this.di.deviceService.getEndpointTableSchema(),
           index_name: 'mac',
           rowCheckboxSupport: true,
-          rowActionsSupport: true
+          rowActionsSupport: true,
+          authManage: {
+            support: true,
+            currentRole: this.scope.role
+          }
         };
       }
     });

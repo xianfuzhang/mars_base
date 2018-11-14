@@ -159,6 +159,14 @@ export class mdlTable {
       return $col.sort || scope.tableModel.CONST_SORT_UNDEFINED;
     };
 
+    scope._getColumnWidth = ($col) => {
+      if($col.width){
+        return {"width":$col.width}
+      } else {
+        return {};
+      }
+    };
+
     scope._isSelected = function (rowId) {
       return scope.tableModel.selectedRowId && scope.tableModel.selectedRowId === rowId;
     };
@@ -282,7 +290,8 @@ export class mdlTable {
       scope.tableModel.schema = scope.provider.getSchema().schema || [];
       scope.tableModel.rowCheckboxSupport = scope.provider.getSchema().rowCheckboxSupport;
       scope.tableModel.rowActionsSupport = scope.provider.getSchema().rowActionsSupport;
-      //scope.tableModel.rowActions = scope.provider.getSchema().rowActions;
+      scope.tableModel.authManageSupport = scope.provider.getSchema().authManage && scope.provider.getSchema().authManage.support || false;
+      scope.tableModel.currentRole = scope.provider.getSchema().authManage && scope.provider.getSchema().authManage.currentRole || 1;
 
       if (scope.tableModel.columns.length === 0) {
         scope.tableModel.schema.forEach((value, index) => {
@@ -314,6 +323,7 @@ export class mdlTable {
       let col = {
         'def': columnDef,
         'visible': scope._getLayoutProperty(columnDef, 'visible', true),
+        'width': scope._getLayoutProperty(columnDef, 'width', null),
         'hidden': scope._getLayoutProperty(columnDef, 'hidden', false),
         'fixed': scope._getLayoutProperty(columnDef, 'fixed', false),
         'sortable': scope._getLayoutProperty(columnDef, 'sortable', false),

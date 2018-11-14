@@ -7,7 +7,7 @@ export class AlertController {
       '$filter',
       '$q',
       '$log',
-      //'$uibModal',
+      'roleService',
       'dialogService',
       'appService',
       'tableProviderFactory',
@@ -24,7 +24,7 @@ export class AlertController {
     let unSubscribers = [];
     let scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
-
+    scope.role = this.di.roleService.getRole();
 
     scope.configurationModel = {
       subjectList: [],
@@ -36,10 +36,17 @@ export class AlertController {
     };
 
     scope.alertModel = {
-      actionsShow: {'menu': true, 'add': false, 'remove': true, 'refresh': true, 'search': false},
+      actionsShow: {
+        'menu': {'enable': true, 'role': 2}, 
+        'add': {'enable': false, 'role': 2}, 
+        'remove': {'enable': true, 'role': 2}, 
+        'refresh': {'enable': true, 'role': 2},
+        'search': {'enable': false, 'role': 2}
+      },
       rowActions: [
         {
           'label': this.translate('MODULES.ALERT.HISTORY.DELETE'),
+          'role': 2,
           'value': 'delete'
         }
       ],
@@ -117,7 +124,11 @@ export class AlertController {
           schema: this.di.alertService.getAlertTableSchema(),
           index_name: 'uuid',
           rowCheckboxSupport: true,
-          rowActionsSupport: true
+          rowActionsSupport: true,
+          authManage: {
+            support: true,
+            currentRole: this.di.$scope.role
+          }
         };
       }
     });

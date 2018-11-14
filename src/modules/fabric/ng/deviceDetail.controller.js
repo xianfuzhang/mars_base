@@ -8,6 +8,7 @@ export class DeviceDetailController {
       '$q',
       '$log',
       '_',
+      'roleService',
       'flowService',
       'deviceService',
       'deviceDetailService',
@@ -27,6 +28,7 @@ export class DeviceDetailController {
     this.translate = this.di.$filter('translate');
     this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE');
     this.scope.deviceId = this.di.$routeParams['deviceId'];
+    this.scope.role = this.di.roleService.getRole();
     this.scope.tabSelected = null;
     this.scope.tabs = this.di.deviceDetailService.getTabSchema();
     this.scope.detailDisplay= false;
@@ -291,6 +293,10 @@ export class DeviceDetailController {
         rowActionsSupport: false,
       };
     }*/
+    schema['authManage'] = {
+      support: true,
+      currentRole: this.scope.role
+    };
     switch (this.scope.tabSelected.type) {
       case 'port':
         schema['index_name'] = 'id';

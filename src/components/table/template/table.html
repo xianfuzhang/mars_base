@@ -1,15 +1,25 @@
 <div class="mdl-table-field">
-  <!--<div class="mdl-table-field">-->
-    <!--<table-action></table-action>-->
     <div class="mdl-table-field__actions">
-      <mdl-button ng-click="_menu($event)" size="tableSize" ng-if="actionsShow.menu" icon-name="menu"></mdl-button>
-      <mdl-button ng-click="_add($event)" size="tableSize" ng-if="actionsShow.add" icon-name="add"></mdl-button>
+      <mdl-button ng-click="_menu($event)" size="tableSize" 
+                  ng-if="actionsShow.menu.enable && 
+                    (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.menu.role)" 
+                  icon-name="menu"></mdl-button>
+      <mdl-button ng-click="_add($event)" size="tableSize" 
+                  ng-if="actionsShow.add.enable && 
+                    (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.add.role)" 
+                  icon-name="add"></mdl-button>
       <mdl-button ng-click="_remove($event)" size="tableSize"
                   disabled="tableModel.removeItems.length === 0"
-                  ng-if="actionsShow.remove" icon-name="remove"></mdl-button>
-      <mdl-button ng-click="_refresh($event)" size="tableSize" ng-if="actionsShow.refresh"
+                  ng-if="actionsShow.remove.enable && 
+                    (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.remove.role)" 
+                  icon-name="remove"></mdl-button>
+      <mdl-button ng-click="_refresh($event)" size="tableSize" 
+                  ng-if="actionsShow.refresh.enable && 
+                    (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.refresh.role)"
                   icon-name="refresh"></mdl-button>
-      <div class="mdl-table-action__search" size="tableSize" ng-if="actionsShow.search">
+      <div class="mdl-table-action__search" size="tableSize" 
+            ng-if="actionsShow.search.enable && 
+                    (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.search.role)">
         <div class="mdl-table-action__search-body">
           <input type="text" placeholder="{{placeholder}}"
                  ng-model="tableModel.searchResult" ng-model-options="{debounce: 1000}"
@@ -18,28 +28,6 @@
         </div>
         <mdl-button ng-click="_clearSearch($event)" size="tableSize"
                     ng-show="tableModel.searchResult" icon-name="close"></mdl-button>
-        <div class="mdl-table-action__search-filter">
-          <!--<mdl-button ng-click="_filter($event)" icon-name="filter_list" class_list="search-filter-button"></mdl-button>-->
-          <!--<div class="mdc-menu search-filter-list">
-            <ul class="mdc-menu__items mdc-list" role="menu">
-              <li class="mdc-list-item" role="menuitem"
-                  ng-repeat="item in filterItems track by $index"
-                  tabindex="{{$index}}">
-                <div class="mdc-radio">
-                  <input class="mdc-radio__native-control" type="radio"
-                         ng-click="_select(item, $event)"
-                         ng-checked="{{item.checked}}"
-                         id="{{item.id}}" name="{{item.name}}">
-                  <div class="mdc-radio__background">
-                    <div class="mdc-radio__outer-circle"></div>
-                    <div class="mdc-radio__inner-circle"></div>
-                  </div>
-                </div>
-                <label for="{{item.id}}" >{{item.label}}</label>
-              </li>
-            </ul>
-          </div>-->
-        </div>
       </div>
     </div>
 
@@ -75,6 +63,7 @@
             <th ng-repeat="$col in tableModel.columns track by $index"
                 ng-click="_onHeaderClick($col, $event)"
                 ng-show="_isColumnDisplayable($col)"
+                ng-style="_getColumnWidth($col)"
                 ng-class="{
                   'sortable': $col.sortable,
                   'sort-asc': $col.sortable && (_getColumnSortMode($col) === tableModel.CONST_SORT_ASC),

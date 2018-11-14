@@ -9,7 +9,7 @@ export class DeviceController {
       '$filter',
       '_',
       'dialogService',
-      'appService',
+      'roleService',
       'deviceService',
       'notificationService',
       'deviceDataManager',
@@ -29,6 +29,7 @@ export class DeviceController {
     /*this.scope.tabSelected = null;
     this.scope.tabs = this.di.deviceService.getTabSchema();*/
     this.scope.page_title = this.translate('MODULES.SWITCHES.TAB.SCHEMA.SWITCH');
+    this.scope.role = this.di.roleService.getRole();
     this.scope.entities = [];
     this.scope.deviceModel = {
       actionsShow: this.di.deviceService.getDeviceActionsShow(),
@@ -279,7 +280,11 @@ export class DeviceController {
           schema: this.di.deviceService.getDeviceTableSchema(),
           index_name: 'mac',
           rowCheckboxSupport: true,
-          rowActionsSupport: true
+          rowActionsSupport: true,
+          authManage: {
+            support: true,
+            currentRole: this.scope.role
+          }
         };
       }
     });

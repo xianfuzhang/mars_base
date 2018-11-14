@@ -55,8 +55,11 @@ export class TableController {
     };
 
     this.rowActionsFilter = (data, actions) => {
+      let roleFilterActions = actions.filter((action) => {
+        return this.scope.tableModel.currentRole >= action.role;
+      });
       let rowActionsFilter = this.scope.rowActionsFilter || angular.noop;
-      let filter = rowActionsFilter({$event:{data: data, actions: actions}}) || actions;
+      let filter = rowActionsFilter({$event:{data: data, actions: roleFilterActions}}) || roleFilterActions;
       return filter;
     };
   }
