@@ -19,6 +19,7 @@ import {LogDataManager} from './datamanagers/log.dataManager';
 import {DashboardDataManager} from './datamanagers/dashboard.dataManager';
 import {IntentDataManager} from './datamanagers/intent.dataManager';
 import {ManageDataManager} from './datamanagers/manage.dataManager';
+import {WebsocketService} from './services/ws.service';
 
 export default angular
   .module('apis', [])
@@ -41,6 +42,7 @@ export default angular
   .service('dateService', DateService)
   .service('manageService', manageService)
   .service('roleService', RoleService)
+  .service('wsService', WebsocketService)
   .service('intentDataManager', IntentDataManager)
   .service('manageDataManager', ManageDataManager)
   .name;
