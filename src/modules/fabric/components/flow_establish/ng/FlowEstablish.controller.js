@@ -328,6 +328,99 @@ export class FlowEstablishController {
 
     };
 
+    let checkCriteriaValue = () => {
+      let status = true;
+      let message = '';
+
+      if(!_ifTable60SchemaListContain('vlan_pcp')){
+        if(_ifTable60SchemaListContain('vlan_id')){
+          status = false;
+          message = "VLAN PCP需要设置VLAN ID"
+        }
+      }
+
+      if(!_ifTable60SchemaListContain('source_ipv4') || !_ifTable60SchemaListContain('destination_ipv4')){
+        if(!_ifTable60SchemaListContain('ether_type')){
+          let res = _getValueFromSecondInputs('ether_type');
+          if(res !== null && res !== '0x0800'){
+            status = false;
+            message = "SOURCE_IPV4/DESTINATION_IPV4 对应的 ETH_TYPE 不正确!";
+          }
+        }
+      }
+
+      if(!_ifTable60SchemaListContain('source_ipv6')|| !_ifTable60SchemaListContain('destination_ipv6') || !_ifTable60SchemaListContain('ipv6_flow_label')){
+        if(!_ifTable60SchemaListContain('ether_type')){
+          let res = _getValueFromSecondInputs('ether_type');
+          if(res !== null && res !== '0x86dd'){
+            status = false;
+            message = "SOURCE_IPV6/DESTINATION_IPV6/IPV6_FLOW_LABEL 对应的 ETH_TYPE 不正确!";
+          }
+        }
+      }
+
+      // if(!_ifTable60SchemaListContain('ip_dscp') || !_ifTable60SchemaListContain('ip_dscp') || !_ifTable60SchemaListContain('ip_dscp')){
+      //   if(_ifTable60SchemaListContain('ether_type')){
+      //     _addTable60SelectItem('ether_type');
+      //   }
+      // }
+
+      if(!_ifTable60SchemaListContain('tcp_sport') || !_ifTable60SchemaListContain('tcp_dport')){
+        let res = _getValueFromSecondInputs('ip_proto');
+        if(res !== null && res !== '6'){
+          status = false;
+          message = "TCP设置需要 IP_PROTO 为 6!";
+        }
+      }
+
+      if(!_ifTable60SchemaListContain('udp_sport') || !_ifTable60SchemaListContain('udp_dport')){
+        let res = _getValueFromSecondInputs('ip_proto');
+        if(res !== null && res !== '17'){
+          status = false;
+          message = "UDP设置需要 IP_PROTO 为 17!";
+        }
+      }
+
+      if(!_ifTable60SchemaListContain('sctp_sport') || !_ifTable60SchemaListContain('sctp_dport')){
+        let res = _getValueFromSecondInputs('ip_proto');
+        if(res !== null && res !== '132'){
+          res = false;
+          message = "SCTP设置需要 IP_PROTO 为 132!";
+        }
+      }
+
+      if(!_ifTable60SchemaListContain('icmpv4_type') || !_ifTable60SchemaListContain('icmpv4_code')){
+        let res = _getValueFromSecondInputs('ip_proto');
+        if(res !== null && res !== '1'){
+          status = false;
+          message = "ICMPV4设置需要 IP_PROTO 为 1!";
+        }
+
+        res = _getValueFromSecondInputs('ether_type');
+        if(res !== null && res !== '0x0800'){
+          status = false;
+          message = "ICMPV4 对应的 ETH_TYPE 不正确!";
+        }
+      }
+
+      if(!_ifTable60SchemaListContain('icmpv6_type') || !_ifTable60SchemaListContain('icmpv6_code')){
+        let res = _getValueFromSecondInputs('ip_proto');
+        if(res !== null && res !== '58'){
+          status = false;
+          message = "ICMPV6设置需要 IP_PROTO 为 58!";
+        }
+
+        res = _getValueFromSecondInputs('ether_type');
+        if(res !== null && res !== '0x86dd'){
+          status = false;
+          message = "ICMPV6 对应的 ETH_TYPE 不正确!";
+        }
+      }
+
+      return {'res':status, 'message':message}
+    };
+
+
     let translate = this.translate;
     this.di.$scope.stepValidation = function (curStep, nextStep) {
       let inValidJson_Copy = angular.copy(inValidJson);
@@ -359,6 +452,11 @@ export class FlowEstablishController {
           return inValidJson_Copy;
         }
 
+        let resJson = checkCriteriaValue();
+        if(!resJson.res){
+          inValidJson_Copy['errorMessage'] = resJson.message;
+          return inValidJson_Copy;
+        }
       }
       return validJson;
     };
@@ -375,16 +473,204 @@ export class FlowEstablishController {
       });
     };
 
+    let getReferenceInput = (curOptId) => {
+      if(curOptId === 'vlan_pcp'){
+        if(_ifTable60SchemaListContain('vlan_id')){
+          _addTable60SelectItem('vlan_id');
+        }
+      } else if(curOptId === 'source_ipv4' || curOptId === 'destination_ipv4'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['source_ipv6'] || input['destination_ipv6'] || input['ipv6_flow_label']){
+            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
+        }
+      } else if(curOptId === 'source_ipv6' || curOptId === 'destination_ipv6' || curOptId === 'ipv6_flow_label'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['source_ipv4'] || input['destination_ipv4']){
+            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
+        }
+      } else if(curOptId === 'ip_dscp' || curOptId === 'ip_proto' || curOptId === 'ip_ecn'){
+        if(_ifTable60SchemaListContain('ether_type')){
+          _addTable60SelectItem('ether_type');
+        }
+      } else if(curOptId === 'tcp_sport' || curOptId === 'tcp_dport'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['udp_sport'] || input['udp_dport'] ){
+            let errorMessage = "TCP和UDP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['icmpv4_type']|| input['icmpv4_code']){
+            let errorMessage = "UDP和ICMPV4不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['sctp_sport'] || input['sctp_dport'] ){
+            let errorMessage = "UDP和SCTP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['icmpv6_type'] || input['icmpv6_code'] ){
+            let errorMessage = "TCP和ICMPV6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
+        }
+
+        if(_ifTable60SchemaListContain('ether_type')){
+          _addTable60SelectItem('ether_type');
+        }
+      } else if(curOptId === 'udp_sport' || curOptId === 'udp_dport'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['tcp_sport'] || input['tcp_dport'] ){
+            let errorMessage = "UDP和TCP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['icmpv4_type']|| input['icmpv4_code']){
+            let errorMessage = "UDP和ICMPV4不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['sctp_sport'] || input['sctp_dport'] ){
+            let errorMessage = "UDP和SCTP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['icmpv6_type'] || input['icmpv6_code'] ){
+            let errorMessage = "TCP和ICMPV6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
+        }
+
+        if(_ifTable60SchemaListContain('ether_type')){
+          _addTable60SelectItem('ether_type');
+        }
+      } else if(curOptId === 'icmpv4_type' || curOptId === 'icmpv4_code'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['tcp_sport'] || input['tcp_dport'] ) {
+            let errorMessage = "ICMPV4和TCP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }else if(input['udp_sport'] || input['udp_dport'] ){
+            let errorMessage = "ICMPV4和UDP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['sctp_sport'] || input['sctp_dport'] ){
+            let errorMessage = "ICMPV4和SCTP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['icmpv6_type'] || input['icmpv6_code'] ){
+            let errorMessage = "ICMPV4和ICMPV6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
+        }
+
+      } else if(curOptId === 'sctp_sport' || curOptId === 'sctp_dport'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['tcp_sport'] || input['tcp_dport'] ) {
+            let errorMessage = "SCTP和TCP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }else if(input['udp_sport'] || input['udp_dport'] ){
+            let errorMessage = "SCTP和UDP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['icmpv4_type']|| input['icmpv4_code']){
+            let errorMessage = "SCTP和ICMPV4不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['icmpv6_type'] || input['icmpv6_code'] ){
+            let errorMessage = "SCTP和ICMPV6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
+        }
+
+        if(_ifTable60SchemaListContain('ether_type')){
+          _addTable60SelectItem('ether_type');
+        }
+
+      } else if(curOptId === 'icmpv6_type' || curOptId === 'icmpv6_code'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['tcp_sport'] || input['tcp_dport'] ) {
+            let errorMessage = "ICMPV6和TCP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }else if(input['udp_sport'] || input['udp_dport'] ){
+            let errorMessage = "ICMPV6和UDP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['sctp_sport'] || input['sctp_dport'] ){
+            let errorMessage = "ICMPV6和SCTP不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['icmpv4_type']|| input['icmpv4_code']){
+            let errorMessage = "ICMPV6和ICMPV4不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
+        }
+      }
+      scope.errorMessage = '';
+      return true;
+    };
+
     scope.addTable60Acl = ()=>{
       let curOptId = scope.flowEstablishModel.table60SchemaOption.value;
       let option = angular.copy(scope.table60Schema[scope.flowEstablishModel.table60SchemaOption.value]);
 
-      scope.criteriaPageSecondInputs.push(addValue2Table60Input(curOptId, scope.table60Schema[curOptId]));
+      if(getReferenceInput(curOptId)){
+        _addTable60SelectItem(curOptId);
+      }
+      // scope.criteriaPageSecondInputs.push(addValue2Table60Input(curOptId, scope.table60Schema[curOptId]));
+      // this.di._.remove(scope.table60SchemaList.options, (option)=>{
+      //   return option.value === curOptId;
+      // });
+    };
 
+
+    let _ifTable60SchemaListContain = (curOptId) => {
+      let res = false;
+      this.di._.forEach(scope.table60SchemaList.options, (option)=>{
+        if(option.value === curOptId){
+          res = true;
+        }
+      });
+      return res;
+    };
+
+    let _getValueFromSecondInputs = (curOptId) => {
+      let value = null;
+      this.di._.forEach(scope.criteriaPageSecondInputs,(inputJson)=>{
+        if(inputJson[curOptId] && Array.isArray(inputJson[curOptId])){
+          this.di._.forEach(inputJson[curOptId], (item)=>{
+            if(item['field'] === curOptId){
+              if(typeof item['value'] === 'object'){
+                value = item['value']['value']
+              } else {
+                value = item['value'];
+              }
+            }
+          })
+        }
+      });
+      return value;
+    };
+
+    let _addTable60SelectItem = (curOptId) => {
+      scope.criteriaPageSecondInputs.push(addValue2Table60Input(curOptId, scope.table60Schema[curOptId]));
       this.di._.remove(scope.table60SchemaList.options, (option)=>{
         return option.value === curOptId;
       });
-
       scope.flowEstablishModel.table60SchemaOption = scope.table60SchemaList.options[0];
     };
 
@@ -649,7 +935,69 @@ export class FlowEstablishController {
         });
 
       });
+
+      ofdpaCriteriaCompletion(criteria);
+
       return criteria;
+    };
+
+    let ofdpaCriteriaCompletion = (criteria) => {
+
+      if(!_ifTable60SchemaListContain('source_ipv4') || !_ifTable60SchemaListContain('destination_ipv4')){
+        if(_ifTable60SchemaListContain('ether_type')){
+          criteria.push(this.di.deviceService.getCriteriaReferenceObject('ether_type', '0x0800'));
+        }
+      }
+
+      if(!_ifTable60SchemaListContain('source_ipv6')|| !_ifTable60SchemaListContain('destination_ipv6') || !_ifTable60SchemaListContain('ipv6_flow_label')){
+        if(_ifTable60SchemaListContain('ether_type')){
+          criteria.push(this.di.deviceService.getCriteriaReferenceObject('ether_type', '0x86dd'));
+        }
+      }
+
+      // if(!_ifTable60SchemaListContain('ip_dscp') || !_ifTable60SchemaListContain('ip_dscp') || !_ifTable60SchemaListContain('ip_dscp')){
+      //   if(_ifTable60SchemaListContain('ether_type')){
+      //     _addTable60SelectItem('ether_type');
+      //   }
+      // }
+
+      if(!_ifTable60SchemaListContain('tcp_sport') || !_ifTable60SchemaListContain('tcp_dport')){
+        if(_ifTable60SchemaListContain('ip_proto')){
+          criteria.push(this.di.deviceService.getCriteriaReferenceObject('ip_proto', 6));
+        }
+      }
+
+      if(!_ifTable60SchemaListContain('udp_sport') || !_ifTable60SchemaListContain('udp_dport')){
+        if(_ifTable60SchemaListContain('ip_proto')){
+          criteria.push(this.di.deviceService.getCriteriaReferenceObject('ip_proto', 17));
+        }
+      }
+
+      if(!_ifTable60SchemaListContain('sctp_sport') || !_ifTable60SchemaListContain('sctp_dport')){
+        if(_ifTable60SchemaListContain('ip_proto')){
+          criteria.push(this.di.deviceService.getCriteriaReferenceObject('ip_proto', 132));
+        }
+      }
+
+      if(!_ifTable60SchemaListContain('icmpv4_type') || !_ifTable60SchemaListContain('icmpv4_code')){
+        if(_ifTable60SchemaListContain('ip_proto')){
+          criteria.push(this.di.deviceService.getCriteriaReferenceObject('ip_proto', 1));
+        }
+
+        if(_ifTable60SchemaListContain('ether_type')){
+          criteria.push(this.di.deviceService.getCriteriaReferenceObject('ether_type', '0x0800'));
+        }
+
+      }
+
+      if(!_ifTable60SchemaListContain('icmpv6_type') || !_ifTable60SchemaListContain('icmpv6_code')){
+        if(_ifTable60SchemaListContain('ip_proto')){
+          criteria.push(this.di.deviceService.getCriteriaReferenceObject('ip_proto', 58));
+        }
+        if(_ifTable60SchemaListContain('ether_type')){
+          criteria.push(this.di.deviceService.getCriteriaReferenceObject('ether_type', '0x86dd'));
+        }
+      }
     };
 
     let formatOfdpaInstructionValue = () =>{
