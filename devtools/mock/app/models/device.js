@@ -52,7 +52,7 @@ class Device {
       }
       
       let annotations = {
-        linkStatus: chance.pickone(['Down', 'Up', 'Up', 'Up']),
+        adminState: chance.pickone(['disabled', 'enabled', 'enabled', 'enabled']),
         interfaceType: chance.word(),
         portName: 'Port_' + chance.word(),
         portMac: chance.mac_address()

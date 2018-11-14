@@ -382,7 +382,7 @@ export class DeviceDetailController {
           obj['port_id'] = entity.port;
           obj['isEnabled'] = entity.isEnabled;
           obj['port_status'] = entity.isEnabled === true ? 'Up' : 'Down';
-          obj['link_status'] = entity.annotations.linkStatus;;
+          obj['link_status'] = entity.annotations.adminState === 'enabled' ? 'available' : 'unavailable';
           obj['type'] = entity.type;
           obj['speed'] = entity.portSpeed;
           this.scope.detailModel.entities.push(obj);
