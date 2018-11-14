@@ -428,13 +428,13 @@ export class DeviceService {
         'sortable': "port_status",
         'show': true
       },
-      // {
-      //   'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
-      //   'field': 'link_status',
-      //   'sortable': "link_status",
-      //   'showState': true,
-      //   'show': true
-      // },
+      {
+        'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.ADMIN_STATUS'),
+        'field': 'admin_state',
+        'sortable': "admin_state",
+        // 'showState': true,
+        'show': true
+      },
     ]
   }
 
