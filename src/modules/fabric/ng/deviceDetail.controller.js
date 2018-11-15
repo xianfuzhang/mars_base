@@ -30,6 +30,7 @@ export class DeviceDetailController {
     this.scope.deviceId = this.di.$routeParams['deviceId'];
     this.scope.role = this.di.roleService.getRole();
     this.scope.tabSelected = null;
+    this.scope.tabSwitch = false;
     this.scope.tabs = this.di.deviceDetailService.getTabSchema();
     this.scope.detailDisplay= false;
     this.scope.detailValue= null;
@@ -78,8 +79,9 @@ export class DeviceDetailController {
     };
 
     this.scope.onTabChange= (tab) => {
-      if (tab){
+      if (tab && !this.scope.tabSwitch){
         this.scope.tabSelected = tab;
+        this.scope.tabSwitch = true;
         this.prepareTableData();
       }
     };
@@ -217,6 +219,7 @@ export class DeviceDetailController {
       query: (params) => {
         let defer = this.di.$q.defer();
         this.getEntities(params).then((res) => {
+          this.scope.tabSwitch = false;
           this.entityStandardization(res.data);
           this.scope.detailModel.total = res.total;
           defer.resolve({
