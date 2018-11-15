@@ -260,13 +260,20 @@ angular
           loggedin: checkLoggedIn
         }
       }).
-    when('/elasticsearch', {
-      template: require('./modules/manage/template/elasticsearch.html'),
-      controller: 'elasticsearchController',
-      resolve: {
-        loggedin: checkLoggedIn
-      }
-    })
+      when('/elasticsearch', {
+        template: require('./modules/manage/template/elasticsearch.html'),
+        controller: 'elasticsearchController',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
+      }).
+      when('/tenant', {
+        template: require('./modules/logical/template/tenant.html'),
+        controller: 'TenantController',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
+      })
       .otherwise({ redirectTo: '/' });
 
   }])

@@ -38,14 +38,15 @@ export class appService {
               //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
-          // {
-          //  'group':'Logical',
-          //  'items':[
-          //    {'label': 'Tenant', 'url': '/tenant', 'role': 2},
-          //    {'label': 'Segment', 'url': '/segment', 'role': 2},
-          //    // {'label': 'Interface Group', 'url': '/interface_group'},
-          //   ]
-          //  },
+          {
+            'group':'Logical',
+            'label': this.translate('MODULE.HEADER.LOGICAL'),
+            'role': 2,
+            'items':[
+              {'label': 'Tenant', 'url': '/tenant', 'role': 2},
+              // {'label': 'Segment', 'url': '/segment', 'role': 2},
+             ]
+           },
           {
             'group': 'Alert',
             'label': this.translate('MODULE.HEADER.ALERT'),

@@ -1,0 +1,14 @@
+<div class="tenant_establish">
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.TABLE.NAME'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input ng-if="isEdit != true" v-name="mac" v-require="true" ng-model="tenantEsModel.name" v-rpcid="page_tenant_es" ></valid-input>
+        <div ng-if="isEdit == true" style="font-size:15px;">{{tenantEsModel.name}}</div>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.TABLE.TYPE'|translate}}</div>
+        <mdl-select ng-model="tenantEsModel.type" display-label="tenantTypeLabel">
+        </mdl-select>
+    </div>
+</div>
