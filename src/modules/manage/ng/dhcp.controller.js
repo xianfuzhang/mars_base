@@ -54,7 +54,10 @@ export class DHCPController {
             .then((data) =>{
               this.di.manageDataManager.deleteMacAndIpBindings(event.data.host.split('/')[0])
                 .then((res) =>{
+                  this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.DHCP.IPMAC.DELETE.SUCCESS'));
                   scope.dhcpModel.dhcpAPI.queryUpdate();
+                },(error)=>{
+                  this.di.notificationService.renderWarning(scope, error);
                 });
             }, (res) =>{
               this.di.$log.debug('delete macip binding dialog cancel');
@@ -321,6 +324,7 @@ export class DHCPController {
 
     let unsubscribes = [];
     unsubscribes.push(this.di.$rootScope.$on('ipmac-refresh', ($event) => {
+      this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.DHCP.IPMAC.CREATE.SUCCESS'));
       scope.dhcpModel.dhcpAPI.queryUpdate();
     }));
 
