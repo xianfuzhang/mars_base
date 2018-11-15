@@ -11,6 +11,7 @@ export class DHCPController {
       '$uibModal',
       'roleService',
       'appService',
+      'notificationService',
       'manageService',
       'manageDataManager',
       'tableProviderFactory',
@@ -107,21 +108,22 @@ export class DHCPController {
   //     "timeout": 150
   // }
 
+    let emptyDHCPServerConfig = {
+      "startip": "",
+      "endip": "",
+      "subnet": "",
+      "router": "",
+      "domain": "",
+      "ttl": "",
+      "lease": "",
+      "renew": "",
+      "rebind": "",
+      "delay": "",
+      "timeout": ""
+    };
 
     scope.dhcpModel = {
-      dhcpserver:{
-          "startip": "",
-          "endip": "",
-          "subnet": "",
-          "router": "",
-          "domain": "",
-          "ttl": "",
-          "lease": "",
-          "renew": "",
-          "rebind": "",
-          "delay": "",
-          "timeout": ""
-        },
+      dhcpserver:angular.copy(emptyDHCPServerConfig),
         actionsShow:{
           'menu': {'enable': false, 'role': 3}, 
           'add': {'enable': true, 'role': 3}, 
@@ -290,8 +292,11 @@ export class DHCPController {
         .then((data)=>{
           this.di.manageDataManager.postDHCP(param).then((res)=>{
             if(res){
+              this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.DHCP.CREATE.SUCCESS'));
               init();
             }
+          },(err)=>{
+            this.di.notificationService.renderWarning(scope, err);
           });
         },(res)=>{
 
@@ -301,7 +306,13 @@ export class DHCPController {
     scope.clearDHCPConfig = () =>{
       this.di.dialogService.createDialog('confirm', this.translate('MODULES.MANAGE.DHCP.DELETE.CONFORM'))
         .then((data)=>{
-          this.di.manageDataManager.deleteDHCP();
+          this.di.manageDataManager.deleteDHCP().then(()=>{
+            this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.DHCP.DELETE.SUCCESS'));
+
+            scope.dhcpModel.dhcpserver = angular.copy(emptyDHCPServerConfig);
+          },(err)=>{
+            this.di.notificationService.renderWarning(scope, err);
+          });
         },(res)=>{
 
         })

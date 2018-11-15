@@ -27,7 +27,7 @@ export class ManageDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(null);
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -42,7 +42,7 @@ export class ManageDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(error);
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -55,7 +55,7 @@ export class ManageDataManager{
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve(error);
+        defer.reject(error);
       }
     );
     return defer.promise;
