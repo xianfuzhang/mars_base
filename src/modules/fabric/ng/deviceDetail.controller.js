@@ -191,12 +191,23 @@ export class DeviceDetailController {
 
     this.scope.batchRemove = ($value) => {
       if ($value.length) {
-        this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCH.DETAIL.DIALOG.CONTENT.BATCH_DELETE_FLOWS'))
-          .then(() =>{
-            this.batchDeleteDeviceFlows($value);
-          }, () =>{
-            this.di.$log.debug('delete switch flows cancel');
+        if (this.scope.tabSelected.type === 'flow') {
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCH.DETAIL.DIALOG.CONTENT.BATCH_DELETE_FLOWS'))
+            .then(() =>{
+              this.batchDeleteDeviceFlows($value);
+            }, () =>{
+              this.di.$log.debug('delete switch flows cancel');
           });
+        }
+        else if (this.scope.tabSelected.type === 'group') {
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCH.DETAIL.DIALOG.CONTENT.BATCH_DELETE_GROUPS'))
+            .then(() =>{
+              this.batchDeleteDeviceGroups($value);
+            }, () =>{
+              this.di.$log.debug('delete switch flows cancel');
+          });
+        }
+        
       }
     };
   }
@@ -221,10 +232,7 @@ export class DeviceDetailController {
           index_name: this.getDataType().index_name,
           rowCheckboxSupport: this.getDataType().rowCheckboxSupport,
           rowActionsSupport: this.getDataType().rowActionsSupport,
-          authManage: {
-            support: true,
-            currentRole: this.scope.role
-          }
+          authManage: this.getDataType().authManage
         };
       }
     });
@@ -533,6 +541,36 @@ export class DeviceDetailController {
     });
 
     this.scope.$emit('batch-delete-endpoints');
+  }
+
+  batchDeleteDeviceGroups(arr) {
+    let deferredArr = [];
+    arr.forEach((item) => {
+      let defer = this.di.$q.defer();
+      this.di.deviceDataManager.deleteDeviceGroup(this.scope.deviceId, item.group_id)
+        .then(() => {
+          defer.resolve();
+        }, (msg) => {
+          defer.reject(msg);
+        });
+      deferredArr.push(defer.promise);
+    });
+
+    this.di.$q.all(deferredArr).then(() => {
+      this.scope.alert = {
+        type: 'success',
+        msg: this.translate('MODULES.SWITCH.DETAIL.FLOW.BATCH.DELETE.SUCCESS')
+      }
+      this.di.notificationService.render(this.scope);
+      this.scope.detailModel.api.queryUpdate();
+    }, (msg) => {
+      this.scope.alert = {
+        type: 'warning',
+        msg: msg
+      }
+      this.di.notificationService.render(this.scope);
+      this.scope.detailModel.api.queryUpdate();
+    });
   }
 }
 DeviceDetailController.$inject = DeviceDetailController.getDI();
