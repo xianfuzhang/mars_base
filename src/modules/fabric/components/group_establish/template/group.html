@@ -43,21 +43,21 @@
                         disable="groupModel.L2UnfilteredInterfaceGroupSelected.value != ''"
                         display-label="L2InterfaceGroupsDisLab">
             </mdl-select>
-            <div style="display:inline-flex;margin-left:10px;vertical-align:bottom;cursor:pointer" ng-click="addL2interface()">
-                <i class="material-icons">add</i>
-            </div>
-            <div class="" style="margin-top:5px;" ng-if="groupModel.L2_Interface_Groups.length != 0">
-                <div class="types-label" ng-repeat="groupLabel in groupModel.L2_Interface_Groups">
-                    <span>{{'0x' + groupLabel.toString(16)}}</span>
-                    <span class="removeBtn" ng-click="removeSelectedL2Interface(groupLabel)">-</span>
-                </div>
-            </div>
+            <!--<div style="display:inline-flex;margin-left:10px;vertical-align:bottom;cursor:pointer" ng-click="addL2interface()">-->
+                <!--<i class="material-icons">add</i>-->
+            <!--</div>-->
+            <!--<div class="" style="margin-top:5px;" ng-if="groupModel.L2_Interface_Groups.length != 0">-->
+                <!--<div class="types-label" ng-repeat="groupLabel in groupModel.L2_Interface_Groups">-->
+                    <!--<span>{{'0x' + groupLabel.toString(16)}}</span>-->
+                    <!--<span class="removeBtn" ng-click="removeSelectedL2Interface(groupLabel)">-</span>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
 
         <div class="stepForm__input">
             <div class="stepForm__input__label">L2_Unfiltered_Interface:</div>
             <mdl-select ng-model="groupModel.L2UnfilteredInterfaceGroupSelected"
-                        disable="groupModel.L2_Interface_Groups.length != 0"
+                        disable="groupModel.L2InterfaceGroupsSelected.value != ''"
                         display-label="L2UnfilteredInterfaceGroupDisLab">
             </mdl-select>
         </div>
@@ -85,15 +85,15 @@
                         ng-model="groupModel.L2InterfaceGroupsSelected"
                         display-label="L2InterfaceGroupsDisLab">
             </mdl-select>
-            <div style="display:inline-flex;margin-left:10px;vertical-align:bottom;cursor:pointer" ng-click="addL2interface()">
-                <i class="material-icons">add</i>
-            </div>
-            <div class="" style="margin-top:5px;" ng-if="groupModel.L2_Interface_Groups.length != 0">
-                <div class="types-label" ng-repeat="groupLabel in groupModel.L2_Interface_Groups">
-                    <span>{{'0x' + groupLabel.toString(16)}}</span>
-                    <span class="removeBtn" ng-click="removeSelectedL2Interface(groupLabel)">-</span>
-                </div>
-            </div>
+            <!--<div style="display:inline-flex;margin-left:10px;vertical-align:bottom;cursor:pointer" ng-click="addL2interface()">-->
+                <!--<i class="material-icons">add</i>-->
+            <!--</div>-->
+            <!--<div class="" style="margin-top:5px;" ng-if="groupModel.L2_Interface_Groups.length != 0">-->
+                <!--<div class="types-label" ng-repeat="groupLabel in groupModel.L2_Interface_Groups">-->
+                    <!--<span>{{'0x' + groupLabel.toString(16)}}</span>-->
+                    <!--<span class="removeBtn" ng-click="removeSelectedL2Interface(groupLabel)">-</span>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
 
         <div class="stepForm__input">
@@ -163,15 +163,15 @@
                         ng-model="groupModel.L2InterfaceGroupsSelected"
                         display-label="L2InterfaceGroupsDisLab">
             </mdl-select>
-            <div style="display:inline-flex;margin-left:10px;vertical-align:bottom;cursor:pointer" ng-click="addL2interface()">
-                <i class="material-icons">add</i>
-            </div>
-            <div class="" style="margin-top:5px;" ng-if="groupModel.L2_Interface_Groups.length != 0">
-                <div class="types-label" ng-repeat="groupLabel in groupModel.L2_Interface_Groups">
-                    <span>{{'0x' + groupLabel.toString(16)}}</span>
-                    <span class="removeBtn" ng-click="removeSelectedL2Interface(groupLabel)">-</span>
-                </div>
-            </div>
+            <!--<div style="display:inline-flex;margin-left:10px;vertical-align:bottom;cursor:pointer" ng-click="addL2interface()">-->
+                <!--<i class="material-icons">add</i>-->
+            <!--</div>-->
+            <!--<div class="" style="margin-top:5px;" ng-if="groupModel.L2_Interface_Groups.length != 0">-->
+                <!--<div class="types-label" ng-repeat="groupLabel in groupModel.L2_Interface_Groups">-->
+                    <!--<span>{{'0x' + groupLabel.toString(16)}}</span>-->
+                    <!--<span class="removeBtn" ng-click="removeSelectedL2Interface(groupLabel)">-</span>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{::'MODULES.SWITCH.DETAIL.GROUP.INPUT.SRC_MAC' | translate}}<span class="stepForm__input__required">*</span></div>

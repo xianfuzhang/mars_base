@@ -97,8 +97,9 @@ export class ElasticsearchController {
         resolve: {
           dataModel: () => {
             return {
-              'indice': this.scope.dashboardModel.selectedIndice,
-              'defaultTime': defaultTime ? defaultTime : ''
+              'defaultTime': defaultTime ? defaultTime : '',
+              'indiceSelectedOption': this.scope.dashboardModel.indiceSelectedOption,
+              'indiceOptions': this.scope.dashboardModel.indiceOptions
             };
           }
         }

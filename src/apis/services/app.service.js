@@ -17,6 +17,9 @@ export class appService {
     this.CONST = {
       MOCKED_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
       LIVE_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
+      MOCKED_WEBSOCKETS_ENDPONT: 'ws://localhost:3001/',
+      // LIVE_WEBSOCKETS_ENDPONT: 'ws://[%__ZONE_IP__%]:3233/',
+      LIVE_WEBSOCKETS_ENDPONT: 'ws://210.63.204.29:3233/',
 
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
@@ -153,7 +156,17 @@ export class appService {
 
     return endpoint;
   }
-
+  
+  getWebscoketEndpoint() {
+    let endpoint;
+    if (this.isMocked) {
+      endpoint = this.CONST.MOCKED_WEBSOCKETS_ENDPONT;
+    } else {
+      endpoint = this.CONST.LIVE_WEBSOCKETS_ENDPONT.replace('[%__ZONE_IP__%]', (this.di.$location.host()));
+    }
+    return endpoint;
+  }
+  
   getLoginUrl() {
     return this.getZoneEndpoint(true) + '/j_security_check';
   }

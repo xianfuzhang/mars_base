@@ -131,12 +131,12 @@ export class DeviceDetailService {
         'field': 'port_status',
         'layout': {'visible': true, 'sortable': true}
       },
-      // {
-      //   'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
-      //   'field': 'link_status',
-      //   'type': 'icon',
-      //   'layout': {'visible': true, 'sortable': true}
-      // },
+      {
+        'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
+        'field': 'link_status',
+        'type': 'icon',
+        'layout': {'visible': true, 'sortable': true}
+      },
       {
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.TYPE'),
         'field': 'type',

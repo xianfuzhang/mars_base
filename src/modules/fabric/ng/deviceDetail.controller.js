@@ -385,10 +385,8 @@ export class DeviceDetailController {
           obj['port_mac'] = entity.annotations.portMac;
           obj['port_id'] = entity.port;
           obj['isEnabled'] = entity.isEnabled;
-          obj['port_status'] = entity.isEnabled === true ?
-            this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE') :
-            this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE');
-          obj['link_status'] = entity.annotations.linkStatus;;
+          obj['port_status'] = entity.isEnabled === true ? 'Up' : 'Down';
+          obj['link_status'] = entity.annotations.adminState === 'enabled' ? 'available' : 'unavailable';
           obj['type'] = entity.type;
           obj['speed'] = entity.portSpeed;
           this.scope.detailModel.entities.push(obj);

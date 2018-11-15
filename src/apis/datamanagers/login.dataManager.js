@@ -41,7 +41,7 @@ export class LoginDataManager {
           defer.resolve(false);
         }
       }, (result) => {
-        defer.reject(false);
+        defer.reject(result);
       });
     return defer.promise;
   }

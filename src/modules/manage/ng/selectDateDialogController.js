@@ -39,6 +39,14 @@ export class SelectDateDialogController {
     this.scope.endtime = '';
     this.scope.defaultTime = this.di.dataModel.defaultTime ? this.di.dataModel.defaultTime : today;
     this.scope.dialogModel.endtime = new Date(this.scope.defaultTime)
+		
+		this.scope.indiceSelectedOption = this.di.dataModel.indiceSelectedOption;
+    this.scope.indiceOptions = this.di.dataModel.indiceOptions;
+    this.scope.dialogModel.selectedIndice = this.scope.indiceSelectedOption.value;
+    
+    this.scope.indiceSelect = ($value) => {
+      this.scope.dialogModel.selectedIndice = $value.value;
+    };
     
 		this.scope.cancel = (event) => {
 			this.di.$modalInstance.dismiss({

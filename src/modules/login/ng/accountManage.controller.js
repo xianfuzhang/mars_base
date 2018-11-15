@@ -51,6 +51,11 @@ export class AccountManageController {
         if (data && !data.canceled) {
           this.di.accountDataManager.createUser(data.result)
             .then(() => {
+              this.scope.alert = {
+                type: 'success',
+                msg: this.translate('MODULE.ACCOUNT.CREATE.SUCCESS')
+              }
+              this.di.notificationService.render(this.scope);
               this.scope.accountModel.api.queryUpdate();
             }, (msg) => {
               this.scope.alert = {

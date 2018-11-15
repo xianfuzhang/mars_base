@@ -11,6 +11,7 @@ import 'easing';
 import 'apis';
 import 'localStore';
 import 'ngTable';
+import 'eventEmitter'
 
 import 'login';
 import 'dashboard';
@@ -50,6 +51,7 @@ angular
     'pascalprecht.translate',
     '_',
     'c3',
+    'eventEmitter',
     'ngTable',
     'crypto',
     // ngTableModule.name,

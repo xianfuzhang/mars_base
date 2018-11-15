@@ -17,6 +17,7 @@ export class loginService {
       CONST_HTTP_OK = 200,
       CONST_HTTP_AUTHORIZATION = 401,
       CONST_HTTP_FORBIDDEN = 403,
+      CONST_HTTP_SERVER_ERROR = 500,
       CONST_HTTP_NOPERMISSION = 888;
 
     switch (status) {
@@ -32,11 +33,14 @@ export class loginService {
       case CONST_HTTP_OK:
         message = null;
         break;
+      case CONST_HTTP_SERVER_ERROR:
+        message = this.di.$filter('translate')('MODULE.LOGIN.SERVER_ERROR');
+        break;  
       case CONST_HTTP_NOPERMISSION:
         message = this.di.$filter('translate')('MODULE.LOGIN.NO_PERMISSIONS');
         break;
       default:
-        message = this.di.$filter('translate')('MODULE.LOGIN.HTTP_ERROR_DEFAULT', status);
+        message = this.di.$filter('translate')('MODULE.LOGIN.HTTP_ERROR_DEFAULT', {status: status});
         break;
     }
     return message;
