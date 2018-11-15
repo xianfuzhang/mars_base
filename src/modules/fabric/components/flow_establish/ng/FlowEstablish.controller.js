@@ -1028,6 +1028,17 @@ export class FlowEstablishController {
           "groupId": groupId
         })
       }
+
+
+      //增加goto table
+      let gotoTable = this.di.deviceService.getFlowTableGotoTableByFilter(scope.flowTypeJson['tableId'], scope.flowTypeJson['type']);
+      if(gotoTable){
+        treatment.push({
+          "type": "TABLE",
+          "tableId": parseInt(gotoTable)
+        })
+      }
+
       return treatment;
     };
 
