@@ -220,7 +220,11 @@ export class DeviceDetailController {
           schema: this.scope.detailModel.schema,
           index_name: this.getDataType().index_name,
           rowCheckboxSupport: this.getDataType().rowCheckboxSupport,
-          rowActionsSupport: this.getDataType().rowActionsSupport
+          rowActionsSupport: this.getDataType().rowActionsSupport,
+          authManage: {
+            support: true,
+            currentRole: this.scope.role
+          }
         };
       }
     });

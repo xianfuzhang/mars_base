@@ -1,6 +1,10 @@
-import {LogicalController} from './ng/logical.controller';
+import {TenantController} from './ng/tenant.controller';
+import {TenantEstablishController} from './component/tenant_establish/ng/tenantEstablish.controller';
 
 export default angular
   .module('logical', [])
-  .controller('LogicalController', LogicalController)
+  .controller('TenantController', TenantController)
+  .controller('TenantEstablishController', TenantEstablishController)
   .name;
+
+

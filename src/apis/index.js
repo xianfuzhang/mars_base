@@ -14,11 +14,13 @@ import {DialogService} from './services/dialog.service';
 import {FlowService} from './services/flow.service';
 import {DateService} from './services/date.service';
 import {manageService} from './services/manage.service';
+import {logicalService} from './services/logical.service';
 import {RoleService} from './services/role.service';
 import {LogDataManager} from './datamanagers/log.dataManager';
 import {DashboardDataManager} from './datamanagers/dashboard.dataManager';
 import {IntentDataManager} from './datamanagers/intent.dataManager';
 import {ManageDataManager} from './datamanagers/manage.dataManager';
+import {LogicalDataManager} from './datamanagers/logical.dataManager';
 import {WebsocketService} from './services/ws.service';
 
 export default angular
@@ -41,8 +43,10 @@ export default angular
   .service('logDataManager', LogDataManager)
   .service('dateService', DateService)
   .service('manageService', manageService)
+  .service('logicalService', logicalService)
   .service('roleService', RoleService)
   .service('wsService', WebsocketService)
   .service('intentDataManager', IntentDataManager)
   .service('manageDataManager', ManageDataManager)
+  .service('logicalDataManager', LogicalDataManager)
   .name;

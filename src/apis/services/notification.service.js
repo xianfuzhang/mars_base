@@ -29,6 +29,43 @@ export class notificationService{
     };
     return this;
   }
+
+  renderSuccess(scope, message) {
+    let templateHtml = '<div class="notification-wrapper">'
+      + '<div uib-alert class="notification-wrapper__content alert-success"'
+      + 'dismiss-on-timeout="2000"'
+      + 'close="closeAlert()">'+ message+'</div></div>';
+
+    let elm = this.di.$compile(templateHtml)(scope);
+    document.body.appendChild(elm[0]);
+
+    scope.closeAlert = () => {
+      let closeDom = document.getElementsByClassName('notification-wrapper');
+      for(let i=0; i< closeDom.length; i++) {
+        document.body.removeChild(closeDom[i]);
+      }
+    };
+    return this;
+  }
+
+  renderWarning(scope, message) {
+    let templateHtml = '<div class="notification-wrapper">'
+      + '<div uib-alert class="notification-wrapper__content alert-warning"'
+      + 'dismiss-on-timeout="2000"'
+      + 'close="closeAlert()">'+ message+'</div></div>';
+
+    let elm = this.di.$compile(templateHtml)(scope);
+    document.body.appendChild(elm[0]);
+
+    scope.closeAlert = () => {
+      let closeDom = document.getElementsByClassName('notification-wrapper');
+      for(let i=0; i< closeDom.length; i++) {
+        document.body.removeChild(closeDom[i]);
+      }
+    };
+    return this;
+  }
+
 }
 
 notificationService.$inject = notificationService.getDI();
