@@ -22,6 +22,7 @@ export class FabricSummaryController {
       'tableProviderFactory',
       'deviceService',
       'switchService',
+      'notificationService',
       'dialogService',
       'commonService',
       'modalManager'
@@ -757,6 +758,10 @@ export class FabricSummaryController {
           }
         }
       });
+    }));
+
+    unsubscribers.push(this.di.$rootScope.$on('device-flow-refresh',()=>{
+      this.di.notificationService.renderSuccess(scope, this.translate('MODULES.SWITCH.DETAIL.FLOW.CREATE.SUCCESS'));
     }));
 
 

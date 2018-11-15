@@ -845,7 +845,7 @@ export class DeviceService {
     return   {
       '10': [
         {'field': 'vlan_id', 'type': 'int', 'require': 'true','field_label':'vlan'},
-        {'field': 'push_vlan', 'input_type':'checkbox' , 'require': 'false', 'displayLabel':{'id': 'check_push', 'label': 'Push Vlan'}},
+        // {'field': 'push_vlan', 'input_type':'checkbox' , 'require': 'false', 'displayLabel':{'id': 'check_push', 'label': 'Push Vlan'}},
       ],
       '20': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
       '30': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
@@ -940,6 +940,7 @@ export class DeviceService {
       ],
       'ether_type': [
         {'field': 'ether_type', 'type': 'int', 'require': 'true', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        //{'label':'PROFINET','value':'0x8892'}
       ],
       'source_mac': [
         {'field': 'source_mac', 'type': 'mac', 'require': 'true'},
