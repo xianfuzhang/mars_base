@@ -805,6 +805,42 @@ export class DeviceService {
     return secondInputs[tableId][type];
   }
 
+
+  getFlowGotoTableList(){
+    return {
+      '10': '20',
+      '20': {
+        'unicast_mac': '30',
+        'ipv4_multicast_mac': '40',
+        'ipv6_multicast_mac': '40'
+      },
+      '30': {
+        'ipv4_multicast':'60',
+        'ipv6_multicast':'60',
+      },
+      '40': {
+        'ipv4_multicast':'60',
+        'ipv6_multicast':'60',
+      },
+      '50': {
+        'unicast_vlan_bridge': '60',
+        'multicast_vlan_bridge': '60',
+        'dlf_vlan_bridge': '60'
+      },
+      '60': null
+    }
+  }
+
+  getFlowTableGotoTableByFilter(tableId, type){
+    let json = this.getFlowGotoTableList();
+    let res = json[tableId];
+    if(type && type !== ''){
+      res = res[type]
+    }
+    return res
+  }
+
+
   getFlowTableApplyActionMaps(){
     return   {
       '10': [
