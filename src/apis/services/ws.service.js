@@ -106,6 +106,8 @@ export class WebsocketService {
 
     function reinit() {
       $log.log('[marsWebsockets] RE-initialize websockets connection');
+      if(!ws) return;
+      
       delete ws.onopen;
       delete ws.onclose;
       delete ws.onmessage;
@@ -240,7 +242,7 @@ export class WebsocketService {
     //his unsubscribe is used to remove page callback. Some requests are one time return, so we need to remove page callback
     //after we get the data.
     service.unsubscribe = function (channel) {
-      if(!channel || typeof channel != 'string') {
+      if(typeof channel != 'string') {
         $log.error('[marsWebsockets] The channel to unsubscribe is invalid.');
       }
       ee.removeEvent(channel);
