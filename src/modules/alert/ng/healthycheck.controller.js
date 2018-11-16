@@ -84,8 +84,14 @@ export class HealthyCheckController {
         hc.status = rule.status === 'enabled'?translate('MODULES.ALERT.HEALTHY_CHECK.STATUS.ENABLED'):translate('MODULES.ALERT.HEALTHY_CHECK.STATUS.DISABLED');
         hc.alert_level = rule.alert_level === 0?translate('MODULES.ALERT.HEALTHY_CHECK.LEVEL.LOW'):translate('MODULES.ALERT.HEALTHY_CHECK.LEVEL.HIGHT');
         hc.receive_group = rule.receive_group;
-        hc.type = di.alertService.getRuleTypeTranslate(rule.query[0].type);
-        hc.description = di.alertService.getDescriptionTranslate(rule.query[0]);
+        if (rule.query.length > 0){
+          hc.type = di.alertService.getRuleTypeTranslate(rule.query[0].type);
+          hc.description = di.alertService.getDescriptionTranslate(rule.query[0]);  
+        }
+        else {
+          hc.type = '-';
+          hc.description = '-';
+        }
         // if(rule.type === 'rx_util'){
         //   hc.description = di.alertService.getDescriptionTranslate(rule.query[0]);
         // } else if(rule.type === 'tx_util'){
