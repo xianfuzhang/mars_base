@@ -719,14 +719,17 @@ export class DeviceService {
         {'field':'vlan_id', 'type':'int_with_zero', 'require':'true'}
       ],
       '20':[
-        {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        // {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        {'field': 'ether_type', 'type': 'string', 'require': 'true'},
         {'field':'destination_mac', 'type':'mac', 'require':'true'}
       ],
       '30':[
-        {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]}
+        // {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]}
+        {'field': 'ether_type', 'type': 'string', 'require': 'true'},
       ],
       '40':[
-        {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        // {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        {'field': 'ether_type', 'type': 'string', 'require': 'true'},
       ],
       '50':[
         {'field':'vlan_id', 'type':'int','require':'true'},
@@ -939,7 +942,8 @@ export class DeviceService {
         {'field': 'in_port', 'type': 'int', 'require': 'true'},
       ],
       'ether_type': [
-        {'field': 'ether_type', 'type': 'int', 'require': 'true', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        {'field': 'ether_type', 'type': 'string', 'require': 'true'},
+        // {'field': 'ether_type', 'type': 'string', 'require': 'true', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
         //{'label':'PROFINET','value':'0x8892'}
       ],
       'source_mac': [

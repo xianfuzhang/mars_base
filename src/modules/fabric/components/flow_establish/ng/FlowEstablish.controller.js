@@ -1123,6 +1123,48 @@ export class FlowEstablishController {
     };
 
 
+
+    let ethtype_tips = [{"label":"0x0800", "value":  "Internet Protocol version 4 (IPv4)"},
+      {"label":"0x0806", "value":  "Address Resolution Protocol (ARP)"},
+      {"label":"0x0842", "value":  "Wake-on-LAN[3]"},
+      {"label":"0x22F0", "value":  "Audio Video Transport Protocol as defined in IEEE Std 1722-2011"},
+      {"label":"0x8035", "value":  "Reverse Address Resolution Protocol"},
+      {"label":"0x8100", "value":  "VLAN-tagged frame (IEEE 802.1Q) & Shortest Path Bridging IEEE 802.1aq[4]"},
+      {"label":"0x86DD", "value":  "Internet Protocol Version 6 (IPv6)"},
+      {"label":"0x8808", "value":  "Ethernet flow control"},
+      {"label":"0x8809", "value":  "Slow Protocols (IEEE 802.3)"},
+      {"label":"0x8847", "value":  "MPLS unicast"},
+      {"label":"0x8848", "value":  "MPLS multicast"},
+      {"label":"0x8863", "value":  "PPPoE Discovery Stage"},
+      {"label":"0x8864", "value":  "PPPoE Session Stage"},
+      {"label":"0x8870", "value":  "Jumbo Frames[2]"},
+      {"label":"0x888E", "value":  "EAP over LAN (IEEE 802.1X)"},
+      {"label":"0x8892", "value":  "PROFINET Protocol"},
+      {"label":"0x889A", "value":  "HyperSCSI (SCSI over Ethernet)"},
+      {"label":"0x88A8", "value":  "Provider Bridging (IEEE 802.1ad) & Shortest Path Bridging IEEE 802.1aq[5]"},
+      {"label":"0x88AB", "value":  "Ethernet Powerlink[来源请求]"},
+      {"label":"0x88CC", "value":  "链路层发现协议 (LLDP)"},
+      {"label":"0x88E1", "value":  "HomePlug AV MME[来源请求]"},
+      {"label":"0x88E3", "value":  "Media Redundancy Protocol (IEC62439-2)"},
+      {"label":"0x88E5", "value":  "MAC security (IEEE 802.1AE)"},
+      {"label":"0x88E7", "value":  "Provider Backbone Bridges (PBB) (IEEE 802.1ah)"},
+      {"label":"0x88F7", "value":  "Precision Time Protocol (PTP) over Ethernet (IEEE 1588)"},
+      {"label":"0x8902", "value":  "IEEE 802.1ag Connectivity Fault Management (CFM) Protocol / ITU-T Recommendation Y.1731 (OAM)"},
+      {"label":"0x8906", "value":  "Fibre Channel over Ethernet (FCoE)"},
+      {"label":"0x8914", "value":  "FCoE Initialization Protocol"},
+      {"label":"0x8915", "value":  "RDMA over Converged Ethernet (RoCE)"},
+      {"label":"0x892F", "value":  "High-availability Seamless Redundancy (HSR)"},
+      {"label":"0x9000", "value":  "Ethernet Configuration Testing Protocol[6]"},
+      {"label":"0x9100", "value":  "VLAN-tagged (IEEE 802.1Q) frame with double tagging[7]"}];
+
+    scope.showToolTip = ($event) => {
+      this.di.$rootScope.$emit("show_tooltip",{event:$event, value: ethtype_tips});
+    };
+
+    scope.hideToolTip = ($event) => {
+      this.di.$rootScope.$emit("hide_tooltip");
+    };
+
     unsubscribes.push(this.di.$rootScope.$on('flow-wizard-show', ($event, deviceId) => {
       scope.open(deviceId);
     }));
