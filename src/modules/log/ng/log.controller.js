@@ -42,12 +42,10 @@ export class LogController {
   
     this.wsService = this.di.wsService;
     this.scope.updateRealtimeLogFlag = true;
-    this.MAX_LOG_NUM = 100;  // max number of logs
-    this.showRealtimeLogs = [];
+    this.MAX_LOG_NUM = 1000;  // max number of logs
     this.hiddenRealtimeLogs = [];
-    this.scope.realtimeLogString = '';
-    this.scope.realtimeBtnTxt = '暂停更新';
-    this.scope.logKeyword = 'Error';
+    this.scope.realtimeBtnTxt = this.translate('MODULE.LOG.BUTTON.PAUSE');
+    this.logKeywords = [];
     
     // the params that had send to get data
     let dateObj = {from: null, to: null};
@@ -81,12 +79,30 @@ export class LogController {
       }
     };
     
+    this.scope.onKeywordChange = (keywordStr) => {
+      this.logKeywords = [];
+      let tmpArr = keywordStr.split(' ');
+      tmpArr.forEach((keyword) => {
+        if(keyword) {
+          this.logKeywords.push(keyword);
+        }
+      })
+    }
+    
     this.scope.onUpdateBtn = () => {
       this.scope.updateRealtimeLogFlag = !this.scope.updateRealtimeLogFlag;
       if(this.scope.updateRealtimeLogFlag) {
-        this.scope.realtimeBtnTxt = '暂停更新';
+        this.scope.realtimeBtnTxt = this.translate('MODULE.LOG.BUTTON.PAUSE');
       } else {
-        this.scope.realtimeBtnTxt = '继续更新';
+        this.scope.realtimeBtnTxt = this.translate('MODULE.LOG.BUTTON.CONTINUE');
+      }
+    }
+    
+    this.scope.onClearLogsBtn = () => {
+      let logList = document.getElementById('realtime-log-div');
+      let count = logList.childNodes.length;
+      for(let i = count - 1; i >= 0; i--) {
+        logList.removeChild(logList.childNodes[i]);
       }
     }
     
@@ -119,10 +135,14 @@ export class LogController {
   
     this.unsubscribers.push(this.di.$scope.$watch('updateRealtimeLogFlag', (newVal, oldVal) => {
       if(newVal == oldVal)return;
-      if (newVal == true && this.scope.hiddenRealtimeLogs.length) {
-        this.showRealtimeLogs.splice(0, 0, ...this.hiddenRealtimeLogs);
-        this.showRealtimeLogs = this.showRealtimeLogs.splice(0, this.MAX_LOG_NUM);
-        this.scope.realtimeLogString = this.showRealtimeLogs.join('<br /><br />')
+      if (newVal == true && this.hiddenRealtimeLogs.length) {
+        let logList = document.getElementById('realtime-log-div');
+        this.hiddenRealtimeLogs.forEach((log) => {
+          let newLog = this.getLogElementNode(log)
+          
+          logList.insertBefore(newLog, logList.childNodes[0])
+        })
+        
         this.hiddenRealtimeLogs = [];
       }
     }));
@@ -145,25 +165,20 @@ export class LogController {
       console.error(e.message)
     } finally {
       this.wsService.subscribe('', {}, (response) => {
-        let log = response.message;
+        let message = response.message;
   
         if(this.scope.updateRealtimeLogFlag) {
-          let message = this.getFormatLog(log);
-          this.showRealtimeLogs.splice(0, 0, message);
-          
-          if(this.showRealtimeLogs.length > this.MAX_LOG_NUM) { // only save MAX_LOG_NUM logs
-            this.showRealtimeLogs = this.showRealtimeLogs.slice(0, this.MAX_LOG_NUM);
-          }
+          let newLog = this.getLogElementNode(message)
+  
+          let logList = document.getElementById('realtime-log-div');
+          logList.insertBefore(newLog, logList.childNodes[0])
         } else {
-          this.hiddenRealtimeLogs.splice(0, 0, log);
+          this.hiddenRealtimeLogs.push(message);
   
           if(this.hiddenRealtimeLogs.length > this.MAX_LOG_NUM) { // only save MAX_LOG_NUM logs
-            this.hiddenRealtimeLogs = this.hiddenRealtimeLogs.slice(0, this.MAX_LOG_NUM);
+            this.hiddenRealtimeLogs.splice(0, this.MAX_LOG_NUM - this.hiddenRealtimeLogs.length);
           }
         }
-        
-        this.scope.realtimeLogString = this.di.$sce.trustAsHtml(this.showRealtimeLogs.join('<br /><br />'));
-        this.scope.$apply();
       })
     }
   
@@ -212,16 +227,18 @@ export class LogController {
     });
   }
   
-  getFormatLog(log) {
-    let message = log;
+  getLogElementNode(log) {
+    
+    this.logKeywords.forEach((keyword) => {
+      let regex = new RegExp(keyword, 'gi');
+      let replacement = '<span style="color:yellow">' + keyword + '</span>'
+      log = log.replace(regex, replacement)
+    })
+  
+    let newLog = document.createElement('span');
+    newLog.innerHTML = '<span>' + log + '</span><br /><br />';
 
-    if(this.scope.logKeyword) { // TODO: based on requirement, mark the key word
-      let regex = new RegExp(this.scope.logKeyword, 'gi');
-      let replacement = '<span style="color:yellow">' + this.scope.logKeyword + '</span>'
-      message = message.replace(regex, replacement)
-    }
-
-    return message;
+    return newLog;
   }
   
   getTabSchema() {

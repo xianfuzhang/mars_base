@@ -8,6 +8,9 @@
   "MODULE.LOG.COLUMN.CONTENT": "Content",
   "MODULE.LOG.BUTTON.SEARCH": "Search",
   "MODULE.LOG.BUTTON.DOWNLOAD": "Download",
+  "MODULE.LOG.BUTTON.PAUSE": "Pause",
+  "MODULE.LOG.BUTTON.CONTINUE": "Continue",
+  "MODULE.LOG.BUTTON.CLEAR_LOG": "Clear",
   "MODULE.LOG.DOWNLOAD_LABEL": "System Log Download:",
   "MODULE.LOG.DOWNLOAD_FILE_SELECT": "Please select the file"
 }
