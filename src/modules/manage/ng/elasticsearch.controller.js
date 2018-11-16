@@ -115,11 +115,15 @@ export class ElasticsearchController {
               this.di.dialogService.createDialog('success', '清理成功！')
                 .then((data)=>{
                   init(); // 初始化
+                }, () => {
+                  init();
                 })
             },
             (err) => { // error to save
               this.di.dialogService.createDialog('error', '清理失败！')
                 .then((data)=>{
+                  this.scope.loading = false;
+                }, (data)=>{
                   this.scope.loading = false;
                 })
             }
