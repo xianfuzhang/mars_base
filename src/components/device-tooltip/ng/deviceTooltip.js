@@ -21,6 +21,10 @@ export class deviceTooltip {
     this.replace = true;
     this.restrict = 'E';
     this.template = require('../template/deviceTooltip');
+    this.scope = {
+      noApply: '@', //是否显示相应action，默认都隐藏
+    };
+
     this.link = (...args) => this._link.apply(this, args);
   }
 
@@ -29,6 +33,10 @@ export class deviceTooltip {
       scope.tooltipStyle = {};
       scope.arrowStyle = {};
       scope.isRight = true;
+
+
+      scope.noApply = scope.noApply|| 'false';
+      scope.isNeedRefresh = scope.noApply === 'true'? false:true;
 
       let unsubscribers = [];
       unsubscribers.push(this.di.$rootScope.$on('show_tooltip',(event, param)=>{
@@ -114,7 +122,8 @@ export class deviceTooltip {
         if(!scope.isRight){
           scope.arrowStyle['left'] = tooltipWidth + 'px';
         }
-        scope.$apply();
+        if(scope.isNeedRefresh)
+          scope.$apply();
       }));
 
       unsubscribers.push(this.di.$rootScope.$on('hide_tooltip',()=>{
@@ -126,7 +135,8 @@ export class deviceTooltip {
         rightDom.empty();
 
         scope.tooltipStyle = {'visibility': 'hidden'};
-        scope.$apply();
+        if(scope.isNeedRefresh)
+          scope.$apply();
       }));
 
 

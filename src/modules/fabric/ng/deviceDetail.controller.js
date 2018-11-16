@@ -59,10 +59,12 @@ export class DeviceDetailController {
 
     let unSubscribers = [];
     unSubscribers.push(this.di.$rootScope.$on('device-flow-refresh',()=>{
+      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.FLOW.CREATE.SUCCESS'));
       this.scope.detailModel.api.queryUpdate();
     }));
   
     unSubscribers.push(this.di.$rootScope.$on('group-list-refresh',()=>{
+      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.GROUP.CREATE.SUCCESS'));
       this.scope.detailModel.api.queryUpdate();
     }));
     
@@ -153,31 +155,46 @@ export class DeviceDetailController {
             }
             else if (event.action.value === 'delete') {
               let flowId = event.data.id;
-              this.di.deviceDataManager.deleteDeviceFlow(this.scope.deviceId, flowId)
-                .then((res) => {
-                  this.scope.detailModel.api.queryUpdate();
-                }, (res) => {
-                  this.scope.alert = {
-                    type: 'warning',
-                    msg: res.data
-                  }
-                this.di.notificationService.render(this.scope);
-              });
+              this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCH.DETAIL.DIALOG.CONTENT.DELETE_FLOWS'))
+                .then(() =>{
+                  this.di.deviceDataManager.deleteDeviceFlow(this.scope.deviceId, flowId)
+                    .then((res) => {
+                      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.FLOW.DELETE.SUCCESS'));
+                      this.scope.detailModel.api.queryUpdate();
+                    }, (res) => {
+                      this.di.notificationService.renderWarning(this.scope, res.data);
+                    });
+                }, () =>{
+                  this.di.$log.debug('delete switch flows cancel');
+                });
             }
             break;
           case 'group':
             // TODO: group data
             let appCookie = '0x' + parseInt(event.data.id).toString(16);
-            this.di.deviceDataManager.deleteDeviceGroup(this.scope.deviceId, appCookie)
-              .then((res) => {
-                this.scope.detailModel.api.queryUpdate();
-              }, (res) => {
-                this.scope.alert = {
-                  type: 'warning',
-                  msg: res.data
-                }
-                this.di.notificationService.render(this.scope);
+
+            this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCH.DETAIL.DIALOG.CONTENT.DELETE_GROUP'))
+              .then(() =>{
+                this.di.deviceDataManager.deleteDeviceGroup(this.scope.deviceId, appCookie)
+                  .then((res) => {
+                    this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.GROUP.DELETE.SUCCESS'));
+                    this.scope.detailModel.api.queryUpdate();
+                  }, (res) => {
+                    this.di.notificationService.renderWarning(this.scope, res.data);
+                  });
+              }, () =>{
+                this.di.$log.debug('delete switch group cancel');
               });
+            // this.di.deviceDataManager.deleteDeviceGroup(this.scope.deviceId, appCookie)
+            //   .then((res) => {
+            //     this.scope.detailModel.api.queryUpdate();
+            //   }, (res) => {
+            //     this.scope.alert = {
+            //       type: 'warning',
+            //       msg: res.data
+            //     }
+            //     this.di.notificationService.render(this.scope);
+            //   });
             break;
         }
       }
