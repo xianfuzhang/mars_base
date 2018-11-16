@@ -12,6 +12,7 @@ export class HealthyCheckController {
       'roleService',
       'tableProviderFactory',
       'alertDataManager',
+      'notificationService',
       'dialogService',
       'configurationDataManager'
     ];
@@ -64,7 +65,10 @@ export class HealthyCheckController {
 
               this.di.alertDataManager.deleteHealthyCheck(object, resource, event.data.rule_name)
                 .then((res) =>{
+                  this.di.notificationService.renderSuccess(scope, this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_HEALTHY_HISTORY.SUCCESS'))
                   scope.healthyCheckModel.healthyCheckAPI.queryUpdate();
+                },(error)=>{
+                  this.di.notificationService.renderWarning(scope, error)
                 });
             }, (res) =>{
               this.di.$log.debug('delete receive group dialog cancel');
@@ -146,6 +150,7 @@ export class HealthyCheckController {
     };
 
     unSubscribers.push(this.di.$rootScope.$on('healthycheck-refresh',()=>{
+      this.di.notificationService.renderSuccess(scope, this.translate('MODULES.ALERT.DIALOG.CONTENT.CREATE_HEALTHY_HISTORY.SUCCESS'))
       scope.healthyCheckModel.healthyCheckAPI.queryUpdate();
     }));
 

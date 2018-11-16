@@ -159,8 +159,12 @@ export class FlowEstablishController {
       } else {
         input['value'] = '';
       }
-      if(input['field'] === 'vlan_id'){
+      if(input['field'] === 'vlan_id') {
         input['field_label'] = 'VLAN';
+      } else if (input['field'] === 'source_mac_masked'){
+        input['field_label'] = 'Source Mac';
+      } else if (input['field'] === 'destination_mac_masked'){
+        input['field_label'] = 'Destination Mac';
       } else {
         input['field_label'] = input['field'].replace('_',' ');
       }
@@ -342,7 +346,7 @@ export class FlowEstablishController {
       if(!_ifTable60SchemaListContain('source_ipv4') || !_ifTable60SchemaListContain('destination_ipv4')){
         if(!_ifTable60SchemaListContain('ether_type')){
           let res = _getValueFromSecondInputs('ether_type');
-          if(res !== null && res !== '0x0800'){
+          if(res !== null && res.toLowerCase() !== '0x0800'){
             status = false;
             message = "SOURCE_IPV4/DESTINATION_IPV4 对应的 ETH_TYPE 不正确!";
           }
@@ -352,24 +356,32 @@ export class FlowEstablishController {
       if(!_ifTable60SchemaListContain('source_ipv6')|| !_ifTable60SchemaListContain('destination_ipv6') || !_ifTable60SchemaListContain('ipv6_flow_label')){
         if(!_ifTable60SchemaListContain('ether_type')){
           let res = _getValueFromSecondInputs('ether_type');
-          if(res !== null && res !== '0x86dd'){
+          if(res !== null && res.toLowerCase() !== '0x86dd'){
             status = false;
-            message = "SOURCE_IPV6/DESTINATION_IPV6/IPV6_FLOW_LABEL 对应的 ETH_TYPE 不正确!";
+            message = "SOURCE_IPV6/DESTINATION_IPV6/IPV6_FLOW_LABEL 对应的 ETH_TYPE 为 0x86dd!";
           }
         }
       }
 
-      // if(!_ifTable60SchemaListContain('ip_dscp') || !_ifTable60SchemaListContain('ip_dscp') || !_ifTable60SchemaListContain('ip_dscp')){
-      //   if(_ifTable60SchemaListContain('ether_type')){
-      //     _addTable60SelectItem('ether_type');
-      //   }
-      // }
+      if(!_ifTable60SchemaListContain('ip_dscp') || !_ifTable60SchemaListContain('ip_proto') || !_ifTable60SchemaListContain('ip_ecn')){
+          let res = _getValueFromSecondInputs('ether_type');
+          if(res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800'){
+            status = false;
+            message = "IP_DSCP/IP_PROTO/IP_ECN 对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+          }
+      }
 
       if(!_ifTable60SchemaListContain('tcp_sport') || !_ifTable60SchemaListContain('tcp_dport')){
         let res = _getValueFromSecondInputs('ip_proto');
         if(res !== null && res !== '6'){
           status = false;
           message = "TCP设置需要 IP_PROTO 为 6!";
+        }
+
+        res = _getValueFromSecondInputs('ether_type');
+        if(typeof res === 'string' && res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800' || res === null){
+          status = false;
+          message = "TCP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
         }
       }
 
@@ -379,6 +391,12 @@ export class FlowEstablishController {
           status = false;
           message = "UDP设置需要 IP_PROTO 为 17!";
         }
+
+        res = _getValueFromSecondInputs('ether_type');
+        if(typeof res === 'string' && res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800' || res === null){
+          status = false;
+          message = "UDP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+        }
       }
 
       if(!_ifTable60SchemaListContain('sctp_sport') || !_ifTable60SchemaListContain('sctp_dport')){
@@ -386,6 +404,12 @@ export class FlowEstablishController {
         if(res !== null && res !== '132'){
           res = false;
           message = "SCTP设置需要 IP_PROTO 为 132!";
+        }
+
+        res = _getValueFromSecondInputs('ether_type');
+        if(typeof res === 'string' && res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800' || res === null){
+          status = false;
+          message = "SCTP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
         }
       }
 
@@ -397,9 +421,9 @@ export class FlowEstablishController {
         }
 
         res = _getValueFromSecondInputs('ether_type');
-        if(res !== null && res !== '0x0800'){
+        if(res !== null && res.toLowerCase() !== '0x0800'){
           status = false;
-          message = "ICMPV4 对应的 ETH_TYPE 不正确!";
+          message = "ICMPV4 对应的 ETH_TYPE 为 0x0800!";
         }
       }
 
@@ -411,9 +435,9 @@ export class FlowEstablishController {
         }
 
         res = _getValueFromSecondInputs('ether_type');
-        if(res !== null && res !== '0x86dd'){
+        if(res !== null && res.toLowerCase() !== '0x86dd'){
           status = false;
-          message = "ICMPV6 对应的 ETH_TYPE 不正确!";
+          message = "ICMPV6 对应的 ETH_TYPE 为 0x86dd!";
         }
       }
 
@@ -478,6 +502,24 @@ export class FlowEstablishController {
         if(_ifTable60SchemaListContain('vlan_id')){
           _addTable60SelectItem('vlan_id');
         }
+      } else if(curOptId === 'source_mac_masked' || curOptId === 'source_mac'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['source_mac_masked'] || input['source_mac']){
+            let errorMessage = "不可以同时指定2个源MAC!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
+        }
+      }  else if(curOptId === 'destination_mac_masked' || curOptId === 'destination_mac'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['destination_mac_masked'] || input['destination_mac']){
+            let errorMessage = "不可以同时指定2个目的MAC!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
+        }
       } else if(curOptId === 'source_ipv4' || curOptId === 'destination_ipv4'){
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
@@ -485,12 +527,21 @@ export class FlowEstablishController {
             let errorMessage = "IPv4和IPv6不可以同时设置!";
             scope.errorMessage = errorMessage;
             return false;
+          } else if(input['icmpv6_type']|| input['icmpv6_code']){
+            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
           }
+
         }
       } else if(curOptId === 'source_ipv6' || curOptId === 'destination_ipv6' || curOptId === 'ipv6_flow_label'){
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['source_ipv4'] || input['destination_ipv4']){
+            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['icmpv4_type']|| input['icmpv4_code']){
             let errorMessage = "IPv4和IPv6不可以同时设置!";
             scope.errorMessage = errorMessage;
             return false;
@@ -569,6 +620,10 @@ export class FlowEstablishController {
             let errorMessage = "ICMPV4和ICMPV6不可以同时设置!";
             scope.errorMessage = errorMessage;
             return false;
+          } else if(input['source_ipv6'] || input['destination_ipv6'] || input['ipv6_flow_label']){
+            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
           }
         }
 
@@ -615,6 +670,10 @@ export class FlowEstablishController {
             return false;
           } else if(input['icmpv4_type']|| input['icmpv4_code']){
             let errorMessage = "ICMPV6和ICMPV4不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['source_ipv4'] || input['destination_ipv4']){
+            let errorMessage = "IPv4和IPv6不可以同时设置!";
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -797,9 +856,9 @@ export class FlowEstablishController {
         }
       });
 
-      if(ethType === '0x0800' && this.di.deviceService.isIpv4MultiMAC(mac)){
+      if(ethType.toLowerCase() === '0x0800' && this.di.deviceService.isIpv4MultiMAC(mac)){
         return this.FLOW_TYPES.TABLE20.IPV4_MULTICAST_MAC;
-      } else if(ethType === '0x86dd' && this.di.deviceService.isIpv6MultiMAC(mac)){
+      } else if(ethType.toLowerCase() === '0x86dd' && this.di.deviceService.isIpv6MultiMAC(mac)){
         return this.FLOW_TYPES.TABLE20.IPV6_MULTICAST_MAC;
       } else if(mac.search(this.di.$scope.mac_regex) !== -1){
         return this.FLOW_TYPES.TABLE20.UNICAST_MAC;
@@ -816,9 +875,9 @@ export class FlowEstablishController {
         }
       });
 
-      if(ethType === '0x0800'){
+      if(ethType.toLowerCase() === '0x0800'){
         return this.FLOW_TYPES.TABLE30.IPV4_MULTICAST;
-      } else if(ethType === '0x86dd'){
+      } else if(ethType.toLowerCase() === '0x86dd'){
         return this.FLOW_TYPES.TABLE30.IPV6_MULTICAST;
       }
     };
@@ -831,9 +890,9 @@ export class FlowEstablishController {
         }
       });
 
-      if(ethType === '0x0800'){
+      if(ethType.toLowerCase() === '0x0800'){
         return this.FLOW_TYPES.TABLE40.IPV4_MULTICAST;
-      } else if(ethType === '0x86dd'){
+      } else if(ethType.toLowerCase() === '0x86dd'){
         return this.FLOW_TYPES.TABLE40.IPV6_MULTICAST;
       }
     };
@@ -919,15 +978,20 @@ export class FlowEstablishController {
 
               //暂时先处理mask相关的代码，其他多字段连接类型另加逻辑处理// TODO
               let v0 , v1;
-              if(value[0].field.indexOf('mask') !== -1){
+              if(value[0].field.indexOf('mask') !== -1 && value[0].field.indexOf('mac') === -1){
                 v0 = value[1];
                 v1 = value[0];
               } else {
                 v0 = value[0];
                 v1 = value[1];
               }
-              v0.value = v0.value + '/' + v1.value;
-              let res = this.di.deviceService.getCriteriaObject(v0);
+              let res;
+              if(v0['field'].indexOf('mac') !== -1){
+                res = this.di.deviceService.getCriteriaMacMasked(v0, v1);
+              } else {
+                v0.value = v0.value + '/' + v1.value;
+                res = this.di.deviceService.getCriteriaObject(v0);
+              }
               if(res !== null) criteria.push(res);
 
             }
@@ -1029,7 +1093,6 @@ export class FlowEstablishController {
         })
       }
 
-
       //增加goto table
       let gotoTable = this.di.deviceService.getFlowTableGotoTableByFilter(scope.flowTypeJson['tableId'], scope.flowTypeJson['type']);
       if(gotoTable){
@@ -1069,6 +1132,13 @@ export class FlowEstablishController {
 
       di.$rootScope.$emit('page_flow_instruction');
       if(!validCurrentDom('flow_instruction')){
+        return new Promise((resolve, reject) => {
+          resolve(inValidJson_Copy);
+        });
+      }
+
+      if(scope.flowTypeJson['tableId'] === '50' && (scope.treatmentPageGroup.groups === null || scope.treatmentPageGroup.groupSelected.value === -1)){
+        inValidJson_Copy['errorMessage'] = "Table 50的flow需要指定group!";
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
@@ -1122,6 +1192,48 @@ export class FlowEstablishController {
       });
     };
 
+
+
+    let ethtype_tips = [{"label":"0x0800", "value":  "Internet Protocol version 4 (IPv4)"},
+      {"label":"0x0806", "value":  "Address Resolution Protocol (ARP)"},
+      {"label":"0x0842", "value":  "Wake-on-LAN[3]"},
+      {"label":"0x22F0", "value":  "Audio Video Transport Protocol as defined in IEEE Std 1722-2011"},
+      {"label":"0x8035", "value":  "Reverse Address Resolution Protocol"},
+      {"label":"0x8100", "value":  "VLAN-tagged frame (IEEE 802.1Q) & Shortest Path Bridging IEEE 802.1aq[4]"},
+      {"label":"0x86DD", "value":  "Internet Protocol Version 6 (IPv6)"},
+      {"label":"0x8808", "value":  "Ethernet flow control"},
+      {"label":"0x8809", "value":  "Slow Protocols (IEEE 802.3)"},
+      {"label":"0x8847", "value":  "MPLS unicast"},
+      {"label":"0x8848", "value":  "MPLS multicast"},
+      {"label":"0x8863", "value":  "PPPoE Discovery Stage"},
+      {"label":"0x8864", "value":  "PPPoE Session Stage"},
+      {"label":"0x8870", "value":  "Jumbo Frames[2]"},
+      {"label":"0x888E", "value":  "EAP over LAN (IEEE 802.1X)"},
+      {"label":"0x8892", "value":  "PROFINET Protocol"},
+      {"label":"0x889A", "value":  "HyperSCSI (SCSI over Ethernet)"},
+      {"label":"0x88A8", "value":  "Provider Bridging (IEEE 802.1ad) & Shortest Path Bridging IEEE 802.1aq[5]"},
+      {"label":"0x88AB", "value":  "Ethernet Powerlink[来源请求]"},
+      {"label":"0x88CC", "value":  "链路层发现协议 (LLDP)"},
+      {"label":"0x88E1", "value":  "HomePlug AV MME[来源请求]"},
+      {"label":"0x88E3", "value":  "Media Redundancy Protocol (IEC62439-2)"},
+      {"label":"0x88E5", "value":  "MAC security (IEEE 802.1AE)"},
+      {"label":"0x88E7", "value":  "Provider Backbone Bridges (PBB) (IEEE 802.1ah)"},
+      {"label":"0x88F7", "value":  "Precision Time Protocol (PTP) over Ethernet (IEEE 1588)"},
+      {"label":"0x8902", "value":  "IEEE 802.1ag Connectivity Fault Management (CFM) Protocol / ITU-T Recommendation Y.1731 (OAM)"},
+      {"label":"0x8906", "value":  "Fibre Channel over Ethernet (FCoE)"},
+      {"label":"0x8914", "value":  "FCoE Initialization Protocol"},
+      {"label":"0x8915", "value":  "RDMA over Converged Ethernet (RoCE)"},
+      {"label":"0x892F", "value":  "High-availability Seamless Redundancy (HSR)"},
+      {"label":"0x9000", "value":  "Ethernet Configuration Testing Protocol[6]"},
+      {"label":"0x9100", "value":  "VLAN-tagged (IEEE 802.1Q) frame with double tagging[7]"}];
+
+    scope.showToolTip = ($event) => {
+      this.di.$rootScope.$emit("show_tooltip",{event:$event, value: ethtype_tips});
+    };
+
+    scope.hideToolTip = ($event) => {
+      this.di.$rootScope.$emit("hide_tooltip");
+    };
 
     unsubscribes.push(this.di.$rootScope.$on('flow-wizard-show', ($event, deviceId) => {
       scope.open(deviceId);

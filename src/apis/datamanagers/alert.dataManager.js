@@ -27,7 +27,7 @@ export class AlertDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(null);
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -42,7 +42,7 @@ export class AlertDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(null);
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -99,7 +99,7 @@ export class AlertDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(null);
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -113,7 +113,7 @@ export class AlertDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(null);
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -173,7 +173,7 @@ export class AlertDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(null);
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -231,7 +231,7 @@ export class AlertDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(null);
+        defer.reject(error);
       }
     );
     return defer.promise;

@@ -15,6 +15,7 @@ export class InformController {
       'appService',
       'roleService',
       'tableProviderFactory',
+      'notificationService',
       'alertDataManager',
       'dialogService',
       'alertService'
@@ -85,7 +86,10 @@ export class InformController {
             .then((data) =>{
               this.di.alertDataManager.deleteReceiveGroup(event.data.group_name)
                 .then((res) =>{
+                  this.di.notificationService.renderSuccess(scope, this.translate('MODULES.ALERT.RECEIVE_GROUP.REMOVE_GROUP.SUCCESS'))
                   scope.informModel.receiveGroupTb.informAPI.queryUpdate();
+                },(error)=>{
+                  this.di.notificationService.renderWarning(scope, error)
                 });
             }, (res) =>{
               this.di.$log.debug('delete receive group dialog cancel');
@@ -126,12 +130,11 @@ export class InformController {
           if(validateServerConfig(param)){
             this.di.alertDataManager.setAlertGroupBasicConfig(param)
               .then((res) => {
-
+                this.di.notificationService.renderSuccess(scope, this.translate('MODULES.ALERT.SERVER_CONFIG.CREATE.SUCCESS'))
               },(error) => {
-
+                this.di.notificationService.renderWarning(scope, error)
               });
           }
-
         },(res)=>{
 
         })
@@ -146,8 +149,10 @@ export class InformController {
         .then((data)=>{
           this.di.alertDataManager.deleteAlertGroupBasicConfig()
             .then((res) => {
+              this.di.notificationService.renderSuccess(scope, this.translate('MODULES.ALERT.SERVER_CONFIG.REMOVE.SUCCESS'))
               clearServerConfig();
-            }, () => {
+            }, (error) => {
+              this.di.notificationService.renderWarning(scope, error);
               clearServerConfig();
             });
         },(res)=>{
@@ -223,6 +228,7 @@ export class InformController {
     // };
 
     unSubscribers.push(this.di.$rootScope.$on("receivegroup-refresh",()=>{
+      this.di.notificationService.renderSuccess(scope, this.translate('MODULES.ALERT.RECEIVE_GROUP.CREATE_GROUP.SUCCESS'))
       scope.informModel.receiveGroupTb.informAPI.queryUpdate();
     }));
 

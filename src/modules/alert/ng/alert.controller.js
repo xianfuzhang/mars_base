@@ -10,6 +10,7 @@ export class AlertController {
       'roleService',
       'dialogService',
       'appService',
+      'notificationService',
       'tableProviderFactory',
       'alertDataManager',
       'alertService'
@@ -76,7 +77,10 @@ export class AlertController {
             .then((data) =>{
               this.di.alertDataManager.deleteAlertHistory(event.data.uuid)
                 .then((res) =>{
+                  this.di.notificationService.renderSuccess(scope, this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORY.SUCCESS'));
                   scope.alertModel.alertAPI.queryUpdate();
+                },(error)=>{
+                  this.di.notificationService.renderWarning(scope, error)
                 });
             }, (res) =>{
               this.di.$log.debug('delete alert history dialog cancel');
@@ -173,9 +177,11 @@ export class AlertController {
     let defer = this.di.$q.defer();
     this.di.alertDataManager.deleteAlertHistoriesSelected(uuids)
       .then(() => {
+        this.di.notificationService.renderSuccess(scope, this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES.SUCCESS'));
         scope.alertModel.alertAPI.queryUpdate();
         defer.resolve();
-      }, () => {
+      }, (error) => {
+        this.di.notificationService.renderWarning(scope, error);
         scope.alertModel.alertAPI.queryUpdate();
         defer.resolve();
       });

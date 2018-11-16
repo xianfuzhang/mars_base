@@ -719,14 +719,17 @@ export class DeviceService {
         {'field':'vlan_id', 'type':'int_with_zero', 'require':'true'}
       ],
       '20':[
-        {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        // {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        {'field': 'ether_type', 'type': 'string', 'require': 'true'},
         {'field':'destination_mac', 'type':'mac', 'require':'true'}
       ],
       '30':[
-        {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]}
+        // {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]}
+        {'field': 'ether_type', 'type': 'string', 'require': 'true'},
       ],
       '40':[
-        {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        // {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        {'field': 'ether_type', 'type': 'string', 'require': 'true'},
       ],
       '50':[
         {'field':'vlan_id', 'type':'int','require':'true'},
@@ -845,7 +848,7 @@ export class DeviceService {
     return   {
       '10': [
         {'field': 'vlan_id', 'type': 'int', 'require': 'true','field_label':'vlan'},
-        {'field': 'push_vlan', 'input_type':'checkbox' , 'require': 'false', 'displayLabel':{'id': 'check_push', 'label': 'Push Vlan'}},
+        // {'field': 'push_vlan', 'input_type':'checkbox' , 'require': 'false', 'displayLabel':{'id': 'check_push', 'label': 'Push Vlan'}},
       ],
       '20': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
       '30': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
@@ -939,7 +942,9 @@ export class DeviceService {
         {'field': 'in_port', 'type': 'int', 'require': 'true'},
       ],
       'ether_type': [
-        {'field': 'ether_type', 'type': 'int', 'require': 'true', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        {'field': 'ether_type', 'type': 'string', 'require': 'true'},
+        // {'field': 'ether_type', 'type': 'string', 'require': 'true', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        //{'label':'PROFINET','value':'0x8892'}
       ],
       'source_mac': [
         {'field': 'source_mac', 'type': 'mac', 'require': 'true'},
@@ -948,6 +953,14 @@ export class DeviceService {
       'destination_mac': [
         {'field': 'destination_mac', 'type': 'mac', 'require': 'true'},
         // {'field': 'destination_mac_mask', 'type': 'string', 'require': 'false'},
+      ],
+      'source_mac_masked': [
+        {'field': 'source_mac_masked', 'type': 'mac', 'require': 'true'},
+        {'field': 'mask', 'type': 'mac', 'require': 'true'},
+      ],
+      'destination_mac_masked': [
+        {'field': 'destination_mac_masked', 'type': 'mac', 'require': 'true'},
+        {'field': 'mask', 'type': 'mac', 'require': 'true'},
       ],
       'vlan_id': [
         {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
@@ -1055,8 +1068,16 @@ export class DeviceService {
     if(res['field_type']){
       delete res['field_type'];
     }
-
     return res;
+  }
+
+  getCriteriaMacMasked(v0, v1){
+    let field = v0['field'];
+    return {
+      "type": field === 'source_mac_masked'?'ETH_SRC_MASKED':"ETH_DST_MASKED",
+      "mac": v0['value'],
+      "macMask": v1['value']
+    };
   }
 
   getCriteriaReferenceObject(objId, defaultValue){
