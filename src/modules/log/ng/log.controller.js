@@ -81,6 +81,8 @@ export class LogController {
     
     this.scope.onKeywordChange = (keywordStr) => {
       this.logKeywords = [];
+      if(!keywordStr) return;
+      
       let tmpArr = keywordStr.split(' ');
       tmpArr.forEach((keyword) => {
         if(keyword) {
