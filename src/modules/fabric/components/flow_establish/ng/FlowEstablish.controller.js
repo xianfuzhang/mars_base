@@ -159,8 +159,12 @@ export class FlowEstablishController {
       } else {
         input['value'] = '';
       }
-      if(input['field'] === 'vlan_id'){
+      if(input['field'] === 'vlan_id') {
         input['field_label'] = 'VLAN';
+      } else if (input['field'] === 'source_mac_masked'){
+        input['field_label'] = 'Source Mac';
+      } else if (input['field'] === 'destination_mac_masked'){
+        input['field_label'] = 'Destination Mac';
       } else {
         input['field_label'] = input['field'].replace('_',' ');
       }
@@ -497,6 +501,24 @@ export class FlowEstablishController {
       if(curOptId === 'vlan_pcp'){
         if(_ifTable60SchemaListContain('vlan_id')){
           _addTable60SelectItem('vlan_id');
+        }
+      } else if(curOptId === 'source_mac_masked' || curOptId === 'source_mac'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['source_mac_masked'] || input['source_mac']){
+            let errorMessage = "不可以同时指定2个源MAC!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
+        }
+      }  else if(curOptId === 'destination_mac_masked' || curOptId === 'destination_mac'){
+        for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
+          let input = scope.criteriaPageSecondInputs[i];
+          if(input['destination_mac_masked'] || input['destination_mac']){
+            let errorMessage = "不可以同时指定2个目的MAC!";
+            scope.errorMessage = errorMessage;
+            return false;
+          }
         }
       } else if(curOptId === 'source_ipv4' || curOptId === 'destination_ipv4'){
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
@@ -956,15 +978,20 @@ export class FlowEstablishController {
 
               //暂时先处理mask相关的代码，其他多字段连接类型另加逻辑处理// TODO
               let v0 , v1;
-              if(value[0].field.indexOf('mask') !== -1){
+              if(value[0].field.indexOf('mask') !== -1 && value[0].field.indexOf('mac') === -1){
                 v0 = value[1];
                 v1 = value[0];
               } else {
                 v0 = value[0];
                 v1 = value[1];
               }
-              v0.value = v0.value + '/' + v1.value;
-              let res = this.di.deviceService.getCriteriaObject(v0);
+              let res;
+              if(v0['field'].indexOf('mac') !== -1){
+                res = this.di.deviceService.getCriteriaMacMasked(v0, v1);
+              } else {
+                v0.value = v0.value + '/' + v1.value;
+                res = this.di.deviceService.getCriteriaObject(v0);
+              }
               if(res !== null) criteria.push(res);
 
             }
