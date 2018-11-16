@@ -342,7 +342,7 @@ export class FlowEstablishController {
       if(!_ifTable60SchemaListContain('source_ipv4') || !_ifTable60SchemaListContain('destination_ipv4')){
         if(!_ifTable60SchemaListContain('ether_type')){
           let res = _getValueFromSecondInputs('ether_type');
-          if(res !== null && res !== '0x0800'){
+          if(res !== null && res.toLowerCase() !== '0x0800'){
             status = false;
             message = "SOURCE_IPV4/DESTINATION_IPV4 对应的 ETH_TYPE 不正确!";
           }
@@ -352,24 +352,32 @@ export class FlowEstablishController {
       if(!_ifTable60SchemaListContain('source_ipv6')|| !_ifTable60SchemaListContain('destination_ipv6') || !_ifTable60SchemaListContain('ipv6_flow_label')){
         if(!_ifTable60SchemaListContain('ether_type')){
           let res = _getValueFromSecondInputs('ether_type');
-          if(res !== null && res !== '0x86dd'){
+          if(res !== null && res.toLowerCase() !== '0x86dd'){
             status = false;
-            message = "SOURCE_IPV6/DESTINATION_IPV6/IPV6_FLOW_LABEL 对应的 ETH_TYPE 不正确!";
+            message = "SOURCE_IPV6/DESTINATION_IPV6/IPV6_FLOW_LABEL 对应的 ETH_TYPE 为 0x86dd!";
           }
         }
       }
 
-      // if(!_ifTable60SchemaListContain('ip_dscp') || !_ifTable60SchemaListContain('ip_dscp') || !_ifTable60SchemaListContain('ip_dscp')){
-      //   if(_ifTable60SchemaListContain('ether_type')){
-      //     _addTable60SelectItem('ether_type');
-      //   }
-      // }
+      if(!_ifTable60SchemaListContain('ip_dscp') || !_ifTable60SchemaListContain('ip_proto') || !_ifTable60SchemaListContain('ip_ecn')){
+          let res = _getValueFromSecondInputs('ether_type');
+          if(res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800'){
+            status = false;
+            message = "IP_DSCP/IP_PROTO/IP_ECN 对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+          }
+      }
 
       if(!_ifTable60SchemaListContain('tcp_sport') || !_ifTable60SchemaListContain('tcp_dport')){
         let res = _getValueFromSecondInputs('ip_proto');
         if(res !== null && res !== '6'){
           status = false;
           message = "TCP设置需要 IP_PROTO 为 6!";
+        }
+
+        res = _getValueFromSecondInputs('ether_type');
+        if(typeof res === 'string' && res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800' || res === null){
+          status = false;
+          message = "TCP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
         }
       }
 
@@ -379,6 +387,12 @@ export class FlowEstablishController {
           status = false;
           message = "UDP设置需要 IP_PROTO 为 17!";
         }
+
+        res = _getValueFromSecondInputs('ether_type');
+        if(typeof res === 'string' && res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800' || res === null){
+          status = false;
+          message = "UDP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+        }
       }
 
       if(!_ifTable60SchemaListContain('sctp_sport') || !_ifTable60SchemaListContain('sctp_dport')){
@@ -386,6 +400,12 @@ export class FlowEstablishController {
         if(res !== null && res !== '132'){
           res = false;
           message = "SCTP设置需要 IP_PROTO 为 132!";
+        }
+
+        res = _getValueFromSecondInputs('ether_type');
+        if(typeof res === 'string' && res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800' || res === null){
+          status = false;
+          message = "SCTP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
         }
       }
 
@@ -397,9 +417,9 @@ export class FlowEstablishController {
         }
 
         res = _getValueFromSecondInputs('ether_type');
-        if(res !== null && res !== '0x0800'){
+        if(res !== null && res.toLowerCase() !== '0x0800'){
           status = false;
-          message = "ICMPV4 对应的 ETH_TYPE 不正确!";
+          message = "ICMPV4 对应的 ETH_TYPE 为 0x0800!";
         }
       }
 
@@ -411,9 +431,9 @@ export class FlowEstablishController {
         }
 
         res = _getValueFromSecondInputs('ether_type');
-        if(res !== null && res !== '0x86dd'){
+        if(res !== null && res.toLowerCase() !== '0x86dd'){
           status = false;
-          message = "ICMPV6 对应的 ETH_TYPE 不正确!";
+          message = "ICMPV6 对应的 ETH_TYPE 为 0x86dd!";
         }
       }
 
@@ -485,12 +505,21 @@ export class FlowEstablishController {
             let errorMessage = "IPv4和IPv6不可以同时设置!";
             scope.errorMessage = errorMessage;
             return false;
+          } else if(input['icmpv6_type']|| input['icmpv6_code']){
+            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
           }
+
         }
       } else if(curOptId === 'source_ipv6' || curOptId === 'destination_ipv6' || curOptId === 'ipv6_flow_label'){
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['source_ipv4'] || input['destination_ipv4']){
+            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['icmpv4_type']|| input['icmpv4_code']){
             let errorMessage = "IPv4和IPv6不可以同时设置!";
             scope.errorMessage = errorMessage;
             return false;
@@ -569,6 +598,10 @@ export class FlowEstablishController {
             let errorMessage = "ICMPV4和ICMPV6不可以同时设置!";
             scope.errorMessage = errorMessage;
             return false;
+          } else if(input['source_ipv6'] || input['destination_ipv6'] || input['ipv6_flow_label']){
+            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
           }
         }
 
@@ -615,6 +648,10 @@ export class FlowEstablishController {
             return false;
           } else if(input['icmpv4_type']|| input['icmpv4_code']){
             let errorMessage = "ICMPV6和ICMPV4不可以同时设置!";
+            scope.errorMessage = errorMessage;
+            return false;
+          } else if(input['source_ipv4'] || input['destination_ipv4']){
+            let errorMessage = "IPv4和IPv6不可以同时设置!";
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -797,9 +834,9 @@ export class FlowEstablishController {
         }
       });
 
-      if(ethType === '0x0800' && this.di.deviceService.isIpv4MultiMAC(mac)){
+      if(ethType.toLowerCase() === '0x0800' && this.di.deviceService.isIpv4MultiMAC(mac)){
         return this.FLOW_TYPES.TABLE20.IPV4_MULTICAST_MAC;
-      } else if(ethType === '0x86dd' && this.di.deviceService.isIpv6MultiMAC(mac)){
+      } else if(ethType.toLowerCase() === '0x86dd' && this.di.deviceService.isIpv6MultiMAC(mac)){
         return this.FLOW_TYPES.TABLE20.IPV6_MULTICAST_MAC;
       } else if(mac.search(this.di.$scope.mac_regex) !== -1){
         return this.FLOW_TYPES.TABLE20.UNICAST_MAC;
@@ -816,9 +853,9 @@ export class FlowEstablishController {
         }
       });
 
-      if(ethType === '0x0800'){
+      if(ethType.toLowerCase() === '0x0800'){
         return this.FLOW_TYPES.TABLE30.IPV4_MULTICAST;
-      } else if(ethType === '0x86dd'){
+      } else if(ethType.toLowerCase() === '0x86dd'){
         return this.FLOW_TYPES.TABLE30.IPV6_MULTICAST;
       }
     };
@@ -831,9 +868,9 @@ export class FlowEstablishController {
         }
       });
 
-      if(ethType === '0x0800'){
+      if(ethType.toLowerCase() === '0x0800'){
         return this.FLOW_TYPES.TABLE40.IPV4_MULTICAST;
-      } else if(ethType === '0x86dd'){
+      } else if(ethType.toLowerCase() === '0x86dd'){
         return this.FLOW_TYPES.TABLE40.IPV6_MULTICAST;
       }
     };
