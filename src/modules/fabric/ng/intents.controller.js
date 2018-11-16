@@ -176,24 +176,12 @@ export class IntentsController {
       obj.appId = item.appId;
       obj.state = item.state;
       if (item.type === 'PointToPointIntent') {
-        if (item.resources.length === 2) {
-          let  srcArr = item.resources[0].split('/'),
-              dstArr = item.resources[1].split('/'),
-              srcDevice = this.di._.find(this.scope.devices, {'id': srcArr[0]}),
-              dstDevice = this.di._.find(this.scope.devices, {'id': dstArr[0]});
-          obj.src_end = ((srcDevice && srcDevice['name'])||srcArr[0]) + '/' + srcArr[1];
-          obj.dst_end = ((dstDevice && dstDevice['name'])||dstArr[0]) + '/' + dstArr[1];
-        }
-        else if (item.resources.length === 1) {
-          let  srcArr = item.resources[0].split('/'),
-               srcDevice = this.di._.find(this.scope.devices, {'id': srcArr[0]});
-          obj.src_end = ((srcDevice && srcDevice['name'])||srcArr[0]) + '/' + srcArr[1];
-          obj.dst_end = '-'; 
-        }
-        else {
-          obj.src_end = '-';
-          obj.dst_end = '-'; 
-        }
+        let  srcArr = item.ingressPoint.device,
+            dstArr = item.egressPoint.device,
+            srcDevice = this.di._.find(this.scope.devices, {'id': srcArr}),
+            dstDevice = this.di._.find(this.scope.devices, {'id': dstArr});
+        obj.src_end = ((srcDevice && srcDevice['name'])||srcArr) + '/' + item.ingressPoint.port;
+        obj.dst_end = ((dstDevice && dstDevice['name'])||dstArr) + '/' + item.egressPoint.port;
       }
       else {
         if (item.resources.length === 2) {

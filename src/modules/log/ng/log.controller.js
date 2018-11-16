@@ -7,6 +7,7 @@ export class LogController {
       '$q',
       '$timeout',
       '$window',
+      '$sce',
       'appService',
       'dialogService',
       'logService',
@@ -38,6 +39,15 @@ export class LogController {
     this.scope.today = new Date(today + ' 23:59:59');
     this.scope.dateFrom = new Date(today + ' 00:00:00');
     this.scope.dateTo = new Date(today + ' 23:59:59');
+  
+    this.wsService = this.di.wsService;
+    this.scope.updateRealtimeLogFlag = true;
+    this.MAX_LOG_NUM = 100;  // max number of logs
+    this.showRealtimeLogs = [];
+    this.hiddenRealtimeLogs = [];
+    this.scope.realtimeLogString = '';
+    this.scope.realtimeBtnTxt = '暂停更新';
+    this.scope.logKeyword = 'Error';
     
     // the params that had send to get data
     let dateObj = {from: null, to: null};
@@ -48,8 +58,6 @@ export class LogController {
       logProvider: null,
       logAPI: null
     };
-    
-    this.scope.realtimeLogs = [];
     
     this.scope.search = () => {
       this.scope.loading = true;
@@ -67,13 +75,24 @@ export class LogController {
       this.scope.logModel.logAPI = $api;
     };
   
-    this.scope.onTabChange= (tab) => {
+    this.scope.onTabChange = (tab) => {
       if (tab){
         this.scope.tabSelected = tab;
       }
     };
     
+    this.scope.onUpdateBtn = () => {
+      this.scope.updateRealtimeLogFlag = !this.scope.updateRealtimeLogFlag;
+      if(this.scope.updateRealtimeLogFlag) {
+        this.scope.realtimeBtnTxt = '暂停更新';
+      } else {
+        this.scope.realtimeBtnTxt = '继续更新';
+      }
+    }
+    
     this.scope.tabs = this.getTabSchema();
+  
+    this.scope.tabSelected = this.scope.tabs[0];
     
     this.unsubscribers = [];
   
@@ -97,24 +116,57 @@ export class LogController {
         this.di.dialogService.createDialog(res.isJson?'info_json':'info', res.ret).then((data)=>{},(err)=>{});
       }
     }));
-
+  
+    this.unsubscribers.push(this.di.$scope.$watch('updateRealtimeLogFlag', (newVal, oldVal) => {
+      if(newVal == oldVal)return;
+      if (newVal == true && this.scope.hiddenRealtimeLogs.length) {
+        this.showRealtimeLogs.splice(0, 0, ...this.hiddenRealtimeLogs);
+        this.showRealtimeLogs = this.showRealtimeLogs.splice(0, this.MAX_LOG_NUM);
+        this.scope.realtimeLogString = this.showRealtimeLogs.join('<br /><br />')
+        this.hiddenRealtimeLogs = [];
+      }
+    }));
+  
     this.scope.$on('$destroy', () => {
       this.unsubscribers.forEach((cb) => {
         cb();
       });
+      // close websocket
+      this.wsService.unsubscribe('');
+      this.wsService.kill();
     });
   }
   
   init() {
-    // get real time log
-    const wsService = this.di.wsService;
-    wsService.init();
+    // get realtime log
+    try {
+      this.wsService.init();
+    } catch(e) {
+      console.error(e.message)
+    } finally {
+      this.wsService.subscribe('', {}, (response) => {
+        let log = response.message;
   
-    wsService.subscribe('', {}, (response) => {
-      let log = response.message;
-      this.scope.realtimeLogs.splice(0, 0, log);
-    })
-    
+        if(this.scope.updateRealtimeLogFlag) {
+          let message = this.getFormatLog(log);
+          this.showRealtimeLogs.splice(0, 0, message);
+          
+          if(this.showRealtimeLogs.length > this.MAX_LOG_NUM) { // only save MAX_LOG_NUM logs
+            this.showRealtimeLogs = this.showRealtimeLogs.slice(0, this.MAX_LOG_NUM);
+          }
+        } else {
+          this.hiddenRealtimeLogs.splice(0, 0, log);
+  
+          if(this.hiddenRealtimeLogs.length > this.MAX_LOG_NUM) { // only save MAX_LOG_NUM logs
+            this.hiddenRealtimeLogs = this.hiddenRealtimeLogs.slice(0, this.MAX_LOG_NUM);
+          }
+        }
+        
+        this.scope.realtimeLogString = this.di.$sce.trustAsHtml(this.showRealtimeLogs.join('<br /><br />'));
+        this.scope.$apply();
+      })
+    }
+  
     // get system history log
     this.scope.logModel.logProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
@@ -160,15 +212,27 @@ export class LogController {
     });
   }
   
+  getFormatLog(log) {
+    let message = log;
+
+    if(this.scope.logKeyword) { // TODO: based on requirement, mark the key word
+      let regex = new RegExp(this.scope.logKeyword, 'gi');
+      let replacement = '<span style="color:yellow">' + this.scope.logKeyword + '</span>'
+      message = message.replace(regex, replacement)
+    }
+
+    return message;
+  }
+  
   getTabSchema() {
     return [
       {
-        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.LINK'),
+        'label': '实时日志',
         'value': 'realtime',
         'type': 'realtime'
       },
       {
-        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.PORT'),
+        'label': '历史日志',
         'value': 'history',
         'type': 'history'
       }

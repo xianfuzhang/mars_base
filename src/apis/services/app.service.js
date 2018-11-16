@@ -377,6 +377,10 @@ export class appService {
     return this.getZoneEndpoint() + '/intents';
   }
 
+  getIntentsConfigUrl() {
+    return this.getZoneEndpoint() + '/intents/config';
+  }
+
   getDeleteIntentUrl(appId, key) {
     return this.getZoneEndpoint() + '/intents/' + appId + '/' + key;
   }
