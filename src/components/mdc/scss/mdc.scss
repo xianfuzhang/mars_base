@@ -83,6 +83,7 @@
 }
 .mdc-tab-field.mdc-tab-bar{
   display: flex;
+  user-select: none;
 }
 .mdc-tab-bar .mdc-tab{
   margin-right: 5px;
