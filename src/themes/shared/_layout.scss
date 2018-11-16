@@ -63,8 +63,8 @@ input:-webkit-autofill:active {
   overflow: hidden;
   padding: 0 24px;
   flex-direction: column;
-  height: 90%;
-  //min-height: 600px;
+  /* height: 90%; */
+  margin-bottom: 80px;
 }
 .main__content__full-width{
   width: 100%;
