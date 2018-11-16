@@ -954,6 +954,14 @@ export class DeviceService {
         {'field': 'destination_mac', 'type': 'mac', 'require': 'true'},
         // {'field': 'destination_mac_mask', 'type': 'string', 'require': 'false'},
       ],
+      'source_mac_masked': [
+        {'field': 'source_mac_masked', 'type': 'mac', 'require': 'true'},
+        {'field': 'mask', 'type': 'mac', 'require': 'true'},
+      ],
+      'destination_mac_masked': [
+        {'field': 'destination_mac_masked', 'type': 'mac', 'require': 'true'},
+        {'field': 'mask', 'type': 'mac', 'require': 'true'},
+      ],
       'vlan_id': [
         {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
       ],
@@ -1060,8 +1068,16 @@ export class DeviceService {
     if(res['field_type']){
       delete res['field_type'];
     }
-
     return res;
+  }
+
+  getCriteriaMacMasked(v0, v1){
+    let field = v0['field'];
+    return {
+      "type": field === 'source_mac_masked'?'ETH_SRC_MASKED':"ETH_DST_MASKED",
+      "mac": v0['value'],
+      "macMask": v1['value']
+    };
   }
 
   getCriteriaReferenceObject(objId, defaultValue){
