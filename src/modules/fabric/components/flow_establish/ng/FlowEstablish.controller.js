@@ -1066,7 +1066,6 @@ export class FlowEstablishController {
         })
       }
 
-
       //增加goto table
       let gotoTable = this.di.deviceService.getFlowTableGotoTableByFilter(scope.flowTypeJson['tableId'], scope.flowTypeJson['type']);
       if(gotoTable){
@@ -1106,6 +1105,13 @@ export class FlowEstablishController {
 
       di.$rootScope.$emit('page_flow_instruction');
       if(!validCurrentDom('flow_instruction')){
+        return new Promise((resolve, reject) => {
+          resolve(inValidJson_Copy);
+        });
+      }
+
+      if(scope.flowTypeJson['tableId'] === '50' && (scope.treatmentPageGroup.groups === null || scope.treatmentPageGroup.groupSelected.value === -1)){
+        inValidJson_Copy['errorMessage'] = "Table 50的flow需要指定group!";
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
