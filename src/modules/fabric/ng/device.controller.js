@@ -68,21 +68,24 @@ export class DeviceController {
         this.scope.deviceModel.deviceAPI.setSelectedRow(event.$data.mac);
       }
     };
-/*
-    this.scope.onPortTableRowActionsFilter = (event) =>{
+
+    this.scope.onTableRowActionsFilter = (event) =>{
       let filterActions = [];
       if (event.data) {
         event.actions.forEach((action) =>{
-          if (event.data.isEnabled && action.value === 'disable') {
+          if (event.data.type !== 'unknown') {
+            filterActions.push(action);
+          }
+          /*if (event.data.isEnabled && action.value === 'disable') {
             filterActions.push(action);
           }
           else if (!event.data.isEnabled && action.value === 'enable') {
             filterActions.push(action);
-          }
+          }*/
         });
       }
       return filterActions;
-    };*/
+    };
 
     this.scope.onTableRowSelectAction = (event) => {
       if (event.data && event.action) {
