@@ -1,7 +1,7 @@
 const router = require('express').Router(),
       cloudLib = require('../lib/cloud');
 
-router.get('/', (req, res) => {
+router.get('/config', (req, res) => {
   return res.json({intents: cloudModel.intents});
 });
 router.post('/', function (req, res) {

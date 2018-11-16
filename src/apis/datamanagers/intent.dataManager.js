@@ -16,7 +16,7 @@ export class IntentDataManager {
 	getIntents(params) {
 		let defer = this.di.$q.defer();
     
-    this.di.$http.get(this.di.appService.getIntentsUrl(), {'params': params}).then(
+    this.di.$http.get(this.di.appService.getIntentsConfigUrl(), {'params': params}).then(
       (res) => {
         defer.resolve(res);
       },
