@@ -80,15 +80,22 @@ export class LogController {
     };
     
     this.scope.onKeywordChange = (keywordStr) => {
-      this.logKeywords = [];
-      if(!keywordStr) return;
-      
+      keywordStr = keywordStr.trim();
+      if(!keywordStr) {
+        this.logKeywords = [];
+        return
+      }
+  
+      let tmpKeywords = [];
+      keywordStr = keywordStr.replace(/[,;]/g,' ');
       let tmpArr = keywordStr.split(' ');
       tmpArr.forEach((keyword) => {
         if(keyword) {
-          this.logKeywords.push(keyword);
+          tmpKeywords.push(keyword);
         }
       })
+      
+      this.logKeywords = tmpKeywords;
     }
     
     this.scope.onUpdateBtn = () => {
