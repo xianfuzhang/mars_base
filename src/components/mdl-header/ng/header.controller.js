@@ -26,9 +26,12 @@ export class headerController{
     this.scope.location = (url, event) => {
       event && event.stopPropagation();
       if (url === '/logout') {
-        this.di.loginDataManager.doLogout().then(() => {
+        this.di.$cookies.remove('useraccount');
+        this.di.$cookies.remove('menu');
+        this.di.$location.path(url);
+        /*this.di.loginDataManager.doLogout().then(() => {
           this.di.$location.path(url);
-        });
+        });*/
       }
       else {
         this.di.$location.path(url);
