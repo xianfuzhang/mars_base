@@ -30,7 +30,9 @@ export class WebsocketService {
       unVisCount = 0,
       stopCommunication = false,
       maxVisCount = 180,
-      channelsToSubscribeOnOpen = [];
+      channelsToSubscribeOnOpen = [],
+      isClosedPurposely = false; // close the connection purposely
+    
     var $log = this.di.$log;
     var $window = this.di.$window;
     var appService  = this.di.appService;
@@ -51,6 +53,11 @@ export class WebsocketService {
             ee.removeListeners(channel, ee.flattenListeners(ee.getListeners(channel)));
           }
         });
+  
+        // close purposely
+        isClosedPurposely = true;
+        clearInterval(heartbeatInterval);
+        heartbeatInterval = null;
       }
     }
 
@@ -108,6 +115,12 @@ export class WebsocketService {
       $log.log('[marsWebsockets] RE-initialize websockets connection');
       if(!ws) return;
       
+      if(isClosedPurposely) {
+        clearInterval(reconnectInterval);
+        reconnectInterval = null;
+        return;
+      }
+      
       delete ws.onopen;
       delete ws.onclose;
       delete ws.onmessage;
@@ -121,7 +134,7 @@ export class WebsocketService {
         } catch (e){
           $log.warn('[marsWebsockets] Reconnect to websocket server error! let us sleep 2s');
         }
-      },2000);
+      }, 10000);
     };
 
     function subscribeToChannel (channel, query, cb) {
