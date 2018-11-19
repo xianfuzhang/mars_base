@@ -117,6 +117,12 @@ mdc设置组件颜色
 .mdl-table-body__row td .status_icon.unavailable{
   background-position: -48px -15px;
 }
+.mdl-table-body__row td .loading{
+  height: 34px;
+  width: 34px;
+  background-image: url('../images/loading.gif');
+  background-size: 34px 34px;
+}
 .mdl-table-header__row th {
   text-align: center;
   user-select: none;

@@ -70,6 +70,9 @@ export class mdlTable {
 
       columns: [],
       columnsByField: {},
+
+      loading: true,
+
       //sortByField: {},
       pagination: {
         numberOfPages: 1,              //总页数
@@ -272,17 +275,17 @@ export class mdlTable {
       //scope._prepareFilteredData();
       scope.tableModel.filteredData = scope.tableModel.data;
 
-      scope.onDataReady();
+      //scope.onDataReady();
       scope._render();
     };
 
     scope._onDataError = () => {
       scope.tableModel.data = [];
-      scope.onDataReady();
+      //scope.onDataReady();
       scope._render();
     };
 
-    scope.onDataReady = () => {
+    scope.onTableHeaderInit = () => {
       renders = [];
       //scope.tableModel.columns = [];
       //scope.tableModel.columnsByField = {};
@@ -400,11 +403,14 @@ export class mdlTable {
 
     scope._queryUpdate = () => {
       let params = scope._getTableParams();
+      scope.tableModel.loading = true;
       return scope.provider.query(params).then(
         function (response) {
+          scope.tableModel.loading = false;
           scope._onDataSuccess(response);
         },
         () => {
+          scope.tableModel.loading = false;
           scope._onDataError();
         }
       );
@@ -469,10 +475,14 @@ export class mdlTable {
       };
 
       if (scope.provider) {
+        scope.tableModel.loading = true;
+        scope.onTableHeaderInit();
         scope.provider.query(scope._getTableParams())
           .then(function (response) {
+            scope.tableModel.loading = false;
             scope._onDataSuccess(response);
-            }, function () {
+          }, function () {
+            scope.tableModel.loading = false;
             scope._onDataError();
           })
           .finally(() => {

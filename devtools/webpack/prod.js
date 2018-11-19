@@ -101,7 +101,7 @@ module.exports = function (config) {
           ]
         },
         {
-          test: /\.(jpg|svg|png|woff|woff2|eot|ttf)$/,
+          test: /\.(jpg|svg|png|woff|woff2|eot|ttf|gif)$/,
           //exclude: /node_modules/,
           use: [
             {

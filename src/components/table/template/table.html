@@ -81,10 +81,13 @@
       </div>
       <div class="mdl-table-body">
         <table class="mdl-table">
-          <tbody ng-if="tableModel.filteredData.length===0">
+          <tbody ng-if="tableModel.loading">
+            <tr class="mdl-table-body__row"><td class="text-center"><span class="loading"></span></td></tr>
+          </tbody>
+          <tbody ng-if="!tableModel.loading && tableModel.filteredData.length===0">
             <tr class="mdl-table-body__row"><td class="text-center" ng-bind="'MODULES.TABLE.RESULT.NODATA'|translate"></td></tr>
           </tbody>
-          <tbody ng-if="tableModel.filteredData.length>0">
+          <tbody ng-if="!tableModel.loading && tableModel.filteredData.length>0">
             <tr class="mdl-table-body__row"
                 ng-repeat="$data in tableModel.filteredData track by $index"
                 ng-class="{'mdl-table-body__row__highlight': _isSelected($data[tableModel.index_name]),
