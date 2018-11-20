@@ -37,6 +37,7 @@ export class logicalService {
     return [
       {
         'label': this.translate("MODULES.LOGICAL.TENANT.TABLE.NAME"),
+        'type': 'clickabletext',
         'field': 'name',
         'layout': {'visible': true, 'sortable': true, 'fixed': true},
       },
