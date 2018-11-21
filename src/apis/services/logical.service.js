@@ -49,6 +49,42 @@ export class logicalService {
     ];
   }
 
+  getSegmentMemberTypeLabel(){
+    return {'options':[
+      {'label': 'VLAN', 'value': 'vlan'},
+      {'label': 'VXLAN', 'value':'vxlan'}
+    ]}
+  }
+
+  getSegmentMemberVlanTypeLabel(){
+    return {'options':[
+      {'label': 'Normal', 'value': 'normal'},
+      {'label': 'Logical', 'value':'logical'},
+      {'label': 'Macbased', 'value':'macbased'}
+    ]}
+  }
+
+  getSegmentMemberVxlanTypeLabel(){
+    return {'options':[
+      {'label': 'Access', 'value': 'access'},
+      {'label': 'Network', 'value':'network'}
+    ]}
+  }
+
+  getSegmentMemberVxlanAccessTypeLabel(){
+    return {'options':[
+      {'label': 'Normal', 'value': 'normal'},
+      {'label': 'Openstack', 'value':'openstack'}
+    ]}
+  }
+
+  getSegmentMemberTagLabel(){
+    return {'options':[
+      {'label': 'Tag', 'value': 'tag'},
+      {'label': 'Untag', 'value':'untag'}
+    ]}
+  }
+
 
 }
 
