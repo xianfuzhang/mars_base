@@ -282,6 +282,13 @@ angular
         resolve: {
           loggedin: checkLoggedIn
         }
+      }).
+      when('/tenant/:tenantName', {
+        template: require('./modules/logical/template/tenantDetail.html'),
+        controller: 'tenantDetailCtrl',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
       })
       .otherwise({ redirectTo: '/' });
 

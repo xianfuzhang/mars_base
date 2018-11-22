@@ -456,8 +456,15 @@ export class appService {
     return this.getZoneEndpoint() + "/tenants/v1/segments";
   }
 
+  getSegmentVxlanMemberUrl(tenantName, segmentName) {
+    return this.getZoneEndpoint() + "/tenants/v1/"+ tenantName+"/segments/" + segmentName + "/vxlan";
+  }
 
-  getTenantSegmentMemberVlanURl(tenant_name, segment_name, device_name){
+  getSegmentVlanMemberUrl(tenantName, segmentName) {
+    return this.getZoneEndpoint() + "/tenants/v1/"+ tenantName+"/segments/" + segmentName + "/vlan";
+  }
+  
+    getTenantSegmentMemberVlanURl(tenant_name, segment_name, device_name){
     return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}/device/${device_name}/vlan`
   }
 
@@ -465,8 +472,6 @@ export class appService {
   getTenantSegmentMemberVxlanURl(tenant_name, segment_name){
    return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}/vxlan`
   }
-
-
 }
 
 appService.$inject = appService.getDI();

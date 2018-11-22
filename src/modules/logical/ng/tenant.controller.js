@@ -8,6 +8,7 @@ export class TenantController {
       '$filter',
       '$q',
       '$log',
+      '$location',
       '$uibModal',
       'appService',
       'logicalService',
@@ -171,6 +172,12 @@ export class TenantController {
         this.di.notificationService.renderSuccess(scope,this.translate('MODULES.LOGICAL.TENANT.CREATE.SUCCESS'));
       }
       scope.tenantModel.tenantAPI.queryUpdate();
+    }));
+    unsubscribes.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
+      //location path to tenant detail
+      if (params && params.field === 'name') {
+        this.di.$location.path('/tenant/' + params.object.name);
+      }
     }));
 
     scope.$on('$destroy', () => {
