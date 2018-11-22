@@ -27,7 +27,7 @@ export class LogicalDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(null);
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -42,7 +42,7 @@ export class LogicalDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(error);
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -55,7 +55,7 @@ export class LogicalDataManager{
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve(error);
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -102,6 +102,64 @@ export class LogicalDataManager{
     );
     return defer.promise;
   }
+
+  getTenantSegmentMemberVlan(tenant_name, segment_name, device_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantSegmentMemberVlanURl(tenant_name, segment_name, device_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  postTenantSegmentMemberVlan(tenant_name, segment_name, device_name, param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getTenantSegmentMemberVlanURl(tenant_name, segment_name, device_name), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  getTenantSegmentMemberVxlan(tenant_name, segment_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantSegmentMemberVxlanURl(tenant_name, segment_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  postTenantSegmentMemberVxlan(tenant_name, segment_name, param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getTenantSegmentMemberVxlanURl(tenant_name, segment_name), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
 
 
 
