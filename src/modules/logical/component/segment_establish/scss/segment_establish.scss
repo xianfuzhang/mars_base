@@ -1,0 +1,53 @@
+@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+.multiple_ip {
+}
+
+.multiple_ip .title {
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  width: 70px;
+  padding: 2px;
+  text-align: center;
+  font-size: 15px;
+  color: #000;
+  background-color: #fff;
+  box-shadow: 5px 5px 5px grey;
+  border-radius: 3px;
+}
+
+.multiple_ip .types-label {
+  position:relative;
+  display:inline-block;
+  margin: 10px 7px 0 0;
+  border-radius:3px;
+  background-color:#7accef;
+  padding:5px 3px;
+  color:#fff;
+}
+
+.multiple_ip .removeBtn {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  border-radius: 8px;
+  width: 15px;
+  height: 15px;
+  font-size: 3px;
+  text-align:center;
+  vertical-align: middle;
+  color: white;
+  background-color: red;
+  cursor: pointer;
+}
+
+.multiple_ip .add-btn{
+  display:inline-flex;
+  height:28px;
+  margin-left:5px;
+  vertical-align:bottom;
+  cursor:pointer
+}

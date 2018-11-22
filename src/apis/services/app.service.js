@@ -47,7 +47,7 @@ export class appService {
             'role': 2,
             'items':[
               {'label': 'Tenant', 'url': '/tenant', 'role': 2},
-              // {'label': 'Segment', 'url': '/segment', 'role': 2},
+              {'label': 'Segment', 'url': '/segment', 'role': 2},
              ]
            },
           {
@@ -420,7 +420,22 @@ export class appService {
   getElasticsearchBackupUrl(backup_name) {
     return this.getZoneEndpoint(true) + `/utility/elasticsearch/v1/_snapshot/${backup_name}`;
   }
-
+  
+  getSegmentUrl(tenant_name, segment_name){
+    let path_url = '/tenants/v1';
+    if(tenant_name) {
+      path_url = path_url + '/' + tenant_name;
+    }
+  
+    path_url = path_url + '/segments';
+    
+    if(segment_name) {
+      path_url = path_url + '/' + segment_name;
+    }
+    
+    return this.getZoneEndpoint() + path_url;
+  }
+  
   getTenantUrl(){
     return this.getZoneEndpoint() + "/tenants/v1";
   }

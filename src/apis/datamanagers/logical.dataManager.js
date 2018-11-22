@@ -60,6 +60,48 @@ export class LogicalDataManager{
     );
     return defer.promise;
   }
+  
+  getSegments(params, tenant){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getSegmentUrl(tenant), {params: params}).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve({data: {segments: []}, count: 0});
+      }
+    );
+    return defer.promise;
+  }
+  
+  
+  postSegment(tenant, param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getSegmentUrl(tenant), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.resolve(error);
+      }
+    );
+    return defer.promise;
+  }
+  
+  deleteTenant(name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTenantDeleteUrl(name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve(error);
+      }
+    );
+    return defer.promise;
+  }
 
   getTenantSegmentMemberVlan(tenant_name, segment_name, device_name){
     let defer = this.di.$q.defer();
