@@ -44,7 +44,7 @@ export class GroupEstablishController {
       {
         id: 'step1',
         title: '',
-        content: require('../template/group')
+        content: require('../template/group_establish.html')
       }
     ];
   

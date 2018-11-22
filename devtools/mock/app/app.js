@@ -20,6 +20,7 @@ var express = require('express'),
   intentController = require('./controllers/intent'),
   dhcpController = require('./controllers/dhcp'),
   elasticsearchController = require('./controllers/elasticsearch'),
+  tenantController = require('./controllers/tenant'),
   app = express(),
   //expressSession = require('express-session'),
   cookieParser = require('cookie-parser');
@@ -62,6 +63,7 @@ app.use('/mars/v1/intents', intentController);
 app.use('/mars/v1/groups', flowgroupController);
 app.use('/mars/dhcpserver/ztp/v1/dhcpserver', dhcpController);
 app.use('/mars/utility/elasticsearch/v1', elasticsearchController);
+app.use('/mars/v1/tenants/v1', tenantController)
 
 // set port
 app.set('port', (process.env.PORT || 4001));

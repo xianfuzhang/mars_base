@@ -275,6 +275,20 @@ angular
         resolve: {
           loggedin: checkLoggedIn
         }
+      }).
+      when('/segment', {
+        template: require('./modules/logical/template/segment.html'),
+        controller: 'segmentController',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
+      }).
+      when('/tenant/:tenantName', {
+        template: require('./modules/logical/template/tenantDetail.html'),
+        controller: 'tenantDetailCtrl',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
       })
       .when('/tenant/:tenantName/segment/:segmentName', {
         template: require('./modules/logical/template/segment_detail.html'),

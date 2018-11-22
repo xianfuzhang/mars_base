@@ -8,10 +8,13 @@ var Device = require('../models/device'),
     Cluster = require('../models/cluster'),
     ConfigHistory = require('../models/confighistory'),
     Intent = require('../models/intent'),
+    Tenant = require('../models/tenant').Tenant,
+    Segment = require('../models/tenant').Segment,
     config = require('../config'),
     Chance = require('chance'),
     moment = require('moment'),
     _ = require('lodash');
+
 
 const chance = new Chance();
 
@@ -31,11 +34,13 @@ global.cloudModel = {
   logs: [],
   clusters: [],
   useraccounts: [
-    new UserAccount("nocsys", ["supergroup"], "nocsys")
+    new UserAccount("nocsys", ["admingroup"], "nocsys")
    ],
   dhcpserver:{},
   confighistory: [],
-  intents: []
+  intents: [],
+  tenants: [],
+  segments: []
 };
 
 let updateInterval;
@@ -329,6 +334,22 @@ let cloudLib = {
       cloudModel.confighistory.push(history);
     });
     
+    //create tenant and segments
+    _.times(5, (index) => {
+      let tenantName = 'tenant' + (index+1),
+          tenantType = chance.pickone(['Normal', 'System']),
+          tenant = new Tenant(tenantName, tenantType);
+      
+      cloudModel.tenants.push(tenant);
+      _.times(chance.integer({ min: 2, max: 5}), (index) => {
+        let name = chance.name(),
+            type = chance.pickone(['vlan', 'vxlan']),
+            ip = chance.ip(),
+            value = chance.integer({ min: 2, max: 100 });
+        cloudModel.segments.push(new Segment(name, type, ip, value, tenantName));
+      });
+    });
+
     updateStatistics();
   },
   

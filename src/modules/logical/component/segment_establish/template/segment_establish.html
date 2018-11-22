@@ -1,0 +1,42 @@
+<div class="stepForm">
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">Tenant名称<span class="stepForm__input__required">*</span></div>
+        <mdl-select ng-model="segmentModel.selectedTenant"
+                    display-label="tenantNameDisLab" disable="defaultTenant != ''">
+        </mdl-select>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">Segment名称<span class="stepForm__input__required">*</span></div>
+        <valid-input v-require="true" ng-model="segmentModel.name" v-rpcid="page_device_1"></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label" style="text-decoration: underline">Segment类型<span class="stepForm__input__required">*</span></div>
+        <mdl-radio ng-model="segmentModel.type" name="type" value="vlan"
+                   display-label="{id: 'check_1', label: 'Vlan', name: 'role', value: 'vlan'}">
+        </mdl-radio>
+        <mdl-radio ng-model="segmentModel.type" name="type" value="vxlan"
+                   display-label="{id: 'check_2', label: 'Vxlan', name: 'role', value: 'vxlan'}">
+        </mdl-radio>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{segmentModel.type == 'vlan' ? 'VLAN ID':'Vxlan VNI'}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-require="true" ng-model="segmentModel.value" v-rpcid="page_device_1" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}"></valid-input>
+    </div>
+
+    <div class="stepForm__input multiple_ip">
+        <div class="stepForm__input__label">IP Address<span class="stepForm__input__required">*</span></div>
+        <valid-input style="width:90%;display:inline-block;" v-require="true" ng-model="segmentModel.ip_address" v-rpcid="page_device_1" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>
+        <div class="add-btn" ng-click="addIPAddress()">
+            <i class="material-icons">add</i>
+        </div>
+        <div class="" style="margin-top:5px;" ng-show="segmentModel.ip_addresses.length">
+            <div class="types-label" ng-repeat="ip in segmentModel.ip_addresses">
+                <span ng-bind="ip"></span>
+                <span class="removeBtn" ng-click="removeSelectedIP(ip)">-</span>
+            </div>
+        </div>
+    </div>
+</div>

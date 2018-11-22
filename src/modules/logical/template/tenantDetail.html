@@ -1,0 +1,43 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{'MODULES.LOGICAL.TENANT.DETAIL.TITLE' | translate}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span>{{'MODULE.HEADER.LOGICAL.TENANT' | translate}}</span>
+  </content-header>
+  <section class="app-body tenant-detail">
+    <div class="section-3-2">
+      <div class="main__content">
+      <mdl-tabs ng-model="tabSelected" options="tabs"
+                class-list="main__content__device-detail-tabs"
+                on-select="onTabChange($value)">
+      </mdl-tabs>
+      <section class="tab-content" ng-if="tabSelected.type == 'segment'">
+        <mdl-table actions-show="detailModel.actionsShow"
+                  actions="detailModel.rowActions"
+                  row-select-action="onTableRowSelectAction($event)"
+                  row-click="onTableRowClick($event)"
+                  provider="detailModel.provider" api-ready="onApiReady($api)">
+        </mdl-table>
+      </section>
+    </div>
+    </div>
+    <div class="section-3-1" ng-if="tabSelected.type === 'segment' && segmentName">
+      <div class="segment-detail">
+        <h3 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.TITLE'|translate"></h3>
+        <div class="segment-vlan-member">
+          <h4 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.VLAN.TITLE'|translate"></h4>
+          <mdl-table actions-show="segmentModel.actionsShow"
+                    provider="segmentModel.vlanProvider" api-ready="onVlanApiReady($api)">
+          </mdl-table>
+        </div>
+        <div class="segment-vxlan-member">
+          <h4 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.VXLAN.TITLE'|translate"></h4>
+          <mdl-table actions-show="segmentModel.actionsShow"
+                    provider="segmentModel.vxlanProvider" api-ready="onVxlanApiReady($api)">
+          </mdl-table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
