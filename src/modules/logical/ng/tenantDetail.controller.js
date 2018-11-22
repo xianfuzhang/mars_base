@@ -4,6 +4,7 @@ export class TenantDetail {
 			'$scope',
 			'$rootScope',
 			'$routeParams',
+			'$filter',
 			'$q',
 			'$timeout',
 			'logicalService',
@@ -20,6 +21,7 @@ export class TenantDetail {
 		});
 		this.scope = this.di.$scope;
 		this.scope.tenantName = this.di.$routeParams['tenantName'];
+		this.scope.page_title = this.di.$filter('translate')('MODULES.LOGICAL.TENANT.DETAIL.TITLE') + "(" + this.scope.tenantName + ")";
 		this.scope.role = this.di.roleService.getRole();
 		this.scope.tabSwitch = false;
 		this.scope.tabSelected = null;
@@ -315,7 +317,7 @@ export class TenantDetail {
 		if (origins.hasOwnProperty('access_port')) {
 			origins.access_port.forEach((port) => {
 				result.push({
-					'type': port.type,
+					'type': 'access port',// + '(' + port.type + ')',
 					'name': port.name,
 					'vlan': port.vlan,
 					'device': port.switch && ((this.scope.deviceObjects[port.switch] || port.switch) + '/' + port.port) || '-',
