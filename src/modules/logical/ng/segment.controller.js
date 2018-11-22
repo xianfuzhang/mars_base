@@ -43,7 +43,7 @@ export class SegmentController {
     this.init();
   
     this.unsubscribers.push(this.di.$rootScope.$on('segment-list-refresh',()=>{
-      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.GROUP.CREATE.SUCCESS'));
+      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.LOGICAL.SEGMENT.CREATE.SUCCESS'));
       this.scope.segmentModel.api.queryUpdate();
     }));
     
@@ -113,32 +113,32 @@ export class SegmentController {
       {
         'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.TENANT_NAME'),
         'field': 'tenant_name',
-        'layout': {'visible': true, 'sortable': true, 'fixed': true, width:"20%"}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true, width:"15%"}
       },
       {
         'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.TENANT_TYPE'),
         'field': 'tenant_type',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"10%"}
+        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"15%"}
       },
       {
         'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.SEGMENT_NAME'),
         'field': 'segment_name',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"20%"}
+        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"15%"}
       },
       {
         'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.SEGMENT_TYPE'),
         'field': 'segment_type',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"10%"}
-      },
-      {
-        'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.IP_ADDRESS'),
-        'field': 'ip_address',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"30%"}
+        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"15%"}
       },
       {
         'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.SEGMENT_VALUE'),
         'field': 'segment_value',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"10%"}
+        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"15%"}
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.IP_ADDRESS'),
+        'field': 'ip_address',
+        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"25%"}
       }
     ];
   }
