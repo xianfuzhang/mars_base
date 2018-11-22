@@ -12,9 +12,13 @@
 
             <div class="main__content" style="position:relative;height:550px;padding-top:5px;">
                 <mdl-table actions-show="segmentModel.actionsShow"
+                           actions="segmentModel.rowActions"
+                           row-click="onTableRowClick($event)"
+                           row-select-action="onSegmentTableRowSelectAction($event)"
                            provider="segmentModel.provider" api-ready="onAPIReady($api)"
                            need-pagination="true"
-                           on-add="createSegment()">
+                           on-add="createSegment()"
+                           on-remove="batchRemove($value)">
                 </mdl-table>
             </div>
         </section>

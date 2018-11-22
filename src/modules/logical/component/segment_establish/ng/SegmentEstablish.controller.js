@@ -76,20 +76,12 @@ export class SegmentEstablishController {
       errorMessage: ''
     };
     
-    scope.open = (tenantName) => {
+    scope.open = (tenantName, segmentName) => {
       if(scope.showWizard) return;
   
+      init();
+      
       scope.defaultTenant = tenantName ? tenantName : '';
-      scope.tenantNameDisLab.options = [
-        {
-          label: '——请选择——',
-          value: ''
-        }
-      ];
-      scope.segmentModel.selectedTenant = {
-        label: '——请选择——',
-        value: ''
-      }
       logicalDataManager.getTenants().then(
         (res) => {
           scope.tenantNameDisLab.options = [];
@@ -113,10 +105,23 @@ export class SegmentEstablishController {
           console.error(error)
         })
       
-        init();
-        this.di.$timeout(() => {
-          scope.showWizard = true;
-        });
+      if(segmentName) {
+        logicalDataManager.getSegment(tenantName, segmentName).then(
+          (res) => {
+            let segment = res.data;
+            scope.segmentModel.name = segment.name;
+            scope.segmentModel.type = segment.type;
+            scope.segmentModel.value = segment.value;
+            scope.segmentModel.ip_addresses = segment.ip_address;
+            scope.segmentModel.ip_address = segment.ip_address[segment.ip_address.length - 1]
+          }, (error) => {
+          console.error(error)
+        })
+      }
+      
+      this.di.$timeout(() => {
+        scope.showWizard = true;
+      });
     };
   
     scope.addIPAddress = () => {
@@ -169,8 +174,8 @@ export class SegmentEstablishController {
       });
     };
   
-    unsubscribes.push(this.di.$rootScope.$on('segment-wizard-show', ($event, tenantName) => {
-      scope.open(tenantName);
+    unsubscribes.push(this.di.$rootScope.$on('segment-wizard-show', ($event, tenantName, segmentName) => {
+      scope.open(tenantName, segmentName);
     }));
 
     scope.$on('$destroy', () => {
