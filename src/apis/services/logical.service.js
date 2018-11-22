@@ -68,7 +68,7 @@ export class logicalService {
       },
       {
         'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.COLUMN.TYPE'),
-        'field': 'segment_name',
+        'field': 'type',
         'layout': {'visible': true, 'sortable': true},
       },
       {

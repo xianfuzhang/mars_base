@@ -5,6 +5,7 @@ export class TenantDetail {
 			'$rootScope',
 			'$routeParams',
 			'$q',
+			'$timeout',
 			'logicalService',
 			'roleService',
 			'logicalDataManager',
@@ -44,6 +45,12 @@ export class TenantDetail {
 			});
 			this.init();
 		});
+
+		this.scope.$on('segment-selected', ($event, params) => {
+			this.scope.segmentName = params.segment.id;
+			this.scope.detailModel.api.setSelectedRow(params.segment.id);
+			this.segmentDetailQuery();
+		});
 	}
 
 	initActions() {
@@ -52,6 +59,9 @@ export class TenantDetail {
         this.scope.tabSelected = tab;
         this.scope.tabSwitch = true;
         this.prepareTableData();
+        this.di.$timeout(() => {
+            this.selectEntity();
+        }, 500);
       }
 		}
 
@@ -70,14 +80,7 @@ export class TenantDetail {
 			this.scope.detailModel.api.setSelectedRow(event.$data.id);
 			switch (this.scope.tabSelected.type){
 				case 'segment':
-					if (!this.scope.initSegmentDetail) {
-						this.initSegmentDetailPanel();
-						this.scope.initSegmentDetail = true;
-					}
-					else {
-						this.scope.segmentModel.vlanApi.queryUpdate();
-						this.scope.segmentModel.vxlanApi.queryUpdate();
-					}
+					this.segmentDetailQuery();
 					break;
 			}
 		};
@@ -125,6 +128,19 @@ export class TenantDetail {
 		this.scope.detailModel.schema = this.getSchema();
     this.scope.detailModel.actionsShow = this.getActionsShow();
     this.scope.detailModel.rowActions = this.getRowActions();
+	}
+
+	selectEntity() {
+		if (this.scope.detailModel.entities.length === 0) {
+      return;
+    }
+    switch (this.scope.tabSelected.type) {
+    	case 'segment':
+    		this.scope.$emit('segment-selected', {
+          segment: this.scope.detailModel.entities[0]
+        });
+    		break;
+    }
 	}
 
 	getEntities(params) {
@@ -246,6 +262,17 @@ export class TenantDetail {
         };
       }
     });
+	}
+
+	segmentDetailQuery() {
+		if (!this.scope.initSegmentDetail) {
+			this.initSegmentDetailPanel();
+			this.scope.initSegmentDetail = true;
+		}
+		else {
+			this.scope.segmentModel.vlanApi.queryUpdate();
+			this.scope.segmentModel.vxlanApi.queryUpdate();
+		}
 	}
 
 	formatSegmentVLanData(origins) {
