@@ -1,0 +1,26 @@
+<div class="flex_entirety">
+    <!--<mar-header></mar-header>-->
+    <mdl-header></mdl-header>
+    <div class="flex_entirety__body">
+
+        <content-header big-title="Segment">
+            <a href="/">Mars Cloud</a>
+            <span>•</span>
+            <span>Segment</span>
+        </content-header>
+        <section class="app-body">
+
+            <div class="main__content" style="position:relative;height:550px;padding-top:5px;">
+                <mdl-table actions-show="segmentModel.actionsShow"
+                           provider="segmentModel.provider" api-ready="onAPIReady($api)"
+                           need-pagination="true"
+                           on-add="createSegment()">
+                </mdl-table>
+            </div>
+        </section>
+    </div>
+
+    <ng-controller ng-controller="segmentEstablishController">
+        <wizard></wizard>
+    </ng-controller>
+</div>

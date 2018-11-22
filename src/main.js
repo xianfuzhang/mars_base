@@ -275,6 +275,13 @@ angular
         resolve: {
           loggedin: checkLoggedIn
         }
+      }).
+      when('/segment', {
+        template: require('./modules/logical/template/segment.html'),
+        controller: 'segmentController',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
       })
       .otherwise({ redirectTo: '/' });
 
