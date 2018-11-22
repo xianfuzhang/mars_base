@@ -290,6 +290,13 @@ angular
           loggedin: checkLoggedIn
         }
       })
+      .when('/tenant/:tenantName/segment/:segmentName', {
+        template: require('./modules/logical/template/segment_detail.html'),
+        controller: 'SegmentDetailController',
+        resolve: {
+          loggedin: checkLoggedIn
+        }
+      })
       .otherwise({ redirectTo: '/' });
 
   }])

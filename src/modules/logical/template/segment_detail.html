@@ -1,0 +1,113 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{page_title}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span ng-bind="'MODULES.SWITCH.DETAIL.TITLE'|translate"></span>
+  </content-header>
+  <div class="segmenet_detail__body__content flex_entirety__body__body">
+      <div class="segmenet_detail">
+        <div class="device-detail__row">
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.NAME'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.name}}</span>
+          </div>
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.IP'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.mgmtIpAddress}}</span>
+          </div>
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.MAC'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.mac}}</span>
+          </div>
+        </div>
+        <div class="device-detail__row">
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.RACK'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.rack_id}}</span>
+          </div>
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.TYPE'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.type}}</span>
+          </div>
+          <div class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'|translate"></label>
+            <span class="device-detail__item-value "
+                  ng-class="{
+                  'device-detail__available': detailValue.available === true,
+                  'device-detail__inavailable': detailValue.available === false
+                  }"></span>
+          </div>
+
+          <!--<div class="device-detail__item">-->
+            <!--<label class="device-detail__item-label"-->
+                   <!--ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.GROUP'|translate"></label>-->
+            <!--<span class="device-detail__item-value">{{Object.keys(detailValue.leaf_group)}}</span>-->
+          <!--</div>-->
+        </div>
+        <!--<div class="device-detail__row">-->
+          <!--<div class="device-detail__item">-->
+            <!--<label class="device-detail__item-label"-->
+                   <!--ng-bind="'MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'|translate"></label>-->
+            <!--<span class="device-detail__item-value "-->
+                  <!--ng-class="{-->
+                  <!--'device-detail__available': detailValue.available === true,-->
+                  <!--'device-detail__inavailable': detailValue.available === false-->
+                  <!--}"></span>-->
+          <!--</div>-->
+        <!--</div>-->
+      </div>
+
+      <!--<div>-->
+        <!--<mdl-table actions-show="detailModel.actionsShow"-->
+                   <!--actions="detailModel.rowActions"-->
+                   <!--row-actions-filter="onTableRowActionsFilter($event)"-->
+                   <!--row-select-action="onTableRowSelectAction($event)"-->
+                   <!--row-click="onTableRowClick($event)"-->
+                   <!--provider="detailModel.provider" api-ready="onApiReady($api)">-->
+        <!--</mdl-table>-->
+      <!--</div>-->
+
+    <div style="display: flex;flex-direction: row;flex-wrap: wrap">
+      <div style="width:600px;margin-right:50px;">
+
+
+        <mdl-table actions-show="vxlanTableModel.actionsShow"
+                   actions="vxlanTableModel.rowActions"
+                   row-select-action="onVxlanAccessTableRowSelectAction($event)"
+                   row-click="onVxlanAccessTableRowClick($event)"
+                   provider="vxlanTableModel.access_provider" api-ready="onVxlanAccessApiReady($api)">
+        </mdl-table>
+      </div>
+      <div style="width:400px;">
+        <mdl-table actions-show="vxlanTableModel.actionsShow"
+                   actions="vxlanTableModel.rowActions"
+                   row-select-action="onVxlanNetworkTableRowSelectAction($event)"
+                   row-click="onVxlanNetworkTableRowClick($event)"
+                   provider="vxlanTableModel.network_provider" api-ready="onVxlanNetworkApiReady($api)">
+        </mdl-table>
+      </div>
+
+
+      <!--<mdl-table actions-show="dhcpModel.actionsShow"-->
+                 <!--actions="dhcpModel.rowActions"-->
+                 <!--row-select-action="onDHCPTableRowSelectAction($event)"-->
+                 <!--provider="dhcpModel.dhcpTableProvider" api-ready="onDHPAPIReady($api)"-->
+      <!--</mdl-table>-->
+
+
+    </div>
+
+
+    </div>
+  <ng-controller ng-controller="groupEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+</div>
