@@ -452,6 +452,13 @@ export class appService {
   }
 
 
+  getTenantSegmentMemberVxlanAccessRemoveURl(tenant_name, segment_name,member_name){
+    return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}/vxlan/access/${member_name}`;
+  }
+
+  getTenantSegmentMemberVxlanNetworkRemoveURl(tenant_name, segment_name,member_name){
+    return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}/vxlan/network/${member_name}`;
+  }
 }
 
 appService.$inject = appService.getDI();

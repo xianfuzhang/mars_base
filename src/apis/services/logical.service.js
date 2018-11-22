@@ -85,6 +85,61 @@ export class logicalService {
     ]}
   }
 
+  getSegmentMemberVlanTableSchema(){
+    // return [
+    //   {
+    //     'label': this.translate("MODULES.LOGICAL.TENANT.TABLE.NAME"),
+    //     'field': 'name',
+    //     'layout': {'visible': true, 'sortable': true, 'fixed': true},
+    //   },
+    //   {
+    //     'label': this.translate("MODULES.LOGICAL.TENANT.TABLE.TYPE"),
+    //     'field': 'type',
+    //     'layout': {'visible': true, 'sortable': true, 'fixed': true}
+    //   }
+    // ];
+  }
+
+  getSegmentMemberVxlanAccessTableSchema(){
+    return [
+      {
+        'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.NAME"),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.TYPE"),
+        'field': 'type',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.PORT"),
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.VLAN"),
+        'field': 'vlan',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      }
+    ];
+  }
+
+
+  getSegmentMemberVxlanNetworkTableSchema(){
+    return [
+      {
+        'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.NAME"),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'30%'},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.IP_ADDRESS"),
+        'field': 'ip_addresses',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'70%'}
+      }
+    ];
+  }
 
 }
 

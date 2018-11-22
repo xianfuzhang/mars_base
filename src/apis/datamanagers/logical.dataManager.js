@@ -118,6 +118,34 @@ export class LogicalDataManager{
     return defer.promise;
   }
 
+  deleteTenantSegmentMemberVxlanAccess(tenant_name, segment_name, member_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTenantSegmentMemberVxlanAccessRemoveURl(tenant_name, segment_name, member_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteTenantSegmentMemberVxlanNetwork(tenant_name, segment_name, member_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTenantSegmentMemberVxlanNetworkRemoveURl(tenant_name, segment_name, member_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
 
 
 
