@@ -5,7 +5,9 @@ export class SegmentController {
       '$scope',
       '$rootScope',
       '$q',
+      '$log',
       'roleService',
+      'dialogService',
       'logicalDataManager',
       'tableProviderFactory',
       'notificationService'
@@ -19,23 +21,63 @@ export class SegmentController {
     });
     
     this.scope = this.di.$scope;
+    this.scope.role = this.di.roleService.getRole();
+    
     this.translate = this.di.$filter('translate');
     this.date = this.di.$filter('date');
-    this.scope.role = this.di.roleService.getRole();
-    this.scope.hasData = false;
-    
-    this.scope.segmentModel = {
+  
+    let scope = this.di.$scope;
+    scope.segmentModel = {
       provider: null,
       api: null,
-      actionsShow: this.getActionsShow()
-    };
-    
-    this.scope.onAPIReady = ($api) => {
-      this.scope.segmentModel.api = $api;
+      actionsShow: this.getActionsShow(),
+      rowActions: this.rowActions()
     };
   
-    this.scope.createSegment = () => {
+    scope.onTableRowClick = (event) => {
+      if (event.$data){
+        scope.segmentModel.api.setSelectedRow(event.$data.name);
+      }
+    };
+    
+    scope.onAPIReady = ($api) => {
+      scope.segmentModel.api = $api;
+    };
+  
+    scope.createSegment = () => {
       this.di.$rootScope.$emit('segment-wizard-show');
+    };
+  
+    scope.onSegmentTableRowSelectAction = (event) => {
+      if (event.data && event.action) {
+        if (event.action.value === 'delete') {
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.LOGICAL.SEGMENT.TABLE.REMOVE_SEGMENT'))
+            .then((data) =>{
+              this.di.logicalDataManager.deleteSegment(event.data.tenant_name, event.data.segment_name)
+                .then((res) =>{
+                  this.di.notificationService.renderSuccess(scope,this.translate('MODULES.LOGICAL.SEGMENT.DELETE.SUCCESS'));
+                  scope.segmentModel.api.queryUpdate();
+                },(err)=>{
+                  this.di.notificationService.renderWarning(scope, err);
+                });
+            
+            }, (res) =>{
+              this.di.$log.debug('delete segment dialog cancel');
+            });
+        } else {
+          this.di.$rootScope.$emit('segment-wizard-show', event.data.tenant_name, event.data.segment_name);
+        }
+      }
+    };
+  
+    scope.batchRemove = ($value) => {
+      if (!$value.length) return;
+      this.di.dialogService.createDialog('warning', this.translate('MODULES.LOGICAL.SEGMENT.TABLE.BATCH_DELETE_SEGMENT'))
+        .then(() =>{
+          batchDeleteSegments($value);
+        }, () => {
+          scope.segmentModel.api.queryUpdate();
+        });
     };
     
     this.unsubscribers = [];
@@ -44,7 +86,7 @@ export class SegmentController {
   
     this.unsubscribers.push(this.di.$rootScope.$on('segment-list-refresh',()=>{
       this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.LOGICAL.SEGMENT.CREATE.SUCCESS'));
-      this.scope.segmentModel.api.queryUpdate();
+      scope.segmentModel.api.queryUpdate();
     }));
     
     this.scope.$on('$destroy', () => {
@@ -52,6 +94,28 @@ export class SegmentController {
         cb();
       });
     });
+  
+    let batchDeleteSegments = (segments) => {
+      let deferredArr = [];
+      segments.forEach((item) => {
+        let defer = this.di.$q.defer();
+        this.di.logicalDataManager.deleteSegment(item.tenant_name, item.segment_name)
+          .then(() => {
+            defer.resolve();
+          }, (msg) => {
+            defer.reject(msg);
+          });
+        deferredArr.push(defer.promise);
+      });
+    
+      this.di.$q.all(deferredArr).then(() => {
+        this.di.notificationService.renderSuccess(this.scope,this.translate('MODULES.LOGICAL.SEGMENT.BATCH.DELETE.SUCCESS'));
+        this.scope.segmentModel.api.queryUpdate();
+      }, (error) => {
+        this.di.notificationService.renderWarning(this.scope, error);
+        this.scope.segmentModel.api.queryUpdate();
+      });
+    };
   }
   
   init() {
@@ -60,7 +124,6 @@ export class SegmentController {
         let defer = this.di.$q.defer();
         
         this.di.logicalDataManager.getSegments(params).then((res) => {
-          this.scope.hasData = res.data.segments.length ? true : false;
           this.scope.entities = this.getEntities(res.data.segments);
           defer.resolve({
             data: this.scope.entities,
@@ -73,6 +136,8 @@ export class SegmentController {
         return {
           schema: this.getTableSchema(),
           index_name: 'segment_name',
+          rowCheckboxSupport: true,
+          rowActionsSupport: true,
           authManage: {
             support: true,
             currentRole: this.scope.role
@@ -92,7 +157,7 @@ export class SegmentController {
       obj.tenant_type = item.tenant_type;
       obj.segment_name = item.segment_name;
       obj.segment_type = item.segment_type;
-      obj.ip_address = item.ip_address.join(',');
+      obj.ip_address = item.ip_address.join(' ; ');
       obj.segment_value = item.segment_value;
       
       entities.push(obj);
@@ -102,10 +167,24 @@ export class SegmentController {
 
   getActionsShow() {
     return {
-      'add': {'enable': true, 'role': 3},
-      'refresh': {'enable': true, 'role': 3}, 
-      'search': {'enable': false, 'role': 3}
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2}
     };
+  }
+  
+  rowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.TABLE.EDIT'),
+        'value': 'edit',
+        'role':  2
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.TABLE.DELETE'),
+        'value': 'delete',
+        'role': 2
+      }]
   }
   
   getTableSchema() {
@@ -142,7 +221,6 @@ export class SegmentController {
       }
     ];
   }
-  
 }
 
 SegmentController.$inject = SegmentController.getDI();

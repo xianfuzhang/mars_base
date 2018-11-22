@@ -61,6 +61,21 @@ export class LogicalDataManager{
     return defer.promise;
   }
   
+  getSegment(tenant, segment){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getSegmentUrl(tenant, segment)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+  
+  
   getSegments(params, tenant){
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getSegmentUrl(tenant), {params: params}).then(
@@ -90,14 +105,14 @@ export class LogicalDataManager{
     return defer.promise;
   }
   
-  deleteTenant(name){
+  deleteSegment(tenant, segment){
     let defer = this.di.$q.defer();
-    this.di.$http.delete(this.di.appService.getTenantDeleteUrl(name)).then(
+    this.di.$http.delete(this.di.appService.getSegmentUrl(tenant, segment)).then(
       (res) => {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve(error);
+        defer.reject(error);
       }
     );
     return defer.promise;
