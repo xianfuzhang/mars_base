@@ -1,5 +1,6 @@
 import './scss/tenant.scss';
 import './component/segment_establish/scss/segment_establish.scss';
+import './component/segmentmember_establish/scss/segmentmember_establish';
 
 import {TenantController} from './ng/tenant.controller';
 import {SegmentDetailController} from './ng/segmentDetail.controller';

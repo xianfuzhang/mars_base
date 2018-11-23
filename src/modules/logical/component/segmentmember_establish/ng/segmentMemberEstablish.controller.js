@@ -51,7 +51,7 @@ export class SegmentMemberEstablishController {
       vlanLogicalPorts:[],
       vlanMacBased:[],
       vxlanIps : [],
-      vlan: { },
+      vlan: { device:''},
       vxlan :{
         name: "",
         network: {},
@@ -59,18 +59,36 @@ export class SegmentMemberEstablishController {
       }
     };
 
+    scope.allDeviceLabel = {options: []};
+    // scope.memberModel.vlanDevice = scope.allDeviceLabel.options[2];
+
+
+
     let init = () =>{
       scope.selected.memberType = scope.memberTypeLabel.options[0];
       scope.selected.vlanType = scope.vlanTypeLabel.options[0];
       scope.selected.vxlanType = scope.vxlanTypeLabel.options[0];
       scope.selected.vxlanAccessType = scope.vxlanAccessTypeLabel.options[0];
 
+      scope.allDeviceLabel = {options: []};
+      scope.selected.vlanDevice = {};
+
+      scope.isTypeDisable = false;
+      scope.isVlanDeviceDisable = false;
+      scope.isVlanTypeDisable = false;
+      // scope.isVxlanTypeDisable = false;
+      scope.isVxlanTypeDisable = false;
+      scope.isVxlanNameDisable = false;
+      scope.isVxlanAccessTypeDisable = false;
+
+
+
       scope.memberModel = {
         vlanPorts :[],
         vlanLogicalPorts:[],
         vlanMacBased:[],
         vxlanIps : [],
-        vlan: { },
+        vlan: { device:{}},
         vxlan :{
           name: "",
           network: {},
@@ -99,10 +117,11 @@ export class SegmentMemberEstablishController {
 
     let formatDeviceLabel = (configs) => {
       let options = [];
+
       this.di._.forEach(configs,(config)=>{
         options.push({'label':config.name, 'value':config.id});
       });
-      return {'options':options};
+      return options;
     };
 
     this.di.$scope.open = (param) => {
@@ -110,25 +129,130 @@ export class SegmentMemberEstablishController {
 
       scope.tenantName = param.tenantName;
       scope.segmentName = param.segmentName;
-      scope.tenantEsModel.type = scope.tenantTypeLabel.options[0];;
+      // scope.tenantEsModel.type = scope.tenantTypeLabel.options[0];;
 
-      if(param){
+      init();
+      if(param.type){
         scope.isEdit = true;
-        // scope.tenantEsModel.name = tenant.name;
-        // scope.tenantEsModel.type = _getType(tenant.type)
+        scope.selected.memberType = this.di._.find(scope.memberTypeLabel.options, {'value':param.type });
+        scope.isTypeDisable = true;
       } else{
         scope.isEdit = false;
       }
-      init();
 
       this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
-        scope.allDeviceLabel = formatDeviceLabel(configs);
+        scope.allDeviceLabel.options = scope.allDeviceLabel.options.concat(formatDeviceLabel(configs));
+        if(param.type){
+          let data = param['data'];
+          if(param.type === 'vlan'){
+            if(data){
+              scope.selected.vlanDevice = this.di._.find(scope.allDeviceLabel.options, {'value':data['device_id'] });
+              if(!scope.memberModel.vlanDevice){
+                scope.errorMessage = "Device Id" + data['device_id']  + "不存在！";
+              }
+              scope.isVlanDeviceDisable = true;
+
+              scope.memberModel.vlanPorts = _format_ports_recieved(data['ports']);
+              scope.memberModel.vlanLogicalPorts =_format_logical_ports_recieved(data['logical_ports']);
+              scope.memberModel.vlanMacBased = _format_mac_based_vlans_recieved(data['mac_based_vlans']);
+            }
+          } else if(param.type === 'vxlan'){
+            if(data){
+              if(data['name']){
+                scope.isVxlanNameDisable = true;
+                scope.isVxlanTypeDisable = true;
+                scope.memberModel.vxlan.name = data['name'];
+                if(data['ip_addresses']){
+                  //network
+                  scope.selected.vxlanType = this.di._.find(scope.vxlanTypeLabel.options,  {'value':'network'});
+                  scope.memberModel.vxlanIps = _format_vxlan_ips(data['ip_addresses'])
+                } else {
+                  //access
+                  scope.selected.vxlanType = this.di._.find(scope.vxlanTypeLabel.options,  {'value':'access'});
+                  if(data['type']){
+                    scope.isVxlanAccessTypeDisable = true;
+                    scope.selected.vxlanAccessType = this.di._.find(scope.vxlanAccessTypeLabel.options,  {'value':data['type']});
+                    if(data['type'] === 'normal'){
+                      let device_port_arr = data['port'].split(':');
+                      scope.memberModel.vxlan.access.port = device_port_arr.length ===2?device_port_arr[1]:'';
+                      scope.memberModel.vxlan.access.device = device_port_arr[0] !== ''?this.di._.find(scope.allDeviceLabel.options, {'value':data['device_id'] }):{};
+
+                    } else {
+                      scope.memberModel.vxlan.access.server_mac = data['port']
+                    }
+                    scope.memberModel.vxlan.access.vlan = data['vlan'];
+                  }
+
+                }
+              }
+
+            }
+          }
+
+        }
         scope.showWizard = true;
       },()=>{
         scope.showWizard = true;
       });
 
 
+    };
+
+    let _format_ports_recieved = (ports) =>{
+      if(ports === null || ports === ''){
+        return [];
+      } else {
+        let portArr = ports.split(',');
+        portArr = this.di._.map(portArr, this.di._.trim);
+        return this.di._.map(portArr, (item)=>{
+          let arr = item.split('/');
+          let port = arr[0];
+          let tag = arr[1];
+          return {'port':port, 'tagValue': this.di._.find(scope.tagDisplayLabel.options, { 'value': tag })}
+        });
+      }
+    };
+
+    let _format_logical_ports_recieved = (logical_ports) =>{
+      if(logical_ports === null || logical_ports === ''){
+        return [];
+      } else {
+        let portArr = logical_ports.split(',');
+        portArr = this.di._.map(portArr, this.di._.trim);
+        return this.di._.map(portArr, (item)=>{
+          let arr = item.split('/');
+          let trunk = arr[0];
+          let tag = arr[1];
+          return {'trunk':trunk, 'tagValue': this.di._.find(scope.tagDisplayLabel.options, { 'value': tag })}
+        });
+      }
+    };
+
+    let _format_mac_based_vlans_recieved = (mac_based) =>{
+      if(mac_based === null || mac_based === ''){
+        return [];
+      } else {
+        let mac_based_arr = mac_based.split(',');
+        mac_based_arr = this.di._.map(mac_based_arr, this.di._.trim);
+        return this.di._.map(mac_based_arr, (item)=>{
+          let arr = item.split('/');
+          let mac = arr[0];
+          let mask = arr[1];
+          return {'mac':mac, 'mask': mask}
+        });
+      }
+    };
+
+    let _format_vxlan_ips = (ips) =>{
+      if(ips === null || ips === ''){
+        return [];
+      } else {
+        let ipsArr = ips.split(',');
+        ipsArr = this.di._.map(ipsArr, this.di._.trim);
+        return this.di._.map(ipsArr, (item)=>{
+          return {'ip':item}
+        });
+      }
     };
 
     scope.addVlanPorts = () => {
@@ -331,7 +455,7 @@ export class SegmentMemberEstablishController {
 
       return new Promise((resolve, reject) => {
         if(scope.selected.memberType.value === 'vlan'){
-          logicalDataManager.postTenantSegmentMemberVlan(scope.tenantName, scope.segmentName, scope.memberModel.vlan.device.value, postJson)
+          logicalDataManager.postTenantSegmentMemberVlan(scope.tenantName, scope.segmentName, scope.memberModel.vlanDevice.value, postJson)
             .then((res) => {
               rootScope.$emit('tenent-refresh',true);
               resolve(validJson);

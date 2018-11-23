@@ -2,14 +2,21 @@
 
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.TYPE'|translate}}</div>
-        <mdl-select ng-model="selected.memberType" display-label="memberTypeLabel">
+        <mdl-select ng-model="selected.memberType" display-label="memberTypeLabel" disable="isTypeDisable == true?true:false">
         </mdl-select>
     </div>
 
-    <div ng-if="selected.memberType.value == 'vlan'">
+
+
+    <div ng-show="selected.memberType.value == 'vlan'">
+        <!--<div class="stepForm__input">-->
+            <!--<div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.DEVICE'|translate}}</div>-->
+            <!--<mdl-select ng-model="memberModel.vlanDevice" display-label="allDeviceLabel">-->
+            <!--</mdl-select>-->
+        <!--</div>-->
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.DEVICE'|translate}}</div>
-            <mdl-select ng-model="memberModel.vlan.device" display-label="allDeviceLabel">
+            <mdl-select ng-model="selected.vlanDevice" display-label="allDeviceLabel" disable="isVlanDeviceDisable == true?true:false">
             </mdl-select>
         </div>
 
@@ -121,19 +128,20 @@
     <div ng-if="selected.memberType.value == 'vxlan'">
         <div class="stepForm__input" >
             <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.VXLAN_TYPE'|translate}}</div>
-            <mdl-select ng-model="selected.vxlanType" display-label="vxlanTypeLabel">
+            <mdl-select ng-model="selected.vxlanType" display-label="vxlanTypeLabel" disable="isVxlanTypeDisable == true?true:false">
             </mdl-select>
         </div>
 
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.NAME'|translate}}<span class="stepForm__input__required">*</span></div>
-            <valid-input v-require="true" ng-model="memberModel.vxlan.name" v-rpcid="page_segmentmember_es" ></valid-input>
+            <div ng-if="isVxlanNameDisable">{{memberModel.vxlan.name}}</div>
+            <valid-input v-require="true" ng-model="memberModel.vxlan.name" v-rpcid="page_segmentmember_es" ng-if="isVxlanNameDisable == false" ></valid-input>
         </div>
 
         <div ng-if="selected.vxlanType.value == 'access'">
             <div class="stepForm__input">
                 <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.VXLAN_ACCESS_TYPE'|translate}}</div>
-                <mdl-select ng-model="selected.vxlanAccessType" display-label="vxlanAccessTypeLabel">
+                <mdl-select ng-model="selected.vxlanAccessType" display-label="vxlanAccessTypeLabel" disable="isVxlanAccessTypeDisable== true?true:false">
                 </mdl-select>
             </div>
 
