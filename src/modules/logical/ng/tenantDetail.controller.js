@@ -5,6 +5,7 @@ export class TenantDetail {
 			'$rootScope',
 			'$routeParams',
 			'$filter',
+			'$location',
 			'$q',
 			'$log',
 			'$timeout',
@@ -57,6 +58,19 @@ export class TenantDetail {
 			this.scope.detailModel.api.setSelectedRow(params.segment.id);
 			this.segmentDetailQuery();
 		});
+
+		let unsubscribers = [];
+		unsubscribers.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
+      if (params && params.field === 'segment_name') {
+        this.di.$location.path('/tenant/' + this.scope.tenantName + '/segment/' + params.object.id);
+      }
+    }));
+
+    this.scope.$on('$destroy', () => {
+      unsubscribers.forEach((cb) => {
+        cb();
+      });
+    });
 	}
 
 	initActions() {
