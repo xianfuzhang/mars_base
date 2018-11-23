@@ -344,7 +344,7 @@ let cloudLib = {
       _.times(chance.integer({ min: 2, max: 5}), (index) => {
         let name = chance.name(),
             type = chance.pickone(['vlan', 'vxlan']),
-            ip = chance.ip(),
+            ip = [chance.ip()],
             value = chance.integer({ min: 2, max: 100 });
         cloudModel.segments.push(new Segment(name, type, ip, value, tenantName));
       });

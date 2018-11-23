@@ -1,6 +1,6 @@
 <mdl-header></mdl-header>
 <div class="app-main">
-  <content-header big-title="{{'MODULES.LOGICAL.TENANT.DETAIL.TITLE' | translate}}">
+  <content-header big-title="{{page_title}}">
     <a href="/">Mars Cloud</a>
     <span>•</span>
     <span>{{'MODULE.HEADER.LOGICAL.TENANT' | translate}}</span>
@@ -17,7 +17,8 @@
                   actions="detailModel.rowActions"
                   row-select-action="onTableRowSelectAction($event)"
                   row-click="onTableRowClick($event)"
-                  provider="detailModel.provider" api-ready="onApiReady($api)">
+                  provider="detailModel.provider" api-ready="onApiReady($api)"
+                  on-add="addSegment()" on-remove="batchRemove($value)">
         </mdl-table>
       </section>
     </div>

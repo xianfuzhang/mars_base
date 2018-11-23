@@ -478,6 +478,7 @@ export class mdlTable {
         scope._OnRegistryToRenders();
         scope.tableModel.loading = true;
         scope.onTableHeaderInit();
+        scope.apiReady({$api: scope.tableModel.api});
         scope.provider.query(scope._getTableParams())
           .then(function (response) {
             scope.tableModel.loading = false;
@@ -485,10 +486,7 @@ export class mdlTable {
           }, function () {
             scope.tableModel.loading = false;
             scope._onDataError();
-          })
-          .finally(() => {
-          scope.apiReady({$api: scope.tableModel.api});
-        });
+          });
       }
     })(this);
 
