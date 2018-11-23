@@ -220,6 +220,7 @@ export class logicalService {
     return [
       {
         'label': this.translate("MODULES.LOGICAL.SGEMENT.VLAN.COLUMN.DEVICE"),
+        'type': 'clickabletext',
         'field': 'device_id',
         'layout': {'visible': true, 'sortable': true, 'fixed': true},
       },
