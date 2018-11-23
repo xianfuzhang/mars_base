@@ -6,6 +6,7 @@ export class SegmentController {
       '$rootScope',
       '$q',
       '$log',
+      '$location',
       'roleService',
       'dialogService',
       'logicalDataManager',
@@ -64,8 +65,14 @@ export class SegmentController {
             }, (res) =>{
               this.di.$log.debug('delete segment dialog cancel');
             });
-        } else {
+        } else if (event.action.value === 'edit'){
           this.di.$rootScope.$emit('segment-wizard-show', event.data.tenant_name, event.data.segment_name);
+        } else if (event.action.value === 'add_segment_member'){
+          let param = {
+            tenantName: event.data.tenant_name,
+            segmentName: event.data.segment_name
+          }
+          this.di.$rootScope.$emit('segmentmember-wizard-show', param);
         }
       }
     };
@@ -87,6 +94,14 @@ export class SegmentController {
     this.unsubscribers.push(this.di.$rootScope.$on('segment-list-refresh',()=>{
       this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.LOGICAL.SEGMENT.CREATE.SUCCESS'));
       scope.segmentModel.api.queryUpdate();
+    }));
+  
+    this.unsubscribers.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
+      //location path to device detail
+      if (params && params.field === 'segment_name') {
+        //this.di.$location.path('/devices/' + params.value).search({'id': params.object.id});
+        this.di.$location.path('/tenant/' + params.object.tenant_name + '/segment/' + params.object.segment_name);
+      }
     }));
     
     this.scope.$on('$destroy', () => {
@@ -184,6 +199,11 @@ export class SegmentController {
         'label': this.translate('MODULES.LOGICAL.TENANT.TABLE.DELETE'),
         'value': 'delete',
         'role': 2
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.ADD_MEMBER'),
+        'value': 'add_segment_member',
+        'role':  2
       }]
   }
   
@@ -202,6 +222,7 @@ export class SegmentController {
       {
         'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.SEGMENT_NAME'),
         'field': 'segment_name',
+        'type': 'clickabletext',
         'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"15%"}
       },
       {
