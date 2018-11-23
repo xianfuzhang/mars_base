@@ -13,6 +13,7 @@ export class SegmentDetailController {
       'dialogService',
       'logicalService',
       'logicalDataManager',
+      'deviceDataManager',
       'tableProviderFactory',
       'modalManager'
     ];
@@ -34,6 +35,7 @@ export class SegmentDetailController {
     let isInit = true;
     let vxlanData = {'network':[],'access':[]};
     let vlanData = [];
+    let devices = [];
 
     scope.segDetailModel = {
       provider: null,
@@ -87,35 +89,7 @@ export class SegmentDetailController {
       scope.vxlanTableModel.network_api = $api;
     };
 
-    scope.vlanTableModel.provider = this.di.tableProviderFactory.createProvider({
-      query: (params) => {
-        let defer = this.di.$q.defer();
 
-        this.di.logicalDataManager.getSegmentVlanMember(scope.tenantName, scope.segmentName)
-          .then((res)=>{
-            vlanData = _formatVlanData(res.data.segment_members);
-            defer.resolve({
-              data: vlanData|| [],
-              count: undefined
-            });
-          },(err)=>{
-            this.di.notificationService.renderWarning(scope, err['data']);
-          });
-        return defer.promise;
-      },
-      getSchema: () => {
-        return {
-          schema: this.di.logicalService.getSegmentMemberVlanTableSchema(),
-          index_name: 'device_id',
-          rowCheckboxSupport: false,
-          rowActionsSupport: true,
-          authManage: {
-            support: true,
-            currentRole: this.di.$scope.role
-          }
-        };
-      }
-    });
 
 
     scope.vxlanTableModel.network_provider = this.di.tableProviderFactory.createProvider({
@@ -191,24 +165,75 @@ export class SegmentDetailController {
       scope.vlanTableModel.rowActions = this.getVlanTableRowActions();
       scope.vlanTableModel.actionsShow =  this.getVlanTableActionShow();
 
-      this.di.logicalDataManager.getTenantSingleSegment(scope.tenantName, scope.segmentName)
-        .then((res)=>{
-          scope.detailModel = res.data;
-          scope.detailModel['ip_address'] = scope.detailModel['ip_address'].join(', ');
+      let segmentData = null;
+      let devicesDefer = this.di.$q.defer(), segmentDefer = this.di.$q.defer();
+      let promises = [];
 
-          if(scope.detailModel.type === 'vxlan'){
-            vxlanDataRefresh().then(()=>{
-              scope.vxlanTableModel.network_api.queryUpdate();
-              scope.vxlanTableModel.access_api.queryUpdate();
-              isInit = false;
-            })
-          }
+      this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
+          devices = configs;
+          devicesDefer.resolve();
         },(err)=>{
           this.di.notificationService.renderWarning(scope, err['data']);
+          devicesDefer.resolve();
         });
+      promises.push(devicesDefer.promise);
 
+      this.di.logicalDataManager.getTenantSingleSegment(scope.tenantName, scope.segmentName)
+        .then((res)=>{
+          segmentData = res.data;
+          segmentDefer.resolve();
+        },(err)=>{
+          segmentDefer.resolve();
+          this.di.notificationService.renderWarning(scope, err['data']);
+        });
+      promises.push(segmentDefer.promise);
 
+      Promise.all(promises).then(()=>{
+        if(segmentData === null){
+          return;
+        }
+        scope.detailModel = segmentData;
+        scope.detailModel['ip_address'] = scope.detailModel['ip_address'].join(', ');
 
+        if(scope.detailModel.type === 'vxlan'){
+          vxlanDataRefresh().then(()=>{
+            scope.vxlanTableModel.network_api.queryUpdate();
+            scope.vxlanTableModel.access_api.queryUpdate();
+            isInit = false;
+          })
+        } else {
+          scope.vlanTableModel.provider = this.di.tableProviderFactory.createProvider({
+            query: (params) => {
+              let defer = this.di.$q.defer();
+
+              this.di.logicalDataManager.getSegmentVlanMember(scope.tenantName, scope.segmentName)
+                .then((res)=>{
+                  vlanData = _formatVlanData(res.data.segment_members);
+                  defer.resolve({
+                    data: vlanData|| [],
+                    count: undefined
+                  });
+                },(err)=>{
+                  this.di.notificationService.renderWarning(scope, err['data']);
+                });
+              return defer.promise;
+            },
+            getSchema: () => {
+              return {
+                schema: this.di.logicalService.getSegmentMemberVlanTableSchema(),
+                index_name: 'device_id',
+                rowCheckboxSupport: false,
+                rowActionsSupport: true,
+                authManage: {
+                  support: true,
+                  currentRole: this.di.$scope.role
+                }
+              };
+            }
+          });
+        }
+        scope.$apply();
+      })
 
       // isInit = false;
 
@@ -243,11 +268,7 @@ export class SegmentDetailController {
       // scope.detailModel.api.queryUpdate();//TODO
     }));
     
-    scope.$on('$destroy', () => {
-      unSubscribers.forEach((unSubscribe) => {
-        unSubscribe();
-      });
-    });
+
 
 
 
@@ -262,10 +283,20 @@ export class SegmentDetailController {
 
       if(access_data.length > 0)
         this.di._.forEach(access_data,(item)=>{
-          let port = item['type'] === 'normal' ? item['switch']+ ':' + item['port']:item['server_mac'];
+          let deviceName = _getDeviceName(item['switch']);
+          let port = item['type'] === 'normal' ? deviceName + ':' + item['port']:item['server_mac'];
           res.access.push({'name': item['name'], 'type': item['type'], 'port':port , 'vlan':item['vlan']});
         });
       return res;
+    };
+
+
+    let _getDeviceName = (id) => {
+      let device = this.di._.find(devices, {'id':id});
+      if(device){
+        return device['name']
+      }
+      return id+ ' ( Name Unknown )';
     };
 
 
@@ -273,7 +304,7 @@ export class SegmentDetailController {
       let _tmp  = {};
       this.di._.forEach(data, (item)=>{
         if(!_tmp[item['device_id']]){
-          _tmp[item['device_id']] = {'device_id':item['device_id'],'ports':null, 'logical_ports':null,'mac_based_vlans':null}
+          _tmp[item['device_id']] = {'device_id': _getDeviceName(item['device_id']),'_device_id': item['device_id'],'ports':null, 'logical_ports':null,'mac_based_vlans':null}
         }
         if(item['type'] === 'normal'){
           _tmp[item['device_id']]['ports'] = item['ports'].join(', ')
@@ -294,7 +325,7 @@ export class SegmentDetailController {
         if ($event.action.value === 'delete') {
           this.di.dialogService.createDialog('warning', this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.REMOVE_SEGMENT_MEMBER'))
             .then((data) =>{
-              this.di.logicalDataManager.deleteTenantSegmentMemberVlan(scope.tenantName, scope.segmentName, $event.data.device_id)
+              this.di.logicalDataManager.deleteTenantSegmentMemberVlan(scope.tenantName, scope.segmentName, $event.data._device_id)
                 .then((res) =>{
                   this.di.notificationService.renderSuccess(scope, this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.REMOVE_SEGMENT_MEMBER.SUCCESS'));
                     scope.vlanTableModel.api.queryUpdate();
@@ -388,7 +419,11 @@ export class SegmentDetailController {
       this.di.$rootScope.$emit('segmentmember-wizard-show', param);
     };
 
-
+    scope.$on('$destroy', () => {
+      unSubscribers.forEach((unSubscribe) => {
+        unSubscribe();
+      });
+    });
   }
 
   getVxlanTableRowActions() {

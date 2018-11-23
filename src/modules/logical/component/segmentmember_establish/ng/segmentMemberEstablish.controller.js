@@ -149,7 +149,7 @@ export class SegmentMemberEstablishController {
           }
           if(param.type === 'vlan'){
             if(data){
-              scope.selected.vlanDevice = this.di._.find(scope.allDeviceLabel.options, {'value':data['device_id'] });
+              scope.selected.vlanDevice = this.di._.find(scope.allDeviceLabel.options, {'label':data['device_id'] });
               if(!scope.memberModel.vlanDevice){
                 scope.errorMessage = "Device Id" + data['device_id']  + "不存在！";
               }
@@ -183,7 +183,7 @@ export class SegmentMemberEstablishController {
                       // console.log(xxx.substring(0, _index))
                       // console.log(xxx.substring(ind + 1, xxx.length))
                       scope.memberModel.vxlan.access.port = _index !==-1?data['port'].substring(_index + 1, data['port'].length):'';
-                      scope.selected.vxlanAccessDevice = _index !==-1? this.di._.find(scope.allDeviceLabel.options, {'value':data['port'].substring(0, _index)}):{};
+                      scope.selected.vxlanAccessDevice = _index !==-1? this.di._.find(scope.allDeviceLabel.options, {'label':data['port'].substring(0, _index)}):{};
 
                     } else {
                       scope.memberModel.vxlan.access.server_mac = data['port']
