@@ -23,7 +23,6 @@ export class SegmentController {
     
     this.scope = this.di.$scope;
     this.scope.role = this.di.roleService.getRole();
-    
     this.translate = this.di.$filter('translate');
     this.date = this.di.$filter('date');
   
@@ -98,7 +97,10 @@ export class SegmentController {
   
     this.unsubscribers.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
       //location path to device detail
-      if (params && params.field === 'segment_name') {
+      if (params && params.field === 'tenant_name') {
+        //this.di.$location.path('/devices/' + params.value).search({'id': params.object.id});
+        this.di.$location.path('/tenant/' + params.object.tenant_name);
+      } else if (params && params.field === 'segment_name') {
         //this.di.$location.path('/devices/' + params.value).search({'id': params.object.id});
         this.di.$location.path('/tenant/' + params.object.tenant_name + '/segment/' + params.object.segment_name);
       }
@@ -212,6 +214,7 @@ export class SegmentController {
       {
         'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.TENANT_NAME'),
         'field': 'tenant_name',
+        'type': 'clickabletext',
         'layout': {'visible': true, 'sortable': true, 'fixed': true, width:"15%"}
       },
       {
