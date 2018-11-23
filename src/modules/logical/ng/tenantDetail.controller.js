@@ -268,7 +268,6 @@ export class TenantDetail {
 	initSegmentVlanProvider() {
 		this.scope.segmentModel.vlanSchema = this.di.logicalService.getSegmentVlanSchema();
 		this.scope.segmentModel.actionsShow = this.di.logicalService.getSegmentVlanActionsShow();
-
 		this.scope.segmentModel.vlanProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
@@ -288,7 +287,6 @@ export class TenantDetail {
         };
       }
     });
-
 	}
 
 	initSegmentVxlanProvider() {
@@ -316,19 +314,14 @@ export class TenantDetail {
 	}
 
 	segmentDetailQuery() {
-		if (this.scope.segment.type === 'vlan') {
-			if (!this.scope.initSegmentVlan) {
-				this.initSegmentVlanProvider();
-				this.scope.initSegmentVlan = true;
-			}
-			else {
-				this.scope.segmentModel.vlanApi.queryUpdate();
-			}
+		if (!this.scope.initSegmentDetail) {
+			this.initSegmentVlanProvider();
+			this.initSegmentVxlanProvider();
+			this.scope.initSegmentDetail = true;
 		}
 		else {
-			if (!this.scope.initSegmentVxlan) {
-				this.initSegmentVxlanProvider();
-				this.scope.initSegmentVxlan = true;
+			if (this.scope.segment.type === 'vlan') {
+				this.scope.segmentModel.vlanApi.queryUpdate();
 			}
 			else {
 				this.scope.segmentModel.vxlanApi.queryUpdate();

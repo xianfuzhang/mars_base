@@ -26,13 +26,13 @@
     <div class="section-3-1" ng-if="tabSelected.type === 'segment' && segment">
       <div class="segment-detail">
         <h3 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.TITLE'|translate"></h3>
-        <div class="segment-vlan-member" ng-if="segment.type === 'vlan'">
+        <div class="segment-vlan-member" ng-show="segment.type === 'vlan'">
           <h4 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.VLAN.TITLE'|translate"></h4>
           <mdl-table actions-show="segmentModel.actionsShow"
                     provider="segmentModel.vlanProvider" api-ready="onVlanApiReady($api)">
           </mdl-table>
         </div>
-        <div class="segment-vxlan-member" ng-if="segment.type === 'vxlan'">
+        <div class="segment-vxlan-member" ng-show="segment.type === 'vxlan'">
           <h4 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.VXLAN.TITLE'|translate"></h4>
           <mdl-table actions-show="segmentModel.actionsShow"
                     provider="segmentModel.vxlanProvider" api-ready="onVxlanApiReady($api)">
