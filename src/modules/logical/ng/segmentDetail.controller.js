@@ -4,6 +4,7 @@ export class SegmentDetailController {
       '$scope',
       '$rootScope',
       '$routeParams',
+      '$location',
       '$filter',
       '$q',
       '$log',
@@ -299,6 +300,14 @@ export class SegmentDetailController {
       return id+ ' ( Name Unknown )';
     };
 
+    let _getDeviceId = (name) => {
+      let device = this.di._.find(devices, {'name': name});
+      if(device){
+        return device['id']
+      }
+      return null;
+    };
+
 
     let _formatVlanData = (data) =>{
       let _tmp  = {};
@@ -418,6 +427,17 @@ export class SegmentDetailController {
       let param = {'tenantName': scope.tenantName, 'segmentName':scope.segmentName, 'type':'vlan'};
       this.di.$rootScope.$emit('segmentmember-wizard-show', param);
     };
+
+
+    unSubscribers.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
+      if (params && params.field === 'device_id') {
+        let deviceId = _getDeviceId(params.object.device_id);
+        if(deviceId){
+          this.di.$location.path('/devices/' + deviceId);
+        }
+      }
+    }));
+
 
     scope.$on('$destroy', () => {
       unSubscribers.forEach((unSubscribe) => {

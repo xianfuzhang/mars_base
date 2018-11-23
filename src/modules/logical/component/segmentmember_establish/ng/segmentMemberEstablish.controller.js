@@ -73,7 +73,7 @@ export class SegmentMemberEstablishController {
 
       scope.allDeviceLabel = {options: []};
       scope.selected.vlanDevice = {};
-      scope.selected.vxlanAccessDevice = {}
+      scope.selected.vxlanAccessDevice = {};
 
       scope.isTypeDisable = false;
       scope.isVlanDeviceDisable = false;
@@ -82,8 +82,6 @@ export class SegmentMemberEstablishController {
       scope.isVxlanTypeDisable = false;
       scope.isVxlanNameDisable = false;
       scope.isVxlanAccessTypeDisable = false;
-
-
 
       scope.memberModel = {
         vlanPorts :[],
@@ -98,9 +96,6 @@ export class SegmentMemberEstablishController {
         }
       };
     };
-
-
-
 
     init();
 
@@ -129,11 +124,9 @@ export class SegmentMemberEstablishController {
 
       scope.tenantName = param.tenantName;
       scope.segmentName = param.segmentName;
-      // scope.tenantEsModel.type = scope.tenantTypeLabel.options[0];;
 
       init();
       if(param.type){
-        // scope.isEdit = true;
         scope.selected.memberType = this.di._.find(scope.memberTypeLabel.options, {'value':param.type });
         scope.isTypeDisable = true;
       } else{
@@ -142,6 +135,9 @@ export class SegmentMemberEstablishController {
       scope.title = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ADD');
       this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
         scope.allDeviceLabel.options = scope.allDeviceLabel.options.concat(formatDeviceLabel(configs));
+        scope.selected.vxlanAccessDevice = scope.allDeviceLabel.options[0];
+        scope.selected.vlanDevice = scope.allDeviceLabel.options[0];
+
         if(param.type){
           let data = param['data'];
           if(data){
@@ -178,19 +174,14 @@ export class SegmentMemberEstablishController {
                     scope.isVxlanAccessTypeDisable = true;
                     scope.selected.vxlanAccessType = this.di._.find(scope.vxlanAccessTypeLabel.options,  {'value':data['type']});
                     if(data['type'] === 'normal'){
-                      // let device_port_arr = data['port'].split(':');
                       let _index  = data['port'].lastIndexOf(':');
-                      // console.log(xxx.substring(0, _index))
-                      // console.log(xxx.substring(ind + 1, xxx.length))
                       scope.memberModel.vxlan.access.port = _index !==-1?data['port'].substring(_index + 1, data['port'].length):'';
                       scope.selected.vxlanAccessDevice = _index !==-1? this.di._.find(scope.allDeviceLabel.options, {'label':data['port'].substring(0, _index)}):{};
-
                     } else {
                       scope.memberModel.vxlan.access.server_mac = data['port']
                     }
                     scope.memberModel.vxlan.access.vlan = data['vlan'];
                   }
-
                 }
               }
             } else {
@@ -202,7 +193,6 @@ export class SegmentMemberEstablishController {
               }
             }
           }
-
         }
         scope.showWizard = true;
       },()=>{
