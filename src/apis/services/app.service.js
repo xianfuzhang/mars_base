@@ -468,6 +468,10 @@ export class appService {
     return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}/device/${device_name}/vlan`
   }
 
+  getTenantSegmentMemberVlanRemoveURl(tenant_name, segment_name, device_name){
+    return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}/device/${device_name}`
+  }
+
 
   getTenantSegmentMemberVxlanURl(tenant_name, segment_name){
    return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}/vxlan`
@@ -479,6 +483,10 @@ export class appService {
 
   getTenantSegmentMemberVxlanNetworkRemoveURl(tenant_name, segment_name,member_name){
     return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}/vxlan/network/${member_name}`;
+  }
+
+  getTenantSingleSegmentUrl(tenant_name, segment_name){
+    return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}`;
   }
 }
 

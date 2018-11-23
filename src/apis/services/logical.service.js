@@ -217,18 +217,28 @@ export class logicalService {
   }
 
   getSegmentMemberVlanTableSchema(){
-    // return [
-    //   {
-    //     'label': this.translate("MODULES.LOGICAL.TENANT.TABLE.NAME"),
-    //     'field': 'name',
-    //     'layout': {'visible': true, 'sortable': true, 'fixed': true},
-    //   },
-    //   {
-    //     'label': this.translate("MODULES.LOGICAL.TENANT.TABLE.TYPE"),
-    //     'field': 'type',
-    //     'layout': {'visible': true, 'sortable': true, 'fixed': true}
-    //   }
-    // ];
+    return [
+      {
+        'label': this.translate("MODULES.LOGICAL.SGEMENT.VLAN.COLUMN.DEVICE"),
+        'field': 'device_id',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.SGEMENT.VLAN.COLUMN.PORTS"),
+        'field': 'ports',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.SGEMENT.VLAN.COLUMN.LOGICAL_PORTS"),
+        'field': 'logical_ports',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.SGEMENT.VLAN.COLUMN.MAC_BASE_VLAN"),
+        'field': 'mac_based_vlans',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      }
+    ];
   }
 
   getSegmentMemberVxlanAccessTableSchema(){
