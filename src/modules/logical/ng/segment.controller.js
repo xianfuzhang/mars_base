@@ -174,7 +174,7 @@ export class SegmentController {
       obj.tenant_type = item.tenant_type;
       obj.segment_name = item.segment_name;
       obj.segment_type = item.segment_type;
-      obj.ip_address = item.ip_address.join(' ; ');
+      obj.ip_address = item.ip_address.join(', ');
       obj.segment_value = item.segment_value;
       
       entities.push(obj);
