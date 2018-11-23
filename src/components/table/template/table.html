@@ -36,7 +36,7 @@
         <table class="mdl-table">
           <thead>
           <tr class="mdl-table-header__row">
-            <th ng-if="tableModel.rowCheckboxSupport" style="width: 50px;">
+            <th ng-if="tableModel.rowCheckboxSupport" style="width: 60px;">
               <div class="mdc-checkbox mdc-checkbox__normal"
                    ng-class="{'mdc-checkbox__small': tableSize === 'small'}"
                    ng-click="_selectAll($event)">
@@ -55,7 +55,7 @@
                 </div>
               </div>
             </th>
-            <th ng-if="tableModel.rowActionsSupport"  style="width: 50px;">
+            <th ng-if="tableModel.rowActionsSupport"  style="width: 60px;">
               <span><button class="mdc-icon-button material-icons mdc-icon-button__normal"
                             ng-class="{'mdc-icon-button__small': tableSize === 'small'}"
                             disabled>menu</button></span>
