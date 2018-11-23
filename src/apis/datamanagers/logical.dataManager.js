@@ -147,6 +147,20 @@ export class LogicalDataManager{
     return defer.promise;
   }
 
+  deleteTenantSegmentMemberVlan(tenant_name, segment_name, device_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTenantSegmentMemberVlanRemoveURl(tenant_name, segment_name, device_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
   getSegmentVlanMember(tenantName, segmentName) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getSegmentVlanMemberUrl(tenantName, segmentName)).then(
@@ -232,6 +246,20 @@ export class LogicalDataManager{
   deleteTenantSegmentMemberVxlanNetwork(tenant_name, segment_name, member_name){
     let defer = this.di.$q.defer();
     this.di.$http.delete(this.di.appService.getTenantSegmentMemberVxlanNetworkRemoveURl(tenant_name, segment_name, member_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  getTenantSingleSegment(tenant_name, segment_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantSingleSegmentUrl(tenant_name, segment_name)).then(
       (res) => {
         defer.resolve(res);
       },
