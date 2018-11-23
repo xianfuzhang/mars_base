@@ -203,8 +203,6 @@ export class SegmentDetailController {
               isInit = false;
             })
           }
-
-
         },(err)=>{
           this.di.notificationService.renderWarning(scope, err['data']);
         });
@@ -231,8 +229,17 @@ export class SegmentDetailController {
 
     let unSubscribers = [];
   
-    unSubscribers.push(this.di.$rootScope.$on('segment-member-refresh',()=>{
+    unSubscribers.push(this.di.$rootScope.$on('segment-member-refresh',($event, s_type)=>{
       this.di.notificationService.renderSuccess(scope, this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.CREATE_SEGMENT_MEMBER.SUCCESS'));
+      if(s_type === 'vlan'){
+        scope.vlanTableModel.api.queryUpdate();
+      } else {
+        if(s_type === 'vxlan_network'){
+          scope.vxlanTableModel.network_api.queryUpdate();
+        } else {
+          scope.vxlanTableModel.access_api.queryUpdate();
+        }
+      }
       // scope.detailModel.api.queryUpdate();//TODO
     }));
     
@@ -366,7 +373,20 @@ export class SegmentDetailController {
       }
     };
 
+    scope.onVxlanAccessAdd = () =>{
+      let param = {'tenantName': scope.tenantName, 'segmentName':scope.segmentName, 'type':'vxlan', 'vxlan_type': 'access'};
+      this.di.$rootScope.$emit('segmentmember-wizard-show', param);
+    };
 
+    scope.onVxlanNetworkAdd = () =>{
+      let param = {'tenantName': scope.tenantName, 'segmentName':scope.segmentName, 'type':'vxlan', 'vxlan_type': 'network'};
+      this.di.$rootScope.$emit('segmentmember-wizard-show', param);
+    };
+
+    scope.onVlanAdd = () =>{
+      let param = {'tenantName': scope.tenantName, 'segmentName':scope.segmentName, 'type':'vlan'};
+      this.di.$rootScope.$emit('segmentmember-wizard-show', param);
+    };
 
 
   }

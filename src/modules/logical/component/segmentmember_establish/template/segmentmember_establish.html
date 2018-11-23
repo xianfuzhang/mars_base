@@ -151,7 +151,7 @@
                     <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.DEVICE'|translate}} & {{'MODULES.LOGICAL.SEGMENT_MEMBER.PORT'|translate}}<span class="stepForm__input__required">*</span></div>
                     <!--<valid-input v-require="true" ng-model="memberModel.vxlan.access.device" v-rpcid="page_segmentmember_es" ></valid-input>-->
                     <div style="display: block;">
-                        <mdl-select ng-model="memberModel.vxlan.access.device" display-label="allDeviceLabel" style="display: inline-block;width:200px;">
+                        <mdl-select ng-model="selected.vxlanAccessDevice" display-label="allDeviceLabel" style="display: inline-block;width:200px;">
                         </mdl-select>
                         <valid-input style="display: inline-block;width:100px;" v-require="true" ng-model="memberModel.vxlan.access.port" v-type="int" v-rpcid="page_segmentmember_es" ></valid-input>
                     </div>

@@ -245,22 +245,22 @@ export class logicalService {
       {
         'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.NAME"),
         'field': 'name',
-        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'25%'},
       },
       {
         'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.TYPE"),
         'field': 'type',
-        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'25%'}
       },
       {
         'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.PORT"),
         'field': 'port',
-        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'40%'}
       },
       {
         'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.VLAN"),
         'field': 'vlan',
-        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'10%'}
       }
     ];
   }
@@ -276,7 +276,7 @@ export class logicalService {
       {
         'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.IP_ADDRESS"),
         'field': 'ip_addresses',
-        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'70%'}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'60%'}
       }
     ];
   }
