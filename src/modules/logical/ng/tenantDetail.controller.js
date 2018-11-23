@@ -9,6 +9,8 @@ export class TenantDetail {
 			'$timeout',
 			'logicalService',
 			'roleService',
+			'dialogService',
+			'notificationService',
 			'logicalDataManager',
 			'deviceDataManager',
 			'tableProviderFactory'
@@ -20,8 +22,9 @@ export class TenantDetail {
 			this.di[value] = args[index];
 		});
 		this.scope = this.di.$scope;
+		this.translate = this.di.$filter('translate');
 		this.scope.tenantName = this.di.$routeParams['tenantName'];
-		this.scope.page_title = this.di.$filter('translate')('MODULES.LOGICAL.TENANT.DETAIL.TITLE') + "(" + this.scope.tenantName + ")";
+		this.scope.page_title = this.translate('MODULES.LOGICAL.TENANT.DETAIL.TITLE') + "(" + this.scope.tenantName + ")";
 		this.scope.role = this.di.roleService.getRole();
 		this.scope.tabSwitch = false;
 		this.scope.tabSelected = null;
@@ -61,9 +64,6 @@ export class TenantDetail {
         this.scope.tabSelected = tab;
         this.scope.tabSwitch = true;
         this.prepareTableData();
-        this.di.$timeout(() => {
-            this.selectEntity();
-        }, 500);
       }
 		}
 
@@ -71,7 +71,21 @@ export class TenantDetail {
 			switch (this.scope.tabSelected.type){
 				case 'segment':
 					if (event.action.value === 'delete') {
-
+						this.di.logicalDataManager.deleteSegment(this.scope.tenantName, this.scope.segmentName)
+						.then(() =>{
+							this.scope.alert = {
+                type: 'success',
+                msg: this.translate('MODULES.LOGICAL.SEGMENT.DELETE.SUCCESS')
+              }
+              this.di.notificationService.render(this.scope);
+              this.scope.detailModel.api.queryUpdate();
+						}, (msg) =>{
+							this.scope.alert = {
+                type: 'warning',
+                msg: msg
+              }
+              this.di.notificationService.render(this.scope);
+						});
 					}
 					break;
 			}
@@ -98,6 +112,19 @@ export class TenantDetail {
     this.scope.onVxlanApiReady = ($api) => {
     	this.scope.segmentModel.vxlanApi = $api;
     };
+
+    this.scope.addSegment = () => {
+
+    };
+
+    this.scope.batchRemove = (value) => {
+    	this.di.dialogService.createDialog('warning', this.translate('MODULES.LOGICAL.SEGMENT.TABLE.BATCH_DELETE_SEGMENT'))
+      .then((data) =>{
+        this.batchDeleteSegments($value);
+      }, (res) =>{
+        this.di.$log.debug('delete segments dialog cancel');
+      });
+    };
 	}
 
 	init() {
@@ -110,6 +137,7 @@ export class TenantDetail {
           defer.resolve({
             data: this.scope.detailModel.entities
           });
+          this.selectEntity();
         });
         return defer.promise;
       },
@@ -134,6 +162,7 @@ export class TenantDetail {
 
 	selectEntity() {
 		if (this.scope.detailModel.entities.length === 0) {
+			this.scope.segmentName = null;
       return;
     }
     switch (this.scope.tabSelected.type) {
@@ -337,6 +366,37 @@ export class TenantDetail {
 			});
 		}
 		return result;
+	}
+
+	batchDeleteSegments(arr) {
+		let deferredArr = [];
+    arr.forEach((item) => {
+      let defer = this.di.$q.defer();
+      this.di.logicalDataManager.deleteSegment(this.scope.tenantName, item.id)
+        .then(() => {
+          defer.resolve();
+        }, (msg) => {
+          defer.reject(msg);
+        });
+      deferredArr.push(defer.promise);
+    });
+
+    this.di.$q.all(deferredArr).then(() => {
+      this.scope.alert = {
+        type: 'success',
+        msg: this.translate('MODULES.LOGICAL.SEGMENT.BATCH.DELETE.SUCCESS')
+      }
+      this.di.notificationService.render(this.scope);
+    }, (msg) => {
+      this.scope.alert = {
+        type: 'warning',
+        msg: msg
+      }
+      this.di.notificationService.render(this.scope);
+    })
+    .finally(() => {
+    	this.scope.detailModel.api.queryUpdate();
+    });
 	}
 }
 

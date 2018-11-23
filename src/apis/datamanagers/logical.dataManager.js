@@ -112,7 +112,7 @@ export class LogicalDataManager{
         defer.resolve(res);
       },
       (error) => {
-        defer.reject(error);
+        defer.reject(error.message);
       }
     );
     return defer.promise;
