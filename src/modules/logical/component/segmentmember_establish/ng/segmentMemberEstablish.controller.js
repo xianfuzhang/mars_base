@@ -51,7 +51,7 @@ export class SegmentMemberEstablishController {
       vlanLogicalPorts:[],
       vlanMacBased:[],
       vxlanIps : [],
-      vlan: { device:''},
+      vlan: { },
       vxlan :{
         name: "",
         network: {},
@@ -70,8 +70,10 @@ export class SegmentMemberEstablishController {
       scope.selected.vxlanType = scope.vxlanTypeLabel.options[0];
       scope.selected.vxlanAccessType = scope.vxlanAccessTypeLabel.options[0];
 
+
       scope.allDeviceLabel = {options: []};
       scope.selected.vlanDevice = {};
+      scope.selected.vxlanAccessDevice = {}
 
       scope.isTypeDisable = false;
       scope.isVlanDeviceDisable = false;
@@ -88,7 +90,7 @@ export class SegmentMemberEstablishController {
         vlanLogicalPorts:[],
         vlanMacBased:[],
         vxlanIps : [],
-        vlan: { device:{}},
+        vlan: {},
         vxlan :{
           name: "",
           network: {},
@@ -103,7 +105,7 @@ export class SegmentMemberEstablishController {
     init();
 
     scope.showWizard = false;
-    scope.title = this.translate('MODULES.LOGICAL.TENANT.TABLE.ADD');
+    scope.title = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ADD');
     scope.steps = [
       {
         id: 'step1',
@@ -111,8 +113,6 @@ export class SegmentMemberEstablishController {
         content: require('../template/segmentmember_establish'),
       }
     ];
-
-
     scope.isEdit = false;
 
     let formatDeviceLabel = (configs) => {
@@ -133,17 +133,20 @@ export class SegmentMemberEstablishController {
 
       init();
       if(param.type){
-        scope.isEdit = true;
+        // scope.isEdit = true;
         scope.selected.memberType = this.di._.find(scope.memberTypeLabel.options, {'value':param.type });
         scope.isTypeDisable = true;
       } else{
-        scope.isEdit = false;
+        // scope.isEdit = false;
       }
-
+      scope.title = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ADD');
       this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
         scope.allDeviceLabel.options = scope.allDeviceLabel.options.concat(formatDeviceLabel(configs));
         if(param.type){
           let data = param['data'];
+          if(data){
+            scope.title = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.EDIT');
+          }
           if(param.type === 'vlan'){
             if(data){
               scope.selected.vlanDevice = this.di._.find(scope.allDeviceLabel.options, {'value':data['device_id'] });
@@ -173,9 +176,12 @@ export class SegmentMemberEstablishController {
                     scope.isVxlanAccessTypeDisable = true;
                     scope.selected.vxlanAccessType = this.di._.find(scope.vxlanAccessTypeLabel.options,  {'value':data['type']});
                     if(data['type'] === 'normal'){
-                      let device_port_arr = data['port'].split(':');
-                      scope.memberModel.vxlan.access.port = device_port_arr.length ===2?device_port_arr[1]:'';
-                      scope.memberModel.vxlan.access.device = device_port_arr[0] !== ''?this.di._.find(scope.allDeviceLabel.options, {'value':data['device_id'] }):{};
+                      // let device_port_arr = data['port'].split(':');
+                      let _index  = data['port'].lastIndexOf(':');
+                      // console.log(xxx.substring(0, _index))
+                      // console.log(xxx.substring(ind + 1, xxx.length))
+                      scope.memberModel.vxlan.access.port = _index !==-1?data['port'].substring(_index + 1, data['port'].length):'';
+                      scope.selected.vxlanAccessDevice = _index !==-1? this.di._.find(scope.allDeviceLabel.options, {'value':data['port'].substring(0, _index)}):{};
 
                     } else {
                       scope.memberModel.vxlan.access.server_mac = data['port']
@@ -185,7 +191,13 @@ export class SegmentMemberEstablishController {
 
                 }
               }
-
+            } else {
+              if(param['vxlan_type']){
+                scope.selected.vxlanType = this.di._.find(scope.vxlanTypeLabel.options,  {'value':param['vxlan_type']});
+                scope.isVxlanTypeDisable = true;
+                if(param['vxlan_type'] === 'access')
+                scope.selected.vxlanAccessDevice =  scope.allDeviceLabel.options[0];
+              }
             }
           }
 
@@ -384,11 +396,11 @@ export class SegmentMemberEstablishController {
           if(scope.selected.vxlanAccessType.value === 'normal'){
             param['access_port'] = [{'name': scope.memberModel.vxlan.name,
                                               'type':scope.selected.vxlanAccessType.value,
-                                              'switch': scope.memberModel.vxlan.access.device.value,
+                                              'switch': scope.selected.vxlanAccessDevice.value,
                                               'port': scope.memberModel.vxlan.access.port,
                                               'vlan': scope.memberModel.vxlan.access.vlan
             }]
-          } else if(scope.selected.vxlanAccessType === 'normal'){
+          } else if(scope.selected.vxlanAccessType.value === 'openstack'){
             param['access_port'] = [{'name': scope.memberModel.vxlan.name,
               'type':scope.selected.vxlanAccessType.value,
               'vlan': scope.memberModel.vxlan.access.vlan,
@@ -457,7 +469,7 @@ export class SegmentMemberEstablishController {
         if(scope.selected.memberType.value === 'vlan'){
           logicalDataManager.postTenantSegmentMemberVlan(scope.tenantName, scope.segmentName, scope.memberModel.vlanDevice.value, postJson)
             .then((res) => {
-              rootScope.$emit('tenent-refresh',true);
+              rootScope.$emit('segment-member-refresh','vlan');
               resolve(validJson);
             }, (error) => {
               inValidJson_Copy.errorMessage = error.data;
@@ -467,7 +479,7 @@ export class SegmentMemberEstablishController {
         } else {
           logicalDataManager.postTenantSegmentMemberVxlan(scope.tenantName, scope.segmentName, postJson)
             .then((res) => {
-              // rootScope.$emit('tenent-refresh',true);
+              rootScope.$emit('segment-member-refresh','vxlan_' + scope.selected.vxlanType.value);
               resolve(validJson);
             }, (error) => {
               inValidJson_Copy.errorMessage = error.data;
