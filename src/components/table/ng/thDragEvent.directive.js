@@ -1,6 +1,6 @@
 export class thDragEvent {
 	static getDI() {
-		return ['$rootScope'];
+		return [];
 	}
 
 	constructor(...args){
@@ -22,7 +22,7 @@ export class thDragEvent {
 			if (allowResize) {
 				startResize = true;
 				startX = event.clientX;
-				this.di.$rootScope.$emit('mousemove-th-col', 
+				scope.$emit('mousemove-th-col', 
 					{
 						'field': scope.$col.field, 
 						'width': event.offsetX,

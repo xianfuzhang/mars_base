@@ -73,10 +73,9 @@ export class updateTableCols {
     };
 
     let dict = {};
-    //thead手动调整th col width
-    unsubscribers.push(this.di.$rootScope.$on('mousemove-th-col', (event, data) => {
-      dict = data;
-    }));
+    scope.$on('mousemove-th-col', (event, data) => {
+    	dict = data;
+    });
 
     //显示隐藏columns时调整table的tds width
     unsubscribers.push(this.di.$rootScope.$on('table-show-hide-columns', (event) => {
