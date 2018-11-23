@@ -6,6 +6,7 @@ export class TenantDetail {
 			'$routeParams',
 			'$filter',
 			'$q',
+			'$log',
 			'$timeout',
 			'logicalService',
 			'roleService',
@@ -120,9 +121,9 @@ export class TenantDetail {
     this.scope.batchRemove = (value) => {
     	this.di.dialogService.createDialog('warning', this.translate('MODULES.LOGICAL.SEGMENT.TABLE.BATCH_DELETE_SEGMENT'))
       .then((data) =>{
-        this.batchDeleteSegments($value);
+        this.batchDeleteSegments(value);
       }, (res) =>{
-        this.di.$log.debug('delete segments dialog cancel');
+        this.di.$log.info('delete segments dialog cancel');
       });
     };
 	}
