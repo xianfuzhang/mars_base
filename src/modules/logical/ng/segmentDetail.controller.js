@@ -257,12 +257,12 @@ export class SegmentDetailController {
       let res = {'network':[], 'access':[]};
       if(network_data.length > 0)
         this.di._.forEach(network_data,(item)=>{
-          res.network.push({'name': item['name'], 'ip_addresses': item['ip_addresses'].join(',')})
+          res.network.push({'name': item['name'], 'ip_addresses': item['ip_addresses'].join(', ')})
         });
 
       if(access_data.length > 0)
         this.di._.forEach(access_data,(item)=>{
-          let port = item['type'] === 'normal' ? item['switch']+ ':' + item['port']:item['server_mac']
+          let port = item['type'] === 'normal' ? item['switch']+ ':' + item['port']:item['server_mac'];
           res.access.push({'name': item['name'], 'type': item['type'], 'port':port , 'vlan':item['vlan']});
         });
       return res;

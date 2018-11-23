@@ -158,6 +158,8 @@ export class SegmentMemberEstablishController {
               scope.memberModel.vlanPorts = _format_ports_recieved(data['ports']);
               scope.memberModel.vlanLogicalPorts =_format_logical_ports_recieved(data['logical_ports']);
               scope.memberModel.vlanMacBased = _format_mac_based_vlans_recieved(data['mac_based_vlans']);
+            } else {
+              scope.selected.vlanDevice = scope.allDeviceLabel.options[0];
             }
           } else if(param.type === 'vxlan'){
             if(data){
@@ -467,7 +469,7 @@ export class SegmentMemberEstablishController {
 
       return new Promise((resolve, reject) => {
         if(scope.selected.memberType.value === 'vlan'){
-          logicalDataManager.postTenantSegmentMemberVlan(scope.tenantName, scope.segmentName, scope.memberModel.vlanDevice.value, postJson)
+          logicalDataManager.postTenantSegmentMemberVlan(scope.tenantName, scope.segmentName, scope.selected.vlanDevice.value, postJson)
             .then((res) => {
               rootScope.$emit('segment-member-refresh','vlan');
               resolve(validJson);
