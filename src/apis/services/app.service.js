@@ -18,8 +18,8 @@ export class appService {
       MOCKED_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
       LIVE_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
       MOCKED_WEBSOCKETS_ENDPONT: 'ws://localhost:3001/',
-      // LIVE_WEBSOCKETS_ENDPONT: 'ws://[%__ZONE_IP__%]:3233/',
-      LIVE_WEBSOCKETS_ENDPONT: 'ws://210.63.204.29:3233/',
+      LIVE_WEBSOCKETS_ENDPONT: 'ws://[%__ZONE_IP__%]:3233/',
+      // LIVE_WEBSOCKETS_ENDPONT: 'ws://210.63.204.29:3233/',
 
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
