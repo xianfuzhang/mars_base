@@ -18,7 +18,8 @@ export class appService {
       MOCKED_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
       LIVE_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
       MOCKED_WEBSOCKETS_ENDPONT: 'ws://localhost:3001/',
-      LIVE_WEBSOCKETS_ENDPONT: 'ws://[%__ZONE_IP__%]:3233/',
+      //logstash/ 最后的斜杠是不能去掉的，否则无法正常代理
+      LIVE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/logstash/',
       // LIVE_WEBSOCKETS_ENDPONT: 'ws://210.63.204.29:3233/',
 
       MOCKED_USERNAME: 'nocsys',
@@ -162,7 +163,12 @@ export class appService {
     if (this.isMocked) {
       endpoint = this.CONST.MOCKED_WEBSOCKETS_ENDPONT;
     } else {
-      endpoint = this.CONST.LIVE_WEBSOCKETS_ENDPONT.replace('[%__ZONE_IP__%]', (this.di.$location.host()));
+      endpoint = this.CONST.LIVE_WEBSOCKETS_ENDPONT.replace('[%__ZONE_IP__%]', this.di.$location.host());
+      if(this.di.$location.protocol() === 'https'){
+        endpoint = endpoint.replace('[%__PROTOCOL__%]', 'wss');
+      } else {
+        endpoint = endpoint.replace('[%__PROTOCOL__%]', 'ws');
+      }
     }
     return endpoint;
   }
