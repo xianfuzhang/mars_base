@@ -16,7 +16,8 @@ export class DeviceDetailController {
       'dialogService',
       'deviceDataManager',
       'tableProviderFactory',
-      'modalManager'
+      'modalManager',
+      'logicalDataManager'
     ];
   }
   constructor(...args){
@@ -368,9 +369,25 @@ export class DeviceDetailController {
     let defer = this.di.$q.defer();
     switch (this.scope.tabSelected.type) {
       case 'port':
+        let deferArr = [];
+        let portsDefer = this.di.$q.defer();
+        let segmentsDefer = this.di.$q.defer();
+        
+        // get device ports
         this.di.deviceDataManager.getDevicePorts(this.scope.deviceId, params).then((res) => {
-          defer.resolve({'data': res.data, 'total': res.data.total});
+          portsDefer.resolve(res.data);
         });
+        deferArr.push(portsDefer.promise)
+        
+        // get segments and ports
+        this.getSegmentsPorts(this.scope.deviceId).then((res) => {
+          segmentsDefer.resolve(res);
+        })
+        deferArr.push(segmentsDefer.promise)
+        
+        this.di.$q.all(deferArr).then((resArr) => {
+          defer.resolve({data: {ports: resArr[0].ports, segments: resArr[1]}, total: resArr[0].total});
+        })
         break;
       case 'link':
         this.di.deviceDataManager.getDeviceLinks(this.scope.deviceId, params).then((res) => {
@@ -400,6 +417,58 @@ export class DeviceDetailController {
     }
     return defer.promise;
   }
+  
+  getSegmentsPorts(deviceId) {
+    let defer = this.di.$q.defer();
+    let ports = [];
+    let segmentsAndPorts = {}
+    // 1. get all segments
+    this.di.logicalDataManager.getSegments().then(
+      (res) => {
+        let segments = res.data.segments;
+        let deferArr = [];
+        
+        // 2.get all segment_member
+        segments.forEach((segment) => {
+          let segmentDefer = this.di.$q.defer();
+          this.di.logicalDataManager.getTenantSegmentMemberVlan(segment.tenant_name, segment.segment_name, deviceId).then(
+            (res) => {
+              let segmentPorts = [];
+              res.data.segment_members.forEach((member) => {
+                if(member.ports) {
+                  segmentPorts = segmentPorts.concat(member.ports)
+                }
+              })
+              segmentDefer.resolve({segment: segment.segment_name, tenant: segment.tenant_name, ports: segmentPorts})
+            },
+            (error) => {
+              // console.error(error.message)
+              segmentDefer.resolve({segment: segment.segment_name, ports: []})
+            })
+  
+          deferArr.push(segmentDefer.promise);
+        })
+  
+        // 3. get all ports
+        if(deferArr.length == 0) {
+          defer.resolve(segmentsAndPorts)
+          return
+        }
+        
+        this.di.$q.all(deferArr).then((resArr) => {
+          resArr.forEach((res) => {
+            segmentsAndPorts[res.segment] = {tenant: res.tenant, ports:res.ports}
+          })
+          
+          defer.resolve(segmentsAndPorts)
+        })
+      },
+      (error) => {
+        defer.resolve(segmentsAndPorts)
+      });
+  
+    return defer.promise;
+  }
 
   entityStandardization(entities) {
     this.scope.detailModel.entities = [];
@@ -417,6 +486,7 @@ export class DeviceDetailController {
           obj['link_status'] = entity.annotations.adminState === 'enabled' ? 'available' : 'unavailable';
           obj['type'] = entity.type;
           obj['speed'] = entity.portSpeed;
+          obj['segments'] = this.getSegmentsHtml(entity.port, entities.segments);
           this.scope.detailModel.entities.push(obj);
         });
         break;
@@ -513,7 +583,21 @@ export class DeviceDetailController {
         break;
     }
   }
-
+  
+  getSegmentsHtml(port, segments) {
+    let segmentHtmlArr = [];
+    Object.keys(segments).forEach((name) => {
+      segments[name].ports.forEach((portName) => {
+        if(portName.indexOf(port) > -1) {
+          let html = `<a class="clickable" href="/#!/tenant/${segments[name].tenant}/segment/${name}">${name}</a>`
+          segmentHtmlArr.push(html);
+        }
+      })
+    });
+    
+    return segmentHtmlArr.length ? segmentHtmlArr.join(', ') : '-'
+  }
+  
   getRowActions(type) {
     let actions = [];
     switch (type) {
