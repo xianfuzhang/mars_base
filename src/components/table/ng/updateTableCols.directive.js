@@ -37,7 +37,7 @@ export class updateTableCols {
     };
     //获取thead中所有的th以及对应的width
     let getColsWidth = () => {
-      let scrollWidth = bodyElm[0].offsetWidth - bodyElm[0].clientWidth;
+      let scrollWidth = bodyElm[0].offsetHeight - bodyElm[0].clientHeight - 2;
       if (!cols.length) {
         let thElms = headerElm.find('th');
         for(let i=0; i< thElms.length; i++) {
@@ -52,10 +52,45 @@ export class updateTableCols {
       //update
       else {
         cols.forEach((colObj, index) => {
-          colObj['width'] = colObj['resize-col-' +index].clientWidth-2; //table的padding默认是2px
-          colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
-          //console.log('getColsWidth...index=' + index + ' , width=' + colObj['width']);
+        	if (!colObj.type) {
+        		colObj['width'] = colObj['resize-col-' +index].clientWidth-2; //table的padding默认是2px
+  	        colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
+	          //console.log('getColsWidth...index=' + index + ' , width=' + colObj['width']);	
+        	}
         });
+      }
+      if (scrollWidth > 0) {
+      	//cols没有x-sroll-patch，新增col，然后更新width
+      	let patch = cols.filter((col) =>{return col.type === 'patch'});
+      	if (!patch.length) {
+      		cols.push({
+      			'type': 'patch',
+      			'width': scrollWidth -2
+      		});
+      		let thElm = document.createElement('th');
+      		thElm.className = 'x-sroll-patch';
+      		thElm.style.width = scrollWidth + 'px';
+      		//thElm.setAttribute('style', {'width': scrollWidth + 'px'});
+      		headerElm.find('tr')[0].appendChild(thElm);
+      	}
+      }
+      else {
+      	//cols如果有x-sroll-patch，移除col
+      	let index = cols.findIndex((col) =>{return col.type === 'patch'});
+      	if (index > -1) {
+      		let patchNode = headerElm.find('tr')[0].lastChild;
+      		headerElm.find('tr')[0].removeChild(patchNode);
+      		cols.splice(index, 1);
+      	}
+      }
+    };
+    let updateColsMinWidth = () => {
+    	let thElms = headerElm.find('th');
+    	for(let i=0; i< thElms.length; i++) {
+        if ((!thElms.eq(i).hasClass('ng-hide') && !thElms.eq(i).hasClass('x-sroll-patch')) 
+        		&& thElms.eq(i)[0].clientWidth < CONST_MIN_WIDTH) {
+        	thElms.eq(i)[0].style.width = CONST_MIN_WIDTH + 'px';
+        }
       }
     };
     //调整tbody中td的width
@@ -90,18 +125,19 @@ export class updateTableCols {
 
     let mousemoveEvent = (event) => {
       if (dict.startResize) {
-        event.preventDefault();
+    		event.preventDefault();
         let offset = event.clientX - dict.startX;
-        //当某col达到最小60px，取消move
+        /*//当某col达到最小60px，取消move
         if (colsMinInspect() && offset > 0 ) {
           return false;
-        }
+        }*/
         let width = dict.width + offset;
         if (width < CONST_MIN_WIDTH) width = CONST_MIN_WIDTH;
         dict.element.style.width = width + 'px';
         
         //统计table header th的width
         getColsWidth();
+        updateColsMinWidth();
         //修改对应class的width
         updateBodyColsWidth();
       }
@@ -112,12 +148,31 @@ export class updateTableCols {
       }
     };
     let resizeEvent = (event) => {
-      getColsWidth();
-      updateBodyColsWidth();
+    	if (scope.resizePromise) {
+    		this.di.$timeout.cancel(scope.resizePromise);
+    	}
+    	scope.resizePromise = this.di.$timeout(() => {
+    		getColsWidth();
+      	updateBodyColsWidth();
+    	}, 500);
     };
+    
     document.addEventListener('mousemove', mousemoveEvent, false);
     document.addEventListener('mouseup', mouseupEvent, false);
     window.addEventListener('resize', resizeEvent, false);
+    bodyElm[0].onscroll = (event)  => {
+    	let scrollLeft = bodyElm[0].scrollLeft;
+    	headerElm[0].scrollLeft = scrollLeft;
+    	//console.log('scroll... scrollLeft = ' + scrollLeft);
+
+    	if (scope.scrollPromise) {
+    		this.di.$timeout.cancel(scope.scrollPromise);
+    	}
+    	scope.scrollPromise = this.di.$timeout(() => {
+    		getColsWidth();
+      	updateBodyColsWidth();
+    	}, 500);
+    }
 
     scope.$on('$destroy', ()=> {
       document.removeEventListener('mousemove', mousemoveEvent);
@@ -126,6 +181,7 @@ export class updateTableCols {
       unsubscribers.forEach((cb) => {
         cb();
       });
+      bodyElm[0].onscroll = null;
     });
   }
 }
