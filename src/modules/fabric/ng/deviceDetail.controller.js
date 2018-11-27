@@ -589,7 +589,7 @@ export class DeviceDetailController {
     Object.keys(segments).forEach((name) => {
       segments[name].ports.forEach((portName) => {
         if(portName.indexOf(port) > -1) {
-          let html = `<a class="clickable" href="/#!/tenant/${segments[name].tenant}/segment/${name}">${name}</a>`
+          let html = `<a style="cursor: pointer;text-decoration: underline;color: #47B8E0;" href="/#!/tenant/${segments[name].tenant}/segment/${name}">${name}</a>`
           segmentHtmlArr.push(html);
         }
       })
