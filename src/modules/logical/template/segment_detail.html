@@ -7,35 +7,35 @@
   </content-header>
   <section class="app-body">
     <div class="main__content">
-      <div class="device-detail">
-        <div class="device-detail__row">
-          <div class="device-detail__item">
-            <label class="device-detail__item-label"
+      <div class="segment-detail">
+        <div class="segment-detail__row">
+          <div class="segment-detail__item">
+            <label class="segment-detail__item-label"
                    ng-bind="'MODULES.LOGICAL.SEGMENT.TABLE.SEGMENT_NAME'|translate"></label>
-            <span class="device-detail__item-value">{{detailModel.name}}</span>
+            <span class="segment-detail__item-value">{{detailModel.name}}</span>
           </div>
-          <div class="device-detail__item">
-            <label class="device-detail__item-label"
+          <div class="segment-detail__item">
+            <label class="segment-detail__item-label"
                    ng-bind="'MODULES.LOGICAL.SEGMENT.TABLE.SEGMENT_TYPE'|translate"></label>
-            <span class="device-detail__item-value">{{detailModel.type}}</span>
+            <span class="segment-detail__item-value">{{detailModel.type}}</span>
           </div>
-          <div class="device-detail__item">
-            <label class="device-detail__item-label"
+          <div class="segment-detail__item">
+            <label class="segment-detail__item-label"
                    ng-bind="'MODULES.LOGICAL.SEGMENT.TABLE.IP_ADDRESS'|translate"></label>
-            <span class="device-detail__item-value">{{detailModel.ip_address}}</span>
+            <span class="segment-detail__item-value">{{detailModel.ip_address}}</span>
           </div>
 
         </div>
-        <div class="device-detail__row">
-          <div class="device-detail__item">
-            <label ng-if="detailModel.type == 'vlan'" class="device-detail__item-label">VLAN ID</label>
-            <label ng-if="detailModel.type == 'vxlan'" class="device-detail__item-label">VNI ID</label>
-            <span class="device-detail__item-value">{{detailModel.value}}</span>
+        <div class="segment-detail__row">
+          <div class="segment-detail__item">
+            <label ng-if="detailModel.type == 'vlan'" class="segment-detail__item-label">VLAN ID</label>
+            <label ng-if="detailModel.type == 'vxlan'" class="segment-detail__item-label">VNI ID</label>
+            <span class="segment-detail__item-value">{{detailModel.value}}</span>
           </div>
-          <div class="device-detail__item">
-            <label class="device-detail__item-label"
+          <div class="segment-detail__item">
+            <label class="segment-detail__item-label"
                    ng-bind="'MODULES.LOGICAL.TENANT.TABLE.NAME'|translate"></label>
-            <span class="device-detail__item-value">{{tenantName}}</span>
+            <span class="segment-detail__item-value">{{tenantName}}</span>
           </div>
         </div>
 
