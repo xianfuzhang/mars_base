@@ -106,12 +106,15 @@ export class ElasticsearchController {
       }).result.then((data) => {
         if (data && !data.canceled) {
           this.scope.loading = true;
+          this.di.$rootScope.$emit('start_loading');
           
           let endtime = data.data.endtime.getTime();
           let params = this.getDeleteIndiceParams(endtime);
   
           this.di.manageDataManager.deleteElasticsearcIndexByTime(this.scope.dashboardModel.selectedIndice, params).then(
             (res) => { // success to save
+              this.di.$rootScope.$emit('stop_loading');
+              
               this.di.dialogService.createDialog('success', '清理成功！')
                 .then((data)=>{
                   init(); // 初始化
@@ -120,9 +123,11 @@ export class ElasticsearchController {
                 })
             },
             (err) => { // error to save
+              this.di.$rootScope.$emit('stop_loading');
               this.di.dialogService.createDialog('error', '清理失败！')
                 .then((data)=>{
                   this.scope.loading = false;
+                  
                 }, (data)=>{
                   this.scope.loading = false;
                 })
@@ -160,7 +165,7 @@ export class ElasticsearchController {
           this.scope.dashboardModel.indiceOptions.push({label: indice.name, value: indice.name})
         });
   
-        chartSwtInterface(dataModel.indices, 'swtInterfaceRxTxDrops');
+        chartIndiceSummary(dataModel.indices, 'indice-summary');
   
         if(this.scope.dashboardModel.indiceOptions.length == 0) return;
   
@@ -177,7 +182,7 @@ export class ElasticsearchController {
       })
     };
     
-    let chartSwtInterface = (indices, bindTo) =>{
+    let chartIndiceSummary = (indices, bindTo) =>{
       this.parseIndicesSize(indices);
       let y_label = indices[0].size.slice(indices[0].size.length - 2, indices[0].size.length);
       let category= [], rxs = [], size = ['占用空间'];

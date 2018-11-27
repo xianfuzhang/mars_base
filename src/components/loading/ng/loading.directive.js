@@ -21,7 +21,7 @@ export class Loading {
     this.template = require('../template/loading');
 
     this.scope = {
-
+      defaultClosed: '@'
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -98,11 +98,12 @@ export class Loading {
           unSubscribe();
         });
       });
-
-      setTimeout(function () {
-        start(true);
-      });
-
+  
+      if(!scope.defaultClosed) {
+        setTimeout(function () {
+          start(true);
+        });
+      }
 
     }).call(this);
   }
