@@ -40,9 +40,9 @@ export class ClickableTextRenderer {
       return this.di.renderService.render().CONST_TYPE_DOM;
     };
     this.getClasses = (spec) => {
-      if (spec && spec.col.sort !== this.di.tableConsts.CONST.SORT_UNDEFINED) {
+      /*if (spec && spec.col.sort !== this.di.tableConsts.CONST.SORT_UNDEFINED) {
         return 'text-bold';
-      }
+      }*/
       if (spec.col.type === 'clickabletext' && (spec.value !== '-')) {
         return 'clickable';
       }

@@ -147,6 +147,11 @@ export class DeviceDetailService {
         'field': 'speed',
         'layout': {'visible': true, 'sortable': true}
       },
+      {
+        'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.SEGMENTS'),
+        'field': 'segments',
+        'layout': {'visible': true, 'sortable': false}
+      },
       /*{
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.DEVICE'),
         'field': 'device_name',
