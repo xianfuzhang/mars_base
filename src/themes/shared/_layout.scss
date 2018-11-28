@@ -61,12 +61,11 @@ input:-webkit-autofill:active {
 }
 .section-3-2{
   width: 66%;
-  padding-top: 20px;
 }
 .section-3-1{
   width: 33%;
   overflow-y: auto;
-  padding: 20px;
+  padding: 0 20px;
   border-left: 1px solid lightgray;
   margin-bottom: 50px;
   overflow-x: hidden;
@@ -74,7 +73,7 @@ input:-webkit-autofill:active {
 .main__content{
   display: flex;
   overflow: hidden;
-  padding: 0 24px;
+  padding: 20px 20px 0;
   flex-direction: column;
   height: 90%;
   /* margin-bottom: 80px; */
