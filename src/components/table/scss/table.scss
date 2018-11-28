@@ -26,7 +26,7 @@ mdc设置组件颜色
 .mdl-table{
   table-layout: fixed;
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
   border-spacing: 0;
 }
 .mdl-table-field__actions {
@@ -103,10 +103,10 @@ mdc设置组件颜色
    border-bottom: 0;
 } */
 .mdl-table-body__row:last-child td:first-child{
-  border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 8px;
 }
 .mdl-table-body__row:last-child td:last-child{
-  border-bottom-right-radius: 4px;
+  border-bottom-right-radius: 8px;
 }
 .mdl-table-body__row .td-row-actions{
   overflow: inherit;
@@ -151,11 +151,11 @@ mdc设置组件颜色
 }
 .mdl-table-header__row th:first-child{
   border-left: 1px solid rgba(0,0,0,0.1);
-  border-top-left-radius: 4px;
+  border-top-left-radius: 8px;
 }
 .mdl-table-header__row th:last-child{
   /* border-right: 0; */
-  border-top-right-radius: 4px;
+  border-top-right-radius: 8px;
 }
 .mdl-table-header__row th.sortable {
   cursor: pointer;
