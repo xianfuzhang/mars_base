@@ -40,17 +40,27 @@ mdc设置组件颜色
   flex-wrap: wrap;
 }
 .mdl-table-header{
-  border:1px solid rgba(0, 0, 0, 0.1);
+/*   border:1px solid rgba(0, 0, 0, 0.1);
   border-bottom: 0;
-  border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0; */
   overflow: hidden;
+  /* position: relative; */
+  width: auto;
+  /* float: left; */
 }
 .mdl-table-body{
-  border-radius: 0 0 4px 4px;
+  position: relative;
+  float: left;
+  height: calc(100% - 100px);
+  width: 100%;
+  /* border-radius: 0 0 4px 4px; */
   overflow: auto;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  /* border: 1px solid rgba(0, 0, 0, 0.1); */
 }
 .mdl-table-footer{
+  position: relative;
+  float: left;
+  width: 100%;
   opacity: 0.6;
 }
 .mdl-table-header__row, .mdl-table-body__row {
@@ -83,11 +93,20 @@ mdc设置组件颜色
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
-.mdl-table-body__row td:last-child{
+.mdl-table-body__row td:first-child{
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+/* .mdl-table-body__row td:last-child{
   border-right: 0;
 }
 .mdl-table-body__row:last-child td{
    border-bottom: 0;
+} */
+.mdl-table-body__row:last-child td:first-child{
+  border-bottom-left-radius: 4px;
+}
+.mdl-table-body__row:last-child td:last-child{
+  border-bottom-right-radius: 4px;
 }
 .mdl-table-body__row .td-row-actions{
   overflow: inherit;
@@ -127,9 +146,16 @@ mdc设置组件颜色
   text-align: center;
   user-select: none;
   border-right: 1px solid rgba(0,0,0,0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.mdl-table-header__row th:first-child{
+  border-left: 1px solid rgba(0,0,0,0.1);
+  border-top-left-radius: 4px;
 }
 .mdl-table-header__row th:last-child{
-  border-right: 0;
+  /* border-right: 0; */
+  border-top-right-radius: 4px;
 }
 .mdl-table-header__row th.sortable {
   cursor: pointer;
@@ -193,11 +219,13 @@ mdc设置组件颜色
   border-radius: 4px;
   font-size: 13px;
   overflow: hidden;
-  transition: box-shadow 135ms cubic-bezier(.4,0,.2,1),width 235ms cubic-bezier(.4,0,.2,1);
-  vertical-align: top;
-  height: calc(100% - 48px);
-  display: flex;
-  flex-direction: column;
+  /* padding-bottom: 80px; */
+  height: calc(100% - 50px);
+  /*transition: box-shadow 135ms cubic-bezier(.4,0,.2,1),width 235ms cubic-bezier(.4,0,.2,1);
+   vertical-align: top;
+   height: calc(100% - 48px);
+   display: flex;
+   flex-direction: column; */
 }
 .mdc-menu.table-row-action-list{
   min-width: 80px;

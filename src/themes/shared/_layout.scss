@@ -76,8 +76,8 @@ input:-webkit-autofill:active {
   overflow: hidden;
   padding: 0 24px;
   flex-direction: column;
-  /* height: 90%; */
-  margin-bottom: 80px;
+  height: 90%;
+  /* margin-bottom: 80px; */
 }
 .main__content__full-width{
   width: 100%;
@@ -90,8 +90,9 @@ input:-webkit-autofill:active {
   padding-top: 10px;
 }
 .tab-content{
-  margin-top: 12px;
-  height: calc(100% - 200px);
+  position: relative;
+  float: left;
+  height: calc(100% - 150px);
 }
 
 @include block(column) {

@@ -8,20 +8,20 @@
   <section class="app-body tenant-detail">
     <div class="section-3-2">
       <div class="main__content">
-      <mdl-tabs ng-model="tabSelected" options="tabs"
-                class-list="main__content__device-detail-tabs"
-                on-select="onTabChange($value)">
-      </mdl-tabs>
-      <section class="tab-content" ng-if="tabSelected.type == 'segment'">
-        <mdl-table actions-show="detailModel.actionsShow"
-                  actions="detailModel.rowActions"
-                  row-select-action="onTableRowSelectAction($event)"
-                  row-click="onTableRowClick($event)"
-                  provider="detailModel.provider" api-ready="onApiReady($api)"
-                  on-add="addSegment()" on-remove="batchRemove($value)">
-        </mdl-table>
-      </section>
-    </div>
+        <mdl-tabs ng-model="tabSelected" options="tabs"
+                  class-list="main__content__device-detail-tabs"
+                  on-select="onTabChange($value)">
+        </mdl-tabs>
+        <section class="tab-content" ng-if="tabSelected.type == 'segment'">
+          <mdl-table actions-show="detailModel.actionsShow"
+                    actions="detailModel.rowActions"
+                    row-select-action="onTableRowSelectAction($event)"
+                    row-click="onTableRowClick($event)"
+                    provider="detailModel.provider" api-ready="onApiReady($api)"
+                    on-add="addSegment()" on-remove="batchRemove($value)">
+          </mdl-table>
+        </section>
+      </div>
     </div>
     <div class="section-3-1" ng-if="tabSelected.type === 'segment' && segment">
       <div class="segment-detail">
