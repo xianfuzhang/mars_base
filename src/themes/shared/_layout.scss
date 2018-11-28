@@ -93,6 +93,7 @@ input:-webkit-autofill:active {
   position: relative;
   float: left;
   height: calc(100% - 150px);
+  width: 100%;
 }
 
 @include block(column) {
