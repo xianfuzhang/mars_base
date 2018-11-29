@@ -82,10 +82,12 @@
   z-index: 100;
 }
 .mdc-tab-field.mdc-tab-bar{
-  display: flex;
+  /* display: flex; */
   user-select: none;
 }
 .mdc-tab-bar .mdc-tab{
+  position: relative;
+  float: left;
   margin-right: 5px;
   border: 1px solid rgba(0,0,0, 0.03);
   border-radius: 4px;

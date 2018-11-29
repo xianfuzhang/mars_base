@@ -1,7 +1,7 @@
 <div class="flex_entirety">
   <!--<mar-header></mar-header>-->
   <mdl-header></mdl-header>
-  <div class="configuration__body flex_entirety__body">
+  <div class="configuration__body flex_entirety__body app-body">
 
     <content-header big-title="{{'MODULE.HEADER.ALERT.ALERT' | translate}}">
       <a href="/">Mars Cloud</a>
@@ -9,13 +9,17 @@
       <span>{{'MODULE.HEADER.ALERT.ALERT' | translate}}</span>
     </content-header>
     <div class="alert-list flex_entirety__body__body" style="display:flex;flex-direction: row">
-      <mdl-table actions-show="alertModel.actionsShow"
-                 actions="alertModel.rowActions"
-                 row-click="onTableRowClick($event)"
-                 row-select-action="onTableRowSelectAction($event)"
-                 provider="alertModel.alertTableProvider" api-ready="onAlertAPIReady($api)"
-                 on-remove="batchRemove($value)">
-      </mdl-table>
+      <div class="section-3-2">
+        <div class="main__content">
+          <mdl-table actions-show="alertModel.actionsShow"
+                     actions="alertModel.rowActions"
+                     row-click="onTableRowClick($event)"
+                     row-select-action="onTableRowSelectAction($event)"
+                     provider="alertModel.alertTableProvider" api-ready="onAlertAPIReady($api)"
+                     on-remove="batchRemove($value)">
+          </mdl-table>
+        </div>
+       </div> 
     </div>
   </div>
 </div>

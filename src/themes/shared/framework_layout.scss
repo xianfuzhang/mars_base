@@ -21,7 +21,7 @@
     flex-shrink: 1;
     display: flex;
     flex-direction: column;
-    padding: 0 8px;
+    /* padding: 0 8px; */
     height: 100%;
 
     @include element(header){

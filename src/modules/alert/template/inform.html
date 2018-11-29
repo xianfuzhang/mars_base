@@ -10,13 +10,14 @@
       <span>{{'MODULE.HEADER.ALERT.INFORM' | translate}}</span>
     </content-header>
     <div class="configuration__body__content flex_entirety__body__body" style="display:flex;flex-direction: column">
-      <div style="margin-top:16px;flex-basis:35px;flex-shrink: 0;flex-grow: 0;">
+      <div class="main__content">
+      <!-- <div style="margin-top:16px;flex-basis:35px;flex-shrink: 0;flex-grow: 0;"> -->
         <mdl-tabs ng-model="tabSelected" options="tabs"
                      class-list="main__content__device-detail-tabs"
                      on-select="onTabChange($value)">
         </mdl-tabs>
-      </div>
-      <div style="margin-top: 16px;flex-shrink: 1;flex-grow: 1;">
+      <!-- </div> -->
+      <!-- <div style="margin-top: 16px;flex-shrink: 1;flex-grow: 1;"> -->
         <section class="tab-content" ng-show="tabSelected.type == 'receive_group'">
           <div style="display: block;">
             <div style="width:60%; display: inline-block;vertical-align: top;">
@@ -92,7 +93,7 @@
         <!--<section class="tab-content">-->
 
 
-          <div style="width:100%;display: inline-block;text-align: center;margin:0 auto;">
+          <div style="width:100%;display: inline-block;margin-top: 20px;">
 
             <div style="display: inline-block;vertical-align:top;height:100%;border:1px solid #fafafa;padding:8px;background-color: #fafafa;border-radius: 5px;text-align:left;">
               <mar-section s-title="{{'MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING'|translate}}" no-fold="true" class="">
@@ -228,7 +229,7 @@
                   <!--</div>-->
               </div></div>
 
-          <div style="text-align:center;margin:24px 0 auto;">
+          <div style="margin-top:20px;">
 
             <div style="display: inline-block;">
               <!--<button id="server_config_clear" ng-click="clearServerConfig()" class="mdc-button mdc-button&#45;&#45;raised" style="width:200px;height:50px;font-size:20px;color:white;">{{ "MODULES.ALERT.SERVER_CONFIG.CLEAR_SETTING"|translate}}</button>-->
@@ -240,8 +241,8 @@
             </div>
           </div>
         </section>
+      <!-- </div> -->
       </div>
-
     </div>
   </div>
 
