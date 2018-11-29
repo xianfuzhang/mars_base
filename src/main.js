@@ -320,25 +320,24 @@ angular
           return config;
         },
         response: function(response) {
-          // do something on success
-          let data = response.data;
-          let url = response.config.url;
-          if(url.indexOf('j_security_check') !== -1){
-            if(data.indexOf('ONOS Login') === -1){
-              return response;
-            } else {
-              $location.url('/login');
-              response.status = 401;
-              return $q.reject(response);
-            }
-          } else {
-            return response;
-          }
+          // let data = response.data;
+          // let url = response.config.url;
+          // if(url.indexOf('login') !== -1){
+          //   if(data.indexOf('ONOS Login') === -1){
+          //     return response;
+          //   } else {
+          //     $location.url('/login');
+          //     response.status = 401;
+          //     return $q.reject(response);
+          //   }
+          // } else {
+          //   return response;
+          // }
 
-
+          return response;
         },
         responseError: function(response) {
-          if (response.status === 401)
+          if (response.status === 401 || response.status === 403)
             $location.url('/login');
           return $q.reject(response);
         }

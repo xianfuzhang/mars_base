@@ -25,6 +25,7 @@ export class FabricSummaryController {
       'notificationService',
       'dialogService',
       'commonService',
+      'roleService',
       'modalManager'
     ];
   }
@@ -47,10 +48,13 @@ export class FabricSummaryController {
     this.di.$scope.resize_right = {};
     this.di.$scope.resize_length = {};
 
+
+
     this.di.$scope.defaultRightLength = 300;
     this.di.$scope.showLeftDiv = false;
 
     let scope = this.di.$scope;
+    scope.role = this.di.roleService.getRole();
 
     let initializeTransitionFlag = false;
 
@@ -679,22 +683,23 @@ export class FabricSummaryController {
 
 
     unsubscribers.push(this.di.$rootScope.$on('switch_opt',(evt, data)=>{
-      // console.log('==switch_opt is receive. isShow: ' + this.di.$scope.fabricModel.switchContextMenu.isShow);
-      if(this.di.$scope.fabricModel.switchContextMenu.isShow){
-        this.di.$scope.fabricModel.switchContextMenu.isShow = false;
-        setTimeout(()=>{
+
+      if(scope.role > 1){
+        if(this.di.$scope.fabricModel.switchContextMenu.isShow){
+          this.di.$scope.fabricModel.switchContextMenu.isShow = false;
+          setTimeout(()=>{
+            this.di.$scope.fabricModel.switchContextMenu.location= {'x':data.event.clientX, 'y':data.event.clientY};
+            this.di.$scope.fabricModel.switchContextMenu.isShow = true;
+            this.di.$scope.$apply();
+          },100);
+        } else {
           this.di.$scope.fabricModel.switchContextMenu.location= {'x':data.event.clientX, 'y':data.event.clientY};
           this.di.$scope.fabricModel.switchContextMenu.isShow = true;
-          this.di.$scope.$apply();
-        },100);
-      } else {
-        this.di.$scope.fabricModel.switchContextMenu.location= {'x':data.event.clientX, 'y':data.event.clientY};
-        this.di.$scope.fabricModel.switchContextMenu.isShow = true;
+        }
+        hideSwitchDetail();
+        this.di.$scope.fabricModel.showSwitchId = data.id;
+        this.di.$scope.$apply();
       }
-      hideSwitchDetail();
-      this.di.$scope.fabricModel.showSwitchId = data.id;
-      this.di.$scope.$apply();
-
     }));
 
     unsubscribers.push(this.di.$rootScope.$on('topo_unselect',(evt)=>{

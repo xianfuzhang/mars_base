@@ -28,14 +28,14 @@ export class LoginDataManager {
       this.di.$cookies.put('useraccount', this.di.crypto.AES.encrypt(JSON.stringify(result), this.di.appService.CONST.CRYPTO_STRING));
       return defer.promise;
     }
-    this.di.$http.post(this.di.appService.getLoginUrl(), 'j_username='+username+'&j_password='+password, {'headers':{'Content-Type': 'application/x-www-form-urlencoded'}})
+    this.di.$http.get(this.di.appService.getLoginUrl(),{'headers':{'Authorization': "Basic " + window.btoa(username + ':' + password)}})
       .then((result) => {
         if(result.status === 200){
           this.di.$cookies.put('useraccount', this.di.crypto.AES.encrypt(JSON.stringify({
             'user_name': username, 
             'password': password
           }), this.di.appService.CONST.CRYPTO_STRING));
-          defer.resolve(true);
+          defer.resolve(result);
         } else {
           this.di.$cookies.remove('useraccount');
           defer.resolve(false);
@@ -43,6 +43,9 @@ export class LoginDataManager {
       }, (result) => {
         defer.reject(result);
       });
+
+
+
     return defer.promise;
   }
 

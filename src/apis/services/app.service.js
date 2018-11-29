@@ -45,10 +45,10 @@ export class appService {
           {
             'group':'Logical',
             'label': this.translate('MODULE.HEADER.LOGICAL'),
-            'role': 2,
+            'role': 3,
             'items':[
-              {'label': 'Tenant', 'url': '/tenant', 'role': 2},
-              {'label': 'Segment', 'url': '/segment', 'role': 2},
+              {'label': 'Tenant', 'url': '/tenant', 'role': 3},
+              {'label': 'Segment', 'url': '/segment', 'role': 3},
              ]
            },
           {
@@ -174,7 +174,8 @@ export class appService {
   }
   
   getLoginUrl() {
-    return this.getZoneEndpoint(true) + '/j_security_check';
+    // return this.getZoneEndpoint(true) + '/j_security_check';
+    return this.getZoneEndpoint(true) + '/useraccount/v1/login';
   }
 
   getLogoutUrl() {
