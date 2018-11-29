@@ -2,6 +2,7 @@ export class DeviceDetailService {
   static getDI() {
     return [
       '$filter',
+      'roleService'
     ];
   }
 
@@ -110,7 +111,7 @@ export class DeviceDetailService {
   }
 
   getDevicePortsSchema() {
-    return [
+    let defaultSchema = [
       {
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.NAME'),
         'field': 'port_name',
@@ -147,17 +148,22 @@ export class DeviceDetailService {
         'field': 'speed',
         'layout': {'visible': true, 'sortable': true}
       },
-      {
-        'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.SEGMENTS'),
-        'field': 'segments',
-        'layout': {'visible': true, 'sortable': false}
-      },
       /*{
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.DEVICE'),
         'field': 'device_name',
         'layout': {'visible': true, 'sortable': true}
       }*/
     ];
+    
+    if(this.di.roleService.getRole() > 1) {
+      defaultSchema.push({
+        'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.SEGMENTS'),
+        'field': 'segments',
+        'layout': {'visible': true, 'sortable': false}
+      })
+    }
+    
+    return defaultSchema;
   }
 
   getDevicePortsTableRowActions() {
