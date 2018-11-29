@@ -77,6 +77,7 @@ input:-webkit-autofill:active {
   flex-direction: column;
   height: 90%;
   width: 100%;
+  box-sizing: border-box;
 }
 .main__content__full-width{
   width: 100%;
