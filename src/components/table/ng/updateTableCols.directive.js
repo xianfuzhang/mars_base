@@ -172,7 +172,18 @@ export class updateTableCols {
         this.di.$timeout.cancel(scope.resizePromise);
       }
       scope.resizePromise = this.di.$timeout(() => {
+        //hard codeing 针对是否overflow显示不同样式
+        let bodyHeight = bodyElm[0].clientHeight;
+        let tableHeight = bodyElm.children()[0].clientHeight;
+        if (bodyHeight > tableHeight) {
+          bodyElm[0].style.height = 'auto';
+        }
+        else {
+          bodyElm[0].style.height = 'calc(100% - 100px)';
+        }
+
         getColsWidth();
+        updateColsWidth();
         updateBodyColsWidth();
       }, 500);
     };
