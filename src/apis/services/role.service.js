@@ -28,6 +28,10 @@ export class RoleService {
     }
     return this.role;
   }
+
+  clearRole() {
+    this.role = null;
+  }
 }
 RoleService.$inject = RoleService.getDI();
 RoleService.$$ngIsClass = true;  

@@ -8,6 +8,7 @@ export class headerController{
       '_',
       'crypto',
       'appService',
+      'roleService',
       'loginDataManager',
       'alertDataManager',
     ];
@@ -28,14 +29,13 @@ export class headerController{
       if (url === '/logout') {
         this.di.$cookies.remove('useraccount');
         this.di.$cookies.remove('menu');
-        this.di.$location.path(url);
+        this.di.roleService.clearRole();
+        //this.di.$location.path(url);
         /*this.di.loginDataManager.doLogout().then(() => {
           this.di.$location.path(url);
         });*/
       }
-      else {
-        this.di.$location.path(url);
-      }
+      this.di.$location.path(url);
     };
 
    /* this.di.alertDataManager.getAlertHistories({})
