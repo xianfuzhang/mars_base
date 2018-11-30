@@ -5,6 +5,7 @@ export class LoginDataManager {
       '$http',
       '$cookies',
       'appService',
+      'localStoreService',
       'crypto'
     ];
   }
@@ -38,29 +39,13 @@ export class LoginDataManager {
           defer.resolve(result);
         } else {
           this.di.$cookies.remove('useraccount');
+          this.di.localStoreService.getSyncStorage().del('menus');
           defer.resolve(false);
         }
       }, (result) => {
+        this.di.$cookies.remove('useraccount');
+        this.di.localStoreService.getSyncStorage().del('menus');
         defer.reject(result);
-      });
-
-
-
-    return defer.promise;
-  }
-
-  doLogout() {
-    let defer = this.di.$q.defer();
-
-    this.di.$http.get(this.di.appService.getLogoutUrl())
-      .then(() => {
-        this.di.$cookies.remove('useraccount');
-        this.di.$cookies.remove('menu');
-        defer.resolve();
-      }, () => {
-        this.di.$cookies.remove('useraccount');
-        this.di.$cookies.remove('menu');
-        defer.resolve();
       });
     return defer.promise;
   }

@@ -1,9 +1,8 @@
 export class RoleService {
   static getDI() {
     return [
-      '$cookies',
-      'appService',
-      'crypto'
+      'localStoreService',
+      'appService'
     ];
   }
 
@@ -16,17 +15,19 @@ export class RoleService {
 
   getRole() {
     if (!this.role) {
-      if(this.di.$cookies.get('menu')) {
-        let menu = this.di.$cookies.get('menu');
-        let decodeBytes = this.di.crypto.AES.decrypt(menu.toString(), this.di.appService.CONST.CRYPTO_STRING);
-        let decodeData = decodeBytes.toString(this.di.crypto.enc.Utf8);
-        this.role = JSON.parse(decodeData).role;
+      if(this.di.localStoreService.getSyncStorage().get('menus')) {
+        let menu = this.di.localStoreService.getSyncStorage().get('menus');
+        this.role = menu.role;
       }
       else {
         this.role = 1;
       }  
     }
     return this.role;
+  }
+
+  clearRole() {
+    this.role = null;
   }
 }
 RoleService.$inject = RoleService.getDI();

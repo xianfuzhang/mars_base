@@ -118,14 +118,10 @@ angular
     var checkLoggedIn = function($q, $cookies, $location){
       let deferred = $q.defer(),
           useraccount = $cookies.get('useraccount'),
-          menu = $cookies.get('menu'),
+          menu = window.localStorage['menus'],
           exists = false;
       if (menu) {
-        let crypto = require('crypto-js');
-        let decodeBytes = crypto.AES.decrypt(menu.toString(), 'secret');
-        let decodeData = decodeBytes.toString(crypto.enc.Utf8);
-        let role = JSON.parse(decodeData).role;
-        let groups = JSON.parse(decodeData).groups;
+        let groups = JSON.parse(menu).groups;
         let url = $location.path();
         if (url === '/') {
           exists = true;
@@ -143,8 +139,10 @@ angular
       }
 
       if (!useraccount || !exists) {
-        deferred.reject();
+        $cookies.remove('useraccount');
+        window.localStorage.removeItem('menus');
         $location.path('/login');
+        deferred.reject();
       }
       else {
         deferred.resolve();
@@ -337,7 +335,7 @@ angular
           return response;
         },
         responseError: function(response) {
-          if (response.status === 401 || response.status === 403)
+          if (response.status === 401)
             $location.url('/login');
           return $q.reject(response);
         }

@@ -155,7 +155,7 @@ export class DeviceDetailService {
       }*/
     ];
     
-    if(this.di.roleService.getRole() > 1) {
+    if(this.di.roleService.getRole() > 2) {
       defaultSchema.push({
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.SEGMENTS'),
         'field': 'segments',
