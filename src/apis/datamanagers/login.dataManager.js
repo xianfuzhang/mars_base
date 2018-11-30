@@ -28,7 +28,7 @@ export class LoginDataManager {
       this.di.$cookies.put('useraccount', this.di.crypto.AES.encrypt(JSON.stringify(result), this.di.appService.CONST.CRYPTO_STRING));
       return defer.promise;
     }
-    this.di.$http.get(this.di.appService.getLoginUrl(),{'headers':{'Authorization': "Basic " + window.btoa(username + ':' + password)}})
+    this.di.$http.post(this.di.appService.getLoginUrl(),{'user_name':username, 'password':password})
       .then((result) => {
         if(result.status === 200){
           this.di.$cookies.put('useraccount', this.di.crypto.AES.encrypt(JSON.stringify({
