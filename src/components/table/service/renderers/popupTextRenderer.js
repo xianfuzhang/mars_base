@@ -28,7 +28,7 @@ export class PopupTextRenderer {
 
       let value = (spec.value === null || spec.value === undefined ? '-':String(spec.value));
       // spec.element.innerHTML = value;
-      if(value.length >= 20){
+      if(value.length >= 40){
         spec.element.innerHTML = "";
         // let clickSpan = "<i class='material-icons' style='vertical-align: middle;'>comment</i>";
         let popupBtn = document.createElement('i');
