@@ -138,11 +138,15 @@ angular
         }
       }
 
-      if (!useraccount || !exists) {
+      if (!useraccount) {
         $cookies.remove('useraccount');
         window.localStorage.removeItem('menus');
         $location.path('/login');
-        deferred.reject();
+        deferred.resolve();
+      }
+      else if (useraccount && !exists) {
+        $location.path('/');
+        deferred.resolve();
       }
       else {
         deferred.resolve();
@@ -318,20 +322,6 @@ angular
           return config;
         },
         response: function(response) {
-          // let data = response.data;
-          // let url = response.config.url;
-          // if(url.indexOf('login') !== -1){
-          //   if(data.indexOf('ONOS Login') === -1){
-          //     return response;
-          //   } else {
-          //     $location.url('/login');
-          //     response.status = 401;
-          //     return $q.reject(response);
-          //   }
-          // } else {
-          //   return response;
-          // }
-
           return response;
         },
         responseError: function(response) {
