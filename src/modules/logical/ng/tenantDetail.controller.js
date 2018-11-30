@@ -129,7 +129,7 @@ export class TenantDetail {
     };
 
     this.scope.addSegment = () => {
-
+      this.di.$rootScope.$emit('segment-wizard-show', this.scope.tenantName, '');
     };
 
     this.scope.batchRemove = (value) => {
