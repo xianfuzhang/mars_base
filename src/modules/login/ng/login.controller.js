@@ -8,6 +8,7 @@ export class LoginController {
       '$cookies',
       'appService',
       'loginService',
+      'localStoreService',
       'loginDataManager',
       'accountDataManager',
       'crypto'
@@ -92,18 +93,17 @@ export class LoginController {
             this.di.appService.setLoginRole(role);
             this.di.appService.filterMenuByLoginRole();
             
-            this.di.$cookies.put('menu', this.di.crypto.AES.encrypt(JSON.stringify({
-              'role': role, 
-              'groups': this.di.appService.roleFilterMenu
-            }), this.di.appService.CONST.CRYPTO_STRING));
+            this.di.localStoreService.getSyncStorage().set('menus',
+              {
+                'role': role, 
+                'groups': this.di.appService.roleFilterMenu
+              });
             this.di.$location.path('/');
           } else {
-            this.di.$cookies.remove('menu');
             this.scope.showBrowserMsg = true;
             this.scope.loginModel.errorMessage = this.di.loginService.validateErrorMsg(res ? res.status : null);
           }
         }, (res) => {
-          this.di.$cookies.remove('menu');
           this.scope.showBrowserMsg = true;
           this.scope.loginModel.errorMessage = this.di.loginService.validateErrorMsg(res ? res.status : null);
         });
