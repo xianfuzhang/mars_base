@@ -379,14 +379,20 @@ export class DeviceDetailController {
         });
         deferArr.push(portsDefer.promise)
         
-        // get segments and ports
-        this.getSegmentsPorts(this.scope.deviceId).then((res) => {
-          segmentsDefer.resolve(res);
-        })
-        deferArr.push(segmentsDefer.promise)
+        if(this.scope.role > 2) {
+          // get segments and ports
+          this.getSegmentsPorts(this.scope.deviceId).then((res) => {
+            segmentsDefer.resolve(res);
+          })
+          deferArr.push(segmentsDefer.promise)
+        }
         
         this.di.$q.all(deferArr).then((resArr) => {
-          defer.resolve({data: {ports: resArr[0].ports, segments: resArr[1]}, total: resArr[0].total});
+          if(this.scope.role > 2) {
+            defer.resolve({data: {ports: resArr[0].ports, segments: resArr[1]}, total: resArr[0].total});
+          } else {
+            defer.resolve({data: {ports: resArr[0].ports}, total: resArr[0].total});
+          }
         })
         break;
       case 'link':
@@ -486,7 +492,9 @@ export class DeviceDetailController {
           obj['link_status'] = entity.annotations.adminState === 'enabled' ? 'available' : 'unavailable';
           obj['type'] = entity.type;
           obj['speed'] = entity.portSpeed;
-          obj['segments'] = this.getSegmentsHtml(entity.port, entities.segments);
+          if(this.scope.role > 2) {
+            obj['segments'] = this.getSegmentsHtml(entity.port, entities.segments);
+          }
           this.scope.detailModel.entities.push(obj);
         });
         break;
