@@ -66,6 +66,15 @@ export class TenantDetail {
       }
     }));
 
+    unsubscribers.push(this.di.$rootScope.$on('segment-list-refresh', (event) => {
+      this.scope.alert = {
+        type: 'success',
+        msg: this.translate('MODULES.LOGICAL.SEGMENT.CREATE.SUCCESS')
+      };
+      this.di.notificationService.render(this.scope);
+      this.scope.detailModel.api.queryUpdate();
+    }));
+
     this.scope.$on('$destroy', () => {
       unsubscribers.forEach((cb) => {
         cb();
