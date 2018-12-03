@@ -210,7 +210,7 @@ export class DeviceWizardController {
               break;
 
             case 'grpc':
-              params.id = `gnmi:${params.managementAddress}:${params.port}`;
+              params.id = `grpc:${params.managementAddress}:${params.port}`;
               break;
               
             case 'of':
