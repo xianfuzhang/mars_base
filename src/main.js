@@ -310,6 +310,7 @@ angular
           let useraccount = $cookies.get('useraccount');
           if (!useraccount) {
              $location.path('/login');
+             return $q.reject(config);
           }
           else{
             let crypto = require('crypto-js');
