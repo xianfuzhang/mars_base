@@ -20,3 +20,4 @@ pipeline:
       {% else %}
         build {{build.number}} failed. Fix me please.
       {% endif %}
+
