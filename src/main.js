@@ -308,17 +308,21 @@ angular
       return {
         request: function(config) {
           let useraccount = $cookies.get('useraccount');
-          if (!useraccount) {
-             $location.path('/login');
-             return $q.reject(config);
-          }
-          else{
-            let crypto = require('crypto-js');
-            let decodeBytes = crypto.AES.decrypt(useraccount.toString(), 'secret');
-            let decodeData = decodeBytes.toString(crypto.enc.Utf8);
-            let username = JSON.parse(decodeData).user_name;
-            let password = JSON.parse(decodeData).password;
-            config.headers['Authorization'] = "Basic " + window.btoa(username + ':' + password);  
+          if(config.url.indexOf('login') !== -1){
+            return config;
+          } else {
+            if (!useraccount) {
+              $location.path('/login');
+              return $q.reject(config);
+            }
+            else{
+              let crypto = require('crypto-js');
+              let decodeBytes = crypto.AES.decrypt(useraccount.toString(), 'secret');
+              let decodeData = decodeBytes.toString(crypto.enc.Utf8);
+              let username = JSON.parse(decodeData).user_name;
+              let password = JSON.parse(decodeData).password;
+              config.headers['Authorization'] = "Basic " + window.btoa(username + ':' + password);
+            }
           }
           return config;
         },
