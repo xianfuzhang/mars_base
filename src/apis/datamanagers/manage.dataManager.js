@@ -74,6 +74,19 @@ export class ManageDataManager{
     return defer.promise;
   }
 
+  getV6MacAndIpBindings() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDHCPV6ServerMappingUrl()).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
   postMacAndIpBindings(param) {
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getDHCPServerUrl(true),param).then(
@@ -87,7 +100,6 @@ export class ManageDataManager{
     return defer.promise;
   }
 
-
   deleteMacAndIpBindings(mac) {
     let defer = this.di.$q.defer();
     this.di.$http.delete(this.di.appService.getDHCPServerMappingRemoveUrl(mac)).then(
@@ -95,6 +107,38 @@ export class ManageDataManager{
         defer.resolve({});
       },
       (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+
+
+  getDHCPV6(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDhcpV6Url()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  postDHCPV6(param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getDhcpV6PostUrl(), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
         defer.reject(error);
       }
     );

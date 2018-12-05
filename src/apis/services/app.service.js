@@ -400,6 +400,15 @@ export class appService {
     return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver/setConfig';
   }
 
+
+  getDhcpV6Url() {
+    return this.getZoneEndpoint(true) + '/dhcpv6server/ztp/v1/dhcpv6server/read';
+  }
+
+  getDhcpV6PostUrl() {
+    return this.getZoneEndpoint(true) + '/dhcpv6server/ztp/v1/dhcpv6server/config';
+  }
+
   getDHCPServerUrl(isBindings) {
     if(isBindings) {
       return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver/mappings';
@@ -410,6 +419,10 @@ export class appService {
 
   getDHCPServerMappingRemoveUrl(mac){
     return this.getZoneEndpoint(true) + '/dhcpserver/ztp/v1/dhcpserver/mappings/'+ mac;
+  }
+
+  getDHCPV6ServerMappingUrl(){
+    return this.getZoneEndpoint(true) + '/dhcpv6server/ztp/v1/dhcpv6server/mappings';
   }
 
   getElasticsearchDataIndexUrl(index){

@@ -44,6 +44,11 @@ export class DHCPController {
       if (tab){
         scope.tabSelected = tab;
 
+        if(tab.type == 'dhcp_server_v6'){
+          initV6config();
+        } else if(tab.type == 'dhcp_server'){
+          init();
+        }
       }
     };
 
@@ -125,11 +130,19 @@ export class DHCPController {
       "timeout": ""
     };
 
+    let emptyDHCPV6ServerConfig = {
+      "enable": '0',
+      "dns_server": "",
+      "domain_search_list": "",
+      "sntp_server": "",
+    };
+
     scope.dhcpModel = {
+      dhcpserverv6:angular.copy(emptyDHCPV6ServerConfig),
       dhcpserver:angular.copy(emptyDHCPServerConfig),
         actionsShow:{
           'menu': {'enable': false, 'role': 3}, 
-          'add': {'enable': true, 'role': 3}, 
+          'add': {'enable': true, 'role': 3},
           'remove': {'enable': false, 'role': 3}, 
           'refresh': {'enable': true, 'role': 3}, 
           'search': {'enable': false, 'role': 3}
@@ -149,8 +162,35 @@ export class DHCPController {
         ],
       dhcpTableProvider:null,
       dhcpAPI: "",
+      v6actionsShow:{
+        'menu': {'enable': false, 'role': 3},
+        'add': {'enable': false, 'role': 3},
+        'remove': {'enable': false, 'role': 3},
+        'refresh': {'enable': true, 'role': 3},
+        'search': {'enable': false, 'role': 3}
+      },
+      v6rowActions:[
+        // {
+        //   'label': this.translate('MODULES.MANAGE.DHCP.TABLE.EDIT'),
+        //   'role': 3,
+        //   'value': 'edit'
+        // },
+        // {
+        //   'label': this.translate('MODULES.MANAGE.DHCP.TABLE.DELETE'),
+        //   'role': 3,
+        //   'value': 'delete'
+        // }
+      ],
+      dhcpv6TableProvider:null,
+      dhcpv6API: "",
     };
 
+
+    scope.displayLabel = {
+      v6enable : {
+        options: [{'label': '是', 'value': '1'}, {'label': '否', 'value': '0'}]
+      }
+    };
 
     scope.addIPMac = () =>{
       this.di.$rootScope.$emit('ipmac-wizard-show');
@@ -183,9 +223,38 @@ export class DHCPController {
       }
     });
 
+    scope.dhcpModel.dhcpv6TableProvider = this.di.tableProviderFactory.createProvider({
+      query: (params) => {
+        let defer = this.di.$q.defer();
+        this.di.manageDataManager.getV6MacAndIpBindings().then((res) => {
+          this.di._.map(res.mappings, (mapping)=>{ mapping.timestamp = this._formatLocaleTime(mapping.timestamp)})
+          defer.resolve({
+            data: res.mappings,
+            count: undefined
+          });
+        },(error)=>{
+          console.log('error dhcpv6TableProvider ====');
+        });
+        return defer.promise;
+      },
+      getSchema: () => {
+        return {
+          schema: this.di.manageService.getDHCPV6TableSchema(),
+          index_name: 'host',
+          rowCheckboxSupport: false,
+          rowActionsSupport: false,
+        };
+      }
+    });
+
     scope.onDHPAPIReady = ($api) => {
       scope.dhcpModel.dhcpAPI = $api;
     };
+
+    scope.onDHCPV6APIReady = ($api) =>{
+      scope.dhcpModel.dhcpv6API = $api;
+    }
+
 
     let init = () =>{
       scope.tabSelected = scope.tabs[0];
@@ -219,9 +288,23 @@ export class DHCPController {
       // }
     };
 
-
-
     init();
+
+    let initV6config = () =>{
+      this.di.manageDataManager.getDHCPV6().then((res)=>{
+        let dhcpJson = res.data;
+        scope.dhcpModel.dhcpserverv6 = angular.copy(emptyDHCPV6ServerConfig);
+        if(dhcpJson['MANAGEMENT']){
+          scope.dhcpModel.dhcpserverv6.enable = this.di._.find(scope.displayLabel.v6enable.options, {'value': dhcpJson['MANAGEMENT']['enable']});
+          if(dhcpJson['MANAGEMENT']['enable'] === '1' && dhcpJson['DHCPv6']){
+            scope.dhcpModel.dhcpserverv6.dns_server = dhcpJson['DHCPv6']['DNS_SERVER'];
+            scope.dhcpModel.dhcpserverv6.domain_search_list = dhcpJson['DHCPv6']['DOMAIN_SEARCH_LIST'];
+            scope.dhcpModel.dhcpserverv6.sntp_server = dhcpJson['DHCPv6']['SNTP_SERVER'];
+          }
+        }
+      });
+    };
+
 
     function validCurrentDom(dom_class) {
       let out = document.getElementsByClassName(dom_class);
@@ -306,6 +389,60 @@ export class DHCPController {
         })
     };
 
+
+    let genV6PostParam = () =>{
+      return  {
+        "MANAGEMENT": {
+          "enable": "1"
+        },
+        "CONTROLLER": {
+          "mapping_url": "http://localhost:8181/mars/dhcpv6server/ztp/v1/dhcpv6server/mappings",
+          "account": "onos",
+          "passwd": "rocks"
+        },
+        "RA_INFO": {
+          "period": "10",
+          "m_flag": "0",
+          "o_flag": "1",
+          "current_hop_limit": "64",
+          "router_life_time": "1800",
+          "reachable_time": "0",
+          "retrans_time": "0",
+          "mcast_dst": "ff02::1",
+          "prefix_length": "64",
+          "prefix": "d00d::"
+        },
+        "DHCPv6": {
+          "DUID": "0003001a8583561abc6",
+          "DNS_SERVER": scope.dhcpModel.dhcpserverv6.dns_server,
+          "DOMAIN_SEARCH_LIST": scope.dhcpModel.dhcpserverv6.domain_search_list,
+          "SNTP_SERVER": scope.dhcpModel.dhcpserverv6.sntp_server
+        }
+      }
+    };
+
+
+    scope.saveDHCPV6Config = () =>{
+      this.di.$rootScope.$emit('page_dhcp_v6');
+      if(!validCurrentDom('dhcp')){
+        return false;
+      }
+      let param = genV6PostParam();
+      this.di.dialogService.createDialog('confirm', this.translate('MODULES.MANAGE.DHCPV6.SUBMIT.CONFORM'))
+        .then((data)=>{
+          this.di.manageDataManager.postDHCPV6(param).then((res)=>{
+            if(res){
+              this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.DHCPV6.CREATE.SUCCESS'));
+              initV6config();
+            }
+          },(err)=>{
+            this.di.notificationService.renderWarning(scope, err);
+          });
+        },(res)=>{
+
+        })
+    };
+
     scope.clearDHCPConfig = () =>{
       this.di.dialogService.createDialog('confirm', this.translate('MODULES.MANAGE.DHCP.DELETE.CONFORM'))
         .then((data)=>{
@@ -313,6 +450,51 @@ export class DHCPController {
             this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.DHCP.DELETE.SUCCESS'));
 
             scope.dhcpModel.dhcpserver = angular.copy(emptyDHCPServerConfig);
+          },(err)=>{
+            this.di.notificationService.renderWarning(scope, err);
+          });
+        },(res)=>{
+
+        })
+    };
+
+
+    let genV6ClearParam = () =>{
+      return {
+        "MANAGEMENT": {
+          "enable": "0"
+        },
+        "CONTROLLER": {
+          "mapping_url": "http://localhost:8181/mars/dhcpv6server/ztp/v1/dhcpv6server/mappings",
+          "account": "onos",
+          "passwd": "rocks"
+        },
+        "RA_INFO": {
+          "period": "10",
+          "m_flag": "0",
+          "o_flag": "1",
+          "current_hop_limit": "64",
+          "router_life_time": "1800",
+          "reachable_time": "0",
+          "retrans_time": "0",
+          "mcast_dst": "ff02::1",
+          "prefix_length": "64",
+          "prefix": "d00d::"
+        },
+        "DHCPv6": {
+        }
+      }
+    };
+
+    scope.clearDHCPV6Config = () =>{
+      let param = genV6ClearParam();
+      this.di.dialogService.createDialog('confirm', this.translate('MODULES.MANAGE.DHCPV6.DELETE.CONFORM'))
+        .then((data)=>{
+          this.di.manageDataManager.postDHCPV6(param).then((res)=>{
+            if(res){
+              this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.DHCPV6.DELETE.SUCCESS'));
+              scope.dhcpModel.dhcpserverv6 = angular.copy(emptyDHCPV6ServerConfig);
+            }
           },(err)=>{
             this.di.notificationService.renderWarning(scope, err);
           });
@@ -337,7 +519,29 @@ export class DHCPController {
   }
 
 
+  _formatLocaleTime(time){
+    let _fillInt= (num, count)=>{
+      if(!count){
+        count = 2;
+      }
+      let numStr = num + '';
+      if(numStr.length !== count) {
+        return '0'.repeat(count - numStr.length) + numStr
+      } else
+        return num
+    };
 
+    let d = new Date(time);
+    let res = d.getFullYear() + '-' +
+      _fillInt(d.getMonth()+ 1) + '-' +
+      _fillInt(d.getDate()) + ' ' +
+      _fillInt(d.getHours()) +  ':' +
+      _fillInt(d.getMinutes()) + ':' +
+      _fillInt(d.getSeconds())+ ',' +
+      _fillInt(d.getMilliseconds(),3);
+
+    return res
+  }
 
 }
 
