@@ -10,6 +10,7 @@ export class DeviceDetailController {
       '_',
       'roleService',
       'flowService',
+      'colorService',
       'deviceService',
       'deviceDetailService',
       'notificationService',
@@ -43,6 +44,11 @@ export class DeviceDetailController {
       rowActions: [],
       entities: [],
       total: null
+    };
+    this.scope.summary = {
+      fanSensors: [],
+      tempSensors: [],
+      psuSensors: []
     };
 
     this.prepareScope();
@@ -368,6 +374,27 @@ export class DeviceDetailController {
   getEntities(params) {
     let defer = this.di.$q.defer();
     switch (this.scope.tabSelected.type) {
+      case 'summary':
+        let defersArr = [],
+            fanDefer = this.di.$q.defer(),
+            psuDefer = this.di.$q.defer(),
+            tempDefer = this.di.$q.defer();
+        this.di.deviceDataManager.getDeviceTemperatureSensors(this.scope.deviceId).then((data) => {
+          tempDefer.resolve(data);
+        });
+        defersArr.push(tempDefer.promise);
+        this.di.deviceDataManager.getDevicePsuSensors(this.scope.deviceId).then((data) => {
+          psuDefer.resolve(data);
+        });
+        defersArr.push(psuDefer.promise);
+        this.di.deviceDataManager.getDeviceFanSensors(this.scope.deviceId).then((data) => {
+          fanDefer.resolve(data);
+        });
+        defersArr.push(fanDefer.promise);
+        this.di.$q.all(defersArr).then((resArr) => {
+          defer.resolve({'data': resArr});
+        });
+        break;
       case 'port':
         let deferArr = [];
         let portsDefer = this.di.$q.defer();
@@ -479,6 +506,11 @@ export class DeviceDetailController {
   entityStandardization(entities) {
     this.scope.detailModel.entities = [];
     switch (this.scope.tabSelected.type) {
+      case 'summary':
+        this.prepareTempSensors(entities[0]);
+        this.preparePsuSensors(entities[1]);
+        this.prepareFanSensors(entities[2]);
+        break;
       case 'port':
         entities.ports.forEach((entity) => {
           let obj = {};
@@ -682,6 +714,48 @@ export class DeviceDetailController {
       }
       this.di.notificationService.render(this.scope);
       this.scope.detailModel.api.queryUpdate();
+    });
+  }
+
+  prepareFanSensors(arr) {
+    this.scope.summary.fanSensors = [];
+    arr.forEach((item) => {
+      this.scope.summary.fanSensors.push({
+        'name': item.name,
+        'flow_type': item.flow_type,
+        'display': item.name + ' / ' + item.flow_type,
+        'RPM': item.RPM,
+        'gradient': this.di.colorService.getFanSensorGradient(item.pct)
+      });
+    });
+  }
+
+  prepareTempSensors(arr) {
+    this.scope.summary.tempSensors = [];
+    arr.forEach((item) => {
+      this.scope.summary.tempSensors.push({
+        'name': item.name,
+        'value': item.value,
+        'gradient': this.di.colorService.getFanSensorGradient(item.value)
+      });
+    });
+  }
+
+  preparePsuSensors(arr) {
+    this.scope.summary.psuSensors = [];
+    arr.forEach((item) => {
+      this.scope.summary.psuSensors.push({
+        'name': item.device,
+        'status': item.status,
+        'model': item.model,
+        'powertype': item.powertype.toUpperCase(),
+        'vin': item.vin,
+        'vout': item.vout,
+        'iin': item.iin,
+        'iout': item.iout,
+        'pout': item.pout,
+        'pin': item.pin
+      });
     });
   }
 }

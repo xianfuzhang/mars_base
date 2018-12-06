@@ -16,6 +16,7 @@ import {DateService} from './services/date.service';
 import {manageService} from './services/manage.service';
 import {logicalService} from './services/logical.service';
 import {RoleService} from './services/role.service';
+import {ColorService} from './services/color.service';
 import {LogDataManager} from './datamanagers/log.dataManager';
 import {DashboardDataManager} from './datamanagers/dashboard.dataManager';
 import {IntentDataManager} from './datamanagers/intent.dataManager';
@@ -45,6 +46,7 @@ export default angular
   .service('manageService', manageService)
   .service('logicalService', logicalService)
   .service('roleService', RoleService)
+  .service('colorService', ColorService)
   .service('wsService', WebsocketService)
   .service('intentDataManager', IntentDataManager)
   .service('manageDataManager', ManageDataManager)

@@ -42,6 +42,7 @@ import 'wizard';
 import 'datePicker';
 import 'marButton';
 import 'jsonEditor';
+import 'gradientScale';
 
 angular
   .module('marsApp', [
@@ -85,7 +86,8 @@ angular
     'wizard',
     'date-picker',
     'marButton',
-    'jsonEditor'
+    'jsonEditor',
+    'gradientScale'
   ])
   .factory('setLanguage', ['$q',function ($q) {
     return function (options) {

@@ -379,6 +379,45 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getDeviceTemperatureSensors(deviceId) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTemperatureSensorsUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res.data.sensors);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  getDevicePsuSensors(deviceId) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getPsuSensorsUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res.data.sensors);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  getDeviceFanSensors(deviceId) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getFanSensorsUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res.data.sensors);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  } 
+
   // get group detail by group id
   parseDeviceGroup(groupId) {
     let returnObj = {}

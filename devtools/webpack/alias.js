@@ -49,7 +49,8 @@ class AliasProvider {
       'deviceTooltip': path.resolve('src/components/device-tooltip/'),
       'ngTable$': path.resolve('src/libs/ngtable/ng-table.min.js'),
       'datePicker': path.resolve('src/components/date-picker'),
-      'jsonEditor': path.resolve('src/components/jsoneditor')
+      'jsonEditor': path.resolve('src/components/jsoneditor'),
+      'gradientScale': path.resolve('src/components/gradient-scale')
     };
   }
 

@@ -355,7 +355,15 @@ export class appService {
   getHealthyCheckByNameUrl(object, resource, rule_name) {
     return this.getZoneEndpoint(true) + '/healthycheck/v1/' + object + '/' + resource + '/threshold/' + rule_name;
   }
-
+  getTemperatureSensorsUrl(deviceId){
+    return this.getZoneEndpoint(true) + '/healthycheck/v1/sensors/' + deviceId + '/temp';
+  }
+  getPsuSensorsUrl(deviceId){
+    return this.getZoneEndpoint(true) + '/healthycheck/v1/sensors/' + deviceId + '/psu';
+  }
+  getFanSensorsUrl(deviceId){
+    return this.getZoneEndpoint(true) + '/healthycheck/v1/sensors/' + deviceId + '/fan';
+  }
   getLogsUrl() {
     return this.getZoneEndpoint(true) + '/utility/logs/v1/controller';
   }
