@@ -1,9 +1,6 @@
 export class gradientScale {
   static getDI () {
-    return [
-      'd3',
-      '_'
-    ];
+    return [];
   }
 
   constructor (...args) {

@@ -186,10 +186,10 @@
 .topo_table {
   border-spacing: 4px 4px;
 }
-
+.deviceDetail .tab-content{
+  height: calc(100% - 150px);
+}
 .device-detail {
- /*  display: flex;
-  flex-direction: column; */
   padding-bottom: 20px;
 }
 
