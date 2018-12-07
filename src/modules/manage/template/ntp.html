@@ -1,0 +1,36 @@
+<div class="ntp flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="app-main">
+    <content-header big-title="{{'MODULE.HEADER.MANAGE.NTP' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.MANAGE.NTP' | translate}}</span>
+    </content-header>
+    <section class="app-body">
+      <div class="main__content">
+        <div>
+          <div class="stepForm__input__label">{{'MODULES.MANAGE.NTP.IS_ENABLE'|translate}}</div>
+          <mdl-switch ng-model="ntpmodel.isEnable" name="ntp_enable" display-label="{on: '是', off: '否', id: 'ntp_enable'}">
+          </mdl-switch>
+        </div>
+        <div>
+          <!--<mar-section s-title="{{'MODULES.MANAGE.DHCP.TAB.DHCP_SERVER_V6'|translate}}" no-fold="true" class="">-->
+            <!--<transclude-body>-->
+              <mdl-table actions-show="ntpModel.actionsShow"
+                         actions="ntpModel.rowActions"
+                         provider="ntpModel.ntpTableProvider" api-ready="onNtpAPIReady($api)"
+                         on-add="add()">
+              </mdl-table>
+            <!--</transclude-body>-->
+          <!--</mar-section>-->
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <ng-controller ng-controller="ntpEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+</div>

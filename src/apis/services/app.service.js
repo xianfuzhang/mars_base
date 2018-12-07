@@ -433,6 +433,10 @@ export class appService {
     return this.getZoneEndpoint(true) + '/dhcpv6server/ztp/v1/dhcpv6server/mappings';
   }
 
+  getNtpUrl(){
+    return this.getZoneEndpoint(true) + '/ntpserver/v1';
+  }
+  
   getElasticsearchDataIndexUrl(index){
     return this.getZoneEndpoint(true) + '/utility/elasticsearch/v1/'+ index +'/query';
   }
