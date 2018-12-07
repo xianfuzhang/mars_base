@@ -83,18 +83,18 @@ mdc设置组件颜色
 }
 .mdl-table-body__row__highlight, .mdl-table-body__row:last-child.mdl-table-body__row__highlight{
   border-bottom: 1px solid #47B8E0;
-  background: rgba(71,184,224, 0.12);
+  background: rgba(255,255,255,0.5);
 }
 .mdl-table-body__row td {
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(255,255,255,0.5);
+  border-bottom: 1px solid rgba(255,255,255,0.5);
 }
 .mdl-table-body__row td:first-child{
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: 1px solid rgba(255,255,255,0.5);
 }
 /* .mdl-table-body__row td:last-child{
   border-right: 0;
@@ -145,12 +145,12 @@ mdc设置组件颜色
 .mdl-table-header__row th {
   text-align: center;
   user-select: none;
-  border-right: 1px solid rgba(0,0,0,0.1);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  border-right: 1px solid rgba(255,255,255,0.5);
+  border-top: 1px solid rgba(255,255,255,0.5);
+  border-bottom: 1px solid rgba(255,255,255,0.5);
 }
 .mdl-table-header__row th:first-child{
-  border-left: 1px solid rgba(0,0,0,0.1);
+  border-left: 1px solid rgba(255,255,255,0.5);
   border-top-left-radius: 8px;
 }
 .mdl-table-header__row th:last-child{
@@ -162,7 +162,7 @@ mdc设置组件颜色
   vertical-align: middle;
 }
 .mdl-table-header__row th.sort-asc, .mdl-table-header__row th.sort-desc {
-  color: var(--mdc-theme-primary, #000000);
+  color: var(--mdc-theme-primary, #fff);
   opacity: 0.8;
 }
 .mdl-table-header__row th.sortable .icon-sort{
