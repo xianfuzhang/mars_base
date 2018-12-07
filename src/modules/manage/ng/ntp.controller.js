@@ -5,6 +5,7 @@ export class NTPController {
       '$rootScope',
       '_',
       '$http',
+      '$timeout',
       '$filter',
       '$q',
       '$log',
@@ -29,18 +30,10 @@ export class NTPController {
     scope.role = this.di.roleService.getRole();
     this.translate = this.di.$filter('translate');
 
-    scope.regex = {
-      ttl_regex: '^[1-9]$|^[1-9][0-9]$|^1[0-9]{2}$|^2[0-4][0-9]$|^25[0-5]$',
-      delay_regex: '^([2-9]|10)$',
-      timeout_regex: '^(1[5-9][0-9]|2[0-9]{2}|300)$',
-      dhcp_int_regex: '^([0-9]|[1-9][0-9]{0,5}|1[0-9]{6}|2[0-4][0-9]{5}|25[0-8][0-9]{4}|259[0-1]{3}|2592000)$'
-    };
-
-
     scope.ntpmodel = {
       isEnable : false,
       actionsShow:{
-        'menu': {'enable': true, 'role': 3},
+        'menu': {'enable': false, 'role': 3},
         'add': {'enable': true, 'role': 3},
         'remove': {'enable': false, 'role': 3},
         'refresh': {'enable': true, 'role': 3},
@@ -55,31 +48,18 @@ export class NTPController {
       ],
       ntpTableProvider:null,
       api: "",
-
     };
-    let data = null;
-
-    let init = () =>{
-      this.di.manageDataManager.getNTP().then((res) => {
-        data = res.data;
-        initializeData(data)
-      },(err)=>{
-        this.di.notificationService.renderWarning(scope, err);
-      });
-    };
-
-    let initializeData = (data) =>{
-      
-    };
-    // init();
 
     scope.add = () => {
       this.di.$rootScope.$emit('ntp-wizard-show');
     };
 
+    let flag = true;
     let _formatData =  (data) =>{
+      flag = true;
       let ntpServers = data['ntp_servers'];
       scope.ntpmodel.isEnable = data['enabled'];
+
       if(ntpServers && Array.isArray(ntpServers)){
         return this.di._.map(ntpServers, (server)=>{ return {'host':server}})
       } else {
@@ -87,16 +67,10 @@ export class NTPController {
       }
     };
 
-
-    scope.onNtpAPIReady = ($api) => {
-      scope.ntpmodel.api = $api;
-    };
-
     scope.ntpmodel.ntpTableProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.manageDataManager.getNTP().then((res) => {
-
           let servers = _formatData(res.data);
           defer.resolve({
             data: servers,
@@ -121,15 +95,58 @@ export class NTPController {
       }
     });
 
+    scope.onNTPTableRowSelectAction = (event) => {
+      if (event.data && event.action) {
+        if (event.action.value === 'delete') {
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.MANAGE.NTP.REMOVE_NTP_SERVER'))
+            .then((data) =>{
+              this.di.manageDataManager.getNTP().then((res) => {
+                let ntp = (res.data);
+                this.di._.remove(ntp['ntp_servers'], (server)=>{ return server === event.data.host});
+
+                this.di.manageDataManager.putNTP(ntp).then((res)=>{
+                  this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.NTP.REMOVE_NTP_SERVER.SUCCESS'));
+                  scope.ntpmodel.api.queryUpdate();
+                },(err)=>{
+                  this.di.notificationService.renderWarning(scope, err);
+                })
+              },(err)=>{
+                this.di.notificationService.renderWarning(scope, err);
+              });
+            }, (res) =>{
+              this.di.$log.debug('delete ntp server dialog cancel');
+            });
+        } else if(event.action.value === 'edit'){
+          this.di.$rootScope.$emit('ipmac-wizard-show', event.data.host.split('/')[0]);
+        }
+      }
+    };
+
+
+    scope.changeSwitch = () =>{
+      this.di.manageDataManager.getNTP().then((res) => {
+
+        let ntp = (res.data);
+        ntp['enabled'] = scope.ntpmodel.isEnable;
+        this.di.manageDataManager.putNTP(ntp).then((res)=>{},(err)=>{
+          this.di.notificationService.renderWarning(scope, err);
+        })
+
+      },(err)=>{
+        this.di.notificationService.renderWarning(scope, err);
+      });
+    }
+
+    scope.onNtpAPIReady = ($api) => {
+      scope.ntpmodel.api = $api;
+    };
+
     let unsubscribes = [];
-
-
 
     unsubscribes.push(this.di.$rootScope.$on('ntp-refresh', ($event) => {
       this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.NTP.SERVER.CREATE.SUCCESS'));
       scope.ntpmodel.api.queryUpdate();
     }));
-
 
     scope.$on('$destroy', () => {
       unsubscribes.forEach((cb) => {
@@ -137,10 +154,6 @@ export class NTPController {
       })
     });
   }
-
-
-
-
 }
 
 NTPController.$inject = NTPController.getDI();

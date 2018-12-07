@@ -29,6 +29,7 @@ export class NtpEstablishController {
     const rootScope = this.di.$rootScope;
     this.translate = this.di.$filter('translate');
 
+    scope.wizardHeight = {"height":'100px'};
 
     let di = this.di;
 
@@ -42,11 +43,11 @@ export class NtpEstablishController {
       }
     ];
 
-    scope.ntpmodel = {};
-    scope.ntpmodel.server = '';
+    scope.ntpesmodel = {};
+    scope.ntpesmodel.server = '';
 
     let reset = () =>{
-      scope.ntpmodel.server = '';
+      scope.ntpesmodel.server = '';
     };
     this.di.$scope.open = () => {
       if(scope.showWizard) return;
@@ -88,7 +89,7 @@ export class NtpEstablishController {
           if(!ntp['ntp_servers']){
             ntp['ntp_servers'] = [];
           }
-          ntp['ntp_servers'].push(scope.ntpmodel.server);
+          ntp['ntp_servers'].push(scope.ntpesmodel.server);
 
           manageDataManager.putNTP(ntp).then((res)=>{
             rootScope.$emit('ntp-refresh');

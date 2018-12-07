@@ -92,6 +92,7 @@ export class appService {
             'label': this.translate('MODULE.HEADER.MANAGE'),
             'items': [
               {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
+              {'label': this.translate('MODULE.HEADER.MANAGE.NTP'), 'url': '/ntp', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3}
             ]
           }

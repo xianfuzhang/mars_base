@@ -14,6 +14,7 @@ export class mdlSwitch {
     this.restrict = 'E';
     this.template = require('../templates/switch.html');
     this.scope = {
+      onClick: '&',
       displayLabel: '=',
       disable: '=',
       data: '=ngModel',
@@ -25,6 +26,9 @@ export class mdlSwitch {
     if (scope.disable) {   //scope.$eval(attrs.status)
       element.find('input').attr('disabled', true);
     }
+
+    scope.onClick = scope.onClick || angular.noop;
+
     if (scope.data === true || scope.data === "true") {
       element.find('input').attr('checked' ,true);
     }
@@ -35,6 +39,7 @@ export class mdlSwitch {
     scope.clicked = () => {
       scope.data = !scope.data;
       ngModel.$setViewValue(scope.data);
+      scope.onClick();
     };
 
 

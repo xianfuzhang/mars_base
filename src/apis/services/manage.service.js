@@ -81,7 +81,7 @@ export class manageService {
   getNTPTableSchema(){
     return [
       {
-        'label': this.translate("MODULES.MANAGE.DHCP.TABLE.MAC"),
+        'label': 'Servers',
         'field': 'host',
         'layout': {'visible': true, 'sortable': true, 'fixed': true},
       }
