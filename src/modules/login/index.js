@@ -1,4 +1,4 @@
-import './scss/login.scss';
+// import './scss/login.scss';
 import {LoginController} from './ng/login.controller';
 import {AccountManageController} from './ng/accountManage.controller';
 import {CreateUserAccountController} from './ng/createUserAccount.controller';

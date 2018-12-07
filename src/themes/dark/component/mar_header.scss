@@ -1,0 +1,134 @@
+//@import 'xbem';
+//@import '../shared/shared';
+//@import '../default/default';
+//@import 'default';
+//@import 'shared';
+
+
+
+
+@include block(mar_header){
+  height: map_get($sizes, header-height);
+  background-color: map_get($colors, header_color);
+  display: flex;
+  flex-direction: row;
+  //flex-grow: 0;
+  //flex-shrink: 0;
+  //flex-basis: map_get($sizes, header-height);
+  z-index:map_get($z-indexes, z1);
+  box-shadow: 1px 2px 2px #bfbebe;
+
+
+  @include element(logo){
+    background-image: url('../../assets/images/mars_logo.png');
+    -webkit-background-size:1.5*map_get($sizes, header-height) map_get($sizes, header-height);
+    background-size:1.5*map_get($sizes, header-height) map_get($sizes, header-height);
+    height: map_get($sizes, header-height);
+    width: 1.5*map_get($sizes, header-height);
+    flex-grow:0;
+  }
+
+  @include element(menu){
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    margin-left:20px;
+  }
+
+  @include element(tools){
+    //align-self: flex-end;
+    flex-grow:0;
+    //min-width: 100px;
+    height: map_get($sizes, header-height);
+    background-color: map_get($colors, header_color);
+    display:flex;
+    justify-content:flex-end;
+
+
+
+    @include element(warning){
+      display: flex;
+      flex-direction: row;
+      margin: 12px 1px 7px 7px;
+      margin-right: 1px;
+      border-right: 1px solid gray;
+      padding-right: 10px;
+
+      @include element(button){
+        background: url('../../assets/images/notification.svg') no-repeat;
+        background-size: 26px;
+        min-width: 26px;
+        width:26px;
+        height:26px;
+
+        &.mdc-icon-button {
+          background: url('../../assets/images/notification.svg') no-repeat;
+          background-size: 26px;
+          min-width: 26px;
+          width:26px;
+          height:26px;
+        }
+
+      }
+
+      @include element(number){
+        color: #e6401a;
+        font-size: 14px;
+        background-color: #f8ff0d;
+        height: 18px;
+        margin: 4px;
+        padding: 0 2px 0 2px;
+        border-radius: 2px;
+        line-height: 18px;
+        text-align: center;
+        margin-left: 0px;
+
+        @include state(hidden){
+          display:none;
+        }
+
+      }
+
+
+      //background-position-x: 7px;
+      //background-position-y: 7px;
+    }
+
+  }
+}
+//
+//.header {
+//  height: map_get($sizes, header-height);
+//  background-color: gray;
+//  display: flex;
+//  flex-direction: row;
+//  flex-grow: 0;
+//
+//  .logo {
+//    background-image: url('../image/mars_logo.png');
+//    -webkit-background-size:1.5*map_get($sizes, header-height) map_get($sizes, header-height);
+//    background-size:1.5*map_get($sizes, header-height) map_get($sizes, header-height);
+//    height: map_get($sizes, header-height);
+//    width: 1.5*map_get($sizes, header-height);
+//  }
+//
+//  .menu {
+//    display: flex;
+//    flex-direction: row;
+//
+//  }
+//
+//  .tools {
+//    align-self: flex-end;
+//    width: 20px;
+//    height: map_get($sizes, header-height);
+//    &.t{
+//      background-color: blue ;
+//    }
+//
+//    &.t.t1{
+//      background-color: red ;
+//    }
+//
+//  }
+//}

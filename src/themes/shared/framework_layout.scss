@@ -43,24 +43,24 @@
   font-family: 'glyphicons';
   font-style: normal;
   font-weight: 400;
-  src: url('../../../asserts/fonts/glyphicons-halflings-regular.eot'); For IE6-8
+  src: url('../../../assets/fonts/glyphicons-halflings-regular.eot'); For IE6-8
   src: local('glyphicons'),
   local('glyphicons-halflings-regular'),
-  url('../../../asserts/fonts/glyphicons-halflings-regular.woff2') format('woff2'),
-  url('../../../asserts/fonts/glyphicons-halflings-regular.woff') format('woff'),
-  url('../../../asserts/fonts/glyphicons-halflings-regular.ttf') format('truetype');
+  url('../../../assets/fonts/glyphicons-halflings-regular.woff2') format('woff2'),
+  url('../../../assets/fonts/glyphicons-halflings-regular.woff') format('woff'),
+  url('../../../assets/fonts/glyphicons-halflings-regular.ttf') format('truetype');
 } */
 
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url('../../../asserts/fonts/MaterialIcons-Regular.eot'); /* For IE6-8 */
+  src: url('../../assets/fonts/MaterialIcons-Regular.eot'); /* For IE6-8 */
   src: local('Material Icons'),
   local('MaterialIcons-Regular'),
-  url('../../../asserts/fonts/MaterialIcons-Regular.woff2') format('woff2'),
-  url('../../../asserts/fonts/MaterialIcons-Regular.woff') format('woff'),
-  url('../../../asserts/fonts/MaterialIcons-Regular.ttf') format('truetype');
+  url('../../assets/fonts/MaterialIcons-Regular.woff2') format('woff2'),
+  url('../../assets/fonts/MaterialIcons-Regular.woff') format('woff'),
+  url('../../assets/fonts/MaterialIcons-Regular.ttf') format('truetype');
 }
 
 .material-icons {

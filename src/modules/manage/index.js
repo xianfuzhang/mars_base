@@ -1,4 +1,4 @@
-import './scss/manage.scss';
+// import './scss/manage.scss';
 
 import {DHCPController} from './ng/dhcp.controller';
 import {ElasticsearchController} from './ng/elasticsearch.controller';

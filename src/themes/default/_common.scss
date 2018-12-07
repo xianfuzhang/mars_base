@@ -1,0 +1,7 @@
+/**
+ * 页面通用样式
+ */
+body{
+  background-color: map_get($colors, body_background_color);
+  color: map_get($colors, body_color);
+}

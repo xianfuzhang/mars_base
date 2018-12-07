@@ -1,4 +1,4 @@
-import './scss/mdc.scss';
+// import './scss/mdc.scss';
 
 import {mdlButton} from './ng/button.directive';
 import {mdlCheckbox} from './ng/checkbox.directive';

@@ -17,6 +17,12 @@
               </ul>
             </li>
           </ul>
+
+          <div class="navbar-inner__right">
+            <div class="navbar-inner__theme-default" ng-hide="theme == 'theme_default'" ng-click="changeTheme('theme_default')"></div>
+            <div class="navbar-inner__theme-dark" ng-hide="theme == 'theme_dark'" ng-click="changeTheme('theme_dark')"></div>
+          </div>
+
           <div class="navbar-inner__right">
            <!--  <div class="navbar-inner__notification">
              <span class="notification-status" ng-class="{'has-alert': alerts_acount > 0}"></span>

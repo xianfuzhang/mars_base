@@ -1,6 +1,6 @@
-import './scss/device.scss'
-import './components/flow_establish/scss/flow_establish';
-import './components/group_establish/scss/group_establish';
+// import './scss/device.scss'
+// import './components/flow_establish/scss/flow_establish';
+// import './components/group_establish/scss/group_establish';
 
 import {InterfaceGroupController} from './ng/interfaceGroup.controller';
 import {DeviceController} from './ng/device.controller';

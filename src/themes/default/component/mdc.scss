@@ -1,0 +1,147 @@
+.select-field-container .mdc-text-field-helper-text{
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.mdc-select__native-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):before,
+.material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):after{
+  background: black;
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity:0;
+  transition: all 0.3s;
+  pointer-events: auto;
+}
+.material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):focus:before{
+  opacity: 0;
+}
+.material-icons.mdc-icon-button:hover:before{
+  opacity: 0.04;
+}
+.material-icons.mdc-icon-button:active:before,
+.material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):active:after{
+  width: 0;
+  height: 0;
+  left:24px;
+  top: 24px;
+  opacity: 0.3;
+  transition-duration: 0s;
+}
+.mdc-icon-button.mdc-icon-button__normal{
+  font-size: 22px;
+  height: 35px;
+  width: 35px;
+  padding: 5px;
+}
+.mdc-icon-button.mdc-icon-button__small{
+  font-size: 18px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+.mdc-form-field .mdc-checkbox-label{
+  user-select: none;
+}
+.mdc-checkbox.mdc-checkbox__normal{
+  padding: 0;
+}
+.mdc-checkbox.mdc-checkbox__normal::before, .mdc-checkbox.mdc-checkbox__normal::after,
+.mdc-checkbox.mdc-checkbox__small::before, .mdc-checkbox.mdc-checkbox__small::after{
+  width: 0;
+  height: 0;
+}
+.mdc-checkbox__background.mdc-checkbox__background-normal{
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+}
+.mdc-checkbox__background.mdc-checkbox__background-small{
+  width: 15px;
+  height: 15px;
+}
+.mdc-select.mdc-select__no-label{
+  height: 28px;
+}
+.mdc-select.mdc-select__no-label > .mdc-select__native-control{
+  padding-top: 0;
+}
+.menu-fixed{
+  position: fixed;
+  z-index: 100;
+}
+.mdc-tab-field.mdc-tab-bar{
+  /* display: flex; */
+  user-select: none;
+}
+.mdc-tab-bar .mdc-tab{
+  position: relative;
+  float: left;
+  margin-right: 5px;
+  border: 1px solid rgba(0,0,0, 0.03);
+  border-radius: 4px;
+  line-height: 2.75rem;
+  background: rgba(0,0,0, 0.03);
+}
+.mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab--active{
+  background: rgba(0,0,0, 0.1);
+}
+
+// dialog css style
+.mdc-dialog__header__title {
+  vertical-align: center;
+}
+
+.mdc-dialog__header__text {
+  display: inline-flex;
+  line-height:30px;
+  font-size: 16px;
+}
+
+.mdc-dialog__header__warning {
+  display:inline-flex;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  margin-right: 5px;
+  background: url('../../assets/images/dialog-warning-96.png') no-repeat;
+  background-size: contain;
+}
+
+.mdc-dialog__header__confirm {
+  display:inline-flex;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  margin-right: 5px;
+  background: url('../../assets/images/dialog-confirm-96.png') no-repeat;
+  background-size: contain;
+}
+
+.mdc-dialog__header__error {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  background: url('../../assets/images/dialog-error-96.png') no-repeat;
+  background-size: contain;
+}
+
+.mdc-dialog__header__success {
+  display:inline-flex;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  margin-right: 5px;
+  background: url('../../assets/images/dialog-success-96.png') no-repeat;
+  background-size: contain;
+}
