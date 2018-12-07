@@ -1,6 +1,6 @@
-import './scss/alert.scss';
-import './component/receivegroup_establish/scss/receivegroup_establish.scss';
-import './component/addHealthyCheck/scss/add_healthycheck.scss';
+// import './scss/alert.scss';
+// import './component/receivegroup_establish/scss/receivegroup_establish.scss';
+// import './component/addHealthyCheck/scss/add_healthycheck.scss';
 
 import {AlertController} from './ng/alert.controller';
 import {HealthyCheckController} from './ng/healthycheck.controller';

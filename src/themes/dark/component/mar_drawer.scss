@@ -1,0 +1,17 @@
+//@import 'xbem';
+//@import '../shared/_zindex';
+//@import 'default';
+//@import 'shared';
+
+.mdc-drawer {
+  &.\+right {
+
+    z-index: map_get($z-indexes, z100);
+    .mdc-drawer__drawer{
+      right: 0px;
+      left: auto;
+      transform: translateX(calc(100% + 20px));
+    }
+  }
+}
+

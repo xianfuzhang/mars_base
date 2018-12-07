@@ -1,7 +1,7 @@
 /**
  * Created by wls on 2018/6/7.
  */
-import './scss/loading';
+// import './scss/loading';
 
 import { Loading } from './ng/loading.directive';
 

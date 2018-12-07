@@ -168,3 +168,19 @@
 .navbar-inner__dropdown-menu li > a:hover{
   background: #455A64;
 }
+
+.navbar-inner__theme-default {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background-color: #efefef;
+  cursor: pointer;
+}
+.navbar-inner__theme-dark {
+  margin-left: 15px;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background-color: #000;
+  cursor: pointer;
+}

@@ -1,0 +1,170 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+//@import 'framework_layout';
+
+@include block(actions){
+  /* margin: 15px 0; */
+  font-weight: bold;
+  font-size: 15px;
+  
+  @include element(input) {
+    height: 20px;
+    width: 150px;
+    padding: 7px 0 9px 15px;
+    font-size: 16px;
+  }
+}
+
+
+@include block(configuration){
+  display:flex;
+  flex-direction: row;
+  
+  @include element(content){
+    height:90%;
+    width:90%;
+    margin:8px;
+    flex-shrink: 1;
+    flex-grow: 1;
+    background-color: white;
+  
+    @include  element(codepre){
+      height:90%;
+      overflow: scroll;
+      border:1px solid lightgray;
+    
+      @include state(edit){
+        border: 2px solid red;
+        
+        animation: codepre-edit 1s 2;
+        -webkit-animation: codepre-edit 1s 2;
+        -moz-animation: codepre-edit 1s 2;
+      }
+  
+      @include state(add){
+        border: 2px solid red;
+    
+        animation: codepre-add 1s 2;
+        -webkit-animation: codepre-add 1s 2;
+        -moz-animation: codepre-add 1s 2;
+      }
+    }
+  }
+  
+  @include element(operation){
+    display: flex;
+    height:100%;
+    margin: 8px 20px;
+    flex-direction: column;
+    flex-basis: 500px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    
+    @include element(form){
+      padding: 15px;
+      border: 1px solid #3883fa;
+      
+      @include state(disable) {
+        border: 1px solid #dfdfdf;
+      }
+      
+      @include element(input){
+        margin-bottom: 20px;
+        
+        @include element(label){
+          font-size: 14px;
+          font-weight: bold;
+          text-decoration: underline;
+        }
+        
+        @include element(text) {
+          border: 1px solid #000;
+          border-radius: 5px;
+          color: #000;
+          @include element(disabled) {
+            border: 1px solid #ddd;
+            color: #ddd;
+          }
+        }
+        
+        @include element(error) {
+          color: red;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes codepre-edit {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@-webkit-keyframes codepre-edit {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@-moz-keyframes codepre-edit {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@keyframes codepre-add {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@-webkit-keyframes codepre-add {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@-moz-keyframes codepre-add {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
