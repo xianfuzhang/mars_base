@@ -1,0 +1,31 @@
+
+.segment-detail{
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  flex-basis: 90px;
+}
+
+.segment-detail__row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+
+.segment-detail__item {
+  display: flex;
+  margin-right: 20px;
+  min-width:200px;
+  max-width:350px;
+  align-items: center;
+}
+
+.segment-detail__item-label {
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+.segment-detail__item-value{
+  margin-left:10px;
+}

@@ -1,4 +1,4 @@
-import './scss/table.scss'
+// import './scss/table.scss'
 
 import {TableController} from './ng/table.controller';
 import {showHideColumnCtrl} from './ng/showHideColumn.controller';

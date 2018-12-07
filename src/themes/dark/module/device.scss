@@ -1,0 +1,350 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+//@import 'framework_layout';
+
+.mdc-tab-bar.main__content__device-tabs {
+  margin: 0;
+  width: 160px;
+}
+
+.mdc-tab-bar.main__content__device-detail-tabs {
+  margin: 0 0;
+  height: 35px;
+}
+
+@include block(topo_setting) {
+
+}
+
+//3联动才能使样式置顶
+.\+front.mdc-button.topo_setting__button {
+  margin: 0;
+  padding: 0;
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  color: black;
+}
+
+.\+show.mdc-button.topo_setting__button {
+  border: 1px solid lightgray;
+  background-color: lightgray;
+}
+
+@include block(detail_summary) {
+  @include element(body) {
+    display: inline;
+    font-size: 16px;
+    font-family: "helvetica neue", "Roboto", helvetica, arial, verdana, "trebuchet ms", calibri, sans-serif;
+    color: black;
+    white-space: nowrap;
+
+    @include modifier(right) {
+      display: inline-block;
+
+      div {
+        padding-top: 4px;
+        padding-left: 8px;
+      }
+    }
+
+    @include modifier(left) {
+      text-transform: capitalize;
+      display: inline-block;
+      text-align: right;
+      font-weight: 300;
+      div {
+        text-align: right;
+        padding-top: 4px;
+      }
+    }
+  }
+}
+
+@include block(summary) {
+
+  @include element(link) {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #47B8E0;
+  }
+  //display: flex;
+  //flex-direction: column;
+  //flex-wrap: nowrap;
+  //height: 100%;
+
+  @include element(body) {
+    //flex-grow: 2;
+    //flex-basis: auto;
+    //flex-shrink: 1;
+    background-color: white;
+    overflow: scroll;
+    padding: 0 8px;
+    //display: flex;
+    //flex-direction: column;
+
+    @include element(content) {
+      height: 100%;
+      width: 100%;
+      position: relative;
+      //border-top: 1px solid lightgray;
+      //flex-grow: 1;
+      //flex-shrink: 1;
+      min-height: 400px;
+      overflow: hidden;
+
+      .summary_drawer_left {
+        position: absolute;
+        right: 300px;
+        top: 0;
+        height: 100%;
+        left: 0px;
+      }
+
+      .summary_drawer_line_space {
+        height: 100%;
+        width: 5px;
+        border: 0;
+        background-color: #cccccc;
+        top: 0;
+        position: absolute;
+        right: 295px;
+        cursor: col-resize;
+
+        .line{
+          height: 40px;
+          width: 1px;
+          background-color: black;
+          border: 0;
+          top: 45%;
+          left: 2px;
+          position: absolute;
+        }
+
+        .ctrl_button.show_arrow {
+          background-image: url('../../assets/images/action/show_arrow.png');
+          background-position: 0px;
+        }
+        .ctrl_button {
+          height: 40px;
+          width: 30px;
+          background-color: white;
+          border: 1px solid lightgray;
+          border-right-width: 0;
+          top: 10%;
+          left: -25px;
+          position: absolute;
+          cursor: pointer;
+          border-top-left-radius: 3px;
+          border-bottom-left-radius: 3px;
+          background-image: url('../../assets/images/action/hide_arrow.png');
+          background-size: 20px 30px;
+          background-repeat: no-repeat;
+          background-position: 5px;
+        }
+
+      }
+
+      .summary_drawer_right {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        background-color: white;
+        width: 295px;
+        display: inline-block;
+        overflow: scroll;
+      }
+    }
+  }
+
+}
+
+.topo_table tr td:first-child {
+  text-align: right;
+  padding-right: 4px;
+  min-width: 120px;
+  //background-color: red;
+  //padding-top: 4px;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.topo_table tr td:last-child {
+  text-align: left;
+  padding-left: 4px;
+  //padding-top: 4px;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.topo_table tr {
+  margin-top: 4px;
+}
+
+.topo_table {
+  border-spacing: 4px 4px;
+}
+
+.device-detail {
+ /*  display: flex;
+  flex-direction: column; */
+  padding-bottom: 20px;
+}
+
+.device-detail__row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.device-detail__item {
+  display: flex;
+  margin-right: 20px;
+  width: 200px;
+  align-items: center;
+}
+
+.device-detail__item-label {
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.6;
+}
+
+.device-detail__item-value {
+  margin-left: 10px;
+}
+
+.device-detail__available {
+  height: 16px;
+  width: 16px;
+  background-image: url('../../assets/images/status-icons.png');
+  background-repeat: no-repeat;
+  background-size: 64px auto;
+  background-position: -48px 0;
+}
+
+.device-detail__inavailable {
+  height: 16px;
+  width: 16px;
+  background-image: url('../../assets/images/status-icons.png');
+  background-repeat: no-repeat;
+  background-size: 64px auto;
+  background-position: -48px -15px;
+}
+
+.show-switch-flow-modal {
+  width: 800px;
+}
+
+.show-switch-flow-modal .tab-content {
+  height: auto;
+  padding: 20px;
+}
+
+.show-switch-group-modal {
+  width: 800px;
+}
+
+.show-switch-group-modal .tab-content {
+  height: auto;
+  padding: 20px;
+}
+
+.show-links-selected-modal {
+  width: 400px;
+
+}
+
+.show-links-selected-modal .content {
+  height: auto;
+  padding: 20px;
+}
+
+.createIntentWizard .wizard__body{
+  height: 250px;
+}
+.createIntentWizard .wizard__body__right{
+  overflow: hidden;
+}
+.create-endpoint-modal, .create-intent-modal{
+  width: 570px;
+}
+.create-endpoint-modal .column-manipulation-field__content{
+  height: 300px;
+}
+.create-endpoint-modal .receiveGroup{
+  width: 250px;
+  display: inline-block;
+}
+.create-endpoint-modal .error-msg{
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.03333em;
+  color: #b00020;
+}
+.create-endpoint-modal .mdc-select{
+  width: 175px;
+}
+.create-intent-modal .column-manipulation-field__content{
+  height: 300px;
+}
+.create-intent-modal .column-manipulation-field__item{
+  padding-bottom: 10px;
+}
+.create-intent-modal .endpoint-item{
+  justify-content: center;
+  display: flex;
+  text-align: center;
+}
+.create-intent-modal .mdc-select{
+  width: 150px;
+}
+.create-intent-modal .mdc-text-field{
+  width: 80px;
+  margin-left: 15px;
+}
+.show-flow-detail-modal.modal{
+  width: 650px;
+  font-size: 14px;
+  padding-bottom: 10px;
+}
+.show-flow-detail-modal .detail-row{
+  display: flex;
+  padding: 0 20px;
+  margin-bottom: 10px;
+ }
+ .show-flow-detail-modal .detail-value{
+  padding-left: 10px;
+  margin-bottom: 10px;
+ }
+.show-flow-detail-modal .left-item{
+  width: 50%;
+}
+.show-flow-detail-modal .right-item{
+  width: 50%;
+}
+.show-flow-detail-modal .detail-name{
+  font-weight: 700;
+}
+@keyframes show_div {
+  from {
+    right: 0;
+  }
+  to {
+    right: var(--right);
+  }
+}
+
+@keyframes hide_div {
+  from {
+    right: var(--right);
+    //right: 400px;
+  }
+  to {
+    right: 0;
+  }
+}
+
+

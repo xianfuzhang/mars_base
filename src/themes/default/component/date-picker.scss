@@ -1,0 +1,272 @@
+.calendar-container{
+  display: flex;
+  height: 60px;
+  align-items: center;
+}
+.calendar-date-field{
+  width: 140px;
+  height: 32px;
+  border-radius: 4px 4px 0 0;
+}
+.calendar-date-field.input-group {
+  position: relative;
+  display: flex;
+}
+.calendar-date-field .input-group-btn {
+  position: absolute;
+  float: left;
+  right: 0;
+  top: 4px;
+}
+.calendar-date-field .btn{
+  /* height: 26px;
+  width: 30px; */
+  margin-left: -1px;
+  color: #333;
+  background-color: #fff;
+  border:  1px solid #ccc;
+  display: inline-block;
+  padding: 5px 10px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border-radius: 3px;
+  outline: none;
+}
+.calendar-date-field .btn-default{
+  width: 32px;
+  height: 26px;
+}
+.calendar-date-field .input-group-btn > .btn-default{
+  border: 0;
+}
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+  cursor: not-allowed;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  opacity: .65;
+}
+.btn-default:hover{
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+.btn.uib-title {
+  width: 100%;
+  height: 30px;
+}
+.input-group-btn:last-child>.btn{
+  z-index: 2;
+  margin-left: -1px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  position: relative;
+}
+/* .input-group .form-control {
+  z-index: 2;
+  position: relative;
+  float: left;
+  margin-bottom: 0;
+  display: block;
+  width: 100px;
+  height: 24px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 24px;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+} */
+.calendar-date-field .form-control{
+  border: none;
+  border-bottom: 1px solid rgba(0,0,0,.42);
+  width:  100%;
+  height:  100%;
+  padding-left: 10px;
+}
+.uib-day button, .uib-month button, .uib-year button {
+  min-width: 100%;
+}
+.uib-datepicker-popup.dropdown-menu{
+  display: block;
+  float: none;
+  margin: 0;
+}
+.calendar-date-field .dropdown-menu{
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 14px;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+.calendar-date-field .uib-datepicker-popup.dropdown-menu {
+  display: block;
+  float: none;
+  margin: 0;
+}
+.calendar-date-field .material-icons{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 24px;
+  color: rgba(0,0,0,0.6);
+  margin-left: -213px;
+}
+.btn.btn-sm.uib-left{
+  background: url('../../assets/images/arrow_back.svg');
+  background-repeat: no-repeat;
+}
+.uib-daypicker .btn.btn-sm.uib-left{
+  background-position: 10px 3px;
+}
+.btn.btn-sm.uib-right{
+  background: url('../../assets/images/arrow_forward.svg');
+  background-repeat: no-repeat;
+  background-position: 9px 5px;
+}
+.uib-daypicker, .uib-monthpicker, .uib-yearpicker{
+  outline:  none;
+}
+.uib-monthpicker, .uib-yearpicker{
+  width:  240px;
+}
+.uib-daypicker table, .uib-monthpicker table, .uib-yearpicker table{
+  width:  100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+  background-color: transparent;
+  user-select: none;
+}
+.uib-daypicker .btn.btn-sm.uib-right{
+  background-position: 6px 3px;
+}
+.uib-daypicker .uib-left,.uib-daypicker .uib-right{
+  width: 36px;
+  height: 30px;
+}
+.uib-monthpicker .btn.btn-sm.uib-left{
+  width: 100%;
+  height: 30px;
+  background-position: 24px 2px;
+}
+.uib-monthpicker .btn.btn-sm.uib-right{
+  width: 100%;
+  height: 30px;
+  background-position: 24px 2px;
+}
+.uib-yearpicker .btn.btn-sm.uib-left{
+  width: 100%;
+  height: 30px;
+  background-position: 8px 2px;
+}
+.uib-yearpicker .btn.btn-sm.uib-right{
+  width: 100%;
+  height: 30px;
+  background-position: 2px 2px;
+}
+.pull-right {
+  float: right!important;
+}
+.pull-left {
+  float: left!important;
+}
+.btn-group{
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+.calendar-date-field .btn-group-sm>.btn, .btn-sm {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+.btn.btn-info {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+.btn.btn-danger {
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d43f3a;
+}
+.btn.btn-success {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+.btn.btn-info:hover {
+  background-color: #31b0d5;
+  border-color: #269abc;
+}
+.btn.btn-danger:hover {
+  background-color: #c9302c;
+  border-color: #ac2925;
+}
+.btn.btn-success:hover {
+  background-color: #449d44;
+  border-color: #398439;
+}
+.calendar-time-field .glyphicon-chevron-up{
+  background: url('../../assets/images/arrow_up.svg') no-repeat center;
+  width: 12px;
+  height: 12px;
+  float: left;
+  position: relative;
+}
+.calendar-time-field .glyphicon-chevron-down{
+  background: url('../../assets/images/arrow_down.svg') no-repeat center;
+  width: 12px;
+  height: 12px;
+  float: left;
+  position: relative;
+}
+.calendar-time-field .uib-increment > a, .calendar-time-field .uib-decrement > a{
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+}
+.calendar-time-field .uib-time input {
+  width: 30px;
+  outline: none;
+  border: 0;
+  border-bottom: 1px solid rgba(0,0,0,.42);
+}

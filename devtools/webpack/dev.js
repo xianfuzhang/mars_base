@@ -8,6 +8,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 //const ngAnnotateWebpackPlugin =  require('ng-annotate-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
 
 const port = process.env.PORT || 3000;
 const hostname = process.env.HOSTNAME || 'localhost';
@@ -19,7 +20,8 @@ module.exports = function (config) {
     mode: "development",
     entry: {
       // app: [path.resolve('src/main.js'), path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js')],
-      app: path.resolve('src/main.js')
+      theme_default: path.resolve('src/main.js'),
+      theme_dark: path.resolve('src/main-theme-dark.js')
     },
     plugins: [
       //new ngAnnotateWebpackPlugin(),
@@ -27,8 +29,10 @@ module.exports = function (config) {
         template: "./src/index.html",
         favicon: "./favicon.ico",
         filename: "./index.html",
-        inject: 'head'
+        inject: 'head',
+        excludeAssets:[/theme_dark.js/, /theme.*.css/]
       }),
+      new HtmlWebpackExcludeAssetsPlugin(),
       new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css"
@@ -101,7 +105,8 @@ module.exports = function (config) {
                   path.resolve('node_modules/xbem/src'),
                   "node_modules",
                   path.resolve('src/themes/shared'),
-                  path.resolve('src/themes/' + config.theme)
+                  path.resolve('src/themes/default'),
+                  path.resolve('src/themes/dark')
                 ]
               }
             }

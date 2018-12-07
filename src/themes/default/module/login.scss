@@ -1,0 +1,118 @@
+.login{
+  background: url('../../assets/images/background.png') no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 35vh;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.login-fields{
+  width: 300px;
+  height: 450px;
+}
+.login-fields__logo{
+  background: url('../../assets/images/mars_logo.png') no-repeat center center;
+  margin: auto auto 10px auto;
+  width: 115px;
+  height: 94px;
+}
+.login-fields__element{
+  margin-bottom: 10px;
+}
+.login-fields__element .mdc-text-field{
+  width: 300px;
+}
+.login-fields__element .mdc-text-field:not(.mdc-text-field--disabled)>.mdc-floating-label,
+.login-fields__element .mdc-text-field:not(.mdc-text-field--disabled)>.mdc-text-field__input{
+  color: rgba(255, 255, 255, 0.6);
+}
+.login-fields__element .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-text{
+  color: rgba(255, 255, 255, 0.6);
+}
+.login-fields__element .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input{
+  border-bottom-color: rgba(255, 255, 255, 0.42);
+}
+.login-fields__element .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input:hover{
+  border-bottom-color: rgba(255, 255, 255, 0.87);
+}
+.login-fields__element .mdc-text-field .mdc-line-ripple{
+  background-color: #fff;
+}
+.login-fields__btn{
+  text-align: center;
+}
+.login-fields__btn > .mdc-button:not(:disabled){
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid;
+  border-radius: 4px;
+}
+.login-fields__message-error{
+  text-align: center;
+  color: #b00020;
+  padding: 10px;
+}
+.create-user-account-modal{
+  width: 570px;
+}
+.create-user-account-modal .column-manipulation-field__content{
+  color: rgba(0, 0, 0, 0.87);
+}
+.create-user-account-modal .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input{
+  -webkit-text-fill-color: rgba(0,0,0,0.87);
+}
+.group-item-field__group-helper{
+  font-size: 12px;
+  color: #b00020;
+}
+.notification-wrapper{
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+.notification-wrapper__content{
+  margin: 60px auto;
+  padding: 10px 10px 10px 20px;
+  position: relative;
+  width: 400px;
+  line-height: 25px;
+  border-radius: 4px;
+}
+.alert-warning{
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+.alert-success{
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+.notification-wrapper__content .close{
+  position: relative;
+  float: right;
+  font-size: 21px;
+  cursor: pointer;
+  border: 0;
+  background: 0 0;
+  color: inherit;
+  opacity: 0.2;
+  outline: none;
+}
+.notification-wrapper__content .close:hover {
+  color: #000;
+  text-decoration: none;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.sr-only{
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+}

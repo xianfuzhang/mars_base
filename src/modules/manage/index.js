@@ -1,4 +1,4 @@
-import './scss/manage.scss';
+// import './scss/manage.scss';
 
 import {DHCPController} from './ng/dhcp.controller';
 import {NTPController} from './ng/ntp.controller';

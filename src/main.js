@@ -1,3 +1,5 @@
+import './themes/default/index.scss';
+
 import 'angular';
 import 'angular-cookies';
 import 'angular-route';

@@ -3,8 +3,10 @@ export class headerController{
     return [
       '$log',
       '$scope',
+      '$rootScope',
       '$cookies',
       '$location',
+      '$window',
       '_',
       'crypto',
       'appService',
@@ -35,6 +37,21 @@ export class headerController{
       this.di.$location.path(url);
     };
 
+    // handle theme
+    const CONST_LOCAL_STORAGE_KEY = 'userPrefs__';
+    const CONST_THEME = 'theme';
+    let theme =  this.di.$window.localStorage.getItem(CONST_LOCAL_STORAGE_KEY + CONST_THEME);
+    if(theme) {
+      this.scope.theme = theme;
+    } else {
+      this.scope.theme = 'theme_default';
+    }
+    
+    this.scope.changeTheme = (theme) => {
+      this.scope.theme = theme;
+      this.di.$rootScope.$emit('change-theme', theme)
+    }
+    
     this.init();
   }
 

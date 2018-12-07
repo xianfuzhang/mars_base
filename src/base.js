@@ -264,10 +264,10 @@ function mainCtrl($scope, $rootScope) {
   const CONST_LOCAL_STORAGE_KEY = 'userPrefs__';
   const CONST_THEME = 'theme';
   let theme =  window.localStorage.getItem(CONST_LOCAL_STORAGE_KEY + CONST_THEME);
-  if(theme === 'theme-default' || theme === 'theme-dark' ){
+  if(theme === 'theme_default' || theme === 'theme_dark' ){
     $scope.theme = theme;
   }else {
-    $scope.theme = 'theme-default';
+    $scope.theme = 'theme_default';
     window.localStorage.setItem(CONST_LOCAL_STORAGE_KEY + CONST_THEME, $scope.theme);
   }
   
