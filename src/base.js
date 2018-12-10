@@ -275,6 +275,8 @@ function mainCtrl($scope, $rootScope) {
   unsubscribers.push($rootScope.$on('change-theme', ($event, theme) => {
     $scope.theme = theme;
     window.localStorage.setItem(CONST_LOCAL_STORAGE_KEY + CONST_THEME, theme);
+    
+    window.location.reload();
   }));
   
   $scope.$on('$destroy', () => {

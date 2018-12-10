@@ -17,24 +17,24 @@
                 </mdl-tabs>
 
                 <section class="tab-content" ng-show="tabSelected.type == 'realtime'" style="position:relative;height: calc(100% - 50px);">
-                    <div class="actions" style="margin-bottom:20px;position: relative;float: right;">
-                        <div style="display:inline-block;height: 40px;">
+                    <div class="realtime-log-actions">
+                        <div style="display:inline-block;height: 33px;">
                             <input style="height: 100%;font-size: 16px;width: 200px;border: 2px solid #000;box-sizing: border-box;" ng-model="keyWordStr" ng-disabled="!updateRealtimeLogFlag" />
                         </div>
 
                         <div style="display:inline-block;margin-left: 10px;">
-                            <mar-button btn-style="updateRealtimeLogFlag ? 'background-color:yellow;color:#000;' : 'background-color: grey;color:#000;'" btn-text="::'MODULE.LOG.BUTTON.MARK' | translate" btn-class="'btn-black btn-md'" btn-icon="'bookmark'" btn-disabled="!updateRealtimeLogFlag" btn-click="onKeywordChange(keyWordStr)" />
+                            <mar-button btn-style="updateRealtimeLogFlag ? 'background-color:yellow;color:#000;' : 'background-color: grey;color:#000;'" btn-text="::'MODULE.LOG.BUTTON.MARK' | translate" btn-class="'btn-black btn-sm'" btn-icon="'bookmark'" btn-disabled="!updateRealtimeLogFlag" btn-click="onKeywordChange(keyWordStr)" />
                         </div>
 
                         <div style="display:inline-block;margin-left: 20px;">
-                            <mar-button btn-text="realtimeBtnTxt" btn-class="'btn-black btn-md'" btn-icon="updateRealtimeLogFlag ? 'pause' : 'play_arrow'" btn-click="onUpdateBtn()" />
+                            <mar-button btn-text="realtimeBtnTxt" btn-class="'btn-black btn-sm'" btn-icon="updateRealtimeLogFlag ? 'pause' : 'play_arrow'" btn-click="onUpdateBtn()" />
                         </div>
 
                         <div style="display:inline-block;margin-left: 20px;">
-                            <mar-button btn-text="::'MODULE.LOG.BUTTON.CLEAR_LOG' | translate" btn-class="'btn-white btn-md'" btn-icon="'delete_forever'" btn-click="onClearLogsBtn()" />
+                            <mar-button btn-text="::'MODULE.LOG.BUTTON.CLEAR_LOG' | translate" btn-class="'btn-white btn-sm'" btn-icon="'delete_forever'" btn-click="onClearLogsBtn()" />
                         </div>
                     </div>
-                    <div id="realtime-log-div" style="position:relative;width:100%;height:90%;background-color:#000;color: #fff;overflow:auto;">
+                    <div id="realtime-log-div" style="position:relative;width:100%;height:100%;background-color:#000;color: #fff;overflow:auto;margin-top: 10px;">
                     </div>
 
 
@@ -65,7 +65,7 @@
                         <!--&lt;!&ndash;<button class="actions__button actions__search-btn" ng-click="search()" ng-class="{'+disabled': dateFrom > dateTo || loading || dateTo > today}" ng-disabled="dateFrom > dateTo || loading || dateTo > today" ng-bind="::'MODULE.LOG.BUTTON.SEARCH' | translate"></button>&ndash;&gt;-->
                         <!--&lt;!&ndash;<button class="actions__button actions__file-btn" ng-click="file()" ng-class="{'+disabled': !hasData}" ng-disabled="!hasData" ng-bind="::'MODULE.LOG.BUTTON.DOWNLOAD' | translate"></button>&ndash;&gt;-->
                         <div style="display:inline-block;margin-left: 15px;">
-                            <mar-button btn-text="::'MODULE.LOG.BUTTON.DOWNLOAD' | translate" btn-class="'btn-black btn-md'" btn-icon="'cloud_download'" btn-click="downloadFile()" btn-disabled="fileList.options.length == 1 || logFileSelected.value == ''" />
+                            <mar-button btn-text="::'MODULE.LOG.BUTTON.DOWNLOAD' | translate" btn-class="'btn-black btn-sm'" btn-icon="'cloud_download'" btn-click="downloadFile()" btn-disabled="fileList.options.length == 1 || logFileSelected.value == ''" />
                         </div>
                     </div>
                 </section>
