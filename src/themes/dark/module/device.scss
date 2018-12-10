@@ -64,6 +64,14 @@
 
 @include block(summary) {
 
+  .mar_section__body{
+    background-color: transparent;
+  }
+
+  .mar_section__header__title{
+    color:white;
+  }
+
   @include element(link) {
     cursor: pointer;
     text-decoration: underline;
@@ -78,7 +86,7 @@
     //flex-grow: 2;
     //flex-basis: auto;
     //flex-shrink: 1;
-    background-color: white;
+    //background-color: white;
     overflow: scroll;
     padding: 0 8px;
     //display: flex;
@@ -151,7 +159,7 @@
         right: 0;
         top: 0;
         height: 100%;
-        background-color: white;
+        //background-color: white;
         width: 295px;
         display: inline-block;
         overflow: scroll;

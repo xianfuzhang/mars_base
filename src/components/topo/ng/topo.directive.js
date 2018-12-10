@@ -5,6 +5,7 @@ export class Topo {
       '$rootScope',
       '$window',
       '$timeout',
+      'localStoreService',
       '$document',
       '_',
       'easingService',
@@ -126,10 +127,10 @@ export class Topo {
           unSelectNode();
         });
 
-        this.spineContainer.fillColor = '255,255,255';
+        this.spineContainer.fillColor = this.getColor()['CONTAINER_FILL'];
         // this.leafContainer.fillColor = '239,239,239';
-        this.leafContainer.fillColor = '255,255,255';
-        this.otherContainer.fillColor = '255,255,255';
+        this.leafContainer.fillColor = this.getColor()['CONTAINER_FILL'];
+        this.otherContainer.fillColor = this.getColor()['CONTAINER_FILL'];
 
         this.spineContainer.alpha = 1;
         this.leafContainer.alpha = 1;
@@ -833,6 +834,21 @@ export class Topo {
     scope.$on('$destroy', ()=>{
       angular.element(this.di.$window).off('resize');
     });
+  }
+
+
+  getColor(){
+    let theme = window.localStorage['userPrefs__theme'];
+    if(theme && theme === 'theme_dark'){
+      return {
+        "CONTAINER_FILL": "40,40,40",
+      };
+    } else {
+      return {
+        "CONTAINER_FILL": "255,255,255",
+      }
+    }
+
   }
 }
 
