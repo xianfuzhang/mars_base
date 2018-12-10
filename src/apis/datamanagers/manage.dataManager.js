@@ -145,6 +145,34 @@ export class ManageDataManager{
     return defer.promise;
   }
 
+  getNTP(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getNtpUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  putNTP(param){
+    let defer = this.di.$q.defer();
+    this.di.$http.put(this.di.appService.getNtpUrl(), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
   getElasticsearchDataByIndexAndQuery(index, param){
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getElasticsearchDataIndexUrl(index), param).then(

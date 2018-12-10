@@ -18,6 +18,11 @@ export class DeviceDetailService {
   getTabSchema() {
     return [
       {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.SUMMARY'),
+        'value': 'summary',
+        'type': 'summary'
+      },
+      {
         'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.PORT'),
         'value': 'port',
         'type': 'port'

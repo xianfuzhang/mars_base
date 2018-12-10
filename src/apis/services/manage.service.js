@@ -78,6 +78,16 @@ export class manageService {
     ];
   }
 
+  getNTPTableSchema(){
+    return [
+      {
+        'label': 'Servers',
+        'field': 'host',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      }
+    ];
+  }
+
 
 }
 

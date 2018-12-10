@@ -32,6 +32,7 @@ export class Wizard {
       scope.errorMessage = '';
       scope.showWizard = scope.showWizard || false;
       scope.loading = false;
+      scope.wizardStyle = scope.wizardHeight || {};
       scope.wizardForm = {};
     }
     

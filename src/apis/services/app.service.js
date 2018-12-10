@@ -92,6 +92,7 @@ export class appService {
             'label': this.translate('MODULE.HEADER.MANAGE'),
             'items': [
               {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
+              {'label': this.translate('MODULE.HEADER.MANAGE.NTP'), 'url': '/ntp', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3}
             ]
           }
@@ -355,7 +356,15 @@ export class appService {
   getHealthyCheckByNameUrl(object, resource, rule_name) {
     return this.getZoneEndpoint(true) + '/healthycheck/v1/' + object + '/' + resource + '/threshold/' + rule_name;
   }
-
+  getTemperatureSensorsUrl(deviceId){
+    return this.getZoneEndpoint(true) + '/healthycheck/v1/sensors/' + deviceId + '/temp';
+  }
+  getPsuSensorsUrl(deviceId){
+    return this.getZoneEndpoint(true) + '/healthycheck/v1/sensors/' + deviceId + '/psu';
+  }
+  getFanSensorsUrl(deviceId){
+    return this.getZoneEndpoint(true) + '/healthycheck/v1/sensors/' + deviceId + '/fan';
+  }
   getLogsUrl() {
     return this.getZoneEndpoint(true) + '/utility/logs/v1/controller';
   }
@@ -425,6 +434,10 @@ export class appService {
     return this.getZoneEndpoint(true) + '/dhcpv6server/ztp/v1/dhcpv6server/mappings';
   }
 
+  getNtpUrl(){
+    return this.getZoneEndpoint(true) + '/ntpserver/v1';
+  }
+  
   getElasticsearchDataIndexUrl(index){
     return this.getZoneEndpoint(true) + '/utility/elasticsearch/v1/'+ index +'/query';
   }

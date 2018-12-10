@@ -44,6 +44,7 @@ import 'wizard';
 import 'datePicker';
 import 'marButton';
 import 'jsonEditor';
+import 'gradientScale';
 
 import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, mainCtrl} from './base';
 
@@ -89,7 +90,8 @@ angular
     'wizard',
     'date-picker',
     'marButton',
-    'jsonEditor'
+    'jsonEditor',
+    'gradientScale'
   ])
   .factory('setLanguage', ['$q', setLanguage])
   .config(['$translateProvider', configTranslate])

@@ -8,7 +8,7 @@
             <div class="wizard__header__dismiss" ng-click="postCancel()"></div>
         </div>
 
-        <div class="wizard__body">
+        <div class="wizard__body" ng-style="wizardStyle">
             <div class="wizard__body__left" ng-if="steps.length > 1">
                 <div ng-repeat="step in steps track by $index" class="wizard__body__left__step" ng-class="{'+active': curIndex === $index }" ng-click="allowSkip === false ? false : switchTo($index)">{{($index+1) + '.' +step.title}}</div>
             </div>

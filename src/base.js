@@ -179,6 +179,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/ntp', {
+      template: require('./modules/manage/template/ntp.html'),
+      controller: 'ntpController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/elasticsearch', {
       template: require('./modules/manage/template/elasticsearch.html'),
       controller: 'elasticsearchController',

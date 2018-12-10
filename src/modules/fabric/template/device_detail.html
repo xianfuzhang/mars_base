@@ -6,7 +6,7 @@
     <span ng-bind="'MODULES.SWITCH.DETAIL.TITLE'|translate"></span>
   </content-header>
   <section class="app-body">
-    <div class="main__content">
+    <div class="main__content deviceDetail">
       <div class="device-detail" ng-if="detailDisplay">
         <div class="device-detail__row">
           <div class="device-detail__item">
@@ -52,22 +52,87 @@
             <!--<span class="device-detail__item-value">{{Object.keys(detailValue.leaf_group)}}</span>-->
           <!--</div>-->
         </div>
-        <!--<div class="device-detail__row">-->
-          <!--<div class="device-detail__item">-->
-            <!--<label class="device-detail__item-label"-->
-                   <!--ng-bind="'MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'|translate"></label>-->
-            <!--<span class="device-detail__item-value "-->
-                  <!--ng-class="{-->
-                  <!--'device-detail__available': detailValue.available === true,-->
-                  <!--'device-detail__inavailable': detailValue.available === false-->
-                  <!--}"></span>-->
-          <!--</div>-->
-        <!--</div>-->
       </div>
       <mdl-tabs ng-model="tabSelected" options="tabs"
                 class-list="main__content__device-detail-tabs"
                 on-select="onTabChange($value)">
       </mdl-tabs>
+      <section class="tab-content" ng-if="tabSelected.type == 'summary'">
+        <div class="hide">
+          <mdl-table provider="detailModel.provider"></mdl-table>
+        </div>
+        <div class="device-summary">
+          <div class="mdc-card temp-sensors">
+            <h2 ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.TEMP.INFO'|translate"></h2>
+            <div class="mdc-card__content">
+              <div class="temp-sensor" ng-repeat="temp in summary.tempSensors">
+                <label class="temp-name" ng-bind="temp.name"></label>
+                <gradient-scale min-value="0 ℃" max-Value="100 ℃"
+                  current-Value="temp.value" color-gradient="temp.gradient">
+                </gradient-scale>
+              </div>
+            </div>
+          </div>
+          <div class="mdc-card fan-sensors">
+            <h2 ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.FAN.INFO'|translate"></h2>
+            <div class="mdc-card__content">
+              <div class="fan-sensor" ng-repeat="fan in summary.fanSensors">
+                <label class="fan-name" ng-bind="fan.display"></label>
+                <gradient-scale min-value="0 RPM" max-Value="20000 RPM"
+                  current-Value="fan.RPM" color-gradient="fan.gradient">
+                </gradient-scale>
+              </div>
+            </div>
+          </div>
+          <div class="mdc-card psu-sensors">
+            <h2 ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.INFO'|translate"></h2>
+            <div class="mdc-card__content">
+              <div class="psu-sensor" ng-repeat="psu in summary.psuSensors">
+                <div class="psu-item">
+                  <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.NAME'|translate"></label>
+                  <span class="psu-value" ng-bind="psu.name"></span>
+                </div>
+                <div class="psu-item">
+                  <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.STATUS'|translate"></label>
+                  <i class="psu-status" ng-class="{true: 'green', false: 'red'}[psu.status === 'good']"></i>
+                </div>
+                <div class="psu-item">
+                  <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.MODEL'|translate"></label>
+                  <span class="psu-value" ng-bind="psu.model"></span>
+                </div>
+                <div class="psu-item">
+                  <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.TYPE'|translate"></label>
+                  <span class="psu-value" ng-bind="psu.powertype"></span>
+                </div>
+                <div class="psu-item">
+                  <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.VIN'|translate"></label>
+                  <span class="psu-value" ng-bind="psu.vin"></span>
+                </div>
+                <div class="psu-item">
+                  <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.VOUT'|translate"></label>
+                  <span class="psu-value" ng-bind="psu.vout"></span>
+                </div>
+                <div class="psu-item">
+                  <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.IIN'|translate"></label>
+                  <span class="psu-value" ng-bind="psu.iin"></span>
+                </div>
+                <div class="psu-item">
+                  <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.IOUT'|translate"></label>
+                  <span class="psu-value" ng-bind="psu.iout"></span>
+                </div>
+                <div class="psu-item">
+                  <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.PIN'|translate"></label>
+                  <span class="psu-value" ng-bind="psu.pin"></span>
+                </div>
+                <div class="psu-item">
+                  <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.POUT'|translate"></label>
+                  <span class="psu-value" ng-bind="psu.pout"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section class="tab-content" ng-if="tabSelected.type == 'port'">
         <mdl-table actions-show="detailModel.actionsShow"
                    actions="detailModel.rowActions"

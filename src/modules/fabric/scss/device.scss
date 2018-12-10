@@ -186,10 +186,10 @@
 .topo_table {
   border-spacing: 4px 4px;
 }
-
+.deviceDetail .tab-content{
+  height: calc(100% - 150px);
+}
 .device-detail {
- /*  display: flex;
-  flex-direction: column; */
   padding-bottom: 20px;
 }
 
@@ -232,11 +232,67 @@
   background-size: 64px auto;
   background-position: -48px -15px;
 }
-
+.device-summary{
+  display: flex;
+  box-sizing: border-box;
+  margin-top: 20px;
+  height: 100%;
+  overflow-y: auto;
+  flex-wrap: wrap;
+}
+.mdc-card.fan-sensors, .mdc-card.psu-sensors, .mdc-card.temp-sensors{
+  width: 500px;
+  height: 500px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  background: rgb(244, 245, 247);
+}
+.fan-sensors h2, .psu-sensors h2, .temp-sensors h2{
+  margin: 0;
+  padding: 10px;
+  border-bottom: 1px solid rgb(233, 233, 233);
+}    
+.fan-sensor, .temp-sensor{
+  display: flex;
+  padding: 10px 0;
+  justify-content: space-between;
+}
+.mdc-card__content{
+  padding: 20px;
+}
+.fan-name, .temp-name{
+  width: 150px;
+  margin: auto 0;
+}
+.psu-sensor {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+}
+.psu-item {
+  width: 50%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+.psu-status{
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+}
+.psu-status.green{
+  background: green;
+}
+.psu-status.red{
+  background: red;
+}
+.psu-item .psu-label {
+  padding-right: 10px;
+}
 .show-switch-flow-modal {
   width: 800px;
 }
-
 .show-switch-flow-modal .tab-content {
   height: auto;
   padding: 20px;
