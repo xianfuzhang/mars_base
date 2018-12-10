@@ -4,7 +4,12 @@
 //@import 'framework_layout';
 
 @include block(actions){
-  /* margin: 15px 0; */
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  top: -5px;
+  background: #fff;
+  padding: 5px 10px;
   font-weight: bold;
   font-size: 15px;
   
@@ -64,6 +69,8 @@
     @include element(form){
       padding: 15px;
       border: 1px solid #3883fa;
+      background-color: #FFF;
+      color: #000;
       
       @include state(disable) {
         border: 1px solid #dfdfdf;

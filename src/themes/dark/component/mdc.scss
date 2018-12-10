@@ -8,7 +8,7 @@
 }
 .material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):before,
 .material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):after{
-  background: black;
+  background: white;
   content: "";
   display: block;
   position: absolute;
@@ -90,10 +90,11 @@
   border: 1px solid rgba(0,0,0, 0.03);
   border-radius: 4px;
   line-height: 2.75rem;
-  background: rgba(0,0,0, 0.03);
+  background: rgba(255,255,255, 0.5);
 }
 .mdc-tab-bar:not(.mdc-tab-bar-upgraded) .mdc-tab--active{
-  background: rgba(0,0,0, 0.1);
+  background: rgba(255,255,255,1);
+  opacity: 1;
 }
 
 // dialog css style
@@ -144,4 +145,21 @@
   margin-right: 5px;
   background: url('../../assets/images/dialog-success-96.png') no-repeat;
   background-size: contain;
+}
+
+//.mdc-select:not(.mdc-select--disabled) .mdc-select__native-control {
+//  color: rgba(255, 255, 255, 1);
+//}
+.mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate) ~ .mdc-checkbox__background {
+  border-color: rgba(255, 255, 255, 1);
+  background-color: transparent; }
+
+.mdc-icon-button {
+  color: rgba(255, 255, 255, 1);
+}
+
+.mdc-icon-button:disabled {
+  color: rgba(255, 255, 255, 0.5);
+  cursor: default;
+  pointer-events: none;
 }

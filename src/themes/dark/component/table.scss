@@ -18,7 +18,9 @@ mdc设置组件颜色
 .mdl-table-action__search-body{
   width: 100%;
 }
+
 .mdc-text-field__input.mdl-table-action__search-body__input{
+  color: #FFF;
   padding-top: 0;
   border: none;
   width: 200px;
@@ -31,7 +33,6 @@ mdc设置组件颜色
 }
 .mdl-table-field__actions {
   display: flex;
-  opacity: 0.6;
 }
 .search-filter-list ul{
   height: 200px;
