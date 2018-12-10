@@ -359,7 +359,7 @@ export class Topo {
         node.dragable = false ;
         node.width = 0;
         node.showSelected =false;
-        node.fillColor = "255.255.255";
+        node.fillColor = "rgba(0,0,0,.2)";
 
         this.scene.add(node);
         return node;
@@ -371,7 +371,7 @@ export class Topo {
         node.showSelected =false;
         node.font = '16px 微软雅黑';
         node.fontColor = "255,255,255";
-        node.fillColor = '200,200,200';
+        node.fillColor = "rgba(0,0,0,.2)";
         node.textPosition = 'Middle_Center';
         node.borderRadius = 3;
         node.width = 100;
