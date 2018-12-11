@@ -19,8 +19,8 @@
           </ul>
 
           <div class="navbar-inner__right">
-            <div class="navbar-inner__theme-default" ng-hide="theme == 'theme_default'" ng-click="changeTheme('theme_default')"></div>
-            <div class="navbar-inner__theme-dark" ng-hide="theme == 'theme_dark'" ng-click="changeTheme('theme_dark')"></div>
+            <div class="navbar-inner__theme" ng-if="theme == 'theme_default'" ng-click="changeTheme()"> <i class="material-icons">brightness_2</i></div>
+            <div class="navbar-inner__theme" ng-if="theme == 'theme_dark'" ng-click="changeTheme()"><i class="material-icons">wb_sunny</i></div>
           </div>
 
           <div class="navbar-inner__right">

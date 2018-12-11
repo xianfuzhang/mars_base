@@ -169,18 +169,9 @@
   background: #455A64;
 }
 
-.navbar-inner__theme-default {
+.navbar-inner__theme {
   width: 30px;
   height: 30px;
-  border-radius: 9px;
-  background-color: #efefef;
-  cursor: pointer;
-}
-.navbar-inner__theme-dark {
-  margin-left: 15px;
-  width: 30px;
-  height: 30px;
-  border-radius: 9px;
-  background-color: #000;
+  margin-top: 5px;
   cursor: pointer;
 }
