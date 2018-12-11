@@ -19,15 +19,18 @@
           </ul>
 
           <div class="navbar-inner__right">
-            <div class="navbar-inner__theme" ng-if="theme == 'theme_default'" ng-click="changeTheme()"> <i class="material-icons">brightness_2</i></div>
-            <div class="navbar-inner__theme" ng-if="theme == 'theme_dark'" ng-click="changeTheme()"><i class="material-icons">wb_sunny</i></div>
-          </div>
+            </div>
 
           <div class="navbar-inner__right">
            <!--  <div class="navbar-inner__notification">
              <span class="notification-status" ng-class="{'has-alert': alerts_acount > 0}"></span>
              <mdl-button ng-click="location('/alert', $event)" icon-name="notifications"></mdl-button>
            </div> -->
+            <div class="navbar-inner__theme" title="夜间模式" ng-if="theme == 'theme_default'" ng-click="changeTheme()"> <i class="material-icons">brightness_2</i></div>
+            <div class="navbar-inner__theme" title="白天模式" ng-if="theme == 'theme_dark'" ng-click="changeTheme()"><i class="material-icons">wb_sunny</i></div>
+
+
+
             <div class="navbar-inner__account navbar-inner__dropdown" uib-dropdown>
               <div class="navbar-inner__account-summary" uib-dropdown-toggle>
                 <i class="material-icons">account_circle</i>
