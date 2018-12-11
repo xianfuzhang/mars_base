@@ -65,8 +65,8 @@ export class contentPanel {
       let easingService = this.di.easingService;
       let isNodeChange = false;
 
-      let parentWidth = element[0].offsetWidth;
-      let parentHeight = element[0].offsetHeight;
+      let parentWidth = element[0].clientWidth;
+      let parentHeight = element[0].clientHeight;
       let circleLength = Math.sqrt(Math.pow(element[0].offsetWidth, 2)  + Math.pow(element[0].offsetHeight,2));
 
 
@@ -129,6 +129,9 @@ export class contentPanel {
       };
 
       let changeContent = (index) =>{
+        parentWidth = element[0].clientWidth;
+        parentHeight = element[0].clientHeight;
+
         isNodeChange = true;
         setLastDiv();
         setCurrentDiv();
