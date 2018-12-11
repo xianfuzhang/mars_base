@@ -48,7 +48,7 @@ export class headerController{
     }
     
     this.scope.changeTheme = (theme) => {
-      this.scope.theme = theme;
+      // this.scope.theme = theme;
       this.di.$rootScope.$emit('change-theme', theme)
     }
     
