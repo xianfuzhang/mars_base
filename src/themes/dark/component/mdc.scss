@@ -102,6 +102,12 @@
   vertical-align: center;
 }
 
+.mdc-dialog__header__title__text {
+  display:inline-flex;
+  line-height:30px;
+  color: #000;
+}
+
 .mdc-dialog__header__text {
   display: inline-flex;
   line-height:30px;
