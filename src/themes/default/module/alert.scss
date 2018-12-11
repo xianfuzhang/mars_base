@@ -11,8 +11,28 @@
   overflow: hidden;
 }
 
+.sender_wechat_section{
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  border: 1px solid #fafafa;
+  padding: 8px;
+  background-color: #fafafa;
+  border-radius: 5px;
+  text-align: left;
+}
 
-
+.sender_email_section{
+  margin-left: 50px;
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  border: 1px solid #fafafa;
+  padding: 8px;
+  background-color: #fafafa;
+  border-radius: 5px;
+  text-align: left;
+}
 
 @-webkit-keyframes fly_into {
   0% {

@@ -11,7 +11,53 @@
   overflow: hidden;
 }
 
+.inform input{
+  color: white !important;
+}
 
+.inform .mdc-notched-outline__idle{
+  border-color:white!important;
+}
+
+.inform .mdc-notched-outline__path{
+  stroke: white !important;
+}
+
+.inform .mdc-floating-label{
+  color:white!important;
+}
+
+
+.inform .mar_section__body{
+  background-color: transparent;
+}
+
+.inform .mar_section__header__title{
+  color:white;
+}
+
+.sender_wechat_section{
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  border: 1px solid #fafafa;
+  padding: 8px;
+  background-color: transparent;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.sender_email_section{
+  margin-left: 50px;
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  border: 1px solid #fafafa;
+  padding: 8px;
+  background-color: transparent;
+  border-radius: 5px;
+  text-align: left;
+}
 
 
 @-webkit-keyframes fly_into {
