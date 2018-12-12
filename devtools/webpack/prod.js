@@ -9,6 +9,8 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin');
+
 const port = process.env.PORT || 3000;
 const hostname = process.env.HOSTNAME || 'localhost';
 const host = 'http://' + hostname + ':' + port;
@@ -18,7 +20,10 @@ module.exports = function (config) {
   return {
     mode: "production",
     entry: {
-      app: path.resolve('src/main.js')
+      // app: path.resolve('src/main.js')
+      // app名称不可以更改，因为现在用js延迟加载了css和js文件，在代码中使用了这2个app的名称
+      theme_default: path.resolve('src/main.js'),
+      theme_dark: path.resolve('src/main-theme-dark.js')
     },
     optimization: {
       minimizer: [
@@ -36,8 +41,10 @@ module.exports = function (config) {
         template: "./src/index.html",
         favicon: "./favicon.ico",
         filename: "./index.html",
-        inject: 'head'
+        inject: 'head',
+        excludeAssets:[/theme.*.js/, /theme.*.css/]
       }),
+      new HtmlWebpackExcludeAssetsPlugin(),
       new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css"

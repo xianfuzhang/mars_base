@@ -8,7 +8,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 //const ngAnnotateWebpackPlugin =  require('ng-annotate-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
+const HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin');
 
 const port = process.env.PORT || 3000;
 const hostname = process.env.HOSTNAME || 'localhost';
@@ -20,6 +20,7 @@ module.exports = function (config) {
     mode: "development",
     entry: {
       // app: [path.resolve('src/main.js'), path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js')],
+      // app名称不可以更改，因为现在用js延迟加载了css和js文件，在代码中使用了这2个app的名称
       theme_default: path.resolve('src/main.js'),
       theme_dark: path.resolve('src/main-theme-dark.js')
     },
@@ -30,7 +31,7 @@ module.exports = function (config) {
         favicon: "./favicon.ico",
         filename: "./index.html",
         inject: 'head',
-        excludeAssets:[/theme_dark.js/, /theme.*.css/]
+        excludeAssets:[/theme.*.js/, /theme.*.css/]
       }),
       new HtmlWebpackExcludeAssetsPlugin(),
       new MiniCssExtractPlugin({
