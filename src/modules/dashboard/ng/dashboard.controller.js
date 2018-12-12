@@ -12,6 +12,7 @@ export class DashboardController {
       'appService',
       'c3',
       'dateService',
+      'deviceService',
       'dashboardDataManager',
       'deviceDataManager',
       'modalManager',
@@ -230,9 +231,11 @@ export class DashboardController {
       promises.push(clusterStaticsDefer.promise);
 
       this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
-        dataModel['devices'] = configs;
-        this.getSwitchesCPUMemoryStatisticFromLS(configs).then(() => {
-          devicesDefer.resolve();
+        this.di.deviceDataManager.getDevices().then((res)=>{
+          dataModel['devices'] = this.di.deviceService.getAllDevices(configs, res.data.devices);
+          this.getSwitchesCPUMemoryStatisticFromLS(configs).then(() => {
+            devicesDefer.resolve();
+          });
         });
       });
       promises.push(devicesDefer.promise);
