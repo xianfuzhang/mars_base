@@ -38,7 +38,7 @@ export class Loading {
       imgs.push();
       for(let i = 1 ; i<= this.imageCount ; i++){
         let image = new Image();
-        let imgUrl = require('../image/Mars_loading_'+i+'.png');
+        let imgUrl = require('../../../assets/images/Mars_loading_'+i+'.png');
 
         image.src = imgUrl;
         imgs.push(image)
