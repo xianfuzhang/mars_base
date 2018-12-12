@@ -143,6 +143,8 @@ mdc设置组件颜色
   background-size: 34px 34px;
 }
 .mdl-table-header__row th {
+  white-space: nowrap;
+  overflow: hidden;
   text-align: center;
   user-select: none;
   border-right: 1px solid rgba(0,0,0,0.1);

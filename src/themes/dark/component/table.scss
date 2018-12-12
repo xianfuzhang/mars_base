@@ -144,6 +144,8 @@ mdc设置组件颜色
   background-size: 34px 34px;
 }
 .mdl-table-header__row th {
+  white-space: nowrap;
+  overflow: hidden;
   text-align: center;
   user-select: none;
   border-right: 1px solid rgba(255,255,255,0.5);
@@ -163,7 +165,7 @@ mdc设置组件颜色
   vertical-align: middle;
 }
 .mdl-table-header__row th.sort-asc, .mdl-table-header__row th.sort-desc {
-  color: var(--mdc-theme-primary, #fff);
+  color: #47B8E0;
   opacity: 0.8;
 }
 .mdl-table-header__row th.sortable .icon-sort{
@@ -211,10 +213,10 @@ mdc设置组件颜色
   top: 10px;
 }
 .mdl-table-header__row th.sort-asc .icon-sort-asc{
-  border-bottom-color: #000000;
+  border-bottom-color: #47B8E0;
 }
 .mdl-table-header__row th.sort-desc .icon-sort-desc{
-  border-top-color: #000000;
+  border-top-color: #47B8E0;
 }
 .mdl-table-field__content{
   border-radius: 4px;
