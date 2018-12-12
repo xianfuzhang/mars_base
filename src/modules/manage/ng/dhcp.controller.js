@@ -272,6 +272,8 @@ export class DHCPController {
           })
         }
 
+      },(err)=>{
+        this.di.notificationService.renderWarning(scope, JSON.stringify(err,undefined, 2));
       })
       // scope.dhcpModel.dhcpserver  = {
       //   "startip": "10.1.11.51",
@@ -302,6 +304,9 @@ export class DHCPController {
             scope.dhcpModel.dhcpserverv6.sntp_server = dhcpJson['DHCPv6']['SNTP_SERVER'];
           }
         }
+      },(err)=>{
+        // this.di.notificationService.renderWarning(scope, err);
+        this.di.notificationService.renderWarning(scope, JSON.stringify(err,undefined, 2));
       });
     };
 
