@@ -89,6 +89,7 @@ export class splineChart {
       chart.load({
         columns: scope.data
       });
+      chart.legend.show();
     });
 
     scope.$on('$destroy', ()=> {
