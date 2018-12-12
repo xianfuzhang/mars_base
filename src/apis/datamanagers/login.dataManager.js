@@ -20,13 +20,17 @@ export class LoginDataManager {
     let defer = this.di.$q.defer();
     //mock
     if(this.di.appService.isMocked) {
-      let result = {
-        'user_name': this.di.appService.CONST.MOCKED_USERNAME,
-        'password': this.di.appService.CONST.MOCKED_PASSWORD
-        //'groups': [this.di.appService.CONST.ADMIN_GROUP]
+      let result = {'data': {
+          'user_name': this.di.appService.CONST.MOCKED_USERNAME,
+          'password': this.di.appService.CONST.MOCKED_PASSWORD,
+          'groups': [this.di.appService.CONST.SUPER_GROUP]  
+        }
       };
       defer.resolve(result);
-      this.di.$cookies.put('useraccount', this.di.crypto.AES.encrypt(JSON.stringify(result), this.di.appService.CONST.CRYPTO_STRING));
+      this.di.$cookies.put('useraccount', this.di.crypto.AES.encrypt(JSON.stringify({
+        'user_name': this.di.appService.CONST.MOCKED_USERNAME,
+        'password': this.di.appService.CONST.MOCKED_PASSWORD
+      }), this.di.appService.CONST.CRYPTO_STRING));
       return defer.promise;
     }
     this.di.$http.post(this.di.appService.getLoginUrl(),{'user_name':username, 'password':password})
