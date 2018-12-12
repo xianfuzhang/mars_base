@@ -63,6 +63,13 @@
 }
 
 @include block(summary) {
+  .mar_section__body{
+    background-color: transparent;
+  }
+
+  .mar_section__header__title{
+    color:white;
+  }
 
   @include element(link) {
     cursor: pointer;
@@ -73,6 +80,11 @@
   //flex-direction: column;
   //flex-wrap: nowrap;
   //height: 100%;
+  .mar_section{
+    background: transparent !important;
+    color: white;
+    box-shadow: none !important;
+  }
 
   @include element(body) {
     //flex-grow: 2;
