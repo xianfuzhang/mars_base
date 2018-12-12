@@ -1,9 +1,9 @@
-@import 'xbem';
+//@import 'xbem';
 //@import 'default';
 //@import 'shared';
 
 
-@include block(ip_mac_establish){
+@include block(ntp_establish){
   margin: 16px;
 
   table{
