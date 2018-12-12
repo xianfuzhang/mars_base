@@ -40,6 +40,7 @@ export class DashboardController {
     this.interval_device = null;
     const CONTROLLER_STATE_INACTIVE = 'INACTIVE';
     this.SWITCHES_CPU_MEMORY_STATISTIC_NS = 'switches_cpu_memory_statistic_ns';
+    this.CLUSTERS_CPU_MEMORY_STATISTIC_NS = 'clusters_cpu_memory_statistic_ns';
     let unSubscribers = [];
     let dataModel = {};
     let date = this.di.dateService.getTodayObject();
@@ -69,6 +70,24 @@ export class DashboardController {
         'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
         'analyzer': []
       },
+      controller: {
+        cpu: {
+          'type': null, //minute, hour, day
+          'begin_date': new Date(before.year, before.month, before.day),
+          'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
+          'end_date': new Date(date.year, date.month, date.day),
+          'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
+          'analyzer': []
+        },
+        memory: {
+          'type': null, //minute, hour, day
+          'begin_date': new Date(before.year, before.month, before.day),
+          'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
+          'end_date': new Date(date.year, date.month, date.day),
+          'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
+          'analyzer': []
+        },
+      },
       timeRange: [
         {label: this.translate('MODULES.DASHBOARD.TIMERANGE.MINUTE'), value: 60},
         {label: this.translate('MODULES.DASHBOARD.TIMERANGE.HOUR'), value: 180},
@@ -81,13 +100,12 @@ export class DashboardController {
       swt : false,
     };
 
-
     this.di.$scope.panelLoading = {
       controller : false,
       swt : false,
     };
 
-    this.di.$scope.rangeConfiguration = (type) => {
+   /* this.di.$scope.rangeConfiguration = (type) => {
       let begin_date, end_date, begin_time, end_time;
       if (type === 'cpu') {
         begin_date = this.di.$scope.dashboardModel.cpu.begin_date;
@@ -141,7 +159,7 @@ export class DashboardController {
           }
         }
       });
-    };
+    };*/
 
     this.di.$scope.timeRangeSelect = (type, $value) => {
       let before;
@@ -157,18 +175,32 @@ export class DashboardController {
       else{
         before = this.di.dateService.getBeforeDateObject(24*60*60*1000); 
       }
-      if (type === 'cpu') {
+      if (type === 'device-cpu') {
         this.di.$scope.dashboardModel.cpu.type = $value;
         this.di.$scope.dashboardModel.cpu.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
         this.getDevicesCPUAnalyzer(dataModel.devices).then(() => {
           convertSwitchCPUAnalyzer();
         });
       }
-      else {
+      else if (type === 'device-memory') {
         this.di.$scope.dashboardModel.memory.type = $value;
         this.di.$scope.dashboardModel.memory.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
         this.getDevicesMemoryAnalyzer(dataModel.devices).then(() => {
           convertSwitchMemoryAnalyzer();
+        });
+      }
+      else if (type === 'controller-cpu') {
+        this.di.$scope.dashboardModel.controller.cpu.type = $value;
+        this.di.$scope.dashboardModel.controller.cpu.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
+        this.getClustersCPUAnalyzer(dataModel.cluster).then(() => {
+          convertClusterCPUAnalyzer();
+        });
+      }
+      else if (type === 'controller-memory') {
+        this.di.$scope.dashboardModel.controller.memory.type = $value;
+        this.di.$scope.dashboardModel.controller.memory.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
+        this.getClustersMemoryAnalyzer(dataModel.cluster).then(() => {
+          convertClusterMemoryAnalyzer();
         });
       }
     };
@@ -185,14 +217,14 @@ export class DashboardController {
 
       this.di.dashboardDataManager.getCluster().then((res)=>{
         dataModel['cluster'] = res;
-
-        clusterDefer.resolve();
+        this.getClusterCPUMemoryStatisticFromLS(res).then(() => {
+          clusterDefer.resolve();
+        });
       });
       promises.push(clusterDefer.promise);
 
       this.di.dashboardDataManager.getClusterStatistic().then((res)=>{
         dataModel['clusterStatistic'] = res;
-
         clusterStaticsDefer.resolve();
       });
       promises.push(clusterStaticsDefer.promise);
@@ -217,22 +249,18 @@ export class DashboardController {
       });
       promises.push(portsDefer.promise);
 
-
       this.di.$rootScope.$emit('start_loading');
       this.di.$scope.panelLoading.controller = true;
       this.di.$scope.panelLoading.switch = false;
 
       Promise.all(promises).then(()=>{
-
         let DI = this.di;
-        setTimeout(function () {
-          convertData2View();
-          DI.$scope.$apply();
-          DI.$rootScope.$emit('stop_loading');
-          DI.$scope.panelRefresh.controller = true;
-          DI.$scope.panelLoading.controller = false;
-          DI.$scope.$apply();
-        });
+        convertData2View();
+        DI.$scope.$apply();
+        DI.$rootScope.$emit('stop_loading');
+        DI.$scope.panelRefresh.controller = true;
+        DI.$scope.panelLoading.controller = false;
+        DI.$scope.$apply();
       });
     };
     
@@ -242,6 +270,8 @@ export class DashboardController {
       convertSwitchInterface2Chart();
       convertSwitchCPUAnalyzer();
       convertSwitchMemoryAnalyzer();
+      convertClusterCPUAnalyzer();
+      convertClusterMemoryAnalyzer();
     }
 
     let convertControllerData =()=>{
@@ -249,12 +279,6 @@ export class DashboardController {
       let controllerSummary = {};
       let ctrlNodes = dataModel['cluster'];
       controllerSummary.count = ctrlNodes.length;
-      if(ctrlNodes.length === 1) {
-        controllerSummary.mode = this.translate('MODULES.DASHBOARD.CONTROLLER.MODE.SINGLETON');
-      } else {
-        controllerSummary.mode = this.translate('MODULES.DASHBOARD.CONTROLLER.MODE.HA');
-      }
-
       controllerSummary.nodes = [];
       controllerSummary.inactives = [];
 
@@ -273,62 +297,6 @@ export class DashboardController {
       });
 
       this.di.$scope.dashboardModel.controllerSummary = controllerSummary;
-/*
-      //2. statistic
-      let cpuUsage = ['cpu'];
-      let memUsage = ['memory'];
-      let category = [];
-      this.di._.forEach(dataModel['clusterStatistic'], (statistic)=>{
-        let cpu_info = statistic['cpu_info'];
-        cpuUsage.push( 100 - cpu_info.idle);
-
-        let mem_info = statistic['memory_info'];
-        memUsage.push(100* mem_info.free_percent);
-
-        category.push(statistic['ip']);
-      });
-
-
-      var chart = this.di.c3.generate({
-        bindto: '#controllerChart',
-        data: {
-          columns: [
-            cpuUsage, memUsage
-          ],
-          type: 'bar'
-        },
-        bar: {
-          width: {
-            ratio: 0.5 // this makes bar width 50% of length between ticks
-          }
-        },
-        tooltip: {
-          format: {
-            title: function (d) { return 'Controller ' + d; },
-            value: function (value, ratio, id) {
-              // var format = id === 'data1' ? d3.format(',') : d3.format('$');
-              // return format(value);
-              return Math.round(value*100)/100 + '%';
-            }
-          },
-          contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-            return genControllerToolTip(d, category);
-          },
-          grouped:false
-        },
-        axis: {
-          x: {
-            type: 'category',
-            categories: category
-          },
-          y:{
-            tick: {
-              values: [0, 10, 20,30,40,50,60,70,80,90,100]
-            },
-            label: "使用率"
-          }
-        }
-      });*/
     };
 
     let convertSwitchInterface2Chart =()=>{
@@ -364,11 +332,10 @@ export class DashboardController {
       packagesOrder.splice(5, packagesOrder.length-5);
       chartSwtInterface(packagesOrder, 'swtInterfaceRxTxPackages', 'packages');
 
-      let b_r_s = 'bytesRecvSent';
+      /*let b_r_s = 'bytesRecvSent';
       let bytesOrder = this.di._.orderBy(waitOrderPortsStatistics, b_r_s, 'desc');
       bytesOrder.splice(5, bytesOrder.length-5);
-      chartSwtInterface(bytesOrder, 'swtInterfaceRxTxBytes', 'bytes');
-
+      chartSwtInterface(bytesOrder, 'swtInterfaceRxTxBytes', 'bytes');*/
 
       let p_d = 'packetsDrop';
       let packagesDropOrder = this.di._.orderBy(waitOrderPortsStatistics, p_d, 'desc');
@@ -381,9 +348,9 @@ export class DashboardController {
       let cpuCols = [];
       let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer);
       let x_axis = this.di.$scope.dashboardModel.cpu.analyzer.length > 0 ?
-        this.getDeviceCPUMemoryTimeSeries(this.di.$scope.dashboardModel.cpu.analyzer[0]) : ['x'];
+        this.getCPUMemoryTimeSeries(this.di.$scope.dashboardModel.cpu.analyzer[0]) : ['x'];
+      cpuCols.push(x_axis);  
       if(records.length) {
-        cpuCols.push(x_axis);
         records.forEach((item, index) =>{
           //只取top5
           if (index < 5) {
@@ -394,43 +361,8 @@ export class DashboardController {
           }
         });
       }
-      else {
-        cpuCols.push(x_axis);
-      }
-      let cpuChart = this.di.c3.generate({
-        bindto: '#deviceCpuAnalyzer',
-        data: {
-          x: 'x',
-          columns: cpuCols,
-          xFormat: '%Y-%m-%dT%H:%M:%S.%LZ'
-        },
-        color: {
-          pattern: ['#0077cb', '#c78500', '#009f0e', '#008e7f', '#34314c']
-        },
-        axis: {
-          x: {
-            type: 'timeseries',
-            tick: {
-              format: (d) => {
-                return this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
-              }
-            }
-          },
-          y: {
-            tick: {
-              format: function (d) { return d + '%'; }
-            }
-          }
-        },
-        tooltip: {
-          format: {
-            title: (d) => {
-              return this.pad(d.getMonth() + 1) + '-' + this.pad(d.getDate()) + ' ' 
-                + this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
-            }
-          }
-        }
-      });
+      this.di.$scope.dashboardModel.cpu.chartData = cpuCols;
+      this.di.$scope.dashboardModel.cpu.aync = !this.di.$scope.dashboardModel.cpu.aync;
     };
 
     let convertSwitchMemoryAnalyzer = () => {
@@ -438,9 +370,9 @@ export class DashboardController {
       let memoryCols = [];
       let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
       let x_axis = this.di.$scope.dashboardModel.memory.analyzer.length > 0 ? 
-          this.getDeviceCPUMemoryTimeSeries(this.di.$scope.dashboardModel.memory.analyzer[0]) : ['x'];
+          this.getCPUMemoryTimeSeries(this.di.$scope.dashboardModel.memory.analyzer[0]) : ['x'];
+      memoryCols.push(x_axis);
       if(records.length) {
-        memoryCols.push(x_axis);
         records.forEach((item, index) =>{
           //只取top5
           if (index < 5) {
@@ -451,43 +383,46 @@ export class DashboardController {
           }
         });
       }
-      else {
-        memoryCols.push(x_axis);
-      }
-      let memoryChart = this.di.c3.generate({
-        bindto: '#deviceMemoryAnalyzer',
-        data: {
-          x: 'x',
-          columns: memoryCols,
-          xFormat: '%Y-%m-%dT%H:%M:%S.%LZ'
-        },
-        color: {
-          pattern: ['#0077cb', '#c78500', '#009f0e', '#008e7f', '#34314c']
-        },
-        axis: {
-          x: {
-            type: 'timeseries',
-            tick: {
-              format: (d) => {
-                return this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
-              }
-            }
-          },
-          y: {
-            tick: {
-              format: function (d) { return d + '%'; }
-            }
-          }
-        },
-        tooltip: {
-          format: {
-            title: (d) => {
-              return this.pad(d.getMonth() + 1) + '-' + this.pad(d.getDate()) + ' ' 
-                + this.pad(d.getHours()) + ':' + this.pad(d.getMinutes());
-            }
-          }
-        }
+      this.di.$scope.dashboardModel.memory.chartData = memoryCols;
+      this.di.$scope.dashboardModel.memory.aync = !this.di.$scope.dashboardModel.memory.aync;
+    };
+
+    let convertClusterCPUAnalyzer = () => {
+      let cpuCols = [], records = [];
+      this.di.$scope.dashboardModel.controller.cpu.analyzer.forEach((controller) => {
+        let data = [controller.name];
+        controller.analyzer.forEach((item) => {
+          data.push((item.user_percent + item.system_percent).toFixed(2))
+        });
+        records.push(data);
       });
+      let x_axis = this.di.$scope.dashboardModel.controller.cpu.analyzer.length > 0 ? 
+          this.getCPUMemoryTimeSeries(this.di.$scope.dashboardModel.controller.cpu.analyzer[0]) : ['x'];
+      cpuCols.push(x_axis);    
+      if (records.length) {
+        cpuCols= cpuCols.concat(records);
+      }
+      this.di.$scope.dashboardModel.controller.cpu.chartData = cpuCols;
+      this.di.$scope.dashboardModel.controller.cpu.aync = !this.di.$scope.dashboardModel.controller.cpu.aync;
+    };
+
+    let convertClusterMemoryAnalyzer = () => {
+      let memoryCols = [], records = [];
+      this.di.$scope.dashboardModel.controller.memory.analyzer.forEach((controller) => {
+        let data = [controller.name];
+        controller.analyzer.forEach((item) => {
+          data.push(item.used_percent.toFixed(2))
+        });
+        records.push(data);
+      });
+      let x_axis = this.di.$scope.dashboardModel.controller.memory.analyzer.length > 0 ? 
+          this.getCPUMemoryTimeSeries(this.di.$scope.dashboardModel.controller.memory.analyzer[0]) : ['x'];
+      memoryCols.push(x_axis);    
+      if (records.length) {
+        memoryCols = memoryCols.concat(records);
+      }
+      this.di.$scope.dashboardModel.controller.memory.chartData = memoryCols;
+      this.di.$scope.dashboardModel.controller.memory.aync = !this.di.$scope.dashboardModel.controller.memory.aync;
     };
 
     let chartSwtInterface = (top5, bindTo, y_label, drop) =>{
@@ -552,31 +487,6 @@ export class DashboardController {
       });
     }
 
-    let genControllerToolTip = (d, category)=>{
-      // let tableStart = "<table style='max-width:350px' class='table_content'>";
-      // let tableEnd = "</table>";
-      // let trStart = "<tr>";
-      // let trEnd = "</tr>";
-      // let tdStart = "<td>";
-      // let tdEnd = "</td>";
-      //
-      // let tbs = tableStart;
-      // tbs = tbs + trStart + tdStart + '控制器' + tdEnd + tdStart + category[d[0].index] + tdEnd + trEnd;
-
-      let tbs = "";
-      this.di._.forEach(d, (item)=>{
-        if(tbs !== ""){
-          tbs += "<br>"
-        }
-        tbs = tbs + item.name + ":  " + Math.round(item.value * 100)/100 + "%";
-        // tbs = tbs + trStart + tdStart + item.name + tdEnd + tdStart + Math.round(item.value * 100)/100 + "%"+ tdEnd + trEnd
-      });
-
-      // tbs += tableEnd;
-
-      return "<div style='background-color: white;color:black;border:1px gray solid;border-radius: 4px;padding:6px;box-shadow: 5px 5px 5px #dddddd;'>"+ tbs+ "</div>";
-    };
-
     let convertSwitchData =()=>{
       let leafSwt = this.di._.filter(dataModel['devices'], { 'type': 'leaf'});
       let spineSwt = this.di._.filter(dataModel['devices'], { 'type': 'spine'});
@@ -589,7 +499,6 @@ export class DashboardController {
     };
     
     let calcRunningDate = (ts)=> {
-
       // 1000 * 60 * 60 * 24
       let dayCount = Math.floor(ts/(1000 * 60 * 60 * 24));
       let hourCount = Math.floor(ts%(1000 * 60 * 60 * 24)/(1000 * 60 * 60));
@@ -629,8 +538,7 @@ export class DashboardController {
       return port && port['annotations']['portName'] || '';
     };
 
-    setTimeout(function () {init()});
-
+    init();
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
         unSubscribe();
@@ -805,7 +713,7 @@ export class DashboardController {
     return devices;
   }
 
-  getDeviceCPUMemoryTimeSeries(device) {
+  getCPUMemoryTimeSeries(device) {
     let timeseries = ['x'];
     device.analyzer.forEach((record) => {
       timeseries.push(record.timepoint);
@@ -827,6 +735,112 @@ export class DashboardController {
       return '0' + number;
     }
     return number;
+  }
+
+  getClusterCPUMemoryStatisticFromLS(clusters) {
+    //10分钟以内不重复获取
+    let defer = this.di.$q.defer();
+    this.di.localStoreService.getStorage(this.CLUSTERS_CPU_MEMORY_STATISTIC_NS).get('timestamp')
+      .then((data) => {
+        if(data) {
+          let time = (Date.now() - data) - 10*60*1000;
+           //超时，重新获取数据
+          if (time >= 0) {
+            this.di.localStoreService.getStorage(this.CLUSTERS_CPU_MEMORY_STATISTIC_NS).del('timestamp')
+              .then(() => {
+                let defers = [];
+                defers.push(this.getClustersCPUAnalyzer(clusters));
+                defers.push(this.getClustersMemoryAnalyzer(clusters));
+                this.di.$q.all(defers).then(() => {
+                  this.di.localStoreService.getStorage(this.CLUSTERS_CPU_MEMORY_STATISTIC_NS)
+                    .set('timestamp', Date.now());
+                  this.di.localStoreService.getStorage(this.CLUSTERS_CPU_MEMORY_STATISTIC_NS)
+                    .set('cpu_memory', {
+                      'cpu': this.di.$scope.dashboardModel.controller.cpu.analyzer,
+                      'memory': this.di.$scope.dashboardModel.controller.memory.analyzer
+                    });
+                  defer.resolve();
+                });
+              });
+          }
+          else {
+            this.di.localStoreService.getStorage(this.CLUSTERS_CPU_MEMORY_STATISTIC_NS).get('cpu_memory')
+              .then((data) => {
+                this.di.$scope.dashboardModel.controller.cpu.analyzer = data.cpu;
+                this.di.$scope.dashboardModel.controller.memory.analyzer = data.memory;
+                defer.resolve();
+              });
+          }
+        }
+        else {
+          let defers = [];
+          defers.push(this.getClustersCPUAnalyzer(clusters));
+          defers.push(this.getClustersMemoryAnalyzer(clusters));
+          this.di.$q.all(defers).then(() => {
+            this.di.localStoreService.getStorage(this.CLUSTERS_CPU_MEMORY_STATISTIC_NS)
+              .set('timestamp', Date.now());
+            this.di.localStoreService.getStorage(this.CLUSTERS_CPU_MEMORY_STATISTIC_NS)
+              .set('cpu_memory', {
+                'cpu': this.di.$scope.dashboardModel.controller.cpu.analyzer,
+                'memory': this.di.$scope.dashboardModel.controller.memory.analyzer
+              });
+            defer.resolve();
+          });
+        }
+      });
+    return defer.promise;  
+  }
+
+  getClustersCPUAnalyzer(clusters) {
+    let deffe = this.di.$q.defer();
+    if (!clusters.length){
+      deffe.resolve([]);
+      return deffe.promise;
+    }
+    let startTime = this.getISODate(this.di.$scope.dashboardModel.controller.cpu.begin_time);
+    let endTime = this.getISODate(this.di.$scope.dashboardModel.controller.cpu.end_time);
+    let solution_second = this.di.$scope.dashboardModel.controller.cpu.type.value;//3600;//this.getResolutionSecond(startTime, endTime);
+    let deferredArr = [];
+    clusters.forEach((cluster) => {
+      let defer = this.di.$q.defer();
+      this.di.deviceDataManager.getDeviceCPUAnalyzer(cluster.id, startTime, endTime, solution_second)
+        .then((data) => {
+          defer.resolve({'id': cluster.id, 'name': cluster.id, 'analyzer': data});
+        });
+      deferredArr.push(defer.promise);  
+    });
+
+    this.di.$q.all(deferredArr).then((arr) => {
+      this.di.$scope.dashboardModel.controller.cpu.analyzer = arr;
+      deffe.resolve();
+    });
+    return deffe.promise;
+  }
+
+  getClustersMemoryAnalyzer(clusters) {
+    let deffe = this.di.$q.defer();
+    if (!clusters.length){
+      deffe.resolve([]);
+      return deffe.promise;
+    }
+    let startTime = this.getISODate(this.di.$scope.dashboardModel.controller.memory.begin_time);
+    let endTime = this.getISODate(this.di.$scope.dashboardModel.controller.memory.end_time);
+    let solution_second = this.di.$scope.dashboardModel.controller.memory.type.value;//3600;//this.getResolutionSecond(startTime, endTime);
+    let deferredArr = [];
+    clusters.forEach((cluster) => {
+      let defer = this.di.$q.defer();
+      this.di.deviceDataManager.getDeviceMemoryAnalyzer(cluster.id, startTime, endTime, solution_second)
+        .then((data) => {
+          defer.resolve({'id': cluster.id, 'name': cluster.id, 'analyzer': data});
+        });
+      deferredArr.push(defer.promise);  
+    });
+
+    this.di.$q.all(deferredArr).then((arr) => {
+      this.di.$scope.dashboardModel.controller.memory.analyzer = arr;
+      deffe.resolve();
+    });
+    return deffe.promise;
   }
 }
 
