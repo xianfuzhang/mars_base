@@ -45,7 +45,7 @@ import 'datePicker';
 import 'marButton';
 import 'jsonEditor';
 import 'gradientScale';
-
+import 'splineChart';
 import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, mainCtrl} from './base';
 
 angular
@@ -91,7 +91,8 @@ angular
     'date-picker',
     'marButton',
     'jsonEditor',
-    'gradientScale'
+    'gradientScale',
+    'splineChart'
   ])
   .factory('setLanguage', ['$q', setLanguage])
   .config(['$translateProvider', configTranslate])

@@ -98,7 +98,55 @@ input:-webkit-autofill:active {
   height: 100%;
   width: 100%;
 }
-
+.mars-row {
+  position: relative;
+  margin-left: 0;
+  margin-right: 0;
+  height: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+.mars-row-flex{
+  display: flex;
+  flex-flow: row wrap;
+}
+.mars-col-6{
+  display: block;
+  box-sizing: border-box;
+  width: 25%;
+}
+.mars-col-8{
+  display: block;
+  box-sizing: border-box;
+  width: 33.33333333%;
+}
+.mars-col-12{
+  display: block;
+  box-sizing: border-box;
+  width: 50%;
+}
+.mars-col-16{
+  display: block;
+  box-sizing: border-box;
+  width: 66.66666667%;
+}
+.mars-col-24{
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+}
+.col-gutter-xs{
+  padding: 8px;
+}
+.col-gutter-sm{
+  padding: 16px;
+}
+.col-gutter-md{
+  padding: 24px;
+}
+.col-gutter-lg{
+  padding: 32px;
+}
 @include block(column) {
   @for $index-alpha from 1 to $grid-size {
     @for $index-beta from 1 through $grid-size {
