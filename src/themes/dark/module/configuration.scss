@@ -34,7 +34,7 @@
 @include block(configuration){
   display:flex;
   flex-direction: row;
-  
+
   @include element(content){
     height:90%;
     width:90%;
@@ -77,10 +77,27 @@
     
     @include element(form){
       padding: 15px;
-      border: 1px solid #3883fa;
-      background-color: #FFF;
-      color: #000;
-      
+      border: 1px solid #47b8e0;
+      background-color: transparent;
+      color: white;
+
+
+      .mdc-radio__outer-circle{
+        border-color: white !important;
+      }
+
+      .mdc-select__native-control{
+        color:white !important;
+        border-bottom-color: white!important;
+      }
+      label, input{
+        color:white!important;
+      }
+      .mdc-notched-outline__idle{
+        border-color:white!important;
+      }
+
+
       @include state(disable) {
         border: 1px solid #dfdfdf;
       }
