@@ -31,6 +31,9 @@ export class notificationService{
   }
 
   renderSuccess(scope, message) {
+    if(message instanceof Object){
+      message = JSON.stringify(message)
+    }
     let templateHtml = '<div class="notification-wrapper">'
       + '<div uib-alert class="notification-wrapper__content alert-success"'
       + 'dismiss-on-timeout="2000"'
@@ -49,9 +52,12 @@ export class notificationService{
   }
 
   renderWarning(scope, message) {
+    if(message instanceof Object){
+      message = JSON.stringify(message)
+    }
     let templateHtml = '<div class="notification-wrapper">'
       + '<div uib-alert class="notification-wrapper__content alert-warning"'
-      + 'dismiss-on-timeout="2000"'
+      + 'dismiss-on-timeout="6000"'
       + 'close="closeAlert()">'+ message+'</div></div>';
 
     let elm = this.di.$compile(templateHtml)(scope);
