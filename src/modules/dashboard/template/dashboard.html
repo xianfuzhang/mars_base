@@ -6,84 +6,178 @@
             <span>Mars Cloud</span>
         </content-header>
         <div class="flex_entirety__body__body dashboard__body">
-
-            <div class="dashboard-summary" ng-show="!panelLoading.controller">
-                <div class="mdc-card panel-widget panel-blue-bg-white margin-right-16 margin-left-8">
-                  <div class="widget-left">
-                    <i class="material-icons md-48">zoom_out_map</i>
-                  </div>
-                  <div class="widget-right">
-                    <div class="widget-top">
-                      <div class="large">{{dashboardModel.controllerSummary.count}}</div>
-                      <div class="medium">控制器</div>
+            <div class="mars-row dashboard-summary" ng-show="!panelLoading.controller">
+              <div class="mars-row-flex">
+                <div class="mars-col-6 col-gutter-md summary-item">
+                  <div class="mdc-card panel-widget panel-blue-bg-white margin-right-16 margin-left-8">
+                    <div class="widget-left">
+                      <i class="material-icons md-48">zoom_out_map</i>
                     </div>
-                    <!-- <div class="widget-bottom">
-                      <div>
-                        <span>模式：</span>
-                        {{dashboardModel.controllerSummary.mode}}
+                    <div class="widget-right">
+                      <div class="widget-top">
+                        <div class="large">{{dashboardModel.controllerSummary.count}}</div>
+                        <div class="medium">控制器</div>
                       </div>
-                      <div class="inactive" ng-if="dashboardModel.controllerSummary.inactives.length">
-                        <span>异常：</span>
-                        <div class="inactive-ips">
-                          <span ng-repeat="ip in dashboardModel.controllerSummary.inactives">{{ip}}</span>
-                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mars-col-6 col-gutter-md summary-item">
+                  <div class="mdc-card panel-widget panel-orange-bg-white">
+                    <div class="widget-left">
+                      <i class="material-icons md-48">shuffle</i>
+                    </div>
+                    <div class="widget-right">
+                      <div class="widget-top">
+                        <div class="large">{{dashboardModel.switchSummary.spineCount}}</div>
+                        <div class="medium">Spine</div>
                       </div>
-                    </div> -->
-                  </div>
-                </div>
-                <div class="mdc-card panel-widget panel-orange-bg-white">
-                  <div class="widget-left">
-                    <i class="material-icons md-48">shuffle</i>
-                  </div>
-                  <div class="widget-right">
-                    <div class="widget-top">
-                      <div class="large">{{dashboardModel.switchSummary.spineCount}}</div>
-                      <div class="medium">Spine</div>
                     </div>
                   </div>
                 </div>
-                <div class="mdc-card panel-widget panel-green-bg-white margin-right-16 margin-left-48">
-                  <div class="widget-left">
-                    <i class="material-icons md-48">swap_vert</i>
-                  </div>
-                  <div class="widget-right">
-                    <div class="widget-top">
-                      <div class="large">{{dashboardModel.switchSummary.leafCount}}</div>
-                      <div class="medium">Leaf</div>
+                <div class="mars-col-6 col-gutter-md summary-item">
+                  <div class="mdc-card panel-widget panel-green-bg-white margin-right-16 margin-left-48">
+                    <div class="widget-left">
+                      <i class="material-icons md-48">swap_vert</i>
+                    </div>
+                    <div class="widget-right">
+                      <div class="widget-top">
+                        <div class="large">{{dashboardModel.switchSummary.leafCount}}</div>
+                        <div class="medium">Leaf</div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="mdc-card panel-widget panel-teal-bg-white">
-                  <div class="widget-left">
-                    <div class="material-icon-left-container panel-material-red">
-                      <i class="material-icons md-30">zoom_out_map</i>
+                <div class="mars-col-6 col-gutter-md summary-item">
+                  <div class="mdc-card panel-widget panel-teal-bg-white">
+                    <div class="widget-left">
+                      <div class="material-icon-left-container panel-material-red">
+                        <i class="material-icons md-30">zoom_out_map</i>
+                      </div>
+                      <div class="material-icon-left-container panel-material-yellow">
+                        <i class="material-icons md-34">swap_horiz</i>
+                      </div>
+                      <div class="material-icon-left-container panel-material-red">
+                        <i class="material-icons md-34">swap_horiz</i>
+                      </div>
                     </div>
-                    <div class="material-icon-left-container panel-material-yellow">
-                      <i class="material-icons md-34">swap_horiz</i>
-                    </div>
-                    <div class="material-icon-left-container panel-material-red">
-                      <i class="material-icons md-34">swap_horiz</i>
+                    <div class="widget-right">
+                      <div class="material-icon-right-container">
+                        <div class="large">{{dashboardModel.controllerSummary.inactives.length}}</div>
+                        <div class="small margin-left-8">异常控制器</div>
+                      </div>
+                      <div class="material-icon-right-container">
+                        <div class="large">{{dashboardModel.switchSummary.unknownCount}}</div>
+                        <div class="small margin-left-8">待加入交换机</div>
+                      </div>
+                      <div class="material-icon-right-container">
+                        <div class="large">{{dashboardModel.switchSummary.unavailableCount}}</div>
+                        <div class="small margin-left-8">异常交换机</div>
+                      </div>
                     </div>
                   </div>
-                  <div class="widget-right">
-                    <div class="material-icon-right-container">
-                      <div class="large">{{dashboardModel.controllerSummary.inactives.length}}</div>
-                      <div class="small margin-left-8">异常控制器</div>
-                    </div>
-                    <div class="material-icon-right-container">
-                      <div class="large">{{dashboardModel.switchSummary.unknownCount}}</div>
-                      <div class="small margin-left-8">待加入交换机</div>
-                    </div>
-                    <div class="material-icon-right-container">
-                      <div class="large">{{dashboardModel.switchSummary.unavailableCount}}</div>
-                      <div class="small margin-left-8">异常交换机</div>
-                    </div>
-                  </div>
-                </div>
+                </div>  
+              </div>
             </div>
-            <div class="dashboard__horizontal_box">
-                <div>
-                    <mar-section s-title="端口收发包Top5" no-fold="true" class="detail_summary dash_mar_section">
+            <div class="mars-row">
+              <div class="mars-row-flex">
+                <div class="mars-col-12 col-gutter-md statistic-chart">
+                  <mar-section s-title="控制器CPU使用率" no-fold="true" class="cpu_rate">
+                    <transclude-title>
+                      <mdl-select ng-model="dashboardModel.controller.cpu.type" 
+                            display-label="{options: dashboardModel.timeRange}"
+                            ng-change="timeRangeSelect('controller-cpu', $value)">
+                      </mdl-select>
+                    </transclude-title>
+                    <transclude-body>
+                      <div class="content_panel_parent">
+                        <content-panel is-load="panelLoading.controller">
+                          <div>
+                            <spline-chart
+                              aync="dashboardModel.controller.cpu.aync"
+                              data="dashboardModel.controller.cpu.chartData"></spline-chart>          
+                          </div>
+                        </content-panel>
+                      </div>
+                    </transclude-body>    
+                  </mar-section>
+                </div>
+                <div class="mars-col-12 col-gutter-md statistic-chart">
+                  <mar-section s-title="控制器内存使用率" no-fold="true" class="memory_rate">
+                    <transclude-title>
+                      <mdl-select ng-model="dashboardModel.controller.memory.type" 
+                            display-label="{options: dashboardModel.timeRange}"
+                            ng-change="timeRangeSelect('controller-memory', $value)">
+                      </mdl-select>
+                    </transclude-title>
+                    <transclude-body>
+                      <div class="content_panel_parent">
+                        <content-panel is-load="panelLoading.controller">
+                          <div>
+                            <spline-chart class="content_panel_dash_chart" 
+                              aync="dashboardModel.controller.memory.aync"
+                              data="dashboardModel.controller.memory.chartData"></spline-chart>          
+                          </div>
+                        </content-panel>
+                      </div>
+                    </transclude-body>    
+                  </mar-section>
+                </div>
+              </div>
+            </div>
+            <div class="mars-row">
+              <div class="mars-row-flex">
+                <div  class="mars-col-12 col-gutter-md statistic-chart">
+                  <mar-section s-title="交换机CPU使用率Top5" no-fold="true"
+                      class="cpu_rate">
+                      <transclude-title>
+                        <mdl-select ng-model="dashboardModel.cpu.type" 
+                              display-label="{options: dashboardModel.timeRange}"
+                              ng-change="timeRangeSelect('device-cpu', $value)">
+                        </mdl-select>
+                      </transclude-title>
+                      <transclude-body>
+                        <div class="content_panel_parent">
+                          <content-panel is-load="panelLoading.controller">
+                            <div>
+                                <spline-chart class="content_panel_dash_chart" 
+                                  aync="dashboardModel.cpu.aync"
+                                  data="dashboardModel.cpu.chartData"></spline-chart> 
+                                <!-- <div id="deviceCpuAnalyzer" class="content_panel_dash_chart"></div> -->          
+                            </div>
+                          </content-panel>
+                        </div>
+                      </transclude-body>
+                  </mar-section>
+                </div>
+                <div  class="mars-col-12 col-gutter-md statistic-chart">
+                  <mar-section s-title="交换机内存使用率Top5" no-fold="true"
+                      class="memory_rate">
+                    <transclude-title>
+                      <mdl-select ng-model="dashboardModel.memory.type" 
+                                  display-label="{options: dashboardModel.timeRange}"
+                                  ng-change="timeRangeSelect('device-memory', $value)">
+                      </mdl-select>
+                    </transclude-title>
+                    <transclude-body>
+                      <div class="content_panel_parent">
+                        <content-panel is-load="panelLoading.controller">
+                            <div>
+                                <spline-chart class="content_panel_dash_chart" 
+                                  aync="dashboardModel.memory.aync"
+                                  data="dashboardModel.memory.chartData"></spline-chart>
+                                <!-- <div id="deviceMemoryAnalyzer" class="content_panel_dash_chart"></div> -->
+                            </div>
+                        </content-panel>
+                      </div>
+                    </transclude-body>
+                  </mar-section>
+                </div>
+              </div>  
+            </div>
+            <div class="mars-row">
+              <div class="mars-row-flex">
+                <div  class="mars-col-12 col-gutter-md statistic-chart">
+                    <mar-section s-title="端口收发包Top5" no-fold="true" class="memory_rate">
                       <transclude-body>
                         <div class="content_panel_parent">
                             <content-panel is-load="panelLoading.controller">
@@ -91,17 +185,17 @@
                                     <div id="swtInterfaceRxTxPackages"
                                          class="content_panel_dash_chart"></div>
                                 </div>
-                                <div>
+                                <!-- <div>
                                     <div id="swtInterfaceRxTxBytes"
                                          class="content_panel_dash_chart"></div>
-                                </div>
+                                </div> -->
                             </content-panel>
                         </div>
                       </transclude-body>  
                     </mar-section>
                 </div>
-                <div>
-                    <mar-section s-title="端口丢包Top5" no-fold="true" class="detail_summary dash_mar_section">
+                <div  class="mars-col-12 col-gutter-md statistic-chart">
+                    <mar-section s-title="端口丢包Top5" no-fold="true" class="memory_rate">
                       <transclude-body>
                         <div class="content_panel_parent">
                             <content-panel is-load="panelLoading.controller">
@@ -113,53 +207,9 @@
                       </transclude-body>  
                     </mar-section>
                 </div>
+              </div>  
             </div>
-            <div class="dashboard__horizontal_box">
-              <div>
-                
-                <mar-section s-title="交换机CPU使用率Top5" no-fold="true"
-                    class="detail_summary dash_mar_section cpu_rate">
-                    <transclude-title>
-                      <mdl-select ng-model="dashboardModel.cpu.type" 
-                            display-label="{options: dashboardModel.timeRange}"
-                            ng-change="timeRangeSelect('cpu', $value)">
-                      </mdl-select>
-                    </transclude-title>
-                    <transclude-body>
-                      <div class="content_panel_parent">
-                        <content-panel is-load="panelLoading.controller">
-                          <div>
-                              <div id="deviceCpuAnalyzer" class="content_panel_dash_chart"></div>          
-                          </div>
-                        </content-panel>
-                      </div>
-                    </transclude-body>
-                    
-                </mar-section>
-              </div>
-              <div>
-                
-                <mar-section s-title="交换机内存使用率Top5" no-fold="true"
-                    class="detail_summary dash_mar_section memory_rate">
-                  <transclude-title>
-                    <mdl-select ng-model="dashboardModel.memory.type" 
-                                display-label="{options: dashboardModel.timeRange}"
-                                ng-change="timeRangeSelect('memory', $value)">
-                    </mdl-select>
-                  </transclude-title>
-                  <transclude-body>
-                    <div class="content_panel_parent">
-                      <content-panel is-load="panelLoading.controller">
-                          <div>
-                              <div id="deviceMemoryAnalyzer" class="content_panel_dash_chart"></div>
-                          </div>
-                      </content-panel>
-                    </div>
-                  </transclude-body>
-                    
-              </mar-section>
-          </div>
-            </div>
+            
         </div>
     </div>
     <loading></loading>

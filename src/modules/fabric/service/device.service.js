@@ -1,6 +1,6 @@
 export class DeviceService {
   static getDI() {
-    return ['$filter'];
+    return ['$filter', '_'];
   }
 
   constructor(...args) {
@@ -1132,13 +1132,52 @@ export class DeviceService {
         delete res['field_type'];
       }
     }
-
-
     return res;
   }
 
+  getAllDevices(configDevices, originDevices) {
+    let entities = [];
+    configDevices.forEach((item) => {
+      let obj = {};
+      let origin = this.di._.find(originDevices, {'id': item.id});
+      obj.id = item.id;
+      obj.switch_name = item.name;
+      obj.ip = item.mgmtIpAddress;
+      obj.mac = item.mac;
+      obj.type = item.type;
+      obj.role = origin && origin.role || '-';
+      obj.rack_id = origin && origin.rackId || '-';
+      obj.available = item.available === true ? 'available' : 'unavailable';
+      obj.protocol = item.protocol;
+      obj.mfr = item.mfr || (origin &&origin.mfr);
+      obj.serial = origin && origin.serial || '-';
+      obj.hw = origin && origin.hw || '-';
+      obj.sw = origin && origin.sw || '-';
+      entities.push(obj);
+    });
 
-
+    originDevices.forEach((item) => {
+      let origin = this.di._.find(entities, {'id': item.id});
+      if (!origin) {
+        let obj = {};
+        obj.id = item.id;
+        obj.switch_name = '-';
+        obj.ip = item.annotations.managementAddress;
+        obj.mac = item.mac;
+        obj.type = 'unknown';
+        obj.role = item.role;
+        obj.rack_id = item.rackId;
+        obj.available = item.available === true ? 'available' : 'unavailable';
+        obj.protocol = item.annotations.protocol;
+        obj.mfr = item.mfr;
+        obj.serial = item.serial;
+        obj.hw = item.hw;
+        obj.sw = item.sw;
+        entities.push(obj);
+      }
+    });
+    return entities;
+  }
 }
 
 DeviceService.$inject = DeviceService.getDI();

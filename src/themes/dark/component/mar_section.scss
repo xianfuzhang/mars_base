@@ -6,11 +6,8 @@
 
 
 @include block(mar_section){
-  margin: 12px 8px;
-  display: inline-block;
-
-
-
+  /* display: inline-block; */
+  background-color: rgb(244, 245, 247);
   @include element(header){
     display: block;
     position: relative;
@@ -70,15 +67,8 @@
   }
 
   @include element(body){
-    //@include state(expand){
-    //  display: block;
-    //  animation: 1.15s ease-out;
-    //  animation-name: section_expand;
-
-    //}
     overflow: hidden;
-    margin:4px;
-      background-color: #fafafa;
+    padding: 8px 16px;
   }
 }
 

@@ -50,7 +50,8 @@ class AliasProvider {
       'ngTable$': path.resolve('src/libs/ngtable/ng-table.min.js'),
       'datePicker': path.resolve('src/components/date-picker'),
       'jsonEditor': path.resolve('src/components/jsoneditor'),
-      'gradientScale': path.resolve('src/components/gradient-scale')
+      'gradientScale': path.resolve('src/components/gradient-scale'),
+      'splineChart': path.resolve('src/components/spline-chart')
     };
   }
 
