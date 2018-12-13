@@ -74,6 +74,11 @@ export class DeviceDetailController {
       this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.GROUP.CREATE.SUCCESS'));
       this.scope.detailModel.api.queryUpdate();
     }));
+
+    unSubscribers.push(this.di.$rootScope.$on('pfc-list-refresh',()=>{
+      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.PFC.CREATE.SUCCESS'));
+      this.scope.detailModel.api.queryUpdate();
+    }));
     
     this.scope.$on('$destroy', () => {
       unSubscribers.forEach((unSubscribe) => {
@@ -203,6 +208,28 @@ export class DeviceDetailController {
             //     this.di.notificationService.render(this.scope);
             //   });
             break;
+          case 'pfc':
+            // TODO: group data
+            let portNo = event.data.port;
+            if (event.action.value === 'edit'){
+
+              this.di.$rootScope.$emit('pfc-wizard-show', this.scope.deviceId, portNo);
+
+            } else if(event.action.value === 'delete'){
+              this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCH.DETAIL.DIALOG.CONTENT.DELETE_PFC'))
+                .then(() =>{
+                  this.di.deviceDataManager.deletePFC(this.scope.deviceId, portNo)
+                    .then((res) => {
+                      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.PFC.DELETE.SUCCESS'));
+                      this.scope.detailModel.api.queryUpdate();
+                    }, (res) => {
+                      this.di.notificationService.renderWarning(this.scope, res.data);
+                    });
+                }, () =>{
+                  this.di.$log.debug('delete switch pfc cancel');
+                });
+            }
+            break;
         }
       }
     };
@@ -214,6 +241,11 @@ export class DeviceDetailController {
     this.scope.createGroup = () => {
       this.di.$rootScope.$emit('group-wizard-show', this.scope.deviceId);
     };
+
+    this.scope.createPFC = () => {
+      this.di.$rootScope.$emit('pfc-wizard-show', this.scope.deviceId);
+    };
+
 
     this.scope.batchRemove = ($value) => {
       if ($value.length) {
@@ -294,6 +326,9 @@ export class DeviceDetailController {
       case 'group':
         schema = this.di.deviceDetailService.getDeviceGroupsSchema();
         break;
+      case 'pfc':
+        schema = this.di.deviceDetailService.getDevicePFCSchema();
+
     }
     return schema;
   }
@@ -318,6 +353,9 @@ export class DeviceDetailController {
         break;
       case 'group':
         actions = this.di.deviceDetailService.getGroupActionsShow();
+        break;
+      case 'pfc':
+        actions = this.di.deviceDetailService.getPFCActionsShow();
         break;
     }
     return actions;
@@ -364,6 +402,11 @@ export class DeviceDetailController {
         break;
       case 'group':
         schema['index_name'] = 'id';
+        schema['rowCheckboxSupport'] = true;
+        schema['rowActionsSupport'] = true;
+        break;
+      case 'pfc':
+        schema['index_name'] = 'port';
         schema['rowCheckboxSupport'] = true;
         schema['rowActionsSupport'] = true;
         break;
@@ -445,6 +488,11 @@ export class DeviceDetailController {
       case 'group':
         this.di.deviceDataManager.getDeviceGroups(this.scope.deviceId, params).then((res) => {
           defer.resolve({'data': res.data.groups, 'total': res.data.total});
+        });
+        break;
+      case 'pfc':
+        this.di.deviceDataManager.getPFCListByDeviceId(this.scope.deviceId).then((res) => {
+          defer.resolve({'data': res.data.pfcs, 'total': res.data.total});
         });
         break;
     }
@@ -621,6 +669,19 @@ export class DeviceDetailController {
           this.scope.detailModel.entities.push(obj);
         });
         break;
+      case 'pfc':
+        entities.forEach((entity) => {
+          let obj = {};
+          obj['port'] = entity.port;
+          if(entity['queues'] && Array.isArray(entity['queues'])){
+            obj['queues'] = entity.queues.join(', ');
+          } else {
+            obj['queues'] = '';
+          }
+
+          this.scope.detailModel.entities.push(obj);
+        });
+        break;
     }
   }
   
@@ -649,6 +710,9 @@ export class DeviceDetailController {
         break;
       case 'group':
         actions = this.di.deviceDetailService.getDeviceGroupsTableRowActions();
+        break;
+      case 'pfc':
+        actions = this.di.deviceDetailService.getDevicePFCTableRowActions();
         break;
     }
     return actions;

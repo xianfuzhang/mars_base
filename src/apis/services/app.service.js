@@ -453,6 +453,15 @@ export class appService {
   getElasticsearchBackupUrl(backup_name) {
     return this.getZoneEndpoint(true) + `/utility/elasticsearch/v1/_snapshot/${backup_name}`;
   }
+
+  getPFCUrl(deviceId){
+    return this.getZoneEndpoint(true) + `/pfc/v1/${deviceId}`;
+  }
+
+  getPFCDeleteUrl(deviceId, port){
+    return this.getZoneEndpoint(true) + `/pfc/v1/${deviceId}/${port}`;
+  }
+
   
   getSegmentUrl(tenant_name, segment_name){
     let path_url = '/tenants/v1';

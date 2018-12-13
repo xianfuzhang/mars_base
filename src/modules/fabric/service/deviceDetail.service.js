@@ -51,6 +51,11 @@ export class DeviceDetailService {
         'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.ENDPOINTS'),
         'value': 'endpoint',
         'type': 'endpoint'
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.PFC'),
+        'value': 'pfc',
+        'type': 'pfc'
       }
     ];
   }
@@ -107,10 +112,20 @@ export class DeviceDetailService {
   
   getGroupActionsShow() {
     return {
-      'menu': {'enable': false, 'role': 2}, 
-      'add': {'enable': true, 'role': 2}, 
-      'remove': {'enable': true, 'role': 2}, 
-      'refresh': {'enable': true, 'role': 2}, 
+      'menu': {'enable': false, 'role': 2},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getPFCActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 2},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2},
       'search': {'enable': false, 'role': 2}
     };
   }
@@ -203,6 +218,21 @@ export class DeviceDetailService {
   
   getDeviceGroupsTableRowActions() {
     return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ];
+  }
+
+  getDevicePFCTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
+        'role': 2,
+        'value': 'edit'
+      },
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
         'role': 2,
@@ -474,7 +504,18 @@ export class DeviceDetailService {
   
   
   getDevicePFCSchema() {
-    return [];
+    return [
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.PFC.COLUMN.PORT'),
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.PFC.COLUMN.QUEUE'),
+        'field': 'queues',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
   }
 }
 DeviceDetailService.$inject = DeviceDetailService.getDI();

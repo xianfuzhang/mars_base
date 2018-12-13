@@ -718,6 +718,14 @@ export class FabricSummaryController {
       this.di.$rootScope.$emit('flow-wizard-show', this.di.$scope.fabricModel.showSwitchId);
 
     }));
+
+    unsubscribers.push(this.di.$rootScope.$on('summary_switch_pfc',(evt)=>{
+      this.di.$rootScope.$emit('pfc-wizard-show', this.di.$scope.fabricModel.showSwitchId);
+
+    }));
+
+
+
   
     unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_create_group',(evt)=>{
       this.di.$rootScope.$emit('group-wizard-show', this.di.$scope.fabricModel.showSwitchId);
@@ -765,8 +773,27 @@ export class FabricSummaryController {
       });
     }));
 
+    unsubscribers.push(this.di.$rootScope.$on('summary_switch_menu_show_pfc',(evt)=>{
+      this.di.modalManager.open({
+        template: require('../template/showSwitchPFCs.html'),
+        controller: 'showSwitchPFCsController',
+        windowClass: 'show-switch-pfc-modal',
+        resolve: {
+          dataModel: () => {
+            return {
+              switchId: this.di.$scope.fabricModel.showSwitchId
+            }
+          }
+        }
+      });
+    }));
+
     unsubscribers.push(this.di.$rootScope.$on('device-flow-refresh',()=>{
       this.di.notificationService.renderSuccess(scope, this.translate('MODULES.SWITCH.DETAIL.FLOW.CREATE.SUCCESS'));
+    }));
+
+    unsubscribers.push(this.di.$rootScope.$on('pfc-list-refresh',()=>{
+      this.di.notificationService.renderSuccess(scope, this.translate('MODULES.SWITCH.DETAIL.PFC.CREATE.SUCCESS'));
     }));
 
 

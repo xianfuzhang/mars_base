@@ -22,7 +22,9 @@ import {ShowSwitchGroupsController} from './ng/showSwitchGroups.controller';
 import {ShowLinksSelectController} from './ng/showLinksSelect.controller';
 import {IntentsController} from './ng/intents.controller';
 import {ShowFlowDetailController} from './ng/showFlowDetail.controller';
+import {ShowSwitchPFCsController} from './ng/showSwitchPFCs.controller';
 import {CreateEndpointController} from './components/createEndpoint/ng/createEndpoint.controller';
+import {PfcEstablishController} from './components/pfc_establish/ng/pfcEstablish.controller';
 
 export default angular
   .module('fabric', [])
@@ -39,10 +41,12 @@ export default angular
   .controller('showSwitchFlowsController', ShowSwitchFlowsController)
   .controller('createIntentCtrl', CreateIntentController)
   .controller('showSwitchGroupsController', ShowSwitchGroupsController)
+  .controller('showSwitchPFCsController', ShowSwitchPFCsController)
   .controller('showLinksSelectController', ShowLinksSelectController)
   .controller('intentsController', IntentsController)
   .controller('createEndpointCtrl', CreateEndpointController)
   .controller('showFlowDetailCtrl', ShowFlowDetailController)
+  .controller('pfcEstablishController', PfcEstablishController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)

@@ -178,6 +178,15 @@
                    on-add="createGroup()" on-remove="batchRemove($value)">
         </mdl-table>
       </section>
+      <section class="tab-content" ng-if="tabSelected.type == 'pfc'">
+        <mdl-table actions-show="detailModel.actionsShow"
+                   actions="detailModel.rowActions"
+                   row-select-action="onTableRowSelectAction($event)"
+                   row-click="onTableRowClick($event)"
+                   provider="detailModel.provider" api-ready="onApiReady($api)"
+                   on-add="createPFC()" on-remove="batchRemove($value)">
+        </mdl-table>
+      </section>
     </div>
   </section>
 
@@ -188,4 +197,10 @@
   <ng-controller ng-controller="groupEstablishController">
     <wizard></wizard>
   </ng-controller>
+
+  <ng-controller ng-controller="pfcEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+
 </div>

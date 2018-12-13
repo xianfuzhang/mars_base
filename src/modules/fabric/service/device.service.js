@@ -489,6 +489,16 @@ export class DeviceService {
         'msg': 'summary_switch_menu_show_group'
       },
       {
+        'label': this.translate('MODULES.SWITCH.MENU.PFC'),
+        'isEnabled': true,
+        'msg': 'summary_switch_pfc'
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.MENU.SHOW_PFC'),
+        'isEnabled': true,
+        'msg': 'summary_switch_menu_show_pfc'
+      },
+      {
         'label': this.translate('MODULES.SWITCH.MENU.REBOOT'),
         'isEnabled': true,
         'msg': 'summary_switch_reboot'

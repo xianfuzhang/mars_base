@@ -307,7 +307,7 @@
 }
 .show-switch-flow-modal .tab-content {
   height: auto;
-  padding: 20px;
+  //padding: 20px;
 }
 
 .show-switch-group-modal {
@@ -316,7 +316,17 @@
 
 .show-switch-group-modal .tab-content {
   height: auto;
-  padding: 20px;
+  //padding: 20px;
+}
+
+
+.show-switch-pfc-modal {
+  width: 400px;
+}
+
+.show-switch-pfc-modal .tab-content {
+  height: auto;
+  //padding: 20px;
 }
 
 .show-links-selected-modal {
@@ -326,7 +336,7 @@
 
 .show-links-selected-modal .content {
   height: auto;
-  padding: 20px;
+  //padding: 20px;
 }
 
 .createIntentWizard .wizard__body{
