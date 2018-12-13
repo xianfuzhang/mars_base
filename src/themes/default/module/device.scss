@@ -64,6 +64,10 @@
 
 @include block(summary) {
 
+  .mar_section{
+    box-shadow: none !important;
+  }
+
   @include element(link) {
     cursor: pointer;
     text-decoration: underline;
