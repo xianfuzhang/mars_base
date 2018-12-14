@@ -1,0 +1,17 @@
+.cos-wizard .wizard__body, .ecn-wizard .wizard__body{
+  height: 350px;
+}
+.cos-wizard .wizard__body__right, .ecn-wizard .wizard__body__right{
+  overflow: auto;
+  padding: 20px;
+}
+.cos-wizard .stepForm__input, .ecn-wizard .stepForm__input{
+  margin: 0;
+  padding: 10px 0;
+}
+.cos-wizard .mdc-select, .ecn-wizard .mdc-select{
+  width: 60px;
+}
+.cos-wizard .mdc-text-field__input, .ecn-wizard .mdc-text-field__input{
+  padding-top: 0;
+}

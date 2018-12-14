@@ -50,7 +50,8 @@ export class appService {
             'items':[
               {'label': 'Tenant', 'url': '/tenant', 'role': 3},
               {'label': 'Segment', 'url': '/segment', 'role': 3},
-             ]
+              {'label': 'QoS', 'url': '/qos', 'role': 3}
+            ]
            },
           {
             'group': 'Alert',
@@ -538,6 +539,14 @@ export class appService {
 
   getTenantSingleSegmentUrl(tenant_name, segment_name){
     return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}`;
+  }
+
+  getCosListUrl(){
+    return this.getZoneEndpoint(true) + "/qos/cos/v1";
+  }
+
+  getEcnListUrl(){
+    return this.getZoneEndpoint(true) + "/qos/ecn/v1";
   }
 }
 

@@ -18,21 +18,6 @@ export class logicalService {
     this.translate = this.di.$filter('translate');
   }
 
-  // getDHCPTabSchema() {
-  //   return [
-  //     {
-  //       'label': this.translate('MODULES.MANAGE.DHCP.TAB.DHCP_SERVER'),
-  //       'value': 'dhcp_server',
-  //       'type': 'dhcp_server'
-  //     },
-  //     {
-  //       'label': this.translate('MODULES.MANAGE.DHCP.TAB.IPMAC_MAPPING'),
-  //       'value': 'ipmac_mapping',
-  //       'type': 'ipmac_mapping'
-  //     }
-  //   ];
-  // }
-
   getTenantTableSchema(){
     return [
       {
@@ -55,6 +40,21 @@ export class logicalService {
         'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.TAB.SCHEMA.SEGMENT'),
         'value': 'segment',
         'type': 'segment'
+      }
+    ];
+  }
+
+  getQoSTabSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.LOGICAL.QOS.TAB.SCHEMA.COS'),
+        'value': 'cos',
+        'type': 'cos'
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.QOS.TAB.SCHEMA.ECN'),
+        'value': 'ecn',
+        'type': 'ecn'
       }
     ];
   }
@@ -283,6 +283,55 @@ export class logicalService {
     ];
   }
 
+  getQosCosSchema() {
+    return [
+      {
+        'label': 'queue',
+        'field': 'queue',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'30%'},
+      },
+      {
+        'label': 'dscp',
+        'field': 'dscp',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'60%'},
+      }
+    ];
+  }
+
+  getQosEcnSchema() {
+    return [
+      {
+        'label': 'queue',
+        'field': 'queue',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'30%'},
+      },
+      {
+        'label': 'threshold',
+        'field': 'threshold',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'60%'},
+      }
+    ];
+  }
+
+  getQosActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 3}, 
+      'add': {'enable': true, 'role': 3}, 
+      'remove': {'enable': false, 'role': 3}, 
+      'refresh': {'enable': true, 'role': 3}, 
+      'search': {'enable': false, 'role': 3}
+    };
+  }
+
+  getQosRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.LOGICAL.QOS.ROW.ACTION.UPDATE'),
+        'role': 3,
+        'value': 'update'
+      }
+    ];  
+  }
 }
 
 

@@ -214,6 +214,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/qos', {
+      template: require('./modules/logical/template/qos.html'),
+      controller: 'qosCtrl',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/tenant/:tenantName', {
       template: require('./modules/logical/template/tenantDetail.html'),
       controller: 'tenantDetailCtrl',
