@@ -1,0 +1,42 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{'MODULE.HEADER.LOGICAL.QOS' | translate}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span>{{'MODULE.HEADER.LOGICAL.QOS' | translate}}</span>
+  </content-header>
+  <section class="app-body tenant-detail">
+    <div class="section-3-2">
+      <div class="main__content">
+        <mdl-tabs ng-model="tabSelected" options="tabs"
+                  class-list="main__content__device-detail-tabs"
+                  on-select="onTabChange($value)">
+        </mdl-tabs>
+        <section class="tab-content" ng-if="tabSelected.type == 'cos'">
+          <mdl-table actions-show="model.actionsShow"
+                    actions="model.rowActions"
+                    row-select-action="onTableRowSelectAction($event)"
+                    row-click="onTableRowClick($event)"
+                    provider="model.provider" api-ready="onApiReady($api)"
+                    on-add="addCOS()">
+          </mdl-table>
+        </section>
+        <section class="tab-content" ng-if="tabSelected.type == 'ecn'">
+          <mdl-table actions-show="model.actionsShow"
+                    actions="model.rowActions"
+                    row-select-action="onTableRowSelectAction($event)"
+                    row-click="onTableRowClick($event)"
+                    provider="model.provider" api-ready="onApiReady($api)"
+                    on-add="addECN()">
+          </mdl-table>
+        </section>
+      </div>
+    </div>
+  </section>
+  <ng-controller class="cos-wizard" ng-controller="cosEstablishCtrl">
+    <wizard></wizard>
+  </ng-controller>
+  <ng-controller class="ecn-wizard" ng-controller="ecnEstablishCtrl">
+    <wizard></wizard>
+  </ng-controller>
+</div>

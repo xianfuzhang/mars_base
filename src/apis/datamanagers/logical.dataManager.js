@@ -271,6 +271,57 @@ export class LogicalDataManager{
     return defer.promise;
   }
 
+  getCosList(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getCosListUrl()).then(
+      (res) => {
+        defer.resolve(res.data.cos);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  getEcnList(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getEcnListUrl()).then(
+      (res) => {
+        defer.resolve(res.data.ecn);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  postCOS(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getCosListUrl(), params).then(
+      (res) => {
+        defer.resolve(null);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
+
+  postECN(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.put(this.di.appService.getEcnListUrl(), params).then(
+      (res) => {
+        defer.resolve(null);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
 }
 
 LogicalDataManager.$inject = LogicalDataManager.getDI();

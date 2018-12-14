@@ -147,6 +147,9 @@ input:-webkit-autofill:active {
 .col-gutter-lg{
   padding: 32px;
 }
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active{
+ -webkit-text-fill-color: inherit; 
+}
 @include block(column) {
   @for $index-alpha from 1 to $grid-size {
     @for $index-beta from 1 through $grid-size {
