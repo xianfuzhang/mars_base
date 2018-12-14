@@ -66,6 +66,7 @@
 
   .mar_section{
     box-shadow: none !important;
+    margin: 12px 8px;
   }
 
   @include element(link) {
