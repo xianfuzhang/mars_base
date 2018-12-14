@@ -25,6 +25,8 @@ import {ShowFlowDetailController} from './ng/showFlowDetail.controller';
 import {ShowSwitchPFCsController} from './ng/showSwitchPFCs.controller';
 import {CreateEndpointController} from './components/createEndpoint/ng/createEndpoint.controller';
 import {PfcEstablishController} from './components/pfc_establish/ng/pfcEstablish.controller';
+import {UpLinkEstablishController} from './components/uplink_establish/ng/upLinkEstablish.controller';
+import {UpLinkController} from './ng/uplink.controller';
 
 export default angular
   .module('fabric', [])
@@ -47,6 +49,8 @@ export default angular
   .controller('createEndpointCtrl', CreateEndpointController)
   .controller('showFlowDetailCtrl', ShowFlowDetailController)
   .controller('pfcEstablishController', PfcEstablishController)
+  .controller('upLinkController', UpLinkController)
+  .controller('upLinkEstablishController', UpLinkEstablishController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)
