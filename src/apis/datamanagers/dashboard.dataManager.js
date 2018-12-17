@@ -26,7 +26,7 @@ export class DashboardDataManager{
         defer.resolve(res['data']['nodes']);
       },
       (error) => {
-        this.di.$log.error(error);
+        this.di.$log.error(error.data.message);
         defer.resolve([]);
       }
     );
@@ -40,7 +40,7 @@ export class DashboardDataManager{
         defer.resolve(res['data']);
       },
       (error) => {
-        this.di.$log.error(error);
+        this.di.$log.error(error.data.message);
         defer.resolve([]);
       }
     );
