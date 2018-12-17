@@ -102,7 +102,11 @@ export class DeviceDetailController {
 
     this.scope.onTableRowClick = (event) => {
       if (event.$data){
-        this.scope.detailModel.api.setSelectedRow(event.$data.id);
+        let rowIndex = event.$data.id;
+        if(this.scope.tabSelected.type === 'pfc'){
+          rowIndex = event.$data.port;
+        }
+        this.scope.detailModel.api.setSelectedRow(rowIndex);
       }
     };
 

@@ -39,6 +39,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
               {'label': 'Intents', 'url': '/intents', 'role': 2},
+              {'label': 'Up Links', 'url': '/uplinks', 'role': 2},
               //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
@@ -461,6 +462,14 @@ export class appService {
 
   getPFCDeleteUrl(deviceId, port){
     return this.getZoneEndpoint(true) + `/pfc/v1/${deviceId}/${port}`;
+  }
+
+  getUpLinkUrl(){
+    return this.getZoneEndpoint(true) + '/topology/v1/uplink-segments';
+  }
+
+  getUpLinkDeleteUrl(name){
+    return this.getZoneEndpoint(true) + '/topology/v1/uplink-segments/' + name;
   }
 
   

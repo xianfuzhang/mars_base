@@ -1188,6 +1188,62 @@ export class DeviceService {
     });
     return entities;
   }
+
+
+  getUpLinkActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getUpLinkSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.FABRIC.UPLINK.COLUMN.SEGMENT_NAME'),
+        'field': 'segment_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.UPLINK.COLUMN.DEVICE'),
+        'field': 'device_id',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.UPLINK.COLUMN.VLAN'),
+        'field': 'vlan',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.UPLINK.COLUMN.PORT'),
+        'field': 'ports',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.UPLINK.COLUMN.GATEWAY'),
+        'field': 'gateway',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.UPLINK.COLUMN.IPADDRESS'),
+        'field': 'ip_address',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
+
+  getUpLinkTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ]
+  }
 }
 
 DeviceService.$inject = DeviceService.getDI();

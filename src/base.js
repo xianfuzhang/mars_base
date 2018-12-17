@@ -186,6 +186,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/uplinks', {
+      template: require('./modules/fabric/template/uplink.html'),
+      controller: 'upLinkController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/elasticsearch', {
       template: require('./modules/manage/template/elasticsearch.html'),
       controller: 'elasticsearchController',

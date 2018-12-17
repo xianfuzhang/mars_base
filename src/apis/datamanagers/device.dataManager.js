@@ -529,6 +529,46 @@ export class DeviceDataManager {
       );
     return defer.promise;
   }
+
+
+  getUpLink(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getUpLinkUrl())
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  postUpLink(param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getUpLinkUrl(), param)
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  deleteUpLink(name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getUpLinkDeleteUrl(name))
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
 DeviceDataManager.$$ngIsClass = true;
