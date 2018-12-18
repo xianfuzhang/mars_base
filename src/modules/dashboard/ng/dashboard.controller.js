@@ -179,14 +179,14 @@ export class DashboardController {
       if (type === 'device-cpu') {
         this.di.$scope.dashboardModel.cpu.type = $value;
         this.di.$scope.dashboardModel.cpu.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
-        this.getDevicesCPUAnalyzer(dataModel.devices).then(() => {
+        this.getDevicesCPUAnalyzer(dataModel.configDevices).then(() => {
           convertSwitchCPUAnalyzer();
         });
       }
       else if (type === 'device-memory') {
         this.di.$scope.dashboardModel.memory.type = $value;
         this.di.$scope.dashboardModel.memory.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
-        this.getDevicesMemoryAnalyzer(dataModel.devices).then(() => {
+        this.getDevicesMemoryAnalyzer(dataModel.configDevices).then(() => {
           convertSwitchMemoryAnalyzer();
         });
       }
@@ -232,6 +232,7 @@ export class DashboardController {
 
       this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
         this.di.deviceDataManager.getDevices().then((res)=>{
+          dataModel['configDevices'] = configs;
           dataModel['devices'] = this.di.deviceService.getAllDevices(configs, res.data.devices);
           this.getSwitchesCPUMemoryStatisticFromLS(configs).then(() => {
             devicesDefer.resolve();
@@ -308,7 +309,7 @@ export class DashboardController {
       this.di._.forEach(swtStatistics, (device)=>{
         let curDeviceId = device.device;
 
-        this.di._.forEach(dataModel['devices'],(deviceM)=>{
+        this.di._.forEach(dataModel['configDevices'],(deviceM)=>{
           if(deviceM['id'] === curDeviceId){
             this.di._.forEach(device.ports, (port)=>{
               let portSt = {};
@@ -532,7 +533,7 @@ export class DashboardController {
 
     let getSwtName = (deviceid) =>{
       let device = this.di._.find(dataModel['devices'], { 'id': deviceid});
-      return device['name'];
+      return device['name']||device['switch_name'];
     };
 
     let getPortName = (deviceid, portNo) =>{

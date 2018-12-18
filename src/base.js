@@ -57,7 +57,7 @@ function configRouterfunction ($routeProvider,
       $cookies.remove('useraccount');
       window.localStorage.removeItem('menus');
       $location.path('/login');
-      deferred.resolve();
+      deferred.reject();
     }
     else if (useraccount && !exists) {
       $location.path('/');
