@@ -7,6 +7,7 @@ import {SelectDateDialogController} from './ng/selectDateDialogController';
 import {InputFilenameDialogController} from './ng/inputFilenameDialogController';
 import {IpmacEstablishController} from './component/ipmac_establish/ng/IpmacEstablish.controller';
 import {NtpEstablishController} from './component/ntp_establish/ng/NtpEstablish.controller'
+import {SystemInfoController} from './ng/systemInfo.controller'
 
 export default angular
   .module('manage', [])
@@ -17,4 +18,5 @@ export default angular
   .controller('inputFilenameDialogController', InputFilenameDialogController)
   .controller('ipmacEstablishController', IpmacEstablishController)
   .controller('ntpEstablishController', NtpEstablishController)
+  .controller('systemInfoController', SystemInfoController)
   .name;

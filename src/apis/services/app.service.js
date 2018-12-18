@@ -95,7 +95,8 @@ export class appService {
             'items': [
               {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.NTP'), 'url': '/ntp', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3}
+              {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3},
+              {'label': this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO'), 'url': '/system_info', 'role': 3}
             ]
           }
 
@@ -472,7 +473,10 @@ export class appService {
     return this.getZoneEndpoint(true) + '/topology/v1/uplink-segments/' + name;
   }
 
-  
+  getSystemVersionUrl(){
+    return this.getZoneEndpoint(true) + '/utility/v1/version';
+  }
+
   getSegmentUrl(tenant_name, segment_name){
     let path_url = '/tenants/v1';
     if(tenant_name) {

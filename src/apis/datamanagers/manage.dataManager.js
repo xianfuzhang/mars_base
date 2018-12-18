@@ -225,6 +225,19 @@ export class ManageDataManager{
     return defer.promise;
   }
 
+  getSystemInfo(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getSystemVersionUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
 }
 
 ManageDataManager.$inject = ManageDataManager.getDI();

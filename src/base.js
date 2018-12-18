@@ -235,6 +235,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/system_info', {
+      template: require('./modules/manage/template/system_info.html'),
+      controller: 'systemInfoController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .otherwise({ redirectTo: '/' });
 }
 

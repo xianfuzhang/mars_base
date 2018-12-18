@@ -1,0 +1,27 @@
+<div class="ntp flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="app-main">
+    <content-header big-title="{{'MODULE.HEADER.MANAGE.SYSTEM_INFO' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.MANAGE.SYSTEM_INFO' | translate}}</span>
+    </content-header>
+    <section class="app-body">
+      <div class="main__content">
+        <table class="sysinfo_table">
+          <tr ng-repeat="key in infoList">
+            <td>{{labelModel[key]}}: </td>
+            <td>{{systemModel[key]}}</td>
+          </tr>
+        </table>
+
+      </div>
+    </section>
+  </div>
+
+  <ng-controller ng-controller="ntpEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+</div>
