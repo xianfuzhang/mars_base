@@ -45,7 +45,7 @@ export class metarowService {
       if (!col.visible || col.hidden) {
         colElement.classList.add("mdl-table-body__td__hide");
       }
-      colElement.title = spec.value;
+      colElement.title = !spec.value ? '-' : spec.value;
       // CACHE: Do not redraw if new value is identical with previous value
       if (spec.value && colElement._renderedValue === spec.value) {
         return;

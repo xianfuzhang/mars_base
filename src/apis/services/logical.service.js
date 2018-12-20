@@ -59,6 +59,21 @@ export class logicalService {
     ];
   }
 
+  getEGPTabSchema() {
+    return [
+      {
+        'label': 'group',
+        'value': 'group',
+        'type': 'group'
+      },
+      {
+        'label': 'policy',
+        'value': 'policy',
+        'type': 'policy'
+      }
+    ];
+  }
+
   getTenantSegmentsSchema() {
     return [
       {
@@ -329,6 +344,121 @@ export class logicalService {
         'label': this.translate('MODULES.LOGICAL.QOS.ROW.ACTION.UPDATE'),
         'role': 3,
         'value': 'update'
+      }
+    ];  
+  }
+
+  getEGPGroupSchema() {
+    return [
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.GROUP.TABLE.NAME"),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'20%'},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.GROUP.TABLE.TENANT"),
+        'field': 'tenant',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'20%'},
+      },
+       {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.GROUP.TABLE.ADDRESS"),
+        'field': 'address',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'50%'},
+      }
+    ];
+  }
+
+  getEGPPolicySchema() {
+    return [
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.TABLE.NAME"),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'20%'},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.TABLE.GROUP"),
+        'field': 'group',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'20%'},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.TABLE.TENANT"),
+        'field': 'tenant',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'50%'},
+      }
+    ];
+  }
+
+  getPolicyRulesSchema() {
+    return [
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.IP_PROTO"),
+        'field': 'ip_proto',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.SRC_IP"),
+        'field': 'src_ip',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.DST_IP"),
+        'field': 'dst_ip',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.DST_MAC"),
+        'field': 'dst_mac',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.VLAN"),
+        'field': 'vid',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.SRC_PORT"),
+        'field': 'src_port',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.DST_PORT"),
+        'field': 'dst_port',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.ICMP_TYPE"),
+        'field': 'icmp_type',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.ICMP_CODE"),
+        'field': 'icmp_code',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.RULE.ACTION'),
+        'field': 'action',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      }
+    ];
+  }
+
+  getEGPActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 3}, 
+      'add': {'enable': true, 'role': 3}, 
+      'remove': {'enable': true, 'role': 3}, 
+      'refresh': {'enable': true, 'role': 3}, 
+      'search': {'enable': false, 'role': 3}
+    };
+  }
+
+  getEGPRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.LOGICAL.EGP.ROW.ACTION.DELETE'),
+        'role': 3,
+        'value': 'delete'
       }
     ];  
   }

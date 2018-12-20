@@ -1,0 +1,133 @@
+<div class="egp-group-establish">
+  <div class="stepForm__input">
+    <mar-button btn-text="::'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.ADD_RULE' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" 
+        btn-style="'width:120px;margin-right: 20px;'" btn-click="addRule()"></mar-button>
+  </div>
+  <div class="stepForm__input">
+    <div class="receiveGroup__content__item receiveGroup"  ng-repeat="rule in ruleReceived">
+      <!-- <div class="type"> {{rule.label}}</div> -->
+      <div class="stepForm__input">
+        <div class="stepForm__input__label">
+          <span ng-bind="'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.IP_PROTO'|translate"></span>
+          <span class="stepForm__input__required">*</span>
+        </div>
+        <mdl-select ng-model="rule.ipProtoObject" display-label="protocolLabel"></mdl-select>
+      </div>
+      <div class="stepForm__input" ng-if="rule.ipProtoObject.value === 'TCP' || rule.ipProtoObject.value === 'UDP'">
+        <div class="mars-col-24">
+          <div class="mars-row-flex mars-row-flex-space-between">
+            <div>
+              <div class="stepForm__input__label">
+                <span ng-bind="'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.SRC_PORT'|translate"></span>
+                <span class="stepForm__input__required">*</span>
+              </div>
+              <mdl-text ng-model="rule.src_port"
+                        helper="rule.helpers.srcPortHelper"
+                        display-label="rule.labels.srcPortDisplayLabel">
+              </mdl-text>
+            </div>
+            <div>
+              <div class="stepForm__input__label">
+                <span ng-bind="'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.DST_PORT'|translate"></span>
+                <span class="stepForm__input__required">*</span>
+              </div>
+              <mdl-text ng-model="rule.dst_port"
+                        helper="rule.helpers.dstPortHelper"
+                        display-label="rule.labels.dstPortDisplayLabel">
+              </mdl-text>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stepForm__input" ng-if="rule.ipProtoObject.value === 'ICMP'">
+        <div class="mars-col-24">
+          <div class="mars-row-flex mars-row-flex-space-between">
+            <div>
+              <div class="stepForm__input__label">
+                <span ng-bind="'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.ICMP_TYPE'|translate"></span>
+                <span class="stepForm__input__required">*</span>
+              </div>
+              <mdl-text ng-model="rule.icmp_type"
+                        helper="rule.helpers.icmpTypeHelper"
+                        display-label="rule.labels.icmpTypeDisplayLabel">
+              </mdl-text>
+            </div>
+            <div>
+              <div class="stepForm__input__label">
+                <span ng-bind="'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.ICMP_CODE'|translate"></span>
+                <span class="stepForm__input__required">*</span>
+              </div>
+              <mdl-text ng-model="rule.icmp_code"
+                        helper="rule.helpers.icmpCodeHelper"
+                        display-label="rule.labels.icmpCodeDisplayLabel">
+              </mdl-text>
+            </div>
+          </div>
+        </div> 
+      </div>
+      <div class="stepForm__input">
+        <div class="mars-col-24">
+          <div class="mars-row-flex mars-row-flex-space-between">
+            <div>
+              <div class="stepForm__input__label">
+                <span ng-bind="'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.SRC_IP'|translate"></span>
+                <span class="stepForm__input__required">*</span>
+              </div>
+              <mdl-text ng-model="rule.src_ip"
+                        helper="rule.helpers.srcIpHelper"
+                        display-label="rule.labels.srcIpDisplayLabel">
+              </mdl-text>
+            </div>
+            <div>
+              <div class="stepForm__input__label">
+                <span ng-bind="'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.DST_IP'|translate"></span>
+                <span class="stepForm__input__required">*</span>
+              </div>
+              <mdl-text ng-model="rule.dst_ip"
+                        helper="rule.helpers.dstIpHelper"
+                        display-label="rule.labels.dstIpDisplayLabel">
+              </mdl-text>
+            </div>
+          </div>
+        </div>  
+      </div>
+      <div class="stepForm__input">
+        <div class="mars-col-24">
+          <div class="mars-row-flex mars-row-flex-space-between">
+            <div>
+              <div class="stepForm__input__label">
+                <span ng-bind="'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.DST_MAC'|translate"></span>
+                <span class="stepForm__input__required">*</span>
+              </div>
+              <mdl-text ng-model="rule.dst_mac"
+                        helper="rule.helpers.dstMacHelper"
+                        display-label="rule.labels.dstMacDisplayLabel">
+              </mdl-text>
+            </div>
+            <div>
+              <div class="stepForm__input__label">
+                <span ng-bind="'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.VLAN'|translate"></span>
+                <span class="stepForm__input__required">*</span>
+              </div>
+              <mdl-text ng-model="rule.vlan_id"
+                        helper="rule.helpers.vlanHelper"
+                        display-label="rule.labels.vlanDisplayLabel">
+              </mdl-text>
+            </div>
+          </div>
+        </div>  
+      </div>
+      <div class="stepForm__input">
+        <div class="stepForm__input__label rule-action">
+          <span ng-bind="'MODULES.LOGICAL.EGP.TAB.POLICY.CREATE.RULE.ACTION'|translate"></span>
+          <span class="stepForm__input__required">*</span>
+        </div>
+        <mdl-radio ng-model="rule.action" display-label="rule.ruleActions[0]">
+        </mdl-radio>
+        <mdl-radio ng-model="rule.action" display-label="rule.ruleActions[1]">
+        </mdl-radio>
+      </div>
+      <mdl-button class="remove" ng-click="removeRule(rule)" icon-name="remove_circle" size='small'></mdl-button>
+    </div>
+  </div>
+</div>

@@ -322,6 +322,97 @@ export class LogicalDataManager{
     );
     return defer.promise;
   }
+
+  getEGPGroupList() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getEGPGroupUrl()).then(
+      (res) => {
+        defer.resolve(res.data.groups);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  getEGPPolicyList() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getEGPPolicyUrl()).then(
+      (res) => {
+        defer.resolve(res.data.policies);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  createEGPGroup(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getEGPGroupUrl(), params).then(
+      (res) => {
+        defer.resolve(null);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
+
+  createEGPPolicy(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getEGPPolicyUrl(), params).then(
+      (res) => {
+        defer.resolve(null);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteEGPGroup(group_name) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDeleteEGPGroupUrl(group_name)).then(
+      (res) => {
+        defer.resolve(null);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteEGPPolicy(policy_name) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDeleteEGPPolicyUrl(policy_name)).then(
+      (res) => {
+        defer.resolve(null);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
+
+  getEGPPolicyDetail(policy_name) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getEGPPolicyDetailUrl(policy_name)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.resolve(null);
+      }
+    );
+    return defer.promise;
+  }
 }
 
 LogicalDataManager.$inject = LogicalDataManager.getDI();
