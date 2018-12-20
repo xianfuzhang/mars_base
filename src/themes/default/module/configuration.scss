@@ -23,11 +23,24 @@
 }
 
 @include block(realtime-log-actions) {
-  position: absolute;
+  position: relative;
+  display: flex;
   float: right;
-  z-index: 999;
-  top: 15px;
-  right: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  
+  @include element(action) {
+    display: inline-block;
+    margin-left: 15px;
+  }
+  
+  @include element(input) {
+    width: 150px;
+    height: 30px;
+    font-size: 16px;
+    border: 2px solid #000;
+    box-sizing: border-box;
+  }
 }
 
 @include block(configuration){

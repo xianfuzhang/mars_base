@@ -5,6 +5,7 @@ import {NTPController} from './ng/ntp.controller';
 import {ElasticsearchController} from './ng/elasticsearch.controller';
 import {SelectDateDialogController} from './ng/selectDateDialogController';
 import {InputFilenameDialogController} from './ng/inputFilenameDialogController';
+import {GenerateCSVFileDialogController} from './ng/generateCSVFileDialogController'
 import {IpmacEstablishController} from './component/ipmac_establish/ng/IpmacEstablish.controller';
 import {NtpEstablishController} from './component/ntp_establish/ng/NtpEstablish.controller'
 import {SystemInfoController} from './ng/systemInfo.controller'
@@ -16,6 +17,7 @@ export default angular
   .controller('elasticsearchController', ElasticsearchController)
   .controller('selectDateDialogController', SelectDateDialogController)
   .controller('inputFilenameDialogController', InputFilenameDialogController)
+  .controller('generateCSVFileDialogController', GenerateCSVFileDialogController)
   .controller('ipmacEstablishController', IpmacEstablishController)
   .controller('ntpEstablishController', NtpEstablishController)
   .controller('systemInfoController', SystemInfoController)

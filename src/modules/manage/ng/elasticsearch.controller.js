@@ -9,6 +9,8 @@ export class ElasticsearchController {
       '$filter',
       '$q',
       '$timeout',
+      '$http',
+      'appService',
       'c3',
       'dialogService',
       'dateService',
@@ -65,8 +67,11 @@ export class ElasticsearchController {
           }
         }
       })
-        .result.then((data) => {
-        if (data && !data.canceled) {
+      .result.then((data) => {
+        if(data.canceled) {
+          this.scope.loading = false;
+          return;
+        } else if (data && !data.canceled) {
           let filename = data.filename;
         
           this.di.manageDataManager.putBackupElasticsearch(filename).then(
@@ -83,6 +88,42 @@ export class ElasticsearchController {
                 })
             }
           )
+        }
+      });
+    };
+  
+    this.scope.download = () => {
+      this.scope.loading = true;
+      let indiceOptions = this.scope.dashboardModel.indiceOptions;
+      this.di.modalManager.open({
+        template: require('../template/generateCSVFileDialog.html'),
+        controller: 'generateCSVFileDialogController',
+        windowClass: 'date-rate-modal',
+        resolve: {
+          dataModel: () => {
+            return {
+              'indiceOptions': indiceOptions,
+            };
+          }
+        }
+      })
+      .result.then((data) => {
+        if(data.canceled) {
+          this.scope.loading = false;
+          return;
+        } else if (data && !data.canceled) {
+          this.di.manageDataManager.getElasticsearchCSVFile()
+            .then(res => {
+              let arr = res.data.file.split('/')
+              // let fileUrl = this.di.appService.getDownloadFileUrl(arr[arr.length - 1]);
+              this.di.$window.location.href = '/download/' + arr[arr.length - 1];
+              this.scope.loading = false;
+            }, (error) => {
+              this.di.dialogService.createDialog('error', '下载失败！')
+                .then((data)=>{
+                  this.scope.loading = false;
+                });
+            })
         }
       });
     };
@@ -104,7 +145,9 @@ export class ElasticsearchController {
           }
         }
       }).result.then((data) => {
-        if (data && !data.canceled) {
+        if(data.canceled) {
+          this.scope.loading = false;
+        } else if (data && !data.canceled) {
           this.scope.loading = true;
           this.di.$rootScope.$emit('start_loading');
           

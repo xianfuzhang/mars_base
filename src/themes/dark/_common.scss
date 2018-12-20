@@ -9,3 +9,8 @@ body{
 table {
   border-color: map_get($colors, table_border_color);
 }
+
+option {
+  background: #1a1a1a;
+  color: #FFFFFF;
+}
