@@ -8,10 +8,13 @@ import {TenantEstablishController} from './component/tenant_establish/ng/tenantE
 import {TenantDetail} from './ng/tenantDetail.controller';
 import {SegmentController} from './ng/segment.controller';
 import {QoSController} from './ng/qos.controller';
+import {EGPController} from './ng/egp.controller';
 import {SegmentEstablishController} from './component/segment_establish/ng/SegmentEstablish.controller';
 import {SegmentMemberEstablishController} from './component/segmentmember_establish/ng/segmentMemberEstablish.controller';
 import {CosEstablishController} from './component/cos_establish/ng/cosEstablish.controller';
 import {EcnEstablishController} from './component/ecn_establish/ng/ecnEstablish.controller';
+import {EGPGroupEstablishController} from './component/epg_establish/ng/group.controller';
+import {EGPPolicyEstablishController} from './component/epg_establish/ng/policy.controller';
 
 export default angular
   .module('logical', [])
@@ -21,8 +24,11 @@ export default angular
   .controller('tenantDetailCtrl', TenantDetail)
   .controller('segmentController', SegmentController)
   .controller('qosCtrl', QoSController)
+  .controller('egpCtrl', EGPController)
   .controller('segmentEstablishController', SegmentEstablishController)
   .controller('SegmentMemberEstablishController', SegmentMemberEstablishController)
   .controller('cosEstablishCtrl', CosEstablishController)
   .controller('ecnEstablishCtrl', EcnEstablishController)
+  .controller('epgGroupEstablishCtrl', EGPGroupEstablishController)
+  .controller('egpPolicyEstablishCtrl', EGPPolicyEstablishController)
   .name;

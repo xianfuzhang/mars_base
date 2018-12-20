@@ -221,6 +221,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/egp', {
+      template: require('./modules/logical/template/egp.html'),
+      controller: 'egpCtrl',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/tenant/:tenantName', {
       template: require('./modules/logical/template/tenantDetail.html'),
       controller: 'tenantDetailCtrl',

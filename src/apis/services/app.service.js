@@ -50,7 +50,8 @@ export class appService {
             'items':[
               {'label': 'Tenant', 'url': '/tenant', 'role': 3},
               {'label': 'Segment', 'url': '/segment', 'role': 3},
-              {'label': 'QoS', 'url': '/qos', 'role': 3}
+              {'label': 'QoS', 'url': '/qos', 'role': 3},
+              {'label': 'EGP', 'url': '/egp', 'role': 3}
             ]
            },
           {
@@ -551,6 +552,26 @@ export class appService {
 
   getEcnListUrl(){
     return this.getZoneEndpoint(true) + "/qos/ecn/v1";
+  }
+
+  getEGPGroupUrl(){
+    return this.getZoneEndpoint(true) + "/egp/v1/group";
+  }
+
+  getDeleteEGPGroupUrl(group_name) {
+    return this.getZoneEndpoint(true) + "/egp/v1/group/" + group_name;
+  }
+
+  getEGPPolicyUrl(){
+    return this.getZoneEndpoint(true) + "/egp/v1/policy";
+  }
+
+  getDeleteEGPPolicyUrl(policy_name) {
+    return this.getZoneEndpoint(true) + "/egp/v1/policy/" + policy_name;
+  }
+
+  getEGPPolicyDetailUrl(policy_name) {
+    return this.getZoneEndpoint(true) + "/egp/v1/policy/" + policy_name;
   }
 }
 

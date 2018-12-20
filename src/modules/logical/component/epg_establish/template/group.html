@@ -1,0 +1,39 @@
+<div class="egp-group-establish">
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">
+            <span ng-bind="'MODULES.LOGICAL.EGP.TAB.GROUP.TABLE.TENANT'|translate"></span>
+            <span class="stepForm__input__required">*</span>
+        </div>
+        <mdl-select ng-model="model.tenantObject" display-label="tenantsLabel">
+        </mdl-select>
+    </div>
+    <div class="stepForm__input name-field">
+        <div class="stepForm__input__label">
+            <span ng-bind="'MODULES.LOGICAL.EGP.TAB.GROUP.TABLE.NAME'|translate"></span>
+            <span class="stepForm__input__required">*</span>
+        </div>
+        <mdl-text ng-model="model.name"
+                  helper="model.nameHelper"
+                  display-label="model.nameDisplayLabel">
+        </mdl-text>
+    </div>
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">
+            <span ng-bind="'MODULES.LOGICAL.EGP.TAB.GROUP.TABLE.ADDRESS'|translate"></span>
+            <span class="stepForm__input__required">*</span>
+        </div>
+        <mdl-text ng-model="model.address"
+                  helper="model.addressHelper"
+                  display-label="model.addressDisplayLabel">
+        </mdl-text>
+        <div class="add-btn" ng-click="addMACAddress()">
+            <i class="material-icons">add</i>
+        </div>
+        <div class="multiple_ip" style="margin-top:5px;" ng-show="model.mac_addresses.length">
+            <div class="types-label" ng-repeat="mac in model.mac_addresses">
+                <span ng-bind="mac"></span>
+                <span class="removeBtn" ng-click="removeSelectedMAC(mac)">-</span>
+            </div>
+        </div>
+    </div>
+</div>

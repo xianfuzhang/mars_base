@@ -1,0 +1,47 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="EGP">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span>EGP</span>
+  </content-header>
+  <section class="app-body tenant-detail">
+    <div class="mars-col-12 ">
+      <div class="main__content">
+        <mdl-tabs ng-model="tabSelected" options="tabs"
+                  class-list="main__content__device-detail-tabs"
+                  on-select="onTabChange($value)">
+        </mdl-tabs>
+        <section class="tab-content" ng-if="tabSelected.type == 'group'">
+          <mdl-table actions-show="model.actionsShow"
+                    actions="model.rowActions"
+                    row-select-action="onTableRowSelectAction($event)"
+                    row-click="onTableRowClick($event)"
+                    provider="model.provider" api-ready="onApiReady($api)"
+                    on-add="addGroup()" on-remove="batchRemove($value)">
+          </mdl-table>
+        </section>
+        <section class="tab-content" ng-if="tabSelected.type == 'policy'">
+          <mdl-table actions-show="model.actionsShow"
+                    actions="model.rowActions"
+                    row-select-action="onTableRowSelectAction($event)"
+                    row-click="onTableRowClick($event)"
+                    provider="model.provider" api-ready="onApiReady($api)"
+                    on-add="addPolicy()" on-remove="batchRemove($value)">
+          </mdl-table>
+        </section>
+      </div>
+    </div>
+    <div class="mars-col-12 policy-rules" ng-if="tabSelected.type == 'policy' && policyModel.policy">
+      <h3 ng-bind="policyModel.ruleName"></h3>
+      <mdl-table class="policy-rules-table" provider="policyModel.provider" api-ready="onRulesApiReady($api)">
+      </mdl-table>
+    </div>
+  </section>
+  <ng-controller class="cos-wizard" ng-controller="epgGroupEstablishCtrl">
+    <wizard></wizard>
+  </ng-controller>
+  <ng-controller class="egp-policy-wizard" ng-controller="egpPolicyEstablishCtrl">
+    <wizard></wizard>
+  </ng-controller>
+</div>
