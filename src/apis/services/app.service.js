@@ -21,6 +21,7 @@ export class appService {
       //logstash/ 最后的斜杠是不能去掉的，否则无法正常代理
       LIVE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/logstash/',
       // LIVE_WEBSOCKETS_ENDPONT: 'ws://210.63.204.29:3233/',
+      // LIVE_WEBSOCKETS_ENDPONT_PORT: 3233,
 
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
@@ -163,8 +164,9 @@ export class appService {
     return endpoint;
   }
   
-  getWebscoketEndpoint() {
-    let endpoint;
+  getWebscoketEndpoint(endpoint) {
+    if (typeof endpoint == 'string' && endpoint) return endpoint;
+    
     if (this.isMocked) {
       endpoint = this.CONST.MOCKED_WEBSOCKETS_ENDPONT;
     } else {
@@ -456,6 +458,23 @@ export class appService {
   
   getElasticsearchBackupUrl(backup_name) {
     return this.getZoneEndpoint(true) + `/utility/elasticsearch/v1/_snapshot/${backup_name}`;
+  }
+  
+  getElasticsearchCSVFileUrl(index, query) {
+    let url = this.getZoneEndpoint(true) + '/utility/elasticsearch/v1/csv';
+    if(index && !query){
+      url += `/${index}`;
+    } else if(index && query) {
+      url += `/${index}/query`;
+    } else if(!index && !query){
+      url += `/file`;
+    }
+    
+    return url;
+  }
+  
+  getDownloadFileUrl(filename) {
+    return this.di.$location.protocol() + '://' + this.di.$location.host() + ":" + this.di.$location.port() + `/download/${filename}`;
   }
 
   getPFCUrl(deviceId){
