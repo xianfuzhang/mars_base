@@ -178,8 +178,10 @@ export class UpLinkEstablishController {
       };
       deviceDataManager.getDeviceConfigs().then((configs)=>{
         this.di._.forEach(configs,(config)=>{
-          if(config['id'].toLocaleLowerCase().indexOf('grpc') != -1)
-          scope.displayLabel.device.options.push({'label':config['name'], 'value':config['id']})
+          if(config['id'].toLocaleLowerCase().indexOf('grpc') != -1 || config['id'].toLocaleLowerCase().indexOf('rest') != -1){
+            scope.displayLabel.device.options.push({'label':config['name'], 'value':config['id']})
+          }
+
         });
         scope.upLinkModel.device = scope.displayLabel.device.options[0];
 
