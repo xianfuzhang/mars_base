@@ -54,9 +54,13 @@ export class EGPPolicyEstablishController {
         }*/
       ]
     }
+
+    this.scope.tenantMap = [];
+
     this.scope.model  = {
       name: null,
       tenantObject: null,
+      tenantName: null,
       groupObject: null,
       rules: [],
       nameHelper: {
@@ -74,6 +78,18 @@ export class EGPPolicyEstablishController {
     unsubscribes.push(this.di.$rootScope.$on('policy-wizard-show', ($event, data) => {
       this.scope.open(data);
     }));
+
+    unsubscribes.push(this.di.$scope.$watch('model.groupObject', (newValue, oldValue) => {
+      if(newValue !== null){
+        let ob = this.di._.find(this.scope.tenantMap, {'name': newValue.value});
+        if(ob){
+          this.di.$scope.model.tenantName = ob.tenant;
+        }
+      }
+    }));
+
+
+
     this.scope.$on('$destroy', () => {
       unsubscribes.forEach((cb) => {
         cb();
@@ -220,6 +236,9 @@ export class EGPPolicyEstablishController {
     this.scope.groupsLabel.options = [];
     this.scope.ruleReceived = [];
     this.scope.ruleIndex = 0;
+
+    this.scope.tenantMap = angular.copy(data.groups);
+
     data.tenants.forEach((item) => {
       this.scope.tenantsLabel.options.push({
         'label': item.name,
@@ -275,7 +294,7 @@ export class EGPPolicyEstablishController {
 
   createPolicy(resolve) {
     let params = {
-      'tenant': this.scope.model.tenantObject.value,
+      'tenant': this.scope.model.tenantName,
       'apply_to': this.scope.model.groupObject.value,
       'policy_name': this.scope.model.name,
       'rules': []
