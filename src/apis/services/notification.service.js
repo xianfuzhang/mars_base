@@ -23,7 +23,8 @@ export class notificationService{
 
     scope.closeAlert = () => {
       let closeDom = document.getElementsByClassName('notification-wrapper');
-      for(let i=0; i< closeDom.length; i++) {
+      let size = closeDom.length;
+      for(let i=size -1; i>= 0; i--) {
         document.body.removeChild(closeDom[i]);
       }
     };
@@ -44,7 +45,8 @@ export class notificationService{
 
     scope.closeAlert = () => {
       let closeDom = document.getElementsByClassName('notification-wrapper');
-      for(let i=0; i< closeDom.length; i++) {
+      let size = closeDom.length;
+      for(let i=size -1; i>= 0; i--) {
         document.body.removeChild(closeDom[i]);
       }
     };
@@ -65,7 +67,8 @@ export class notificationService{
 
     scope.closeAlert = () => {
       let closeDom = document.getElementsByClassName('notification-wrapper');
-      for(let i=0; i< closeDom.length; i++) {
+      let size = closeDom.length;
+      for(let i=size -1; i>= 0; i--) {
         document.body.removeChild(closeDom[i]);
       }
     };
