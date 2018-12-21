@@ -7,14 +7,17 @@ export class LogController {
       '$q',
       '$timeout',
       '$window',
+      '$location',
       '$sce',
+      '_',
       'appService',
       'dialogService',
       'logService',
       'roleService',
       'wsService',
       'logDataManager',
-      'tableProviderFactory'
+      'tableProviderFactory',
+      'dashboardDataManager'
     ];
   }
   
@@ -32,16 +35,12 @@ export class LogController {
     this.scope.loading = false;
     this.scope.hasData = false;
     this.scope.fileList = {options: []};
-    this.scope.logFileSelected = {};
     this.scope.role = this.di.roleService.getRole();
-    let now = Date.now();
-    let today = this.date(now, 'yyyy-MM-dd');
-    this.scope.today = new Date(today + ' 23:59:59');
-    this.scope.dateFrom = new Date(today + ' 00:00:00');
-    this.scope.dateTo = new Date(today + ' 23:59:59');
+    this.scope.updateRealtimeLogFlag = true;
+    this.scope.endpointDisLabs = {options: []};
+    this.scope.selectedEndpoint = {};
   
     this.wsService = this.di.wsService;
-    this.scope.updateRealtimeLogFlag = true;
     this.MAX_LOG_NUM = 1000;  // max number of logs
     this.hiddenRealtimeLogs = [];
     this.scope.realtimeBtnTxt = this.translate('MODULE.LOG.BUTTON.PAUSE');
@@ -54,7 +53,8 @@ export class LogController {
       actionsShow: this.getActionsShow(),
       // rowActions: this.di.logService.getDeviceTableRowActions(),
       logProvider: null,
-      logAPI: null
+      logAPI: null,
+      logFileSelected: null
     };
     
     this.scope.search = () => {
@@ -64,9 +64,9 @@ export class LogController {
     };
   
     this.scope.downloadFile = () => {
-      if (this.scope.logFileSelected.value == '') return false;
+      if (this.scope.logModel.logFileSelected.value == '') return false;
       
-      this.di.$window.location.href = this.di.appService.getLogFilesUrl() + `/${this.scope.logFileSelected.value}`;
+      this.di.$window.location.href = this.di.appService.getLogFilesUrl() + `/${this.scope.logModel.logFileSelected.value}`;
     }
   
     this.scope.onLogAPIReady = ($api) => {
@@ -167,30 +167,52 @@ export class LogController {
   }
   
   init() {
-    // get realtime log
-    try {
-      this.wsService.init();
-    } catch(e) {
-      console.error(e.message)
-    } finally {
-      this.wsService.subscribe('', {}, (response) => {
-        let message = response.message;
-  
-        if(this.scope.updateRealtimeLogFlag) {
-          let newLog = this.getLogElementNode(message)
-  
-          let logList = document.getElementById('realtime-log-div');
-          logList.insertBefore(newLog, logList.childNodes[0])
-        } else {
-          this.hiddenRealtimeLogs.push(message);
-  
-          if(this.hiddenRealtimeLogs.length > this.MAX_LOG_NUM) { // only save MAX_LOG_NUM logs
-            this.hiddenRealtimeLogs.splice(0, this.MAX_LOG_NUM - this.hiddenRealtimeLogs.length);
-          }
+    // get controlers
+    this.di.dashboardDataManager.getCluster().then((res)=>{
+      let host = this.di.$location.host();
+      let selectedEndpoint = {}, endpointOptions = [];
+      res.forEach(node => {
+        if(host == node.ip) {
+          selectedEndpoint.label = node.ip;
+          selectedEndpoint.value = node.ip;
         }
+        endpointOptions.push({label:node.ip, value:node.ip});
       })
-    }
   
+      this.scope.endpointDisLabs.options = endpointOptions;
+      if (!this.di._.isEmpty (selectedEndpoint)) {
+        this.scope.selectedEndpoint = selectedEndpoint;
+      } else {
+        this.scope.selectedEndpoint = this.scope.endpointDisLabs.options[0];
+      }
+      
+      // get realtime log
+      try {
+        // let endpoint = this.di.appService.getWebscoketEndpoint(this.scope.selectedEndpoint.value);
+        // this.wsService.init(endpoint);
+        this.wsService.init();
+      } catch(e) {
+        console.error(e.message)
+      } finally {
+        this.wsService.subscribe('', {}, (response) => {
+          let message = response.message;
+      
+          if(this.scope.updateRealtimeLogFlag) {
+            let newLog = this.getLogElementNode(message)
+        
+            let logList = document.getElementById('realtime-log-div');
+            logList.insertBefore(newLog, logList.childNodes[0])
+          } else {
+            this.hiddenRealtimeLogs.push(message);
+        
+            if(this.hiddenRealtimeLogs.length > this.MAX_LOG_NUM) { // only save MAX_LOG_NUM logs
+              this.hiddenRealtimeLogs.splice(0, this.MAX_LOG_NUM - this.hiddenRealtimeLogs.length);
+            }
+          }
+        })
+      }
+    });
+    
     // get system history log
     this.scope.logModel.logProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
@@ -232,7 +254,7 @@ export class LogController {
       }
   
       this.scope.fileList.options = opts;
-      this.scope.logFileSelected = this.scope.fileList.options[0];
+      this.scope.logModel.logFileSelected = this.scope.fileList.options[0];
     });
   }
   
@@ -274,11 +296,28 @@ export class LogController {
   
   getEntities(origins) {
     let entities = [];
+    let exceptionStr = '';
+    let exceptionObj = {}
+    let newException = true;
     if(!Array.isArray(origins)) return entities;
     origins.forEach((item) => {
       let obj = {};
       let arr = item.split('|');
       if(arr.length ===  6){
+        // add pre exception
+        if(exceptionStr) {
+          exceptionObj = {}
+          exceptionObj.created_time = '-';
+          exceptionObj.type = 'EXCEPTION';
+          exceptionObj.level = '-';
+          exceptionObj.creator = '-';
+          exceptionObj.operation = '-';
+          exceptionObj.content = exceptionStr;
+          entities.push(exceptionObj);
+          exceptionStr = '';
+          newException = true;
+        }
+        
         obj.created_time = arr[0];
         obj.type = arr[1];
         obj.level = arr[2];
@@ -286,10 +325,24 @@ export class LogController {
         obj.operation = arr[4];
         obj.content = arr[5];
         entities.push(obj);
+      } else if(arr.length ===  1){
+        exceptionStr += arr[0];
+        newException = false;
       }
-      
-
     });
+    
+    if(exceptionStr) {
+      exceptionObj = {}
+      exceptionObj.created_time = '-';
+      exceptionObj.type = 'EXCEPTION';
+      exceptionObj.level = '-';
+      exceptionObj.creator = '-';
+      exceptionObj.operation = '-';
+      exceptionObj.content = exceptionStr;
+      entities.push(exceptionObj);
+      exceptionStr = '';
+      newException = true;
+    }
     return entities;
   }
   
