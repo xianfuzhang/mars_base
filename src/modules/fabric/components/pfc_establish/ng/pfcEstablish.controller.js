@@ -21,6 +21,10 @@ export class PfcEstablishController {
     let di = this.di;
     let deviceDataManager = this.di.deviceDataManager;
     this.translate = this.di.$filter('translate');
+    let inValidJson = {
+      valid: false,
+      errorMessage: ''
+    };
 
     scope.queue_regex = '^[0-7]$';
     scope.deviceId = null;
@@ -71,8 +75,18 @@ export class PfcEstablishController {
     };
 
     scope.submit = function() {
+      let inValidJson_Copy = angular.copy(inValidJson);
+
       let params = {};
       params['port'] = parseInt(scope.pfcModel.port);
+
+      if(scope.pfcModel.queue.length === 0){
+        inValidJson_Copy['errorMessage'] = "请至少添加一个Queue!";
+        return new Promise((resolve, reject) => {
+          resolve(inValidJson_Copy);
+        });
+      }
+
       params['queues'] = di._.map(scope.pfcModel.queue, (queue)=>{return parseInt(queue)});
 
       return new Promise((resolve, reject) => {

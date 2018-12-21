@@ -1,13 +1,13 @@
 <div class="pfc_establish">
 
     <div class="stepForm__input">
-        <div class="stepForm__input__label">端口</div>
+        <div class="stepForm__input__label">端口<span class="stepForm__input__required">*</span></div>
         <valid-input ng-if="isEdit == false" v-name="port_no" v-require="true" ng-model="pfcModel.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.PFC_ADD.PORT' | translate}}" v-rpcid="page_pfc_es" ></valid-input>
         <div ng-if="isEdit == true" style="font-size:15px;">{{pfcModel.port}}</div>
     </div>
 
     <div class="stepForm__input multiple_ip">
-        <div class="stepForm__input__label">Queue<span class="stepForm__input__required">*</span></div>
+        <div class="stepForm__input__label">Queue</div>
         <valid-input style="width:90%;display:inline-block;" ng-model="pfcModel.singleQueue" v-rpcid="page_pfc_es" v-regex="queue_regex" v-message="{{ 'MODULES.REGEX.PFC_ADD.QUEUE' | translate}}"></valid-input>
         <div class="add-btn" ng-click="addQueue()">
             <i class="material-icons">add</i>

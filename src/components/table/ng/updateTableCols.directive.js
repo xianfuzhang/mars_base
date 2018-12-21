@@ -58,7 +58,7 @@ export class updateTableCols {
       }
       //update
       else {
-        console.log('_last_g_offset:' + _last_g_offset + " ; g_offset:"+ g_offset);
+        // console.log('_last_g_offset:' + _last_g_offset + " ; g_offset:"+ g_offset);
         let willChangeLen = 0;
 
         //向右拖
@@ -199,7 +199,7 @@ export class updateTableCols {
       //最后一列不可以拖动
       let isLast = false;
       curIndex = -1;
-      console.log("on 'mousemove-th-col' ====>" )
+      // console.log("on 'mousemove-th-col' ====>" )
 
       cols.forEach((colObj, index) => {
         if(dict.element == colObj['resize-col-' + index]){

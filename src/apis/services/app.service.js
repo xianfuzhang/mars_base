@@ -459,11 +459,11 @@ export class appService {
   }
 
   getPFCUrl(deviceId){
-    return this.getZoneEndpoint(true) + `/pfc/v1/${deviceId}`;
+    return this.getZoneEndpoint(true) + `/qos/pfc/v1/${deviceId}`;
   }
 
   getPFCDeleteUrl(deviceId, port){
-    return this.getZoneEndpoint(true) + `/pfc/v1/${deviceId}/${port}`;
+    return this.getZoneEndpoint(true) + `/qos/pfc/v1/${deviceId}/${port}`;
   }
 
   getUpLinkUrl(){
