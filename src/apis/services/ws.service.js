@@ -36,6 +36,7 @@ export class WebsocketService {
     var $log = this.di.$log;
     var $window = this.di.$window;
     var appService  = this.di.appService;
+    let wsEndpoint = '';
     function kill () {
       $log.log('[marsWebsockets] killing socket service');
       try {
@@ -128,7 +129,7 @@ export class WebsocketService {
       reconnectInterval = setInterval(function () {
         try{
           $log.warn('[marsWebsockets] Try to connect websocket server!');
-          ws = new WebSocket(appService.getWebscoketEndpoint());
+          ws = new WebSocket(appService.getWebscoketEndpoint(wsEndpoint));
           ws.onopen = reopen;
           ws.onerror = onerror;
         } catch (e){
@@ -324,10 +325,11 @@ export class WebsocketService {
       return result === undefined ? false : true;
     }
 
-    service.init = function () {
+    service.init = function (endpoint) {
       kill();
       $log.log('[marsWebsockets] initialize websockets connection');
-      ws = new WebSocket(appService.getWebscoketEndpoint());
+      wsEndpoint = endpoint;
+      ws = new WebSocket(appService.getWebscoketEndpoint(endpoint));
       ws.onmessage = onmessage;
       ws.onclose = onclose;
     };

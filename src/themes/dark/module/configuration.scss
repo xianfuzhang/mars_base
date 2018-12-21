@@ -23,11 +23,24 @@
 }
 
 @include block(realtime-log-actions) {
-  position: absolute;
+  position: relative;
+  display: flex;
   float: right;
-  z-index: 999;
-  top: 15px;
-  right: 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  
+  @include element(action) {
+    display: inline-block;
+    margin-left: 15px;
+  }
+  
+  @include element(input) {
+    width: 150px;
+    height: 30px;
+    font-size: 16px;
+    border: 2px solid #000;
+    box-sizing: border-box;
+  }
 }
 
 
@@ -42,28 +55,6 @@
     flex-shrink: 1;
     flex-grow: 1;
     background-color: white;
-  
-    @include  element(codepre){
-      height:90%;
-      overflow: scroll;
-      border:1px solid lightgray;
-    
-      @include state(edit){
-        border: 2px solid red;
-        
-        animation: codepre-edit 1s 2;
-        -webkit-animation: codepre-edit 1s 2;
-        -moz-animation: codepre-edit 1s 2;
-      }
-  
-      @include state(add){
-        border: 2px solid red;
-    
-        animation: codepre-add 1s 2;
-        -webkit-animation: codepre-add 1s 2;
-        -moz-animation: codepre-add 1s 2;
-      }
-    }
   }
   
   @include element(operation){
@@ -130,74 +121,15 @@
   }
 }
 
-@keyframes codepre-edit {
-  0% {
-    border: 2px solid lightgray;
-  }
-  50% {
-    border: 2px solid red;
-  }
-  100% {
-    border: 2px solid lightgray;
-  }
+.configuration__content .jsoneditor-text {
+  color: #FFFFFF;
+  background-color: #1a1a1a;
 }
 
-@-webkit-keyframes codepre-edit {
-  0% {
-    border: 2px solid lightgray;
-  }
-  50% {
-    border: 2px solid red;
-  }
-  100% {
-    border: 2px solid lightgray;
-  }
+.configuration__content .jsoneditor-tree-inner {
+  background: #1a1a1a;
 }
 
-@-moz-keyframes codepre-edit {
-  0% {
-    border: 2px solid lightgray;
-  }
-  50% {
-    border: 2px solid red;
-  }
-  100% {
-    border: 2px solid lightgray;
-  }
-}
-
-@keyframes codepre-add {
-  0% {
-    border: 2px solid lightgray;
-  }
-  50% {
-    border: 2px solid red;
-  }
-  100% {
-    border: 2px solid lightgray;
-  }
-}
-
-@-webkit-keyframes codepre-add {
-  0% {
-    border: 2px solid lightgray;
-  }
-  50% {
-    border: 2px solid red;
-  }
-  100% {
-    border: 2px solid lightgray;
-  }
-}
-
-@-moz-keyframes codepre-add {
-  0% {
-    border: 2px solid lightgray;
-  }
-  50% {
-    border: 2px solid red;
-  }
-  100% {
-    border: 2px solid lightgray;
-  }
+.configuration__content .jsoneditor-field, .jsoneditor-value {
+  color: #ffffff;
 }

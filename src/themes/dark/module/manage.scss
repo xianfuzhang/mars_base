@@ -88,5 +88,56 @@
 
 .sysinfo_table {
   border-spacing: 38px 8px;
-  width:800px;
+  width: 800px;
+}
+
+.elasticsearch-form {
+  height:140px;
+  padding:10px;
+}
+.elasticsearch-form .conditions {
+  margin:0 auto;
+  width: 60%;
+  border:1px solid #aaa;
+  padding:10px 5px;
+}
+
+.elasticsearch-form .conditions .label {
+  margin-right: 15px;
+  font-size:14px;
+  font-weight:bold;
+  color: #000;
+}
+.elasticsearch-form .conditions .date-input {
+  width:90%;
+  border-radius:5px;
+  font-size:14px;
+}
+
+.elasticsearch-csv-file {
+  height: 200px;
+  padding: 10px;
+}
+.elasticsearch-csv-file .conditions {
+  margin:0 auto;
+  width: 80%;
+}
+
+.elasticsearch-csv-file .conditions .label {
+  margin-right: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+}
+
+.elasticsearch-csv-file .conditions .label .must{
+  font-size: 18px;
+  font-weight: bold;
+  color: red;
+}
+
+.elasticsearch-csv-file .conditions .query {
+  height: 215px;
+  border-radius:5px;
+  font-size:14px;
 }

@@ -224,7 +224,45 @@ export class ManageDataManager{
     );
     return defer.promise;
   }
-
+  
+  generateElasticsearchCSVFile(indice, query) {
+    let defer = this.di.$q.defer();
+    if(query) {
+      this.di.$http.post(this.di.appService.getElasticsearchCSVFileUrl(indice, true), query).then(
+        (res) => {
+          defer.resolve(res);
+        },
+        (error) => {
+          defer.reject(error);
+        }
+      );
+    } else {
+      this.di.$http.get(this.di.appService.getElasticsearchCSVFileUrl(indice)).then(
+        (res) => {
+          defer.resolve(res);
+        },
+        (error) => {
+          defer.reject(error);
+        }
+      );
+    }
+    return defer.promise;
+  }
+  
+  getElasticsearchCSVFile() {
+    let defer = this.di.$q.defer();
+    
+    this.di.$http.get(this.di.appService.getElasticsearchCSVFileUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+  
   getSystemInfo(){
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getSystemVersionUrl()).then(

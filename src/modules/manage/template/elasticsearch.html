@@ -8,7 +8,7 @@
             <span ng-bind="::'MODULE.HEADER.MANAGE.ELASTICSEARCH' | translate"></span>
         </content-header>
 
-        <div class="flex_entirety__body__body dashboard__body">
+        <div class="flex_entirety__body__body" style="margin:0 auto;">
             <div class="dashboard__horizontal_box">
                 <div>
                     <mar-section s-title="空间占用情况统计" no-fold="true" class="detail_summary dash_mar_section">
@@ -23,8 +23,11 @@
                         </transclude-body>
                     </mar-section>
 
-                    <div style="margin-top:20px;margin-left: 180px">
-                        <mar-button btn-style="'width:200px;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.BACKUP' | translate" btn-class="'btn-white btn-lg'" btn-icon="'backup'" btn-click="backup()" btn-disabled="loading" />
+                    <div style="display:inline-block;margin-top:20px;margin-left: 90px;">
+                        <mar-button btn-style="'width:150px;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.BACKUP' | translate" btn-class="'btn-white btn-lg'" btn-icon="'backup'" btn-click="backup()" btn-disabled="loading" />
+                    </div>
+                    <div style="display:inline-block;margin-top:20px;margin-left: 20px">
+                        <mar-button btn-style="'width:150px;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.DOWNLOAD' | translate" btn-class="'btn-black btn-lg'" btn-icon="'cloud_download'" btn-click="download()" btn-disabled="loading" />
                     </div>
                 </div>
 
@@ -51,7 +54,7 @@
                     </mar-section>
 
                     <div style="margin-top:20px;margin-left: 180px">
-                        <mar-button btn-style="'width:200px;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.REMOVE' | translate" btn-class="'btn-black btn-lg'" btn-icon="'delete_forever'" btn-click="clear()" btn-disabled="loading" />
+                        <mar-button btn-style="'width:200px;background:#0077cb;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.REMOVE' | translate" btn-class="'btn-black btn-lg'" btn-icon="'delete_forever'" btn-click="clear()" btn-disabled="loading" />
                     </div>
                 </div>
             </div>
