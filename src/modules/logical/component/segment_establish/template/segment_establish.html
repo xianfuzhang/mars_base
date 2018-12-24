@@ -27,8 +27,8 @@
     </div>
 
     <div class="stepForm__input multiple_ip">
-        <div class="stepForm__input__label">IP Address<span class="stepForm__input__required">*</span></div>
-        <valid-input style="width:90%;display:inline-block;" v-require="true" ng-model="segmentModel.ip_address" v-rpcid="page_device_1" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>
+        <div class="stepForm__input__label">IP Address</div>
+        <valid-input style="width:90%;display:inline-block;" ng-model="segmentModel.ip_address" v-rpcid="page_device_1" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>
         <div class="add-btn" ng-click="addIPAddress()">
             <i class="material-icons">add</i>
         </div>
