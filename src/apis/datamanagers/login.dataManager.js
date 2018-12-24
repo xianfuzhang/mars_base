@@ -36,10 +36,12 @@ export class LoginDataManager {
     this.di.$http.post(this.di.appService.getLoginUrl(),{'user_name':username, 'password':password})
       .then((result) => {
         if(result.status === 200){
+          let expireDate = new Date();
+          expireDate.setTime(expireDate.getTime() + 20*60*1000); //cookies20分钟过期
           this.di.$cookies.put('useraccount', this.di.crypto.AES.encrypt(JSON.stringify({
             'user_name': username, 
             'password': password
-          }), this.di.appService.CONST.CRYPTO_STRING));
+          }), this.di.appService.CONST.CRYPTO_STRING), {expires: expireDate});
           defer.resolve(result);
         } else {
           this.di.$cookies.remove('useraccount');
