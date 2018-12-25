@@ -30,6 +30,7 @@ export class SystemInfoController {
     this.translate = this.di.$filter('translate');
 
     scope.systemModel = {
+      isFinish : false,
 
     };
 
@@ -46,7 +47,7 @@ export class SystemInfoController {
     scope.infoList = ['commit', 'version', 'build_server', 'build_date', 'logstash', 'elasticsearch', 'nginx'];
 
     let init = () =>{
-
+      scope.systemModel.isFinish = false;
       // scope.systemModel = {
       //     "commit": "b561c7c46c0609151afcfbb857a7d1d97dacafae",
       //     "version": "v1.0.0.0-2-gb561c7c",
@@ -59,7 +60,8 @@ export class SystemInfoController {
       //   }
 
       this.di.manageDataManager.getSystemInfo().then((res)=>{
-        scope.systemModel = res;
+        scope.systemModel = res.data;
+        scope.systemModel.isFinish = true;
       },(err)=>{
         this.di.notificationService.renderWarning(scope, err);
       })
