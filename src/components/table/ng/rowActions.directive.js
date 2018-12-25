@@ -38,9 +38,6 @@ export class rowActions {
         return;
       }
       else {
-       /* if (menuElement[0].classList.contains('mdc-menu--open')) {
-          menuElement[0].classList.remove('mdc-menu--open');
-        }*/
        let nodes = document.getElementsByClassName('table-row-action-list');
        for(let i=0; i< nodes.length; i++) {
          document.body.removeChild(nodes[i]);
@@ -49,21 +46,37 @@ export class rowActions {
     };
     document.body.addEventListener('click', onTriggerClickRemove, true);
 
+    let calculatePosition = (event, menuElement) => {
+      let windowInnerWidth = this.di.$window.document.body.offsetWidth,
+        windowInnerHeight = this.di.$window.document.body.offsetHeight;
+      let menuHeight = scope.actions.length ? scope.actions.length * 35 + 16 : 0;
+      let topPosition = event.clientY, leftPosition = event.clientX;
+      if (topPosition + menuHeight > windowInnerHeight) {
+        topPosition = event.clientY - menuHeight;
+      }
+      return {
+        top: topPosition,
+        left: leftPosition
+      };
+    };
+
     let insertMenuList = (event) => {
       let menuHtml = this.di.$templateCache.get('table-row-action-list.html');
       let menuElement = this.di.$compile(menuHtml)(scope);
+      document.body.appendChild(menuElement[0]);
+      let position = calculatePosition(event, menuElement);
       menuElement.css({
         position: 'absolute',
-        left: event.clientX + 'px',
-        top: event.clientY + 'px',
+        left: position.left + 'px',
+        top: position.top + 'px',
         display: 'block',
         opacity: 1
       });
-      document.body.appendChild(menuElement[0]);
     };
 
     scope._menuToggle = (event) => {
       //menuElement.toggleClass('mdc-menu--open');
+      scope.actions =  ctrl.rowActionsFilter(scope.data, scope.actionItems);
       if (scope.actions.length > 0) {
         insertMenuList(event);
         event && event.stopPropagation();  
@@ -75,11 +88,6 @@ export class rowActions {
       event && event.stopPropagation();
     };
 
-    unsubscribers.push(this.di.$rootScope.$on('change-device-port-state', ($event, param) => {
-      if (scope.data.element === param.data.element && scope.data.port_id === param.data.port_id) {
-        scope.actions =  ctrl.rowActionsFilter(param.data, scope.actionItems);
-      }
-    }));
     scope.$on('$destroy', ()=> {
      document.body.removeEventListener('click', onTriggerClickRemove);
       unsubscribers.forEach((cb) => {
