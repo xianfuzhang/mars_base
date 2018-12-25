@@ -76,6 +76,7 @@ export class rowActions {
 
     scope._menuToggle = (event) => {
       //menuElement.toggleClass('mdc-menu--open');
+      scope.actions =  ctrl.rowActionsFilter(scope.data, scope.actionItems);
       if (scope.actions.length > 0) {
         insertMenuList(event);
         event && event.stopPropagation();  
@@ -87,11 +88,6 @@ export class rowActions {
       event && event.stopPropagation();
     };
 
-    unsubscribers.push(this.di.$rootScope.$on('change-device-port-state', ($event, param) => {
-      if (scope.data.element === param.data.element && scope.data.port_id === param.data.port_id) {
-        scope.actions =  ctrl.rowActionsFilter(param.data, scope.actionItems);
-      }
-    }));
     scope.$on('$destroy', ()=> {
      document.body.removeEventListener('click', onTriggerClickRemove);
       unsubscribers.forEach((cb) => {
