@@ -12,6 +12,7 @@ import {TabsController} from './ng/tabs.controller';
 import {mdlTabs} from './ng/tabs.directive';
 import {tabItem} from './ng/tabItem.directive';
 import {mdlMenu} from './ng/menu.directive';
+import {mdlUpload} from './ng/upload.directive';
 
 
 export default angular
@@ -28,4 +29,5 @@ export default angular
   .controller('TabsController', TabsController)
   .directive('mdlTabs', mdlTabs)
   .directive('tabItem', tabItem)
+  .directive('mdlUpload', mdlUpload)
   .name;

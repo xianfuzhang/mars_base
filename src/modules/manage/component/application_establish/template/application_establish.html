@@ -1,0 +1,18 @@
+<div class="application_establish">
+    <form>
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.MANAGE.APPLICATION.ES.ACTIVE'|translate}}<span class="stepForm__input__required">*</span></div>
+        <mdl-select ng-model="appesModel.isEnabled"
+                    display-label="diaplayLabel">
+        </mdl-select>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.MANAGE.APPLICATION.ES.FILE'|translate}}<span class="stepForm__input__required">*</span></div>
+        <mdl-upload change="changeEvent(event)" height="50px"></mdl-upload>
+    </div>
+
+
+    </form>
+
+</div>

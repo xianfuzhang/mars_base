@@ -8,7 +8,9 @@ import {InputFilenameDialogController} from './ng/inputFilenameDialogController'
 import {GenerateCSVFileDialogController} from './ng/generateCSVFileDialogController'
 import {IpmacEstablishController} from './component/ipmac_establish/ng/IpmacEstablish.controller';
 import {NtpEstablishController} from './component/ntp_establish/ng/NtpEstablish.controller'
-import {SystemInfoController} from './ng/systemInfo.controller'
+import {ApplicationEstablishController} from './component/application_establish/ng/ApplicationEstablish.controller';
+import {SystemInfoController} from './ng/systemInfo.controller';
+import {ApplicationController} from './ng/application.controller'
 
 export default angular
   .module('manage', [])
@@ -21,4 +23,6 @@ export default angular
   .controller('ipmacEstablishController', IpmacEstablishController)
   .controller('ntpEstablishController', NtpEstablishController)
   .controller('systemInfoController', SystemInfoController)
+  .controller('applicationController', ApplicationController)
+  .controller('applicationEstablishController', ApplicationEstablishController)
   .name;

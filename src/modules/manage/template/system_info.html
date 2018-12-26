@@ -9,7 +9,7 @@
     </content-header>
     <section class="app-body">
       <div class="main__content">
-        <table class="sysinfo_table">
+        <table class="sysinfo_table"  ng-show="systemModel.isFinish">
           <tr ng-repeat="key in infoList">
             <td>{{labelModel[key]}}: </td>
             <td>{{systemModel[key]}}</td>
