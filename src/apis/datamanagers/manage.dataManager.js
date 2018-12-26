@@ -276,6 +276,94 @@ export class ManageDataManager{
     return defer.promise;
   }
 
+
+  getAllApplications(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getApplicationUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  getApplication(app_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getApplicationByNameUrl(app_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  activeApplication(app_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getApplicationActionUrl(app_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  deActiveApplication(app_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getApplicationActionUrl(app_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteApplication(app_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getApplicationByNameUrl(app_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  postApplication(activate, file){
+    let defer = this.di.$q.defer();
+    var form = new FormData();
+    form.append('file', file);
+
+    this.di.$http({
+      url: 'http://localhost/mars/v1/applications?activate=' + activate,
+      method: 'POST',
+      headers: {'Content-Type': 'application/octet-stream'},
+      data: new Uint8Array(file),
+      transformRequest: []
+    }).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
 }
 
 ManageDataManager.$inject = ManageDataManager.getDI();

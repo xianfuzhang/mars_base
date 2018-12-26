@@ -98,7 +98,8 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.NTP'), 'url': '/ntp', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO'), 'url': '/system_info', 'role': 3}
+              {'label': this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO'), 'url': '/system_info', 'role': 3},
+              {'label': this.translate('MODULE.HEADER.MANAGE.APPLICATION'), 'url': '/application', 'role': 3}
             ]
           }
 
@@ -495,6 +496,18 @@ export class appService {
 
   getSystemVersionUrl(){
     return this.getZoneEndpoint(true) + '/utility/v1/version';
+  }
+
+  getApplicationUrl(){
+    return this.getZoneEndpoint() + '/applications';
+  }
+
+  getApplicationActionUrl(app_name){
+    return this.getZoneEndpoint() + '/applications/' + app_name + '/active';
+  }
+
+  getApplicationByNameUrl(app_name){
+    return this.getZoneEndpoint() + '/applications/' + app_name;
   }
 
   getSegmentUrl(tenant_name, segment_name){

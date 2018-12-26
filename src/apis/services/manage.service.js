@@ -88,7 +88,71 @@ export class manageService {
     ];
   }
 
+  getApplicationTableActionsShow(){
+    return {
+      'menu': {'enable': false, 'role': 3},
+      'add': {'enable': true, 'role': 3},
+      'remove': {'enable': false, 'role': 3},
+      'refresh': {'enable': true, 'role': 3},
+      'search': {'enable': false, 'role': 3}
+    };
+  }
 
+  getApplicationTableRowActions(){
+    return [
+      {
+        'label': this.translate('MODULES.MANAGE.APPLICATION.ROW.ACTION.ACTIVE'),
+        'role': 3,
+        'value': 'active'
+      },
+      {
+        'label': this.translate('MODULES.MANAGE.APPLICATION.ROW.ACTION.DE_ACTIVE'),
+        'role': 3,
+        'value': 'deactive'
+      },
+      {
+        'label': this.translate('MODULES.MANAGE.APPLICATION.ROW.ACTION.DELETE'),
+        'role': 3,
+        'value': 'delete'
+      }
+    ]
+  }
+
+  getApplicationTableSchema(){
+    return [
+      {
+        'label': this.translate("MODULES.MANAGE.APPLICATION.TABLE.STATUS"),
+        'field': 'status',
+        'type': 'icon',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'60px'},
+      },
+      {
+        'label': this.translate("MODULES.MANAGE.APPLICATION.TABLE.APP_ID"),
+        'field': 'app_id',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'250px'}
+      },
+      {
+        'label': this.translate("MODULES.MANAGE.APPLICATION.TABLE.VERSION"),
+        'field': 'version',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'150px'}
+      },
+      {
+        'label': this.translate("MODULES.MANAGE.APPLICATION.TABLE.CATEGORY"),
+        'field': 'category',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'150px'}
+      },
+      {
+        'label': this.translate("MODULES.MANAGE.APPLICATION.TABLE.ORIGIN"),
+        'field': 'origin',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'200px'}
+      },
+      {
+        'label': this.translate("MODULES.MANAGE.APPLICATION.TABLE.TITLE"),
+        'field': 'title',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+      }
+    ];
+  }
 }
 
 
