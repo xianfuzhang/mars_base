@@ -162,7 +162,13 @@
 //}
 .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate) ~ .mdc-checkbox__background {
   border-color: rgba(255, 255, 255, 1);
-  background-color: transparent; }
+  background-color: transparent;
+}
+
+.modal .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate) ~ .mdc-checkbox__background {
+  border-color: rgba(0, 0, 0, 0.54);
+  background-color: transparent;
+}
 
 .mdc-icon-button {
   color: rgba(255, 255, 255, 1);
