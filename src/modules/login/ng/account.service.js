@@ -36,6 +36,21 @@ export class accountService {
       }
     ];
   }
+
+  getRowActions() {
+    return [
+      {
+        'label': this.translate('MODULE.ACCOUNT.TABLE.ROW.ACTION.EDIT'),
+        'role': 3,
+        'value': 'edit'
+      },
+      {
+        'label': this.translate('MODULE.ACCOUNT.TABLE.ROW.ACTION.DELETE'),
+        'role': 3,
+        'value': 'delete'
+      }
+    ];
+  }
 }
 accountService.$inject = accountService.getDI();
 accountService.$$ngIsClass = true;
