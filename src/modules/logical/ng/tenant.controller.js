@@ -70,11 +70,11 @@ export class TenantController {
           'search': {'enable': false, 'role': 2}
         },
         rowActions:[
-          {
-            'label': this.translate('MODULES.LOGICAL.TENANT.TABLE.EDIT'),
-            'value': 'edit',
-            'role': 2,
-          },
+          // {
+          //   'label': this.translate('MODULES.LOGICAL.TENANT.TABLE.EDIT'),
+          //   'value': 'edit',
+          //   'role': 2,
+          // },
           {
             'label': this.translate('MODULES.LOGICAL.TENANT.TABLE.DELETE'),
             'value': 'delete',
