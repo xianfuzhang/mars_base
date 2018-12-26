@@ -149,6 +149,7 @@ export class ApplicationController {
         this.di._.forEach(scope._apps, (app)=>{
           if(app.app_id === app_id){
             app['status'] = res.data['state'] === 'ACTIVE' ? 'available' : null;
+            app['_state'] = res.data['state'];
           }
         });
         scope.applicationModel.api.update();
