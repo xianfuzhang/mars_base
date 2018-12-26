@@ -40,7 +40,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
               {'label': 'Intents', 'url': '/intents', 'role': 2},
-              {'label': 'Up Links', 'url': '/uplinks', 'role': 2},
+              {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
               //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
