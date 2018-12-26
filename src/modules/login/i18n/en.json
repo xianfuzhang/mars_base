@@ -16,8 +16,10 @@
   "MODULE.ACCOUNT.MANAGE.COLUMN.NAME": "User Name",
   "MODULE.ACCOUNT.MANAGE.COLUMN.GROUP": "Group",
   "MODULE.ACCOUNT.DIALOG.CONTENT.BATCH_DELETE_ACCOUNT": "Batch delete user account?",
+  "MODULE.ACCOUNT.DIALOG.CONTENT.DELETE_ACCOUNT": "Are you sure to delete this account information?",
   "MODULES.ACCOUNT.BATCH.DELETE.SUCCESS": "Batch delete accounts success.",
   "MODULE.ACCOUNT.CREATE.TITTLE": "Create User Account",
+  "MODULE.ACCOUNT.UPDATE.TITTLE": "Update User Account",
   "MODULE.ACCOUNT.CREATE.NAME": "Account Name",
   "MODULE.ACCOUNT.CREATE.NAME.HELP": "Account name must contains numbers, alphabet",
   "MODULE.ACCOUNT.CREATE.GROUPS": "Groups",
@@ -26,5 +28,11 @@
   "MODULE.ACCOUNT.CREATE.GROUP.GUEST": "Guest User",
   "MODULE.ACCOUNT.CREATE.PASSWORD": "Password",
   "MODULE.ACCOUNT.CREATE.GROUP.HELP": "Required. Please select user group.",
-  "MODULE.ACCOUNT.CREATE.SUCCESS": "Create account success."
+  "MODULE.ACCOUNT.CREATE.SUCCESS": "Create user account success.",
+  "MODULE.ACCOUNT.UPDATE.SUCCESS": "Update user account success.",
+  "MODULE.ACCOUNT.TABLE.ROW.ACTION.EDIT": "Edit",
+  "MODULE.ACCOUNT.TABLE.ROW.ACTION.DELETE": "Delete",
+  "MODULE.ACCOUNT.UPDATE.PASSWORD": "Update Password",
+  "MODULE.ACCOUNT.UPDATE.GROUP": "Update Group",
+  "MODULE.ACCOUNT.UPDATE.NEW_PASSWORD": "New Password"
 }
