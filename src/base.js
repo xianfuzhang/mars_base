@@ -279,6 +279,10 @@ function configHttpProvider($httpProvider){
             let username = JSON.parse(decodeData).user_name;
             let password = JSON.parse(decodeData).password;
             config.headers['Authorization'] = "Basic " + window.btoa(username + ':' + password);
+
+            let expireDate = new Date();
+            expireDate.setTime(expireDate.getTime() + 20*60*1000); //cookies20分钟过期
+            $cookies.put('useraccount', useraccount, {expires: expireDate});
           }
         }
         return config;
