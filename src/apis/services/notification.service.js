@@ -21,6 +21,9 @@ export class notificationService{
     let elm = this.di.$compile(templateHtml)(scope);
     document.body.appendChild(elm[0]);
 
+    scope.$on('$destroy', () => {
+      scope.closeAlert();
+    });
     scope.closeAlert = () => {
       let closeDom = document.getElementsByClassName('notification-wrapper');
       let size = closeDom.length;
@@ -43,6 +46,9 @@ export class notificationService{
     let elm = this.di.$compile(templateHtml)(scope);
     document.body.appendChild(elm[0]);
 
+    scope.$on('$destroy', () => {
+      scope.closeAlert();
+    });
     scope.closeAlert = () => {
       let closeDom = document.getElementsByClassName('notification-wrapper');
       let size = closeDom.length;
@@ -65,6 +71,9 @@ export class notificationService{
     let elm = this.di.$compile(templateHtml)(scope);
     document.body.appendChild(elm[0]);
 
+    scope.$on('$destroy', () => {
+      scope.closeAlert();
+    });
     scope.closeAlert = () => {
       let closeDom = document.getElementsByClassName('notification-wrapper');
       let size = closeDom.length;

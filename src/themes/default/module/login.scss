@@ -85,17 +85,15 @@
 }
 .notification-wrapper{
   position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
+  top: 60px;
+  left: 33%;
 }
 .notification-wrapper__content{
-  margin: 60px auto;
   padding: 10px 10px 10px 20px;
   position: relative;
   width: 400px;
   line-height: 25px;
+  min-height: 25px;
   border-radius: 4px;
 }
 .alert-warning{
