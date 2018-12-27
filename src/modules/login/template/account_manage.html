@@ -10,6 +10,8 @@
       <div class="main__content">
         <section class="tab-content">
           <mdl-table actions-show="accountModel.actionsShow"
+                     actions="accountModel.rowActions"
+                     row-select-action="onTableRowSelectAction($event)"
                      row-click="onTableRowClick($event)"
                      provider="accountModel.provider" api-ready="onAPIReady($api)"
                      on-add="createUser()" on-remove="batchRemove($value)">

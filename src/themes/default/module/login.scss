@@ -55,7 +55,7 @@
   color: #b00020;
   padding: 10px;
 }
-.create-user-account-modal{
+.create-user-account-modal, .update-user-modal{
   width: 570px;
 }
 .create-user-account-modal .column-manipulation-field__content{
@@ -63,6 +63,21 @@
 }
 .create-user-account-modal .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input{
   -webkit-text-fill-color: rgba(0,0,0,0.87);
+}
+.update-user-modal .column-manipulation-field__item{
+  text-align: inherit;
+  margin: 0 auto;
+  width: 380px;
+  padding: 10px 0;
+}
+.update-user-modal .column-manipulation-field__item .label{
+  font-weight: bold;
+}
+.column-manipulation-field__item.padding-left-20{
+  padding-left: 20px;
+}
+.update-user-modal .column-manipulation-field__content{
+  height: 320px;
 }
 .group-item-field__group-helper{
   font-size: 12px;

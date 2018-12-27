@@ -43,7 +43,7 @@ export class mdlText {
       //当text有值,hint float
       if (scope.value) {
         element.find('label').addClass('mdc-floating-label--float-above');
-        element.find('div').addClass('mdc-line-ripple--active');
+        //element.find('div').addClass('mdc-line-ripple--active');
       }
     }
 
@@ -102,13 +102,13 @@ export class mdlText {
       element.find('input').attr('disabled', false);
     }
 
-    unSubscribes.push(scope.$watch('value',(newValue)=>{
+    /*unSubscribes.push(scope.$watch('value',(newValue)=>{
       if(!scope.value){
         scope.blur();
       } else {
         scope.focus();
       }
-    }));
+    }));*/
 
     unSubscribes.push(scope.$watch('disable',(newValue)=>{
       if(newValue === 'true'){

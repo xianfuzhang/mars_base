@@ -27,8 +27,68 @@ export class AccountManageController {
     this.scope.accountModel = {
       provider: null,
       actionsShow: this.di.accountService.getActionsShow(),
-      //rowActions: null,
+      rowActions: this.di.accountService.getRowActions(),
       api: null
+    };
+
+    this.scope.onTableRowSelectAction = (event) => {
+      if (event.action.value === 'edit') {
+        this.di.modalManager.open({
+          template: require('../template/updateUserAccount.html'),
+          controller: 'updateUserAccountController',
+          windowClass: 'update-user-modal',
+          resolve: {
+            dataModel: () => {
+              return {
+                user: event.data
+              };
+            }
+          }
+        })
+        .result.then((data) => {
+          if (data && !data.canceled) {
+            this.di.accountDataManager.createUser(data.result)
+            .then(() => {
+              this.scope.alert = {
+                type: 'success',
+                msg: this.translate('MODULE.ACCOUNT.UPDATE.SUCCESS')
+              }
+              this.di.notificationService.render(this.scope);
+              this.scope.accountModel.api.queryUpdate();
+            }, (msg) => {
+              this.scope.alert = {
+                type: 'warning',
+                msg: msg
+              }
+              this.di.notificationService.render(this.scope);
+            });
+          }
+        });
+      }
+      else if (event.action.value === 'delete') {
+        this.di.dialogService.createDialog('warning', this.translate('MODULE.ACCOUNT.DIALOG.CONTENT.DELETE_ACCOUNT'))
+        .then(() => {
+          this.di.accountDataManager.deleteUser(event.data.user_name)
+          .then(() => {
+            this.scope.alert = {
+              type: 'success',
+              msg: this.translate('MODULES.LOGICAL.EGP.TAB.GROUP.DELETE.SUCCESS')
+            }
+            this.di.notificationService.render(this.scope);
+          }, (msg) => {
+            this.scope.alert = {
+              type: 'warning',
+              msg: msg
+            }
+            this.di.notificationService.render(this.scope);
+          })
+          .finally(() => {
+            this.scope.accountModel.api.queryUpdate();
+          });;
+        }, () => {
+          this.di.$log.debug('delete EGP group dialog cancel');
+        });
+      }
     };
 
     this.scope.onTableRowClick = (event) => {
@@ -71,7 +131,6 @@ export class AccountManageController {
     this.scope.batchRemove = ($value) => {
       if ($value.length) {
         this.di.dialogService.createDialog('warning', this.translate('MODULE.ACCOUNT.DIALOG.CONTENT.BATCH_DELETE_ACCOUNT'))
-        //this.confirmDialog('warning', this.translate('MODULE.ACCOUNT.DIALOG.CONTENT.BATCH_DELETE_ACCOUNT'))
           .then((data) =>{
             this.batchDeleteUserAccounts($value);
           });
@@ -100,6 +159,7 @@ export class AccountManageController {
           schema: this.di.accountService.getTableSchema(),
           index_name: 'id',
           rowCheckboxSupport: true,
+          rowActionsSupport: true,
           authManage: {
             support: true,
             currentRole: this.di.$scope.role
@@ -108,36 +168,6 @@ export class AccountManageController {
       }
     });
   }
-
-  /**
-  confirmDialog(type, content) {
-    let defer = this.di.$q.defer();
-    this.di.$uibModal
-      .open({
-        template: require('../../../components/mdc/templates/dialog.html'),
-        controller: 'dialogCtrl',
-        backdrop: true,
-        resolve: {
-          dataModel: () => {
-            return {
-              type: type,
-              headerText: this.translate('MODULES.SWITCHES.DIALOG.HEADER'),
-              contentText: content,
-            };
-          }
-        }
-      })
-      .result.then((data) => {
-      if(data) {
-        defer.resolve(data);
-      }
-      else {
-        defer.reject(null);
-      }
-    });
-
-    return defer.promise;
-  }**/
 
   batchDeleteUserAccounts(arr) {
     let deferredArr = [];
