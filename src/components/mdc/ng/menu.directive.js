@@ -52,8 +52,13 @@ export class mdlMenu {
         if(scope.isShow === true){
           // menu.open = false;
           let menuEl = element[0];
+          let allHeight = document.body.offsetHeight;
+          if(scope.location.y + scope.data.length * 48 > allHeight){
+            menuEl.style.top = (scope.location.y - scope.data.length * 48 )  + 'px';
+          } else {
+            menuEl.style.top = scope.location.y + 'px';
+          }
           menuEl.style.left = scope.location.x + 'px';
-          menuEl.style.top = scope.location.y + 'px';
 
           this.menu.setAnchorCorner(Corner.BOTTOM_END);
           // this.menu.quickOpen = false;

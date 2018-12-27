@@ -533,7 +533,7 @@ export class FabricSummaryController {
       this.di.$scope.fabricModel.showSwitchId = null;
       this.di.$scope.fabricModel.switchPorts = null;
       this.di.$scope.fabricModel.switchLinks = null;
-      this.di.$scope.$apply();
+      // this.di.$scope.$apply();
     };
 
 
@@ -692,6 +692,7 @@ export class FabricSummaryController {
             this.di.$scope.fabricModel.switchContextMenu.isShow = true;
             this.di.$scope.$apply();
           },100);
+
         } else {
           this.di.$scope.fabricModel.switchContextMenu.location= {'x':data.event.clientX, 'y':data.event.clientY};
           this.di.$scope.fabricModel.switchContextMenu.isShow = true;
@@ -706,6 +707,7 @@ export class FabricSummaryController {
       // console.log('==switch_select is receive. isShow: ' + this.di.$scope.fabricModel.switchContextMenu.isShow);
       this.di.$scope.fabricModel.switchContextMenu.isShow = false;
       hideSwitchDetail();
+      this.di.$scope.$apply();
 
     }));
 

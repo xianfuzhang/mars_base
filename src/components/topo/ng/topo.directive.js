@@ -465,7 +465,12 @@ export class Topo {
               DI.$rootScope.$emit("hide_tooltip");
             }
 
-            unSelectNode();
+            // unSelectNode();
+            scope.selectedDeviceId  = null;
+            if(scope.topoSetting.show_links !== 2){
+              crushLinks();
+            }
+
             DI.$rootScope.$emit("switch_opt",{event: evt, id: this.deviceId});
           }
 
