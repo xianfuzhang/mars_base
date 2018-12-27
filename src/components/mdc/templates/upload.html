@@ -1,20 +1,18 @@
-<body>
-    <div class="file_input_div">
-        <div class="file_input">
-            <label ng-style="uploadModel.iconOutletStyle" class="material-icons mdc-icon-button mdc-icon-button__normal">
-                <i class="material-icons" ng-style="uploadModel.iconStyle">file_upload</i>
-                <input id="file_input_file" ng-model="uploadModel.file" class="none" type="file" />
-            </label>
-        </div>
-        <div id="file_input_text_div" class="mdl-textfield mdl-js-textfield textfield-demo">
-            <div class="mdc-text-field">
-                <input style="padding-top: 0;" ng-style="uploadModel.textStyle" type="text" disabled readonly class="mdc-text-field__input"
-                       ng-model="uploadModel.fileText" ng-focus="focus()" ng-blur="blur()">
-                <label class="mdc-floating-label" ></label>
-                <div class="mdc-line-ripple"></div>
-            </div>
-            <!--<input class="file_input_text mdl-textfield__input" type="text" disabled readonly ng-model="uploadModel.fileText" id="{{uploadModel.randomID}}" />-->
-            <!--<label class="mdl-textfield__label" for="{{uploadModel.randomID}}"></label>-->
-        </div>
+<div class="file_input_div">
+    <div class="file_input">
+        <label ng-style="uploadModel.iconOutletStyle" class="material-icons mdc-icon-button mdc-icon-button__normal">
+            <i class="material-icons" ng-style="uploadModel.iconStyle">file_upload</i>
+            <input id="file_input_file" ng-model="uploadModel.file" class="none" type="file" />
+        </label>
     </div>
-</body>
+    <div id="file_input_text_div" class="mdl-textfield mdl-js-textfield textfield-demo">
+        <div class="mdc-text-field">
+            <input style="padding-top: 0;" ng-style="uploadModel.textStyle" type="text" disabled readonly class="mdc-text-field__input"
+                   ng-model="uploadModel.fileText" ng-focus="focus()" ng-blur="blur()">
+            <label class="mdc-floating-label" ></label>
+            <div class="mdc-line-ripple"></div>
+        </div>
+        <!--<input class="file_input_text mdl-textfield__input" type="text" disabled readonly ng-model="uploadModel.fileText" id="{{uploadModel.randomID}}" />-->
+        <!--<label class="mdl-textfield__label" for="{{uploadModel.randomID}}"></label>-->
+    </div>
+</div>
