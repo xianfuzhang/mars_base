@@ -111,11 +111,10 @@ export class mdlTable {
       // 默认不需要后台分页，分页的场景较少。如果需要分页，需要添加配置
       if(scope._isNeedPagination === false ||  scope._isNeedPagination === 'false'){
         scope._inlineOrder($col);
-        scope._render();
-        return;
       }
-
-      scope._sort($col);
+      else {
+        scope._sort($col);  
+      }
       scope._render();
     };
 
@@ -239,13 +238,44 @@ export class mdlTable {
     scope._search = () => {
       scope.tableModel.pagination.start = 0;
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
-      scope._queryUpdate();
+      if (scope._isNeedPagination === false ||  scope._isNeedPagination === 'false') {
+        scope.inlineFilter();
+        scope._render();
+      }
+      else {
+        scope._queryUpdate();
+      }
     };
     scope._clearSearch = (event) => {
       scope.tableModel.searchResult = '';
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
-      scope._queryUpdate();
+      if (scope._isNeedPagination === false ||  scope._isNeedPagination === 'false') {
+        scope.inlineFilter();
+        scope._render();
+      }
+      else {
+        scope._queryUpdate();
+      }
       event && event.stopPropagation();
+    };
+
+    scope.inlineFilter = () => {
+      if (!scope.tableModel.search['value']) {
+        scope.tableModel.filteredData = scope.tableModel.data;
+      }
+      else {
+        let reg = new RegExp(scope.tableModel.search['value'], 'i');
+        scope.tableModel.filteredData = scope.tableModel.data.filter((item) => {
+          let match = false;
+          for(let key in item) {
+            if (reg.test(item[key])) {
+              match = true;
+              break;
+            }  
+          }
+          return match;
+        });
+      }
     };
     /*scope._filter = (event) => {
       tableCtrl.onFilter();
