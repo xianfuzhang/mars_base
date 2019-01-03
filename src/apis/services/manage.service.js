@@ -94,7 +94,7 @@ export class manageService {
       'add': {'enable': true, 'role': 3},
       'remove': {'enable': false, 'role': 3},
       'refresh': {'enable': true, 'role': 3},
-      'search': {'enable': false, 'role': 3}
+      'search': {'enable': true, 'role': 3}
     };
   }
 
