@@ -10,7 +10,8 @@ import {IpmacEstablishController} from './component/ipmac_establish/ng/IpmacEsta
 import {NtpEstablishController} from './component/ntp_establish/ng/NtpEstablish.controller'
 import {ApplicationEstablishController} from './component/application_establish/ng/ApplicationEstablish.controller';
 import {SystemInfoController} from './ng/systemInfo.controller';
-import {ApplicationController} from './ng/application.controller'
+import {ApplicationController} from './ng/application.controller';
+import {LicenseController} from './ng/license.controller';
 
 export default angular
   .module('manage', [])
@@ -25,4 +26,5 @@ export default angular
   .controller('systemInfoController', SystemInfoController)
   .controller('applicationController', ApplicationController)
   .controller('applicationEstablishController', ApplicationEstablishController)
+	.controller('licenseController', LicenseController)
   .name;

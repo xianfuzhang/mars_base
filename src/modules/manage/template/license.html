@@ -1,0 +1,54 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{'MODULE.HEADER.MANAGE.LICENSE' | translate}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span ng-bind="'MODULE.HEADER.MANAGE.LICENSE'|translate"></span>
+  </content-header>
+  <section class="app-body">
+    <div class="section-3-2">
+      <div class="main__content license">
+        <div class="license__detail">
+          <div class="license__row">
+            <div class="license__item">
+              <label class="license__item-label"
+                     ng-bind="'MODULES.MANAGE.LICENSE.COLUMN.VALID'|translate"></label>
+              <span class="license__item-value" ng-bind="licenseModel.detail.valid ? '有效' : '失效'"></span>
+            </div>
+            <div class="license__item">
+              <label class="license__item-label"
+                     ng-bind="'MODULES.MANAGE.LICENSE.COLUMN.SCENARIO'|translate"></label>
+              <span class="license__item-value">{{licenseModel.detail.scenario}}</span>
+            </div>
+            <div class="license__item">
+              <label class="license__item-label"
+                     ng-bind="'MODULES.MANAGE.LICENSE.COLUMN.MAX_SWITCHES'|translate"></label>
+              <span class="license__item-value">{{licenseModel.detail.maxSwitches}}</span>
+            </div>
+          </div>
+          <div class="license__row">
+            <div class="license__item">
+              <label class="license__item-label"
+                     ng-bind="'MODULES.MANAGE.LICENSE.COLUMN.START_TIME'|translate"></label>
+              <span class="license__item-value">{{licenseModel.detail.startTime}}</span>
+            </div>
+            <div class="license__item">
+              <label class="license__item-label"
+                     ng-bind="'MODULES.MANAGE.LICENSE.COLUMN.EXPIRATION_TIME'|translate"></label>
+              <span class="license__item-value">{{licenseModel.detail.expirationTime}}</span>
+            </div>
+          </div>
+        </div>
+        <section class="license__app">
+          <div class="license__upload">
+            <div class="label">上传证书文件：</div>
+            <mdl-upload change="uploadFile(event)" height="50px"></mdl-upload>
+          </div>
+          <div class="license__app__label">应用列表如下：</div>
+          <mdl-table provider="licenseModel.licenseTableProvider" api-ready="onApiReady($api)">
+          </mdl-table>
+        </section>
+      </div>
+    </div>
+  </section>
+</div>
