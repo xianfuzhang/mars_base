@@ -153,6 +153,22 @@ export class manageService {
       }
     ];
   }
+	
+	getLicenseTableSchema(){
+		return [
+			{
+				'label': this.translate("MODULES.MANAGE.LICENSE.COLUMN.APP_NAME"),
+				'field': 'name',
+				'layout': {'visible': true, 'sortable': true, 'fixed': true},
+			},
+			{
+				'label': this.translate("MODULES.MANAGE.LICENSE.COLUMN.APP_ALLOW"),
+				'field': 'allow',
+				// 'type': 'icon',
+				'layout': {'visible': true, 'fixed': true}
+			}
+		];
+	}
 }
 
 
