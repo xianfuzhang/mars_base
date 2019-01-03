@@ -110,8 +110,8 @@ export class mdlTable {
       }
       // 默认不需要后台分页，分页的场景较少。如果需要分页，需要添加配置
       if(scope._isNeedPagination === false ||  scope._isNeedPagination === 'false'){
-        scope._inlineOrder($col);
         scope.inlineFilter();
+        scope._inlineOrder($col);
       }
       else {
         scope._sort($col);  
