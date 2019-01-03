@@ -110,6 +110,7 @@ export class mdlTable {
       }
       // 默认不需要后台分页，分页的场景较少。如果需要分页，需要添加配置
       if(scope._isNeedPagination === false ||  scope._isNeedPagination === 'false'){
+        scope.inlineFilter();
         scope._inlineOrder($col);
       }
       else {
@@ -134,8 +135,7 @@ export class mdlTable {
         orderStr = 'desc';
       }
       scope.tableModel.data = this.di._.orderBy(scope.tableModel.data,[$col.field],[orderStr]);
-      scope.tableModel.filteredData = scope.tableModel.data;
-
+      //scope.tableModel.filteredData = scope.tableModel.data;
     };
 
     scope._sort = ($col) => {
@@ -269,19 +269,12 @@ export class mdlTable {
         scope.tableModel.filteredData = tmpData.filter((item) => {
           let match = false;
           for(let key in item) {
-            if (reg.test(item[key])) {
+            if ('string' === typeof item[key] && reg.test(item[key])) {
               match = true;
+              item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
               break;
             }  
           }
-
-          if(match){
-            for(let key in item) {
-              if(item[key] && 'string' === typeof item[key])
-                item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>')
-            }
-          }
-
           return match;
         });
       }
