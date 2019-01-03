@@ -265,7 +265,8 @@ export class mdlTable {
       }
       else {
         let reg = new RegExp(scope.tableModel.search['value'], 'i');
-        scope.tableModel.filteredData = scope.tableModel.data.filter((item) => {
+        let tmpData = angular.copy(scope.tableModel.data);
+        scope.tableModel.filteredData = tmpData.filter((item) => {
           let match = false;
           for(let key in item) {
             if (reg.test(item[key])) {
@@ -273,6 +274,14 @@ export class mdlTable {
               break;
             }  
           }
+
+          if(match){
+            for(let key in item) {
+              if(item[key] && 'string' === typeof item[key])
+                item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>')
+            }
+          }
+
           return match;
         });
       }
