@@ -77,7 +77,7 @@ export class DeviceService {
       'add': {'enable': true, 'role': 2},
       'remove': {'enable': true, 'role': 2},
       'refresh': {'enable': true, 'role': 2}, 
-      'search': {'enable': false, 'role': 2}
+      'search': {'enable': true, 'role': 2}
     };
   }
 
