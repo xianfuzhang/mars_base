@@ -164,7 +164,7 @@ export class manageService {
 			{
 				'label': this.translate("MODULES.MANAGE.LICENSE.COLUMN.APP_ALLOW"),
 				'field': 'allow',
-				// 'type': 'icon',
+				'type': 'icon',
 				'layout': {'visible': true, 'fixed': true}
 			}
 		];
