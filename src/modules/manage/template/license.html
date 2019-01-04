@@ -43,6 +43,9 @@
           <div class="license__upload">
             <div class="label">上传证书文件：</div>
             <mdl-upload change="uploadFile(event)" height="50px"></mdl-upload>
+            <div class="save">
+              <mar-button btn-text="'上传'" btn-class="'btn-black btn-sm'" btn-icon="'backup'" btn-disabled="licenseModel.uploadBtnDisable" btn-click="save()" />
+            </div>
           </div>
           <div class="license__app__label">应用列表如下：</div>
           <mdl-table provider="licenseModel.licenseTableProvider" api-ready="onApiReady($api)">

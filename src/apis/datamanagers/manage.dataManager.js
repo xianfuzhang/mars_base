@@ -386,7 +386,7 @@ export class ManageDataManager{
 		this.di.$http({
 			url: url,
 			method: 'POST',
-			headers: {'Content-Type': 'application/raw'},
+			// headers: {'Content-Type': 'application/raw'},
 			data: new Uint8Array(file),
 			transformRequest: []
 		}).then(
