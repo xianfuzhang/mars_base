@@ -132,7 +132,7 @@ export class LicenseController {
 			this.di.manageDataManager.postLicense(scope.licenseModel.file).then((res)=>{
 				di.$scope.$emit('license-refresh');
 			},(err)=>{
-				console.error(err);
+				di.notificationService.renderWarning(scope, this.translate('MODULES.MANAGE.LICENSE.UPLOAD.FAILURE'));
 			});
 		}
 

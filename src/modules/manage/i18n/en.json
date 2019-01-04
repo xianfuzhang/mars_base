@@ -75,5 +75,6 @@
   "MODULES.MANAGE.LICENSE.COLUMN.EXPIRATION_TIME": "Expiration_Time:",
   "MODULES.MANAGE.LICENSE.COLUMN.APP_NAME": "App_Name",
   "MODULES.MANAGE.LICENSE.COLUMN.APP_ALLOW": "App_Allow",
-  "MODULES.MANAGE.LICENSE.UPLOAD.SUCCESS":"Success to upload new license file."
+  "MODULES.MANAGE.LICENSE.UPLOAD.SUCCESS":"Success to upload new license file.",
+  "MODULES.MANAGE.LICENSE.UPLOAD.FAILURE": "Fail to upload new license file."
 }
