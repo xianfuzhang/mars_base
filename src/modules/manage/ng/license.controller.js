@@ -30,47 +30,47 @@ export class LicenseController {
     this.translate = this.di.$filter('translate');
 
     scope.licenseModel = {
-    	uploadBtnDisable: true,
+      uploadBtnDisable: true,
       detail: {},
       // actionsShow: this.di.manageService.getLicenseTableActionsShow(),
       // rowActions: this.di.manageService.getLicenseTableRowActions(),
       licenseTableProvider: null,
       api: null,
     };
-	
-		scope.reader = new FileReader();
-		
-		let getLocalDate = (time) => {
-			if (time === -1) {
-				return '';
-			}
-			var local_time = '';
-			var day = new Date(time);
-			local_time += day.getFullYear() + '-';
-			local_time += addPrefix((day.getMonth() + 1)) + '-';
-			local_time += addPrefix(day.getDate()) + ' ';
-			local_time += addPrefix(day.getHours()) + ':';
-			local_time += addPrefix(day.getMinutes()) + ':';
-			local_time += addPrefix(day.getSeconds());
-		
-			return local_time;
-		
-			function addPrefix(num) {
-				if (num < 10) {
-					return '0' + num;
-				}
-				else {
-					return num;
-				}
-			}
-		}
-		
+  
+    scope.reader = new FileReader();
+    
+    let getLocalDate = (time) => {
+      if (time === -1) {
+        return '';
+      }
+      var local_time = '';
+      var day = new Date(time);
+      local_time += day.getFullYear() + '-';
+      local_time += addPrefix((day.getMonth() + 1)) + '-';
+      local_time += addPrefix(day.getDate()) + ' ';
+      local_time += addPrefix(day.getHours()) + ':';
+      local_time += addPrefix(day.getMinutes()) + ':';
+      local_time += addPrefix(day.getSeconds());
+    
+      return local_time;
+    
+      function addPrefix(num) {
+        if (num < 10) {
+          return '0' + num;
+        }
+        else {
+          return num;
+        }
+      }
+    }
+    
     let _formatData = (res) =>{
       scope.licenseModel.detail.valid = res.valid;
-			scope.licenseModel.detail.scenario = res.scenario;
-			scope.licenseModel.detail.maxSwitches = res.maxSwitches;
-			scope.licenseModel.detail.startTime = getLocalDate(res.startTime);
-			scope.licenseModel.detail.expirationTime = getLocalDate(res.expirationTime);
+      scope.licenseModel.detail.scenario = res.scenario;
+      scope.licenseModel.detail.maxSwitches = res.maxSwitches;
+      scope.licenseModel.detail.startTime = getLocalDate(res.startTime);
+      scope.licenseModel.detail.expirationTime = getLocalDate(res.expirationTime);
       
       let apps = res['apps'];
       let retApps = [];
@@ -115,26 +115,26 @@ export class LicenseController {
     scope.onApiReady = ($api) => {
       scope.licenseModel.api = $api;
     };
-	
-		scope.uploadFile = (event) =>{
-			scope.licenseModel.uploadBtnDisable = true;
-			scope.reader.onload = function (loadEvent) {
-				scope.$apply(function () {
-					scope.licenseModel.file = scope.reader.result;
-					scope.licenseModel.uploadBtnDisable = false;
-				});
-			};
-			scope.reader.readAsArrayBuffer(event.target.files[0]);
-		};
-		
-		scope.save = () => {
-			const di = this.di;
-			this.di.manageDataManager.postLicense(scope.licenseModel.file).then((res)=>{
-				di.$scope.$emit('license-refresh');
-			},(err)=>{
-				console.error(err);
-			});
-		}
+  
+    scope.uploadFile = (event) =>{
+      scope.licenseModel.uploadBtnDisable = true;
+      scope.reader.onload = function (loadEvent) {
+        scope.$apply(function () {
+          scope.licenseModel.file = scope.reader.result;
+          scope.licenseModel.uploadBtnDisable = false;
+        });
+      };
+      scope.reader.readAsArrayBuffer(event.target.files[0]);
+    };
+    
+    scope.save = () => {
+      const di = this.di;
+      this.di.manageDataManager.postLicense(scope.licenseModel.file).then((res)=>{
+        di.$scope.$emit('license-refresh');
+      },(err)=>{
+        di.notificationService.renderWarning(scope, this.translate('MODULES.MANAGE.LICENSE.UPLOAD.FAILURE'));
+      });
+    }
 
     let unsubscribes = [];
 
