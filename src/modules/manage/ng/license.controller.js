@@ -30,6 +30,7 @@ export class LicenseController {
     this.translate = this.di.$filter('translate');
 
     scope.licenseModel = {
+    	uploadBtnDisable: true,
       detail: {},
       // actionsShow: this.di.manageService.getLicenseTableActionsShow(),
       // rowActions: this.di.manageService.getLicenseTableRowActions(),
@@ -37,6 +38,8 @@ export class LicenseController {
       api: null,
     };
 	
+		scope.reader = new FileReader();
+		
 		let getLocalDate = (time) => {
 			if (time === -1) {
 				return '';
@@ -114,26 +117,29 @@ export class LicenseController {
     };
 	
 		scope.uploadFile = (event) =>{
-			const reader = new FileReader();
-			reader.onload = function (loadEvent) {
+			scope.licenseModel.uploadBtnDisable = true;
+			scope.reader.onload = function (loadEvent) {
 				scope.$apply(function () {
-					scope.licenseModel.file = reader.result;
+					scope.licenseModel.file = scope.reader.result;
+					scope.licenseModel.uploadBtnDisable = false;
 				});
 			};
-			reader.readAsArrayBuffer(event.target.files[0]);
-			
+			scope.reader.readAsArrayBuffer(event.target.files[0]);
+		};
+		
+		scope.save = () => {
 			const di = this.di;
 			this.di.manageDataManager.postLicense(scope.licenseModel.file).then((res)=>{
 				di.$scope.$emit('license-refresh');
 			},(err)=>{
 				console.error(err);
 			});
-		};
+		}
 
     let unsubscribes = [];
 
     unsubscribes.push(this.di.$scope.$on('license-refresh', ($event) => {
-      this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.APPLICATION.ADD_APPLICATION.SUCCESS'));
+      this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.LICENSE.UPLOAD.SUCCESS'));
       scope.licenseModel.api.queryUpdate();
     }));
 
