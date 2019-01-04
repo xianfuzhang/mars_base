@@ -74,7 +74,7 @@ export class LicenseController {
       this.di._.forEach(apps, (app)=>{
         let item = {};
         item['name'] = app['name'];
-        item['allow'] = app['allow'];
+        item['allow'] = app['allow'] ? 'available' : null;
         retApps.push(item);
       });
 
