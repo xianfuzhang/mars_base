@@ -364,41 +364,41 @@ export class ManageDataManager{
     return defer.promise;
   }
 	
-	getLicense(){
-		let defer = this.di.$q.defer();
-		this.di.$http.get(this.di.appService.getLicenseUrl()).then(
-			(res) => {
-				defer.resolve(res);
-			},
-			(error) => {
-				defer.reject(error);
-			}
-		);
-		return defer.promise;
-	}
-	
-	postLicense(file){
-		let defer = this.di.$q.defer();
-		const form = new FormData();
-		form.append('file', file);
-		
-		let url = this.di.appService.getLicenseUploadUrl();
-		this.di.$http({
-			url: url,
-			method: 'POST',
-			// headers: {'Content-Type': 'application/raw'},
-			data: new Uint8Array(file),
-			transformRequest: []
-		}).then(
-			(res) => {
-				defer.resolve(res);
-			},
-			(error) => {
-				defer.reject(error);
-			}
-		);
-		return defer.promise;
-	}
+  getLicense(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getLicenseUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+  
+  postLicense(file){
+    let defer = this.di.$q.defer();
+    const form = new FormData();
+    form.append('file', file);
+    
+    let url = this.di.appService.getLicenseUploadUrl();
+    this.di.$http({
+      url: url,
+      method: 'POST',
+      // headers: {'Content-Type': 'application/raw'},
+      data: new Uint8Array(file),
+      transformRequest: []
+    }).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
 
 }
 
