@@ -65,6 +65,7 @@ export class ApplicationController {
         item['status'] = app['state'] === 'ACTIVE' ? 'available' : null;
         item['_state'] = app['state'];
         item['app_id'] = app['name'];
+        item['_app_id'] = app['name'];
         item['title'] = app['description'];
         item['version'] = app['version'];
         item['category'] = app['category'];
@@ -114,7 +115,7 @@ export class ApplicationController {
         if (event.action.value === 'delete') {
           this.di.dialogService.createDialog('warning', this.translate('MODULES.MANAGE.APPLICATION.REMOVE_APPLICATION'))
             .then((data) =>{
-              this.di.manageDataManager.deleteApplication(event.data.app_id).then((res) => {
+              this.di.manageDataManager.deleteApplication(event.data._app_id).then((res) => {
                 this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.APPLICATION.REMOVE_APPLICATION.SUCCESS'));
                 scope.applicationModel.api.queryUpdate();
               },(err)=>{
@@ -124,16 +125,16 @@ export class ApplicationController {
               this.di.$log.debug('delete application dialog cancel');
             });
         } else if(event.action.value === 'active'){
-          this.di.manageDataManager.activeApplication(event.data.app_id).then((res) => {
+          this.di.manageDataManager.activeApplication(event.data._app_id).then((res) => {
             this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.APPLICATION.ACTIVE_APPLICATION.SUCCESS'));
-            _update_single_item(event.data.app_id);
+            _update_single_item(event.data._app_id);
           },(err)=>{
             this.di.notificationService.renderWarning(scope, err.data);
           });
         } else if(event.action.value === 'deactive'){
-          this.di.manageDataManager.deActiveApplication(event.data.app_id).then((res) => {
+          this.di.manageDataManager.deActiveApplication(event.data._app_id).then((res) => {
             this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.APPLICATION.DEACTIVE_APPLICATION.SUCCESS'));
-            _update_single_item(event.data.app_id);
+            _update_single_item(event.data._app_id);
           },(err)=>{
             this.di.notificationService.renderWarning(scope, err.data);
           });
