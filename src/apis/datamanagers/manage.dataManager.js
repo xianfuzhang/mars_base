@@ -219,7 +219,7 @@ export class ManageDataManager{
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve(error);
+        defer.reject(error);
       }
     );
     return defer.promise;

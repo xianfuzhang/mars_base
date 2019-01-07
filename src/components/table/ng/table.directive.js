@@ -232,6 +232,7 @@ export class mdlTable {
       event && event.stopPropagation();
     };
     scope._refresh = (event) => {
+      scope.tableModel.searchResult = '';
       scope._queryUpdate();
       event && event.stopPropagation();
     };
