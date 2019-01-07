@@ -72,7 +72,7 @@ export class ElasticsearchController {
           this.scope.loading = false;
           return;
         } else if (data && !data.canceled) {
-          let filename = data.filename;
+          let filename = data.data.filename;
         
           this.di.manageDataManager.putBackupElasticsearch(filename).then(
             (res) => { // success to save
