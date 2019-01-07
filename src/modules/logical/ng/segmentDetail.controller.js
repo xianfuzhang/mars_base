@@ -315,15 +315,27 @@ export class SegmentDetailController {
         if(!_tmp[item['device_id']]){
           _tmp[item['device_id']] = {'device_id': _getDeviceName(item['device_id']),'_device_id': item['device_id'],'ports':null, 'logical_ports':null,'mac_based_vlans':null}
         }
-        if(item['type'] === 'normal'){
+
+
+        if(item['ports']){
           _tmp[item['device_id']]['ports'] = item['ports'].join(', ')
         }
-        if(item['type'] === 'logical'){
+        if(item['logical_ports']){
           _tmp[item['device_id']]['logical_ports'] = item['logical_ports'].join(', ')
         }
-        if(item['type'] === 'macbased'){
+        if(item['mac_based_vlans']){
           _tmp[item['device_id']]['mac_based_vlans'] = item['mac_based_vlans'].join(', ')
         }
+
+        // if(item['type'] === 'normal'){
+        //   _tmp[item['device_id']]['ports'] = item['ports'].join(', ')
+        // }
+        // if(item['type'] === 'logical'){
+        //   _tmp[item['device_id']]['logical_ports'] = item['logical_ports'].join(', ')
+        // }
+        // if(item['type'] === 'macbased'){
+        //   _tmp[item['device_id']]['mac_based_vlans'] = item['mac_based_vlans'].join(', ')
+        // }
 
       });
       return this.di._.values(_tmp);

@@ -372,7 +372,7 @@ export class SegmentMemberEstablishController {
       // let ret_json = {'url':'','param':{}};
       let param = {};
       if(scope.selected.memberType.value === 'vlan'){
-        param['type'] = scope.selected.vlanType.value;
+        // param['type'] = scope.selected.vlanType.value;
         if(scope.selected.vlanType.value === 'normal'){
           param['ports'] = _formatVlanPorts();
         } else if (scope.selected.vlanType.value === 'logical'){
