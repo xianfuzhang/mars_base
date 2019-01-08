@@ -145,7 +145,7 @@ export class DeviceDetailController {
                 this.scope.detailModel.entities.forEach((item) => {
                   if (item.element === event.data.element && item.port_id === event.data.port_id) {
                     item.port_status = event.data.isEnabled === true ? 'Up' : 'Down';
-                    item.link_status = event.data.isEnabled === true ? "available" : "unavailable";
+                    //item.link_status = event.data.isEnabled === true ? "available" : "unavailable";
                     this.scope.detailModel.api.update();
                   }
                 });
