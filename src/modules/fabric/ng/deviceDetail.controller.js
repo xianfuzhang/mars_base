@@ -18,6 +18,7 @@ export class DeviceDetailController {
       'deviceDataManager',
       'tableProviderFactory',
       'modalManager',
+      'applicationService',
       'logicalDataManager'
     ];
   }
@@ -45,13 +46,91 @@ export class DeviceDetailController {
       entities: [],
       total: null
     };
+
+    this.scope.isOpenflowEnable= false;
+    this.scope.isQosEnable= false;
+    this.scope.isSwtManageEnable= false;
+    this.scope.isHCEnable= false;
+    this.scope.isTenantEnable= false;
+    this.scope.isEndpointEnable= false;
+
     this.scope.summary = {
       fanSensors: [],
       tempSensors: [],
       psuSensors: []
     };
 
+    this.apps = this.di.applicationService.getNocsysApps();
+
+    let _get_license_info = () =>{
+      let OPENFLOW_APP_NAME = 'org.onosproject.openflow';
+      let QOS_APP_NAME = 'com.nocsys.qos';
+      let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
+      let HEALTHYCHECK_APP_NAME = 'com.nocsys.healthycheck';
+      let TENANT_APP_NAME = 'com.nocsys.tenant';
+      let ENDPINT_APP_NAME = 'com.nocsys.endpoint';
+
+      let openflowAppInfo = this.di._.find(this.apps, {'name':OPENFLOW_APP_NAME});
+      let qosAppInfo = this.di._.find(this.apps, {'name':QOS_APP_NAME});
+      let swtMgtAppInfo = this.di._.find(this.apps, {'name':SWTMGT_APP_NAME});
+      let hcAppInfo = this.di._.find(this.apps, {'name':HEALTHYCHECK_APP_NAME});
+      let tenantAppInfo = this.di._.find(this.apps, {'name':TENANT_APP_NAME});
+      let endpointAppInfo = this.di._.find(this.apps, {'name':ENDPINT_APP_NAME});
+
+      if(openflowAppInfo && openflowAppInfo['state'] === 'ACTIVE'){
+        this.scope.isOpenflowEnable= true;
+      }
+
+      if(qosAppInfo && qosAppInfo['state'] === 'ACTIVE'){
+        this.scope.isQosEnable= true;
+      }
+
+      if(swtMgtAppInfo && swtMgtAppInfo['state'] === 'ACTIVE'){
+        this.scope.isSwtManageEnable= true;
+      }
+
+      if(hcAppInfo && hcAppInfo['state'] === 'ACTIVE'){
+        this.scope.isHCEnable= true;
+      }
+
+      if(tenantAppInfo && tenantAppInfo['state'] === 'ACTIVE'){
+        this.scope.isTenantEnable= true;
+      }
+
+      if(endpointAppInfo && endpointAppInfo['state'] === 'ACTIVE'){
+        this.scope.isEndpointEnable= true;
+      }
+    };
+
+    let _reset_tab_list = () => {
+      if(!this.scope.isHCEnable){
+        this.di._.remove(this.scope.tabs, (tab)=>{
+          return tab['value'] === 'summary';
+        });
+      }
+
+      if(!this.scope.isQosEnable){
+        this.di._.remove(this.scope.tabs, (tab)=>{
+          return tab['value'] === 'pfc';
+        });
+      }
+
+      if(!this.scope.isOpenflowEnable){
+        this.di._.remove(this.scope.tabs, (tab)=>{
+          return tab['value'] === 'flow' || tab['value'] === 'group';
+        });
+      }
+
+      if(!this.scope.isEndpointEnable){
+        this.di._.remove(this.scope.tabs, (tab)=>{
+          return tab['value'] === 'endpoint';
+        });
+      }
+    };
+
     this.prepareScope();
+    _get_license_info();
+    _reset_tab_list();
 
     this.di.deviceDataManager.getDeviceConfig(this.scope.deviceId).then((res) => {
       if (res) {
@@ -310,7 +389,7 @@ export class DeviceDetailController {
     let schema;
     switch (type) {
       case 'port':
-        schema = this.di.deviceDetailService.getDevicePortsSchema();
+        schema = this.di.deviceDetailService.getDevicePortsSchema(this.scope.isTenantEnable);
         break;
       case 'link':
         schema = this.di.deviceDetailService.getDeviceLinksSchema();
@@ -448,18 +527,18 @@ export class DeviceDetailController {
         this.di.deviceDataManager.getDevicePorts(this.scope.deviceId, params).then((res) => {
           portsDefer.resolve(res.data);
         });
-        deferArr.push(portsDefer.promise)
+        deferArr.push(portsDefer.promise);
         
-        if(this.scope.role > 2) {
+        if(this.scope.role > 2 && this.scope.isTenantEnable) {
           // get segments and ports
           this.getSegmentsPorts(this.scope.deviceId).then((res) => {
             segmentsDefer.resolve(res);
-          })
+          });
           deferArr.push(segmentsDefer.promise)
         }
         
         this.di.$q.all(deferArr).then((resArr) => {
-          if(this.scope.role > 2) {
+          if(this.scope.role > 2 && this.scope.isTenantEnable) {
             defer.resolve({data: {ports: resArr[0].ports, segments: resArr[1]}, total: resArr[0].total});
           } else {
             defer.resolve({data: {ports: resArr[0].ports}, total: resArr[0].total});
@@ -573,7 +652,7 @@ export class DeviceDetailController {
           obj['link_status'] = entity.annotations.adminState === 'enabled' ? 'available' : 'unavailable';
           obj['type'] = entity.type;
           obj['speed'] = entity.portSpeed;
-          if(this.scope.role > 2) {
+          if(this.scope.role > 2 && this.scope.isTenantEnable) {
             obj['segments'] = this.getSegmentsHtml(entity.port, entities.segments);
           }
           this.scope.detailModel.entities.push(obj);

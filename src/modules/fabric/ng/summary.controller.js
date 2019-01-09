@@ -26,6 +26,7 @@ export class FabricSummaryController {
       'notificationService',
       'dialogService',
       'commonService',
+      'applicationService',
       'roleService',
       'modalManager'
     ];
@@ -59,14 +60,6 @@ export class FabricSummaryController {
     scope.isOpenflowEnable= false;
     scope.isQosEnable= false;
     scope.isSwtManageEnable= false;
-    let OPENFLOW_APP_NAME = 'org.onosproject.openflow';
-    let QOS_APP_NAME = 'com.nocsys.qos';
-    let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
-
-
-
-
-
 
 
     let initializeTransitionFlag = false;
@@ -205,6 +198,56 @@ export class FabricSummaryController {
     };
 
 
+    this.apps = this.di.applicationService.getNocsysApps();
+    let _get_license_info = () =>{
+      let OPENFLOW_APP_NAME = 'org.onosproject.openflow';
+      let QOS_APP_NAME = 'com.nocsys.qos';
+      let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
+
+      let openflowAppInfo = this.di._.find(this.apps, {'name':OPENFLOW_APP_NAME});
+      let qosAppInfo = this.di._.find(this.apps, {'name':QOS_APP_NAME});
+      let swtMgtAppInfo = this.di._.find(this.apps, {'name':SWTMGT_APP_NAME});
+
+      if(openflowAppInfo && openflowAppInfo['state'] === 'ACTIVE'){
+        scope.isOpenflowEnable= true;
+      }
+
+      if(qosAppInfo && qosAppInfo['state'] === 'ACTIVE'){
+        scope.isQosEnable= true;
+      }
+
+      if(swtMgtAppInfo && swtMgtAppInfo['state'] === 'ACTIVE'){
+        scope.isSwtManageEnable= true;
+      }
+      // _reset_right_menu();
+    };
+
+
+    let _reset_right_menu = () =>{
+
+      if(!scope.isOpenflowEnable){
+        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
+          return 'summary_switch_menu_create_flow' === item['msg'] || 'summary_switch_menu_show_flow' === item['msg'] ||'summary_switch_menu_create_group' === item['msg']||'summary_switch_menu_show_group' === item['msg']
+        });
+      }
+
+      if(!scope.isQosEnable){
+        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
+          return 'summary_switch_pfc' === item['msg'] || 'summary_switch_menu_show_pfc' === item['msg'];
+        });
+      }
+
+      if(!scope.isSwtManageEnable){
+        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
+          return 'summary_switch_reboot' === item['msg'];
+        });
+      }
+    };
+
+
+    _get_license_info();
+    _reset_right_menu();
+
     let init = () => {
       let hide_div = this.di.localStoreService.getSyncStorage(fabric_storage_ns).get('hide_right_div');
       if(hide_div === true){
@@ -255,19 +298,11 @@ export class FabricSummaryController {
       });
       promises.push(endpointsDefer.promise);
 
-      this.di.manageDataManager.getAllApplications().then((res) => {
-        this.apps = res.data.applications;
-
-        appDefer.resolve();
-      });
-      promises.push(appDefer.promise);
-
       Promise.all(promises).then(()=>{
 
         let DI = this.di;
         let devices = this.devices;
         formatLeafGroupData(devices, this.realtimeDevices);
-        _get_license_info(this.apps);
         DI.$rootScope.$emit('stop_loading');
         DI._.forEach(devices, (device)=>{
           device.ports = portGroups[device.id];
@@ -305,47 +340,7 @@ export class FabricSummaryController {
       });
     };
 
-    let _get_license_info = (apps) =>{
 
-      let openflowAppInfo = this.di._.find(apps, {'name':OPENFLOW_APP_NAME});
-      let qosAppInfo = this.di._.find(apps, {'name':QOS_APP_NAME});
-      let swtMgtAppInfo = this.di._.find(apps, {'name':SWTMGT_APP_NAME});
-
-      if(openflowAppInfo && openflowAppInfo['state'] === 'ACTIVE'){
-        scope.isOpenflowEnable= true;
-      }
-
-      if(qosAppInfo && qosAppInfo['state'] === 'ACTIVE'){
-        scope.isQosEnable= true;
-      }
-
-      if(swtMgtAppInfo && swtMgtAppInfo['state'] === 'ACTIVE'){
-        scope.isSwtManageEnable= true;
-      }
-      _reset_right_menu();
-    };
-
-
-    let _reset_right_menu = () =>{
-
-      if(!scope.isOpenflowEnable){
-        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
-          return 'summary_switch_menu_create_flow' === item['msg'] || 'summary_switch_menu_show_flow' === item['msg'] ||'summary_switch_menu_create_group' === item['msg']||'summary_switch_menu_show_group' === item['msg']
-        });
-      }
-
-      if(!scope.isQosEnable){
-        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
-          return 'summary_switch_pfc' === item['msg'] || 'summary_switch_menu_show_pfc' === item['msg'];
-        });
-      }
-
-      if(!scope.isSwtManageEnable){
-        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
-          return 'summary_switch_reboot' === item['msg'];
-        });
-      }
-    };
 
     // this.di.deviceDataManager.getPorts().then((res)=>{
     //   if(res.data.ports){

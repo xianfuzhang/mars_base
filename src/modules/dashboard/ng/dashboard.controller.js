@@ -16,6 +16,7 @@ export class DashboardController {
       'dashboardDataManager',
       'deviceDataManager',
       'modalManager',
+      'applicationService',
       'localStoreService'
     ];
   }
@@ -208,6 +209,21 @@ export class DashboardController {
 
     let di = this.di;
 
+    this.apps = this.di.applicationService.getNocsysApps();
+
+    this.di.$scope.isAnalyzeEnable= false;
+    let _get_license_info = () =>{
+      let ANALYZER_APP_NAME = 'com.nocsys.analyzer';
+
+      let analyzerAppInfo = this.di._.find(this.apps, {'name':ANALYZER_APP_NAME});
+
+      if(analyzerAppInfo && analyzerAppInfo['state'] === 'ACTIVE'){
+        this.di.$scope.isAnalyzeEnable = true;
+      }
+    };
+
+    _get_license_info();
+
     let init =() =>{
       let promises = [];
       let clusterDefer = this.di.$q.defer(),
@@ -216,13 +232,16 @@ export class DashboardController {
         clusterStaticsDefer = this.di.$q.defer(),
         swtStaticsDefer = this.di.$q.defer();
 
-      this.di.dashboardDataManager.getCluster().then((res)=>{
-        dataModel['cluster'] = res;
-        this.getClusterCPUMemoryStatisticFromLS(res).then(() => {
-          clusterDefer.resolve();
+      if(this.di.$scope.isAnalyzeEnable){
+        this.di.dashboardDataManager.getCluster().then((res)=>{
+          dataModel['cluster'] = res;
+          this.getClusterCPUMemoryStatisticFromLS(res).then(() => {
+            clusterDefer.resolve();
+          });
         });
-      });
-      promises.push(clusterDefer.promise);
+        promises.push(clusterDefer.promise);
+      }
+
 
       this.di.dashboardDataManager.getClusterStatistic().then((res)=>{
         dataModel['clusterStatistic'] = res;
@@ -272,10 +291,12 @@ export class DashboardController {
       convertControllerData();
       convertSwitchData();
       convertSwitchInterface2Chart();
-      convertSwitchCPUAnalyzer();
-      convertSwitchMemoryAnalyzer();
-      convertClusterCPUAnalyzer();
-      convertClusterMemoryAnalyzer();
+      if(this.di.$scope.isAnalyzeEnable) {
+        convertSwitchCPUAnalyzer();
+        convertSwitchMemoryAnalyzer();
+        convertClusterCPUAnalyzer();
+        convertClusterMemoryAnalyzer();
+      }
     }
 
     let convertControllerData =()=>{

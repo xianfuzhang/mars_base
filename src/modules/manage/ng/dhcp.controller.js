@@ -14,6 +14,7 @@ export class DHCPController {
       'notificationService',
       'manageService',
       'manageDataManager',
+      'applicationService',
       'tableProviderFactory',
       'dialogService',
     ];
@@ -39,14 +40,72 @@ export class DHCPController {
     scope.tabSelected = null;
     scope.tabs = this.di.manageService.getDHCPTabSchema();
 
+    // {
+    //   'label': this.translate('MODULES.MANAGE.DHCP.TAB.DHCP_SERVER'),
+    //   'value': 'dhcp_server',
+    //   'type': 'dhcp_server'
+    // },
+    // {
+    //   'label': this.translate('MODULES.MANAGE.DHCP.TAB.IPMAC_MAPPING'),
+    //   'value': 'ipmac_mapping',
+    //   'type': 'ipmac_mapping'
+    // },
+    // {
+    //   'label': this.translate('MODULES.MANAGE.DHCP.TAB.DHCP_SERVER_V6'),
+    //   'value': 'dhcp_server_v6',
+    //   'type': 'dhcp_server_v6'
+    // },
+    // {
+    //   'label': this.translate('MODULES.MANAGE.DHCP.TAB.IPMAC_MAPPING_V6'),
+    //   'value': 'ipmac_mapping_v6',
+    //   'type': 'ipmac_mapping_v6'
+    // }
+
+    this.apps = this.di.applicationService.getNocsysApps();
+
+    scope.isDHCPv4Enable= false;
+    scope.isDHCPv6Enable= false;
+    let _get_license_info = () =>{
+      let DCHPV4_APP_NAME = 'com.nocsys.dhcpserver';
+      let DCHPV6_APP_NAME = 'com.nocsys.dhcpv6server';
+
+      let dhcpv4AppInfo = this.di._.find(this.apps, {'name':DCHPV4_APP_NAME});
+      let dhcpv6AppInfo = this.di._.find(this.apps, {'name':DCHPV6_APP_NAME});
+
+      if(dhcpv4AppInfo && dhcpv4AppInfo['state'] === 'ACTIVE'){
+        scope.isDHCPv4Enable = true;
+      }
+
+      if(dhcpv6AppInfo && dhcpv6AppInfo['state'] === 'ACTIVE'){
+        scope.isDHCPv6Enable = true;
+      }
+
+    };
+
+    let _reset_tab_list = () => {
+      if(!scope.isDHCPv4Enable){
+        this.di._.remove(scope.tabs, (tab)=>{
+          return tab['value'] === 'dhcp_server' || tab['value'] === 'ipmac_mapping';
+        });
+      }
+
+      if(!scope.isDHCPv6Enable){
+        this.di._.remove(scope.tabs, (tab)=>{
+          return tab['value'] === 'dhcp_server_v6' || tab['value'] === 'ipmac_mapping_v6';
+        });
+      }
+    };
+
+    _get_license_info();
+    _reset_tab_list();
 
     scope.onTabChange= (tab) => {
       if (tab){
         scope.tabSelected = tab;
 
-        if(tab.type == 'dhcp_server_v6'){
+        if(tab.type === 'dhcp_server_v6'){
           initV6config();
-        } else if(tab.type == 'dhcp_server'){
+        } else if(tab.type === 'dhcp_server'){
           init();
         }
       }

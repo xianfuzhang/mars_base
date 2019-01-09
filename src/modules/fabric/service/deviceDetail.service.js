@@ -130,7 +130,7 @@ export class DeviceDetailService {
     };
   }
 
-  getDevicePortsSchema() {
+  getDevicePortsSchema(isTenantEnable) {
     let defaultSchema = [
       {
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.NAME'),
@@ -175,7 +175,7 @@ export class DeviceDetailService {
       }*/
     ];
     
-    if(this.di.roleService.getRole() > 2) {
+    if(this.di.roleService.getRole() > 2 && isTenantEnable) {
       defaultSchema.push({
         'label': this.translate('MODULES.SWITCHES.PORT.COLUMN.SEGMENTS'),
         'field': 'segments',

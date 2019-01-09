@@ -78,7 +78,7 @@
                 </div>  
               </div>
             </div>
-            <div class="mars-row">
+            <div class="mars-row" ng-if="isAnalyzeEnable">
               <div class="mars-row-flex">
                 <div class="mars-col-12 col-gutter-md statistic-chart">
                   <mar-section s-title="控制器CPU使用率" no-fold="true" class="cpu_rate">
@@ -124,7 +124,7 @@
                 </div>
               </div>
             </div>
-            <div class="mars-row">
+            <div class="mars-row" ng-if="isAnalyzeEnable">
               <div class="mars-row-flex">
                 <div  class="mars-col-12 col-gutter-md statistic-chart">
                   <mar-section s-title="交换机CPU使用率Top5" no-fold="true"
