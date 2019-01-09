@@ -1,7 +1,6 @@
 export class headerController{
   static getDI() {
     return [
-      '$log',
       '$scope',
       '$rootScope',
       '$cookies',
@@ -12,8 +11,10 @@ export class headerController{
       'appService',
       'roleService',
       'localStoreService',
+      'applicationService',
       'loginDataManager',
       'alertDataManager',
+      'manageDataManager'
     ];
   }
 
@@ -53,13 +54,24 @@ export class headerController{
     }
     
     this.init();
+
+    let unsubscribers = [];
+    unsubscribers.push(this.di.$rootScope.$on('application-change-state', (event) => {
+      this.filterMenusByApps();
+    }));
+
+    this.scope.$on('$destroy', () => {
+      unsubscribers.forEach((cb) => {
+        cb();
+      });
+    });
   }
 
   init() {
     this.scope.userConfig = angular.copy(this.scope.groups.user.items);
-    let useraccount = this.di.$cookies.get('useraccount'),
-        menus = this.di.localStoreService.getSyncStorage().get('menus');
-    if (!useraccount || !menus) {
+    this.scope.menus = this.di.localStoreService.getSyncStorage().get('menus');
+    let useraccount = this.di.$cookies.get('useraccount');
+    if (!useraccount || !this.scope.menus) {
       this.di.$location.path('/login');
       return;
     }
@@ -67,7 +79,94 @@ export class headerController{
     let decodeData = decodeBytes.toString(this.di.crypto.enc.Utf8);
     this.scope.username = JSON.parse(decodeData).user_name;
 
-    this.scope.menues = menus.groups;
+    this.filterMenusByApps();
+  }
+
+  filterMenusByApps() {
+    this.di.applicationService.getNocsysAppsState().then(() => {
+      let apps = this.di.applicationService.getAppsState();
+      if (!Object.keys(apps).length) {
+        this.scope.menues = this.scope.menus.groups;
+      }
+      else {
+        let origins = angular.copy(this.scope.menus.groups);
+        let tenantState = apps['com.nocsys.tenant'];
+        for(let key in apps) {
+          if (apps[key] !== 'ACTIVE') {
+            switch (key) {
+              case 'com.nocsys.alert':
+              case 'com.nocsys.healthycheck':
+                let alertIndex = this.di._.findIndex(origins, {'group': 'Alert'});
+                if (alertIndex > -1) origins.splice(alertIndex , 1);
+                break;
+              case 'com.nocsys.dhcpserver':
+              case 'com.nocsys.dhcpv6server':
+                let index0 = this.di._.findIndex(origins, {'group': 'Manage'});
+                if (index0 > -1) {
+                  let dhcpIndex = this.di._.findIndex(origins[index0]['items'], {'url': '/dhcp'});
+                  if (dhcpIndex > -1) origins[index0]['items'].splice(dhcpIndex, 1);  
+                }
+                break;
+              case 'com.nocsys.utility':
+                let configIndex = this.di._.findIndex(origins, {'group': 'Config'});
+                if (configIndex > -1) origins.splice(configIndex, 1);
+                let logIndex = this.di._.findIndex(origins, {'group': 'Log'});
+                if (logIndex > -1) origins.splice(logIndex, 1);
+                let index1 = this.di._.findIndex(origins, {'group': 'Manage'});
+                if (index1 > -1) {
+                  let elasticIndex = this.di._.findIndex(origins[index1]['items'], {'url': '/elasticsearch'});
+                  if (elasticIndex > -1) origins[index1]['items'].splice(elasticIndex, 1);    
+                }
+                break;
+              case 'com.nocsys.tenant':
+                let tenantIndex = this.di._.findIndex(origins, {'group': 'Logical'});
+                if (tenantIndex > -1) origins.splice(tenantIndex , 1);
+                break;
+              case 'com.nocsys.endpoint':
+                let index2 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (index2 > -1) {
+                  let endpointIndex = this.di._.findIndex(origins[index2]['items'], {'url': '/endpoints'});
+                  if (endpointIndex > -1) origins[index2]['items'].splice(endpointIndex, 1);  
+                }
+                break;
+              case 'com.nocsys.topology':
+                let index3 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (index3 > -1) {
+                  let uplinkIndex = this.di._.findIndex(origins[index3]['items'], {'url': '/uplinks'});
+                  if (uplinkIndex > -1) origins[index3]['items'].splice(uplinkIndex, 1);  
+                }
+                break;
+              case 'com.nocsys.ntpserver':
+                let index4 = this.di._.findIndex(origins, {'group': 'Manage'});
+                if (index4 > -1) {
+                  let ntpIndex = this.di._.findIndex(origins[index4]['items'], {'url': '/ntp'});
+                  if (ntpIndex > -1) origins[index4]['items'].splice(ntpIndex, 1);  
+                }
+                break;
+              case 'com.nocsys.egp':
+                if (tenantState === 'ACTIVE') {
+                  let index5 = this.di._.findIndex(origins, {'group': 'Logical'});
+                  if (index5 > -1) {
+                    let egpIndex = this.di._.findIndex(origins[index5]['items'], {'url': '/egp'});
+                    if (egpIndex > -1) origins[index5]['items'].splice(egpIndex, 1);  
+                  }
+                }
+                break;
+              case 'com.nocsys.qos':
+                if (tenantState === 'ACTIVE') {
+                  let index6 = this.di._.findIndex(origins, {'group': 'Logical'});
+                  if (index6 > -1) {
+                    let qosIndex = this.di._.findIndex(origins[index6]['items'], {'url': '/qos'});
+                    if (qosIndex > -1) origins[index6]['items'].splice(qosIndex, 1);
+                  }
+                }
+                break;     
+            }
+          }
+        }
+        this.scope.menues = origins;
+      }
+    });
   }
 }
 
