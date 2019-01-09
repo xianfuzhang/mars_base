@@ -23,6 +23,7 @@ import {IntentDataManager} from './datamanagers/intent.dataManager';
 import {ManageDataManager} from './datamanagers/manage.dataManager';
 import {LogicalDataManager} from './datamanagers/logical.dataManager';
 import {WebsocketService} from './services/ws.service';
+import {applicationService} from './services/application.service';
 
 export default angular
   .module('apis', [])
@@ -48,6 +49,7 @@ export default angular
   .service('roleService', RoleService)
   .service('colorService', ColorService)
   .service('wsService', WebsocketService)
+  .service('applicationService', applicationService)
   .service('intentDataManager', IntentDataManager)
   .service('manageDataManager', ManageDataManager)
   .service('logicalDataManager', LogicalDataManager)

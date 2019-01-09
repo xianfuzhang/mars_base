@@ -128,6 +128,7 @@ export class ApplicationController {
           this.di.manageDataManager.activeApplication(event.data._app_id).then((res) => {
             this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.APPLICATION.ACTIVE_APPLICATION.SUCCESS'));
             _update_single_item(event.data._app_id);
+            scope.$emit('application-change-state');
           },(err)=>{
             this.di.notificationService.renderWarning(scope, err.data);
           });
@@ -135,6 +136,7 @@ export class ApplicationController {
           this.di.manageDataManager.deActiveApplication(event.data._app_id).then((res) => {
             this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.APPLICATION.DEACTIVE_APPLICATION.SUCCESS'));
             _update_single_item(event.data._app_id);
+            scope.$emit('application-change-state');
           },(err)=>{
             this.di.notificationService.renderWarning(scope, err.data);
           });

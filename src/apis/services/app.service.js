@@ -114,6 +114,7 @@ export class appService {
           ]
         }
       },
+      NOCSYS_APP: 'com.nocsys',
       CRYPTO_STRING: 'secret',
       DEFAULT_FILENAME: 'startup_netcfg.cfg' // default configuration file name
     };
