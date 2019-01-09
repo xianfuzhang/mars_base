@@ -491,6 +491,7 @@ export class mdlTable {
         update: scope._apiUpdate,
         //在controller中设置column显示/隐藏func(column_field, true/false)
         setColumnVisibility: scope._apiSetColumnVisibility,
+        inlineFilter : scope.inlineFilter,
         //在controller中更新table data
         queryUpdate: scope._apiQueryUpdate,
         //在controller中返回table所有columns的visible值{column_field: true/false, ...}

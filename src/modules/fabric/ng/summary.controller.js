@@ -19,6 +19,7 @@ export class FabricSummaryController {
       'localStoreService',
       'appService',
       'deviceDataManager',
+      'manageDataManager',
       'tableProviderFactory',
       'deviceService',
       'switchService',
@@ -49,12 +50,24 @@ export class FabricSummaryController {
     this.di.$scope.resize_length = {};
 
 
-
     this.di.$scope.defaultRightLength = 300;
     this.di.$scope.showLeftDiv = false;
 
     let scope = this.di.$scope;
     scope.role = this.di.roleService.getRole();
+
+    scope.isOpenflowEnable= false;
+    scope.isQosEnable= false;
+    scope.isSwtManageEnable= false;
+    let OPENFLOW_APP_NAME = 'org.onosproject.openflow';
+    let QOS_APP_NAME = 'com.nocsys.qos';
+    let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
+
+
+
+
+
+
 
     let initializeTransitionFlag = false;
 
@@ -116,7 +129,8 @@ export class FabricSummaryController {
     let portsDefer = this.di.$q.defer(),
       devicesDefer = this.di.$q.defer(),
       endpointsDefer = this.di.$q.defer(),
-      deviceConfigsDefer = this.di.$q.defer();
+      deviceConfigsDefer = this.di.$q.defer(),
+      appDefer = this.di.$q.defer();
     let promises = [];
     let portGroups = {};
     this.devices = [];
@@ -241,15 +255,19 @@ export class FabricSummaryController {
       });
       promises.push(endpointsDefer.promise);
 
+      this.di.manageDataManager.getAllApplications().then((res) => {
+        this.apps = res.data.applications;
 
-
-
+        appDefer.resolve();
+      });
+      promises.push(appDefer.promise);
 
       Promise.all(promises).then(()=>{
 
         let DI = this.di;
         let devices = this.devices;
         formatLeafGroupData(devices, this.realtimeDevices);
+        _get_license_info(this.apps);
         DI.$rootScope.$emit('stop_loading');
         DI._.forEach(devices, (device)=>{
           device.ports = portGroups[device.id];
@@ -285,6 +303,48 @@ export class FabricSummaryController {
         // this.di.$scope.fabricModel.isShowTopo = true;
         // this.di.$scope.$apply();
       });
+    };
+
+    let _get_license_info = (apps) =>{
+
+      let openflowAppInfo = this.di._.find(apps, {'name':OPENFLOW_APP_NAME});
+      let qosAppInfo = this.di._.find(apps, {'name':QOS_APP_NAME});
+      let swtMgtAppInfo = this.di._.find(apps, {'name':SWTMGT_APP_NAME});
+
+      if(openflowAppInfo && openflowAppInfo['state'] === 'ACTIVE'){
+        scope.isOpenflowEnable= true;
+      }
+
+      if(qosAppInfo && qosAppInfo['state'] === 'ACTIVE'){
+        scope.isQosEnable= true;
+      }
+
+      if(swtMgtAppInfo && swtMgtAppInfo['state'] === 'ACTIVE'){
+        scope.isSwtManageEnable= true;
+      }
+      _reset_right_menu();
+    };
+
+
+    let _reset_right_menu = () =>{
+
+      if(!scope.isOpenflowEnable){
+        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
+          return 'summary_switch_menu_create_flow' === item['msg'] || 'summary_switch_menu_show_flow' === item['msg'] ||'summary_switch_menu_create_group' === item['msg']||'summary_switch_menu_show_group' === item['msg']
+        });
+      }
+
+      if(!scope.isQosEnable){
+        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
+          return 'summary_switch_pfc' === item['msg'] || 'summary_switch_menu_show_pfc' === item['msg'];
+        });
+      }
+
+      if(!scope.isSwtManageEnable){
+        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
+          return 'summary_switch_reboot' === item['msg'];
+        });
+      }
     };
 
     // this.di.deviceDataManager.getPorts().then((res)=>{
@@ -685,6 +745,9 @@ export class FabricSummaryController {
     unsubscribers.push(this.di.$rootScope.$on('switch_opt',(evt, data)=>{
 
       if(scope.role > 1){
+        if(this.di.$scope.fabricModel.switchContextMenu.length === 0){
+          return;
+        }
         if(this.di.$scope.fabricModel.switchContextMenu.isShow){
           this.di.$scope.fabricModel.switchContextMenu.isShow = false;
           setTimeout(()=>{

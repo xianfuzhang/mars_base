@@ -154,6 +154,7 @@ export class ApplicationController {
           }
         });
         scope.applicationModel.api.update();
+        scope.applicationModel.api.inlineFilter();
       },(err)=>{
         console.log("Error occur when getApplication in _update_single_item " + JSON.stringify(err))
       });
