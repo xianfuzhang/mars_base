@@ -197,57 +197,6 @@ export class FabricSummaryController {
       this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("hide_right_div", true);
     };
 
-
-    this.apps = this.di.applicationService.getNocsysApps();
-    let _get_license_info = () =>{
-      let OPENFLOW_APP_NAME = 'org.onosproject.openflow';
-      let QOS_APP_NAME = 'com.nocsys.qos';
-      let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
-
-      let openflowAppInfo = this.di._.find(this.apps, {'name':OPENFLOW_APP_NAME});
-      let qosAppInfo = this.di._.find(this.apps, {'name':QOS_APP_NAME});
-      let swtMgtAppInfo = this.di._.find(this.apps, {'name':SWTMGT_APP_NAME});
-
-      if(openflowAppInfo && openflowAppInfo['state'] === 'ACTIVE'){
-        scope.isOpenflowEnable= true;
-      }
-
-      if(qosAppInfo && qosAppInfo['state'] === 'ACTIVE'){
-        scope.isQosEnable= true;
-      }
-
-      if(swtMgtAppInfo && swtMgtAppInfo['state'] === 'ACTIVE'){
-        scope.isSwtManageEnable= true;
-      }
-      // _reset_right_menu();
-    };
-
-
-    let _reset_right_menu = () =>{
-
-      if(!scope.isOpenflowEnable){
-        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
-          return 'summary_switch_menu_create_flow' === item['msg'] || 'summary_switch_menu_show_flow' === item['msg'] ||'summary_switch_menu_create_group' === item['msg']||'summary_switch_menu_show_group' === item['msg']
-        });
-      }
-
-      if(!scope.isQosEnable){
-        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
-          return 'summary_switch_pfc' === item['msg'] || 'summary_switch_menu_show_pfc' === item['msg'];
-        });
-      }
-
-      if(!scope.isSwtManageEnable){
-        this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
-          return 'summary_switch_reboot' === item['msg'];
-        });
-      }
-    };
-
-
-    _get_license_info();
-    _reset_right_menu();
-
     let init = () => {
       let hide_div = this.di.localStoreService.getSyncStorage(fabric_storage_ns).get('hide_right_div');
       if(hide_div === true){
@@ -740,7 +689,7 @@ export class FabricSummaryController {
     unsubscribers.push(this.di.$rootScope.$on('switch_opt',(evt, data)=>{
 
       if(scope.role > 1){
-        if(this.di.$scope.fabricModel.switchContextMenu.length === 0){
+        if(this.di.$scope.fabricModel.switchContextMenu.data.length === 0){
           return;
         }
         if(this.di.$scope.fabricModel.switchContextMenu.isShow){
@@ -874,7 +823,7 @@ export class FabricSummaryController {
       // this.di.$log.info('FabricSummaryController', 'Destroyed');
     });
 
-
+    this.init_application_license();
     setTimeout(function () {
       init();
     });
@@ -955,6 +904,55 @@ export class FabricSummaryController {
       entities.push(obj);
     });
     return entities;
+  }
+
+
+  init_application_license(){
+    let scope = this.di.$scope;
+    this.di.applicationService.getNocsysAppsState().then(()=>{
+      let allState = this.di.applicationService.getAppsState();
+
+      let _get_license_info = () =>{
+        let OPENFLOW_APP_NAME = 'org.onosproject.openflow';
+        let QOS_APP_NAME = 'com.nocsys.qos';
+        let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
+
+        if(allState[OPENFLOW_APP_NAME] === 'ACTIVE'){
+          scope.isOpenflowEnable= true;
+        }
+
+        if(allState[QOS_APP_NAME] === 'ACTIVE'){
+          scope.isQosEnable= true;
+        }
+
+        if(allState[SWTMGT_APP_NAME] === 'ACTIVE'){
+          scope.isSwtManageEnable= true;
+        }
+      };
+      let _reset_right_menu = () =>{
+
+        if(!scope.isOpenflowEnable){
+          this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
+            return 'summary_switch_menu_create_flow' === item['msg'] || 'summary_switch_menu_show_flow' === item['msg'] ||'summary_switch_menu_create_group' === item['msg']||'summary_switch_menu_show_group' === item['msg']
+          });
+        }
+
+        if(!scope.isQosEnable){
+          this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
+            return 'summary_switch_pfc' === item['msg'] || 'summary_switch_menu_show_pfc' === item['msg'];
+          });
+        }
+
+        if(!scope.isSwtManageEnable){
+          this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
+            return 'summary_switch_reboot' === item['msg'];
+          });
+        }
+      };
+
+      _get_license_info();
+      _reset_right_menu();
+    });
   }
 
 }

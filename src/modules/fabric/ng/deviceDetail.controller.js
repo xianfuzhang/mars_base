@@ -34,7 +34,7 @@ export class DeviceDetailController {
     this.scope.role = this.di.roleService.getRole();
     this.scope.tabSelected = null;
     this.scope.tabSwitch = false;
-    this.scope.tabs = this.di.deviceDetailService.getTabSchema();
+    this.scope.tabs = [];
     this.scope.detailDisplay= false;
     this.scope.detailValue= null;
     this.scope.detailModel = {
@@ -60,87 +60,18 @@ export class DeviceDetailController {
       psuSensors: []
     };
 
-    this.apps = this.di.applicationService.getNocsysApps();
-
-    let _get_license_info = () =>{
-      let OPENFLOW_APP_NAME = 'org.onosproject.openflow';
-      let QOS_APP_NAME = 'com.nocsys.qos';
-      let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
-      let HEALTHYCHECK_APP_NAME = 'com.nocsys.healthycheck';
-      let TENANT_APP_NAME = 'com.nocsys.tenant';
-      let ENDPINT_APP_NAME = 'com.nocsys.endpoint';
-
-      let openflowAppInfo = this.di._.find(this.apps, {'name':OPENFLOW_APP_NAME});
-      let qosAppInfo = this.di._.find(this.apps, {'name':QOS_APP_NAME});
-      let swtMgtAppInfo = this.di._.find(this.apps, {'name':SWTMGT_APP_NAME});
-      let hcAppInfo = this.di._.find(this.apps, {'name':HEALTHYCHECK_APP_NAME});
-      let tenantAppInfo = this.di._.find(this.apps, {'name':TENANT_APP_NAME});
-      let endpointAppInfo = this.di._.find(this.apps, {'name':ENDPINT_APP_NAME});
-
-      if(openflowAppInfo && openflowAppInfo['state'] === 'ACTIVE'){
-        this.scope.isOpenflowEnable= true;
-      }
-
-      if(qosAppInfo && qosAppInfo['state'] === 'ACTIVE'){
-        this.scope.isQosEnable= true;
-      }
-
-      if(swtMgtAppInfo && swtMgtAppInfo['state'] === 'ACTIVE'){
-        this.scope.isSwtManageEnable= true;
-      }
-
-      if(hcAppInfo && hcAppInfo['state'] === 'ACTIVE'){
-        this.scope.isHCEnable= true;
-      }
-
-      if(tenantAppInfo && tenantAppInfo['state'] === 'ACTIVE'){
-        this.scope.isTenantEnable= true;
-      }
-
-      if(endpointAppInfo && endpointAppInfo['state'] === 'ACTIVE'){
-        this.scope.isEndpointEnable= true;
-      }
-    };
-
-    let _reset_tab_list = () => {
-      if(!this.scope.isHCEnable){
-        this.di._.remove(this.scope.tabs, (tab)=>{
-          return tab['value'] === 'summary';
-        });
-      }
-
-      if(!this.scope.isQosEnable){
-        this.di._.remove(this.scope.tabs, (tab)=>{
-          return tab['value'] === 'pfc';
-        });
-      }
-
-      if(!this.scope.isOpenflowEnable){
-        this.di._.remove(this.scope.tabs, (tab)=>{
-          return tab['value'] === 'flow' || tab['value'] === 'group';
-        });
-      }
-
-      if(!this.scope.isEndpointEnable){
-        this.di._.remove(this.scope.tabs, (tab)=>{
-          return tab['value'] === 'endpoint';
-        });
-      }
-    };
-
     this.prepareScope();
-    _get_license_info();
-    _reset_tab_list();
+    this.init_application_license().then(()=>{
+      this.di.deviceDataManager.getDeviceConfig(this.scope.deviceId).then((res) => {
+        if (res) {
+          this.scope.detailDisplay = true;
+          this.scope.detailValue = res;
 
-    this.di.deviceDataManager.getDeviceConfig(this.scope.deviceId).then((res) => {
-      if (res) {
-        this.scope.detailDisplay = true;
-        this.scope.detailValue = res;
-
-        this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE') + "(" + this.scope.detailValue.name + ")";
-        this.scope.detailValue.leaf_group = !this.scope.detailValue.leaf_group ? '-' : this.scope.detailValue.leaf_group;
-      }
-      this.init();
+          this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE') + "(" + this.scope.detailValue.name + ")";
+          this.scope.detailValue.leaf_group = !this.scope.detailValue.leaf_group ? '-' : this.scope.detailValue.leaf_group;
+        }
+        this.init();
+      });
     });
 
     let unSubscribers = [];
@@ -901,6 +832,80 @@ export class DeviceDetailController {
         'pin': item.pin
       });
     });
+  }
+
+  init_application_license(){
+    let defer = this.di.$q.defer();
+
+    let scope = this.di.$scope;
+    this.di.applicationService.getNocsysAppsState().then(()=> {
+      let allState = this.di.applicationService.getAppsState();
+
+      let _get_license_info = () =>{
+        let OPENFLOW_APP_NAME = 'org.onosproject.openflow';
+        let QOS_APP_NAME = 'com.nocsys.qos';
+        let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
+        let HEALTHYCHECK_APP_NAME = 'com.nocsys.healthycheck';
+        let TENANT_APP_NAME = 'com.nocsys.tenant';
+        let ENDPINT_APP_NAME = 'com.nocsys.endpoint';
+        if(allState[OPENFLOW_APP_NAME] === 'ACTIVE'){
+          scope.isOpenflowEnable = true;
+        }
+        if(allState[QOS_APP_NAME] === 'ACTIVE'){
+          scope.isQosEnable = true;
+        }
+        if(allState[SWTMGT_APP_NAME] === 'ACTIVE'){
+          scope.isSwtManageEnable = true;
+        }
+        if(allState[HEALTHYCHECK_APP_NAME] === 'ACTIVE'){
+          scope.isHCEnable = true;
+        }
+        if(allState[TENANT_APP_NAME] === 'ACTIVE'){
+          scope.isTenantEnable = true;
+        }
+        if(allState[ENDPINT_APP_NAME] === 'ACTIVE'){
+          scope.isEndpointEnable = true;
+        }
+      };
+
+      let _reset_tab_list = () => {
+        let tabs = this.di.deviceDetailService.getTabSchema();
+        // this.scope.tabs = this.di.deviceDetailService.getTabSchema();
+        if(!scope.isHCEnable){
+          this.di._.remove(tabs, (tab)=>{
+            return tab['value'] === 'summary';
+          });
+        }
+
+        if(!this.scope.isQosEnable){
+          this.di._.remove(tabs, (tab)=>{
+            return tab['value'] === 'pfc';
+          });
+        }
+
+        if(!this.scope.isOpenflowEnable){
+          this.di._.remove(tabs, (tab)=>{
+            return tab['value'] === 'flow' || tab['value'] === 'group';
+          });
+        }
+
+        if(!this.scope.isEndpointEnable){
+          this.di._.remove(tabs, (tab)=>{
+            return tab['value'] === 'endpoint';
+          });
+        }
+
+        this.scope.tabs = tabs;
+      };
+
+      _get_license_info();
+      _reset_tab_list();
+      defer.resolve();
+    },()=>{
+      defer.resolve();
+    });
+
+    return defer.promise;
   }
 }
 DeviceDetailController.$inject = DeviceDetailController.getDI();

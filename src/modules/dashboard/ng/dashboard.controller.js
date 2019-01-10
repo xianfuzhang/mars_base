@@ -209,21 +209,6 @@ export class DashboardController {
 
     let di = this.di;
 
-    this.apps = this.di.applicationService.getNocsysApps();
-
-    this.di.$scope.isAnalyzeEnable= false;
-    let _get_license_info = () =>{
-      let ANALYZER_APP_NAME = 'com.nocsys.analyzer';
-
-      let analyzerAppInfo = this.di._.find(this.apps, {'name':ANALYZER_APP_NAME});
-
-      if(analyzerAppInfo && analyzerAppInfo['state'] === 'ACTIVE'){
-        this.di.$scope.isAnalyzeEnable = true;
-      }
-    };
-
-    _get_license_info();
-
     let init =() =>{
       let promises = [];
       let clusterDefer = this.di.$q.defer(),
@@ -232,16 +217,17 @@ export class DashboardController {
         clusterStaticsDefer = this.di.$q.defer(),
         swtStaticsDefer = this.di.$q.defer();
 
-      if(this.di.$scope.isAnalyzeEnable){
-        this.di.dashboardDataManager.getCluster().then((res)=>{
-          dataModel['cluster'] = res;
+      this.di.dashboardDataManager.getCluster().then((res)=>{
+        dataModel['cluster'] = res;
+        if(this.di.$scope.isAnalyzeEnable){
           this.getClusterCPUMemoryStatisticFromLS(res).then(() => {
             clusterDefer.resolve();
           });
-        });
-        promises.push(clusterDefer.promise);
-      }
-
+        } else {
+          clusterDefer.resolve();
+        }
+      });
+      promises.push(clusterDefer.promise);
 
       this.di.dashboardDataManager.getClusterStatistic().then((res)=>{
         dataModel['clusterStatistic'] = res;
@@ -253,9 +239,14 @@ export class DashboardController {
         this.di.deviceDataManager.getDevices().then((res)=>{
           dataModel['configDevices'] = configs;
           dataModel['devices'] = this.di.deviceService.getAllDevices(configs, res.data.devices);
-          this.getSwitchesCPUMemoryStatisticFromLS(configs).then(() => {
+          if(this.di.$scope.isAnalyzeEnable){
+            this.getSwitchesCPUMemoryStatisticFromLS(configs).then(() => {
+              devicesDefer.resolve();
+            });
+          } else {
             devicesDefer.resolve();
-          });
+          }
+
         });
       });
       promises.push(devicesDefer.promise);
@@ -291,7 +282,7 @@ export class DashboardController {
       convertControllerData();
       convertSwitchData();
       convertSwitchInterface2Chart();
-      if(this.di.$scope.isAnalyzeEnable) {
+      if(di.$scope.isAnalyzeEnable) {
         convertSwitchCPUAnalyzer();
         convertSwitchMemoryAnalyzer();
         convertClusterCPUAnalyzer();
@@ -563,7 +554,10 @@ export class DashboardController {
       return port && port['annotations']['portName'] || '';
     };
 
-    init();
+    this.init_application_license().then(()=>{
+      init();
+    });
+
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
         unSubscribe();
@@ -866,6 +860,25 @@ export class DashboardController {
       deffe.resolve();
     });
     return deffe.promise;
+  }
+
+  init_application_license(){
+    let defer = this.di.$q.defer();
+    let scope = this.di.$scope;
+
+    scope.isAnalyzeEnable = false;
+    this.di.applicationService.getNocsysAppsState().then(()=>{
+      let allState = this.di.applicationService.getAppsState();
+      let ANALYZER_APP_NAME = 'com.nocsys.analyzer';
+      if(allState[ANALYZER_APP_NAME] === 'ACTIVE'){
+        scope.isAnalyzeEnable = true;
+      }
+
+      defer.resolve();
+    },()=>{
+      defer.resolve();
+    });
+    return defer.promise;
   }
 }
 

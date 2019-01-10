@@ -14,6 +14,7 @@ export class DeviceController {
       'notificationService',
       'deviceDataManager',
       'intentDataManager',
+      'applicationService',
       'modalManager',
       'tableProviderFactory'
     ];
@@ -233,6 +234,7 @@ export class DeviceController {
     }
     
     this.init();
+    this.init_application_license();
 
     this.unsubscribers.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
       //location path to device detail
@@ -399,6 +401,27 @@ export class DeviceController {
 
     this.scope.$emit('batch-delete-endpoints');
   }
+
+
+  init_application_license(){
+    let scope = this.di.$scope;
+
+    scope.isSwtMgmtEnable = false;
+    this.di.applicationService.getNocsysAppsState().then(()=>{
+      let allState = this.di.applicationService.getAppsState();
+      let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
+      if(allState[SWTMGT_APP_NAME] === 'ACTIVE'){
+        scope.isSwtMgmtEnable = true;
+      }
+
+      if(!scope.isSwtMgmtEnable){
+        this.di._.remove(this.scope.deviceModel.rowActions, (row)=>{
+          return row['value'] === 'reboot';
+        });
+      }
+    });
+  }
+
 }
 
 DeviceController.$inject = DeviceController.getDI();
