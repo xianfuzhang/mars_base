@@ -7,6 +7,7 @@ export class Wizard {
     return [
       '$compile',
       '$sce',
+      '$timeout',
       '$filter'
     ];
   }
@@ -86,14 +87,22 @@ export class Wizard {
       }
     }
 
+    let _closeWizard = () =>{
+      scope.isWizardClosing =  true;
+      scope.$apply();
+      this.di.$timeout(()=>{
+        scope.showWizard = false;
+        scope.isWizardClosing =  false;
+      },300);
+    }
+
     scope.postCancel = function() {
       scope.cancel()
         .then((result) => {
           if (result.valid == false) {
             scope.errorMessage = result.errorMessage || '';
           } else {
-            scope.showWizard = false;
-            scope.$apply();
+            _closeWizard();
           }
         });
     }
@@ -107,7 +116,8 @@ export class Wizard {
           if (result.valid == false) {
             scope.errorMessage = result.errorMessage || '';
           } else {
-            scope.showWizard = false;
+            // scope.showWizard = false;
+            _closeWizard();
           }
 
           scope.$apply();
