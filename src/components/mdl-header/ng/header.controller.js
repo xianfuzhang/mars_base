@@ -91,6 +91,8 @@ export class headerController{
       else {
         let origins = angular.copy(this.scope.menus.groups);
         let tenantState = apps['com.nocsys.tenant'];
+        let dhcpserverState = apps['com.nocsys.dhcpserver'];
+        let dhcpv6serverState = apps['com.nocsys.dhcpv6server'];
         for(let key in apps) {
           if (apps[key] !== 'ACTIVE') {
             switch (key) {
@@ -101,10 +103,12 @@ export class headerController{
                 break;
               case 'com.nocsys.dhcpserver':
               case 'com.nocsys.dhcpv6server':
-                let index0 = this.di._.findIndex(origins, {'group': 'Manage'});
-                if (index0 > -1) {
-                  let dhcpIndex = this.di._.findIndex(origins[index0]['items'], {'url': '/dhcp'});
-                  if (dhcpIndex > -1) origins[index0]['items'].splice(dhcpIndex, 1);  
+                if (dhcpserverState !== 'ACTIVE' && dhcpv6serverState !== 'ACTIVE') {
+                  let index0 = this.di._.findIndex(origins, {'group': 'Manage'});
+                  if (index0 > -1) {
+                    let dhcpIndex = this.di._.findIndex(origins[index0]['items'], {'url': '/dhcp'});
+                    if (dhcpIndex > -1) origins[index0]['items'].splice(dhcpIndex, 1);  
+                  }  
                 }
                 break;
               case 'com.nocsys.utility':
