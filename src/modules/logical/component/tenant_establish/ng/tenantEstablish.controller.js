@@ -30,6 +30,7 @@ export class TenantEstablishController {
     const rootScope = this.di.$rootScope;
     this.translate = this.di.$filter('translate');
 
+    scope.wizardHeight = {"height":'200px'};
 
     let di = this.di;
 
