@@ -363,8 +363,9 @@ export class DashboardController {
       //cpu analyzer
       let cpuCols = [];
       let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer);
+      let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.cpu.analyzer, function(item){return item.analyzer.length;});
       let x_axis = this.di.$scope.dashboardModel.cpu.analyzer.length > 0 ?
-        this.getCPUMemoryTimeSeries(this.di.$scope.dashboardModel.cpu.analyzer[0]) : ['x'];
+        this.getCPUMemoryTimeSeries(x_times) : ['x'];
       cpuCols.push(x_axis);  
       if(records.length) {
         records.forEach((item, index) =>{
@@ -385,8 +386,9 @@ export class DashboardController {
       //memory analyzer
       let memoryCols = [];
       let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
+      let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.memory.analyzer, function(item){return item.analyzer.length;});
       let x_axis = this.di.$scope.dashboardModel.memory.analyzer.length > 0 ? 
-          this.getCPUMemoryTimeSeries(this.di.$scope.dashboardModel.memory.analyzer[0]) : ['x'];
+          this.getCPUMemoryTimeSeries(x_times) : ['x'];
       memoryCols.push(x_axis);
       if(records.length) {
         records.forEach((item, index) =>{
@@ -412,8 +414,9 @@ export class DashboardController {
         });
         records.push(data);
       });
+      let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.controller.cpu.analyzer, function(item){return item.analyzer.length;});
       let x_axis = this.di.$scope.dashboardModel.controller.cpu.analyzer.length > 0 ? 
-          this.getCPUMemoryTimeSeries(this.di.$scope.dashboardModel.controller.cpu.analyzer[0]) : ['x'];
+          this.getCPUMemoryTimeSeries(x_times) : ['x'];
       cpuCols.push(x_axis);    
       if (records.length) {
         cpuCols= cpuCols.concat(records);
@@ -431,8 +434,9 @@ export class DashboardController {
         });
         records.push(data);
       });
+      let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.controller.memory.analyzer, function(item){return item.analyzer.length;});
       let x_axis = this.di.$scope.dashboardModel.controller.memory.analyzer.length > 0 ? 
-          this.getCPUMemoryTimeSeries(this.di.$scope.dashboardModel.controller.memory.analyzer[0]) : ['x'];
+          this.getCPUMemoryTimeSeries(x_times) : ['x'];
       memoryCols.push(x_axis);    
       if (records.length) {
         memoryCols = memoryCols.concat(records);
