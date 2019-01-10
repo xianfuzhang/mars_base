@@ -27,29 +27,29 @@
     background: #fff;
     border: 1px solid #000;
     overflow: hidden;
-    animation: come-in 0.3s ease-out;
-  
+    animation: come-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
     @include keyframes(come-in) {
       0% {
-        transform: scale(0,1);
+        transform: scale(0);
       }
       100% {
-        transform: scale(1,1);
+        transform: scale(1);
       }
     }
-    
-    //@include state(hide) {
-    //  animation: come-out 0.1s ease-in;
-    //
-    //  @include keyframes(come-out) {
-    //    0% {
-    //      width: 760px;
-    //    }
-    //    100% {
-    //      width: 0;
-    //    }
-    //  }
-    //}
+
+    @include keyframes(come-out) {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(0);
+      }
+    }
+
+    @include state(hide) {
+      animation: come-out 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    }
   }
   
   @include element(dialog-single) {
@@ -60,29 +60,29 @@
     background: #fff;
     border: 1px solid #000;
     overflow: hidden;
-    animation: come-in-single 0.3s ease-out;
-    
+    animation: come-in-single 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
     @include keyframes(come-in-single) {
       0% {
-        transform: scale(0,1);
+        transform: scale(0);
       }
       100% {
-        transform: scale(1,1);
+        transform: scale(1);
       }
     }
-  
-    //@include state(hide) {
-    //  animation: come-out-single 0.1s ease-in;
-    //
-    //  @include keyframes(come-out-single) {
-    //    0% {
-    //      width: 570px;
-    //    }
-    //    100% {
-    //      width: 0;
-    //    }
-    //  }
-    //}
+
+    @include keyframes(come-out-single) {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(0);
+      }
+    }
+
+    @include state(hide) {
+      animation: come-out-single 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    }
   }
 
   @include element(header) {
