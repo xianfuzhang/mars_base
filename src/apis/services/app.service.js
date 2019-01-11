@@ -41,7 +41,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
               {'label': 'Intents', 'url': '/intents', 'role': 2},
               {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
-              //  {'label': 'Storm Profile', 'url': '/storm_control'},
+              {'label': this.translate('MODULE.HEADER.FABRIC.STORM'), 'url': '/storm_control', 'role': 2},
             ]
           },
           {
@@ -614,6 +614,14 @@ export class appService {
 
   getEGPPolicyDetailUrl(policy_name) {
     return this.getZoneEndpoint(true) + "/egp/v1/policy/" + policy_name;
+  }
+
+  getStormControlUrl(){
+    return this.getZoneEndpoint(true) + "/storm/v1";
+  }
+
+  getStormControlUrlByDeviceId(deviceId){
+    return this.getZoneEndpoint(true) + "/storm/v1/"+ deviceId;
   }
 }
 

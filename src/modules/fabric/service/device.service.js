@@ -1244,6 +1244,78 @@ export class DeviceService {
       }
     ]
   }
+
+
+
+  getStormActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': false, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+
+  getStormSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.FABRIC.STORM.COLUMN.DEVICE'),
+        'field': 'device_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.STORM.COLUMN.UNICAST_ENABLED'),
+        'field': 'unicast_enabled',
+        'type': 'icon',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.STORM.COLUMN.UNICAST'),
+        'field': 'unicast',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.STORM.COLUMN.BCAST_ENABLED'),
+        'field': 'bcast_enabled',
+        'type':'icon',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.STORM.COLUMN.BCAST'),
+        'field': 'bcast',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.STORM.COLUMN.MCAST_ENABLED'),
+        'field': 'mcast_enabled',
+        'type':'icon',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.STORM.COLUMN.MCAST'),
+        'field': 'mcast',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
+
+  getStormTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.FABRIC.STORM.ROW.ACTION.EDIT'),
+        'role': 2,
+        'value': 'edit'
+      },
+      // {
+      //   'label': this.translate('MODULES.FABRIC.STORM.ROW.ACTION.DELETE'),
+      //   'role': 2,
+      //   'value': 'delete'
+      // }
+    ]
+  }
+
 }
 
 DeviceService.$inject = DeviceService.getDI();

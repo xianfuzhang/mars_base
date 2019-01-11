@@ -263,6 +263,13 @@ function configRouterfunction ($routeProvider,
 				loggedin: checkLoggedIn
 			}
 		})
+    .when('/storm_control', {
+      template: require('./modules/fabric/template/storm.html'),
+      controller: 'stormController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .otherwise({ redirectTo: '/' });
 }
 

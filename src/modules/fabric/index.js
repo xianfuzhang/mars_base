@@ -27,6 +27,8 @@ import {CreateEndpointController} from './components/createEndpoint/ng/createEnd
 import {PfcEstablishController} from './components/pfc_establish/ng/pfcEstablish.controller';
 import {UpLinkEstablishController} from './components/uplink_establish/ng/upLinkEstablish.controller';
 import {UpLinkController} from './ng/uplink.controller';
+import {StormController} from './ng/storm.controller';
+import {StormEstablishController} from './components/storm_establish/ng/stormEstablish.controller';
 
 export default angular
   .module('fabric', [])
@@ -51,6 +53,8 @@ export default angular
   .controller('pfcEstablishController', PfcEstablishController)
   .controller('upLinkController', UpLinkController)
   .controller('upLinkEstablishController', UpLinkEstablishController)
+  .controller('stormController', StormController)
+  .controller('stormEstablishController', StormEstablishController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)

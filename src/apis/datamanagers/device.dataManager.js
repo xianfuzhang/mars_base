@@ -570,6 +570,58 @@ export class DeviceDataManager {
       );
     return defer.promise;
   }
+
+  getAllStorm(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getStormControlUrl())
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  getStormControl(deviceId){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getStormControlUrlByDeviceId(deviceId))
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  postStormControl(deviceId, param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getStormControlUrlByDeviceId(deviceId), param)
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  deleteStormControl(deviceId){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getStormControlUrlByDeviceId(deviceId))
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
 DeviceDataManager.$$ngIsClass = true;
