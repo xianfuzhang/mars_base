@@ -584,6 +584,19 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getLogicalPortsList() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getLogicalPortUrl())
+      .then((res) => {
+          defer.resolve(res.data.logical_ports);
+        },
+        (err) => {
+          defer.resolve([]);
+        }
+      );
+    return defer.promise;
+  }
+
   getStormControl(deviceId){
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getStormControlUrlByDeviceId(deviceId))
@@ -618,6 +631,19 @@ export class DeviceDataManager {
         },
         (err) => {
           defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  deleteLogicalPort(name) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDeleteLogicalPortUrl(name))
+      .then((res) => {
+          defer.resolve(null);
+        },
+        (err) => {
+          defer.reject(err.data.message);
         }
       );
     return defer.promise;

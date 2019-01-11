@@ -41,6 +41,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
               {'label': 'Intents', 'url': '/intents', 'role': 2},
               {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
               {'label': this.translate('MODULE.HEADER.FABRIC.STORM'), 'url': '/storm_control', 'role': 2},
             ]
           },
@@ -620,8 +621,16 @@ export class appService {
     return this.getZoneEndpoint(true) + "/storm/v1";
   }
 
-  getStormControlUrlByDeviceId(deviceId){
-    return this.getZoneEndpoint(true) + "/storm/v1/"+ deviceId;
+  getStormControlUrlByDeviceId(deviceId) {
+    return this.getZoneEndpoint(true) + "/storm/v1/" + deviceId;
+  }
+
+  getLogicalPortUrl() {
+    return this.getZoneEndpoint(true) + "/logicalport/v1"; 
+  }
+
+  getDeleteLogicalPortUrl(logical_name) {
+    return this.getZoneEndpoint(true) + "/logicalport/v1/" +  logical_name;   
   }
 }
 

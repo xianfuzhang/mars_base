@@ -1245,8 +1245,6 @@ export class DeviceService {
     ]
   }
 
-
-
   getStormActionsShow() {
     return {
       'menu': {'enable': false, 'role': 1},
@@ -1316,6 +1314,76 @@ export class DeviceService {
     ]
   }
 
+  getLogicalPortActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 3}, 
+      'add': {'enable': true, 'role': 3}, 
+      'remove': {'enable': true, 'role': 3}, 
+      'refresh': {'enable': true, 'role': 3}, 
+      'search': {'enable': false, 'role': 3}
+    };
+  }
+
+  getLogicalPortTableRowActions() {
+    return [
+     {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
+        'role': 3,
+        'value': 'edit'
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 3,
+        'value': 'delete'
+      }
+    ]
+  }
+
+  getLogicalPortTableSchema() {
+    return [
+     {
+        'label': this.translate('MODULES.PORT.COLUMN.NAME'),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': 'M-LAG',
+        'field': 'mlag',
+        'layout': {'visible': false, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULES.PORT.COLUMN.GROUP'),
+        'field': 'group',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.PORT.COLUMN.MEMBER_COUNT'),
+        'field': 'member_count',
+        'layout': {'visible': true, 'sortable': true}
+      },
+    ];
+  }
+
+  getLogicalPortMembersTableSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.PORT.MEMBER.COLUMN.DEVICE'),
+        'field': 'device',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULES.PORT.MEMBER.COLUMN.PORT'),
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULES.PORT.MEMBER.COLUMN.STATUS'),
+        'field': 'status',
+        'type': 'icon',
+        'layout': {'visible': true, 'sortable': false}
+      }
+    ];
+  }   
 }
 
 DeviceService.$inject = DeviceService.getDI();
