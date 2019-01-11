@@ -33,10 +33,20 @@ export class modalWindow {
 
       scope.close = (evt) => {
         let modal = this.di.modalStack.getTop();
+
+        let _close = () =>{
+          scope.isModalClosing =  true;
+          this.di.$timeout(()=>{
+            this.di.modalStack.dismiss(modal.key, {canceled: true});
+            scope.isModalClosing =  false;
+          },400);
+        };
+
         if (modal && evt.target === evt.currentTarget) {
           evt.preventDefault();
           evt.stopPropagation();
-          this.di.modalStack.dismiss(modal.key, {canceled: true});
+          // this.di.modalStack.dismiss(modal.key, {canceled: true});
+          _close();
         }
       };
 
