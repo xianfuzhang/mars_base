@@ -1,8 +1,31 @@
-<div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">
-  <mdl-header></mdl-header>
-  <div class="main">
-    <section class="+hasscroll">
-      interface group page.
-    </section>
-  </div>
+<mdl-header></mdl-header>
+<div class="app-main">
+	<content-header big-title="{{'MODULE.HEADER.FABRIC.LOGICAL_PORT'|translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span ng-bind="'MODULE.HEADER.FABRIC.LOGICAL_PORT'|translate"></span>
+  </content-header>
+  <section class="app-body" >
+  	<div class="section-3-2">
+  		<div class="main__content">
+	    	<mdl-table actions-show="model.actionsShow"
+	                 actions="model.rowActions"
+	                 row-click="onTableRowClick($event)"
+	                 row-select-action="onTableRowSelectAction($event)"
+	                 provider="model.provider" api-ready="onAPIReady($api)"
+	                 on-add="addLogicalPort()" on-remove="batchRemove($value)">
+	      </mdl-table>
+	    </div>
+  	</div>
+    <div class="section-3-1" ng-if="selectedLogicalPort">
+    	<div class="port-member">
+        <h3 ng-bind="'MODULES.PORT.MEMBER.TITLE'|translate"></h3>
+        <mdl-table provider="memberModel.provider" api-ready="onMemberApiReady($api)">
+        </mdl-table>
+      </div>  
+    </div>
+  </section>
+  <ng-controller class="cos-wizard" ng-controller="trunkCtrl">
+    <wizard></wizard>
+  </ng-controller>
 </div>

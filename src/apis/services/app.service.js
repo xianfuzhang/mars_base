@@ -39,9 +39,9 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary', 'role': 1},
               {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
               {'label': 'Intents', 'url': '/intents', 'role': 2},
-              {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
-              //  {'label': 'Storm Profile', 'url': '/storm_control'},
+              {'label': 'UpLink', 'url': '/uplinks', 'role': 2}
             ]
           },
           {
@@ -614,6 +614,14 @@ export class appService {
 
   getEGPPolicyDetailUrl(policy_name) {
     return this.getZoneEndpoint(true) + "/egp/v1/policy/" + policy_name;
+  }
+
+  getLogicalPortUrl() {
+    return this.getZoneEndpoint(true) + "/logicalport/v1"; 
+  }
+
+  getDeleteLogicalPortUrl(logical_name) {
+    return this.getZoneEndpoint(true) + "/logicalport/v1/" +  logical_name;   
   }
 }
 

@@ -1,62 +1,25 @@
-<!--<div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">-->
-  <mdl-header></mdl-header>
-  <!--<mar-header  headers="deviceModel.headers"></mar-header>-->
-  <div class="app-main">
-    <content-header big-title="{{page_title}}">
-      <a href="/">Mars Cloud</a>
-      <span>•</span>
-      <span ng-bind="'MODULES.SWITCHES.TAB.SCHEMA.SWITCH'|translate"></span>
-    </content-header>
-    <section class="app-body" >
-      <div class="main__content">
-        <!--<mdl-tabs ng-model="tabSelected" options="tabs"
-                  class-list="main__content__device-tabs"
-                  on-select="onTabChange($value)">
-        </mdl-tabs>-->
-        <!--<section class="tab-content">-->
-          <mdl-table actions-show="deviceModel.actionsShow"
-                     actions="deviceModel.rowActions"
-                     row-click="onTableRowClick($event)"
-                     row-select-action="onTableRowSelectAction($event)"
-                     row-actions-filter="onTableRowActionsFilter($event)"
-                     provider="deviceModel.deviceProvider" api-ready="onDeviceAPIReady($api)"
-                     on-add="addSwitch()" on-remove="batchRemove($value)">
-          </mdl-table>
-        <!--</section>-->
-        <!--<section class="tab-content" ng-if="tabSelected.type == 'port'">
-          <mdl-table actions-show="portModel.actionsShow"
-                     actions="portModel.rowActions"
-                     row-click="onTableRowClick($event)"
-                     provider="portModel.portProvider"
-                     row-actions-filter="onPortTableRowActionsFilter($event)"
-                     row-select-action="onTableRowSelectAction($event)"
-                     api-ready="onPortApiReady($api)">
-          </mdl-table>
-        </section>
-        <section class="tab-content" ng-if="tabSelected.type == 'link'">
-          <mdl-table actions-show="linkModel.actionsShow"
-                     row-click="onTableRowClick($event)"
-                     provider="linkModel.linkProvider" api-ready="onLinkApiReady($api)">
-          </mdl-table>
-        </section>
-        <section class="tab-content" ng-if="tabSelected.type == 'endpoint'">
-          <mdl-table actions-show="endpointModel.actionsShow"
-                     actions="endpointModel.rowActions"
-                     row-click="onTableRowClick($event)"
-                     row-select-action="onTableRowSelectAction($event)"
-                     provider="endpointModel.endpointProvider" api-ready="onEndpointApiReady($api)"
-                     on-add="addEndpoint()" on-remove="batchRemove($value)">
-          </mdl-table>
-        </section>-->
-      </div>
-    </section>
-    <!--<section class="column__1__3 +hasscroll +hasborder">
-    </section>-->
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{page_title}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span ng-bind="'MODULES.SWITCHES.TAB.SCHEMA.SWITCH'|translate"></span>
+  </content-header>
+  <section class="app-body" >
+    <div class="main__content">
+      <mdl-table actions-show="deviceModel.actionsShow"
+                 actions="deviceModel.rowActions"
+                 row-click="onTableRowClick($event)"
+                 row-select-action="onTableRowSelectAction($event)"
+                 row-actions-filter="onTableRowActionsFilter($event)"
+                 provider="deviceModel.deviceProvider" api-ready="onDeviceAPIReady($api)"
+                 on-add="addSwitch()" on-remove="batchRemove($value)">
+      </mdl-table>
+    </div>
+  </section>
 
-    <ng-controller ng-controller="deviceWizardController">
-      <wizard></wizard>
-    </ng-controller>
-  </div>
-<!--
+  <ng-controller ng-controller="deviceWizardController">
+    <wizard></wizard>
+  </ng-controller>
 </div>
--->
+

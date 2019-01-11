@@ -6,7 +6,6 @@ import {InterfaceGroupController} from './ng/interfaceGroup.controller';
 import {DeviceController} from './ng/device.controller';
 import {DeviceDetailController} from './ng/deviceDetail.controller';
 import {EndPointController} from './ng/endpoints.controller';
-import {StatisticController} from './ng/statistic.controller';
 import {StormControlController} from './ng/stormControl.controller';
 import {DeviceService} from './service/device.service';
 import {DeviceDetailService} from './service/deviceDetail.service';
@@ -26,6 +25,7 @@ import {ShowSwitchPFCsController} from './ng/showSwitchPFCs.controller';
 import {CreateEndpointController} from './components/createEndpoint/ng/createEndpoint.controller';
 import {PfcEstablishController} from './components/pfc_establish/ng/pfcEstablish.controller';
 import {UpLinkEstablishController} from './components/uplink_establish/ng/upLinkEstablish.controller';
+import {TrunkController} from  './components/trunk_establish/ng/trunk.controller';
 import {UpLinkController} from './ng/uplink.controller';
 
 export default angular
@@ -34,7 +34,6 @@ export default angular
   .controller('deviceDetailController', DeviceDetailController)
   .controller('interfaceGroupController', InterfaceGroupController)
   .controller('endPointController', EndPointController)
-  .controller('statisticController', StatisticController)
   .controller('stormControlController', StormControlController)
   .controller('fabricSummaryController', FabricSummaryController)
   .controller('deviceWizardController', DeviceWizardController)
@@ -51,6 +50,7 @@ export default angular
   .controller('pfcEstablishController', PfcEstablishController)
   .controller('upLinkController', UpLinkController)
   .controller('upLinkEstablishController', UpLinkEstablishController)
+  .controller('trunkCtrl', TrunkController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)
