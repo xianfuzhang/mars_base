@@ -93,7 +93,7 @@ export class Wizard {
       this.di.$timeout(()=>{
         scope.showWizard = false;
         scope.isWizardClosing =  false;
-      },300);
+      },400);
     }
 
     scope.postCancel = function() {

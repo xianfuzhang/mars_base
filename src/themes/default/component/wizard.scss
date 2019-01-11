@@ -48,7 +48,7 @@
     }
 
     @include state(hide) {
-      animation: come-out 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+      animation: come-out 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
     }
   }
   
@@ -81,7 +81,7 @@
     }
 
     @include state(hide) {
-      animation: come-out-single 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+      animation: come-out-single 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
     }
   }
 
