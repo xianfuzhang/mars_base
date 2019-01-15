@@ -1363,11 +1363,11 @@ export class DeviceService {
 
   getMonitorTableRowActions() {
     return [
-      {
-        'label': this.translate('MODULES.FABRIC.MONITOR.ROW.ACTION.EDIT'),
-        'role': 2,
-        'value': 'edit'
-      },
+      // {
+      //   'label': this.translate('MODULES.FABRIC.MONITOR.ROW.ACTION.EDIT'),
+      //   'role': 2,
+      //   'value': 'edit'
+      // },
       {
         'label': this.translate('MODULES.FABRIC.MONITOR.ROW.ACTION.DELETE'),
         'role': 2,
