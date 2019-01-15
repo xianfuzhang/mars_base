@@ -153,6 +153,7 @@ export class DHCPController {
 
     let emptyDHCPV6ServerConfig = {
       "enable": '0',
+      "isEnable": false,
       "dns_server": "",
       "domain_search_list": "",
       "sntp_server": "",
@@ -316,12 +317,16 @@ export class DHCPController {
         let dhcpJson = res.data;
         scope.dhcpModel.dhcpserverv6 = angular.copy(emptyDHCPV6ServerConfig);
         if(dhcpJson['MANAGEMENT']){
-          scope.dhcpModel.dhcpserverv6.enable = this.di._.find(scope.displayLabel.v6enable.options, {'value': dhcpJson['MANAGEMENT']['enable']});
-          if(dhcpJson['MANAGEMENT']['enable'] === '1' && dhcpJson['DHCPv6']){
-            scope.dhcpModel.dhcpserverv6.dns_server = dhcpJson['DHCPv6']['DNS_SERVER'];
-            scope.dhcpModel.dhcpserverv6.domain_search_list = dhcpJson['DHCPv6']['DOMAIN_SEARCH_LIST'];
-            scope.dhcpModel.dhcpserverv6.sntp_server = dhcpJson['DHCPv6']['SNTP_SERVER'];
-          }
+          // scope.dhcpModel.dhcpserverv6.enable = this.di._.find(scope.displayLabel.v6enable.options, {'value': dhcpJson['MANAGEMENT']['enable']});
+          scope.dhcpModel.dhcpserverv6.isEnable = dhcpJson['MANAGEMENT']['enable'] === '1'?true:false;
+          scope.dhcpModel.dhcpserverv6.dns_server = dhcpJson['DHCPv6']['DNS_SERVER'];
+          scope.dhcpModel.dhcpserverv6.domain_search_list = dhcpJson['DHCPv6']['DOMAIN_SEARCH_LIST'];
+          scope.dhcpModel.dhcpserverv6.sntp_server = dhcpJson['DHCPv6']['SNTP_SERVER'];
+          // if(dhcpJson['MANAGEMENT']['enable'] === '1' && dhcpJson['DHCPv6']){
+          //   scope.dhcpModel.dhcpserverv6.dns_server = dhcpJson['DHCPv6']['DNS_SERVER'];
+          //   scope.dhcpModel.dhcpserverv6.domain_search_list = dhcpJson['DHCPv6']['DOMAIN_SEARCH_LIST'];
+          //   scope.dhcpModel.dhcpserverv6.sntp_server = dhcpJson['DHCPv6']['SNTP_SERVER'];
+          // }
         }
       },(err)=>{
         // this.di.notificationService.renderWarning(scope, err);
@@ -418,10 +423,24 @@ export class DHCPController {
     };
 
 
+    // scope.changeDHCPv6Switch = () =>{
+    //   this.di.manageDataManager.getNTP().then((res) => {
+    //
+    //     let ntp = (res.data);
+    //     ntp['enabled'] = scope.ntpmodel.isEnable;
+    //     this.di.manageDataManager.putNTP(ntp).then((res)=>{},(err)=>{
+    //       this.di.notificationService.renderWarning(scope, err);
+    //     })
+    //
+    //   },(err)=>{
+    //     this.di.notificationService.renderWarning(scope, err);
+    //   });
+    // }
+
     let genV6PostParam = () =>{
       return  {
         "MANAGEMENT": {
-          "enable": "1"
+          "enable": scope.dhcpModel.dhcpserverv6.isEnable?"1":"0"
         },
         "CONTROLLER": {
           "mapping_url": "http://localhost:8181/mars/dhcpv6server/ztp/v1/dhcpv6server/mappings",
@@ -451,6 +470,8 @@ export class DHCPController {
 
 
     scope.saveDHCPV6Config = () =>{
+      // console.log(scope.dhcpModel.dhcpserverv6.isEnable);
+      // return false;
       this.di.$rootScope.$emit('page_dhcp_v6');
       if(!validCurrentDom('dhcp')){
         return false;

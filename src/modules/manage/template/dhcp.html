@@ -169,17 +169,24 @@
             <mar-section s-title="{{'MODULES.MANAGE.DHCP.TAB.DHCP_SERVER_V6'|translate}}" no-fold="true" class="">
               <transclude-body>
                 <table class="dhcp_table" style="margin:auto">
+                  <div class="ntp_switch" style="margin-bottom: 20px;">
+                    <td><div class="stepForm__input__label" style="display:inline-block">{{'MODULES.MANAGE.DHCPV6.IS_ENABLE'|translate}}</div></td>
+                    <td>
+                      <mdl-switch style="vertical-align: top" on-click="changeSwitch()" ng-model="dhcpModel.dhcpserverv6.isEnable" name="ntp_enable" display-label="{on: '是', off: '否', id: 'ntp_enable'}">
+                      </mdl-switch>
+                    </td>
+                  </div>
                   <tr>
-                    <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.DNS_SERVER'|translate}}<span class="stepForm__input__required">*</span></div></td>
-                    <td><valid-input v-require="true" ng-model="dhcpModel.dhcpserverv6.dns_server" v-type="ipv6" v-rpcid="page_dhcp_v6" ></valid-input></td>
+                    <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.DNS_SERVER'|translate}}</div></td>
+                    <td><valid-input ng-model="dhcpModel.dhcpserverv6.dns_server" v-type="ipv6" v-rpcid="page_dhcp_v6" ></valid-input></td>
                   </tr>
                   <tr>
-                    <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.DOMAIN_SEARCH_LIST'|translate}}<span class="stepForm__input__required">*</span></div></td>
-                    <td><valid-input v-require="true" ng-model="dhcpModel.dhcpserverv6.domain_search_list"  v-rpcid="page_dhcp_v6" ></valid-input></td>
+                    <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.DOMAIN_SEARCH_LIST'|translate}}</div></td>
+                    <td><valid-input ng-model="dhcpModel.dhcpserverv6.domain_search_list"  v-rpcid="page_dhcp_v6" ></valid-input></td>
                   </tr>
                   <tr>
-                    <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.SNTP_SERVER'|translate}}<span class="stepForm__input__required">*</span></div></td>
-                    <td><valid-input v-require="true" ng-model="dhcpModel.dhcpserverv6.sntp_server" v-type="ipv6" v-rpcid="page_dhcp_v6" ></valid-input></td>
+                    <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.SNTP_SERVER'|translate}}</div></td>
+                    <td><valid-input  ng-model="dhcpModel.dhcpserverv6.sntp_server" v-type="ipv6" v-rpcid="page_dhcp_v6" ></valid-input></td>
                   </tr>
                 </table>
               </transclude-body>
