@@ -164,7 +164,29 @@ export class headerController{
                     if (qosIndex > -1) origins[index6]['items'].splice(qosIndex, 1);
                   }
                 }
-                break;     
+                break;
+              case 'com.nocsys.monitor':
+                let index7 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (index7 > -1) {
+                  let endpointIndex = this.di._.findIndex(origins[index7]['items'], {'url': '/monitor'});
+                  if (endpointIndex > -1) origins[index7]['items'].splice(endpointIndex, 1);
+                }
+                break;
+
+              case 'com.nocsys.storm-control':
+                let index8 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (index8 > -1) {
+                  let endpointIndex = this.di._.findIndex(origins[index8]['items'], {'url': '/storm_control'});
+                  if (endpointIndex > -1) origins[index8]['items'].splice(endpointIndex, 1);
+                }
+                break;
+              case 'com.nocsys.logicalport':
+                let index9 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (index9 > -1) {
+                  let endpointIndex = this.di._.findIndex(origins[index9]['items'], {'url': '/logical_port'});
+                  if (endpointIndex > -1) origins[index9]['items'].splice(endpointIndex, 1);
+                }
+                break;
             }
           }
         }
