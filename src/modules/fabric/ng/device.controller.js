@@ -399,8 +399,6 @@ export class DeviceController {
       this.di.notificationService.render(this.scope);
       this.scope.deviceModel.deviceAPI.queryUpdate();
     });
-
-    this.scope.$emit('batch-delete-endpoints');
   }
 
 

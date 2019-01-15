@@ -197,8 +197,6 @@ export class AccountManageController {
       this.di.notificationService.render(this.scope);
       this.scope.accountModel.api.queryUpdate();
     });
-
-    this.scope.$emit('batch-delete-endpoints');
   }
 
   getEntities(users) {

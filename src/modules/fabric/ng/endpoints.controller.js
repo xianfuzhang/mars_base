@@ -273,8 +273,6 @@ export class EndPointController {
       }
       this.di.notificationService.render(this.scope);
     });
-
-    this.scope.$emit('batch-delete-endpoints');
   }
 }
 

@@ -38,12 +38,6 @@ export class rowCheckbox {
       element.find('input')[0].checked = false;
     }));*/
 
-    unsubscribers.push(this.di.$rootScope.$on('batch-delete-endpoints', (event) => {
-      if (element.find('input')[0].checked) {
-        element.find('input')[0].checked = false;
-      }
-    }));
-
     scope.$watch('data.isChecked', () => {
       element.find('input')[0].checked = scope.data.isChecked ? true : false;
     }, true);
