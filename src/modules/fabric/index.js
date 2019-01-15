@@ -29,6 +29,8 @@ import {TrunkController} from  './components/trunk_establish/ng/trunk.controller
 import {UpLinkController} from './ng/uplink.controller';
 import {StormController} from './ng/storm.controller';
 import {StormEstablishController} from './components/storm_establish/ng/stormEstablish.controller';
+import {MonitorController} from './ng/monitor.controller';
+import {MonitorEstablishController} from './components/monitor_establish/ng/monitorEstablish.controller';
 
 export default angular
   .module('fabric', [])
@@ -54,6 +56,8 @@ export default angular
   .controller('upLinkEstablishController', UpLinkEstablishController)
   .controller('stormController', StormController)
   .controller('stormEstablishController', StormEstablishController)
+  .controller('monitorController', MonitorController)
+  .controller('monitorEstablishController', MonitorEstablishController)
   .controller('trunkCtrl', TrunkController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)

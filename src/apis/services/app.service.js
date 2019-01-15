@@ -43,6 +43,7 @@ export class appService {
               {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
               {'label': this.translate('MODULE.HEADER.FABRIC.STORM'), 'url': '/storm_control', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.FABRIC.MONITOR'), 'url': '/monitor', 'role': 2},
             ]
           },
           {
@@ -615,6 +616,14 @@ export class appService {
 
   getEGPPolicyDetailUrl(policy_name) {
     return this.getZoneEndpoint(true) + "/egp/v1/policy/" + policy_name;
+  }
+
+  getMonitorUrl(){
+    return this.getZoneEndpoint(true) + "/monitor/v1";
+  }
+
+  getMonitorUrlBySessionId(sessionId) {
+    return this.getZoneEndpoint(true) + "/monitor/v1/" + sessionId;
   }
 
   getStormControlUrl(){

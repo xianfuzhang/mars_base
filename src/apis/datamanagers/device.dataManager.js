@@ -636,6 +636,58 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getAllMonitor(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getMonitorUrl())
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  getMonitor(session_id){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getMonitorUrlBySessionId(session_id))
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  postMonitor(param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getMonitorUrl(), param)
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  deleteMonitor(session_id){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getMonitorUrlBySessionId(session_id))
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
   deleteLogicalPort(name) {
     let defer = this.di.$q.defer();
     this.di.$http.delete(this.di.appService.getDeleteLogicalPortUrl(name))

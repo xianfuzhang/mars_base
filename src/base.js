@@ -270,6 +270,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/monitor', {
+      template: require('./modules/fabric/template/monitor.html'),
+      controller: 'monitorController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .otherwise({ redirectTo: '/' });
 }
 

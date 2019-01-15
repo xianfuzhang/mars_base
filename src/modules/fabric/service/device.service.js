@@ -1314,6 +1314,69 @@ export class DeviceService {
     ]
   }
 
+
+  getMonitorActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': false, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+
+  getMonitorSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.FABRIC.MONITOR.COLUMN.SESSION_ID'),
+        'field': 'session_id',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.MONITOR.COLUMN.SOURCE_SWITCH'),
+        'field': 'source_switch',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.MONITOR.COLUMN.SOURCE_PORT'),
+        'field': 'source_port',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.MONITOR.COLUMN.DIRECTION'),
+        'field': 'direction',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.MONITOR.COLUMN.DST_SWITCH'),
+        'field': 'dst_switch',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.MONITOR.COLUMN.DST_PORT'),
+        'field': 'dst_port',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
+
+  getMonitorTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.FABRIC.MONITOR.ROW.ACTION.EDIT'),
+        'role': 2,
+        'value': 'edit'
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.MONITOR.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ]
+  }
+
+
   getLogicalPortActionsShow() {
     return {
       'menu': {'enable': false, 'role': 3}, 

@@ -1,0 +1,31 @@
+<div class="monitor_establish">
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.MONITOR.COLUMN.SOURCE_SWITCH'|translate}}</div>
+        <mdl-select ng-model="monitorModel.source_swt" display-label="displayLabel.device" >
+        </mdl-select>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.MONITOR.COLUMN.SOURCE_PORT'|translate}}</div>
+        <valid-input v-style='{"width": "100px"}' v-require="true" ng-model="monitorModel.source_port" v-type="port" v-rpcid="page_monitor_establish" ></valid-input>
+    </div>
+
+    <div class="stepForm__input" style="margin-top: 30px;">
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.MONITOR.COLUMN.DIRECTION'|translate}}</div>
+        <mdl-select ng-model="monitorModel.direction" display-label="displayLabel.direction">
+        </mdl-select>
+    </div>
+
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.MONITOR.COLUMN.DST_SWITCH'|translate}}</div>
+        <mdl-select ng-model="monitorModel.dst_switch" display-label="displayLabel.device" >
+        </mdl-select>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.MONITOR.COLUMN.DST_PORT'|translate}}</div>
+        <valid-input v-style='{"width": "100px"}' v-require="true" ng-model="monitorModel.dst_port" v-regex="port" v-rpcid="page_monitor_establish" ></valid-input>
+    </div>
+</div>
