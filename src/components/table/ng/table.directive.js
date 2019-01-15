@@ -287,7 +287,7 @@ export class mdlTable {
         scope.tableModel.filteredData = tmpData.filter((item) => {
           let match = false;
           for(let key in item) {
-            if ('string' === typeof item[key] && reg.test(item[key])) {
+            if (scope.tableModel.columnsByField[key] && 'string' === typeof item[key] && reg.test(item[key])) {
               match = true;
               item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
             }  
