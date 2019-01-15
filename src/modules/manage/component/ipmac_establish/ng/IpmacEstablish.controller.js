@@ -29,7 +29,7 @@ export class IpmacEstablishController {
     const rootScope = this.di.$rootScope;
     this.translate = this.di.$filter('translate');
 
-
+    scope.wizardHeight = {"height":'200px'};
     let di = this.di;
 
     this.di.$scope.showWizard = false;
