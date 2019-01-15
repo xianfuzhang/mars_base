@@ -210,6 +210,7 @@ export class DeviceController {
           .then((data) =>{
             this.batchDeleteDevices($value);
           }, (res) =>{
+            this.scope.deviceModel.deviceAPI.queryUpdate();
             this.di.$log.debug('delete switch dialog cancel');
           });
         /*switch (this.scope.tabSelected.type) {
@@ -398,8 +399,6 @@ export class DeviceController {
       this.di.notificationService.render(this.scope);
       this.scope.deviceModel.deviceAPI.queryUpdate();
     });
-
-    this.scope.$emit('batch-delete-endpoints');
   }
 
 

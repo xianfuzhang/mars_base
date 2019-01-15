@@ -49,7 +49,10 @@ export class tablePagination {
         scope.tableModel.pagination.number = scope.model.value;
         scope.tableModel.removeItems = [];
         scope._queryUpdate(scope._getTableParams());
-        scope.$emit('pagination-checkbox-unselect');
+        scope.tableModel.filteredData.forEach((item) => {
+          item.isChecked = false;
+        });
+        //scope.$emit('pagination-checkbox-unselect');
       }
     };
 

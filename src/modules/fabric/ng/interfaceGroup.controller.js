@@ -2,8 +2,10 @@ export class InterfaceGroupController {
   static getDI() {
     return [
       '$scope',
+      '$rootScope',
       '$filter',
       '$q',
+      '_',
       'roleService',
       'deviceService',
       'notificationService',
@@ -63,6 +65,17 @@ export class InterfaceGroupController {
       this.scope.model.API.setSelectedRow(params.port.name);
       this.portMembersQuery();
     });
+
+    let unsubscribers = [];
+    unsubscribers.push(this.di.$rootScope.$on('trunk-list-refresh', () => {
+      this.scope.model.API.queryUpdate();
+    }));
+
+    this.scope.$on('$destroy', () => {
+      unsubscribers.forEach((cb) => {
+        cb();
+      });
+    });
   }
 
   initActions() {
@@ -83,7 +96,19 @@ export class InterfaceGroupController {
     this.scope.onTableRowSelectAction = ($event) => {
       if (!$event.action || !$event.data) return;
       if ($event.action.value === 'edit') {
-        this.scope.$emit('trunk-wizard-show', {'edit': true});
+        this.getAvailableMemberDevices().then((result) => {
+          this.scope.$emit('trunk-wizard-show', {
+            'edit': true, 
+            'trunk': $event.data,
+            'availableDevices': result
+          });
+        }, () => {
+          this.scope.alert = {
+            type: 'warning',
+            msg: this.translate('MODULES.PORT.MEMBERS.NO_AVAILABLE_DEVICES')
+          }
+          this.di.notificationService.render(this.scope);
+        });
       }
       else if ($event.action.value === 'delete') {
         this.di.deviceDataManager.deleteLogicalPort($event.data.name).then(() => {
@@ -104,7 +129,15 @@ export class InterfaceGroupController {
     };
 
     this.scope.addLogicalPort = () => {
-      this.scope.$emit('trunk-wizard-show', {});
+      this.getAvailableMemberDevices().then((result) => {
+        this.scope.$emit('trunk-wizard-show', {'edit': false, 'availableDevices': result});
+      }, () => {
+        this.scope.alert = {
+          type: 'warning',
+          msg: this.translate('MODULES.PORT.MEMBERS.NO_AVAILABLE_DEVICES')
+        }
+        this.di.notificationService.render(this.scope);
+      });
     };
 
     this.scope.batchRemove = ($value) => {
@@ -224,6 +257,44 @@ export class InterfaceGroupController {
     .finally(() => {
       this.scope.model.API.queryUpdate();
     });
+  }
+
+  getAvailableMemberDevices() {
+    let defer = this.di.$q.defer(),
+      deviceDefer = this.di.$q.defer(), portDefer = this.di.$q.defer();
+    this.di.deviceDataManager.getDeviceConfigs().then((devices) => {  
+      deviceDefer.resolve(devices);
+    });
+    this.di.deviceDataManager.getPorts().then((res) => {
+      portDefer.resolve(res.data.ports);
+    });
+
+    this.di.$q.all([deviceDefer.promise, portDefer.promise]).then((arr) => {
+      this.scope.availableDevices = [];
+      arr[0].forEach((device) => {
+        let ports = [];
+        arr[1].forEach((port) => {
+          if (port.isEnabled && port.element === device.id) {
+            ports.push(port);
+          }
+        });
+        this.scope.availableDevices.push({
+          'id': device.id, 
+          'name': device.name,
+          'ports': ports,
+          'groups': [1, 2, 3, 4, 5, 6, 7]
+        });
+      });
+    })
+    .finally(() => {
+      let arr = this.di._.filter(this.scope.availableDevices, (item) => {
+        return item.ports.length > 0 && item.groups.length > 0;
+      });
+      this.scope.availableDevices = arr;
+      this.scope.availableDevices.length > 0 ? defer.resolve(this.scope.availableDevices) :
+        defer.reject(null);
+    });
+    return defer.promise;
   }
 }
 

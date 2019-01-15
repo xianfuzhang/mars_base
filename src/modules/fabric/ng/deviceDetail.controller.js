@@ -758,8 +758,6 @@ export class DeviceDetailController {
       this.di.notificationService.render(this.scope);
       this.scope.detailModel.api.queryUpdate();
     });
-
-    this.scope.$emit('batch-delete-endpoints');
   }
 
   batchDeleteDeviceGroups(arr) {
