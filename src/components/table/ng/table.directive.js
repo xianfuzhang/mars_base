@@ -187,7 +187,17 @@ export class mdlTable {
     };
 
     scope._selectAll = (event) => {
-      for(var i=0; i < scope.tableModel.data.length;  i++) {
+      scope.tableModel.removeItems = [];
+      scope.tableModel.filteredData.forEach((item) => {
+        if (!event.target.checked) {
+          item.isChecked = false;  
+        }
+        else {
+          item.isChecked = true;
+          scope.tableModel.removeItems.push(item);
+        }
+      });
+      /*for(var i=0; i < scope.tableModel.data.length;  i++) {
         let index = scope.tableModel.removeItems.indexOf(scope.tableModel.data[i]);
         if (event.target.checked && index === -1) {
           scope.tableModel.removeItems.push(scope.tableModel.data[i]);
@@ -195,18 +205,20 @@ export class mdlTable {
         if (!event.target.checked && index !== -1) {
           scope.tableModel.removeItems.splice(index, 1);
         }
-      }
-      scope.$emit('checkbox-select-all', {'checked': event.target.checked});
+      }*/
+      //scope.$emit('checkbox-select-all', {'checked': event.target.checked});
     };
 
     scope._isSelectedAll = () => {
       if (scope.tableModel.data.length === 0) return false;
-      for(var i=0; i < scope.tableModel.data.length;  i++) {
+      return scope.tableModel.filteredData.length === scope.tableModel.removeItems.length ? true : false;
+      /*if (scope.tableModel.data.length === 0) return false;
+      for(var i=0; i < scope.tableModel.filteredData.length;  i++) {
         if (scope.tableModel.removeItems.indexOf(scope.tableModel.data[i]) === -1) {
           return false;
         }
       }
-      return true;
+      return true;*/
     };
 
     scope._menu = ($event) => {
@@ -228,11 +240,14 @@ export class mdlTable {
       if (scope.tableModel.removeItems.length) {
         scope.onRemove({$value: scope.tableModel.removeItems});
       }
+      //当用户esc退出或取消弹出框时重置数据
       scope.tableModel.removeItems = [];
+      scope.tableModel.filteredData.forEach((item) => {
+        item.isChecked = false;
+      });
       event && event.stopPropagation();
     };
     scope._refresh = (event) => {
-      scope.tableModel.searchResult = '';
       scope._queryUpdate();
       event && event.stopPropagation();
     };
@@ -241,6 +256,7 @@ export class mdlTable {
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
       if (scope._isNeedPagination === false ||  scope._isNeedPagination === 'false') {
         scope.inlineFilter();
+        scope.clearRowCheck();
         scope._render();
       }
       else {
@@ -252,6 +268,7 @@ export class mdlTable {
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
       if (scope._isNeedPagination === false ||  scope._isNeedPagination === 'false') {
         scope.inlineFilter();
+        scope.clearRowCheck();
         scope._render();
       }
       else {
@@ -265,7 +282,7 @@ export class mdlTable {
         scope.tableModel.filteredData = scope.tableModel.data;
       }
       else {
-        let reg = new RegExp(scope.tableModel.search['value'], 'i');
+        let reg = new RegExp(scope.tableModel.search['value']);
         let tmpData = angular.copy(scope.tableModel.data);
         scope.tableModel.filteredData = tmpData.filter((item) => {
           let match = false;
@@ -273,12 +290,18 @@ export class mdlTable {
             if ('string' === typeof item[key] && reg.test(item[key])) {
               match = true;
               item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
-              break;
             }  
           }
           return match;
         });
       }
+    };
+
+    scope.clearRowCheck = () => {
+      scope.tableModel.removeItems = [];
+      scope.tableModel.filteredData.forEach((item) => {
+        item.isChecked = false;
+      });
     };
     /*scope._filter = (event) => {
       tableCtrl.onFilter();
@@ -307,7 +330,9 @@ export class mdlTable {
 
       //scope._prepareFilteredData();
       scope.tableModel.filteredData = scope.tableModel.data;
-
+      scope.tableModel.filteredData.forEach((item) => {
+        item.isChecked = false;
+      });
       //scope.onDataReady();
       scope._render();
     };
@@ -436,6 +461,7 @@ export class mdlTable {
 
     scope._queryUpdate = () => {
       let params = scope._getTableParams();
+      scope.tableModel.searchResult = '';
       scope.tableModel.loading = true;
       return scope.provider.query(params).then(
         function (response) {
