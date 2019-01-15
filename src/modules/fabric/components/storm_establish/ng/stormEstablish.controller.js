@@ -106,7 +106,7 @@ export class StormEstablishController {
         scope.stormModel.device_id = scope.stormModel.device.value;
       }
 
-      di.$rootScope.$emit('page_storm_es');
+      di.$rootScope.$emit('page_storm_establish');
       if(!validCurrentDom('storm_establish')){
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);

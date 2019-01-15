@@ -71,7 +71,7 @@ export class StormController {
     };
 
     scope.onTableRowClick = ($event) => {
-    	scope.model.API.setSelectedRow($event.$data.id);
+    	scope.model.API.setSelectedRow($event.$data.device_name);
     };
 
     let init = () => {
