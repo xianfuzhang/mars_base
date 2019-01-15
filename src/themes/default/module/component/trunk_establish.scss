@@ -1,0 +1,10 @@
+.trunk_establish .member-components, .trunk_establish .member-items{
+  display: flex;
+}
+.trunk_establish .member-components>div{
+  margin-right: 15px;
+}
+.trunk_establish .add-btn{
+  cursor: pointer;
+  user-select: none;
+}

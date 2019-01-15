@@ -1326,11 +1326,11 @@ export class DeviceService {
 
   getLogicalPortTableRowActions() {
     return [
-     {
+    /* {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
         'role': 3,
         'value': 'edit'
-      },
+      },*/
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
         'role': 3,

@@ -636,6 +636,17 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  createLogicalPort(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getLogicalPortUrl(), params)
+      .then(() => {
+        defer.resolve(null);
+      }, (err) => {
+        defer.reject(err.data.message);
+      });
+    return defer.promise;  
+  }
+
   deleteLogicalPort(name) {
     let defer = this.di.$q.defer();
     this.di.$http.delete(this.di.appService.getDeleteLogicalPortUrl(name))

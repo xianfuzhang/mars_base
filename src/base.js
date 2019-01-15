@@ -100,6 +100,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/logical_port', {
+      template: require('./modules/fabric/template/interface_group.html'),
+      controller: 'interfaceGroupController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/intents', {
       template: require('./modules/fabric/template/intents.html'),
       controller: 'intentsController',
