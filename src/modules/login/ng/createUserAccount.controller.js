@@ -140,6 +140,7 @@ export class CreateUserAccountController {
       }
       i++;
     }
+    if (accountName.length < 5 || accountName.length > 20) status = false;
     return status;
   }
 }
