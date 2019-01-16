@@ -420,6 +420,9 @@ export class Topo {
           g.closePath();
 
           if(scope.topoSetting.show_ports && ports && ports instanceof Array && ports.length > 0){
+            if(ports.length > 60){
+              len = 1.8;
+            }
             let padding = (width - len * 2)/3;
             let left = - width/2 + padding;
             let right = width/2 -padding - len;
@@ -758,6 +761,9 @@ export class Topo {
           g.closePath();
 
           if(scope.topoSetting.show_ports && ports && ports instanceof Array && ports.length > 0) {
+            if(ports.length > 60){
+              len = 1.8;
+            }
 
             let padding = (width - len * 2) / 3;
             let left = -width / 2 + padding;
