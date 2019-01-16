@@ -36,6 +36,7 @@ export class modalWindow {
         if (modal && evt.target === evt.currentTarget) {
           evt.preventDefault();
           evt.stopPropagation();
+          scope.animate = false;
           this.di.modalStack.dismiss(modal.key, {canceled: true});
         }
       };

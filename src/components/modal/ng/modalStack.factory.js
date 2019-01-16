@@ -7,6 +7,7 @@ export class modalStack {
       '$document',
       '$compile',
       '$rootScope',
+      '$timeout',
       'modalStackedMap'
     ];
   }
@@ -105,20 +106,25 @@ export class modalStack {
   removeModalWindow (modalInstance) {
     let modalWindow = this.openedWindows.get(modalInstance).value;
 
-    // clean up the stack
-    this.openedWindows.remove(modalInstance);
+    modalWindow.modalDomEl.removeClass('in');
+    this.backdropDomEl.removeClass('in');
+    
+    this.di.$timeout(() => {
+      // clean up the stack
+      this.openedWindows.remove(modalInstance);
 
-    // remove window DOM element
-    modalWindow.modalDomEl.remove();
+      // remove window DOM element
+      modalWindow.modalDomEl.remove();
 
-    // remove backdrop if no longer needed
-    if (this.backdropDomEl && this.backdropIndex() === -1) {
-      this.backdropDomEl.remove();
-      this.backdropDomEl = undefined;
-    }
+      // remove backdrop if no longer needed
+      if (this.backdropDomEl && this.backdropIndex() === -1) {
+        this.backdropDomEl.remove();
+        this.backdropDomEl = undefined;
+      }
 
-    // destroy scope
-    modalWindow.modalScope.$destroy();
+      // destroy scope
+      modalWindow.modalScope.$destroy();
+    }, 500);
   }
 }
 
