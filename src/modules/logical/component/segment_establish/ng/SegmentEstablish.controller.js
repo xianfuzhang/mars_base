@@ -169,6 +169,7 @@ export class SegmentEstablishController {
             resolve({valid: true, errorMessage: ''});
           }, (err) => {
             // scope.switch = _.cloneDeep(initSwitch);
+	          rootScope.$emit('segment-list-refresh', false);
             resolve({valid: false, errorMessage: err});
           });
       });
