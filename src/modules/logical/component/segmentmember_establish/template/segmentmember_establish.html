@@ -39,7 +39,11 @@
                         <tr>
                             <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{ "MODULES.LOGICAL.SEGMENT_MEMBER.PORT"|translate}}</div></td>
                             <td>
-                                <div class="criteria_line">
+                                <div class="criteria_line" ng-if="isSonicDevice">
+                                    <valid-input v-require="true" ng-model="port.port" v-type="int_with_zero" v-rpcid="page_segmentmember_es" ></valid-input>
+                                </div>
+
+                                <div class="criteria_line" ng-if="!isSonicDevice">
                                     <valid-input v-require="true" ng-model="port.port" v-type="int" v-rpcid="page_segmentmember_es" ></valid-input>
                                 </div>
                             </td>
