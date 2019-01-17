@@ -14,6 +14,7 @@ export class SegmentMemberEstablishController {
       '_',
       'notificationService',
       'logicalDataManager',
+      'manageDataManager',
       'deviceDataManager',
       'logicalService'
     ];
@@ -36,6 +37,7 @@ export class SegmentMemberEstablishController {
     scope.vxlanTypeLabel = this.di.logicalService.getSegmentMemberVxlanTypeLabel();
     scope.vxlanAccessTypeLabel = this.di.logicalService.getSegmentMemberVxlanAccessTypeLabel();
     scope.tagDisplayLabel = this.di.logicalService.getSegmentMemberTagLabel();
+    scope.trunkDisplayLabel = {'options':[]};
 
     // scope.memberType = scope.memberTypeLabel.options[0];
     // scope.vlanType = scope.vlanTypeLabel.options[0];
@@ -45,6 +47,7 @@ export class SegmentMemberEstablishController {
     let di = this.di;
 
     scope.selected = {};
+    scope.isTrunkEnable = false;
 
     scope.memberModel = {
       vlanPorts :[],
@@ -65,6 +68,8 @@ export class SegmentMemberEstablishController {
 
 
     let init = () =>{
+      scope.vlanTypeLabel = this.di.logicalService.getSegmentMemberVlanTypeLabel();
+
       scope.selected.memberType = scope.memberTypeLabel.options[0];
       scope.selected.vlanType = scope.vlanTypeLabel.options[0];
       scope.selected.vxlanType = scope.vxlanTypeLabel.options[0];
@@ -74,6 +79,8 @@ export class SegmentMemberEstablishController {
       scope.allDeviceLabel = {options: []};
       scope.selected.vlanDevice = {};
       scope.selected.vxlanAccessDevice = {};
+
+      scope.logical_ports = {};
 
       scope.isTypeDisable = false;
       scope.isVlanDeviceDisable = false;
@@ -119,6 +126,15 @@ export class SegmentMemberEstablishController {
       return options;
     };
 
+    let _formatLogicalPort = (ports) =>{
+      this.di._.forEach(ports,(port)=>{
+        if(!scope.logical_ports[port.members[0]['device_id']]){
+          scope.logical_ports[port.members[0]['device_id']] = [];
+        }
+        scope.logical_ports[port.members[0]['device_id']].push({'label':port.name, 'value': port.name });
+      });
+    };
+
     this.di.$scope.open = (param) => {
       if(scope.showWizard) return;
 
@@ -133,10 +149,58 @@ export class SegmentMemberEstablishController {
         // scope.isEdit = false;
       }
       scope.title = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ADD');
+
+      this.di.manageDataManager.getApplication("com.nocsys.logicalport").then((res) => {
+        if(res.data['state'] === 'ACTIVE'){
+          _open(true, param)
+          scope.isTrunkEnable = true;
+        } else {
+          _open(true, param)
+          scope.isTrunkEnable = false;
+        }
+      },(err)=>{
+        _open(false, param);
+        scope.isTrunkEnable = false;
+        console.log("Error occur when getApplication in _update_single_item " + JSON.stringify(err))
+      });
+    };
+
+
+    let _open = (isTrunkEnable, param) =>{
+      let deviceConfDefer = this.di.$q.defer();
+      let trunkDefer = this.di.$q.defer();
+      let promises = [];
+      let _ports = [];
+      let _config = [];
+
+      if(isTrunkEnable){
+        this.di.deviceDataManager.getLogicalPortsList().then((ports)=>{
+          _ports = ports;
+          trunkDefer.resolve();
+        },(err)=>{
+          trunkDefer.reject(err)
+        });
+        promises.push(trunkDefer.promise)
+      }
+
       this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
-        scope.allDeviceLabel.options = scope.allDeviceLabel.options.concat(formatDeviceLabel(configs));
+        _config = configs;
+        deviceConfDefer.resolve();
+      },(err)=>{
+        deviceConfDefer.reject(err);
+      });
+      promises.push(deviceConfDefer.promise);
+
+      Promise.all(promises).then(()=>{
+        scope.allDeviceLabel.options = scope.allDeviceLabel.options.concat(formatDeviceLabel(_config));
         scope.selected.vxlanAccessDevice = scope.allDeviceLabel.options[0];
         scope.selected.vlanDevice = scope.allDeviceLabel.options[0];
+        if(scope.selected.vlanDevice.value.indexOf('grpc') === 0){
+          scope.isSonicDevice = true;
+        } else {
+          scope.isSonicDevice = false;
+        }
+
 
         if(param.type){
           let data = param['data'];
@@ -146,6 +210,13 @@ export class SegmentMemberEstablishController {
           if(param.type === 'vlan'){
             if(data){
               scope.selected.vlanDevice = this.di._.find(scope.allDeviceLabel.options, {'label':data['device_id'] });
+              if(scope.selected.vlanDevice.value.indexOf('grpc') === 0){
+                scope.isSonicDevice = true;
+              } else {
+                scope.isSonicDevice = false;
+              }
+
+
               if(!scope.memberModel.vlanDevice){
                 scope.errorMessage = "Device Id" + data['device_id']  + "不存在！";
               }
@@ -154,8 +225,62 @@ export class SegmentMemberEstablishController {
               scope.memberModel.vlanPorts = _format_ports_recieved(data['ports']);
               scope.memberModel.vlanLogicalPorts =_format_logical_ports_recieved(data['logical_ports']);
               scope.memberModel.vlanMacBased = _format_mac_based_vlans_recieved(data['mac_based_vlans']);
+
+              if(scope.memberModel.vlanPorts.length > 0){
+                this.di._.remove(scope.vlanTypeLabel.options,(item)=>{
+                  return item['value'] === 'normal';
+                })
+              }
+
+              if(scope.memberModel.vlanLogicalPorts.length > 0){
+                this.di._.remove(scope.vlanTypeLabel.options,(item)=>{
+                  return item['value'] === 'logical';
+                })
+              }
+
+              if(scope.memberModel.vlanMacBased.length > 0){
+                this.di._.remove(scope.vlanTypeLabel.options,(item)=>{
+                  return item['value'] === 'macbased';
+                })
+              }
+
+              scope.selected.vlanType = scope.vlanTypeLabel.options[0];
+
             } else {
+              if(param.vlan_devices){
+                this.di._.remove(scope.allDeviceLabel.options, (option)=>{
+                  if(this.di._.findIndex(param.vlan_devices, (deviceId)=>{return option.value === deviceId}) !== -1){
+                    return true
+                  } else {
+                    return false
+                  }
+                });
+                scope.selected.vlanDevice = scope.allDeviceLabel.options[0];
+                if(scope.selected.vlanDevice.value.indexOf('grpc') === 0){
+                  scope.isSonicDevice = true;
+                } else {
+                  scope.isSonicDevice = false;
+                }
+                // scope.allDeviceLabel.options = [];
+                if(scope.allDeviceLabel.options.length === 0){
+                  this.di.notificationService.renderWarning(scope, "没有可用的交换机！")
+                  scope.showWizard = false;
+                  scope.$apply();
+                  return;
+                }
+              }
+
               scope.selected.vlanDevice = scope.allDeviceLabel.options[0];
+              if(scope.selected.vlanDevice.value.indexOf('grpc') === 0){
+                scope.isSonicDevice = true;
+              } else {
+                scope.isSonicDevice = false;
+              }
+            }
+            if(_ports.length > 0){
+              _formatLogicalPort(_ports);
+              let logical_ports = scope.logical_ports[scope.selected.vlanDevice.value];
+              scope.trunkDisplayLabel.options = logical_ports?logical_ports:[];
             }
           } else if(param.type === 'vxlan'){
             if(data){
@@ -189,18 +314,88 @@ export class SegmentMemberEstablishController {
                 scope.selected.vxlanType = this.di._.find(scope.vxlanTypeLabel.options,  {'value':param['vxlan_type']});
                 scope.isVxlanTypeDisable = true;
                 if(param['vxlan_type'] === 'access')
-                scope.selected.vxlanAccessDevice =  scope.allDeviceLabel.options[0];
+                  scope.selected.vxlanAccessDevice =  scope.allDeviceLabel.options[0];
               }
             }
           }
         }
         scope.showWizard = true;
-      },()=>{
+        scope.$apply();
+      }).catch((e)=>{
         scope.showWizard = true;
+        scope.$apply();
       });
 
 
-    };
+
+      // this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
+      //   scope.allDeviceLabel.options = scope.allDeviceLabel.options.concat(formatDeviceLabel(configs));
+      //   scope.selected.vxlanAccessDevice = scope.allDeviceLabel.options[0];
+      //   scope.selected.vlanDevice = scope.allDeviceLabel.options[0];
+      //
+      //   if(param.type){
+      //     let data = param['data'];
+      //     if(data){
+      //       scope.title = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.EDIT');
+      //     }
+      //     if(param.type === 'vlan'){
+      //       if(data){
+      //         scope.selected.vlanDevice = this.di._.find(scope.allDeviceLabel.options, {'label':data['device_id'] });
+      //         if(!scope.memberModel.vlanDevice){
+      //           scope.errorMessage = "Device Id" + data['device_id']  + "不存在！";
+      //         }
+      //         scope.isVlanDeviceDisable = true;
+      //
+      //         scope.memberModel.vlanPorts = _format_ports_recieved(data['ports']);
+      //         scope.memberModel.vlanLogicalPorts =_format_logical_ports_recieved(data['logical_ports']);
+      //         scope.memberModel.vlanMacBased = _format_mac_based_vlans_recieved(data['mac_based_vlans']);
+      //       } else {
+      //         scope.selected.vlanDevice = scope.allDeviceLabel.options[0];
+      //       }
+      //     } else if(param.type === 'vxlan'){
+      //       if(data){
+      //         if(data['name']){
+      //           scope.isVxlanNameDisable = true;
+      //           scope.isVxlanTypeDisable = true;
+      //           scope.memberModel.vxlan.name = data['name'];
+      //           if(data['ip_addresses']){
+      //             //network
+      //             scope.selected.vxlanType = this.di._.find(scope.vxlanTypeLabel.options,  {'value':'network'});
+      //             scope.memberModel.vxlanIps = _format_vxlan_ips(data['ip_addresses'])
+      //           } else {
+      //             //access
+      //             scope.selected.vxlanType = this.di._.find(scope.vxlanTypeLabel.options,  {'value':'access'});
+      //             if(data['type']){
+      //               scope.isVxlanAccessTypeDisable = true;
+      //               scope.selected.vxlanAccessType = this.di._.find(scope.vxlanAccessTypeLabel.options,  {'value':data['type']});
+      //               if(data['type'] === 'normal'){
+      //                 let _index  = data['port'].lastIndexOf(':');
+      //                 scope.memberModel.vxlan.access.port = _index !==-1?data['port'].substring(_index + 1, data['port'].length):'';
+      //                 scope.selected.vxlanAccessDevice = _index !==-1? this.di._.find(scope.allDeviceLabel.options, {'label':data['port'].substring(0, _index)}):{};
+      //               } else {
+      //                 scope.memberModel.vxlan.access.server_mac = data['port']
+      //               }
+      //               scope.memberModel.vxlan.access.vlan = data['vlan'];
+      //             }
+      //           }
+      //         }
+      //       } else {
+      //         if(param['vxlan_type']){
+      //           scope.selected.vxlanType = this.di._.find(scope.vxlanTypeLabel.options,  {'value':param['vxlan_type']});
+      //           scope.isVxlanTypeDisable = true;
+      //           if(param['vxlan_type'] === 'access')
+      //             scope.selected.vxlanAccessDevice =  scope.allDeviceLabel.options[0];
+      //         }
+      //       }
+      //     }
+      //   }
+      //   scope.showWizard = true;
+      // },()=>{
+      //   scope.showWizard = true;
+      // });
+
+    }
+
 
     let _format_ports_recieved = (ports) =>{
       if(ports === null || ports === ''){
@@ -218,6 +413,14 @@ export class SegmentMemberEstablishController {
     };
 
     let _format_logical_ports_recieved = (logical_ports) =>{
+
+      let __find_trunk_option = (value) =>{
+        if(scope.trunkDisplayLabel.options.length === 0){
+          return null;
+        }
+        return this.di._.find(scope.trunkDisplayLabel.options, {'value':value} )
+      };
+
       if(logical_ports === null || logical_ports === ''){
         return [];
       } else {
@@ -227,7 +430,7 @@ export class SegmentMemberEstablishController {
           let arr = item.split('/');
           let trunk = arr[0];
           let tag = arr[1];
-          return {'trunk':trunk, 'tagValue': this.di._.find(scope.tagDisplayLabel.options, { 'value': tag })}
+          return {'trunk':__find_trunk_option(trunk), 'tagValue': this.di._.find(scope.tagDisplayLabel.options, { 'value': tag })}
         });
       }
     };
@@ -270,12 +473,16 @@ export class SegmentMemberEstablishController {
     };
 
     scope.addVlanLogicalPorts = () => {
-      scope.memberModel.vlanLogicalPorts.push({'trunk':'', 'tagValue': scope.tagDisplayLabel.options[0]})
+      if(scope.trunkDisplayLabel.options.length === 0){
+        scope.errorMessage = "交换机 " + scope.selected.vlanDevice.label+ " 上没有创建端口聚合！";
+        return;
+      }
+      scope.memberModel.vlanLogicalPorts.push({'trunk':scope.trunkDisplayLabel.options[0], 'tagValue': scope.tagDisplayLabel.options[0]})
     };
 
     scope.deleteVlanLogicalPorts = (port) => {
       this.di._.remove(scope.memberModel.vlanLogicalPorts, function(n) {
-        return n.trunk === port.trunk;
+        return n.trunk.value === port.trunk.value;
       });
     };
 
@@ -298,6 +505,27 @@ export class SegmentMemberEstablishController {
       this.di._.remove(scope.memberModel.vxlanIps, function(n) {
         return ip.ip === n.ip;
       });
+    };
+
+    scope.deviceChange = ($value) =>{
+      scope.errorMessage = "";
+      let ports = scope.logical_ports[$value.value];
+      scope.trunkDisplayLabel.options = ports?ports:[];
+      scope.memberModel.vlanPorts = [];
+      scope.memberModel.vlanMacBased = [];
+      scope.memberModel.vlanLogicalPorts = [];
+
+      if($value.value.indexOf('grpc') === 0){
+        scope.isSonicDevice = true;
+      } else {
+        scope.isSonicDevice = false;
+      }
+
+
+    };
+
+    scope.vlanTypeChange = ($value) => {
+      scope.errorMessage = "";
     };
 
 
@@ -338,7 +566,7 @@ export class SegmentMemberEstablishController {
     let _formatVlanLogicalPorts = () =>{
       let logical_ports = [];
       this.di._.forEach(scope.memberModel.vlanLogicalPorts,(port)=>{
-        logical_ports.push(port.trunk + '/' + port.tagValue.value)
+        logical_ports.push(port.trunk.value + '/' + port.tagValue.value)
       });
       return logical_ports;
     };

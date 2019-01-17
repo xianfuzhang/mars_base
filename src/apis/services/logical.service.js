@@ -194,9 +194,9 @@ export class logicalService {
 
   getSegmentMemberVlanTypeLabel(){
     return {'options':[
-      {'label': 'Normal', 'value': 'normal'},
-      {'label': 'Logical', 'value':'logical'},
-      {'label': 'Macbased', 'value':'macbased'}
+      {'label': this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.TYPE.PORT'), 'value': 'normal'},
+      {'label': this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.TYPE.LOGICAL_PORT'), 'value':'logical'},
+      {'label': this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.TYPE.MAC_BASED'), 'value':'macbased'}
     ]}
   }
 
