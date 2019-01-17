@@ -105,10 +105,10 @@ export class TrunkController {
       });
     };
 
-    this.scope.changeDevice = () => {
+    this.scope.changeDevice = ($value) => {
       this.scope.model.groupDisplayLabel.options = [];
       this.scope.model.portDisplayLabel.options = [];
-      let device = this.di._.find(this.scope.availableDevices, {'id': this.scope.model.deviceOption.value});
+      let device = this.di._.find(this.scope.availableDevices, {'id': $value.value});
       device.ports.forEach((port) => {
         this.scope.model.portDisplayLabel.options.push({
           'label': port.port,
@@ -180,7 +180,7 @@ export class TrunkController {
       this.scope.model.deviceOption = this.scope.model.deviceDisplayLabel.options[0];
     }
 
-    this.scope.changeDevice();
+    this.scope.changeDevice(this.scope.model.deviceOption);
   }
 }
 TrunkController.$inject = TrunkController.getDI();

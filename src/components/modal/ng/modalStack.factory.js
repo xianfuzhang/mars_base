@@ -101,13 +101,18 @@ export class modalStack {
     this.getTop = () => {
       return this.openedWindows.top();
     };
+
+    this.getOpenedWindowsLength = () => {
+      return this.openedWindows.length();
+    };
   }
 
   removeModalWindow (modalInstance) {
     let modalWindow = this.openedWindows.get(modalInstance).value;
 
-    modalWindow.modalDomEl.removeClass('in');
-    this.backdropDomEl.removeClass('in');
+
+     modalWindow.modalDomEl.addClass('ease_out');
+     this.backdropDomEl.addClass('fade');
     
     this.di.$timeout(() => {
       // clean up the stack
