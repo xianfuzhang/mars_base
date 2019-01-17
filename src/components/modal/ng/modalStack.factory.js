@@ -111,7 +111,7 @@ export class modalStack {
     let modalWindow = this.openedWindows.get(modalInstance).value;
 
 
-     modalWindow.modalDomEl.addClass('fade');
+     modalWindow.modalDomEl.addClass('ease_out');
      this.backdropDomEl.addClass('fade');
     
     this.di.$timeout(() => {

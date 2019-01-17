@@ -70,7 +70,7 @@ export class modalManager {
               modalStack.dismiss(modalInstance, reason);
             }
           };
-        //modalµ¯³ö²ãÄ¿Ç°½öÔÊÐíÒ»¸ö,×èÖ¹¶à´Îµ¯³ömodal  
+        //modalå¼¹å‡ºå±‚ç›®å‰ä»…å…è®¸ä¸€ä¸ª,é˜»æ­¢å¤šæ¬¡å¼¹å‡ºmodal  
         if (modalStack.getOpenedWindowsLength() > 0) {
           modalResultDeferred.resolve();
           return modalInstance;
