@@ -101,6 +101,10 @@ export class modalStack {
     this.getTop = () => {
       return this.openedWindows.top();
     };
+
+    this.getOpenedWindowsLength = () => {
+      return this.openedWindows.length();
+    };
   }
 
   removeModalWindow (modalInstance) {

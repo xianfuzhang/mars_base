@@ -70,6 +70,11 @@ export class modalManager {
               modalStack.dismiss(modalInstance, reason);
             }
           };
+        //modal弹出层目前仅允许一个,阻止多次弹出modal  
+        if (modalStack.getOpenedWindowsLength() > 0) {
+          modalResultDeferred.resolve();
+          return modalInstance;
+        }  
         let templateAndResolvePromise;
 
         // merge and clean up options
@@ -104,7 +109,7 @@ export class modalManager {
 
             $controller(modalOptions.controller, ctrlLocals);
           }
-
+          
           modalStack.open(modalInstance, {
             scope: modalScope,
             deferred: modalResultDeferred,
