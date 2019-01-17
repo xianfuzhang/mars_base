@@ -358,7 +358,11 @@ export class SegmentDetailController {
             });
         }else if($event.action.value === 'edit'){
           let param = {'tenantName': scope.tenantName, 'segmentName':scope.segmentName, 'type':scope.detailModel.type, 'data':$event.data};
-          this.di.$rootScope.$emit('segmentmember-wizard-show', param);
+          if($event.data.ports && $event.data.logical_ports && $event.data.mac_based_vlans){
+            this.di.notificationService.renderWarning(scope, $event.data.device_id + "已经设置完毕，如果需要修改，请删除后重新设置");
+          } else {
+            this.di.$rootScope.$emit('segmentmember-wizard-show', param);
+          }
         }
       }
     };
@@ -436,7 +440,8 @@ export class SegmentDetailController {
     };
 
     scope.onVlanAdd = () =>{
-      let param = {'tenantName': scope.tenantName, 'segmentName':scope.segmentName, 'type':'vlan'};
+      let deviceIds = this.di._.map(vlanData, '_device_id');
+      let param = {'tenantName': scope.tenantName, 'segmentName':scope.segmentName, 'type':'vlan', 'vlan_devices':deviceIds};
       this.di.$rootScope.$emit('segmentmember-wizard-show', param);
     };
 

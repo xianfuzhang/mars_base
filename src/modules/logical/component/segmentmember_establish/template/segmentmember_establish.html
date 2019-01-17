@@ -16,13 +16,13 @@
         <!--</div>-->
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.DEVICE'|translate}}</div>
-            <mdl-select ng-model="selected.vlanDevice" display-label="allDeviceLabel" disable="isVlanDeviceDisable == true?true:false">
+            <mdl-select ng-model="selected.vlanDevice" ng-change="deviceChange($value)" display-label="allDeviceLabel" disable="isVlanDeviceDisable == true?true:false">
             </mdl-select>
         </div>
 
         <div class="stepForm__input">
             <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.VLAN_TYPE'|translate}}</div>
-            <mdl-select ng-model="selected.vlanType" display-label="vlanTypeLabel">
+            <mdl-select ng-model="selected.vlanType" ng-change="vlanTypeChange($value)" display-label="vlanTypeLabel">
             </mdl-select>
         </div>
 
@@ -70,10 +70,12 @@
                     <mdl-button class="remove" ng-click="deleteVlanLogicalPorts(port)" icon-name="remove_circle" size='small'></mdl-button>
                     <table class="inline_content_table">
                         <tr>
-                            <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >Trunk</div></td>
+                            <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{"MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_LOGICAL_PORTS"|translate}}</div></td>
                             <td>
                                 <div class="criteria_line">
-                                    <valid-input v-require="true" ng-model="port.trunk" v-rpcid="page_segmentmember_es" ></valid-input>
+                                    <!--<valid-input v-require="true" ng-model="port.trunk"  v-rpcid="page_segmentmember_es" ></valid-input>-->
+                                    <mdl-select ng-model="port.trunk" display-label="trunkDisplayLabel">
+                                    </mdl-select>
                                 </div>
                             </td>
                         </tr>
