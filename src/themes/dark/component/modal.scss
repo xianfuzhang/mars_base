@@ -16,15 +16,19 @@
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   box-sizing: border-box;
   outline: none;
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.modal.fade {
   opacity: 0;
   transform: scale(0);
+  //transition: all 5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .modal.in {
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   opacity: 1;
   transform: scale(1);
+}
+.modal.fade {
+  transition: all 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  opacity: 0;
+  transform: scale(0);
 }
 
 .modal-content-container {
