@@ -18,7 +18,7 @@
     <div class="stepForm__input__label">{{::'MODULES.PORT.MEMBER.TITLE' | translate}}
       <span class="stepForm__input__required">*</span></div>
     <div class="member-components">
-      <mdl-select ng-model="model.deviceOption" ng-change="changeDevice()"
+      <mdl-select ng-model="model.deviceOption" ng-change="changeDevice($value)"
               disable="model.membersDetail.length > 0"
               display-label="model.deviceDisplayLabel">
       </mdl-select>
