@@ -28,7 +28,7 @@ export class UpdateUserAccountController {
       newPwd: null,
       passwordDisplayLabel: {
         id: 'password',
-        type: 'password'
+        //type: 'password'
       },
       passwordHelper: {
         id: 'passwordHelper',
