@@ -192,7 +192,7 @@ export class MonitorEstablishController {
           })
         } else {
           deviceDataManager.getAllMonitor().then((res)=>{
-            let monitors = res.data['Monitor sessions:'];
+            let monitors = res.data['sessions'];
             let session_id = null;
             if(!monitors){
               scope.monitorModel.session_id = 1;
