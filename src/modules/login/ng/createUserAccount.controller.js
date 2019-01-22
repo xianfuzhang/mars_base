@@ -36,7 +36,7 @@ export class CreateUserAccountController {
       passwordDisplayLabel: {
         id: 'password',
         hint: this.translate('MODULE.ACCOUNT.CREATE.PASSWORD'),
-        type: 'password',
+        //type: 'password',
         required: 'true'
       },
       passwordHelper: {
