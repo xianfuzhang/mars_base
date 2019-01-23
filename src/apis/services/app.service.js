@@ -641,6 +641,10 @@ export class appService {
   getDeleteLogicalPortUrl(logical_name) {
     return this.getZoneEndpoint(true) + "/logicalport/v1/" +  logical_name;   
   }
+
+  getLogicalPortMappingUrl() {
+   return this.getZoneEndpoint(true) + "/logicalport/v1/mapping";  
+  }
 }
 
 appService.$inject = appService.getDI();

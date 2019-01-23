@@ -711,6 +711,19 @@ export class DeviceDataManager {
       );
     return defer.promise;
   }
+
+  getLogicalPortMapping() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getLogicalPortMappingUrl())
+      .then((res) => {
+          defer.resolve(res.data.ports);
+        },
+        (err) => {
+          defer.resolve([]);
+        }
+      );
+    return defer.promise;
+  }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
 DeviceDataManager.$$ngIsClass = true;

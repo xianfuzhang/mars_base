@@ -3,6 +3,7 @@ export class TrunkController {
     return [
       '$scope',
       '$rootScope',
+      '$filter',
       '_',
       'deviceDataManager'
     ];
@@ -14,6 +15,7 @@ export class TrunkController {
       this.di[value] = args[index];
     });
     this.scope = this.di.$scope;
+    this.translate = this.di.$filter('translate');
     this.scope.edit = false;
     this.scope.showWizard = false;
     this.scope.steps = [
@@ -31,6 +33,18 @@ export class TrunkController {
       membersDetail: [],
       nameHelper: {
         validation: 'false'
+      },
+      mlagEnableLabel: {
+        id: 'check_1', 
+        label: this.translate('MODULES.PORT.MLAG.ENABLE'),
+        name: 'radio_1', 
+        value:  true
+      },
+      mlagDsiableLabel: {
+        id: 'check_2', 
+        label: this.translate('MODULES.PORT.MLAG.DISABLE'),
+        name: 'radio_1', 
+        value:  false
       },
       groupDisplayLabel: {
         options: []
@@ -111,8 +125,8 @@ export class TrunkController {
       let device = this.di._.find(this.scope.availableDevices, {'id': $value.value});
       device.ports.forEach((port) => {
         this.scope.model.portDisplayLabel.options.push({
-          'label': port.port,
-          'value': port.port  
+          'label': port,
+          'value': port  
         });
       });
       device.groups.forEach((group) => {
@@ -149,10 +163,15 @@ export class TrunkController {
         this.scope.model.membersDetail.splice(index, 1);
       }
     };
+
+    this.scope.supportMLAG = (state) => {
+      //console.log(this.scope.model.is_mlag);
+    };
   }
 
   initSelectOptions() {
     this.scope.model.nameHelper.validation = 'false';
+    this.scope.model.is_mlag = false;
     this.scope.model.deviceDisplayLabel.options = [];
     this.scope.availableDevices.forEach((item) => {
       this.scope.model.deviceDisplayLabel.options.push({

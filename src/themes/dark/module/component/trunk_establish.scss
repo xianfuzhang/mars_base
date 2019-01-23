@@ -1,5 +1,21 @@
+.trunk-wizard .wizard__body {
+  height: 400px;
+}
+.trunk-wizard .wizard__body__right{
+  overflow: auto;
+  padding: 20px;
+}
+.trunk-wizard .mdc-text-field__input{
+  width: 150px;
+}
+.trunk-wizard .mdc-select{
+  width: 150px;
+}
 .trunk_establish .member-components, .trunk_establish .member-items{
   display: flex;
+}
+.trunk_establish .member-items{
+  flex-wrap: wrap;
 }
 .trunk_establish .member-components>div{
   margin-right: 15px;
@@ -7,4 +23,7 @@
 .trunk_establish .add-btn{
   cursor: pointer;
   user-select: none;
+}
+.trunk_establish .inlink-block{
+  display: inline-block;
 }

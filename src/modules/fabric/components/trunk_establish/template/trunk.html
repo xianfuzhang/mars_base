@@ -8,6 +8,16 @@
     </mdl-text>
   </div>
   <div class="stepForm__input">
+    <div class="stepForm__input__label inlink-block">M-LAG
+      <span class="stepForm__input__required">*</span></div>
+    <mdl-radio ng-model="model.is_mlag" display-label="model.mlagEnableLabel" 
+      disable="model.disableMLAG" on-click="supportMLAG(true)">
+    </mdl-radio>
+    <mdl-radio ng-model="model.is_mlag" display-label="model.mlagDsiableLabel"
+      disable="model.disableMLAG" on-click="supportMLAG(false)">
+    </mdl-radio>
+  </div>
+  <div class="stepForm__input">
     <div class="stepForm__input__label">{{::'MODULES.PORT.COLUMN.GROUP' | translate}}
       <span class="stepForm__input__required">*</span></div>
     <mdl-select ng-model="model.groupOption" disable="edit"
@@ -19,7 +29,7 @@
       <span class="stepForm__input__required">*</span></div>
     <div class="member-components">
       <mdl-select ng-model="model.deviceOption" ng-change="changeDevice($value)"
-              disable="model.membersDetail.length > 0"
+              disable="model.membersDetail.length > 0 && model.is_mlag === false"
               display-label="model.deviceDisplayLabel">
       </mdl-select>
       <mdl-select ng-model="model.portOption"
