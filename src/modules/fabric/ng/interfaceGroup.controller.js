@@ -313,6 +313,7 @@ export class InterfaceGroupController {
         availableDevices.push({
           'id': device.id, 
           'name': device.name,
+          'protocol': device.protocol,
           'ports': ports,
           'groups': []
         });

@@ -28,6 +28,7 @@ export class TrunkController {
     this.scope.model = {
       name: null,
       is_mlag: false,
+      disableMLAG: true,
       group: null,
       members: [],
       membersDetail: [],
@@ -165,7 +166,25 @@ export class TrunkController {
     };
 
     this.scope.supportMLAG = (state) => {
-      //console.log(this.scope.model.is_mlag);
+      this.scope.model.membersDetail = [];
+      //rest device support mlag
+      this.scope.model.deviceDisplayLabel.options = [];
+      this.scope.availableDevices.forEach((item) => {
+        if (state && item.protocol === 'rest') {
+          this.scope.model.deviceDisplayLabel.options.push({
+            'label': item.name,
+            'value': item.id
+          });  
+        } 
+        else if (!state){
+          this.scope.model.deviceDisplayLabel.options.push({
+            'label': item.name,
+            'value': item.id
+          });  
+        }
+      });
+      this.scope.model.deviceOption = this.scope.model.deviceDisplayLabel.options[0];
+      this.scope.changeDevice(this.scope.model.deviceOption);
     };
   }
 
@@ -174,6 +193,7 @@ export class TrunkController {
     this.scope.model.is_mlag = false;
     this.scope.model.deviceDisplayLabel.options = [];
     this.scope.availableDevices.forEach((item) => {
+      if (item.protocol === 'rest') this.scope.model.disableMLAG = false;
       this.scope.model.deviceDisplayLabel.options.push({
         'label': item.name,
         'value': item.id
