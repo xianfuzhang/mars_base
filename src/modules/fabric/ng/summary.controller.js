@@ -118,7 +118,9 @@ export class FabricSummaryController {
         data:this.di.deviceService.getSummarySwitchMenu()
       },
       srcHost:null,
-      dstHost: null
+      dstHost: null,
+      srcHost_select: true,
+      dstHost_select: true
     };
 
     this.di.$scope.displayLabel = {
@@ -417,15 +419,49 @@ export class FabricSummaryController {
     };
 
 
+    function validCurrentDom(dom_class) {
+      let out = document.getElementsByClassName(dom_class);
+
+      if(out && out.length === 1){
+        let invalidDoms = out[0].getElementsByClassName('ng-invalid');
+        if(invalidDoms && invalidDoms.length > 0){
+          return false;
+        }
+      }
+      return true;
+    }
+
     scope.findPath = () =>{
       if(scope.fabricModel.srcHost.value === null ||
         scope.fabricModel.dstHost.value === null ||
         scope.fabricModel.dstHost.value === scope.fabricModel.srcHost.value){
+        if(scope.fabricModel.srcHost.value === null){
+          scope.fabricModel.srcHost_select = false;
+          setTimeout(function () {
+            scope.fabricModel.srcHost_select = true;
+            scope.$apply()
+          },500)
+        }
+
+        if(scope.fabricModel.dstHost.value === null){
+          scope.fabricModel.dstHost_select = false;
+          setTimeout(function () {
+            scope.fabricModel.dstHost_select = true;
+            scope.$apply()
+          },500)
+        }
+
         return ;
       }
 
+
+      this.di.$rootScope.$emit('topo_path_search');
+      if(!validCurrentDom('topo_path_search')){
+        return;
+      }
+
       this.di.$rootScope.$emit('start_loading');
-      this.di.deviceDataManager.postPathCalc(scope.fabricModel.srcHost.value, scope.fabricModel.dstHost.value).then((res)=>{
+      this.di.deviceDataManager.postPathCalc(scope.fabricModel.srcHost.value, scope.fabricModel.dstHost.value, scope.fabricModel.latency).then((res)=>{
         this.di.$rootScope.$emit('show_path', res.data.links);
         this.di.$rootScope.$emit('stop_loading');
       },(err)=>{
