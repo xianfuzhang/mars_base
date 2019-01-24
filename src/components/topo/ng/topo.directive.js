@@ -492,7 +492,7 @@ export class Topo {
         return node;
       };
 
-      let genHostSwitchLink = (hostId, deviceId,devicePort, isAgainst) =>{
+      let genHostSwitchLink = (hostId, deviceId,devicePort, isActive,isAgainst) =>{
         let swt = this.leafs[deviceId] || this.spines[deviceId] || this.others[deviceId];
         let host = this.hostNodes[hostId];
         let link;
@@ -507,7 +507,13 @@ export class Topo {
 
         link.zIndex = 100;
         link.lineWidth = this.PATH_LINE_WIDTH;
-        link.strokeColor = this.PATH_LINE_SELECTED;
+
+        if(isActive)
+          link.strokeColor = this.PATH_LINE_SELECTED;
+        else
+          link.strokeColor = this.LINE_ERROR;
+
+        // link.strokeColor = this.PATH_LINE_SELECTED;
         link.dragable = false;
 
         // node.mouseover(pathMouseOverHandler);
@@ -575,7 +581,7 @@ export class Topo {
         });
       };
 
-      let genPathLinkNode = (devices, ports) => {
+      let genPathLinkNode = (devices, ports, isActive) => {
         let nodeA = this.leafs[devices[0]] || this.spines[devices[0]] || this.others[devices[0]];
         let nodeB = this.leafs[devices[1]] || this.spines[devices[1]] || this.others[devices[1]];
 
@@ -583,7 +589,10 @@ export class Topo {
         link.arrowsRadius = 15;
         link.zIndex = 100;
         link.lineWidth = this.PATH_LINE_WIDTH;
-        link.strokeColor = this.PATH_LINE_SELECTED;
+        if(isActive)
+          link.strokeColor = this.PATH_LINE_SELECTED;
+        else
+          link.strokeColor = this.LINE_ERROR;
         link.dragable = false;
         link.src_port =ports[0];
         link.dst_port =ports[1];
@@ -604,7 +613,7 @@ export class Topo {
             let deviceIds = [src_arr[0], dst_arr[0]];
             let ports = [src_arr[1], dst_arr[1]];
             let linkId = getLinkId(deviceIds);
-            this.pathNodes[linkId] = genPathLinkNode(deviceIds, ports);
+            this.pathNodes[linkId] = genPathLinkNode(deviceIds, ports, path['state'] === LINK_ACTIVE_STATE);
           } else {
             let hostId = null, deviceId = null, devicePort = null;
             let isAgainst = false;
@@ -619,7 +628,7 @@ export class Topo {
               deviceId = src_arr[0];
               devicePort = src_arr[1];
             }
-            this.pathNodes[hostId+'_'+deviceId] = genHostSwitchLink(hostId, deviceId,devicePort, isAgainst)
+            this.pathNodes[hostId+'_'+deviceId] = genHostSwitchLink(hostId, deviceId,devicePort, path.state === LINK_ACTIVE_STATE, isAgainst)
           }
         });
       };
