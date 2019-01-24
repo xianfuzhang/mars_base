@@ -117,13 +117,13 @@ export class marSection {
         // scope.lastHeight = scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
         if(scope.sectionModel.isFold){
           scope.sectionModel.showStyle = {'display':'block','height':'0px'};
-          scope.sectionModel.iconStyle = {'animation': '.15s ease-out', 'animation-name': 'section_expand', 'transform': 'rotateZ(0deg)'};
+          scope.sectionModel.iconStyle = {'transform': 'rotateZ(0deg)'};
           scope.isDown = true;
           scope.isUp = false;
           dynamicDown((new Date()).getTime(), 1000);
         } else {
           // scope.sectionModel.showStyle = {'display':'none'};
-          scope.sectionModel.iconStyle = {'animation': '.15s ease-out', 'animation-name': 'section_fold', 'transform': 'rotateZ(270deg)'};
+          scope.sectionModel.iconStyle = {'transform': 'rotateZ(270deg)'};
           // console.log(scope.isDown);
           if(!scope.isDown && !scope.isUp){
             let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
