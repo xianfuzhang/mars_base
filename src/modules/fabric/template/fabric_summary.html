@@ -25,7 +25,7 @@
 
             </div>
             <div class="right_div summary_drawer_right" ng-style="resize_length">
-                <mar-section s-title="Topo Settings" class="topo_setting">
+                <mar-section s-title="{{'MODULES.TOPO.TITLE.SETTING'|translate}}" class="topo_setting">
                     <transclude-body>
                     <div style="margin:2px;">
                         <div ng-click="topoRefresh()" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.REFRESH'|translate}}" id="refresh_topo"  class="+front mdc-button topo_setting__button">
@@ -43,15 +43,7 @@
 
                         </div>
                         <div ng-click="lineSetting()" id="line_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_LINES'|translate}}" ng-class="{'+show':fabricModel.topoSetting.show_links}"  class="+front mdc-button topo_setting__button">
-                            <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
-                                <defs>
-                                    <path id="a" d="M0 0h24v24H0V0z"/>
-                                </defs>
-                                <clipPath id="b">
-                                    <use xlink:href="#a" overflow="visible"/>
-                                </clipPath>
-                                <path clip-path="url(#b)" d="M23 8c0 1.1-.9 2-2 2-.18 0-.35-.02-.51-.07l-3.56 3.55c.05.16.07.34.07.52 0 1.1-.9 2-2 2s-2-.9-2-2c0-.18.02-.36.07-.52l-2.55-2.55c-.16.05-.34.07-.52.07s-.36-.02-.52-.07l-4.55 4.56c.05.16.07.33.07.51 0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2c.18 0 .35.02.51.07l4.56-4.55C8.02 9.36 8 9.18 8 9c0-1.1.9-2 2-2s2 .9 2 2c0 .18-.02.36-.07.52l2.55 2.55c.16-.05.34-.07.52-.07s.36.02.52.07l3.55-3.56C19.02 8.35 19 8.18 19 8c0-1.1.9-2 2-2s2 .9 2 2z"/>
-                            </svg>
+                            <i class="material-icons">link</i>
                         </div>
 
                         <div ng-click="portSettings()" id="port_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_PORTS'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_ports }" class="+front mdc-button topo_setting__button">
@@ -94,7 +86,45 @@
                                 </g>
                             </svg>
                         </div>
+
+                        <div ng-click="pathSettings()" id="path_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_PATH'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_path }" class="+front mdc-button topo_setting__button">
+                            <div class="path_topo" style="background-size: 28px;width:28px;height:28px;"></div>
+                        </div>
+
                     </div>
+                    </transclude-body>
+                </mar-section>
+
+                <mar-section ng-show="fabricModel.topoSetting.show_path"  s-title="{{'MODULES.TOPO.TITLE.PATH'|translate}}" class="detail_summary">
+                    <transclude-body>
+                        <div style="margin-top:5px;">
+                            <span style="width:50px;display: inline-block"> {{'MODULES.TOPO.PATH.START'|translate}}: </span>
+                            <mdl-select ng-model="fabricModel.srcHost" style="display: inline-block"
+                                        display-label="displayLabel.hosts">
+                            </mdl-select>
+                        </div>
+                        <div style="margin-top:5px;">
+                            <span style="width:50px;display: inline-block"> {{'MODULES.TOPO.PATH.END'|translate}}: </span>
+                            <mdl-select ng-model="fabricModel.dstHost" style="display: inline-block"
+                                        display-label="displayLabel.hosts">
+                            </mdl-select>
+                        </div>
+                        <div style="margin-top:15px;margin-left:55px;">
+                            <mar-button id="'server_config_clear'" btn-text="::'MODULES.TOPO.PATH.CLEAR_SEARCH' | translate" btn-class="'btn-black'" btn-click="clearPath()"></mar-button>
+                            <mar-button style='margin-left: 20px;' id="'server_config_save'" btn-text="::'MODULES.TOPO.PATH.SEARCH' | translate" btn-class="'btn-black'" btn-click="findPath()"></mar-button>
+                        </div>
+                    </transclude-body>
+                </mar-section>
+
+                <mar-section ng-show="fabricModel.showPathInfo"  s-title="{{'MODULES.TOPO.TITLE.PATH_INFO_DETAIL'|translate}}" class="detail_summary">
+                    <transclude-body>
+                        <table id="pathInfo" class="topo_path_table"></table>
+                    </transclude-body>
+                </mar-section>
+
+                <mar-section ng-show="fabricModel.showHostDetail"  s-title="{{'MODULES.TOPO.TITLE.PATH_HOST_DETAIL'|translate}}" class="detail_summary">
+                    <transclude-body>
+                        <table id="pathHost" class="topo_host_table"></table>
                     </transclude-body>
                 </mar-section>
 
@@ -104,7 +134,7 @@
                     </transclude-body>
                 </mar-section>
 
-                <mar-section ng-if="fabricModel.showSwitchDetail" s-title="Endpoint" class="detail_interface">
+                <mar-section ng-if="fabricModel.showSwitchDetail" s-title="{{'MODULES.TOPO.TITLE.ENDPOINTS'|translate}}" class="detail_interface">
                     <transclude-body>
                         <static-table style="max-width:400px;min-width: 80px;" data="fabricModel.endpoints" scale="small" columns="fabricModel.endpointsSchema"></static-table>
                         <!--<mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">-->
@@ -112,7 +142,7 @@
                     </transclude-body>
                 </mar-section>
 
-                <mar-section ng-if="fabricModel.showSwitchDetail" s-title="Interfaces" class="detail_interface">
+                <mar-section ng-if="fabricModel.showSwitchDetail" s-title="{{'MODULES.TOPO.TITLE.INTERFACES'|translate}}" class="detail_interface">
                     <transclude-body>
                     <static-table style="max-width:400px" data="fabricModel.switchPorts" scale="small" columns="fabricModel.portsSchema"></static-table>
                     <!--<mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">-->
@@ -120,7 +150,7 @@
                     </transclude-body>
                 </mar-section>
 
-                <mar-section ng-if="fabricModel.showSwitchDetail"  s-title="Links" class="detail_link">
+                <mar-section ng-if="fabricModel.showSwitchDetail"  s-title="{{'MODULES.TOPO.TITLE.LINKS'|translate}}" class="detail_link">
                     <transclude-body>
                     <static-table style="max-width:400px" data="fabricModel.switchLinks" columns="fabricModel.linksSchema"></static-table>
                     </transclude-body>

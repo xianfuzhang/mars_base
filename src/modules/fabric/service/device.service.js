@@ -1306,11 +1306,11 @@ export class DeviceService {
         'role': 2,
         'value': 'edit'
       },
-      // {
-      //   'label': this.translate('MODULES.FABRIC.STORM.ROW.ACTION.DELETE'),
-      //   'role': 2,
-      //   'value': 'delete'
-      // }
+      {
+        'label': this.translate('MODULES.FABRIC.STORM.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
     ]
   }
 

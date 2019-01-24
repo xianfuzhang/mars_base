@@ -68,6 +68,13 @@ export class Topo {
       this.otherContainerRightNode = null;
       this.otherContainerText = null;
 
+      this.paths = [];
+      this.pathNodes = {};
+
+      this.hosts = [];
+      this.hostNodes = {};
+
+
       scope.selectedDeviceId = null;
 
       let DeviceType = {
@@ -97,6 +104,18 @@ export class Topo {
       this.LINE_NORMAL = '240,240,240';
       this.LINE_ERROR = "255,0,0";
       this.oldWidth = null;
+
+
+      this.host_width = 48;
+      this.host_height = 48;
+      this.host_min_interval = 10;
+      this.PATH_LINE_WIDTH = 3;
+      this.PATH_LINE_SELECTED = '236,234,136';
+
+      const EDGE_TYPE = 'EDGE';
+      const DIRECT_TYPE = 'DIRECT';
+      const LINK_ACTIVE_STATE = 'ACTIVE';
+
 
       let easingService = this.di.easingService;
       let switchLocation = this.switchLocation;
@@ -327,6 +346,8 @@ export class Topo {
           this.switchLocation[key] = [x, y];
         }
         this.otherContainerText.setLocation(10, 10 + avgHeight*2);
+
+        relocateHost();
       };
 
       let calcInterval = (nodes, width) =>{
@@ -450,6 +471,207 @@ export class Topo {
         this.scene.add(node);
         return node;
       };
+
+      let genHostNode = (host) =>{
+        let node = new JTopo.Node();
+        node.dragable = true ;
+        node.width = this.host_width;
+        node.height = this.host_height;
+        node.showSelected =true;
+        // node.ip_address = ipAddresses;
+        node.hostId = host['id'];
+        node.connect_swt = host['connect_swt'];
+        node.move = false;
+        let hostImageUrl = require('../../../assets/images/compute.png');
+        node.setImage(hostImageUrl, true);
+
+        node.click(hostClickHandler);
+
+        this.scene.add(node);
+
+        return node;
+      };
+
+      let genHostSwitchLink = (hostId, deviceId,devicePort, isAgainst) =>{
+        let swt = this.leafs[deviceId] || this.spines[deviceId] || this.others[deviceId];
+        let host = this.hostNodes[hostId];
+        let link;
+        if(isAgainst){
+          link = new JTopo.Link(swt, host);
+          link.src_port = devicePort;
+        } else {
+          link = new JTopo.Link(host, swt);
+          link.dst_port = devicePort;
+        }
+        link.arrowsRadius = 15;
+
+        link.zIndex = 100;
+        link.lineWidth = this.PATH_LINE_WIDTH;
+        link.strokeColor = this.PATH_LINE_SELECTED;
+        link.dragable = false;
+
+        // node.mouseover(pathMouseOverHandler);
+        // node.mouseout(pathMouseOverHandler);
+        link.click(pathClickHandler);
+
+        this.scene.add(link);
+        return link;
+      };
+
+      function pathClickHandler(evt) {
+        let startNode = this.nodeA;
+        let endNode = this.nodeZ;
+        let param = {'start':{}, 'end':{}};
+        if(startNode.hostId){
+          param.start['type'] = 'HOST';
+          param.start['id'] = startNode.hostId;
+        } else {
+          param.start['type'] = 'SWITCH';
+          param.start['id'] = startNode.deviceId;
+          param.start['port'] = this.src_port;
+        }
+
+        if(endNode.hostId){
+          param.end['type'] = 'HOST';
+          param.end['id'] = endNode.hostId;
+        } else {
+          param.end['type'] = 'SWITCH';
+          param.end['id'] = endNode.deviceId;
+          param.end['port'] = this.dst_port;
+        }
+
+        DI.$rootScope.$emit("path_select",{event:evt, value: param});
+      }
+
+      // let pathMouseOutHandler = (evt) => {
+      //   // console.log('node mouse out');
+      //     this.di.$rootScope.$emit("hide_path_tooltip");
+      // };
+
+      let relocateHost = () =>{
+        let y = (this.height/3 - this.host_height)/2 + this.height/3 * 2;
+        let lastX = -1;
+        this.di._.forEach(this.hosts, (hostDict)=>{
+          let hostNode = this.hostNodes[hostDict['id']];
+          let swtId = hostNode.connect_swt;
+          let swtX = this.switchLocation[swtId][0];
+          if(lastX !== -1){
+            if(swtX - lastX < this.host_width + this.host_min_interval){
+              lastX = lastX + this.host_width + this.host_min_interval;
+            } else {
+              lastX = swtX + this.host_width;
+            }
+          } else {
+            lastX = swtX - this.host_width;
+          }
+          hostNode.setLocation(lastX, y);
+        })
+      };
+
+      let genAllHosts = () =>{
+
+        this.di._.forEach(this.hosts, (host)=>{
+          this.hostNodes[host['id']] = genHostNode(host);
+        });
+      };
+
+      let genPathLinkNode = (devices, ports) => {
+        let nodeA = this.leafs[devices[0]] || this.spines[devices[0]] || this.others[devices[0]];
+        let nodeB = this.leafs[devices[1]] || this.spines[devices[1]] || this.others[devices[1]];
+
+        let link = new JTopo.Link(nodeA, nodeB);
+        link.arrowsRadius = 15;
+        link.zIndex = 100;
+        link.lineWidth = this.PATH_LINE_WIDTH;
+        link.strokeColor = this.PATH_LINE_SELECTED;
+        link.dragable = false;
+        link.src_port =ports[0];
+        link.dst_port =ports[1];
+
+        link.click(pathClickHandler);
+
+        // node.mouseover(pathMouseOverHandler);
+        // node.mouseout(pathMouseOverHandler);
+        this.scene.add(link);
+        return link;
+      };
+
+      let genAllPathLinks = () =>{
+        this.di._.forEach(this.paths, (path)=>{
+          let src_arr = path['src'].split('/');
+          let dst_arr = path['dst'].split('/');
+          if(src_arr.length === 2 && dst_arr.length === 2){
+            let deviceIds = [src_arr[0], dst_arr[0]];
+            let ports = [src_arr[1], dst_arr[1]];
+            let linkId = getLinkId(deviceIds);
+            this.pathNodes[linkId] = genPathLinkNode(deviceIds, ports);
+          } else {
+            let hostId = null, deviceId = null, devicePort = null;
+            let isAgainst = false;
+            if(src_arr.length === 3){
+              hostId = src_arr[0] + '/' +src_arr[1];
+              deviceId = dst_arr[0];
+              devicePort = dst_arr[1];
+            }
+            if(dst_arr.length === 3){
+              isAgainst = true;
+              hostId = dst_arr[0] + '/' +dst_arr[1];
+              deviceId = src_arr[0];
+              devicePort = src_arr[1];
+            }
+            this.pathNodes[hostId+'_'+deviceId] = genHostSwitchLink(hostId, deviceId,devicePort, isAgainst)
+          }
+        });
+      };
+
+      let showPath = () =>{
+        let hosts = [];
+        this.di._.forEach(this.paths, (path)=>{
+          if(path['type'] === EDGE_TYPE){
+            let host = {};
+            let src_arr = path['src'].split('/');
+            let dst_arr = path['dst'].split('/');
+            if(src_arr.length === 3){
+              host['id'] =  src_arr[0] + '/' +src_arr[1];
+              host['connect_swt'] = dst_arr[0];
+              host['swt_x'] = this.switchLocation[dst_arr[0]]?this.switchLocation[dst_arr[0]][0]:0;
+            }
+            if(dst_arr.length === 3){
+              host['id'] =  dst_arr[0] + '/' +dst_arr[1];
+              host['connect_swt'] = src_arr[0];
+              host['swt_x'] = this.switchLocation[src_arr[0]]?this.switchLocation[src_arr[0]][0]:0;
+            }
+            hosts.push(host);
+          }
+        });
+        this.hosts = this.di._.sortBy(hosts, ['swt_x']);
+        genAllHosts();
+        genAllPathLinks();
+
+        relocateHost()
+      };
+
+      let clearPath= ()=>{
+        this.di._.forEach(this.hostNodes, (node, key)=>{
+          this.scene.remove(node);
+        });
+
+        this.di._.forEach(this.pathNodes, (node, key)=>{
+          this.scene.remove(node);
+        });
+        this.paths = [];
+        this.pathNodes = {};
+
+        this.hosts = [];
+        this.hostNodes = {};
+
+      };
+
+
+      function hostClickHandler(evt){
+        let hostId = this.hostId;
+        DI.$rootScope.$emit("host_select",{event:evt, id: hostId});
+      }
 
       function mouseUpHandler(evt){
         if(this.move){
@@ -825,6 +1047,16 @@ export class Topo {
 
       }));
 
+      unsubscribers.push(this.di.$rootScope.$on('show_path',($event, params)=>{
+        clearPath();
+        this.paths = params;
+        showPath();
+
+      }));
+
+      unsubscribers.push(this.di.$rootScope.$on('hide_path',()=>{
+        clearPath();
+      }));
 
       unsubscribers.push(this.di.$rootScope.$on('show_ports',()=>{
         if(scope.topoSetting.show_ports){
@@ -846,6 +1078,7 @@ export class Topo {
       angular.element(this.di.$window).off('resize');
     });
   }
+
 
 
   getColor(){

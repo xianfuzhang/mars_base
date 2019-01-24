@@ -107,6 +107,7 @@ export class FabricSummaryController {
 
     this.di.$scope.fabricModel = {
       showSwitchDetail: false,
+      showHostDetail: false,
       isShowTopo: false,
       portsSchema: this.di.deviceService.getSummaryPortsTableSchema(),
       endpointsSchema: this.di.deviceService.getSummaryEndpointsTableSchema(),
@@ -115,8 +116,13 @@ export class FabricSummaryController {
         location:{'x':0, 'y':1},
         isShow : false,
         data:this.di.deviceService.getSummarySwitchMenu()
-      }
+      },
+      srcHost:null,
+      dstHost: null
+    };
 
+    this.di.$scope.displayLabel = {
+      hosts: {'options':[]}
     };
 
     let portsDefer = this.di.$q.defer(),
@@ -262,30 +268,11 @@ export class FabricSummaryController {
         DI.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
         DI.$scope.fabricModel['deOthers'] = unknownSwt.concat(dstSwt.other);
         DI.$scope.fabricModel.isShowTopo = true;
-        DI.$scope.$apply();
-        //TODO 这里为了给台湾同事测试效果增加timeout
-        // setTimeout(function () {
-        //   DI.$rootScope.$emit('stop_loading');
-        //   DI._.forEach(devices, (device)=>{
-        //     device.ports = portGroups[device.id];
-        //   });
-        //   let dstSwt = distributeSwitches(devices);
-        //   DI.$scope.fabricModel['deSpines'] = dstSwt.spine;
-        //   DI.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
-        //   DI.$scope.fabricModel['deOthers'] = dstSwt.other;
-        //   DI.$scope.fabricModel.isShowTopo = true;
-        //   DI.$scope.$apply();
-        // },1000)
 
-        // this.di._.forEach(this.devices, (device)=>{
-        //   device.ports = portGroups[device.id];
-        // });
-        // let dstSwt = distributeSwitches(this.devices);
-        // this.di.$scope.fabricModel['deSpines'] = dstSwt.spine;
-        // this.di.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
-        // this.di.$scope.fabricModel['deOthers'] = dstSwt.other;
-        // this.di.$scope.fabricModel.isShowTopo = true;
-        // this.di.$scope.$apply();
+        if(DI.$scope.fabricModel.topoSetting.show_path){
+          _render_path_select(this.endpoints);
+        }
+        DI.$scope.$apply();
       });
     };
 
@@ -353,6 +340,7 @@ export class FabricSummaryController {
           "show_links": 0,
           "show_tooltips":false,
           "show_ports":false,
+          "show_path":false
         }
       } else {
         this.di.$scope.fabricModel.topoSetting = data;
@@ -393,6 +381,67 @@ export class FabricSummaryController {
       this.di.$rootScope.$emit('show_ports');
 
     };
+
+    this.di.$scope.pathSettings = (event) => {
+      this.di.$scope.fabricModel.topoSetting.show_path = !this.di.$scope.fabricModel.topoSetting.show_path;
+      this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("topo_set", this.di.$scope.fabricModel.topoSetting);
+
+      if(this.di.$scope.fabricModel.topoSetting.show_path){
+        this.di.deviceDataManager.getEndpoints().then((res)=>{
+          if(res.data.hosts.length === 0){
+            this.di.notificationService.renderWarning(scope, "没有可用的host!");
+            return;
+          } else {
+            this.endpoints = res.data.hosts;
+            _render_path_select(res.data.hosts);
+          }
+        },(err)=>{
+          this.di.notificationService.renderWarning(scope, err.message)
+        });
+      } else {
+        this.di.$rootScope.$emit('hide_path');
+        hidePathDetail();
+        hideHostDetail();
+
+      }
+    };
+
+    let _render_path_select = (hosts) =>{
+      scope.displayLabel.hosts.options = [{'label': '请选择端点', 'value':null}];
+      this.di._.forEach(hosts, (host)=>{
+        scope.displayLabel.hosts.options.push({'label':host.id, 'value':host.id})
+      });
+
+      scope.fabricModel.srcHost = scope.displayLabel.hosts.options[0];
+      scope.fabricModel.dstHost = scope.displayLabel.hosts.options[0];
+    };
+
+
+    scope.findPath = () =>{
+      if(scope.fabricModel.srcHost.value === null ||
+        scope.fabricModel.dstHost.value === null ||
+        scope.fabricModel.dstHost.value === scope.fabricModel.srcHost.value){
+        return ;
+      }
+
+      this.di.$rootScope.$emit('start_loading');
+      this.di.deviceDataManager.postPathCalc(scope.fabricModel.srcHost.value, scope.fabricModel.dstHost.value).then((res)=>{
+        this.di.$rootScope.$emit('show_path', res.data.links);
+        this.di.$rootScope.$emit('stop_loading');
+      },(err)=>{
+        this.di.$rootScope.$emit('stop_loading');
+        this.di.notificationService.renderWarning(scope, err)
+      })
+    };
+
+    scope.clearPath = () =>{
+      this.di.$rootScope.$emit('hide_path');
+      hideHostDetail();
+      hidePathDetail();
+    };
+
+
+
 
     this.di.$scope.resize_div = (event) => {
       // console.log(event);
@@ -509,6 +558,57 @@ export class FabricSummaryController {
 
     let win_width = this.di.$window.innerWidth;
     this.di.$scope.resize_right_plus = {'width': (win_width - 300)+ 'px','right':'300px'};
+
+
+    let showHostDetail = (id) =>{
+      if(this.di.$scope.fabricModel.showHostDetail){
+        this.di.$scope.fabricModel.showHostDetail = false;
+        this.di.$scope.$apply();
+      }
+
+      this.di.$scope.fabricModel.showHostId = id;
+      this.di.$scope.fabricModel.showHostDetail = true;
+      showHost();
+    };
+
+
+
+    let showHost = () =>{
+      let host = this.di._.find(this.endpoints,{id: scope.fabricModel.showHostId});
+      let trStart = '<tr>';
+      let trEnd= '</tr>';
+      let tdStart = '<td>';
+      let tdEnd = '</td>';
+
+      let pathHost_detail = angular.element(document.getElementById('pathHost'));
+      pathHost_detail.empty();
+
+      let firstTdContent = '<div>'+ this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.MAC')+'</div>';
+      let secondTdContent = '<div>'+ host.mac +'</div>';
+      let tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+      pathHost_detail.append(tr);
+
+      firstTdContent = '<div>'+ this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.VLAN') +'</div>';
+      secondTdContent = '<div>'+ host.vlan +'</div>';
+      tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+      pathHost_detail.append(tr);
+
+      firstTdContent = '<div>' + this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP') + '</div>';
+      secondTdContent = '<div>'+ host.ipAddresses.join(',') +'</div>';
+      tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+      pathHost_detail.append(tr);
+
+      firstTdContent = '<div>'+ this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.LOCATION') +'</div>';
+      secondTdContent = '<div>'+ host.locations.map(x=>this.di.switchService.getSwitchName( x.elementId, this.devices) + '/' + x.port).join(',') +'</div>';
+      tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+      pathHost_detail.append(tr)
+    };
+
+
+    let hideHostDetail = () =>{
+      this.di.$scope.fabricModel.showHostDetail = false;
+      this.di.$scope.fabricModel.showHostId = null;
+    };
 
     let showSwitchDetail = (id, type, summaryList) => {
 
@@ -679,11 +779,103 @@ export class FabricSummaryController {
     };
 
     unsubscribers.push(this.di.$rootScope.$on('switch_select',(evt, data)=>{
-      // console.log('==switch_select is receive. isShow: ' + this.di.$scope.fabricModel.switchContextMenu.isShow);
+      hideHostDetail();
+      hidePathDetail();
+
       this.di.$scope.fabricModel.switchContextMenu.isShow = false;
       this.di.$scope.$apply();
       showSwitchDetail(data.id, data.type, data.value);
     }));
+
+
+    unsubscribers.push(this.di.$rootScope.$on('host_select',(evt, data)=>{
+      this.di.$scope.fabricModel.switchContextMenu.isShow = false;
+      hideSwitchDetail();
+      hidePathDetail();
+
+      showHostDetail(data.id);
+      this.di.$scope.$apply();
+
+    }));
+
+    let hidePathDetail = () =>{
+      scope.fabricModel.showPathInfo = false;
+    };
+
+
+    let showPathInfo = (start, end)=>{
+      let trStart = '<tr>';
+      let trEnd= '</tr>';
+      let tdStart = '<td>';
+      let tdEnd = '</td>';
+
+      let pathInfo_detail = angular.element(document.getElementById('pathInfo'));
+      pathInfo_detail.empty();
+
+      if(start.type === 'HOST'){
+        let firstTdContent = '<div>'+ this.translate('MODULES.TOPO.PATH.SOURCE.HOST') +'</div>';
+        let secondTdContent = '<div>'+ start.instance.mac +'</div>';
+        let tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+        pathInfo_detail.append(tr)
+      } else {
+        let firstTdContent = '<div>'+ this.translate('MODULES.TOPO.PATH.SOURCE.SWITCH') +'</div>';
+        let secondTdContent = '<div>'+ start.instance.name +'</div>';
+        let tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+        pathInfo_detail.append(tr)
+
+        firstTdContent = '<div>'+ this.translate('MODULES.TOPO.PATH.SOURCE.SWITCH_PORT') +'</div>';
+        secondTdContent = '<div>'+ start.port +'</div>';
+        tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+        pathInfo_detail.append(tr)
+      }
+
+      pathInfo_detail.append('</br>');
+
+      if(end.type === 'HOST'){
+        let firstTdContent = '<div>'+ this.translate('MODULES.TOPO.PATH.DST.HOST') +'</div>';
+        let secondTdContent = '<div>'+ end.instance.mac +'</div>';
+        let tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+        pathInfo_detail.append(tr)
+      } else {
+        let firstTdContent = '<div>'+ this.translate('MODULES.TOPO.PATH.DST.SWITCH') +'</div>';
+        let secondTdContent = '<div>'+ end.instance.name +'</div>';
+        let tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+        pathInfo_detail.append(tr)
+
+        firstTdContent = '<div>'+ this.translate('MODULES.TOPO.PATH.DST.SWITCH_PORT') +'</div>';
+        secondTdContent = '<div>'+ end.port +'</div>';
+        tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+        pathInfo_detail.append(tr)
+      }
+    };
+
+    unsubscribers.push(this.di.$rootScope.$on('path_select',(evt, data)=>{
+      let param = data.value;
+      let start = param.start;
+      let end = param.end;
+
+      if(start.type === 'HOST'){
+        start['instance'] = this.di._.find(this.endpoints, {id: start.id})
+      } else {
+        start['instance'] = this.di._.find(this.devices, {id: start.id})
+      }
+
+      if(end.type === 'HOST'){
+        end['instance'] = this.di._.find(this.endpoints, {id: end.id})
+      } else {
+        end['instance'] = this.di._.find(this.devices, {id: end.id})
+      }
+
+      hideHostDetail();
+      hideSwitchDetail();
+
+      scope.fabricModel.showPathInfo = true;
+      showPathInfo(start, end);
+      scope.$apply();
+
+    }));
+
+
 
 
     unsubscribers.push(this.di.$rootScope.$on('switch_opt',(evt, data)=>{
@@ -705,6 +897,8 @@ export class FabricSummaryController {
           this.di.$scope.fabricModel.switchContextMenu.isShow = true;
         }
         hideSwitchDetail();
+        hideHostDetail();
+        hidePathDetail();
         this.di.$scope.fabricModel.showSwitchId = data.id;
         this.di.$scope.$apply();
       }
@@ -714,6 +908,8 @@ export class FabricSummaryController {
       // console.log('==switch_select is receive. isShow: ' + this.di.$scope.fabricModel.switchContextMenu.isShow);
       this.di.$scope.fabricModel.switchContextMenu.isShow = false;
       hideSwitchDetail();
+      hidePathDetail();
+      hideHostDetail();
       this.di.$scope.$apply();
 
     }));
@@ -827,13 +1023,7 @@ export class FabricSummaryController {
     setTimeout(function () {
       init();
     });
-
-
   }
-
-
-
-
 
   setTableOpt(obj){
     obj.opt = '';

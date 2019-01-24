@@ -711,6 +711,18 @@ export class DeviceDataManager {
       );
     return defer.promise;
   }
+
+  postPathCalc(src, dst){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getPathUrl(), {"host1":src, "host2": dst})
+      .then((res) => {
+        defer.resolve(res);
+      }, (err) => {
+        defer.reject(err.data.message);
+      });
+    return defer.promise;
+
+  }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
 DeviceDataManager.$$ngIsClass = true;
