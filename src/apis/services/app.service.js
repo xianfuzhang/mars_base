@@ -646,6 +646,9 @@ export class appService {
     return this.getZoneEndpoint(true) + "/calcpath/v1/getpath";
   }
 
+  getLogicalPortMappingUrl() {
+   return this.getZoneEndpoint(true) + "/logicalport/v1/mapping";  
+  }
 }
 
 appService.$inject = appService.getDI();

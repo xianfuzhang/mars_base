@@ -712,16 +712,28 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  postPathCalc(src, dst){
+  postPathCalc(src, dst) {
     let defer = this.di.$q.defer();
-    this.di.$http.post(this.di.appService.getPathUrl(), {"host1":src, "host2": dst})
+    this.di.$http.post(this.di.appService.getPathUrl(), {"host1": src, "host2": dst})
       .then((res) => {
         defer.resolve(res);
       }, (err) => {
         defer.reject(err.data.message);
       });
     return defer.promise;
+  }
 
+  getLogicalPortMapping() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getLogicalPortMappingUrl())
+      .then((res) => {
+          defer.resolve(res.data.ports);
+        },
+        (err) => {
+          defer.resolve([]);
+        }
+      );
+    return defer.promise;
   }
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();

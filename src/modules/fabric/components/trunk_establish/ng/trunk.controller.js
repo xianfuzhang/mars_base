@@ -3,6 +3,7 @@ export class TrunkController {
     return [
       '$scope',
       '$rootScope',
+      '$filter',
       '_',
       'deviceDataManager'
     ];
@@ -14,6 +15,7 @@ export class TrunkController {
       this.di[value] = args[index];
     });
     this.scope = this.di.$scope;
+    this.translate = this.di.$filter('translate');
     this.scope.edit = false;
     this.scope.showWizard = false;
     this.scope.steps = [
@@ -26,11 +28,24 @@ export class TrunkController {
     this.scope.model = {
       name: null,
       is_mlag: false,
+      disableMLAG: true,
       group: null,
       members: [],
       membersDetail: [],
       nameHelper: {
         validation: 'false'
+      },
+      mlagEnableLabel: {
+        id: 'check_1', 
+        label: this.translate('MODULES.PORT.MLAG.ENABLE'),
+        name: 'radio_1', 
+        value:  true
+      },
+      mlagDsiableLabel: {
+        id: 'check_2', 
+        label: this.translate('MODULES.PORT.MLAG.DISABLE'),
+        name: 'radio_1', 
+        value:  false
       },
       groupDisplayLabel: {
         options: []
@@ -111,8 +126,8 @@ export class TrunkController {
       let device = this.di._.find(this.scope.availableDevices, {'id': $value.value});
       device.ports.forEach((port) => {
         this.scope.model.portDisplayLabel.options.push({
-          'label': port.port,
-          'value': port.port  
+          'label': port,
+          'value': port  
         });
       });
       device.groups.forEach((group) => {
@@ -149,12 +164,36 @@ export class TrunkController {
         this.scope.model.membersDetail.splice(index, 1);
       }
     };
+
+    this.scope.supportMLAG = (state) => {
+      this.scope.model.membersDetail = [];
+      //rest device support mlag
+      this.scope.model.deviceDisplayLabel.options = [];
+      this.scope.availableDevices.forEach((item) => {
+        if (state && item.protocol === 'rest') {
+          this.scope.model.deviceDisplayLabel.options.push({
+            'label': item.name,
+            'value': item.id
+          });  
+        } 
+        else if (!state){
+          this.scope.model.deviceDisplayLabel.options.push({
+            'label': item.name,
+            'value': item.id
+          });  
+        }
+      });
+      this.scope.model.deviceOption = this.scope.model.deviceDisplayLabel.options[0];
+      this.scope.changeDevice(this.scope.model.deviceOption);
+    };
   }
 
   initSelectOptions() {
     this.scope.model.nameHelper.validation = 'false';
+    this.scope.model.is_mlag = false;
     this.scope.model.deviceDisplayLabel.options = [];
     this.scope.availableDevices.forEach((item) => {
+      if (item.protocol === 'rest') this.scope.model.disableMLAG = false;
       this.scope.model.deviceDisplayLabel.options.push({
         'label': item.name,
         'value': item.id

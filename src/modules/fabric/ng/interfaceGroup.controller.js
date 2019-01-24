@@ -100,7 +100,7 @@ export class InterfaceGroupController {
           this.scope.$emit('trunk-wizard-show', {
             'edit': true, 
             'trunk': $event.data,
-            'availableDevices': result
+            'availableDevices': result.availableDevices
           });
         }, () => {
           this.scope.alert = {
@@ -130,7 +130,11 @@ export class InterfaceGroupController {
 
     this.scope.addLogicalPort = () => {
       this.getAvailableMemberDevices().then((result) => {
-        this.scope.$emit('trunk-wizard-show', {'edit': false, 'availableDevices': result});
+        this.scope.$emit('trunk-wizard-show', {
+          'edit': false, 
+          'availableDevices': result.availableDevices,
+          //'deviceMapping': result.deviceMapping
+        });
       }, () => {
         this.scope.alert = {
           type: 'warning',
@@ -187,27 +191,51 @@ export class InterfaceGroupController {
             });
           }
           else {
-            let deviceDefer = this.di.$q.defer(), portsDefer = this.di.$q.defer();
-            this.di.deviceDataManager.getDeviceConfig(members[0]['device_id']).then((device) => {
-              deviceDefer.resolve(device && device.name || members[0]['device_id']);
+            let deferArr = [], memberDevices = [];
+            members.forEach((member) => {
+              memberDevices.includes(member.device_id) ? null : memberDevices.push(member.device_id);
             });
-            this.di.deviceDataManager.getDevicePorts(members[0]['device_id']).then((res) => {
-              portsDefer.resolve(res.data.ports);
-            });
-            this.di.$q.all([deviceDefer.promise, portsDefer.promise]).then((arr) => {
-              let deviceName = arr[0], ports = arr[1] ,member_ports = [], result = [];
-              members.forEach((member) => {
-                member_ports.push(member.port);
+            memberDevices.forEach((device_id) => {
+              let deviceDefer = this.di.$q.defer(), portsDefer = this.di.$q.defer();
+              this.di.deviceDataManager.getDeviceConfig(device_id).then((device) => {
+                deviceDefer.resolve({
+                  'device_id': device_id,
+                  'device_name': device && device.name || device_id
+                });
               });
-              ports.forEach((port) => {
-                if (member_ports.includes(parseInt(port.port))) {
+              this.di.deviceDataManager.getDevicePorts(device_id).then((res) => {
+                portsDefer.resolve({
+                  'device_id': device_id,
+                  'ports': res.data.ports
+                });
+              });
+              deferArr.push(deviceDefer.promise);
+              deferArr.push(portsDefer.promise);
+            });
+            
+            this.di.$q.all(deferArr).then((arr) => {
+              //let deviceName = arr[0], ports = arr[1] ,member_ports = [], result = [];
+              let result = [];
+              members.forEach((member) => {
+                //member_ports.push(member.port);
+                let device_name_ports = arr.filter(item => member.device_id === item.device_id);
+                if (device_name_ports.length === 2) {
+                  let port = device_name_ports[1]['ports'].find(port => parseInt(port.port) === member.port);
                   result.push({
-                    'device': deviceName,
-                    'port': port.port,
-                    'status': port.isEnabled ? 'available' : 'unavailable'
+                    'device': device_name_ports[0]['device_name'],
+                    'port': port && port.port || member.port,
+                    'status': port && port.isEnabled ? 'available' : 'unavailable'
+                  });
+                }
+                else {
+                  result.push({
+                    'device': member.device_id,
+                    'port': member.port,
+                    'status': 'unavailable'
                   });
                 }
               });
+              
               defer.resolve({
                 data: result
               });
@@ -261,37 +289,74 @@ export class InterfaceGroupController {
 
   getAvailableMemberDevices() {
     let defer = this.di.$q.defer(),
-      deviceDefer = this.di.$q.defer(), portDefer = this.di.$q.defer();
+      deviceDefer = this.di.$q.defer(), portDefer = this.di.$q.defer(), mappingDefer = this.di.$q.defer();
     this.di.deviceDataManager.getDeviceConfigs().then((devices) => {  
       deviceDefer.resolve(devices);
     });
     this.di.deviceDataManager.getPorts().then((res) => {
       portDefer.resolve(res.data.ports);
     });
+    this.di.deviceDataManager.getLogicalPortMapping().then((ports) => {
+      mappingDefer.resolve(ports);
+    });
 
-    this.di.$q.all([deviceDefer.promise, portDefer.promise]).then((arr) => {
-      this.scope.availableDevices = [];
+    let availableDevices = [], logicalMapping = [];
+    this.di.$q.all([deviceDefer.promise, portDefer.promise, mappingDefer.promise]).then((arr) => {
+      logicalMapping = arr[2];
       arr[0].forEach((device) => {
         let ports = [];
         arr[1].forEach((port) => {
-          if (port.isEnabled && port.element === device.id) {
-            ports.push(port);
+          if (port.element === device.id) {
+            ports.push(parseInt(port.port));
           }
         });
-        this.scope.availableDevices.push({
+        availableDevices.push({
           'id': device.id, 
           'name': device.name,
+          'protocol': device.protocol,
           'ports': ports,
-          'groups': [1, 2, 3, 4, 5, 6, 7]
+          'groups': []
         });
       });
     })
     .finally(() => {
-      let arr = this.di._.filter(this.scope.availableDevices, (item) => {
-        return item.ports.length > 0 && item.groups.length > 0;
+      let deviceMapping = {};
+      logicalMapping.forEach((item) => {
+        if (deviceMapping.hasOwnProperty(item.device_id)) {
+          deviceMapping[item.device_id]['ports'].push(item.port);
+          deviceMapping[item.device_id]['groups'].includes(item.group) ? null :
+            deviceMapping[item.device_id]['groups'].push(item.group);
+        } 
+        else {
+          deviceMapping[item.device_id] = {
+            'id': item.device_id,
+            'groups': [item.group],
+            'ports': [item.port]
+          };
+        } 
       });
-      this.scope.availableDevices = arr;
-      this.scope.availableDevices.length > 0 ? defer.resolve(this.scope.availableDevices) :
+      availableDevices.forEach((device) => {
+        if (!deviceMapping.hasOwnProperty(device.id)) {
+          device.groups = [1, 2, 3, 4, 5, 6, 7];
+        }
+        else if (deviceMapping.hasOwnProperty(device.id)) {
+          let i = 1, j = 0;
+          while (i <=  7) {
+            deviceMapping[device.id]['groups'].includes(i) ? null : device.groups.push(i);
+            i++;
+          }
+          while (j < deviceMapping[device.id]['ports'].length) {
+            let index = device.ports.indexOf(deviceMapping[device.id]['ports'][j]);
+            if (index > -1) device.ports.splice(index, 1);
+            j++;
+          }
+        }
+      });
+      let arr = this.di._.filter(availableDevices, (item) => {
+        return item.groups.length > 0 && item.ports.length > 0;
+      });
+      availableDevices = arr;
+      availableDevices.length > 0 ? defer.resolve({'availableDevices': availableDevices, 'deviceMapping': deviceMapping}) :
         defer.reject(null);
     });
     return defer.promise;

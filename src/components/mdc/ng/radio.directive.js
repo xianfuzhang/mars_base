@@ -15,6 +15,7 @@ export class mdlRadio {
       data: '=ngModel',
       displayLabel: '=',
       disable: '=',
+      onClick: '&'
     };
     this.link = (...args) => this._link.apply(this, args);
   }
@@ -43,7 +44,9 @@ export class mdlRadio {
     };
 
     scope.clicked = (event) => {
+      scope.onClick = scope.onClick || angular.noop;
       ngModel.$setViewValue(scope.value);
+      scope.onClick();
       event.stopPropagation();
     };
   
