@@ -89,6 +89,7 @@ export class SegmentMemberEstablishController {
       scope.isVxlanTypeDisable = false;
       scope.isVxlanNameDisable = false;
       scope.isVxlanAccessTypeDisable = false;
+      scope.isVxlanNetworkUplinkDisable = false;
 
       scope.memberModel = {
         vlanPorts :[],
@@ -147,6 +148,13 @@ export class SegmentMemberEstablishController {
         scope.isTypeDisable = true;
       } else{
         // scope.isEdit = false;
+      }
+      if (param.type && param.type === 'vxlan') {
+        scope.vxlanUplinkLabel = {};
+        scope.vxlanUplinkLabel.options = param.uplinks.map((uplink) => {
+          return {'label': uplink.segment_name, 'value': uplink.segment_name};
+        });
+        scope.selected.vxlanNetworkUplink = scope.vxlanUplinkLabel.options[0];
       }
       scope.title = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ADD');
 
@@ -287,6 +295,7 @@ export class SegmentMemberEstablishController {
               if(data['name']){
                 scope.isVxlanNameDisable = true;
                 scope.isVxlanTypeDisable = true;
+                scope.isVxlanNetworkUplinkDisable = true;
                 scope.memberModel.vxlan.name = data['name'];
                 if(data['ip_addresses']){
                   //network
@@ -307,6 +316,9 @@ export class SegmentMemberEstablishController {
                     }
                     scope.memberModel.vxlan.access.vlan = data['vlan'];
                   }
+                }
+                if (data['uplink_segment']) {
+                  scope.selected.vxlanNetworkUplink = this.di._.find(scope.vxlanUplinkLabel.options,  {'value':data['uplink_segment']});
                 }
               }
             } else {
@@ -611,7 +623,11 @@ export class SegmentMemberEstablishController {
       } else {
 
         if(scope.selected.vxlanType.value === 'network'){
-          param['network_port'] = [{'name': scope.memberModel.vxlan.name, 'ip_addresses': _formatVxlanIPs() }];
+          param['network_port'] = [{
+            'name': scope.memberModel.vxlan.name,
+            'uplink_segment': scope.selected.vxlanNetworkUplink.value,
+            'ip_addresses': _formatVxlanIPs()
+          }];
         } else {
           if(scope.selected.vxlanAccessType.value === 'normal'){
             param['access_port'] = [{'name': scope.memberModel.vxlan.name,

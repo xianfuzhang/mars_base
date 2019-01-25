@@ -279,7 +279,7 @@ export class SegmentDetailController {
       let res = {'network':[], 'access':[]};
       if(network_data.length > 0)
         this.di._.forEach(network_data,(item)=>{
-          res.network.push({'name': item['name'], 'ip_addresses': item['ip_addresses'].join(', ')})
+          res.network.push({'name': item['name'], 'ip_addresses': item['ip_addresses'].join(', '), 'uplink_segment': item['uplink_segment']})
         });
 
       if(access_data.length > 0)
@@ -411,8 +411,25 @@ export class SegmentDetailController {
               this.di.$log.debug('delete tenant segment member dialog cancel');
             });
         } else if($event.action.value === 'edit'){
-          let param = {'tenantName': scope.tenantName, 'segmentName':scope.segmentName, 'type':scope.detailModel.type, 'data':$event.data};
-          this.di.$rootScope.$emit('segmentmember-wizard-show', param);
+          this.di.deviceDataManager.getUpLink().then((res) => {
+            let uplinks = res.data.uplinkSegments;
+            if (uplinks.length === 0) {
+              scope.alert = {
+                type: 'warning',
+                msg: this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.NO_AVAILABLE_UPLINK')
+              }
+              this.di.notificationService.render(this.scope);
+              return;
+            }
+            let param = {
+              'tenantName': scope.tenantName, 
+              'segmentName':scope.segmentName,
+              'uplinks': uplinks,
+              'type':scope.detailModel.type, 
+              'data':$event.data
+            };
+            this.di.$rootScope.$emit('segmentmember-wizard-show', param);
+          });
         }
       }
     };
@@ -435,8 +452,25 @@ export class SegmentDetailController {
     };
 
     scope.onVxlanNetworkAdd = () =>{
-      let param = {'tenantName': scope.tenantName, 'segmentName':scope.segmentName, 'type':'vxlan', 'vxlan_type': 'network'};
-      this.di.$rootScope.$emit('segmentmember-wizard-show', param);
+      this.di.deviceDataManager.getUpLink().then((res) => {
+        let uplinks = res.data.uplinkSegments;
+        if (uplinks.length === 0) {
+          scope.alert = {
+            type: 'warning',
+            msg: this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.NO_AVAILABLE_UPLINK')
+          }
+          this.di.notificationService.render(this.scope);
+          return;
+        }
+        let param = {
+          'tenantName': scope.tenantName, 
+          'segmentName':scope.segmentName,
+          'uplinks': uplinks,
+          'type':'vxlan', 
+          'vxlan_type': 'network'
+        };
+        this.di.$rootScope.$emit('segmentmember-wizard-show', param);
+      });
     };
 
     scope.onVlanAdd = () =>{
@@ -465,11 +499,11 @@ export class SegmentDetailController {
 
   getVxlanTableRowActions() {
     return [
-      {
+    /*  {
         'label': this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.ACTION.EDIT'),
         'role': 2,
         'value': 'edit'
-      },
+      },*/
       {
         'label': this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.ACTION.DELETE'),
         'role': 2,
@@ -480,11 +514,11 @@ export class SegmentDetailController {
 
   getVlanTableRowActions() {
     return [
-      {
+     /* {
         'label': this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.ACTION.EDIT'),
         'role': 2,
         'value': 'edit'
-      },
+      },*/
       {
         'label': this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.ACTION.DELETE'),
         'role': 2,
