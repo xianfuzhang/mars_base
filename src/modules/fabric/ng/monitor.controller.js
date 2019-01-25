@@ -85,10 +85,10 @@ export class MonitorController {
           this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
             scope.devices = configs;
             this.di.deviceDataManager.getAllMonitor().then((res) => {
-              if(!res.data['Monitor sessions:']){
+              if(!res.data['sessions']){
                 scope.entities = []
               } else {
-                scope.entities = this.getEntities(res.data['Monitor sessions:']);
+                scope.entities = this.getEntities(res.data['sessions']);
               }
 
               defer.resolve({

@@ -642,6 +642,10 @@ export class appService {
     return this.getZoneEndpoint(true) + "/logicalport/v1/" +  logical_name;   
   }
 
+  getPathUrl(){
+    return this.getZoneEndpoint(true) + "/calcpath/v1/getpath";
+  }
+
   getLogicalPortMappingUrl() {
    return this.getZoneEndpoint(true) + "/logicalport/v1/mapping";  
   }

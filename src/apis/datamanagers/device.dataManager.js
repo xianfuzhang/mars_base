@@ -712,6 +712,21 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  postPathCalc(src, dst, latency) {
+    let defer = this.di.$q.defer();
+    let param = {"host1": src, "host2": dst};
+    if(latency !== '' && latency !== null && latency !== undefined){
+      param['latency'] = latency;
+    }
+    this.di.$http.post(this.di.appService.getPathUrl(), param)
+      .then((res) => {
+        defer.resolve(res);
+      }, (err) => {
+        defer.reject(err.data.message);
+      });
+    return defer.promise;
+  }
+
   getLogicalPortMapping() {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getLogicalPortMappingUrl())
