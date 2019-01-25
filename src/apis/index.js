@@ -24,6 +24,7 @@ import {ManageDataManager} from './datamanagers/manage.dataManager';
 import {LogicalDataManager} from './datamanagers/logical.dataManager';
 import {WebsocketService} from './services/ws.service';
 import {applicationService} from './services/application.service';
+import {flowCacheService} from './services/flowCache.service';
 
 export default angular
   .module('apis', [])
@@ -50,6 +51,7 @@ export default angular
   .service('colorService', ColorService)
   .service('wsService', WebsocketService)
   .service('applicationService', applicationService)
+  .service('flowCacheService', flowCacheService)
   .service('intentDataManager', IntentDataManager)
   .service('manageDataManager', ManageDataManager)
   .service('logicalDataManager', LogicalDataManager)

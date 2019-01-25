@@ -30,6 +30,7 @@ export class validInput {
       vType: '=',
       vMessage: '@',
       vRpcid: '@',
+      vDisabled: '=',
       vStyle: '@',
       vSpan: '@',
       vList: '@'
@@ -43,6 +44,7 @@ export class validInput {
 
       let unsubscribers = [];
       scope.ngChange = scope.ngChange|| angular.noop;
+      scope.disabled = scope.vDisabled || false;
 
       let getMessageByType = (type) =>{
 
@@ -185,6 +187,14 @@ export class validInput {
       unsubscribers.push(scope.$watch('vList',(newValue, oldValue)=>{
         if(newValue == oldValue)  return;
         element.find('input').attr('list', scope.vList)
+      }));
+
+      unsubscribers.push(scope.$watch('vDisabled',(newValue)=>{
+        if(newValue){
+          scope.disabled = true;
+        } else {
+          scope.disabled = false;
+        }
       }));
 
       scope.$on('$destroy', () => {

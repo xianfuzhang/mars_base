@@ -40,6 +40,7 @@ import 'topo';
 import 'validInput';
 import 'loading';
 import 'deviceTooltip';
+import 'linkTooltip';
 import 'wizard';
 import 'datePicker';
 import 'marButton';
@@ -88,6 +89,7 @@ angular
     'validInput',
     'loading',
     'deviceTooltip',
+    'linkTooltip',
     'wizard',
     'date-picker',
     'marButton',

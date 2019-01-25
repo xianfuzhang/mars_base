@@ -1,0 +1,102 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+@include block(linkTooltip){
+  border-radius: 4px;
+  border: 1px solid rgba(88, 86, 86, 0.7);
+  opacity: 0.90;
+  position: fixed;
+  padding: 2px 4px 0 4px;
+  z-index: 200;
+  font-size: 13px;
+  line-height: 1.3;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  background-color: white;
+  color: #555;
+  pointer-events: none;
+
+  //visibility: visible;//临时开启测试使用
+  visibility: hidden;
+
+  @include element(arrow){
+    border-color: white transparent;
+    content: '';
+    position: absolute;
+    display: block;
+    z-index: 1;
+    left: -10px;
+    top: 50%;
+    pointer-events: none;
+    width:10px;
+    height:11px;
+
+    @include state(right){
+      background: url('../../assets/images/arrow_right.png') no-repeat;
+      background-size: 10px;
+    }
+
+    @include state(left){
+      background: url('../../assets/images/arrow_left.png') no-repeat;
+      background-size: 10px;
+    }
+    //width: 0;
+    //height: 0;
+    //border-top: 5px solid transparent;
+    //border-right: 10px solid whitesmoke;
+    //border-bottom: 5px solid transparent;
+
+  }
+
+  @include element(content){
+    padding: 9px;
+    color: #555;
+    //background-color: gray;
+    //width:400px;
+    //heigth:200px;
+    pointer-events: none;
+
+
+    @include element(body){
+       display: inline;
+       font-size:16px;
+       font-family: "helvetica neue","Roboto",helvetica,arial,verdana,"trebuchet ms",calibri,sans-serif;
+       color:black;
+
+       @include modifier(right){
+         display:inline-block;
+
+         div{
+           //text-align: right;
+           padding-top: 4px;
+           padding-left:8px;
+         }
+       }
+
+       @include modifier(left){
+         text-transform: capitalize;
+         display:inline-block;
+         text-align: right;
+         font-weight:300;
+         div{
+           text-align: right;
+           padding-top:4px;
+         }
+       }
+     }
+  }
+}
+
+
+
+//@include block(tooltip_body){
+//  display: inline-block;
+//
+//  @include element(left){
+//    text-align: right;
+//  }
+//
+//  @include element(right){
+//
+//  }
+//}

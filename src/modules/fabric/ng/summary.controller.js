@@ -28,6 +28,7 @@ export class FabricSummaryController {
       'commonService',
       'applicationService',
       'roleService',
+      'flowCacheService',
       'modalManager'
     ];
   }
@@ -63,6 +64,10 @@ export class FabricSummaryController {
 
 
     let initializeTransitionFlag = false;
+    scope.monitorInterval = null;
+    let monitorStateInterval = null;
+    let flowCalcData = {};
+    let linkFlowDict = {};
 
     let distributeSwitches = (allSwitches) => {
       let distributeSwt = {'spine':[], 'leaf':[], 'other':[]};
@@ -105,6 +110,11 @@ export class FabricSummaryController {
       return unknowns;
     };
 
+    this.di.$scope.displayLabel = {
+      hosts: {'options':[]},
+      fluxUnits: {'options':[{'label':'Bps', 'value':'Bps'},{'label':'KBps', 'value':'KBps'},{'label':'MBps', 'value':'MBps'}, {'label':'GBps', 'value':'GBps'}]}
+    };
+
     this.di.$scope.fabricModel = {
       showSwitchDetail: false,
       showHostDetail: false,
@@ -120,12 +130,15 @@ export class FabricSummaryController {
       srcHost:null,
       dstHost: null,
       srcHost_select: true,
-      dstHost_select: true
+      dstHost_select: true,
+      busyMetric: 500,
+      congestionMetric: 2000,
+      monitorState: this.translate('MODULES.TOPO.MONITOR.STATE_STOP'),
+      busyMetricUnit: scope.displayLabel.fluxUnits.options[1],
+      congestionMetricUnit: scope.displayLabel.fluxUnits.options[1]
     };
 
-    this.di.$scope.displayLabel = {
-      hosts: {'options':[]}
-    };
+
 
     let portsDefer = this.di.$q.defer(),
       devicesDefer = this.di.$q.defer(),
@@ -342,7 +355,8 @@ export class FabricSummaryController {
           "show_links": 0,
           "show_tooltips":false,
           "show_ports":false,
-          "show_path":false
+          "show_path":false,
+          "show_monitor": false
         }
       } else {
         this.di.$scope.fabricModel.topoSetting = data;
@@ -404,9 +418,141 @@ export class FabricSummaryController {
         this.di.$rootScope.$emit('hide_path');
         hidePathDetail();
         hideHostDetail();
-
       }
     };
+
+
+
+    this.di.$scope.monitorSettings = (event) => {
+      this.di.$scope.fabricModel.topoSetting.show_monitor = !this.di.$scope.fabricModel.topoSetting.show_monitor;
+      this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("topo_set", this.di.$scope.fabricModel.topoSetting);
+
+
+      if(!this.di.$scope.fabricModel.topoSetting.show_monitor){
+        scope.stopMonitor();
+      }
+    };
+
+    let congestionMetric = null,
+        busyMetric = null;
+
+    let FLOW_UNITS_CONSTRAINT = {
+      'bps': 1,
+      'kbps': 1024,
+      'mbps': 1024*1024,
+      'gbps': 1024*1024*1024,
+    }
+    scope.startMonitor = () =>{
+      this.di.flowCacheService.clear();
+      this.di.$rootScope.$emit('topo_monitor_metric');
+      if(!validCurrentDom('topo_monitor')){
+        return;
+      }
+
+      linkFlowDict = {};
+      flowCalcData = {};
+
+      busyMetric = FLOW_UNITS_CONSTRAINT[scope.fabricModel.busyMetricUnit.value.toLowerCase()] * parseInt(scope.fabricModel.busyMetric);
+      congestionMetric = FLOW_UNITS_CONSTRAINT[scope.fabricModel.congestionMetricUnit.value.toLowerCase()] * parseInt(scope.fabricModel.congestionMetric);
+      if(busyMetric >= congestionMetric){
+        this.di.notificationService.renderWarning(scope,"拥堵阈值必须大于繁忙阈值!");
+        return;
+      }
+
+      loop_monitor();
+      loop_monitor_state();
+    };
+
+    scope.stopMonitor = () =>{
+      // clearInterval(monitorInterval);
+      clearTimeout(scope.monitorInterval);
+      scope.monitorInterval = null;
+      clearTimeout(monitorStateInterval);
+      monitorStateInterval = null;
+      scope.fabricModel.monitorState = this.translate('MODULES.TOPO.MONITOR.STATE_STOP');
+
+      this.di.$rootScope.$emit('clearLinksColor');
+    };
+
+    let loop_monitor = () =>{
+      this.di.deviceDataManager.getDevicePortsStatistics().then((res)=>{
+        this.di.flowCacheService.setFlowData(res.data['statistics']);
+        let _flowCalculate = this.di.flowCacheService.getCalcFlow();
+        if(_flowCalculate){
+          flowCalcData = _flowCalculate;
+          linkFlowDict = {};
+          changeLinkData();
+          console.log(linkFlowDict);
+        }
+      }, (err)=>{
+        console.log(JSON.stringify(err))
+      });
+      scope.monitorInterval = setTimeout(loop_monitor,30000)
+    };
+
+    let loop_monitor_state = () =>{
+      if(scope.fabricModel.monitorState === this.translate('MODULES.TOPO.MONITOR.STATE_STOP')){
+        scope.fabricModel.monitorState = this.translate('MODULES.TOPO.MONITOR.STATE_RUNNING');
+      } else {
+        let baseStr = this.translate('MODULES.TOPO.MONITOR.STATE_RUNNING');
+        if(scope.fabricModel.monitorState.length - baseStr.length <6){
+          scope.fabricModel.monitorState = scope.fabricModel.monitorState + '·';
+        } else {
+          scope.fabricModel.monitorState = this.translate('MODULES.TOPO.MONITOR.STATE_RUNNING');
+        }
+        scope.$apply();
+      }
+      monitorStateInterval = setTimeout(loop_monitor_state,500)
+    };
+
+    let getLinkId = (deviceIds, ports) =>{
+      let newDeviceIds = this.di._.sortBy(deviceIds);
+      if(newDeviceIds[0] !== deviceIds[0]){
+        let tmp = ports[0];
+        ports[0] = ports[1];
+        ports[1] = tmp;
+      }
+      return deviceIds[0] + ':' + ports[0] + '_' + deviceIds[1] + ':' + ports[1];
+    };
+
+    let changeLinkData = ()=> {
+
+      console.log('=====> START')
+      // let linkFlowDict = {};
+      this.di._.forEach(scope.fabricModel.deLinks, (link)=>{
+        let linkId = getLinkId([link.src.device,link.dst.device], [link.src.port,link.dst.port]);
+        if(!linkFlowDict[linkId] && flowCalcData[link.src.device]){
+          linkFlowDict[linkId] = {'src':angular.copy(link.src), 'dst':angular.copy(link.dst)};
+          let flow = angular.copy(flowCalcData[link.src.device][link.src.port]);
+          linkFlowDict[linkId]['flow'] = flow;
+
+          console.log(linkId + " : " + flow['bytesReceived'] +';' + flow['bytesSent']);
+
+          let colorRes = _calcLinkColor(flow['bytesReceived'] + flow['bytesSent']);
+          linkFlowDict[linkId]['color'] = colorRes[0];
+          linkFlowDict[linkId]['__color_code'] = colorRes[1];
+
+        }
+      });
+
+      this.di.$rootScope.$emit('changeLinksColor', linkFlowDict)
+    };
+
+    let _calcLinkColor = (bytesFlux) =>{
+      let LINE_NORMAL = '136,234,136';
+      let LINE_BUSY = '252, 212, 104  ';
+      let LINE_CONGESTION = "255,0,0";
+      if(bytesFlux >= busyMetric && bytesFlux < congestionMetric){
+        return [LINE_BUSY, 'busy'];
+      } else if(bytesFlux >= congestionMetric){
+        return [LINE_CONGESTION, 'congestion'];
+      } else {
+        return [LINE_NORMAL,'normal'];
+      }
+    };
+
+
+
 
     let _render_path_select = (hosts) =>{
       scope.displayLabel.hosts.options = [{'label': '请选择端点', 'value':null}];
@@ -1052,6 +1198,7 @@ export class FabricSummaryController {
       this.di._.each(unsubscribers, (unsubscribe) => {
         unsubscribe();
       });
+      scope.stopMonitor();
       // this.di.$log.info('FabricSummaryController', 'Destroyed');
     });
 

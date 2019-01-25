@@ -232,11 +232,12 @@ export class Topo {
 
             this.di._.forEach(scope.links, (link, key) => {
               let deviceIds = [link.src.device, link.dst.device];
-              let linkId = getLinkId(deviceIds);
+              let ports = [link.src.port, link.dst.port];
+              let linkId = getLinkId(deviceIds, ports);
               if(this.links[linkId]){
                 return;
               }
-              this.links[linkId] = genLinkNode(deviceIds);
+              this.links[linkId] = genLinkNode(deviceIds, linkId);
               if(link.state != this.active_status){
                 this.links[linkId].strokeColor = this.LINE_ERROR;
               }
@@ -253,20 +254,29 @@ export class Topo {
         this.links = {};
       };
 
-      let getLinkId = (deviceIds) =>{
-        deviceIds = this.di._.sortBy(deviceIds);
-        return deviceIds[0] + '_' + deviceIds[1];
+      let getLinkId = (deviceIds, ports) =>{
+        let newDeviceIds = this.di._.sortBy(deviceIds);
+        if(newDeviceIds[0] !== deviceIds[0]){
+          let tmp = ports[0];
+          ports[0] = ports[1];
+          ports[1] = tmp;
+        }
+        return deviceIds[0] + ':' + ports[0] + '_' + deviceIds[1] + ':' + ports[1];
       };
 
-      let genLinkNode = (devices) => {
+      let genLinkNode = (devices, linkId) => {
         let nodeA = this.leafs[devices[0]] || this.spines[devices[0]] || this.others[devices[0]];
         let nodeB = this.leafs[devices[1]] || this.spines[devices[1]] || this.others[devices[1]];
 
         let link = new JTopo.Link(nodeA, nodeB);
         link.zIndex = 20;
+        link.linkId = linkId;
         link.lineWidth = this.LINE_WIDTH;
         link.strokeColor = this.LINE_SELECTED;
         link.dragable = false;
+
+        link.mouseover(linkMouseOverHandler);
+        link.mouseout(linkMouseOutHandler);
 
         this.scene.add(link);
         return link;
@@ -612,7 +622,7 @@ export class Topo {
           if(src_arr.length === 2 && dst_arr.length === 2){
             let deviceIds = [src_arr[0], dst_arr[0]];
             let ports = [src_arr[1], dst_arr[1]];
-            let linkId = getLinkId(deviceIds);
+            let linkId = getLinkId(deviceIds, ports);
             this.pathNodes[linkId] = genPathLinkNode(deviceIds, ports, path['state'] === LINK_ACTIVE_STATE);
           } else {
             let hostId = null, deviceId = null, devicePort = null;
@@ -766,6 +776,34 @@ export class Topo {
         }
       };
 
+      let _completeDeviceName4FlowInfo = (detail) =>{
+        let res = angular.copy(detail);
+        let src = detail.src.device;
+        let dst = detail.dst.device;
+
+        let src_sw = DI._.find(scope.spines,{'id':src}) || DI._.find(scope.leafs,{'id':src})||DI._.find(scope.others,{'id':src});
+        let dst_sw = DI._.find(scope.spines,{'id':dst}) || DI._.find(scope.leafs,{'id':dst})||DI._.find(scope.others,{'id':dst});
+        res.src.device_name = src_sw.name;
+        res.dst.device_name = dst_sw.name;
+        return res;
+      };
+
+      function linkMouseOverHandler(evt) {
+        if(scope.topoSetting.show_monitor){
+          if(this._flow_detail){
+            let res = _completeDeviceName4FlowInfo(this._flow_detail);
+            DI.$rootScope.$emit("show_link_tooltip",{event:evt, value: res});
+          }
+        }
+      }
+
+      let  linkMouseOutHandler = (evt) => {
+        // console.log('node mouse out');
+        if(scope.topoSetting.show_monitor){
+          this.di.$rootScope.$emit("hide_link_tooltip");
+        }
+      };
+
       function clickHandler(evt) {
         let deviceId =  this.deviceId;
         let deviceType = this.deviceType;
@@ -800,11 +838,12 @@ export class Topo {
           this.di._.forEach(scope.links, (link, key) => {
             if(deviceId == link.src.device){
               let deviceIds = [link.src.device, link.dst.device];
-              let linkId = getLinkId(deviceIds);
+              let ports = [link.src.port, link.dst.port];
+              let linkId = getLinkId(deviceIds, ports);
               if(this.links[linkId]){
                 return;
               }
-              this.links[linkId] = genLinkNode(deviceIds);
+              this.links[linkId] = genLinkNode(deviceIds, linkId);
               // this.links[linkId].lineWidth = 3;
               this.links[linkId].strokeColor = this.LINE_SELECTED;
               if(link.state != this.active_status){
@@ -1062,6 +1101,24 @@ export class Topo {
         showPath();
 
       }));
+
+      unsubscribers.push(this.di.$rootScope.$on('changeLinksColor',($event, params)=>{
+        let links_color = params;
+        let keys = this.di._.keys(links_color);
+        this.di._.forEach(keys, (key)=>{
+          this.links[key].strokeColor =  links_color[key].color;
+          this.links[key]._flow_detail = links_color[key];
+        });
+      }));
+
+      unsubscribers.push(this.di.$rootScope.$on('clearLinksColor',($event)=>{
+        this.di._.forEach(this.links, (linkNode)=>{
+          linkNode.strokeColor = this.LINE_SELECTED;
+          linkNode._flow_detail = null;
+        });
+      }));
+
+
 
       unsubscribers.push(this.di.$rootScope.$on('hide_path',()=>{
         clearPath();

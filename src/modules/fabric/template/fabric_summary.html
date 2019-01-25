@@ -91,9 +91,44 @@
                             <div class="path_topo" style="background-size: 28px;width:28px;height:28px;"></div>
                         </div>
 
+                        <div ng-click="monitorSettings()" id="monitor_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_MONITOR'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_monitor }" class="+front mdc-button topo_setting__button">
+                            <div class="monitor_topo" style="background-size: 28px;width:28px;height:28px;"></div>
+                        </div>
+
                     </div>
                     </transclude-body>
                 </mar-section>
+
+                <mar-section ng-show="fabricModel.topoSetting.show_monitor"  s-title="{{'MODULES.TOPO.TITLE.MONITOR'|translate}}" class="detail_summary topo_monitor">
+                    <transclude-body>
+
+                        <div style="margin-top:5px;">
+                            <span style="width:80px;display: inline-block"> {{'MODULES.TOPO.MONITOR.STATE'|translate}}: </span>
+                            <span style="width:200px;display: inline-block"> {{ fabricModel.monitorState }}</span>
+                        </div>
+
+                        <div style="margin-top:5px;">
+                            <span style="width:80px;display: inline-block"> {{'MODULES.TOPO.MONITOR.BUSY'|translate}}: </span>
+                            <valid-input style="display: inline-block;width:80px;" v-require="true" ng-model="fabricModel.busyMetric" v-type="int" v-rpcid="topo_monitor_metric" v-disabled="monitorInterval"></valid-input>
+                            <mdl-select style="display: inline-block;width:80px;" ng-model="fabricModel.busyMetricUnit" disable="monitorInterval!= null"
+                                        display-label="displayLabel.fluxUnits">
+                            </mdl-select>
+                        </div>
+                        <div style="margin-top:5px;">
+                            <span style="width:80px;display: inline-block"> {{'MODULES.TOPO.MONITOR.CONGESTION'|translate}}: </span>
+                            <valid-input style="display: inline-block;width:80px;" v-require="true" ng-model="fabricModel.congestionMetric" v-type="int" v-rpcid="topo_monitor_metric" v-disabled="monitorInterval"></valid-input>
+                            <mdl-select style="display: inline-block;width:80px;" ng-model="fabricModel.congestionMetricUnit" disable="monitorInterval!= null"
+                                        display-label="displayLabel.fluxUnits">
+                            </mdl-select>
+                        </div>
+                        <div style="margin-top:15px;margin-left:55px;">
+                            <mar-button id="'server_config_clear'"  btn-text="::'MODULES.TOPO.MONITOR.STOP_MONITOR' | translate" btn-class="'btn-black'" btn-click="stopMonitor()"></mar-button>
+                            <mar-button style='margin-left: 20px;' id="'server_config_save'" btn-disabled="monitorInterval" btn-text="::'MODULES.TOPO.MONITOR.START_MONITOR' | translate" btn-class="'btn-black'" btn-click="startMonitor()"></mar-button>
+                        </div>
+
+                    </transclude-body>
+                </mar-section>
+
 
                 <mar-section ng-show="fabricModel.topoSetting.show_path"  s-title="{{'MODULES.TOPO.TITLE.PATH'|translate}}" class="detail_summary topo_path_search">
                     <transclude-body>
@@ -191,6 +226,7 @@
 
     <mar-drawer is-right=true></mar-drawer>
     <device-tooltip></device-tooltip>
+    <link-tooltip></link-tooltip>
     <ng-controller ng-controller="deviceWizardController">
         <wizard></wizard>
     </ng-controller>

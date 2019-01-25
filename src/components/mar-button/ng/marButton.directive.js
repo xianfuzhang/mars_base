@@ -37,9 +37,17 @@ export class MarButton {
   _link (scope) {
     let unsubscribers = [];
     
-    scope.disabled = scope.disabled === true ? true : false;
+    scope.disabled = scope.btnDisabled === true ? true : false;
     (function init () {
-      
+
+      unsubscribers.push(scope.$watch('btnDisabled',(newValue)=>{
+        if(newValue === true){
+          scope.disabled = true;
+        } else {
+          scope.disabled = false;
+        }
+      }));
+
       scope.$on('$destroy', () => {
         unsubscribers.forEach((cb) => {
           cb();
