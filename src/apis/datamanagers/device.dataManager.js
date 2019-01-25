@@ -539,7 +539,7 @@ export class DeviceDataManager {
           defer.resolve(res);
         },
         (err) => {
-          defer.reject(err);
+          defer.resolve({'data': {'uplinkSegments': []}});
         }
       );
     return defer.promise;

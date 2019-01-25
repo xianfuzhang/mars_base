@@ -293,7 +293,12 @@ export class logicalService {
       {
         'label': this.translate("MODULES.LOGICAL.SEGMENT_DETAIL.TABLE.IP_ADDRESS"),
         'field': 'ip_addresses',
-        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'60%'}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'40%'}
+      },
+      {
+        'label': 'UpLink',
+        'field': 'uplink_segment',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'30%'}
       }
     ];
   }

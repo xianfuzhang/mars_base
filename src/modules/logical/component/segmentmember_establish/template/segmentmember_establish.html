@@ -185,7 +185,12 @@
 
 
         <div ng-if="selected.vxlanType.value == 'network'">
-
+            <div class="stepForm__input">
+                <div class="stepForm__input__label">UpLink</div>
+                <mdl-select ng-model="selected.vxlanNetworkUplink" display-label="vxlanUplinkLabel"
+                    disable="isVxlanNetworkUplinkDisable">
+                </mdl-select>
+            </div>
             <div style="display: inline-block; margin-right:15px;">
                 <mar-button btn-text="::'MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_IP' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addVxlanIps()"/>
             </div>
@@ -207,9 +212,6 @@
             </div>
 
         </div>
-
-
-
     </div>
 
 </div>
