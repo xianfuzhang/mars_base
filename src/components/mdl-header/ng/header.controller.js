@@ -14,7 +14,8 @@ export class headerController{
       'applicationService',
       'loginDataManager',
       'alertDataManager',
-      'manageDataManager'
+      'manageDataManager',
+      'messageService'
     ];
   }
 
@@ -27,17 +28,20 @@ export class headerController{
     this.CONST_ADMIN_GROUP = this.di.appService.CONST.ADMIN_GROUP;
     this.scope.groups = angular.copy(this.di.appService.CONST.HEADER);
     this.scope.username = null;
-    //this.scope.alerts_acount = 0;
-    this.scope.location = (url, event) => {
+    this.scope.location = (path, event) => {
       event && event.stopPropagation();
-      if (url === '/logout') {
+      if (path === '/logout') {
         this.di.$cookies.remove('useraccount');
         this.di.localStoreService.getSyncStorage().del('menus');
         this.di.roleService.clearRole();
       }
-      this.di.$location.path(url);
+      if(path.url) {
+	      this.di.$location.path(path.url).search(path.query);
+      } else if(path.url === undefined) {
+	      this.di.$location.url(path)
+      }
     };
-
+	
     // handle theme
     const CONST_LOCAL_STORAGE_KEY = 'userPrefs__';
     const CONST_THEME = 'theme';
@@ -59,6 +63,12 @@ export class headerController{
     unsubscribers.push(this.di.$rootScope.$on('application-change-state', (event) => {
       this.filterMenusByApps();
     }));
+	
+	  unsubscribers.push(this.di.$rootScope.$on('new-websocket-message', ($event, message) => {
+		  let messages = this.scope.messages;
+		  messages.splice(0, 0, message);
+	    this.scope.messages = messages.slice(0, this.di.appService.MAX_MESSAGES_NUMBER);
+	  }));
 
     this.scope.$on('$destroy', () => {
       unsubscribers.forEach((cb) => {
@@ -80,8 +90,26 @@ export class headerController{
     this.scope.username = JSON.parse(decodeData).user_name;
 
     this.filterMenusByApps();
+    this.setMessageWebsocket();
   }
 
+  setMessageWebsocket() {
+    // setup message websocket
+    this.di.messageService.init();
+    
+    let messages = this.di.messageService.getMessages();
+    
+    messages = messages.concat([
+	    {title: '端口启动 - of:000000000000da7a:43', time: new Date(), isRead: false, path: {url:'/devices/of:00008cea1b9ba5ec', query:{'port':1}}},
+	    {title: '端口关闭 - of:000000000000da7a:44', time: new Date(),isRead: true, path: {url:'/devices/of:00008cea1b9ba5ec', query:{'port':2}}},
+	    {title: '新增link - of:00008cea1b8d0a32:42 >> of:00008cea1b113950:12', time: new Date(),isRead: false, path: {url:'/devices/of:00008cea1b9ba5ec', query:{'link_port':41}}},
+	    {title: '删除link - of:00008cea1b113950:12 >> of:00008cea1b113950:42', time: new Date(),isRead: true, path: {url: false, query:{}}},
+	    {title: '告警 - 规则“rule_name”:“xxx gt 90 and continue 180 seconds”', time: new Date(),isRead: false, path: {url:'/alert', query:{'uuid':'adfad41'}}}
+    ]);
+    
+	  this.scope.messages = messages;
+  }
+  
   filterMenusByApps() {
     this.di.applicationService.getNocsysAppsState().then(() => {
       let apps = this.di.applicationService.getAppsState();

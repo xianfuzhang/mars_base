@@ -25,6 +25,7 @@ import {LogicalDataManager} from './datamanagers/logical.dataManager';
 import {WebsocketService} from './services/ws.service';
 import {applicationService} from './services/application.service';
 import {flowCacheService} from './services/flowCache.service';
+import {MessageWebsocketService} from './services/message.service'
 
 export default angular
   .module('apis', [])
@@ -55,4 +56,5 @@ export default angular
   .service('intentDataManager', IntentDataManager)
   .service('manageDataManager', ManageDataManager)
   .service('logicalDataManager', LogicalDataManager)
+	.service('messageService', MessageWebsocketService)
   .name;

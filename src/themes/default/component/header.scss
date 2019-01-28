@@ -85,7 +85,7 @@
   border-bottom-color: transparent;
   border-left-color: transparent;
 }
-.navbar-inner__account-summary:hover, .navbar-inner__notification:hover{
+.navbar-inner__account-summary:hover{
   opacity: 0.8;
 }
 .navbar-inner__dropdown-toggle{
@@ -121,6 +121,44 @@
 }
 .navbar-inner__notification{
   position: relative;
+  margin-right: 10px;
+  font-size: 12px;
+  color: #FFFFFF;
+}
+.navbar-inner__notification-toggle{
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 47px;
+}
+.navbar-inner__notification ul {
+  width: 300px;
+}
+.navbar-inner__notification li > a {
+  line-height: 18px !important;
+  padding-left: 10px !important;
+  color: #c0c0c0 !important;
+}
+.navbar-inner__notification li .title {
+  padding-top: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.navbar-inner__notification li .title:hover {
+  color: #00D3FF;
+}
+.navbar-inner__notification li .title.non-read {
+  color: #fff;
+  font-weight: bold;
+}
+.navbar-inner__notification li .title.non-read:hover {
+  color: #00D3FF;
+}
+.navbar-inner__notification li .time {
+  color: #999;
 }
 .notification-status{
   position: absolute;
