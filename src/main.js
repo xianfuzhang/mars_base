@@ -47,6 +47,7 @@ import 'marButton';
 import 'jsonEditor';
 import 'gradientScale';
 import 'splineChart';
+
 import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, mainCtrl} from './base';
 
 angular
