@@ -384,7 +384,7 @@ export class DeviceDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getTemperatureSensorsUrl(deviceId)).then(
       (res) => {
-        defer.resolve(res.data.sensors);
+        defer.resolve(res.data.temps);
       },
       (error) => {
         defer.resolve([]);
@@ -397,7 +397,7 @@ export class DeviceDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getPsuSensorsUrl(deviceId)).then(
       (res) => {
-        defer.resolve(res.data.sensors);
+        defer.resolve(res.data.psus);
       },
       (error) => {
         defer.resolve([]);
@@ -410,7 +410,7 @@ export class DeviceDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getFanSensorsUrl(deviceId)).then(
       (res) => {
-        defer.resolve(res.data.sensors);
+        defer.resolve(res.data.fans);
       },
       (error) => {
         defer.resolve([]);
