@@ -1412,11 +1412,16 @@ export class DeviceService {
       {
         'label': 'M-LAG',
         'field': 'mlag',
-        'layout': {'visible': false, 'sortable': false}
+        'layout': {'visible': true, 'sortable': true}
       },
       {
         'label': this.translate('MODULES.PORT.COLUMN.GROUP'),
         'field': 'group',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.PORT.COLUMN.STATE'),
+        'field': 'state',
         'layout': {'visible': true, 'sortable': true}
       },
       {

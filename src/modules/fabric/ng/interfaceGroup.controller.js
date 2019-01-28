@@ -36,9 +36,16 @@ export class InterfaceGroupController {
     this.initActions();
     this.scope.model.provider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
-        let defer = this.di.$q.defer();
+        let defer = this.di.$q.defer(), linksDefer = this.di.$q.defer(), logicalDefer = this.di.$q.defer();
+        this.di.deviceDataManager.getLinks().then((res) => {
+          linksDefer.resolve(res.data.links);
+        });
         this.di.deviceDataManager.getLogicalPortsList().then((ports)=>{
-          this.scope.entities = this.getEntities(ports);
+          logicalDefer.resolve(ports);
+        });
+        this.di.$q.all([linksDefer.promise, logicalDefer.promise]).then((arr) => {
+          this.transformLinksState(arr[0]);
+          this.scope.entities = this.getEntities(arr[1]);
           defer.resolve({
             data: this.scope.entities
           });
@@ -155,14 +162,16 @@ export class InterfaceGroupController {
     };
   }
 
-  getEntities(entities)  {
+  getEntities(ports) {
     let arr = [];
-    entities.forEach((item) => {
+    ports.forEach((item) => {
       let obj = {};
       obj['id'] = item.name;
       obj['name'] = item.name;
+      obj['mlag'] = item.is_mlag ? this.translate('MODULES.PORT.MLAG.ENABLE') : this.translate('MODULES.PORT.MLAG.DISABLE');
       obj['group'] = item.group;
       obj['members'] = item.members;
+      obj['state'] = this.getLogicalPortState(item.members);
       obj['member_count'] = item.members.length;
       arr.push(obj);
     });
@@ -360,6 +369,28 @@ export class InterfaceGroupController {
         defer.reject(null);
     });
     return defer.promise;
+  }
+
+  transformLinksState(links) {
+    this.scope.links = {};
+    links.forEach((link) => {
+      let srcKey = link.src.device + ':' + link.src.port,
+        dstKey = link.dst.device + ':' + link.dst.port;
+      this.scope.links[srcKey] = link.state;
+      this.scope.links[dstKey] = link.state;  
+    });
+  }
+
+  getLogicalPortState(members) {
+    let state = 'Down';
+    for(let i=0; i< members.length; i++) {
+      let key = members[i]['device_id'] + ':' + members[i]['port'];
+      if (this.scope.links.hasOwnProperty(key) && this.scope.links[key] === 'ACTIVE') {
+        state = 'Up';
+        break;
+      }
+    }  
+    return state;
   }
 }
 
