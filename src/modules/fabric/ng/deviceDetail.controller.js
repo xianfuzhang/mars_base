@@ -7,6 +7,7 @@ export class DeviceDetailController {
       '$filter',
       '$q',
       '$log',
+      '$location',
       '_',
       'roleService',
       'flowService',
@@ -306,7 +307,23 @@ export class DeviceDetailController {
         };
       }
     });
-    this.scope.onTabChange(this.scope.tabs[0]);
+    
+    // get query string
+    let queryObj = this.di.$location.search();
+    let selectedTab;
+    let tabs = this.scope.tabs;
+    if(queryObj.port) {
+      selectedTab = this.di._.find(tabs, (tab) => {
+        return tab.type === 'port';
+      })
+    } else if(queryObj.link_port) {
+	    selectedTab = this.di._.find(tabs, (tab) => {
+		    return tab.type === 'link';
+	    })
+    }
+    
+    selectedTab = selectedTab || this.scope.tabs[0];
+    this.scope.onTabChange(selectedTab);
   }
 
   prepareTableData() {

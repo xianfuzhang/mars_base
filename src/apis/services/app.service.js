@@ -22,7 +22,10 @@ export class appService {
       LIVE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/logstash/',
       // LIVE_WEBSOCKETS_ENDPONT: 'ws://210.63.204.29:3233/',
       // LIVE_WEBSOCKETS_ENDPONT_PORT: 3233,
-
+	    MOCKED_MESSAGE_WEBSOCKETS_ENDPONT: 'ws://localhost:3001/mars/websock',
+	    // LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/mars/websock/',
+	    LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://210.63.204.28/mars/websock/',
+      
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
       GUEST_GROUP: 'guestgroup',
@@ -118,7 +121,8 @@ export class appService {
       },
       NOCSYS_APP: 'com.nocsys',
       CRYPTO_STRING: 'secret',
-      DEFAULT_FILENAME: 'startup_netcfg.cfg' // default configuration file name
+      DEFAULT_FILENAME: 'startup_netcfg.cfg',// default configuration file name
+	    MAX_MESSAGES_NUMBER: 50
     };
     this.loginRole = 1;
     this.roleFilterMenu = [];
@@ -184,6 +188,21 @@ export class appService {
     }
     return endpoint;
   }
+	
+	getMessageWebscoketEndpoint() {
+    let endpoint;
+		if (this.isMocked) {
+			endpoint = this.CONST.MOCKED_MESSAGE_WEBSOCKETS_ENDPONT;
+		} else {
+			endpoint = this.CONST.LIVE_MESSAGE_WEBSOCKETS_ENDPONT.replace('[%__ZONE_IP__%]', this.di.$location.host());
+			if(this.di.$location.protocol() === 'https'){
+				endpoint = endpoint.replace('[%__PROTOCOL__%]', 'wss');
+			} else {
+				endpoint = endpoint.replace('[%__PROTOCOL__%]', 'ws');
+			}
+		}
+		return endpoint;
+	}
   
   getLoginUrl() {
     // return this.getZoneEndpoint(true) + '/j_security_check';
