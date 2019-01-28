@@ -7,6 +7,7 @@ export class MessageWebsocketService {
       'eventEmitter',
 			'appService',
       'localStoreService',
+			'deviceDataManager'
 		];
 	}
 	
@@ -26,6 +27,7 @@ export class MessageWebsocketService {
 				CLOSED: 3
 			},
 			ws,
+			devices,
 			ee = new EventEmitter(),
 			reconnectInterval = null,
 			heartbeatInterval = null,
@@ -326,9 +328,17 @@ export class MessageWebsocketService {
 			return result === undefined ? false : true;
 		}
 		
+		function getDeviceName (deviceId) {
+			let device = devices.find((val) => {
+				return val.id === deviceId
+			})
+			
+			return device ? device.name : deviceId;
+		}
+		
 		function formatMessage(message) {
 			let msg = {title:'', isRead: false};
-			let arr, port, device;
+			let srcArr, srcPort, srcDevice, dstArr, dstPort, dstDevice;
 			msg.time = new Date();
 			
 			switch(message.event) {
@@ -339,27 +349,35 @@ export class MessageWebsocketService {
 						msg.title += '端口关闭 - ';
 					}
 					
-					msg.title += message.payload.device + ':' + message.payload.port;
+					msg.title += getDeviceName(message.payload.device) + ':' + message.payload.port;
 					msg.path = {
 						url: '/devices/' + message.payload.device,
 						query: {port:message.payload.port}
 					};
 					break;
 				case 'linkAdded':
-					msg.title += '新增link - ' + message.payload.src + ' >> ' + message.payload.dst;
-					arr = message.payload.src.split(':');
-					port = arr[arr.length-1];
-					device = message.payload.src.slice(0, arr.length - port.length - 1);
+					srcArr = message.payload.src.split(':');
+					srcPort = srcArr[srcArr.length - 1];
+					srcDevice = message.payload.src.slice(0, message.payload.src.length - srcPort.length - 1);
+					
+					dstArr = message.payload.dst.split(':');
+					dstPort = dstArr[dstArr.length - 1];
+					dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
+					msg.title += '新增link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
 					msg.path = {
 						url: '/devices/' + device,
 						query: {link_port: port}
 					};
 					break;
 				case 'linkRemoved':
-					msg.title += '删除link - ' + message.payload.src + ' >> ' + message.payload.dst;
-					arr = message.payload.src.split(':');
-					port = arr[arr.length-1];
-					device = message.payload.src.slice(0, arr.length - port.length - 1);
+					srcArr = message.payload.src.split(':');
+					srcPort = srcArr[srcArr.length - 1];
+					srcDevice = message.payload.src.slice(0, message.payload.src.length - srcPort.length - 1);
+					
+					dstArr = message.payload.dst.split(':');
+					dstPort = dstArr[dstArr.length - 1];
+					dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
+					msg.title += '新增link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
 					msg.path = {
 						url: false,
 						query: {}
@@ -368,26 +386,26 @@ export class MessageWebsocketService {
 				case 'overThreshold':
 					msg.title += '告警 - ' + message.payload.rule_name + ':' + message.payload.msg;
 					msg.path = {
-						url: '/devices/' + device,
+						url: '/alert/' + device,
 						query: {uuid: message.payload.uuid}
 					};
 					break;
 				case 'deviceAdded':
-					msg.title += '新增设备 - ' + message.payload.device;
+					msg.title += '新增设备 - ' + getDeviceName(message.payload.device);
 					msg.path = {
 						url: '/devices',
 						query: {device_id: message.payload.device}
 					};
 					break;
 				case 'deviceUpdated':
-					msg.title += '更新设备 - ' + message.payload.device;
+					msg.title += '更新设备 - ' + getDeviceName(message.payload.device);
 					msg.path = {
 						url: '/devices/' + message.payload.device,
 						query: {}
 					};
 					break;
 				case 'deviceRemoved':
-					msg.title += '删除设备 - ' + message.payload.device;
+					msg.title += '删除设备 - ' + getDeviceName(message.payload.device);
 					msg.path = {
 						url: false,
 						query: {}
@@ -395,7 +413,10 @@ export class MessageWebsocketService {
 					break;
 				default:
 					msg.title += '未知通知';
-					msg.url = '#';
+					msg.path = {
+						url: false,
+						query: {}
+					};
 			}
 			
 			return msg;
@@ -427,18 +448,32 @@ export class MessageWebsocketService {
 			  ws.onmessage = onmessage;
 			  ws.onclose = onclose;
 			  
-			  // subscribe
-			  service.subscribe('', {}, messageCb)
+			  // get devices
+			  DI.deviceDataManager.getDevices().then((res) => {
+			    devices = res.data.devices;
+			  }, () => {
+			  	devices = [];
+			  }).finally(() => {
+				  // subscribe message
+				  service.subscribe('', {}, messageCb)
+			  })
       }
       
       return service;
 		};
 		
+		// get messages from local storage
 		service.getMessages = function () {
 			const storage = DI.localStoreService.getSyncStorage();
 			let messages = storage.get(WEBSOCKET_MESSAGES_LOCALSTORE_KEY) || [];
 			
 			return messages;
+		}
+		
+		// set message to local storage
+		service.saveMessages = function(messages) {
+			const storage = DI.localStoreService.getSyncStorage();
+			storage.set(WEBSOCKET_MESSAGES_LOCALSTORE_KEY, messages);
 		}
 		
 		service.kill = function () {
