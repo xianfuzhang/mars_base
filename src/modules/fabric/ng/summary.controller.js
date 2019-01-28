@@ -482,12 +482,12 @@ export class FabricSummaryController {
           flowCalcData = _flowCalculate;
           linkFlowDict = {};
           changeLinkData();
-          console.log(linkFlowDict);
+          // console.log(linkFlowDict);
         }
       }, (err)=>{
         console.log(JSON.stringify(err))
       });
-      scope.monitorInterval = setTimeout(loop_monitor,15000)
+      scope.monitorInterval = setTimeout(loop_monitor,30000)
     };
 
     let loop_monitor_state = () =>{
@@ -525,7 +525,7 @@ export class FabricSummaryController {
           let flow = angular.copy(flowCalcData[link.src.device][link.src.port]);
           linkFlowDict[linkId]['flow'] = flow;
 
-          console.log(linkId + " : " + flow['bytesReceived'] +';' + flow['bytesSent']);
+          // console.log(linkId + " : " + flow['bytesReceived'] +';' + flow['bytesSent']);
 
           let colorRes = _calcLinkColor(flow['bytesReceived'] + flow['bytesSent']);
           linkFlowDict[linkId]['color'] = colorRes[0];
