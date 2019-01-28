@@ -147,6 +147,7 @@ export class TrunkController {
     };
 
     this.scope.addMember = () => {
+      if (!this.scope.model.is_mlag && this.scope.model.membersDetail.length >= 8) return;
       let member = {
         'device_id': this.scope.model.deviceOption.value,
         'port': this.scope.model.portOption.value,
