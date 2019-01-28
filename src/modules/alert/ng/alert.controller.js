@@ -7,6 +7,7 @@ export class AlertController {
       '$filter',
       '$q',
       '$log',
+      '$location',
       'roleService',
       'dialogService',
       'appService',
@@ -121,6 +122,10 @@ export class AlertController {
           });
         });
 
+        let query = this.di.$location.search();
+        if(query.uuid) {
+          this.scope.alertModel.alertAPI.setSelectedRow(qeury.uuid);
+        }
         return defer.promise;
       },
       getSchema: () => {

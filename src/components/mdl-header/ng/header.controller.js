@@ -28,20 +28,17 @@ export class headerController{
     this.CONST_ADMIN_GROUP = this.di.appService.CONST.ADMIN_GROUP;
     this.scope.groups = angular.copy(this.di.appService.CONST.HEADER);
     this.scope.username = null;
-    this.scope.location = (path, event) => {
+    //this.scope.alerts_acount = 0;
+    this.scope.location = (url, event) => {
       event && event.stopPropagation();
-      if (path === '/logout') {
+      if (url === '/logout') {
         this.di.$cookies.remove('useraccount');
         this.di.localStoreService.getSyncStorage().del('menus');
         this.di.roleService.clearRole();
       }
-      if(path.url) {
-	      this.di.$location.path(path.url).search(path.query);
-      } else if(path.url === undefined) {
-	      this.di.$location.url(path)
-      }
+      this.di.$location.url(url);
     };
-	
+
     // handle theme
     const CONST_LOCAL_STORAGE_KEY = 'userPrefs__';
     const CONST_THEME = 'theme';
@@ -56,6 +53,20 @@ export class headerController{
       let theme = this.scope.theme == 'theme_default' ? 'theme_dark' : 'theme_default';
       this.di.$rootScope.$emit('change-theme', theme)
     }
+	
+	  this.scope.messageClick = (message) => {
+      if(!message.isRead) {
+	      message.isRead = true;
+	      this.scope.unreadMsgNum--;
+      }
+      
+		  let messages = this.scope.messages;
+      this.di.messageService.saveMessages(messages);
+      
+		  if(message.path.url) {
+			  this.di.$location.path(message.path.url).search(message.path.query);
+		  }
+	  };
     
     this.init();
 
@@ -68,6 +79,7 @@ export class headerController{
 		  let messages = this.scope.messages;
 		  messages.splice(0, 0, message);
 	    this.scope.messages = messages.slice(0, this.di.appService.MAX_MESSAGES_NUMBER);
+	    this.scope.$apply();
 	  }));
 
     this.scope.$on('$destroy', () => {
@@ -94,20 +106,21 @@ export class headerController{
   }
 
   setMessageWebsocket() {
+    let unReadNum = 0;
     // setup message websocket
     this.di.messageService.init();
     
     let messages = this.di.messageService.getMessages();
     
-    messages = messages.concat([
-	    {title: '端口启动 - of:000000000000da7a:43', time: new Date(), isRead: false, path: {url:'/devices/of:00008cea1b9ba5ec', query:{'port':1}}},
-	    {title: '端口关闭 - of:000000000000da7a:44', time: new Date(),isRead: true, path: {url:'/devices/of:00008cea1b9ba5ec', query:{'port':2}}},
-	    {title: '新增link - of:00008cea1b8d0a32:42 >> of:00008cea1b113950:12', time: new Date(),isRead: false, path: {url:'/devices/of:00008cea1b9ba5ec', query:{'link_port':41}}},
-	    {title: '删除link - of:00008cea1b113950:12 >> of:00008cea1b113950:42', time: new Date(),isRead: true, path: {url: false, query:{}}},
-	    {title: '告警 - 规则“rule_name”:“xxx gt 90 and continue 180 seconds”', time: new Date(),isRead: false, path: {url:'/alert', query:{'uuid':'adfad41'}}}
-    ]);
-    
 	  this.scope.messages = messages;
+	  
+	  this.di._.forEach(messages, (message) => {
+	    if(!message.isRead) {
+	      unReadNum++;
+      }
+    })
+    
+    this.scope.unreadMsgNum = unReadNum;
   }
   
   filterMenusByApps() {

@@ -134,7 +134,10 @@
   height: 47px;
 }
 .navbar-inner__notification ul {
-  width: 300px;
+  width: 350px;
+  min-height: 240px;
+  max-height: 480px;
+  overflow-y: scroll;
 }
 .navbar-inner__notification li > a {
   line-height: 18px !important;
