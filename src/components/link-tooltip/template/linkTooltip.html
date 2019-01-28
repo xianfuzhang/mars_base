@@ -13,15 +13,21 @@
 
             <!--</mar-section>-->
             <div>
-                <div style="margin-left: 10px;font-size:19px;display: inline-block">{{'MODULES.TOPO.LINK_TOOLTIP.DIRECTION'|translate}} :</div>
+                <table id="link_up_div" class="topo_table"></table>
+            </div>
+            <div>
+                <!--<div style="margin-left: 10px;font-size:19px;display: inline-block">{{'MODULES.TOPO.LINK_TOOLTIP.DIRECTION'|translate}} :</div>-->
                 <div style="height: 30px;line-height: 30px;margin-left: 10px;display: inline-block">
                     <span style="display: inline-block">{{srcDevice}}</span>
-                    <span style="display: inline-block"><i class="material-icons" style="vertical-align: middle">arrow_forward</i></span>
+                    <span style="display: inline-block;width: 100px;height: 24px;vertical-align: middle;" class="both_way_flux"></span>
                     <span style="display: inline-block">{{dstDevice}}</span>
                 </div>
             </div>
-            <div style="border-bottom: 1px solid gray"></div>
-            <table id="link_tooltip_detail" class="topo_table"></table>
+            <!--<div style="border-bottom: 1px solid gray"></div>-->
+            <div>
+                <table id="link_down_div" class="topo_table"></table>
+            </div>
+
 
         </div>
     </div>

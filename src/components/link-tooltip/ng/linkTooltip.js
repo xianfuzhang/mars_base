@@ -37,19 +37,61 @@ export class linkTooltip {
       scope.isRight = true;
 
 
+      let FLOW_UNITS_CONSTRAINT = {
+        'bps': 1,
+        'kbps': 1024,
+        'mbps': 1024*1024,
+        'gbps': 1024*1024*1024,
+      }
+
       scope.noApply = scope.noApply|| 'false';
       scope.isNeedRefresh = scope.noApply === 'true'? false:true;
 
-      let getFlowShowInfo = (detail)=>{
+      // 'B/s': 1,
+      //   'KB/s': 1024,
+      //   'MB/s': 1024*1024,
+      //   'GB/s': 1024*1024*1024,
+      let reformat_packets_value = (value) =>{
+        if(value >= FLOW_UNITS_CONSTRAINT.kbps && value < FLOW_UNITS_CONSTRAINT.mbps ){
+          value = (value/FLOW_UNITS_CONSTRAINT.kbps).toFixed(2) + 'Kp/s'
+        } else if ( value >= FLOW_UNITS_CONSTRAINT.mbps && value < FLOW_UNITS_CONSTRAINT.gbps ){
+          value = (value/FLOW_UNITS_CONSTRAINT.mbps).toFixed(2) + 'Mp/s'
+        } else if( value >= FLOW_UNITS_CONSTRAINT.gbps){
+          value = (value/FLOW_UNITS_CONSTRAINT.mbps).toFixed(2) + 'Gp/s'
+        } else {
+          value = value.toFixed(2) + 'p/s'
+        }
+        return value
+      };
+
+      let reformat_bytes_value = (value) =>{
+        if(value >= FLOW_UNITS_CONSTRAINT.kbps && value < FLOW_UNITS_CONSTRAINT.mbps ){
+          value = (value/FLOW_UNITS_CONSTRAINT.kbps).toFixed(2) + 'KB/s'
+        } else if ( value >= FLOW_UNITS_CONSTRAINT.mbps && value < FLOW_UNITS_CONSTRAINT.gbps ){
+          value = (value/FLOW_UNITS_CONSTRAINT.mbps).toFixed(2) + 'MB/s'
+        } else if( value >= FLOW_UNITS_CONSTRAINT.gbps){
+          value = (value/FLOW_UNITS_CONSTRAINT.mbps).toFixed(2) + 'GB/s'
+        } else {
+          value = value.toFixed(2)+ 'B/s'
+        }
+        return value
+      };
+
+      let getUpFlowShowInfo = (detail)=>{
         let showArray = [];
-        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_RECEIVED'), 'value': detail.flow.packetsReceived});
-        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_RX_DROPPED'), 'value': detail.flow.packetsRxDropped});
-        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_RX_ERRORS'), 'value':detail.flow.packetsRxErrors});
-        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.BYTES_RECEIVED'), 'value': detail.flow.bytesReceived});
-        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_SENT'), 'value':detail.flow.packetsSent});
-        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_TX_DROPPED'), 'value': detail.flow.packetsTxDropped});
-        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_TX_ERRORS'), 'value': detail.flow.packetsTxErrors});
-        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.BYTES_SENT'), 'value': detail.flow.bytesSent});
+        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.BYTES_SENT'), 'value': reformat_bytes_value(detail.flow.bytesSent)});
+        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_SENT'), 'value':reformat_packets_value(detail.flow.packetsSent)});
+        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_TX_DROPPED'), 'value': reformat_packets_value(detail.flow.packetsTxDropped)});
+        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_TX_ERRORS'), 'value': reformat_packets_value(detail.flow.packetsTxErrors)});
+        return showArray;
+      };
+
+      let getDownFlowShowInfo = (detail)=>{
+        let showArray = [];
+        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.BYTES_RECEIVED'), 'value': reformat_bytes_value(detail.flow.bytesReceived)});
+        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_RECEIVED'), 'value': reformat_packets_value(detail.flow.packetsReceived)});
+        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_RX_DROPPED'), 'value': reformat_packets_value(detail.flow.packetsRxDropped)});
+        showArray.push({'label': this.translate('MODULES.TOPO.LINK_TOOLTIP.PACKETS_RX_ERRORS'), 'value':reformat_packets_value(detail.flow.packetsRxErrors)});
         return showArray;
       };
 
@@ -65,11 +107,13 @@ export class linkTooltip {
         let tdStart = '<td>';
         let tdEnd = '</td>';
 
-        let link_topo_detail = angular.element(document.getElementById('link_tooltip_detail'));
-        link_topo_detail.empty();
+        let link_up_div = angular.element(document.getElementById('link_up_div'));
+        let link_down_div = angular.element(document.getElementById('link_down_div'));
+        link_up_div.empty();
+        link_down_div.empty();
 
-        let showArray = getFlowShowInfo(detail);
-        this.di._.forEach(showArray, (item, key)=>{
+        let upArray = getUpFlowShowInfo(detail);
+        this.di._.forEach(upArray, (item, key)=>{
           let firstTdContent = '<div>'+ item.label +'</div>';
 
           // let secondTdContent = '';
@@ -77,20 +121,22 @@ export class linkTooltip {
             item.value = ''
           }
           let secondTdContent = '<div>'+ item.value +'</div>';
-
-          // if(item.value === "false" || item.value === false){
-          //   secondTdContent = '<div><svg  xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"> <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="red"/> <path d="M0 0h24v24H0z" fill="none"/> </svg></div>';
-          // } else if(item.value === "true" || item.value === true) {
-          //   secondTdContent = "<div><svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'><path fill='none' d='M0 0h18v18H0z'/><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z' fill='green'/></svg></div>";
-          // } else {
-          //     if(item.value === undefined){
-          //       item.value = ''
-          //     }
-          //     secondTdContent = '<div>'+ item.value +'</div>';
-          // }
-
           let tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
-          link_topo_detail.append(tr)
+          link_up_div.append(tr)
+        });
+
+
+        let downArray = getDownFlowShowInfo(detail);
+        this.di._.forEach(downArray, (item, key)=>{
+          let firstTdContent = '<div>'+ item.label +'</div>';
+
+          // let secondTdContent = '';
+          if(item.value === undefined){
+            item.value = ''
+          }
+          let secondTdContent = '<div>'+ item.value +'</div>';
+          let tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+          link_down_div.append(tr)
         });
 
         let win_width = this.di.$window.innerWidth;
@@ -133,14 +179,19 @@ export class linkTooltip {
       }));
 
       unsubscribers.push(this.di.$rootScope.$on('hide_link_tooltip',()=>{
-
+        // return;
         scope.srcDevice = '';
         scope.dstDevice = '';
 
-        let leftDom = angular.element(element[0].getElementsByClassName('linkTooltip__content__body--left'));
-        let rightDom = angular.element(element[0].getElementsByClassName('linkTooltip__content__body--right'));
-        leftDom.empty();
-        rightDom.empty();
+        // let leftDom = angular.element(element[0].getElementsByClassName('linkTooltip__content__body--left'));
+        // let rightDom = angular.element(element[0].getElementsByClassName('linkTooltip__content__body--right'));
+        let link_up_div = angular.element(document.getElementById('link_up_div'));
+        let link_down_div = angular.element(document.getElementById('link_down_div'));
+        link_up_div.empty();
+        link_down_div.empty();
+
+        // leftDom.empty();
+        // rightDom.empty();
 
         scope.tooltipStyle = {'visibility': 'hidden'};
         if(scope.isNeedRefresh)
