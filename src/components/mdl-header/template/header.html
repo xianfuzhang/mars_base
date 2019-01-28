@@ -27,12 +27,12 @@
 
             <div class="navbar-inner__notification navbar-inner__dropdown" uib-dropdown>
               <div class="navbar-inner__notification-toggle" uib-dropdown-toggle>
-                <span class="notification-status" ng-class="{'has-alert': messages.length > 0}"></span>
+                <span class="notification-status" ng-class="{'has-alert': unreadMsgNum > 0}"></span>
                 <i class="material-icons">notifications</i>
               </div>
               <ul class="navbar-inner__dropdown-menu navbar-inner__dropdown-menu__right" uib-dropdown-menu>
-                <li ng-repeat="msg in messages">
-                  <a ng-click="location(msg.path)" title="{{msg.title}}">
+                <li ng-repeat="msg in messages track by $index">
+                  <a ng-click="messageClick(msg)" title="{{msg.title}}">
                     <div class="title" ng-class="{'non-read': !msg.isRead}">
                       {{msg.title}}
                     </div>
