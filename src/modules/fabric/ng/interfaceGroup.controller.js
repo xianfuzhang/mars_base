@@ -346,11 +346,15 @@ export class InterfaceGroupController {
       });
       availableDevices.forEach((device) => {
         if (!deviceMapping.hasOwnProperty(device.id)) {
-          device.groups = [1, 2, 3, 4, 5, 6, 7];
+          let i = 1;
+          while (i <= 26) {
+            device.groups.push(i);
+            i++;
+          }
         }
         else if (deviceMapping.hasOwnProperty(device.id)) {
           let i = 1, j = 0;
-          while (i <=  7) {
+          while (i <= 26) {
             deviceMapping[device.id]['groups'].includes(i) ? null : device.groups.push(i);
             i++;
           }
