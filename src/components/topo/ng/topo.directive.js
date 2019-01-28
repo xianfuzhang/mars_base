@@ -261,7 +261,7 @@ export class Topo {
           ports[0] = ports[1];
           ports[1] = tmp;
         }
-        return deviceIds[0] + ':' + ports[0] + '_' + deviceIds[1] + ':' + ports[1];
+        return newDeviceIds[0] + ':' + ports[0] + '_' + newDeviceIds[1] + ':' + ports[1];
       };
 
       let genLinkNode = (devices, linkId) => {

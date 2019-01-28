@@ -134,8 +134,8 @@ export class FabricSummaryController {
       busyMetric: 500,
       congestionMetric: 2000,
       monitorState: this.translate('MODULES.TOPO.MONITOR.STATE_STOP'),
-      busyMetricUnit: scope.displayLabel.fluxUnits.options[1],
-      congestionMetricUnit: scope.displayLabel.fluxUnits.options[1]
+      busyMetricUnit: scope.displayLabel.fluxUnits.options[2],
+      congestionMetricUnit: scope.displayLabel.fluxUnits.options[2]
     };
 
 
@@ -487,7 +487,7 @@ export class FabricSummaryController {
       }, (err)=>{
         console.log(JSON.stringify(err))
       });
-      scope.monitorInterval = setTimeout(loop_monitor,30000)
+      scope.monitorInterval = setTimeout(loop_monitor,15000)
     };
 
     let loop_monitor_state = () =>{
@@ -512,12 +512,11 @@ export class FabricSummaryController {
         ports[0] = ports[1];
         ports[1] = tmp;
       }
-      return deviceIds[0] + ':' + ports[0] + '_' + deviceIds[1] + ':' + ports[1];
+      return newDeviceIds[0] + ':' + ports[0] + '_' + newDeviceIds[1] + ':' + ports[1];
     };
 
     let changeLinkData = ()=> {
 
-      console.log('=====> START')
       // let linkFlowDict = {};
       this.di._.forEach(scope.fabricModel.deLinks, (link)=>{
         let linkId = getLinkId([link.src.device,link.dst.device], [link.src.port,link.dst.port]);
