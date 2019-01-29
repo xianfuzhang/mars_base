@@ -838,7 +838,7 @@ export class DeviceDetailController {
     this.scope.summary.psuSensors = [];
     arr.forEach((item) => {
       this.scope.summary.psuSensors.push({
-        'name': item.device,
+        'name': item.name,
         'status': item.status,
         'model': item.model,
         'powertype': item.powertype.toUpperCase(),

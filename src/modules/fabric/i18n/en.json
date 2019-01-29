@@ -305,6 +305,7 @@
   "MODULES.FABRIC.MONITOR.WARNING.MAX_SESSION":"The maximum number of sessions in the system has been reached. Please delete the existing data and try again!",
    "MODULES.PORT.COLUMN.NAME": "Name",
   "MODULES.PORT.COLUMN.GROUP": "Group",
+  "MODULES.PORT.COLUMN.STATE": "State",
   "MODULES.PORT.COLUMN.MEMBER_COUNT": "Total Member",
   "MODULES.PORT.MEMBER.TITLE": "Port Member",
   "MODULES.PORT.MEMBER.COLUMN.DEVICE": "Device",
