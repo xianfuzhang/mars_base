@@ -29,7 +29,19 @@
 
 .\+show.mdc-button.topo_setting__button {
   border: 1px solid lightgray;
-  background-color: lightgray;
+  background-color: gray;
+}
+
+.topo_setting__button svg{
+  color:whitesmoke;
+}
+
+.topo_setting__button svg g line{
+  stroke:whitesmoke;
+}
+
+.topo_setting__button i{
+  color: whitesmoke;
 }
 
 @include block(detail_summary) {
@@ -476,11 +488,11 @@
 }
 
 .path_topo {
-  background-image: url('../../assets/images/path.png')
+  background-image: url('../../assets/images/path_dark_theme.png')
 }
 
 .monitor_topo {
-  background-image: url('../../assets/images/monitor.png')
+  background-image: url('../../assets/images/monitor_dark_theme.png')
 }
 
 .shake_animation{
