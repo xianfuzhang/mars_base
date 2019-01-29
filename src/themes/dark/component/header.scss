@@ -121,7 +121,7 @@
 }
 .navbar-inner__notification{
   position: relative;
-  margin-right: 10px;
+  margin-right: 20px;
   font-size: 12px;
   color: #FFFFFF;
 }
@@ -132,6 +132,9 @@
   display: flex;
   align-items: center;
   height: 47px;
+}
+.navbar-inner__notification-toggle:hover{
+  opacity: .8
 }
 .navbar-inner__notification ul {
   width: 350px;
@@ -212,9 +215,11 @@
 }
 
 .navbar-inner__theme {
-  width: 30px;
-  height: 30px;
   margin-top: 6px;
   cursor: pointer;
-  margin-right:20px;
+  margin-right: 20px;
+  text-align: center;
+}
+.navbar-inner__theme:hover {
+  opacity: .8;
 }

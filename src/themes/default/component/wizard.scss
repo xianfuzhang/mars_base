@@ -159,7 +159,7 @@
       width: 567px;
       background: #ffffff;
       box-sizing: border-box;
-      overflow: scroll;
+      overflow: auto;
   
       @include state(single) {
         width: 100%;
@@ -296,6 +296,10 @@
       font-weight: 800;
     }
   }
+}
+
+.wizard__body .mdc-select.mdc-select__no-label {
+  min-width: 50%;
 }
 
 

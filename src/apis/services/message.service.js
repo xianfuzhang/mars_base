@@ -333,7 +333,7 @@ export class MessageWebsocketService {
 				return val.id === deviceId
 			})
 			
-			return device ? device.name : deviceId;
+			return device ? device.annotations.name : deviceId;
 		}
 		
 		function formatMessage(message) {
@@ -393,8 +393,8 @@ export class MessageWebsocketService {
 				case 'deviceAdded':
 					msg.title += '新增设备 - ' + getDeviceName(message.payload.device);
 					msg.path = {
-						url: '/devices',
-						query: {device_id: message.payload.device}
+						url: '/devices/' + message.payload.device,
+						query: {}
 					};
 					break;
 				case 'deviceUpdated':

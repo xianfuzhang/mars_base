@@ -32,16 +32,23 @@ export class DeviceWizardController {
         {label: 'GRPC', value: 'grpc'}
       ]
     };
+    
+    scope.mfrDisplayLabel = {
+      options: [
+        {label: 'Nocsys', value: 'Nocsys'},
+        {label: 'Mellanox', value: 'Mellanox'}
+      ]
+    }
 
     let initSwitch = {
       id: '',
       mac_address: '',
       name: '',
       rack_id: '',
-      mfr: '',
+      mfr: scope.mfrDisplayLabel.options[0],
       available: true,
       fabric_role: 'unknown',
-      leaf_group: '',
+      leaf_group: {name: '', port: ''},
       managementAddress: '',
       port: '',
       protocol: scope.protocolDisplayLabel.options[0],
@@ -176,9 +183,9 @@ export class DeviceWizardController {
         name: scope.switch.name,
         type: scope.switch.fabric_role,
         available: scope.switch.available,
-        // leaf_group: scope.switch.leaf_group,
+        leaf_group: scope.switch.leaf_group,
         rack_id: scope.switch.rack_id,
-        mfr: scope.switch.mfr,
+        mfr: scope.switch.mfr.value,
         // community: scope.switch.community,
         managementAddress: scope.switch.managementAddress,
         port: scope.switch.port,
