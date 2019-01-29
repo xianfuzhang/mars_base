@@ -78,6 +78,7 @@ export class headerController{
 	  unsubscribers.push(this.di.$rootScope.$on('new-websocket-message', ($event, message) => {
 		  let messages = this.scope.messages;
 		  messages.splice(0, 0, message);
+		  this.scope.unreadMsgNum++;
 	    this.scope.messages = messages.slice(0, this.di.appService.MAX_MESSAGES_NUMBER);
 	    this.scope.$apply();
 	  }));
