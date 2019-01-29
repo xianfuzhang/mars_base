@@ -22,8 +22,9 @@
     cursor: pointer;
     font-weight: 200;
     font-size: 18px;
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px solid whitesmoke;
     min-width:400px;
+    //background-color: lightgray;
 
 
     @include element(icon){
@@ -68,6 +69,7 @@
   @include element(body){
     overflow: hidden;
     padding: 8px 16px;
+    //background-color: lightgray;
   }
 }
 
