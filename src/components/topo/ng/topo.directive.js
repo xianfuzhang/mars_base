@@ -1106,8 +1106,10 @@ export class Topo {
         let links_color = params;
         let keys = this.di._.keys(links_color);
         this.di._.forEach(keys, (key)=>{
-          this.links[key].strokeColor =  links_color[key].color;
-          this.links[key]._flow_detail = links_color[key];
+          if(this.links[key]){
+            this.links[key].strokeColor =  links_color[key].color;
+            this.links[key]._flow_detail = links_color[key];
+          }
         });
       }));
 
