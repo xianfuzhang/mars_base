@@ -459,7 +459,7 @@ export class SegmentDetailController {
             type: 'warning',
             msg: this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.NO_AVAILABLE_UPLINK')
           }
-          this.di.notificationService.render(this.scope);
+          this.di.notificationService.render(scope);
           return;
         }
         let param = {

@@ -149,7 +149,7 @@ export class SegmentMemberEstablishController {
       } else{
         // scope.isEdit = false;
       }
-      if (param.type && param.type === 'vxlan') {
+      if (param.type === 'vxlan' && param.vxlan_type === 'network') {
         scope.vxlanUplinkLabel = {};
         scope.vxlanUplinkLabel.options = param.uplinks.map((uplink) => {
           return {'label': uplink.segment_name, 'value': uplink.segment_name};
