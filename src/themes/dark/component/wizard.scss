@@ -306,7 +306,20 @@
   color: #fff;
 }
 
-.wizard__body .mdc-radio .mdc-radio__native-control:enabled:not(:checked) + .wizard__body .mdc-radio__background .mdc-radio__outer-circle {
+.wizard__body .mdc-radio .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background .mdc-radio__outer-circle {
+  border-color: rgba(255, 255, 255, 0.54);
+}
+
+.wizard__body .mdc-radio .mdc-radio__native-control:disabled:checked + .mdc-radio__background .mdc-radio__outer-circle {
+  border-color: #47B8E0;
+  border-color: var(--mdc-theme-secondary, #47B8E0);
+}
+
+.wizard__body .mdc-radio__native-control:disabled + .mdc-radio__background .mdc-radio__inner-circle, [aria-disabled="true"] .mdc-radio__native-control + .mdc-radio__background .mdc-radio__inner-circle {
+  border-color: var(--mdc-theme-secondary, #47B8E0);
+}
+
+.wizard__body .mdc-radio__native-control:disabled + .mdc-radio__background .mdc-radio__outer-circle, [aria-disabled="true"] .mdc-radio__native-control + .mdc-radio__background .mdc-radio__outer-circle {
   border-color: rgba(255, 255, 255, 0.54);
 }
 
