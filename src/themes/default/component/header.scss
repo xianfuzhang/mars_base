@@ -140,7 +140,8 @@
   width: 350px;
   min-height: 240px;
   max-height: 480px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .navbar-inner__notification li > a {
   line-height: 18px !important;
