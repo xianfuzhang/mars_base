@@ -111,7 +111,7 @@ export class FabricSummaryController {
     };
 
     this.di.$scope.displayLabel = {
-      hosts: {'options':[]},
+      hosts: {'options':[{'label': '请选择端点', 'value':null}]},
       fluxUnits: {'options':[{'label':'Bps', 'value':'Bps'},{'label':'KBps', 'value':'KBps'},{'label':'MBps', 'value':'MBps'}, {'label':'GBps', 'value':'GBps'}]}
     };
 
