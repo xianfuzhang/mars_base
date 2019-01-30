@@ -336,10 +336,35 @@ export class MessageWebsocketService {
 			return device ? device.annotations.name : deviceId;
 		}
 		
+		function getLocalTime() {
+			if (time === -1) {
+				return '';
+			}
+			var local_time = '';
+			var day = new Date();
+			local_time += day.getFullYear() + '-';
+			local_time += addPrefix((day.getMonth() + 1)) + '-';
+			local_time += addPrefix(day.getDate()) + ' ';
+			local_time += addPrefix(day.getHours()) + ':';
+			local_time += addPrefix(day.getMinutes()) + ':';
+			local_time += addPrefix(day.getSeconds());
+			
+			return local_time;
+			
+			function addPrefix(num) {
+				if (num < 10) {
+					return '0' + num;
+				}
+				else {
+					return num;
+				}
+			}
+		}
+		
 		function formatMessage(message) {
 			let msg = {title:'', isRead: false};
 			let srcArr, srcPort, srcDevice, dstArr, dstPort, dstDevice;
-			msg.time = new Date();
+			msg.time = getLocalTime();
 			
 			switch(message.event) {
 				case 'portState':
