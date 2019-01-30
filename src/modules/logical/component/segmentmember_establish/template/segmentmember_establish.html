@@ -20,16 +20,24 @@
             </mdl-select>
         </div>
 
-        <div class="stepForm__input">
-            <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.VLAN_TYPE'|translate}}</div>
-            <mdl-select ng-model="selected.vlanType" ng-change="vlanTypeChange($value)" display-label="vlanTypeLabel">
-            </mdl-select>
-        </div>
+        <!--<div class="stepForm__input">-->
+            <!--<div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.VLAN_TYPE'|translate}}</div>-->
+            <!--<mdl-select ng-model="selected.vlanType" ng-change="vlanTypeChange($value)" display-label="vlanTypeLabel">-->
+            <!--</mdl-select>-->
+        <!--</div>-->
 
-        <div ng-if="selected.vlanType.value == 'normal'">
-
+        <div>
+        <!--<div ng-if="selected.vlanType.value == 'normal'">-->
             <div style="display: inline-block; margin-right:15px;">
-                <mar-button btn-text="::'MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_PORTS' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addVlanPorts()"/>
+                <div style="display: inline-block;">
+                <mar-button btn-text="::'MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_PORTS' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:90px;'" btn-click="addVlanPorts()"/>
+                </div>
+                <div style="display: inline-block;">
+                <mar-button btn-text="::'MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_LOGICAL_PORTS' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:100px;'" btn-click="addVlanLogicalPorts()"/>
+                </div>
+                <div style="display: inline-block;">
+                <mar-button btn-text="::'MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_MAC_BASED' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:90px;'" btn-click="addVlanMacBased()"/>
+                </div>
             </div>
 
             <div class="inline_content">
@@ -39,13 +47,17 @@
                         <tr>
                             <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{ "MODULES.LOGICAL.SEGMENT_MEMBER.PORT"|translate}}</div></td>
                             <td>
-                                <div class="criteria_line" ng-if="isSonicDevice">
-                                    <valid-input v-require="true" ng-model="port.port" v-type="int_with_zero" v-rpcid="page_segmentmember_es" ></valid-input>
+                                <div class="criteria_line">
+                                    <mdl-select ng-model="port.port" display-label="vlanDeviceDisplayLabel">
+                                    </mdl-select>
                                 </div>
+                                <!--<div class="criteria_line" ng-if="isSonicDevice">-->
+                                    <!--<valid-input v-require="true" ng-model="port.port" v-type="int_with_zero" v-rpcid="page_segmentmember_es" ></valid-input>-->
+                                <!--</div>-->
 
-                                <div class="criteria_line" ng-if="!isSonicDevice">
-                                    <valid-input v-require="true" ng-model="port.port" v-type="int" v-rpcid="page_segmentmember_es" ></valid-input>
-                                </div>
+                                <!--<div class="criteria_line" ng-if="!isSonicDevice">-->
+                                    <!--<valid-input v-require="true" ng-model="port.port" v-type="int" v-rpcid="page_segmentmember_es" ></valid-input>-->
+                                <!--</div>-->
                             </td>
                         </tr>
                         <tr>
@@ -64,10 +76,11 @@
 
         </div>
 
-        <div ng-if="selected.vlanType.value == 'logical'">
-            <div style="display: inline-block; margin-right:15px;">
-                <mar-button btn-text="::'MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_LOGICAL_PORTS' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addVlanLogicalPorts()"/>
-            </div>
+        <div>
+        <!--<div ng-if="selected.vlanType.value == 'logical'">-->
+            <!--<div style="display: inline-block; margin-right:15px;">-->
+                <!--<mar-button btn-text="::'MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_LOGICAL_PORTS' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addVlanLogicalPorts()"/>-->
+            <!--</div>-->
 
             <div class="inline_content">
                 <div class="item"  ng-repeat="port in memberModel.vlanLogicalPorts">
@@ -98,10 +111,11 @@
 
         </div>
 
-        <div ng-if="selected.vlanType.value == 'macbased'">
-            <div style="display: inline-block; margin-right:15px;">
-                <mar-button btn-text="::'MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_MAC_BASED' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addVlanMacBased()"/>
-            </div>
+        <div>
+        <!--<div ng-if="selected.vlanType.value == 'macbased'">-->
+            <!--<div style="display: inline-block; margin-right:15px;">-->
+                <!--<mar-button btn-text="::'MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_MAC_BASED' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addVlanMacBased()"/>-->
+            <!--</div>-->
 
             <div class="inline_content">
                 <div class="item"  ng-repeat="based in memberModel.vlanMacBased">

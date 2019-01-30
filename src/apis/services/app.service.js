@@ -609,6 +609,10 @@ export class appService {
     return this.getZoneEndpoint() + `/tenants/v1/${tenant_name}/segments/${segment_name}`;
   }
 
+  getTenantSegmentPvid(){
+    return this.getZoneEndpoint() + '/tenants/v1/pvid';
+  }
+
   getCosListUrl(){
     return this.getZoneEndpoint(true) + "/qos/cos/v1";
   }
