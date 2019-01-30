@@ -61,7 +61,10 @@
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MFR' | translate}}</div>
-        <input class="stepForm__input__text" name="mfr" type="text" ng-model="switch.mfr"/>
+        <!--<input class="stepForm__input__text" name="mfr" type="text" ng-model="switch.mfr"/>-->
+        <mdl-select ng-model="switch.mfr"
+                    display-label="mfrDisplayLabel">
+        </mdl-select>
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label" style="text-decoration: underline">{{::'MODULES.SWITCHES.SWITCH.COLUMN.AVAILABLE' | translate}}</div>
@@ -81,17 +84,17 @@
                    display-label="{id: 'check_3', label: 'None', name: 'role', value: 'unknown'}">
         </mdl-radio>
     </div>
-    <!--<div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">-->
-        <!--<div class="stepForm__input__label">Leaf Group</div>-->
-        <!--&lt;!&ndash;<input class="stepForm__input__text" ng-model="switch.leaf_group.name"/>&ndash;&gt;-->
-        <!--<valid-input v-require="true"  ng-model="switch.leaf_group.name"  v-rpcid="page_device_1" ></valid-input>-->
-    <!--</div>-->
-    <!--<div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">-->
-        <!--<div class="stepForm__input__label">Switch Port</div>-->
-        <!--&lt;!&ndash;<input class="stepForm__input__text" name="switch_port" type="number" ng-blur="switchPortChange=true" ng-model="switch.leaf_group.switch_port" min="0" max="65535"/>&ndash;&gt;-->
+    <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">
+        <div class="stepForm__input__label">Leaf Group</div>
+        <!--<input class="stepForm__input__text" ng-model="switch.leaf_group.name"/>-->
+        <valid-input v-require="true"  ng-model="switch.leaf_group.name"  v-rpcid="page_device_1" ></valid-input>
+    </div>
+    <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">
+        <div class="stepForm__input__label">Switch Port</div>
+        <!--<input class="stepForm__input__text" name="switch_port" type="number" ng-blur="switchPortChange=true" ng-model="switch.leaf_group.switch_port" min="0" max="65535"/>-->
 
-        <!--<valid-input v-require="true"  ng-model="switch.leaf_group.switch_port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>-->
-    <!--</div>-->
+        <valid-input v-require="true"  ng-model="switch.leaf_group.switch_port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
+    </div>
     <!--<div class="stepForm__input">
         <div class="stepForm__input__label">Description</div>
         <textarea class="stepForm__input__textarea" name="description" ng-model="switch.description" class="stepForm__input__textarea" resize="false"></textarea>

@@ -271,6 +271,21 @@ export class LogicalDataManager{
     return defer.promise;
   }
 
+  getTenantPortUntagList(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantSegmentPvid()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
   getCosList(){
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getCosListUrl()).then(

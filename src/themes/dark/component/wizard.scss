@@ -11,7 +11,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  color: #000;
+  color: #fff;
   background: rgba(0,0,0,.7);
   z-index: 1000;
   overflow: hidden;
@@ -125,7 +125,7 @@
       //background: -moz-linear-gradient(top,#CCCCCC,#F0F0F0);
       //background: -ms-linear-gradient(top,#CCCCCC,#F0F0F0);
       //background: linear-gradient(top,#CCCCCC,#F0F0F0);
-      background-color: #f0f0f0;
+      background-color: #1a1a1a;
       overflow: hidden;
 
       @include element(step) {
@@ -140,17 +140,17 @@
         //background: -ms-linear-gradient(left,#ECF0F0,#BCBCBC);
         //background: linear-gradient(left,#ECF0F0,#BCBCBC);
         border-bottom: 1px solid #666666;
-        color: #000;
+        color: #fff;
         white-space: nowrap;
         overflow: hidden;
         cursor: pointer;
 
         &:hover {
-          background-color: #E0E0E0;
+          background-color: #808080;
         }
 
         @include state(active) {
-          background-color: #A0A0A0;
+          background-color: #808080;
         }
       }
     }
@@ -160,9 +160,9 @@
       padding: 3px 10px 5px;
       height: 100%;
       width: 567px;
-      background: #ffffff;
+      background: #282828;
       box-sizing: border-box;
-      overflow: scroll;
+      overflow: auto;
   
       @include state(single) {
         width: 100%;
@@ -254,9 +254,10 @@
       height: 30px;
       font-size: 15px;
       padding: 0 5px;
-      border: 1px solid rgb(169, 169, 169);
+      border: 1px solid darkgray;
       box-sizing: border-box;
       border-radius: 5px;
+      background-color: lightgray;
     }
     
     @include element(text-prefix) {
@@ -301,4 +302,27 @@
   }
 }
 
+.wizard__body .mdc-form-field > label {
+  color: #fff;
+}
 
+.wizard__body .mdc-radio .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background .mdc-radio__outer-circle {
+  border-color: rgba(255, 255, 255, 0.54);
+}
+
+.wizard__body .mdc-radio .mdc-radio__native-control:disabled:checked + .mdc-radio__background .mdc-radio__outer-circle {
+  border-color: #47B8E0;
+  border-color: var(--mdc-theme-secondary, #47B8E0);
+}
+
+.wizard__body .mdc-radio__native-control:disabled + .mdc-radio__background .mdc-radio__inner-circle, [aria-disabled="true"] .mdc-radio__native-control + .mdc-radio__background .mdc-radio__inner-circle {
+  border-color: var(--mdc-theme-secondary, #47B8E0);
+}
+
+.wizard__body .mdc-radio__native-control:disabled + .mdc-radio__background .mdc-radio__outer-circle, [aria-disabled="true"] .mdc-radio__native-control + .mdc-radio__background .mdc-radio__outer-circle {
+  border-color: rgba(255, 255, 255, 0.54);
+}
+
+.wizard__body .mdc-select.mdc-select__no-label {
+  min-width: 50%;
+}
