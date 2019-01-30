@@ -28,6 +28,7 @@ export class Topo {
       leafs: '=',
       others:'=',
       links:'=',
+      logicalPorts:'=',
       topoSetting:'='
     };
 
@@ -94,9 +95,9 @@ export class Topo {
 
       this.switch_width = 16;
       this.switch_height = 108;
-      this.leaf_group_interval = 8;
-      // this.leaf_group_str = 'leaf_group_name';
-      this.leaf_group_str = 'id';
+      this.leaf_group_interval = 15;
+      this.leaf_group_str = 'leaf_group_name';
+      // this.leaf_group_str = 'id';
       this.resizeTimeout = null;
       this.active_status = "ACTIVE";
       this.LINE_WIDTH = 1;
@@ -242,7 +243,32 @@ export class Topo {
                 this.links[linkId].strokeColor = this.LINE_ERROR;
               }
             });
+
+            // console.log(scope.links)
+
+            genPeerLinks();
           }
+      };
+
+      let genPeerLink = (devices, linkId, isOk) =>{
+        let nodeA = this.leafs[devices[0]] || this.spines[devices[0]] || this.others[devices[0]];
+        let nodeB = this.leafs[devices[1]] || this.spines[devices[1]] || this.others[devices[1]];
+
+        let link = new JTopo.Link(nodeA, nodeB);
+        link.zIndex = 20;
+        link.linkId = linkId;
+        link.dashedPattern = 5;
+        link.lineWidth = this.LINE_WIDTH;
+        link.strokeColor = this.LINE_SELECTED;
+        link.dragable = false;
+        if(!isOk){
+          link.strokeColor = this.LINE_ERROR;
+        }
+        // link.mouseover(linkMouseOverHandler);
+        // link.mouseout(linkMouseOutHandler);
+
+        this.scene.add(link);
+        return link;
       };
 
       let crushLinks =()=>{
@@ -263,6 +289,56 @@ export class Topo {
         }
         return newDeviceIds[0] + ':' + ports[0] + '_' + newDeviceIds[1] + ':' + ports[1];
       };
+
+
+      let _checkPortState = (device, port)=>{
+        let state = false;
+        this.di._.forEach(scope.links, (link)=>{
+          if((link.src.device === device.id && link.src.port === String(port)) || (link.dst.device === device.id && link.dst.port === String(port))){
+            if(link.state === 'ACTIVE'){
+              state = true;
+              return false;
+            }
+          }
+        });
+        return state
+      };
+
+      let _checkPeerLinksState = (memberDict) =>{
+        let keys = this.di._.keys(memberDict);
+        let isOk = true;
+        this.di._.forEach(keys, (key)=>{
+          // let device = this.leafs[key] || this.spines[key] || this.others[key];
+          let device = this.di._.find(scope.leafs,{'id':key});
+          if(device){
+            // TODO 目前用的是交换机 leafgroup中的port， 后面如果switch port 不起作用，那么要用memberDict中的port
+            isOk = _checkPortState(device, device.leafGroup.switch_port);
+            if(isOk === false){
+              return false;
+            }
+          } else {
+            console.log('[topo.js > _checkPeerLinksState()] Device '+ key + ' 找不到');
+          }
+
+        });
+        return isOk;
+      };
+
+      let genPeerLinks = ()=> {
+        this.di._.forEach(scope.logicalPorts, (logicalPort)=>{
+          if(logicalPort.is_mlag){
+            let memberDict = this.di._.groupBy(logicalPort.members, 'device_id');
+            let isPeerLinkOk = _checkPeerLinksState(memberDict);
+
+            let keys = this.di._.keys(memberDict);
+            let newKeys = this.di._.sortBy(keys);
+            let linkId =  newKeys[0] + '__' + newKeys[1];
+            console.log('genPeerLinks  ====== >' + linkId);
+            this.links[linkId] = genPeerLink(newKeys,linkId, isPeerLinkOk)
+          }
+        })
+      };
+
 
       let genLinkNode = (devices, linkId) => {
         let nodeA = this.leafs[devices[0]] || this.spines[devices[0]] || this.others[devices[0]];

@@ -13,7 +13,12 @@
         <div class="summary__body__content flex_entirety__body__body">
 
             <div ng-style="resize_right_plus" class="summary_drawer_left">
-                <topo ng-if="fabricModel.isShowTopo" spines="fabricModel.deSpines" leafs="fabricModel.deLeafs" others="fabricModel.deOthers" links="fabricModel.deLinks" topo-setting="fabricModel.topoSetting">
+                <topo ng-if="fabricModel.isShowTopo" spines="fabricModel.deSpines"
+                                                     leafs="fabricModel.deLeafs"
+                                                     others="fabricModel.deOthers"
+                                                     links="fabricModel.deLinks"
+                                                     logical-ports="fabricModel.deLogicalPorts"
+                                                     topo-setting="fabricModel.topoSetting">
                 </topo>
             </div>
             <div class="line_space summary_drawer_line_space" ng-style="resize_right" ng-mousedown="resize_div($event)">

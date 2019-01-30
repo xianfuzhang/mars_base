@@ -144,6 +144,7 @@ export class FabricSummaryController {
       devicesDefer = this.di.$q.defer(),
       endpointsDefer = this.di.$q.defer(),
       deviceConfigsDefer = this.di.$q.defer(),
+      logicalPortDefer = this.di.$q.defer(),
       appDefer = this.di.$q.defer();
     let promises = [];
     let portGroups = {};
@@ -268,6 +269,15 @@ export class FabricSummaryController {
       });
       promises.push(endpointsDefer.promise);
 
+      this.logicalPorts = [];
+      this.di.deviceDataManager.getLogicalPortsList().then((ports)=>{
+        this.logicalPorts = ports;
+        logicalPortDefer.resolve();
+      },(err)=>{
+        logicalPortDefer.resolve();
+      });
+      promises.push(logicalPortDefer.promise);
+
       Promise.all(promises).then(()=>{
 
         let DI = this.di;
@@ -282,6 +292,7 @@ export class FabricSummaryController {
         DI.$scope.fabricModel['deSpines'] = dstSwt.spine;
         DI.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
         DI.$scope.fabricModel['deOthers'] = unknownSwt.concat(dstSwt.other);
+        DI.$scope.fabricModel['deLogicalPorts'] = angular.copy(this.logicalPorts);
         DI.$scope.fabricModel.isShowTopo = true;
 
         if(DI.$scope.fabricModel.topoSetting.show_path){
@@ -1288,6 +1299,7 @@ export class FabricSummaryController {
         let OPENFLOW_APP_NAME = 'org.onosproject.openflow';
         let QOS_APP_NAME = 'com.nocsys.qos';
         let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
+        let LOGICALPORT_APP_NAME = 'com.nocsys.logicalport';
 
         if(allState[OPENFLOW_APP_NAME] === 'ACTIVE'){
           scope.isOpenflowEnable= true;
@@ -1300,6 +1312,12 @@ export class FabricSummaryController {
         if(allState[SWTMGT_APP_NAME] === 'ACTIVE'){
           scope.isSwtManageEnable= true;
         }
+
+        if(allState[LOGICALPORT_APP_NAME] === 'ACTIVE'){
+          scope.isLogicalPortEnable= true;
+        }
+
+
       };
       let _reset_right_menu = () =>{
 
