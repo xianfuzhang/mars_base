@@ -36,15 +36,15 @@ export class InterfaceGroupController {
     this.initActions();
     this.scope.model.provider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
-        let defer = this.di.$q.defer(), linksDefer = this.di.$q.defer(), logicalDefer = this.di.$q.defer();
-        this.di.deviceDataManager.getLinks().then((res) => {
-          linksDefer.resolve(res.data.links);
+        let defer = this.di.$q.defer(), portsDefer = this.di.$q.defer(), logicalDefer = this.di.$q.defer();
+        this.di.deviceDataManager.getPorts().then((res) => {
+          portsDefer.resolve(res.data.ports);
         });
         this.di.deviceDataManager.getLogicalPortsList().then((ports)=>{
           logicalDefer.resolve(ports);
         });
-        this.di.$q.all([linksDefer.promise, logicalDefer.promise]).then((arr) => {
-          this.transformLinksState(arr[0]);
+        this.di.$q.all([portsDefer.promise, logicalDefer.promise]).then((arr) => {
+          this.transformPortsState(arr[0]);
           this.scope.entities = this.getEntities(arr[1]);
           defer.resolve({
             data: this.scope.entities
@@ -233,7 +233,7 @@ export class InterfaceGroupController {
                   result.push({
                     'device': device_name_ports[0]['device_name'],
                     'port': port && port.port || member.port,
-                    'status': port && port.isEnabled ? 'available' : 'unavailable'
+                    'status': port && port.annotations.linkStatus === 'UP' ? 'available' : 'unavailable'
                   });
                 }
                 else {
@@ -375,13 +375,11 @@ export class InterfaceGroupController {
     return defer.promise;
   }
 
-  transformLinksState(links) {
-    this.scope.links = {};
-    links.forEach((link) => {
-      let srcKey = link.src.device + ':' + link.src.port,
-        dstKey = link.dst.device + ':' + link.dst.port;
-      this.scope.links[srcKey] = link.state;
-      this.scope.links[dstKey] = link.state;  
+  transformPortsState(ports) {
+    this.scope.ports = {};
+    ports.forEach((port) => {
+      let key = port.element + ':' + port.port;
+      this.scope.ports[key] = port.annotations.linkStatus;
     });
   }
 
@@ -389,7 +387,7 @@ export class InterfaceGroupController {
     let state = 'Down';
     for(let i=0; i< members.length; i++) {
       let key = members[i]['device_id'] + ':' + members[i]['port'];
-      if (this.scope.links.hasOwnProperty(key) && this.scope.links[key] === 'ACTIVE') {
+      if (this.scope.ports.hasOwnProperty(key) && this.scope.ports[key] === 'UP') {
         state = 'Up';
         break;
       }
