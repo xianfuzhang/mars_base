@@ -140,6 +140,7 @@ export class InterfaceGroupController {
         this.scope.$emit('trunk-wizard-show', {
           'edit': false, 
           'availableDevices': result.availableDevices,
+          'leafGroups': result.leafGroups
           //'deviceMapping': result.deviceMapping
         });
       }, () => {
@@ -309,10 +310,19 @@ export class InterfaceGroupController {
       mappingDefer.resolve(ports);
     });
 
-    let availableDevices = [], logicalMapping = [];
+    let availableDevices = [], logicalMapping = [], leafGroups = {};
     this.di.$q.all([deviceDefer.promise, portDefer.promise, mappingDefer.promise]).then((arr) => {
       logicalMapping = arr[2];
       arr[0].forEach((device) => {
+        if (device['leafGroup']['name']) {
+          if (!leafGroups.hasOwnProperty(device['leafGroup']['name'])) {
+            leafGroups[device.leafGroup.name] = [];
+          }  
+          leafGroups[device.leafGroup.name].push({
+            'device_id': device.id,
+            'port': device.leafGroup.switch_port
+          });
+        }
         let ports = [];
         arr[1].forEach((port) => {
           if (port.element === device.id) {
@@ -369,8 +379,12 @@ export class InterfaceGroupController {
         return item.groups.length > 0 && item.ports.length > 0;
       });
       availableDevices = arr;
-      availableDevices.length > 0 ? defer.resolve({'availableDevices': availableDevices, 'deviceMapping': deviceMapping}) :
-        defer.reject(null);
+      availableDevices.length > 0 ? 
+        defer.resolve({
+          'availableDevices': availableDevices, 
+          'deviceMapping': deviceMapping,
+          'leafGroups': leafGroups
+        }) : defer.reject(null);
     });
     return defer.promise;
   }

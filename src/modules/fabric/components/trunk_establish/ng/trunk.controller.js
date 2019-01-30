@@ -55,6 +55,9 @@ export class TrunkController {
       },
       portDisplayLabel: {
         options: []
+      },
+      leafGroupDisplayLabel: {
+        options: []
       }
     };
 
@@ -64,6 +67,7 @@ export class TrunkController {
     unsubscribers.push(this.di.$rootScope.$on('trunk-wizard-show', ($event, data) => {
       this.scope.edit = data.edit || false;
       this.scope.availableDevices = data.availableDevices || [];
+      this.scope.leafGroups = data.leafGroups || {};
       this.scope.trunk = data.trunk;
       this.scope.open(data);
     }));
@@ -91,12 +95,17 @@ export class TrunkController {
         }
         else {
           let members = [];
-          this.scope.model.membersDetail.forEach((member) => {
-            members.push({
-              'device_id': member.device_id,
-              'port': member.port
-            });
-          });
+          if (this.scope.model.is_mlag) {
+            members = this.scope.model.leafGroupOption['value'];
+          }
+          else {
+            this.scope.model.membersDetail.forEach((member) => {
+              members.push({
+                'device_id': member.device_id,
+                'port': member.port
+              });
+            });  
+          }
           let params = {
             'name': this.scope.model.name,
             'is_mlag': this.scope.model.is_mlag,
@@ -193,6 +202,7 @@ export class TrunkController {
     this.scope.model.nameHelper.validation = 'false';
     this.scope.model.is_mlag = false;
     this.scope.model.deviceDisplayLabel.options = [];
+    this.scope.model.leafGroupDisplayLabel.options = [];
     this.scope.availableDevices.forEach((item) => {
       if (item.protocol === 'rest') this.scope.model.disableMLAG = false;
       this.scope.model.deviceDisplayLabel.options.push({
@@ -218,6 +228,19 @@ export class TrunkController {
       this.scope.model.name = null;
       this.scope.model.membersDetail = [];
       this.scope.model.deviceOption = this.scope.model.deviceDisplayLabel.options[0];
+    }
+
+    if (Object.keys(this.scope.leafGroups).length === 0) {
+      this.scope.model.disableMLAG = true;
+    }
+    else {
+      for (let key in this.scope.leafGroups) {
+        this.scope.model.leafGroupDisplayLabel.options.push({
+          'label': key,
+          'value': this.scope.leafGroups[key]
+        });
+      }
+      this.scope.model.leafGroupOption = this.scope.model.leafGroupDisplayLabel.options[0];
     }
 
     this.scope.changeDevice(this.scope.model.deviceOption);

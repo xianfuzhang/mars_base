@@ -8,7 +8,7 @@
   position: absolute;
   right: 0;
   top: -5px;
-  background: #fff;
+  background: #000;
   padding: 5px 10px;
   font-weight: bold;
   font-size: 15px;
@@ -35,14 +35,29 @@
   }
   
   @include element(input) {
-    width: 150px;
     height: 30px;
+    width: 150px;
     font-size: 16px;
     border: 2px solid #000;
+    border-radius: 3px;
     box-sizing: border-box;
+    background: #000;
+    color: #fff;
   }
+  
+  @include element(select) {
+    width: 150px;
+    background: #000;
+    color: #fff;
+    padding: 0 3px;
+    border-radius: 3px;
+  }
+  
+  
 }
-
+.realtime-log-actions__select .mdc-select {
+  width: 150px;
+}
 
 @include block(configuration){
   display:flex;

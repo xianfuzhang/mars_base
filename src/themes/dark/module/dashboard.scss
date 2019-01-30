@@ -294,6 +294,11 @@
   background-color: lightgray;
 }
 
+.mar_section__header .mdc-select.mdc-select__no-label > .mdc-select__native-control {
+  padding-top: 0;
+  color: #4C4C4C;
+  border-bottom-color: whitesmoke;
+}
 
 .dashboard .mdc-select.mdc-select__no-label > .mdc-select__native-control{
   color: #4C4C4C;
