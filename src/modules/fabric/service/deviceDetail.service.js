@@ -355,6 +355,16 @@ export class DeviceDetailService {
   getDeviceSFlowsSchema() {
     return [
       {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.DEVICE'),
+        'field': 'device',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PORT'),
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
         'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.DST_IP'),
         'field': 'ip',
         'layout': {'visible': true, 'sortable': true}
@@ -380,15 +390,30 @@ export class DeviceDetailService {
         'layout': {'visible': true, 'sortable': true}
       },
       {
-        'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PORT'),
-        'field': 'port',
-        'layout': {'visible': true, 'sortable': true}
-      },
-      {
         'label': this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.DURATION'),
         'field': 'duration',
         'layout': {'visible': true, 'sortable': true}
       },
+    ];
+  }
+
+  getSFlowActionsShow() {
+     return {
+      'menu': {'enable': false, 'role': 2},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getSFlowTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
     ];
   }
 
@@ -501,7 +526,6 @@ export class DeviceDetailService {
       },
     ];
   }
-  
   
   getDevicePFCSchema() {
     return [

@@ -184,7 +184,7 @@ export class DeviceDataManager {
         defer.resolve(res['data']['configs']);
       },
       (error) => {
-        this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error.data.message +"）");
+        //this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error.data.message +"）");
         defer.resolve([]);
       }
     );
@@ -735,6 +735,32 @@ export class DeviceDataManager {
         },
         (err) => {
           defer.resolve([]);
+        }
+      );
+    return defer.promise;
+  }
+
+  getAllSFlows() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getSFlowsUrl())
+      .then((res) => {
+          defer.resolve(res.data.sflows);
+        },
+        (err) => {
+          defer.resolve([]);
+        }
+      );
+    return defer.promise;
+  }
+
+  deleteSFlowByDeviceId(device_id) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getSFlowsUrl(device_id))
+      .then((res) => {
+          defer.resolve(null);
+        },
+        (err) => {
+          defer.reject(err.data.message);
         }
       );
     return defer.promise;

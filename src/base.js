@@ -200,6 +200,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/sflows', {
+      template: require('./modules/fabric/template/sflows.html'),
+      controller: 'sFlowsController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/elasticsearch', {
       template: require('./modules/manage/template/elasticsearch.html'),
       controller: 'elasticsearchController',

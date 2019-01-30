@@ -20,6 +20,7 @@ import {ShowSwitchFlowsController} from './ng/showSwitchFlows.controller';
 import {ShowSwitchGroupsController} from './ng/showSwitchGroups.controller';
 import {ShowLinksSelectController} from './ng/showLinksSelect.controller';
 import {IntentsController} from './ng/intents.controller';
+import {sFlowsController} from './ng/sFlows.controller';
 import {ShowFlowDetailController} from './ng/showFlowDetail.controller';
 import {ShowSwitchPFCsController} from './ng/showSwitchPFCs.controller';
 import {CreateEndpointController} from './components/createEndpoint/ng/createEndpoint.controller';
@@ -49,6 +50,7 @@ export default angular
   .controller('showSwitchPFCsController', ShowSwitchPFCsController)
   .controller('showLinksSelectController', ShowLinksSelectController)
   .controller('intentsController', IntentsController)
+  .controller('sFlowsController', sFlowsController)
   .controller('createEndpointCtrl', CreateEndpointController)
   .controller('showFlowDetailCtrl', ShowFlowDetailController)
   .controller('pfcEstablishController', PfcEstablishController)

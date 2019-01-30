@@ -135,6 +135,7 @@ export class headerController{
         let tenantState = apps['com.nocsys.tenant'];
         let dhcpserverState = apps['com.nocsys.dhcpserver'];
         let dhcpv6serverState = apps['com.nocsys.dhcpv6server'];
+        let fabricIndex = this.di._.findIndex(origins, {'group': 'Fabric'});
         for(let key in apps) {
           if (apps[key] !== 'ACTIVE') {
             switch (key) {
@@ -169,17 +170,17 @@ export class headerController{
                 if (tenantIndex > -1) origins.splice(tenantIndex , 1);
                 break;
               case 'com.nocsys.endpoint':
-                let index2 = this.di._.findIndex(origins, {'group': 'Fabric'});
-                if (index2 > -1) {
-                  let endpointIndex = this.di._.findIndex(origins[index2]['items'], {'url': '/endpoints'});
-                  if (endpointIndex > -1) origins[index2]['items'].splice(endpointIndex, 1);  
+                //let index2 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (fabricIndex > -1) {
+                  let endpointIndex = this.di._.findIndex(origins[fabricIndex]['items'], {'url': '/endpoints'});
+                  if (endpointIndex > -1) origins[fabricIndex]['items'].splice(endpointIndex, 1);  
                 }
                 break;
               case 'com.nocsys.topology':
-                let index3 = this.di._.findIndex(origins, {'group': 'Fabric'});
-                if (index3 > -1) {
-                  let uplinkIndex = this.di._.findIndex(origins[index3]['items'], {'url': '/uplinks'});
-                  if (uplinkIndex > -1) origins[index3]['items'].splice(uplinkIndex, 1);  
+                //let index3 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (fabricIndex > -1) {
+                  let uplinkIndex = this.di._.findIndex(origins[fabricIndex]['items'], {'url': '/uplinks'});
+                  if (uplinkIndex > -1) origins[fabricIndex]['items'].splice(uplinkIndex, 1);  
                 }
                 break;
               case 'com.nocsys.ntpserver':
@@ -208,25 +209,32 @@ export class headerController{
                 }
                 break;
               case 'com.nocsys.monitor':
-                let index7 = this.di._.findIndex(origins, {'group': 'Fabric'});
-                if (index7 > -1) {
-                  let endpointIndex = this.di._.findIndex(origins[index7]['items'], {'url': '/monitor'});
-                  if (endpointIndex > -1) origins[index7]['items'].splice(endpointIndex, 1);
+                //let index7 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (fabricIndex > -1) {
+                  let endpointIndex = this.di._.findIndex(origins[fabricIndex]['items'], {'url': '/monitor'});
+                  if (endpointIndex > -1) origins[fabricIndex]['items'].splice(endpointIndex, 1);
                 }
                 break;
 
               case 'com.nocsys.storm-control':
-                let index8 = this.di._.findIndex(origins, {'group': 'Fabric'});
-                if (index8 > -1) {
-                  let endpointIndex = this.di._.findIndex(origins[index8]['items'], {'url': '/storm_control'});
-                  if (endpointIndex > -1) origins[index8]['items'].splice(endpointIndex, 1);
+                //let index8 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (fabricIndex > -1) {
+                  let endpointIndex = this.di._.findIndex(origins[fabricIndex]['items'], {'url': '/storm_control'});
+                  if (endpointIndex > -1) origins[fabricIndex]['items'].splice(endpointIndex, 1);
                 }
                 break;
               case 'com.nocsys.logicalport':
-                let index9 = this.di._.findIndex(origins, {'group': 'Fabric'});
-                if (index9 > -1) {
-                  let endpointIndex = this.di._.findIndex(origins[index9]['items'], {'url': '/logical_port'});
-                  if (endpointIndex > -1) origins[index9]['items'].splice(endpointIndex, 1);
+                //let index9 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (fabricIndex > -1) {
+                  let endpointIndex = this.di._.findIndex(origins[fabricIndex]['items'], {'url': '/logical_port'});
+                  if (endpointIndex > -1) origins[fabricIndex]['items'].splice(endpointIndex, 1);
+                }
+                break;
+              case 'com.nocsys.sflow':
+                //let index10 = this.di._.findIndex(origins, {'group': 'Fabric'});
+                if (fabricIndex > -1) {
+                  let sflowIndex = this.di._.findIndex(origins[fabricIndex]['items'], {'url': '/sflows'});
+                  if (sflowIndex > -1) origins[fabricIndex]['items'].splice(sflowIndex, 1);
                 }
                 break;
             }
