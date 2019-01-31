@@ -305,7 +305,43 @@ mdc设置组件颜色
   height: 230px;
   padding: 12px;
   overflow-y: auto;
+  background: #282828;
+  color: #fff;
 }
+
+.column-manipulation-field__content .mdc-form-field {
+  color: rgba(255, 255, 255, 0.87);
+}
+.column-manipulation-field__content .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.column-manipulation-field__content .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: rgba(255, 255, 255, 0.87);
+}
+.column-manipulation-field__content .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input {
+  border-bottom-color: rgba(255, 255, 255, 0.87);
+}
+.column-manipulation-field__content .mdc-text-field .mdc-line-ripple {
+  background-color: #fff;
+  background-color: var(--mdc-theme-background, #fff);
+}
+
+.column-manipulation-field__content .mdc-select:not(.mdc-select--disabled) .mdc-select__native-control {
+  border-bottom-color: rgba(255, 255, 255, 0.87);
+}
+.column-manipulation-field__content .mdc-select:not(.mdc-select--disabled) .mdc-select__native-control {
+  color: rgba(255, 255, 255, 0.87);
+}
+.column-manipulation-field__content .mdc-select:not(.mdc-select--disabled) .mdc-floating-label {
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.column-manipulation-field__content .mdc-checkbox__native-control:disabled:checked ~ .mdc-checkbox__background, .mdc-checkbox__native-control:disabled:indeterminate ~ .mdc-checkbox__background {
+  border-color: transparent;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
 .column-manipulation-field__column{
   display: flex;
   flex-direction: column;

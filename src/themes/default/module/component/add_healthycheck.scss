@@ -27,6 +27,7 @@
     @include element(input) {
       display: inline-block;
       vertical-align: top;
+      width: 230px;
     }
   }
 }
