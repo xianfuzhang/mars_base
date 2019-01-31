@@ -320,9 +320,25 @@
 }
 
 .wizard__body .mdc-radio__native-control:disabled + .mdc-radio__background .mdc-radio__outer-circle, [aria-disabled="true"] .mdc-radio__native-control + .mdc-radio__background .mdc-radio__outer-circle {
-  border-color: rgba(255, 255, 255, 0.54);
+  border-color: rgba(255, 255, 255, 1);
 }
 
 .wizard__body .mdc-select.mdc-select__no-label {
   min-width: 50%;
+}
+
+.wizard__body .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input {
+  border-bottom-color: rgba(255, 255, 255, 1);
+}
+
+.wizard__body .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.wizard__body .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-text {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.wizard__body .mdc-line-ripple {
+  background-color: var(--mdc-theme-background, #fff);
 }
