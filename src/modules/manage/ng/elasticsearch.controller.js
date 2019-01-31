@@ -504,6 +504,8 @@ export class ElasticsearchController {
               (err)=>{
                 defer.reject({})
               })
+          } else {
+	          defer.reject({})
           }
         }
         else{
