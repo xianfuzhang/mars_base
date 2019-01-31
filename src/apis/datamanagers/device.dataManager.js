@@ -753,6 +753,17 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  createDeviceSFlow(device_id, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getSFlowsUrl(device_id), params)
+      .then((res) => {
+        defer.resolve(res);
+      }, (err) => {
+        defer.reject(err.data.message);
+      });
+    return defer.promise;
+  }
+
   deleteSFlowByDeviceId(device_id) {
     let defer = this.di.$q.defer();
     this.di.$http.delete(this.di.appService.getSFlowsUrl(device_id))

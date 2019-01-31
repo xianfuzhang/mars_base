@@ -37,59 +37,35 @@ export class sFlowsController {
     };
 
     this.scope.addFlow = () => {
-      let deviceDefer = this.di.$q.defer(),
-          endpointDefer = this.di.$q.defer();
+      let portsDefer = this.di.$q.defer(), devicesDefer = this.di.$q.defer();
+      this.di.deviceDataManager.getPorts().then((res) => {
+        portsDefer.resolve(res.data.ports);
+      });
       this.di.deviceDataManager.getDeviceConfigs().then((devices)=> {
-        deviceDefer.resolve(devices);
+        devicesDefer.resolve(devices);
       });
-      this.di.deviceDataManager.getEndpoints().then((res)=> {
-        endpointDefer.resolve(res.data.hosts);
-      });
-      this.di.$q.all([deviceDefer.promise, endpointDefer.promise]).then(
-        (arr) => {
-          if (arr[0].length === 0 && arr[1].length === 0) {
-            this.scope.alert = {
-              type: 'warning',
-              msg: this.translate('MODULES.INTENT.CREATE.RESOURCE.INVALID')
-            }
-            this.di.notificationService.render(this.scope);
-            return;
+      this.di.$q.all([devicesDefer.promise, portsDefer.promise]).then((arr) => {
+        let  filterDevices = this.filterSflowDevices(arr[0]);
+        if (filterDevices.length === 0) {
+          this.scope.alert = {
+            type: 'warning',
+            msg: this.translate('MODULES.SWITCH.SFLOW.NO_AVAILABLE_DEVICE')
           }
-          this.di.modalManager.open({
-            template: require('../components/createIntent/template/createIntent.html'),
-            controller: 'createIntentCtrl',
-            windowClass: 'create-intent-modal',
-            resolve: {
-              dataModel: () => {
-                return {
-                  devices: arr[0],
-                  endpoints: arr[1],
-                  from: 'intent'
-                };
-              }
+          this.di.notificationService.render(this.scope);
+          return;
+        }
+        filterDevices.forEach((device) => {
+          if (!device.hasOwnProperty('ports')) {
+            device['ports'] = [];
+          }
+          arr[1].forEach((port) => {
+            if (port.element === device.id) {
+              device['ports'].push(parseInt(port.port));
             }
-          })
-          .result.then((data) => {
-            if (data && !data.canceled) {
-              this.di.intentDataManager.createIntent(data.result).then(
-                () => {
-                  this.scope.alert = {
-                    type: 'success',
-                    msg: this.translate('MODULES.INTENT.CREATE.SUCCESS')
-                  }
-                  this.di.notificationService.render(this.scope);
-                  this.scope.model.API.queryUpdate();
-                },
-                (msg) => {
-                  this.scope.alert = {
-                    type: 'warning',
-                    msg: msg
-                  }
-                  this.di.notificationService.render(this.scope);
-                }
-              )
-            }
-          });  
+          });
+          device['ports'].sort((a, b) => a - b);
+        });
+        this.scope.$emit('sflow-wizard-show', {'devices': filterDevices});
       });
     };
 
@@ -131,6 +107,17 @@ export class sFlowsController {
     };
 
     this.init();
+
+    let unsubscribers = [];
+    unsubscribers.push(this.di.$rootScope.$on('sflow-list-refresh', () => {
+      this.scope.model.API.queryUpdate();
+    }));
+
+    this.scope.$on('$destroy', () => {
+      unsubscribers.forEach((cb) => {
+        cb();
+      });
+    });
   }
 
   init() {
@@ -171,7 +158,8 @@ export class sFlowsController {
       obj.id = item.device_id + ':' + item.collector_ip;
       obj.device = device && device.name || item.device_id;
       obj.device_id = item.device_id;
-      obj.port = item.port.join(',');
+      //obj.port = item.ports.join(',');
+      obj.ip = item.collector_ip;
       obj.payload = item.max_payload_length;
       obj.header = item.max_header_length;
       obj.interval = item.polling_interval;
@@ -210,6 +198,16 @@ export class sFlowsController {
       this.di.notificationService.render(this.scope);
       this.scope.model.API.queryUpdate();
     });
+  }
+
+  filterSflowDevices(devices) {
+    let result = [];
+
+    devices.forEach((device) => {
+      let exist = this.scope.entities.find(item => item.device_id === device.id);
+      if (!exist) result.push(device);
+    });
+    return result;
   }
 }
 

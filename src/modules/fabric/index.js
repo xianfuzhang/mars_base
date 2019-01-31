@@ -26,6 +26,7 @@ import {ShowSwitchPFCsController} from './ng/showSwitchPFCs.controller';
 import {CreateEndpointController} from './components/createEndpoint/ng/createEndpoint.controller';
 import {PfcEstablishController} from './components/pfc_establish/ng/pfcEstablish.controller';
 import {UpLinkEstablishController} from './components/uplink_establish/ng/upLinkEstablish.controller';
+import {sFlowController} from './components/sflow_establish/ng/sflowEstablish.controller';
 import {TrunkController} from  './components/trunk_establish/ng/trunk.controller';
 import {UpLinkController} from './ng/uplink.controller';
 import {StormController} from './ng/storm.controller';
@@ -61,6 +62,7 @@ export default angular
   .controller('monitorController', MonitorController)
   .controller('monitorEstablishController', MonitorEstablishController)
   .controller('trunkCtrl', TrunkController)
+  .controller('sflowCtrl', sFlowController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)

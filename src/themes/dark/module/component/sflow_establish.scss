@@ -1,0 +1,17 @@
+.sflow_establish .member-components{
+  display: flex;
+}
+.sflow_establish .member-components > div{
+  margin-right: 15px;
+}
+.sflow_establish .mdc-select, .sflow_establish .mdc-text-field{
+  width: 150px;
+}
+.sflow_establish .inline_block_element{
+  display: inline-block;
+  margin-right: 12px;
+}
+.sflow_establish .add-btn{
+  cursor: pointer;
+  user-select: none;
+}
