@@ -19,7 +19,8 @@ export class mdlText {
       displayLabel: '=',
       helper: '=',
       disable: '@',
-      datalist:'@'
+      datalist:'@',
+      formatValidate: '&'
     };
     this.link = (...args) => this._link.apply(this, args);
   }
@@ -90,6 +91,8 @@ export class mdlText {
       }
       angular.element(element.children()[0]).removeClass('mdc-text-field--focused');
       element.find('div').removeClass('mdc-line-ripple--active');
+      scope.formatValidate = scope.formatValidate || angular.noop;
+      scope.formatValidate();
     };
 
     function disable(){
