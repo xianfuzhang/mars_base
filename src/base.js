@@ -200,7 +200,7 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
-    .when('/sflows', {
+    .when('/sflow', {
       template: require('./modules/fabric/template/sflows.html'),
       controller: 'sFlowsController',
       resolve: {
