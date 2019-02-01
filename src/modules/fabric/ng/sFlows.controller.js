@@ -158,7 +158,7 @@ export class sFlowsController {
       obj.id = item.device_id + ':' + item.collector_ip;
       obj.device = device && device.name || item.device_id;
       obj.device_id = item.device_id;
-      //obj.port = item.ports.join(',');
+      obj.port = item.ports.length === 0 ? '-' : item.ports.join(',');
       obj.ip = item.collector_ip;
       obj.payload = item.max_payload_length;
       obj.header = item.max_header_length;
