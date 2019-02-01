@@ -337,9 +337,6 @@ export class MessageWebsocketService {
 		}
 		
 		function getLocalTime() {
-			if (time === -1) {
-				return '';
-			}
 			var local_time = '';
 			var day = new Date();
 			local_time += day.getFullYear() + '-';
