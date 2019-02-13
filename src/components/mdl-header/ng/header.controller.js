@@ -15,6 +15,7 @@ export class headerController{
       'loginDataManager',
       'alertDataManager',
       'manageDataManager',
+	    'deviceDataManager',
       'messageService'
     ];
   }
@@ -28,6 +29,9 @@ export class headerController{
     this.CONST_ADMIN_GROUP = this.di.appService.CONST.ADMIN_GROUP;
     this.scope.groups = angular.copy(this.di.appService.CONST.HEADER);
     this.scope.username = null;
+	  this.scope.messages = [];
+	  this.scope.hasUnreadMsg = false;
+	  this.devices = [];
     //this.scope.alerts_acount = 0;
     this.scope.location = (url, event) => {
       event && event.stopPropagation();
@@ -55,13 +59,25 @@ export class headerController{
     }
 	
 	  this.scope.messageClick = (message) => {
-      if(!message.isRead) {
-	      message.isRead = true;
-	      this.scope.unreadMsgNum--;
-      }
-      
+    	let unReadNum = 0;
+		  message.isRead = true;
+		
 		  let messages = this.scope.messages;
-      this.di.messageService.saveMessages(messages);
+		  this.di._.forEach(messages, (message) => {
+			  if(!message.isRead) {
+				  unReadNum++;
+			  }
+		  })
+		  
+		  this.scope.hasUnreadMsg = unReadNum > 0 ? true : false;
+		  
+		  let savedMessages = this.di.messageService.getMessages();
+		  savedMessages.forEach((msg) => {
+		  	if(msg.uuid && (msg.uuid === message.uuid)) {
+		  		msg.isRead = true;
+			  }
+		  })
+      this.di.messageService.saveMessages(savedMessages);
       
 		  if(message.path.url) {
 			  this.di.$location.path(message.path.url).search(message.path.query);
@@ -77,10 +93,15 @@ export class headerController{
 	
 	  unsubscribers.push(this.di.$rootScope.$on('new-websocket-message', ($event, message) => {
 		  let messages = this.scope.messages;
-		  messages.splice(0, 0, message);
-		  this.scope.unreadMsgNum++;
-	    this.scope.messages = messages.slice(0, this.di.appService.MAX_MESSAGES_NUMBER);
-	    this.scope.$apply();
+		
+		  messages.splice(0, 0, this.formatMessage(message));
+		
+		  this.scope.hasUnreadMsg = true;
+		  if(messages.length > this.di.appService.MAX_MESSAGES_NUMBER) {
+			  this.scope.messages = messages.slice(0, this.di.appService.MAX_MESSAGES_NUMBER);
+      }
+	    
+      this.scope.$apply();
 	  }));
 
     this.scope.$on('$destroy', () => {
@@ -108,20 +129,31 @@ export class headerController{
 
   setMessageWebsocket() {
     let unReadNum = 0;
-    // setup message websocket
-    this.di.messageService.init();
-    
-    let messages = this.di.messageService.getMessages();
-    
-	  this.scope.messages = messages;
-	  
-	  this.di._.forEach(messages, (message) => {
-	    if(!message.isRead) {
-	      unReadNum++;
-      }
-    })
-    
-    this.scope.unreadMsgNum = unReadNum;
+    let devices = [];
+	  const THIS = this;
+	
+	  // get devices
+	  THIS.di.deviceDataManager.getDevices().then((res) => {
+		  THIS.devices = res.data.devices;
+	  }, () => {
+		  THIS.devices = [];
+	  }).finally(() => {
+		  // setup message websocket
+		  THIS.di.messageService.init();
+		
+		  let messages = THIS.di.messageService.getMessages();
+		
+		
+		  THIS.di._.forEach(messages, (message) => {
+			  if(!message.isRead) {
+				  unReadNum++;
+			  }
+			
+			  THIS.scope.messages.push(THIS.formatMessage(message));
+		  })
+		
+		  THIS.scope.hasUnreadMsg = unReadNum > 0 ? true : false;
+	  })
   }
   
   filterMenusByApps() {
@@ -244,6 +276,105 @@ export class headerController{
       }
     });
   }
+	
+	formatMessage(message) {
+		let msg = {};
+		let devices = this.devices;
+		let srcArr, srcPort, srcDevice, dstArr, dstPort, dstDevice;
+		
+		msg.uuid = message.uuid;
+		msg.isRead = message.isRead;
+		msg.time = message.time;
+		msg.title = '';
+		
+		function getDeviceName (deviceId) {
+			let device = devices.find((val) => {
+				return val.id === deviceId
+			})
+			
+			return device ? device.annotations.name : deviceId;
+		}
+		
+		switch(message.event) {
+			case 'portState':
+				if(message.payload.link == 'up') {
+					msg.title += '端口启动 - ';
+				} else {
+					msg.title += '端口关闭 - ';
+				}
+				
+				msg.title += getDeviceName(message.payload.device) + ':' + message.payload.port;
+				msg.path = {
+					url: '/devices/' + message.payload.device,
+					query: {port:message.payload.port}
+				};
+				break;
+			case 'linkAdded':
+				srcArr = message.payload.src.split(':');
+				srcPort = srcArr[srcArr.length - 1];
+				srcDevice = message.payload.src.slice(0, message.payload.src.length - srcPort.length - 1);
+				
+				dstArr = message.payload.dst.split(':');
+				dstPort = dstArr[dstArr.length - 1];
+				dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
+				msg.title += '新增link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
+				msg.path = {
+					url: '/devices/' + device,
+					query: {link_port: port}
+				};
+				break;
+			case 'linkRemoved':
+				srcArr = message.payload.src.split(':');
+				srcPort = srcArr[srcArr.length - 1];
+				srcDevice = message.payload.src.slice(0, message.payload.src.length - srcPort.length - 1);
+				
+				dstArr = message.payload.dst.split(':');
+				dstPort = dstArr[dstArr.length - 1];
+				dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
+				msg.title += '删除link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
+				msg.path = {
+					url: false,
+					query: {}
+				};
+				break;
+			case 'overThreshold':
+				msg.title += '告警 - ' + message.payload.rule_name + ':' + message.payload.msg;
+				msg.path = {
+					url: '/alert/' + device,
+					query: {uuid: message.payload.uuid}
+				};
+				break;
+			case 'deviceAdded':
+				msg.title += '新增设备 - ' + getDeviceName(message.payload.device);
+				msg.path = {
+					url: '/devices/' + message.payload.device,
+					query: {}
+				};
+				break;
+			case 'deviceUpdated':
+				msg.title += '更新设备 - ' + getDeviceName(message.payload.device);
+				msg.path = {
+					url: '/devices/' + message.payload.device,
+					query: {}
+				};
+				break;
+			case 'deviceRemoved':
+				msg.title += '删除设备 - ' + getDeviceName(message.payload.device);
+				msg.path = {
+					url: false,
+					query: {}
+				};
+				break;
+			default:
+				msg.title += '未知通知';
+				msg.path = {
+					url: false,
+					query: {}
+				};
+		}
+		
+		return msg;
+	}
 }
 
 headerController.$inject = headerController.getDI();

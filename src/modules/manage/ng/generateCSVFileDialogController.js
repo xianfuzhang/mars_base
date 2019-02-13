@@ -30,7 +30,8 @@ export class  GenerateCSVFileDialogController {
     this.scope.globalInvalid = false;
     this.scope.errMsg = '';
     this.scope.dataModel = {
-      option: 'indice',
+    	option: 'indice',
+	    selectedIndice: this.scope.indiceOptions[0],
       query: this.di._.cloneDeep(defaultQuery)
     }
     
@@ -56,11 +57,11 @@ export class  GenerateCSVFileDialogController {
       });
       event.stopPropagation();
 		};
-
+		
 		this.scope.generate = (event) => {
       let query = this.di._.isEqual(this.scope.dataModel.query, defaultQuery) ? false : this.scope.dataModel.query;
       
-      this.di.manageDataManager.generateElasticsearchCSVFile(this.scope.selectedIndice.value, query)
+      this.di.manageDataManager.generateElasticsearchCSVFile(this.scope.dataModel.selectedIndice.value, query)
 				.then((res) => {
           this.di.$modalInstance.close({
             canceled: false,
