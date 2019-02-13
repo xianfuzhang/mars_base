@@ -189,6 +189,25 @@
 
 }
 
+.link_select{
+  background-color: #282828;
+}
+.link_select .mdc-radio__outer-circle{
+  border-color: white !important;
+}
+
+.link_select .mdc-select__native-control{
+  color:white !important;
+  border-bottom-color: white!important;
+}
+.link_select label, input{
+  color:white!important;
+}
+.link_select .mdc-notched-outline__idle{
+  border-color:white!important;
+}
+
+
 .topo_host_table tr td:first-child {
   text-align: left;
   padding-right: 4px;
