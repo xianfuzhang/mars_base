@@ -125,6 +125,8 @@ export class ElasticsearchController {
                 });
             })
         }
+      }, () => {
+	      this.scope.loading = false;
       });
     };
     
