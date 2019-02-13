@@ -13,6 +13,7 @@
   font-weight: bold;
   font-size: 15px;
   border-radius: 6px;
+  z-index:100;
   
   @include element(input) {
     height: 20px;
