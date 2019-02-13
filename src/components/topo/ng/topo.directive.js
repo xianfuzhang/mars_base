@@ -514,6 +514,7 @@ export class Topo {
         let status_error = 'rgb(255,0,0)';
         let top = 4;
 
+        let self = this;
         node.paint = function(g){
           g.beginPath();
           g.rect(-width/2, -height/2, width, height);
@@ -521,7 +522,7 @@ export class Topo {
           if(node.status === false){
             g.fillStyle ='rgb(255,0,0)';
           } else {
-            g.fillStyle = 'rgb(0,0,0)';
+            g.fillStyle = self.getNodeColor();
           }
           g.fill();
           g.closePath();
@@ -1071,13 +1072,15 @@ export class Topo {
       let crushPorts = (node) =>{
         let height = this.switch_height;
         let width = this.switch_width;
+
+        let self = this;
         node.paint = function(g) {
           g.beginPath();
           g.rect(-width / 2, -height / 2, width, height);
           if(node.status === false){
             g.fillStyle ='rgb(255,0,0)';
           } else {
-            g.fillStyle = 'rgb(0,0,0)';
+            g.fillStyle = self.getNodeColor();
           }
           g.fill();
           g.closePath();
@@ -1095,13 +1098,15 @@ export class Topo {
         let status_normal = '#81FF1A';
         let status_error = 'rgb(255,0,0)';
         let top = 4;
+
+        let self = this;
         node.paint = function(g){
           g.beginPath();
           g.rect(-width/2, -height/2, width, height);
           if(node.status === false){
             g.fillStyle ='rgb(255,0,0)';
           } else {
-            g.fillStyle = 'rgb(0,0,0)';
+            g.fillStyle = self.getNodeColor();
           }
           g.fill();
           g.closePath();
@@ -1237,6 +1242,16 @@ export class Topo {
       }
     }
 
+  }
+
+
+  getNodeColor(){
+    let theme = window.localStorage['userPrefs__theme'];
+    if(theme && theme === 'theme_dark'){
+      return 'rgb(100,100,100)';
+    } else {
+      return 'rgb(0,0,0)';
+    }
   }
 }
 
