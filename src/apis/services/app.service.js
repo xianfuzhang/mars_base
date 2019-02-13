@@ -23,8 +23,8 @@ export class appService {
       // LIVE_WEBSOCKETS_ENDPONT: 'ws://210.63.204.29:3233/',
       // LIVE_WEBSOCKETS_ENDPONT_PORT: 3233,
 	    MOCKED_MESSAGE_WEBSOCKETS_ENDPONT: 'ws://localhost:3001/mars/websock',
-	    // LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/mars/websock/',
-	    LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://210.63.204.28/mars/websock/',
+	    LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/mars/websock/',
+	    // LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://210.63.204.28/mars/websock/',
       
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
