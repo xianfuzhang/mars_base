@@ -48,7 +48,7 @@ export class DeviceWizardController {
       mfr: scope.mfrDisplayLabel.options[0],
       available: true,
       fabric_role: 'unknown',
-      leaf_group: {name: '', port: ''},
+      leaf_group: {name: '', switch_port: ''},
       managementAddress: '',
       port: '',
       protocol: scope.protocolDisplayLabel.options[0],
@@ -192,6 +192,9 @@ export class DeviceWizardController {
         protocol: scope.switch.protocol.value,
       };
       
+      if(params.type == 'spine') {
+        delete params.leaf_group;
+      }
       return new Promise((resolve, reject) => {
         if(scope.mode == 'update') { // update switch config
           deviceDataManager.putDeviceDetail(params)
@@ -232,7 +235,7 @@ export class DeviceWizardController {
               resolve({valid: true, errorMessage: ''});
             }, (err) => {
               // scope.switch = _.cloneDeep(initSwitch);
-              resolve({valid: false, errorMessage: err});
+              resolve({valid: false, errorMessage: '保存失败！'});
             });
         }
       });

@@ -328,14 +328,6 @@ export class MessageWebsocketService {
 			return result === undefined ? false : true;
 		}
 		
-		function getDeviceName (deviceId) {
-			let device = devices.find((val) => {
-				return val.id === deviceId
-			})
-			
-			return device ? device.annotations.name : deviceId;
-		}
-		
 		function getLocalTime() {
 			var local_time = '';
 			var day = new Date();
@@ -358,102 +350,20 @@ export class MessageWebsocketService {
 			}
 		}
 		
-		function formatMessage(message) {
-			let msg = {title:'', isRead: false};
-			let srcArr, srcPort, srcDevice, dstArr, dstPort, dstDevice;
-			msg.time = getLocalTime();
-			
-			switch(message.event) {
-				case 'portState':
-					if(message.payload.link == 'up') {
-						msg.title += '端口启动 - ';
-					} else {
-						msg.title += '端口关闭 - ';
-					}
-					
-					msg.title += getDeviceName(message.payload.device) + ':' + message.payload.port;
-					msg.path = {
-						url: '/devices/' + message.payload.device,
-						query: {port:message.payload.port}
-					};
-					break;
-				case 'linkAdded':
-					srcArr = message.payload.src.split(':');
-					srcPort = srcArr[srcArr.length - 1];
-					srcDevice = message.payload.src.slice(0, message.payload.src.length - srcPort.length - 1);
-					
-					dstArr = message.payload.dst.split(':');
-					dstPort = dstArr[dstArr.length - 1];
-					dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
-					msg.title += '新增link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
-					msg.path = {
-						url: '/devices/' + device,
-						query: {link_port: port}
-					};
-					break;
-				case 'linkRemoved':
-					srcArr = message.payload.src.split(':');
-					srcPort = srcArr[srcArr.length - 1];
-					srcDevice = message.payload.src.slice(0, message.payload.src.length - srcPort.length - 1);
-					
-					dstArr = message.payload.dst.split(':');
-					dstPort = dstArr[dstArr.length - 1];
-					dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
-					msg.title += '新增link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
-					msg.path = {
-						url: false,
-						query: {}
-					};
-					break;
-				case 'overThreshold':
-					msg.title += '告警 - ' + message.payload.rule_name + ':' + message.payload.msg;
-					msg.path = {
-						url: '/alert/' + device,
-						query: {uuid: message.payload.uuid}
-					};
-					break;
-				case 'deviceAdded':
-					msg.title += '新增设备 - ' + getDeviceName(message.payload.device);
-					msg.path = {
-						url: '/devices/' + message.payload.device,
-						query: {}
-					};
-					break;
-				case 'deviceUpdated':
-					msg.title += '更新设备 - ' + getDeviceName(message.payload.device);
-					msg.path = {
-						url: '/devices/' + message.payload.device,
-						query: {}
-					};
-					break;
-				case 'deviceRemoved':
-					msg.title += '删除设备 - ' + getDeviceName(message.payload.device);
-					msg.path = {
-						url: false,
-						query: {}
-					};
-					break;
-				default:
-					msg.title += '未知通知';
-					msg.path = {
-						url: false,
-						query: {}
-					};
-			}
-			
-			return msg;
-		}
-		
-		function messageCb(msg) {
-			if(msg.event == 'connect') {
+		function messageCb(message) {
+			if(message.event == 'connect') {
 				return;
 			}
 		  // save new message
 			const storage = DI.localStoreService.getSyncStorage();
 			let messages = storage.get(WEBSOCKET_MESSAGES_LOCALSTORE_KEY) || [];
 			
+			// complete message obj
+			message.uuid = (new Date()).getTime().toString() + Math.floor(Math.random() * 10).toString();
+			message.isRead = false;
+			message.time = getLocalTime();
+			
 			// Added to the start position
-			let message = formatMessage(msg);
 			messages.splice(0, 0, message);
 			storage.set(WEBSOCKET_MESSAGES_LOCALSTORE_KEY, messages.slice(0, DI.appService.MAX_MESSAGES_NUMBER));
 			
@@ -469,16 +379,8 @@ export class MessageWebsocketService {
 			  ws = new WebSocket(DI.appService.getMessageWebscoketEndpoint());
 			  ws.onmessage = onmessage;
 			  ws.onclose = onclose;
-			  
-			  // get devices
-			  DI.deviceDataManager.getDevices().then((res) => {
-			    devices = res.data.devices;
-			  }, () => {
-			  	devices = [];
-			  }).finally(() => {
-				  // subscribe message
-				  service.subscribe('', {}, messageCb)
-			  })
+			
+			  service.subscribe('', {}, messageCb);
       }
       
       return service;
