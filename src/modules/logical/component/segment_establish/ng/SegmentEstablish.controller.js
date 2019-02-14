@@ -33,6 +33,7 @@ export class SegmentEstablishController {
     // wizard params
     scope.showWizard = false;
     scope.title = '添加Segment';
+    scope.mode = 'create';
     scope.steps = [
       {
         id: 'step1',
@@ -80,7 +81,8 @@ export class SegmentEstablishController {
       if(scope.showWizard) return;
   
       init();
-      
+	
+	    scope.mode = 'create';
       scope.defaultTenant = tenantName ? tenantName : '';
       logicalDataManager.getTenants().then(
         (res) => {
@@ -106,6 +108,7 @@ export class SegmentEstablishController {
         })
       
       if(segmentName) {
+	      scope.mode = 'update';
         logicalDataManager.getSegment(tenantName, segmentName).then(
           (res) => {
             let segment = res.data;
