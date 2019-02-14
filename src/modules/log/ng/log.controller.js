@@ -65,8 +65,16 @@ export class LogController {
   
     this.scope.downloadFile = () => {
       if (this.scope.logModel.logFileSelected.value == '') return false;
-      
-      this.di.$window.location.href = this.di.appService.getLogFilesUrl() + `/${this.scope.logModel.logFileSelected.value}`;
+	
+      let url = this.di.appService.getLogFilesUrl() + `/${this.scope.logModel.logFileSelected.value}`;
+	    
+      let DI = this.di;
+	    DI.$rootScope.$emit('start_loading');
+	    DI.appService.downloadFileWithAuth(url, this.scope.logModel.logFileSelected.value).then(() => {
+	      DI.$rootScope.$emit('stop_loading');
+      }, () => {
+	      DI.$rootScope.$emit('stop_loading');
+      });
     }
   
     this.scope.onLogAPIReady = ($api) => {

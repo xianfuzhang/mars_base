@@ -115,9 +115,21 @@ export class ElasticsearchController {
           this.di.manageDataManager.getElasticsearchCSVFile()
             .then(res => {
               let arr = res.data.file.split('/')
-              // let fileUrl = this.di.appService.getDownloadFileUrl(arr[arr.length - 1]);
-              this.di.$window.location.href = '/download/' + arr[arr.length - 1];
-              this.scope.loading = false;
+	            let url = this.di.appService.getDownloadFileUrl(arr[arr.length - 1]);
+	
+	            let DI = this.di;
+	            DI.$rootScope.$emit('start_loading');
+	            DI.appService.downloadFileWithAuth(url, arr[arr.length - 1]).then(() => {
+		            DI.$rootScope.$emit('stop_loading');
+		            this.scope.loading = false;
+	            }, () => {
+		            DI.$rootScope.$emit('stop_loading');
+		            this.scope.loading = false;
+		            this.di.dialogService.createDialog('error', '下载失败！')
+			            .then((data)=>{
+				            this.scope.loading = false;
+			            });
+	            });
             }, (error) => {
               this.di.dialogService.createDialog('error', '下载失败！')
                 .then((data)=>{
