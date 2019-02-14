@@ -365,7 +365,7 @@ export class MessageWebsocketService {
 			
 			// Added to the start position
 			messages.splice(0, 0, message);
-			storage.set(WEBSOCKET_MESSAGES_LOCALSTORE_KEY, messages.slice(0, DI.appService.MAX_MESSAGES_NUMBER));
+			storage.set(WEBSOCKET_MESSAGES_LOCALSTORE_KEY, messages.slice(0, DI.appService.CONST.MAX_MESSAGES_NUMBER));
 			
 			DI.$rootScope.$emit('new-websocket-message', message)
     }

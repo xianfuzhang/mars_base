@@ -144,3 +144,17 @@
   overflow-y: auto;
   //background: rgba(0, 0, 0, .3);
 }
+
+
+.modalWizard .jsoneditor-text {
+  color: #FFFFFF;
+  background-color: #1a1a1a;
+}
+
+.modalWizard .jsoneditor-tree {
+  background: #1a1a1a;
+}
+
+.modalWizard .jsoneditor-field, .jsoneditor-value {
+  color: #ffffff;
+}
