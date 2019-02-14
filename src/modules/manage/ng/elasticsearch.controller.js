@@ -68,7 +68,7 @@ export class ElasticsearchController {
         }
       })
       .result.then((data) => {
-        if(data.canceled) {
+        if(!data || data.canceled) {
           this.scope.loading = false;
           return;
         } else if (data && !data.canceled) {
@@ -108,7 +108,7 @@ export class ElasticsearchController {
         }
       })
       .result.then((data) => {
-        if(data.canceled) {
+        if(!data || data.canceled) {
           this.scope.loading = false;
           return;
         } else if (data && !data.canceled) {
@@ -159,7 +159,7 @@ export class ElasticsearchController {
           }
         }
       }).result.then((data) => {
-        if(data.canceled) {
+        if(!data || data.canceled) {
           this.scope.loading = false;
         } else if (data && !data.canceled) {
           this.scope.loading = true;
