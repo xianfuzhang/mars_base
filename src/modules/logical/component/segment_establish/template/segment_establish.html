@@ -8,15 +8,15 @@
 
     <div class="stepForm__input">
         <div class="stepForm__input__label">Segment名称<span class="stepForm__input__required">*</span></div>
-        <valid-input v-require="true" ng-model="segmentModel.name" v-rpcid="page_device_1" v-disabled="segmentModel.name != ''"></valid-input>
+        <valid-input v-require="true" ng-model="segmentModel.name" v-rpcid="page_device_1" v-disabled="mode == 'update'"></valid-input>
     </div>
 
     <div class="stepForm__input">
         <div class="stepForm__input__label" style="text-decoration: underline">Segment类型<span class="stepForm__input__required">*</span></div>
-        <mdl-radio ng-model="segmentModel.type" name="type" value="vlan" disable="segmentModel.name != ''"
+        <mdl-radio ng-model="segmentModel.type" name="type" value="vlan" disable="mode == 'update'"
                    display-label="{id: 'check_1', label: 'Vlan', name: 'role', value: 'vlan'}">
         </mdl-radio>
-        <mdl-radio ng-model="segmentModel.type" name="type" value="vxlan" disable="segmentModel.name != ''"
+        <mdl-radio ng-model="segmentModel.type" name="type" value="vxlan" disable="mode == 'update'"
                    display-label="{id: 'check_2', label: 'Vxlan', name: 'role', value: 'vxlan'}">
         </mdl-radio>
     </div>
