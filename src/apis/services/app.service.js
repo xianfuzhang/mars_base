@@ -2,7 +2,10 @@ export class appService {
   static getDI() {
     return [
       '$location',
-      '$filter'
+      '$filter',
+      '$cookies',
+      '$http',
+      '$q'
     ];
   }
 
@@ -204,6 +207,56 @@ export class appService {
 		}
 		return endpoint;
 	}
+	
+	_downloadFile(url) {
+		let headers = {};
+		let useraccount = this.di.$cookies.get('useraccount');
+    let crypto = require('crypto-js');
+    let decodeBytes = crypto.AES.decrypt(useraccount.toString(), 'secret');
+    let decodeData = decodeBytes.toString(crypto.enc.Utf8);
+    let username = JSON.parse(decodeData).user_name;
+    let password = JSON.parse(decodeData).password;
+    
+    headers['Authorization'] = "Basic " + window.btoa(username + ':' + password);
+		
+		let deferred = this.di.$q.defer();
+		this.di.$http.get(url,{responseType: 'arraybuffer', headers: headers})
+			.then((result, status, headers) => {
+				deferred.resolve(result.data);
+			}, (data, status) => {
+			  console.error("Request failed with status: " + status);
+				deferred.reject('Error:' + status);
+		})
+		
+		return deferred.promise;
+  }
+  
+	downloadFileWithAuth(url, filename, type) {
+		filename = filename || 'download_file';
+		type = type || 'text|plain';
+		
+		let deferred = this.di.$q.defer();
+    this._downloadFile(url).then((data) => {
+      // generate file
+      let file = new Blob([data], { type: type});
+	    let fileURL = window.URL.createObjectURL(file);
+	    deferred.resolve();
+	    
+	    // download file
+	    let a = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      a.href = fileURL;
+      a.download = filename;
+      a.click();
+      a.remove();
+    }, (error) => {
+	    console.error('Error:Failed to download file.');
+      deferred.reject('Error:Failed to download file.');
+    });
+		
+		return deferred.promise;
+  }
   
   getLoginUrl() {
     // return this.getZoneEndpoint(true) + '/j_security_check';
