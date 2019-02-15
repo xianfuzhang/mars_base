@@ -8,74 +8,82 @@
         <div class="flex_entirety__body__body dashboard__body">
             <div class="mars-row dashboard-summary" ng-show="!panelLoading.controller">
               <div class="mars-row-flex">
-                <div class="mars-col-6 col-gutter-md summary-item">
-                  <div class="mdc-card panel-widget panel-blue-bg-white margin-right-16 margin-left-8">
-                    <div class="widget-left">
-                      <i class="material-icons md-48">zoom_out_map</i>
-                    </div>
-                    <div class="widget-right">
-                      <div class="widget-top">
-                        <div class="large">{{dashboardModel.controllerSummary.count}}</div>
-                        <div class="medium">控制器</div>
+                <div class="mars-col-12 summary-row">
+                  <div class="mars-row-flex">
+                    <div class="mars-col-12 col-gutter-md summary-item">
+                      <div class="mdc-card panel-widget panel-blue-bg-white margin-right-16 margin-left-8">
+                        <div class="widget-left">
+                          <i class="material-icons md-48">zoom_out_map</i>
+                        </div>
+                        <div class="widget-right">
+                          <div class="widget-top">
+                            <div class="large">{{dashboardModel.controllerSummary.count}}</div>
+                            <div class="medium">控制器</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div class="mars-col-6 col-gutter-md summary-item">
-                  <div class="mdc-card panel-widget panel-orange-bg-white">
-                    <div class="widget-left">
-                      <i class="material-icons md-48">shuffle</i>
-                    </div>
-                    <div class="widget-right">
-                      <div class="widget-top">
-                        <div class="large">{{dashboardModel.switchSummary.spineCount}}</div>
-                        <div class="medium">Spine</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mars-col-6 col-gutter-md summary-item">
-                  <div class="mdc-card panel-widget panel-green-bg-white margin-right-16 margin-left-48">
-                    <div class="widget-left">
-                      <i class="material-icons md-48">swap_vert</i>
-                    </div>
-                    <div class="widget-right">
-                      <div class="widget-top">
-                        <div class="large">{{dashboardModel.switchSummary.leafCount}}</div>
-                        <div class="medium">Leaf</div>
+                    <div class="mars-col-12 col-gutter-md summary-item">
+                      <div class="mdc-card panel-widget panel-orange-bg-white">
+                        <div class="widget-left">
+                          <i class="material-icons md-48">shuffle</i>
+                        </div>
+                        <div class="widget-right">
+                          <div class="widget-top">
+                            <div class="large">{{dashboardModel.switchSummary.spineCount}}</div>
+                            <div class="medium">Spine</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="mars-col-6 col-gutter-md summary-item">
-                  <div class="mdc-card panel-widget panel-teal-bg-white">
-                    <div class="widget-left">
-                      <div class="material-icon-left-container panel-material-red">
-                        <i class="material-icons md-30">zoom_out_map</i>
-                      </div>
-                      <div class="material-icon-left-container panel-material-yellow">
-                        <i class="material-icons md-34">swap_horiz</i>
-                      </div>
-                      <div class="material-icon-left-container panel-material-red">
-                        <i class="material-icons md-34">swap_horiz</i>
-                      </div>
-                    </div>
-                    <div class="widget-right">
-                      <div class="material-icon-right-container">
-                        <div class="large">{{dashboardModel.controllerSummary.inactives.length}}</div>
-                        <div class="small margin-left-8">异常控制器</div>
-                      </div>
-                      <div class="material-icon-right-container">
-                        <div class="large">{{dashboardModel.switchSummary.unknownCount}}</div>
-                        <div class="small margin-left-8">待加入交换机</div>
-                      </div>
-                      <div class="material-icon-right-container">
-                        <div class="large">{{dashboardModel.switchSummary.unavailableCount}}</div>
-                        <div class="small margin-left-8">异常交换机</div>
+                <div class="mars-col-12 summary-row">
+                  <div class="mars-row-flex">
+                    <div class="mars-col-12 col-gutter-md summary-item">
+                      <div class="mdc-card panel-widget panel-green-bg-white margin-right-16 margin-left-48">
+                        <div class="widget-left">
+                          <i class="material-icons md-48">swap_vert</i>
+                        </div>
+                        <div class="widget-right">
+                          <div class="widget-top">
+                            <div class="large">{{dashboardModel.switchSummary.leafCount}}</div>
+                            <div class="medium">Leaf</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
+                    <div class="mars-col-12 col-gutter-md summary-item">
+                      <div class="mdc-card panel-widget panel-teal-bg-white">
+                        <div class="widget-left">
+                          <div class="material-icon-left-container panel-material-red">
+                            <i class="material-icons md-30">zoom_out_map</i>
+                          </div>
+                          <div class="material-icon-left-container panel-material-yellow">
+                            <i class="material-icons md-34">swap_horiz</i>
+                          </div>
+                          <div class="material-icon-left-container panel-material-red">
+                            <i class="material-icons md-34">swap_horiz</i>
+                          </div>
+                        </div>
+                        <div class="widget-right">
+                          <div class="material-icon-right-container">
+                            <div class="large">{{dashboardModel.controllerSummary.inactives.length}}</div>
+                            <div class="small margin-left-8">异常控制器</div>
+                          </div>
+                          <div class="material-icon-right-container">
+                            <div class="large">{{dashboardModel.switchSummary.unknownCount}}</div>
+                            <div class="small margin-left-8">待加入交换机</div>
+                          </div>
+                          <div class="material-icon-right-container">
+                            <div class="large">{{dashboardModel.switchSummary.unavailableCount}}</div>
+                            <div class="small margin-left-8">异常交换机</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>  
                   </div>
-                </div>  
+                </div>
               </div>
             </div>
             <div class="mars-row" ng-if="isAnalyzeEnable">
@@ -208,8 +216,7 @@
                     </mar-section>
                 </div>
               </div>  
-            </div>
-            
+            </div> 
         </div>
     </div>
     <loading></loading>

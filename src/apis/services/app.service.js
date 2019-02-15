@@ -27,7 +27,7 @@ export class appService {
       // LIVE_WEBSOCKETS_ENDPONT_PORT: 3233,
 	    MOCKED_MESSAGE_WEBSOCKETS_ENDPONT: 'ws://localhost:3001/mars/websock',
 	    LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/mars/websock/',
-	    // LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://210.63.204.28/mars/websock/',
+	    // LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://210.63.204.29/mars/websock/',
       
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
@@ -126,7 +126,7 @@ export class appService {
       NOCSYS_APP: 'com.nocsys',
       CRYPTO_STRING: 'secret',
       DEFAULT_FILENAME: 'startup_netcfg.cfg',// default configuration file name
-	    MAX_MESSAGES_NUMBER: 50
+	    MAX_MESSAGES_NUMBER: 100
     };
     this.loginRole = 1;
     this.roleFilterMenu = [];

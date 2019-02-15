@@ -97,8 +97,8 @@ export class headerController{
 		  messages.splice(0, 0, this.formatMessage(message));
 		
 		  this.scope.hasUnreadMsg = true;
-		  if(messages.length > this.di.appService.MAX_MESSAGES_NUMBER) {
-			  this.scope.messages = messages.slice(0, this.di.appService.MAX_MESSAGES_NUMBER);
+		  if(messages.length > this.di.appService.CONST.MAX_MESSAGES_NUMBER) {
+			  this.scope.messages = messages.slice(0, this.di.appService.CONST.MAX_MESSAGES_NUMBER);
       }
 	    
       this.scope.$apply();
@@ -133,8 +133,8 @@ export class headerController{
 	  const THIS = this;
 	
 	  // get devices
-	  THIS.di.deviceDataManager.getDevices().then((res) => {
-		  THIS.devices = res.data.devices;
+	  THIS.di.deviceDataManager.getDeviceConfigs().then((res) => {
+		  THIS.devices = res;
 	  }, () => {
 		  THIS.devices = [];
 	  }).finally(() => {
@@ -292,7 +292,11 @@ export class headerController{
 				return val.id === deviceId
 			})
 			
-			return device ? device.annotations.name : deviceId;
+			if(device && device.name) {
+				return device.name
+			} else {
+				return deviceId
+			}
 		}
 		
 		switch(message.event) {
@@ -319,8 +323,8 @@ export class headerController{
 				dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
 				msg.title += '新增link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
 				msg.path = {
-					url: '/devices/' + device,
-					query: {link_port: port}
+					url: '/devices/' + srcDevice,
+					query: {link_port: srcPort}
 				};
 				break;
 			case 'linkRemoved':
@@ -340,7 +344,7 @@ export class headerController{
 			case 'overThreshold':
 				msg.title += '告警 - ' + message.payload.rule_name + ':' + message.payload.msg;
 				msg.path = {
-					url: '/alert/' + device,
+					url: '/alert',
 					query: {uuid: message.payload.uuid}
 				};
 				break;
