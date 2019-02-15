@@ -342,11 +342,10 @@ export class SegmentMemberEstablishController {
               _formatLogicalPort(_ports);
               let logical_ports = scope.logical_ports[scope.selected.vlanDevice.value];
               scope.trunkDisplayLabel.options = logical_ports?logical_ports:[];
-
-              scope.vlanDeviceDisplayLabel.options = this.di._.sortBy(this.di._.map(scope._phyPorts[scope.selected.vlanDevice.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
-                return {'label': String(portNum), 'value': String(portNum)}
-              });
             }
+            scope.vlanDeviceDisplayLabel.options = this.di._.sortBy(this.di._.map(scope._phyPorts[scope.selected.vlanDevice.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
+              return {'label': String(portNum), 'value': String(portNum)}
+            });
           } else if(param.type === 'vxlan'){
             if(data){
               if(data['name']){
