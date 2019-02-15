@@ -99,7 +99,7 @@ export class LogicalDataManager{
       },
       (error) => {
         this.di.$log.error(error);
-        defer.resolve(error);
+        defer.reject(error);
       }
     );
     return defer.promise;
