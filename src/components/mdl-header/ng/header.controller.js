@@ -133,8 +133,8 @@ export class headerController{
 	  const THIS = this;
 	
 	  // get devices
-	  THIS.di.deviceDataManager.getDevices().then((res) => {
-		  THIS.devices = res.data.devices;
+	  THIS.di.deviceDataManager.getDeviceConfigs().then((res) => {
+		  THIS.devices = res;
 	  }, () => {
 		  THIS.devices = [];
 	  }).finally(() => {
@@ -292,8 +292,8 @@ export class headerController{
 				return val.id === deviceId
 			})
 			
-			if(device && device.annotations) {
-				return device.annotations.name
+			if(device && device.name) {
+				return device.name
 			} else {
 				return deviceId
 			}
