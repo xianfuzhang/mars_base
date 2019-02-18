@@ -56,7 +56,17 @@ function configRouterfunction ($routeProvider,
     if (!useraccount) {
       $cookies.remove('useraccount');
       window.localStorage.removeItem('menus');
-      $location.path('/login');
+
+      let url = $location.path();
+      let search = $location.search();
+
+      if(url !== '/'){
+        url = window.btoa(url);
+        search = window.btoa(JSON.stringify(search));
+        $location.path('/login').search({lastp: url,lasts:search});
+      } else {
+        $location.path('/login');
+      }
       deferred.reject();
     }
     else if (useraccount && !exists) {
@@ -304,7 +314,17 @@ function configHttpProvider($httpProvider){
           return config;
         } else {
           if (!useraccount) {
-            $location.path('/login');
+            // $location.path('/login');
+            let url = $location.path();
+            let search = $location.search();
+            if(url !== '/'){
+              url = window.btoa(url);
+              search = window.btoa(JSON.stringify(search));
+              $location.path('/login').search({lastp: url, lasts: search});
+            } else {
+              $location.path('/login');
+            }
+
             return $q.reject(config);
           }
           else{

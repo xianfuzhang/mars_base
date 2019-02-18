@@ -98,7 +98,27 @@ export class LoginController {
                 'role': role, 
                 'groups': this.di.appService.roleFilterMenu
               });
-            this.di.$location.path('/');
+
+            let query = this.di.$location.search();
+
+            if(query.lastp !== undefined) {
+              try{
+                let _path = window.atob(query.lastp);
+                let _search = JSON.parse(window.atob(query.lasts));
+                this.di.$location.path(_path).search({port:'1'});
+              } catch(e){
+                this.di.$location.path('/');
+              }
+
+              this.di.$location.path(window.atob(query.lastp)).search({});
+            }else {
+              this.di.$location.path('/');
+            }
+            // if(this.scope.lastPage){
+            //   this.di.$location.path(this.scope.lastPage);
+            // } else {
+            //   this.di.$location.path('/');
+            // }
           } else {
             this.scope.showBrowserMsg = true;
             this.scope.loginModel.errorMessage = this.di.loginService.validateErrorMsg(res ? res.status : null);
