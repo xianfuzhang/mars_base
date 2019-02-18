@@ -161,7 +161,7 @@
       height: 100%;
       width: 567px;
       background: #282828;
-      //box-sizing: border-box;
+      box-sizing: border-box;
       overflow: auto;
   
       @include state(single) {
