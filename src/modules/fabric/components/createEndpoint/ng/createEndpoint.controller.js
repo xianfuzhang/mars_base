@@ -23,7 +23,7 @@ export class CreateEndpointController {
     this.scope.addedReceiverModel = [];
     this.scope.model = {
       mac: null,
-      vlan: null,
+      segment: null,
       ip: null,
       ip_hint: false,
       location_hint: false,
@@ -53,11 +53,10 @@ export class CreateEndpointController {
         required: 'true'
       }
     };
-  
-    this.scope.deviceSelect = {
-      'hint': this.translate('MODULES.ENDPOINT.CREATE.LOCATION.DEVICE'),
-      'options': this.di.dataModel.devices
-    }
+    this.scope.segmentSelect = {
+      'hint': 'Segment',//this.translate('MODULES.ENDPOINT.CREATE.TENANT'),
+      'options': this.di.dataModel.segments
+    };
     this.scope.canceled = false;
     this.scope.ipIndex = 0;
     this.scope.locationIndex = 0;
@@ -89,26 +88,75 @@ export class CreateEndpointController {
     };
 
     this.scope.addLocation = () =>{
+      let devices = [], ports = [],
+        segment = this.scope.model.segment.label,
+        segmentLocations = angular.copy(this.di.dataModel.locations[segment]);
+
+      /*for(let i =0; i< this.scope.addedReceiverModel.length; i++) {
+        if (this.scope.addedReceiverModel[i]['type'] === 'location') {
+          let addedDeviceId = this.scope.addedReceiverModel[i]['device']['value'],
+            addedDevicePort = this.scope.addedReceiverModel[i]['port']['value'],
+            index = segmentLocations[addedDeviceId].indexOf(addedDevicePort);
+          if (index > -1) {
+            segmentLocations[addedDeviceId].splice(index, 1);
+          }
+        }
+      }*/
+      for(let key in segmentLocations) {
+        if (segmentLocations[key].length > 0) {
+          devices.push({
+            'label': this.di.dataModel.devices[key] || key,
+            'value': key
+          });  
+        }
+      }
+      if (devices.length === 0) return;
+
+      segmentLocations[devices[0]['value']].forEach((port) => {
+        ports.push({
+          'label': port,
+          'value': port
+        });
+      });
+
       this.scope.addedReceiverModel.push(
         {
           'type':'location', 
           'label': this.translate('MODULES.ENDPOINT.CREATE.BUTTON.LOCATION'),
-          'location': this.di.dataModel.devices[0],
-          'port': null,
-          'portHelper': {
-            'id': 'portHelper' + this.scope.locationIndex,
-            'validation': 'false',
-            'content': this.translate('MODULES.ENDPOINT.CREATE.FORM.PORT.HELP')
+          'device': devices[0],
+          'port': ports[0],
+          'deviceOptions': {
+            'hint': this.translate('MODULES.ENDPOINT.CREATE.LOCATION.DEVICE'),
+            'options': devices
           },
-          'portDisplayLabel': {
-            'id': 'port'  + this.scope.locationIndex,
-            'hint': this.translate('MODULES.ENDPOINT.CREATE.FORM.PORT'),
-            'type': 'text',
-            'required': 'true'
+          'portOptions': {
+            'hint': this.translate('MODULES.ENDPOINT.CREATE.LOCATION.PORT'),
+            'options': ports
           }
         }
       );
       this.scope.locationIndex++;
+    };
+
+    this.scope.changeSegment = (value) => {
+      //console.log('change segment...' + value);
+      if (this.scope.addedReceiverModel.length > 0) {
+        this.scope.addedReceiverModel = [];
+      }
+      this.scope.ipIndex = 0;
+      this.scope.locationIndex = 0;
+    };
+
+    this.scope.changeDevice = (value, receiver) => {
+      let deviceId = value.value, port = null, portOptions = [];
+      this.di.dataModel.locations[this.scope.model.segment.label][deviceId].forEach((port) => {
+        portOptions.push({
+          'label': port,
+          'value': port
+        });
+      });
+      receiver.portOptions.options = portOptions;
+      receiver.port = portOptions[0];
     };
 
     this.scope.cancel = (event) => {
@@ -130,13 +178,6 @@ export class CreateEndpointController {
       else {
         this.scope.model.macHelper.validation = 'false';
       }
-      if (!this.scope.model.vlan || this.regExp('int', this.scope.model.vlan)){
-        this.scope.model.vlanHelper.validation = 'true';
-        invalid = true;
-      }
-      else {
-        this.scope.model.vlanHelper.validation = 'false';
-      }
       if (invalid || this.validateIPLocation()) {
         return;
       }
@@ -147,16 +188,20 @@ export class CreateEndpointController {
           ips.push(this.scope.addedReceiverModel[i].ip);
         }
         else if (this.scope.addedReceiverModel[i].type === 'location') {
-          locations.push({
-            'elementId': this.scope.addedReceiverModel[i].location.value, 
-            'port': this.scope.addedReceiverModel[i].port
-          });
+          let location = {
+            'device_id': this.scope.addedReceiverModel[i].device.value, 
+            'port': this.scope.addedReceiverModel[i].port.value
+          };
+          if (this.di._.findIndex(locations, {'device_id': location.device_id, 'port': location.port}) === -1) {
+            locations.push(location);  
+          }
         }
       }
       let data = {
+        tenant: this.scope.model.segment.value.tenant,
         mac: this.scope.model.mac,
-        vlan: this.scope.model.vlan,
-        ipAddresses: ips,
+        segment: this.scope.model.segment.value.segment,
+        ip_addresses: ips,
         locations: locations
       };
       this.di.$modalInstance.close({
@@ -184,15 +229,6 @@ export class CreateEndpointController {
       }
       else {
         ips[i].ipHelper.validation = 'false';
-      }
-    }
-    for(let j=0; j< locations.length; j++) {
-      if (!locations[j].port || this.regExp('positive_int', locations[j].port)) {
-        locations[j].portHelper.validation = 'true';
-        invalid = true;
-      }
-      else {
-        locations[j].portHelper.validation = 'false';
       }
     }
     return invalid;

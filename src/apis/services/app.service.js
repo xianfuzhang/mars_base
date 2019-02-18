@@ -347,7 +347,7 @@ export class appService {
   }
 
   getEndPointsUrl() {
-    return this.getZoneEndpoint() + '/hosts';
+    return this.getZoneEndpoint(true) + '/endpoint/v1';
   }
 
   // getDeleteEndpointUrl(tenant, segment, mac) {
