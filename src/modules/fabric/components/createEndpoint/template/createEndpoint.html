@@ -5,16 +5,13 @@
   </div>
   <form class="endpoint__form" name="model.endpointForm" autocomplete="off" novalidate>
   	<div class="column-manipulation-field__content">
+      <div class="column-manipulation-field__item">
+        <mdl-select ng-model="model.segment" display-label="segmentSelect" ng-change="changeSegment($value)"></mdl-select>
+      </div>
   		<div class="column-manipulation-field__item">
         <mdl-text ng-model="model.mac"
                   helper="model.macHelper"
                   display-label="model.macDisplayLabel">
-        </mdl-text>
-      </div>
-      <div class="column-manipulation-field__item">
-        <mdl-text ng-model="model.vlan"
-                  helper="model.vlanHelper"
-                  display-label="model.vlanDisplayLabel">
         </mdl-text>
       </div>
       <div class="column-manipulation-field__item">
@@ -36,10 +33,9 @@
               </mdl-text>
           </div>
           <div ng-if="receiver.type == 'location'">
-              <mdl-select ng-model="receiver.location" display-label="deviceSelect"></mdl-select>
-              <mdl-text ng-model="receiver.port"
-                  helper="receiver.portHelper"
-                  display-label="receiver.portDisplayLabel"></mdl-text>
+              <mdl-select ng-model="receiver.device" display-label="receiver.deviceOptions"
+                          ng-change="changeDevice($value, receiver)"></mdl-select>
+              <mdl-select ng-model="receiver.port" display-label="receiver.portOptions"></mdl-select>
           </div>
         </div>
       </div>
