@@ -52,15 +52,15 @@ export class ConfigurationHistoryController {
     this.scope.downloadFile = () => {
       if (this.scope.historyFileSelected.value == '') return false;
 	
-      let url = this.di.appService.getConfigurationHistoryFilesUrl() + `/${this.scope.historyFileSelected.value}`;
+      this.di.$window.location.href = this.di.appService.getConfigurationHistoryFilesUrl() + `/${this.scope.historyFileSelected.value}`;
 	
-	    let DI = this.di;
-	    DI.$rootScope.$emit('start_loading');
-	    DI.appService.downloadFileWithAuth(url, this.scope.historyFileSelected.value).then(() => {
-		    DI.$rootScope.$emit('stop_loading');
-	    }, () => {
-		    DI.$rootScope.$emit('stop_loading');
-	    });
+	    // let DI = this.di;
+	    // DI.$rootScope.$emit('start_loading');
+	    // DI.appService.downloadFileWithAuth(url, this.scope.historyFileSelected.value).then(() => {
+		  //   DI.$rootScope.$emit('stop_loading');
+	    // }, () => {
+		  //   DI.$rootScope.$emit('stop_loading');
+	    // });
     }
     
     this.scope.onAPIReady = ($api) => {
