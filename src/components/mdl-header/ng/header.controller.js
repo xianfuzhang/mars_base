@@ -116,7 +116,17 @@ export class headerController{
     this.scope.menus = this.di.localStoreService.getSyncStorage().get('menus');
     let useraccount = this.di.$cookies.get('useraccount');
     if (!useraccount || !this.scope.menus) {
-      this.di.$location.path('/login');
+
+      let url = this.di.$location.path();
+      let search = this.di.$location.search();
+      if(url !== '/'){
+        url = window.btoa(url);
+        search = window.btoa(JSON.stringify(search));
+        this.di.$location.path('/login').search({lastp: url, lasts: search});
+      } else {
+        this.di.$location.path('/login');
+      }
+      // this.di.$location.path('/login');
       return;
     }
     let decodeBytes = this.di.crypto.AES.decrypt(useraccount.toString(), this.di.appService.CONST.CRYPTO_STRING);
