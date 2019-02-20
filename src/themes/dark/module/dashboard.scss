@@ -290,20 +290,33 @@
 }
 
 .dashboard .mar_section__header{
-  background-color: lightgray;
+  background-color: #171819;
+  color: #d8d9da;
+  border-bottom: 1px solid #000;
 }
 
 .dashboard .mar_section__body{
-  background-color: lightgray;
+  background-color: #171819;
 }
 
 .mar_section__header .mdc-select.mdc-select__no-label > .mdc-select__native-control {
   padding-top: 0;
-  color: #4C4C4C;
+  color: #d8d9da;
   border-bottom-color: whitesmoke;
 }
 
 .dashboard .mdc-select.mdc-select__no-label > .mdc-select__native-control{
-  color: #4C4C4C;
+  color: #d8d9da;
 }
+
+.c3 svg {
+  background: #171819;
+}
+.c3 text {
+  stroke: #fff;
+  stroke-width: .65px;
+}
+//.c3 path, .c3 line {
+//  stroke: #fff !important;
+//}
 

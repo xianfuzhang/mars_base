@@ -37,6 +37,14 @@ export class splineChart {
           columns: data,
           type: 'spline'
         },
+	      grid: {
+		      y: {
+			      show: true
+		      }
+	      },
+	      zoom: {
+		      enabled: true
+	      },
         color: {
           pattern: ['#0077cb', '#c78500', '#009f0e', '#008e7f', '#34314c']
         },

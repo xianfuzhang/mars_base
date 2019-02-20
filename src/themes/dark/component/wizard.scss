@@ -11,7 +11,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  color: #fff;
+  color: map_get($colors, body_color);
   background: rgba(0,0,0,.7);
   z-index: 1000;
   overflow: hidden;
@@ -92,6 +92,7 @@
     height: 40px;
     line-height: 40px;
     padding: 5px 0;
+    color: #fff;
     border-bottom: 1px solid #777;
     background-color: #7accef;
 
@@ -162,6 +163,7 @@
       width: 567px;
       background: #282828;
       box-sizing: border-box;
+      //box-sizing: border-box;
       overflow: auto;
   
       @include state(single) {
@@ -215,7 +217,7 @@
 
     @include element(btn) {
       display: inline-block;
-      margin: 10px 5px 0;
+      margin: 7px 5px 0;
     }
   }
 }
@@ -257,7 +259,7 @@
       border: 1px solid darkgray;
       box-sizing: border-box;
       border-radius: 5px;
-      background-color: lightgray;
+      background-color: map_get($colors, input_background_color);
     }
     
     @include element(text-prefix) {
