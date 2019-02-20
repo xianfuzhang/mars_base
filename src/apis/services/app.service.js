@@ -20,6 +20,7 @@ export class appService {
     this.CONST = {
       MOCKED_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
       LIVE_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
+	    LIVE_ZONE_ENDPOINT_AUTH: '[%__PROTOCOL__%]://[%__USERNAME__%]:[%__PASSWORD__%]@[%__ZONE_IP__%]/' + this.versionUrl,
       MOCKED_WEBSOCKETS_ENDPONT: 'ws://localhost:3001/',
       //logstash/ 最后的斜杠是不能去掉的，否则无法正常代理
       LIVE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/logstash/',
@@ -157,7 +158,7 @@ export class appService {
     this.roleFilterMenu = menu;
   }
 
-  getZoneEndpoint(isComponent) {
+  getZoneEndpoint(isComponent, isAuth) {
     let endpoint;
     if (this.isMocked) {
       endpoint = this.CONST.MOCKED_ZONE_ENDPOINT.replace('[%__ZONE_IP__%]',
@@ -165,9 +166,23 @@ export class appService {
       endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
     }
     else {
-      endpoint = this.CONST.LIVE_ZONE_ENDPOINT.replace('[%__ZONE_IP__%]',
-        (this.di.$location.host() + ":" + this.di.$location.port()));
-      endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
+      if(isAuth === true) {
+	      let useraccount = this.di.$cookies.get('useraccount');
+	      let crypto = require('crypto-js');
+	      let decodeBytes = crypto.AES.decrypt(useraccount.toString(), 'secret');
+	      let decodeData = decodeBytes.toString(crypto.enc.Utf8);
+	      let username = JSON.parse(decodeData).user_name;
+	      let password = JSON.parse(decodeData).password;
+	
+	      endpoint = this.CONST.LIVE_ZONE_ENDPOINT_AUTH.replace('[%__USERNAME__%]', username);
+	      endpoint = endpoint.replace('[%__PASSWORD__%]', password);
+	      endpoint = endpoint.replace('[%__ZONE_IP__%]', (this.di.$location.host() + ":" + this.di.$location.port()));
+	      endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
+      } else {
+	      endpoint = this.CONST.LIVE_ZONE_ENDPOINT.replace('[%__ZONE_IP__%]',
+		      (this.di.$location.host() + ":" + this.di.$location.port()));
+	      endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
+      }
     }
 
     if (isComponent) {
@@ -391,7 +406,7 @@ export class appService {
   }
 
   getConfigurationHistoryFilesUrl() {
-    return this.getZoneEndpoint(true) + '/utility/confighistory/v1/files';
+    return this.getZoneEndpoint(true, true) + '/utility/confighistory/v1/files';
   }
 
   getAlertHistoryUrl() {
@@ -454,7 +469,7 @@ export class appService {
   }
 
   getLogFilesUrl() {
-    return this.getZoneEndpoint(true) + '/utility/logs/v1/controller/files';
+    return this.getZoneEndpoint(true, true) + '/utility/logs/v1/controller/files';
   }
 
   getClusterUrl() {
@@ -552,7 +567,14 @@ export class appService {
   }
   
   getDownloadFileUrl(filename) {
-    return this.di.$location.protocol() + '://' + this.di.$location.host() + ":" + this.di.$location.port() + `/download/${filename}`;
+	  let useraccount = this.di.$cookies.get('useraccount');
+	  let crypto = require('crypto-js');
+	  let decodeBytes = crypto.AES.decrypt(useraccount.toString(), 'secret');
+	  let decodeData = decodeBytes.toString(crypto.enc.Utf8);
+	  let username = JSON.parse(decodeData).user_name;
+	  let password = JSON.parse(decodeData).password;
+	  
+    return this.di.$location.protocol() + `://${username}:${password}@` + this.di.$location.host() + ":" + this.di.$location.port() + `/download/${filename}`;
   }
 
   getPFCUrl(deviceId){
