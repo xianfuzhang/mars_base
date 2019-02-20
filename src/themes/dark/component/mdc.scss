@@ -183,7 +183,7 @@
 }
 
 .mdc-card {
-  color: #d8d9da;
+  color: map_get($colors, body_color);
 }
 .mdc-text-field__input.no-floating-label{
   padding-top: 0;

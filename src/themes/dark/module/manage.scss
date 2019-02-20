@@ -9,7 +9,7 @@
 
 .dhcp .mar_section{
   background-color: transparent;
-  color: white;
+  color: map_get($colors, body_color);
 }
 
 
@@ -106,7 +106,7 @@
   margin-right: 15px;
   font-size:14px;
   font-weight:bold;
-  color: #fff;
+  color: map_get($colors, body_color);
 }
 .elasticsearch-form .conditions .date-input {
   width:90%;
@@ -127,7 +127,7 @@
   margin-right: 15px;
   font-size: 14px;
   font-weight: bold;
-  color: #fff;
+  color: map_get($colors, body_color);
 }
 
 .elasticsearch-csv-file .conditions .label .must{

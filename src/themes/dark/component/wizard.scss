@@ -141,17 +141,18 @@
         //background: -ms-linear-gradient(left,#ECF0F0,#BCBCBC);
         //background: linear-gradient(left,#ECF0F0,#BCBCBC);
         border-bottom: 1px solid #666666;
-        color: #fff;
+        color: map_get($colors, body_color);
         white-space: nowrap;
         overflow: hidden;
         cursor: pointer;
 
         &:hover {
-          background-color: #808080;
+          background-color: #101010;
         }
 
         @include state(active) {
-          background-color: #808080;
+          background-color: #000;
+          color: #fff;
         }
       }
     }
@@ -305,7 +306,7 @@
 }
 
 .wizard__body .mdc-form-field > label {
-  color: #fff;
+  color: map_get($colors, body_color);
 }
 
 .wizard__body .mdc-radio .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background .mdc-radio__outer-circle {

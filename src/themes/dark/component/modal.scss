@@ -156,5 +156,5 @@
 }
 
 .modalWizard .jsoneditor-field, .jsoneditor-value {
-  color: #ffffff;
+  color: map_get($colors, body_color);
 }
