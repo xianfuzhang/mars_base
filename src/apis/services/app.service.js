@@ -667,6 +667,39 @@ export class appService {
     return this.getZoneEndpoint() + '/tenants/v1/pvid';
   }
 
+  getTenantLogicalRouteUrl(tenant){
+    return this.getZoneEndpoint(true) + '/tenantlogicalrouter/v1/tenants/' + tenant;
+  }
+
+  getTenantLogicalRouteDeleteUrl(tenant, route_name){
+    return this.getZoneEndpoint(true) + `/tenantlogicalrouter/v1/tenants/${tenant}/${route_name}`;
+  }
+
+  getTenantLogicalPolicyRouteUrl(tenant, route_name){
+    return this.getZoneEndpoint(true) + `/tenantlogicalrouter/v1/tenants/${tenant}/tenantlogicalrouter/${route_name}/policy-route`;
+  }
+
+  getTenantLogicalPolicyRouteWithNameUrl(tenant, route_name, policy_route_name){
+    return this.getZoneEndpoint(true) + `/tenantlogicalrouter/v1/tenants/${tenant}/tenantlogicalrouter/${route_name}/policy-route/${policy_route_name}`;
+  }
+
+
+  getTenantLogicalStaticRouteUrl(tenant, route_name){
+    return this.getZoneEndpoint(true) + `/tenantlogicalrouter/v1/tenants/${tenant}/tenantlogicalrouter/${route_name}/static-route`;
+  }
+
+  getTenantLogicalStaticRouteWithNameUrl(tenant, route_name, static_route_name){
+    return this.getZoneEndpoint(true) + `/tenantlogicalrouter/v1/tenants/${tenant}/tenantlogicalrouter/${route_name}/static-route/${static_route_name}`;
+  }
+
+  getTenantLogicalNexthopUrl(tenant, route_name){
+    return this.getZoneEndpoint(true) + `/tenantlogicalrouter/v1/tenants/${tenant}/tenantlogicalrouter/${route_name}/nexthop-group`;
+  }
+
+  getTenantLogicalNexthopWithNameUrl(tenant, route_name, nexthop_group_name){
+    return this.getZoneEndpoint(true) + `/tenantlogicalrouter/v1/tenants/${tenant}/tenantlogicalrouter/${route_name}/nexthop-group/${nexthop_group_name}`;
+  }
+
   getCosListUrl(){
     return this.getZoneEndpoint(true) + "/qos/cos/v1";
   }

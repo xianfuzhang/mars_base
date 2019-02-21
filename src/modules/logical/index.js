@@ -15,6 +15,9 @@ import {CosEstablishController} from './component/cos_establish/ng/cosEstablish.
 import {EcnEstablishController} from './component/ecn_establish/ng/ecnEstablish.controller';
 import {EGPGroupEstablishController} from './component/epg_establish/ng/group.controller';
 import {EGPPolicyEstablishController} from './component/epg_establish/ng/policy.controller';
+import {RouteEstablishController} from './component/route_establish/ng/routeEstablish.controller';
+import {StaticRouteEstablishController} from './component/staticroute_establish/ng/staticrouteEstablish.controller';
+import {NexthopEstablishController} from './component/nexthop_establish/ng/nexthopEstablish.controller';
 
 export default angular
   .module('logical', [])
@@ -31,4 +34,7 @@ export default angular
   .controller('ecnEstablishCtrl', EcnEstablishController)
   .controller('epgGroupEstablishCtrl', EGPGroupEstablishController)
   .controller('egpPolicyEstablishCtrl', EGPPolicyEstablishController)
+  .controller('routeEstablishController', RouteEstablishController)
+  .controller('staticRouteEstablishController', StaticRouteEstablishController)
+  .controller('nexthopEstablishController', NexthopEstablishController)
   .name;

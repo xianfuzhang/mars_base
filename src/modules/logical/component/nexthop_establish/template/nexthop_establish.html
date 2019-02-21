@@ -1,0 +1,21 @@
+<div class="staticroute_establish">
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.STATICROUTE.COLUMN.NAME'|translate}}</div>
+        <valid-input v-require="true" ng-model="nexthopEsModel.name" v-rpcid="page_nexthop_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input multiple_ip">
+        <div class="stepForm__input__label">IP Address</div>
+        <valid-input style="width:90%;display:inline-block;" ng-model="nexthopEsModel.ip_address" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>
+        <div class="add-btn" ng-click="addIPAddress()">
+            <i class="material-icons">add</i>
+        </div>
+        <div class="" style="margin-top:5px;" ng-show="nexthopEsModel.ip_addresses.length">
+            <div class="types-label" ng-repeat="ip in nexthopEsModel.ip_addresses">
+                <span ng-bind="ip"></span>
+                <span class="removeBtn" ng-click="removeSelectedIP(ip)">-</span>
+            </div>
+        </div>
+    </div>
+
+</div>

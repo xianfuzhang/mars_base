@@ -40,6 +40,11 @@ export class logicalService {
         'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.TAB.SCHEMA.SEGMENT'),
         'value': 'segment',
         'type': 'segment'
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.TAB.SCHEMA.ROUTE'),
+        'value': 'route',
+        'type': 'route'
       }
     ];
   }
@@ -119,6 +124,170 @@ export class logicalService {
       }
     ];
   }
+
+  getTenantPolicyRouteSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.NAME'),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.INGRESS_SEGMENTS'),
+        'field': 'ingressegments',
+        'layout': {'visible': true, 'sortable': true},
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.INGRESS_PORTS'),
+        'field': 'ingress_ports',
+        'layout': {'visible': true, 'sortable': true},
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.ACTION'),
+        'field': 'action',
+        'layout': {'visible': true, 'sortable': true},
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.SEQUENCE_NO'),
+        'field': 'sequenceNo',
+        'layout': {'visible': true, 'sortable': true},
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.PROTOCOLS'),
+        'field': 'protocol',
+        'layout': {'visible': true, 'sortable': true},
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.MATCH_IP'),
+        'field': 'matchIp',
+        'layout': {'visible': true, 'sortable': true},
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.NEXTHOP'),
+        'field': 'nextHop',
+        'layout': {'visible': true, 'sortable': true},
+      }
+    ];
+  }
+
+  getTenantPolicyRouteActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 2},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getTenantPolicyRouteRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
+        'role': 2,
+        'value': 'edit'
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ];
+  }
+
+
+  getTenantStaticRouteSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.STATICROUTE.COLUMN.NAME'),
+        'field': 'name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.STATICROUTE.COLUMN.DEST'),
+        'field': 'dest',
+        'layout': {'visible': true, 'sortable': true},
+      },
+      // {
+      //   'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.STATICROUTE.COLUMN.PREFIX_LEN'),
+      //   'field': 'prefixLen',
+      //   'layout': {'visible': true, 'sortable': true},
+      // },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.STATICROUTE.COLUMN.NEXT_HOP'),
+        'field': 'nexthop_group',
+        'layout': {'visible': true, 'sortable': true},
+      }
+    ];
+  }
+
+  getTenantStaticRouteActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 2},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getTenantStaticRouteRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
+        'role': 2,
+        'value': 'edit'
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ];
+  }
+
+  getTenantNextHopGroupSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.NEXTHOPGROUP.COLUMN.NEXTHOP_GROUP_NAME'),
+        'field': 'nexthop_group_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.NEXTHOPGROUP.COLUMN.IP_ADDRESSES'),
+        'field': 'ip_addresses',
+        'layout': {'visible': true, 'sortable': true},
+      }
+    ];
+  }
+
+  getTenantNextHopGroupActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 2},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getTenantNextHopGroupRowActions() {
+    return [
+      // {
+      //   'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
+      //   'role': 2,
+      //   'value': 'edit'
+      // },
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ];
+  }
+
+
+
 
   getSegmentVlanSchema() {
     return [

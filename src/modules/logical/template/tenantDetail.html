@@ -6,45 +6,139 @@
     <span>{{'MODULE.HEADER.LOGICAL.TENANT' | translate}}</span>
   </content-header>
   <section class="app-body tenant-detail">
-    <div class="section-3-2">
-      <div class="main__content">
-        <mdl-tabs ng-model="tabSelected" options="tabs"
-                  class-list="main__content__device-detail-tabs"
-                  on-select="onTabChange($value)">
-        </mdl-tabs>
-        <section class="tab-content" ng-if="tabSelected.type == 'segment'">
-          <mdl-table actions-show="detailModel.actionsShow"
-                    actions="detailModel.rowActions"
-                    row-select-action="onTableRowSelectAction($event)"
-                    row-click="onTableRowClick($event)"
-                    provider="detailModel.provider" api-ready="onApiReady($api)"
-                    on-add="addSegment()" on-remove="batchRemove($value)">
-          </mdl-table>
-        </section>
+    <div class="main__content">
+      <mdl-tabs ng-model="tabSelected" options="tabs"
+                class-list="main__content__device-detail-tabs"
+                on-select="onTabChange($value)">
+      </mdl-tabs>
+      <div style="display:flex;height:100%" ng-if="tabSelected.type == 'segment'">
+        <div class="section-3-2">
+          <div class="main__content">
+            <section class="tab-content">
+              <mdl-table actions-show="detailModel.actionsShow"
+                         actions="detailModel.rowActions"
+                         row-select-action="onTableRowSelectAction($event)"
+                         row-click="onTableRowClick($event)"
+                         provider="detailModel.provider" api-ready="onApiReady($api)"
+                         on-add="addSegment()" on-remove="batchRemove($value)">
+              </mdl-table>
+            </section>
+          </div>
+        </div>
+        <div class="section-3-1" ng-if="tabSelected.type === 'segment' && segment">
+          <div class="segment-detail">
+            <h3 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.TITLE'|translate"></h3>
+            <div class="segment-vlan-member" ng-show="segment.type === 'vlan'">
+              <h4 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.VLAN.TITLE'|translate"></h4>
+              <mdl-table actions-show="segmentModel.actionsShow"
+                         provider="segmentModel.vlanProvider" api-ready="onVlanApiReady($api)">
+              </mdl-table>
+            </div>
+            <div class="segment-vxlan-member" ng-show="segment.type === 'vxlan'">
+              <h4 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.VXLAN.TITLE'|translate"></h4>
+              <mdl-table actions-show="segmentModel.actionsShow"
+                         provider="segmentModel.vxlanProvider" api-ready="onVxlanApiReady($api)">
+              </mdl-table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;height:100%;overflow-y:auto;" ng-if="tabSelected.type == 'route'">
+        <div style="display: flex;flex-direction:column;width:100%;height:100%;">
+          <div style="min-width:300px;max-width:500px;margin-bottom: 10px;margin-top:10px;">
+            <mar-section s-title="路由详情" no-fold="true" class="detail_summary">
+              <transclude-body>
+                <div style="margin-bottom: 10px;">
+                  <span class="route_item">
+                    <label class="route_item_label">路由名称:</label>
+                    <span class="route_item_value">{{tenantRouteModel.name}}</span>
+                  </span>
+                  <span class="route_item">
+                    <label class="route_item_label">Segments白名单:</label>
+                    <span class="route_item_value">{{tenantRouteModel.segments}}</span>
+                  </span>
+                </div>
+                <div style="text-align: right;">
+                  <mar-button btn-id="'save_tenant_router'" btn-text="::'MODULES.LOGICAL.TENANT.DETAIL.BUTTON.SETTINGS' | translate" btn-style="'height:33px;'" btn-icon="'settings'" btn-click="routeSetting()" ></mar-button>
+                  <mar-button btn-id="'clear_tenant_router'" btn-text="::'MODULES.LOGICAL.TENANT.DETAIL.BUTTON.CLEAR' | translate" btn-style="'height:33px;'" btn-icon="'clear'"  btn-click="clearRouteSetting()" ></mar-button>
+                </div>
+
+              </transclude-body>
+            </mar-section>
+          </div>
+          <div style="display: flex;flex-direction: row;width:100%;height:100%;">
+
+
+            <div style="margin-right:20px;">
+              <div style="min-width:400px;max-width:600px;margin-bottom: 20px;">
+                <mar-section s-title="静态路由" no-fold="true" class="detail_summary">
+                  <transclude-body>
+                    <mdl-table actions-show="detailModel.actionsShow4static"
+                               actions="detailModel.rowActions4static"
+                               row-select-action="onTableRowSelectAction4static($event)"
+                               row-click="onTableRowClick4static($event)"
+                               provider="detailModel.provider4static" api-ready="onApiReady4static($api)"
+                               on-add="addStaticRoute()" on-remove="batchRemove4static($value)">
+                    </mdl-table>
+                  </transclude-body>
+                </mar-section>
+              </div>
+              <div style="min-width:400px;max-width:600px;">
+                <mar-section s-title="NextHop组" no-fold="true" class="detail_summary">
+                  <transclude-body>
+                    <mdl-table actions-show="detailModel.actionsShow4nexthop"
+                               actions="detailModel.rowActions4nexthop"
+                               row-select-action="onTableRowSelectAction4nexthop($event)"
+                               row-click="onTableRowClick4nexthop($event)"
+                               provider="detailModel.provider4nexthop" api-ready="onApiReady4nexthop($api)"
+                               on-add="addNexthopGroup()" on-remove="batchRemove4nexthop($value)">
+                    </mdl-table>
+                  </transclude-body>
+                </mar-section>
+              </div>
+
+            </div>
+
+            <div>
+              <div style="min-width:600px;max-width:800px;">
+                <mar-section s-title="策略路由" no-fold="true" class="detail_summary">
+                  <transclude-body>
+                    <mdl-table actions-show="detailModel.actionsShow4policy"
+                               actions="detailModel.rowActions4policy"
+                               row-select-action="onTableRowSelectAction4policy($event)"
+                               row-click="onTableRowClick4policy($event)"
+                               provider="detailModel.provider4policy" api-ready="onApiReady4policy($api)"
+                               on-add="addPolicyRoute()" on-remove="batchRemove4policy($value)">
+                    </mdl-table>
+                  </transclude-body>
+                </mar-section>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="section-3-1" ng-if="tabSelected.type === 'segment' && segment">
-      <div class="segment-detail">
-        <h3 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.TITLE'|translate"></h3>
-        <div class="segment-vlan-member" ng-show="segment.type === 'vlan'">
-          <h4 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.VLAN.TITLE'|translate"></h4>
-          <mdl-table actions-show="segmentModel.actionsShow"
-                    provider="segmentModel.vlanProvider" api-ready="onVlanApiReady($api)">
-          </mdl-table>
-        </div>
-        <div class="segment-vxlan-member" ng-show="segment.type === 'vxlan'">
-          <h4 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.VXLAN.TITLE'|translate"></h4>
-          <mdl-table actions-show="segmentModel.actionsShow"
-                    provider="segmentModel.vxlanProvider" api-ready="onVxlanApiReady($api)">
-          </mdl-table>
-        </div>
-      </div>
-    </div>
+
   </section>
 
   <ng-controller ng-controller="segmentEstablishController">
     <wizard></wizard>
   </ng-controller>
+
+  <ng-controller ng-controller="routeEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+  <ng-controller ng-controller="staticRouteEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+  <ng-controller ng-controller="nexthopEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+
 
 
 </div>
