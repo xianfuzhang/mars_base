@@ -47,7 +47,7 @@ export class StaticRouteEstablishController {
     scope.nexthopGroupDisplayLabel = {'options':[]}
 
     scope.showWizard = false;
-    scope.title = this.translate('MODULES.LOGICAL.STATICROUTE.ADD');
+    scope.title = this.translate('MODULES.LOGICAL.TENANT.STATICROUTE.ADD');
     scope.steps = [
       {
         id: 'step1',

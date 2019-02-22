@@ -44,8 +44,8 @@
         </div>
       </div>
 
-      <div style="display:flex;height:100%;overflow-y:auto;" ng-if="tabSelected.type == 'route'">
-        <div style="display: flex;flex-direction:column;width:100%;height:100%;">
+      <div style="display:flex;height:100%;flex-direction:column;width:100%;overflow-y:auto;" ng-if="tabSelected.type == 'route'">
+        <!--<div style="display: flex;flex-direction:column;width:100%;height:100%;overflow-y:auto;">-->
           <div style="min-width:300px;max-width:500px;margin-bottom: 10px;margin-top:10px;">
             <mar-section s-title="路由详情" no-fold="true" class="detail_summary">
               <transclude-body>
@@ -60,18 +60,32 @@
                   </span>
                 </div>
                 <div style="text-align: right;">
-                  <mar-button btn-id="'save_tenant_router'" btn-text="::'MODULES.LOGICAL.TENANT.DETAIL.BUTTON.SETTINGS' | translate" btn-style="'height:33px;'" btn-icon="'settings'" btn-click="routeSetting()" ></mar-button>
-                  <mar-button btn-id="'clear_tenant_router'" btn-text="::'MODULES.LOGICAL.TENANT.DETAIL.BUTTON.CLEAR' | translate" btn-style="'height:33px;'" btn-icon="'clear'"  btn-click="clearRouteSetting()" ></mar-button>
+                  <mar-button ng-if="!tenantRouteModel.name" btn-id="'save_tenant_router'" btn-text="::'MODULES.LOGICAL.TENANT.DETAIL.BUTTON.SETTINGS' | translate" btn-style="'height:33px;'" btn-icon="'settings'" btn-click="routeSetting()" ></mar-button>
+                  <mar-button ng-if="tenantRouteModel.name" btn-id="'clear_tenant_router'" btn-text="::'MODULES.LOGICAL.TENANT.DETAIL.BUTTON.CLEAR' | translate" btn-style="'height:33px;'" btn-icon="'clear'"  btn-click="clearRouteSetting()" ></mar-button>
                 </div>
 
               </transclude-body>
             </mar-section>
           </div>
-          <div style="display: flex;flex-direction: row;width:100%;height:100%;">
+          <div style="display: flex;flex-direction: column;width:100%;height:100%;" ng-if="tenantRouteModel.name">
 
-
-            <div style="margin-right:20px;">
-              <div style="min-width:400px;max-width:600px;margin-bottom: 20px;">
+            <div style="margin-bottom: 20px;">
+              <div style="min-width:800px;max-width:1200px;">
+                <mar-section s-title="策略路由" no-fold="true" class="detail_summary">
+                  <transclude-body>
+                    <mdl-table actions-show="detailModel.actionsShow4policy"
+                               actions="detailModel.rowActions4policy"
+                               row-select-action="onTableRowSelectAction4policy($event)"
+                               row-click="onTableRowClick4policy($event)"
+                               provider="detailModel.provider4policy" api-ready="onApiReady4policy($api)"
+                               on-add="addPolicyRoute()" on-remove="batchRemove4policy($value)">
+                    </mdl-table>
+                  </transclude-body>
+                </mar-section>
+              </div>
+            </div>
+            <div style="margin-bottom:20px;">
+              <div style="min-width:400px;max-width:600px;margin-bottom: 20px;margin-right:20px;display: inline-block">
                 <mar-section s-title="静态路由" no-fold="true" class="detail_summary">
                   <transclude-body>
                     <mdl-table actions-show="detailModel.actionsShow4static"
@@ -84,7 +98,7 @@
                   </transclude-body>
                 </mar-section>
               </div>
-              <div style="min-width:400px;max-width:600px;">
+              <div style="min-width:400px;max-width:600px;display: inline-block">
                 <mar-section s-title="NextHop组" no-fold="true" class="detail_summary">
                   <transclude-body>
                     <mdl-table actions-show="detailModel.actionsShow4nexthop"
@@ -100,23 +114,9 @@
 
             </div>
 
-            <div>
-              <div style="min-width:600px;max-width:800px;">
-                <mar-section s-title="策略路由" no-fold="true" class="detail_summary">
-                  <transclude-body>
-                    <mdl-table actions-show="detailModel.actionsShow4policy"
-                               actions="detailModel.rowActions4policy"
-                               row-select-action="onTableRowSelectAction4policy($event)"
-                               row-click="onTableRowClick4policy($event)"
-                               provider="detailModel.provider4policy" api-ready="onApiReady4policy($api)"
-                               on-add="addPolicyRoute()" on-remove="batchRemove4policy($value)">
-                    </mdl-table>
-                  </transclude-body>
-                </mar-section>
-              </div>
-            </div>
+
           </div>
-        </div>
+        <!--</div>-->
       </div>
     </div>
 
@@ -138,7 +138,7 @@
     <wizard></wizard>
   </ng-controller>
 
-
-
-
+  <ng-controller ng-controller="policyRouteEstablishController">
+    <wizard></wizard>
+  </ng-controller>
 </div>

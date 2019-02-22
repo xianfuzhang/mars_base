@@ -46,7 +46,7 @@ export class NexthopEstablishController {
     scope.nexthopGroupDisplayLabel = {'options':[]}
 
     scope.showWizard = false;
-    scope.title = this.translate('MODULES.LOGICAL.nexthop.ADD');
+    scope.title = this.translate('MODULES.LOGICAL.TENANT.NEXTHOP.ADD');
     scope.steps = [
       {
         id: 'step1',

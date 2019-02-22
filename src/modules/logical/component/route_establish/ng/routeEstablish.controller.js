@@ -165,7 +165,7 @@ export class RouteEstablishController {
         'name': scope.routeEsModel.name,
         'interfaces': scope.routeEsModel.segments,
       }
-    }
+    };
     scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
 
@@ -176,6 +176,12 @@ export class RouteEstablishController {
         });
       }
 
+      if(scope.routeEsModel.segments.length === 0){
+        return new Promise((resolve, reject) => {
+          inValidJson_Copy.errorMessage = '请至少选择一个Segment';
+          resolve(inValidJson_Copy);
+        });
+      }
 
       let postJson = getSubmitJson();
 

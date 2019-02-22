@@ -134,13 +134,13 @@ export class logicalService {
       },
       {
         'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.INGRESS_SEGMENTS'),
-        'field': 'ingressegments',
+        'field': 'ingress_segments',
         'layout': {'visible': true, 'sortable': true},
       },
       {
         'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.INGRESS_PORTS'),
         'field': 'ingress_ports',
-        'layout': {'visible': true, 'sortable': true},
+        'layout': {'visible': true, 'sortable': true, 'width':'200px'},
       },
       {
         'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.ACTION'),
@@ -149,22 +149,22 @@ export class logicalService {
       },
       {
         'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.SEQUENCE_NO'),
-        'field': 'sequenceNo',
+        'field': 'sequence_no',
         'layout': {'visible': true, 'sortable': true},
       },
       {
         'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.PROTOCOLS'),
-        'field': 'protocol',
+        'field': 'protocols',
         'layout': {'visible': true, 'sortable': true},
       },
       {
         'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.MATCH_IP'),
-        'field': 'matchIp',
+        'field': 'match_ip',
         'layout': {'visible': true, 'sortable': true},
       },
       {
         'label': this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.NEXTHOP'),
-        'field': 'nextHop',
+        'field': 'nexthop',
         'layout': {'visible': true, 'sortable': true},
       }
     ];
@@ -233,11 +233,11 @@ export class logicalService {
 
   getTenantStaticRouteRowActions() {
     return [
-      {
-        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
-        'role': 2,
-        'value': 'edit'
-      },
+      // {
+      //   'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
+      //   'role': 2,
+      //   'value': 'edit'
+      // },
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
         'role': 2,

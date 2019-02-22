@@ -33,7 +33,6 @@ export class TenantDetail {
     this.scope.tabSelected = null;
     this.scope.segment = null;
     this.scope.deviceObjects = {};
-    this.scope.tabs = this.di.logicalService.getTenantDetailTabSchema();
     this.scope.detailModel = {
       provider: null,
       api: null,
@@ -62,13 +61,43 @@ export class TenantDetail {
       vxlanProvider: null
     };
     this.initActions();
+
+
+    let _proimises = [];
+    let tenantDefer = this.di.$q.defer();
+    let devicesDefer = this.di.$q.defer();
+
+    this.di.logicalDataManager.getTenants().then((res)=>{
+      let tenants = res.data.tenants;
+      tenants.forEach((tenant)=>{
+        if(tenant.name === this.scope.tenantName){
+          this.scope.tenantType = tenant.type;
+        }
+      });
+      if(this.scope.tenantType === 'System'){
+        this.scope.tabs = this.di.logicalService.getTenantDetailTabSchema();
+         this.di._.remove(this.scope.tabs, (tab)=>{
+           return tab.value === 'segment';
+         });
+      } else {
+        this.scope.tabs = this.di.logicalService.getTenantDetailTabSchema();
+      }
+      tenantDefer.resolve();
+    });
+    _proimises.push(tenantDefer.promise);
+
     this.di.deviceDataManager.getDeviceConfigs().then((devices) =>{
       devices.forEach((device) => {
         this.scope.deviceObjects[device.id] = device.name;
       });
+      devicesDefer.resolve();
+    });
+    _proimises.push(devicesDefer.promise);
+
+
+    this.di.$q.all(_proimises).then(() => {
       this.init();
     });
-
 
 
 
@@ -230,7 +259,7 @@ export class TenantDetail {
     };
 
     this.scope.addPolicyRoute = () => {
-      this.di.$rootScope.$emit('segment-wizard-show', this.scope.tenantName, '');
+      this.di.$rootScope.$emit('policyroute-wizard-show', this.scope.tenantName, this.scope.routeName);
     };
 
     this.scope.batchRemove4policy = (value) => {
@@ -330,26 +359,26 @@ export class TenantDetail {
 
   init() {
     this.scope.detailModel.provider = this.di.tableProviderFactory.createProvider({
-    query: (params) => {
-    let defer = this.di.$q.defer();
-    this.getEntities(params).then((res) => {
-      this.scope.tabSwitch = false;
-      this.entityStandardization(res.data);
-      defer.resolve({
-        data: this.scope.detailModel.entities
+      query: (params) => {
+      let defer = this.di.$q.defer();
+      this.getEntities(params).then((res) => {
+        this.scope.tabSwitch = false;
+        this.entityStandardization(res.data);
+        defer.resolve({
+          data: this.scope.detailModel.entities
+        });
+        this.selectEntity();
       });
-      this.selectEntity();
-    });
-    return defer.promise;
-    },
-    getSchema: () => {
-    return {
-      schema: this.scope.detailModel.schema,
-      index_name: this.getDataType().index_name,
-      rowCheckboxSupport: this.getDataType().rowCheckboxSupport,
-      rowActionsSupport: this.getDataType().rowActionsSupport,
-      authManage: this.getDataType().authManage
-    };
+      return defer.promise;
+      },
+      getSchema: () => {
+      return {
+        schema: this.scope.detailModel.schema,
+        index_name: this.getDataType().index_name,
+        rowCheckboxSupport: this.getDataType().rowCheckboxSupport,
+        rowActionsSupport: this.getDataType().rowActionsSupport,
+        authManage: this.getDataType().authManage
+      };
     }
   });
     this.scope.onTabChange(this.scope.tabs[0]);

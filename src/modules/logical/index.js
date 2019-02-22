@@ -18,6 +18,7 @@ import {EGPPolicyEstablishController} from './component/epg_establish/ng/policy.
 import {RouteEstablishController} from './component/route_establish/ng/routeEstablish.controller';
 import {StaticRouteEstablishController} from './component/staticroute_establish/ng/staticrouteEstablish.controller';
 import {NexthopEstablishController} from './component/nexthop_establish/ng/nexthopEstablish.controller';
+import {PolicyRouteEstablishController} from './component/policyroute_establish/ng/policyrouteEstablish.controller';
 
 export default angular
   .module('logical', [])
@@ -37,4 +38,5 @@ export default angular
   .controller('routeEstablishController', RouteEstablishController)
   .controller('staticRouteEstablishController', StaticRouteEstablishController)
   .controller('nexthopEstablishController', NexthopEstablishController)
+  .controller('policyRouteEstablishController', PolicyRouteEstablishController)
   .name;

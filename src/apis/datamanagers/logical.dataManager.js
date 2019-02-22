@@ -485,6 +485,20 @@ export class LogicalDataManager{
     return defer.promise;
   }
 
+  getTenantLogicalPolicyRouteByName(tenant_name, route_name, policy_route_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantLogicalPolicyRouteWithNameUrl(tenant_name, route_name, policy_route_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
   postTenantLogicalPolicyRoute(tenant_name, route_name, param){
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getTenantLogicalPolicyRouteUrl(tenant_name, route_name), param).then(

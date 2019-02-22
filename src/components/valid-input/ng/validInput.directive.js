@@ -63,6 +63,8 @@ export class validInput {
           message = this.translate('MODULES.REGEX.FLOW_ADD.VLAN')
         } else if (type === 'ipv4_mask'){
           message = this.translate('MODULES.REGEX.FLOW_ADD.IPV4_MASK')
+        } else if (type === 'ipv4_mask_or_not'){
+          message = this.translate('MODULES.REGEX.FLOW_ADD.IPV4_MASK_OR_NOT')
         } else if (type === 'port'){
           message = this.translate('MODULES.REGEX.FLOW_ADD.PORT')
         }
@@ -88,6 +90,8 @@ export class validInput {
           regex = '^\d$|^[1-9]+[0-9]*$';
         } else if (type === 'ipv4_mask'){
           regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/([0-9]|[1-2][0-9]|3[0-2])$';
+        } else if (type === 'ipv4_mask_or_not'){
+          regex = '^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/([0-9]|[1-2][0-9]|3[0-2]))|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
         } else if (type === 'port') {
           regex = '^[1-9]$|^[1-9][0-9]$';
         }
