@@ -386,33 +386,49 @@ export class TenantDetail {
 
   _initRoute(){
     this.di.logicalDataManager.getLoigcalRouteByTenant(this.scope.tenantName).then((res)=>{
-      // let _router = res.data.routers;
-      // scope.tenantRouteModel = {
-      //   name: _router.name,
-      //   segments: ', '.join(_router.interfaces)
-      // }
-      //TODO wls 后期恢复成上面的数据获取方式
-      let keys = this.di._.keys(res.data);
-      if(keys.length > 0 &&  res.data[keys[0]].length > 0){
-        let _router =  res.data[keys[0]][0];
-        this.scope.tenantRouteModel = {
-          name: _router.name,
-          segments: _router.interfaces.join(', ')
+      let routers = res.data.routers;
+      if(routers.length > 0){
+        let _router =  routers[0];
+        if(this.scope.tenantType === 'Normal'){
+          this.scope.tenantRouteModel = {
+            name: _router.name,
+            segments: _router.interfaces.join(', ')
+          }
+        } else {
+          this.scope.tenantRouteModel = {
+            name: _router.name,
+            tenant_routers: _router.tenant_routers.join(', ')
+          }
         }
+
         this.scope.routeName = this.scope.tenantRouteModel.name;
+
       } else {
-        this.scope.tenantRouteModel = {
-          name: '',
-          segments: ''
+        if(this.scope.tenantType === 'Normal') {
+          this.scope.tenantRouteModel = {
+            name: '',
+            segments: ''
+          }
+        }else {
+          this.scope.tenantRouteModel = {
+            name: '',
+            tenant_routers: ''
+          }
         }
         this.scope.routeName = null;
       }
 
-
-      this.scope.detailModel.api4policy.queryUpdate();
-      this.scope.detailModel.api4static.queryUpdate();
-      this.scope.detailModel.api4nexthop.queryUpdate();
-
+      if(this.scope.detailModel.api4policy){
+        this.scope.detailModel.api4policy.queryUpdate();
+      }
+      if(this.scope.detailModel.api4static){
+        this.scope.detailModel.api4static.queryUpdate();
+      }
+      if(this.scope.detailModel.api4nexthop){
+        this.scope.detailModel.api4nexthop.queryUpdate();
+      }
+      // this.scope.detailModel.api4static.queryUpdate();
+      // this.scope.detailModel.api4nexthop.queryUpdate();
     },(err)=>{
     });
   }
@@ -427,7 +443,7 @@ export class TenantDetail {
     this._initRoute();
 
     this.scope.routeSetting = () =>{
-      this.di.$rootScope.$emit('route-wizard-show', this.scope.tenantName)
+      this.di.$rootScope.$emit('route-wizard-show', this.scope.tenantName, this.scope.tenantType)
     };
 
     this.scope.clearRouteSetting = () =>{

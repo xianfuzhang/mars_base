@@ -667,6 +667,10 @@ export class appService {
     return this.getZoneEndpoint() + '/tenants/v1/pvid';
   }
 
+  getTenantLogicalAllRouteUrl(){
+    return this.getZoneEndpoint(true) + '/tenantlogicalrouter/v1';
+  }
+
   getTenantLogicalRouteUrl(tenant){
     return this.getZoneEndpoint(true) + '/tenantlogicalrouter/v1/tenants/' + tenant;
   }

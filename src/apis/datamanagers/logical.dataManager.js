@@ -429,6 +429,20 @@ export class LogicalDataManager{
     return defer.promise;
   }
 
+  getLoigcalAllRoute(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantLogicalAllRouteUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
   getLoigcalRouteByTenant(tenant_name){
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getTenantLogicalRouteUrl(tenant_name)).then(
@@ -442,6 +456,7 @@ export class LogicalDataManager{
     );
     return defer.promise;
   }
+
 
   postLoigcalRouteByTenant(tenant_name, param){
     let defer = this.di.$q.defer();

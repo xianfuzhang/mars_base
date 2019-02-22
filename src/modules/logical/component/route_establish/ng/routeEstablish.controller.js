@@ -56,23 +56,28 @@ export class RouteEstablishController {
     ];
     scope.isEdit = false;
 
-    this.di.$scope.open = (tenant) => {
+    this.di.$scope.open = (tenant, tenantType) => {
       if(scope.showWizard) return;
 
       scope.routeEsModel = {
         name :null,
         curSegment:null,
         segments:[],
-        segmentDisplayLabel : []
+        tenantRouters: [],
+        segmentDisplayLabel : {options:[]},
+        tenantRouterDisplayLabel: {options:[]}
       };
 
       scope.tenantName = tenant;
+      scope.tenantType = tenantType;
 
       let segmentDefer = this.di.$q.defer();
       let routeDefer = this.di.$q.defer();
+      let allrouteDefer = this.di.$q.defer();
       let promises = [];
       let _segments = [];
       let _router = [];
+      let _allRouters = [];
 
       this.di.logicalDataManager.getTenantSegments(tenant).then((res)=>{
         _segments = res.data.tenantSegments;
@@ -81,6 +86,14 @@ export class RouteEstablishController {
         segmentDefer.reject(err)
       });
       promises.push(segmentDefer.promise);
+
+      this.di.logicalDataManager.getLoigcalAllRoute().then((res)=>{
+        _allRouters = res.data.routers;
+        allrouteDefer.resolve();
+      },(err)=>{
+        allrouteDefer.reject(err)
+      });
+      promises.push(allrouteDefer.promise);
 
       this.di.logicalDataManager.getLoigcalRouteByTenant(tenant).then((res)=>{
         // _router = res.data.routers;
@@ -97,9 +110,16 @@ export class RouteEstablishController {
 
       Promise.all(promises).then(()=>{
         scope.routeEsModel.segmentDisplayLabel.options = [];
+        scope.routeEsModel.tenantRouterDisplayLabel.options = [];
         _segments.forEach((segment)=>{
           if(segment.type === 'vlan')
             scope.routeEsModel.segmentDisplayLabel.options.push({'label':segment.name, 'value': segment.name})
+        });
+
+        _allRouters.forEach((router)=>{
+          if(router.interfaces && Array.isArray(router.interfaces) && router.interfaces.length > 0){
+            scope.routeEsModel.tenantRouterDisplayLabel.options.push({'label':router.tenant + '/' + router.name, 'value': router.tenant + '/' + router.name})
+          }
         });
 
         if(_router.length > 0){
@@ -110,6 +130,7 @@ export class RouteEstablishController {
           })
         }
         scope.routeEsModel.curSegment = scope.routeEsModel.segmentDisplayLabel.options[0];
+        scope.routeEsModel.curTenantRouter = scope.routeEsModel.tenantRouterDisplayLabel.options[0];
         scope.showWizard = true;
         scope.$apply();
       })
@@ -145,7 +166,8 @@ export class RouteEstablishController {
       scope.routeEsModel.segments.push(scope.routeEsModel.curSegment.value);
       this.di._.remove(scope.routeEsModel.segmentDisplayLabel.options, (item)=>{
         return scope.routeEsModel.curSegment.value === item.value;
-      })
+      });
+
       if(scope.routeEsModel.segmentDisplayLabel.options.length > 0)
         scope.routeEsModel.curSegment = scope.routeEsModel.segmentDisplayLabel.options[0];
     };
@@ -160,11 +182,38 @@ export class RouteEstablishController {
     };
 
 
+    scope.addTenantRouter = () =>{
+      scope.routeEsModel.tenantRouters.push(scope.routeEsModel.curTenantRouter.value);
+      this.di._.remove(scope.routeEsModel.tenantRouterDisplayLabel.options, (item)=>{
+        return scope.routeEsModel.curTenantRouter.value === item.value;
+      });
+
+      if(scope.routeEsModel.tenantRouterDisplayLabel.options.length > 0)
+        scope.routeEsModel.curTenantRouter = scope.routeEsModel.tenantRouterDisplayLabel.options[0];
+    };
+
+    scope.removeSelectedTenantRouter = (tenantRouter) => {
+      scope.routeEsModel.tenantRouterDisplayLabel.options.push({'label':tenantRouter, 'value':tenantRouter});
+      this.di._.remove(scope.routeEsModel.tenantRouters, (item)=>{
+        return tenantRouter === item;
+      });
+      if(scope.routeEsModel.tenantRouterDisplayLabel.options.length > 0)
+        scope.routeEsModel.curTenantRouter = scope.routeEsModel.tenantRouterDisplayLabel.options[0];
+    };
+
     let getSubmitJson = ()=> {
-      return {
-        'name': scope.routeEsModel.name,
-        'interfaces': scope.routeEsModel.segments,
+      if(scope.tenantType === 'Normal'){
+        return {
+          'name': scope.routeEsModel.name,
+          'interfaces': scope.routeEsModel.segments,
+        }
+      } else {
+        return {
+          'name': 'system',
+          'tenant_routers': scope.routeEsModel.tenantRouters,
+        }
       }
+
     };
     scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
@@ -176,12 +225,20 @@ export class RouteEstablishController {
         });
       }
 
-      if(scope.routeEsModel.segments.length === 0){
+      if(scope.tenantType === 'Normal' && scope.routeEsModel.segments.length === 0){
         return new Promise((resolve, reject) => {
           inValidJson_Copy.errorMessage = '请至少选择一个Segment';
           resolve(inValidJson_Copy);
         });
       }
+
+      if(scope.tenantType === 'System' && scope.routeEsModel.tenantRouters.length === 0){
+        return new Promise((resolve, reject) => {
+          inValidJson_Copy.errorMessage = '请至少选择一个路由';
+          resolve(inValidJson_Copy);
+        });
+      }
+
 
       let postJson = getSubmitJson();
 
@@ -206,8 +263,8 @@ export class RouteEstablishController {
       });
     };
 
-    unsubscribes.push(this.di.$rootScope.$on('route-wizard-show', ($event, tenant) => {
-      scope.open(tenant);
+    unsubscribes.push(this.di.$rootScope.$on('route-wizard-show', ($event, tenant, tenantType) => {
+      scope.open(tenant, tenantType);
     }));
 
     this.di.$scope.$on('$destroy', () => {

@@ -1,14 +1,14 @@
 <div class="route_establish">
 
 
-    <div class="stepForm__input">
-        <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT_MEMBER.TYPE'|translate}}</div>
+    <div class="stepForm__input" ng-if="tenantType == 'Normal'">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.ROUTER.LABEL.TENANT_ROUTER_NAME'|translate}}</div>
         <valid-input v-require="true" ng-model="routeEsModel.name" v-rpcid="page_route_es" ></valid-input>
     </div>
 
 
 
-    <div class="stepForm__input multiple_ip">
+    <div class="stepForm__input multiple_ip" ng-if="tenantType == 'Normal'">
         <div class="stepForm__input__label">Segments</div>
         <mdl-select ng-model="routeEsModel.curSegment" display-label="routeEsModel.segmentDisplayLabel" style="display: inline-block">
         </mdl-select>
@@ -19,6 +19,22 @@
             <div class="types-label" ng-repeat="segment in routeEsModel.segments">
                 <span ng-bind="segment"></span>
                 <span class="removeBtn" ng-click="removeSelectedSegment(segment)">-</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="stepForm__input multiple_ip" ng-if="tenantType == 'System'">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.ROUTER.LABEL.TENANT_AND_ROUTER'|translate}}</div>
+        <mdl-select ng-model="routeEsModel.curTenantRouter" display-label="routeEsModel.tenantRouterDisplayLabel" style="display: inline-block">
+        </mdl-select>
+        <div class="add-btn" ng-click="addTenantRouter()">
+            <i class="material-icons">add</i>
+        </div>
+        <div class="" style="margin-top:5px;" ng-show="routeEsModel.tenantRouters.length">
+            <div class="types-label" ng-repeat="tenantRouter in routeEsModel.tenantRouters">
+                <span ng-bind="tenantRouter"></span>
+                <span class="removeBtn" ng-click="removeSelectedTenantRouter(tenantRouter)">-</span>
             </div>
         </div>
     </div>
