@@ -77,6 +77,9 @@ export class DeviceController {
           if (event.data.type !== 'unknown') {
             filterActions.push(action);
           }
+          if(event.data.type === 'unknown' && action.value === 'delete'){
+            filterActions.push(action);
+          }
           /*if (event.data.isEnabled && action.value === 'disable') {
             filterActions.push(action);
           }
