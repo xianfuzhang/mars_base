@@ -428,6 +428,236 @@ export class LogicalDataManager{
     );
     return defer.promise;
   }
+
+  getLoigcalAllRoute(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantLogicalAllRouteUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  getLoigcalRouteByTenant(tenant_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantLogicalRouteUrl(tenant_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  postLoigcalRouteByTenant(tenant_name, param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getTenantLogicalRouteUrl(tenant_name), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteLoigcalRouteByTenant(tenant_name, route_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTenantLogicalRouteDeleteUrl(tenant_name, route_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  getTenantLogicalPolicyRoute(tenant_name, route_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantLogicalPolicyRouteUrl(tenant_name, route_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  getTenantLogicalPolicyRouteByName(tenant_name, route_name, policy_route_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantLogicalPolicyRouteWithNameUrl(tenant_name, route_name, policy_route_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  postTenantLogicalPolicyRoute(tenant_name, route_name, param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getTenantLogicalPolicyRouteUrl(tenant_name, route_name), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteTenantLogicalPolicyRoute(tenant_name, route_name, policy_route_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTenantLogicalPolicyRouteWithNameUrl(tenant_name, route_name, policy_route_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  getTenantLogicalStaticRoute(tenant_name, route_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantLogicalStaticRouteUrl(tenant_name, route_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  getTenantLogicalStaticRouteByName(tenant_name, route_name, static_route_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantLogicalStaticRouteWithNameUrl(tenant_name, route_name, static_route_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  postTenantLogicalStaticRoute(tenant_name, route_name, param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getTenantLogicalStaticRouteUrl(tenant_name, route_name), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteTenantLogicalStaticRoute(tenant_name, route_name, static_route_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTenantLogicalStaticRouteWithNameUrl(tenant_name, route_name, static_route_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  getTenantLogicalNexthopGroup(tenant_name, route_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantLogicalNexthopUrl(tenant_name, route_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  getTenantLogicalNexthopGroupByName(tenant_name, route_name, nexthopGroupName){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTenantLogicalNexthopWithNameUrl(tenant_name, route_name, nexthopGroupName)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  postTenantLogicalNexthopGroup(tenant_name, route_name, param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getTenantLogicalNexthopUrl(tenant_name, route_name), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteTenantLogicalNexthopGroup(tenant_name, route_name, nexthop_group_name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTenantLogicalNexthopWithNameUrl(tenant_name, route_name, nexthop_group_name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        this.di.$log.error(error);
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
 }
 
 LogicalDataManager.$inject = LogicalDataManager.getDI();

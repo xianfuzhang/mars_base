@@ -1,0 +1,77 @@
+<div class="policyroute_establish">
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.NAME'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-require="true" ng-model="policyRouteEsModel.name" v-rpcid="page_policyroute_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input multiple_ip">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.INGRESS_SEGMENTS'|translate}}</div>
+        <mdl-select ng-model="policyRouteEsModel.curSegment" display-label="segmentDisplayLabel" style="display: inline-block">
+        </mdl-select>
+        <div class="add-btn" ng-click="addSegment()">
+            <i class="material-icons">add</i>
+        </div>
+        <div class="" style="margin-top:5px;" ng-show="policyRouteEsModel.segments.length">
+            <div class="types-label" ng-repeat="segment in policyRouteEsModel.segments">
+                <span ng-bind="segment"></span>
+                <span class="removeBtn" ng-click="removeSelectedSegment(segment)">-</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="stepForm__input multiple_ip">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.INGRESS_PORTS'|translate}}</div>
+        <mdl-select ng-model="policyRouteEsModel.curDevice" display-label="deviceDisplayLabel" ng-change="deviceChange($value)"  style="display: inline-block;margin-right: 10px;">
+        </mdl-select>
+        <mdl-select ng-model="policyRouteEsModel.curPort" display-label="portDisplayLabel" style="display: inline-block">
+        </mdl-select>
+        <div class="add-btn" ng-click="addDevicePort()">
+            <i class="material-icons">add</i>
+        </div>
+
+        <div class="" style="margin-top:5px;" ng-show="policyRouteEsModel.ingress_ports.length">
+            <div class="types-label" ng-repeat="ingress_port in policyRouteEsModel.ingress_ports">
+                <span>{{ingress_port.device.label}}/{{ingress_port.port.label}}</span>
+                <span class="removeBtn" ng-click="removeSelectedDevicePort(ingress_port)">-</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.ACTION'|translate}}</div>
+        <mdl-select ng-model="policyRouteEsModel.action" display-label="actionDisplayLabel" style="display: inline-block">
+        </mdl-select>
+    </div>
+
+    <div class="stepForm__input multiple_ip">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.SEQUENCE_NO'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-require="true" ng-model="policyRouteEsModel.sequence_no" v-rpcid="page_policyroute_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.PROTOCOLS'|translate}}<span class="stepForm__input__required">*</span></div>
+        <div>
+            <mdl-checkbox ng-model="policyRouteEsModel.protocol.icmp" display-label="protocolDisplayLabel.icmpLabel">
+            </mdl-checkbox>
+            <mdl-checkbox ng-model="policyRouteEsModel.protocol.tcp" display-label="protocolDisplayLabel.tcpLabel">
+            </mdl-checkbox>
+            <mdl-checkbox ng-model="policyRouteEsModel.protocol.udp" display-label="protocolDisplayLabel.udpLabel">
+            </mdl-checkbox>
+        </div>
+    </div>
+
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.MATCH_IP'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-require="true" ng-model="policyRouteEsModel.match_ip" v-type="ipv4_mask_or_not" v-rpcid="page_policyroute_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.NEXTHOP'|translate}}<span class="stepForm__input__required" ng-if="policyRouteEsModel.action.value == 'permit'">*</span></div>
+        <valid-input v-require="true" ng-model="policyRouteEsModel.nexthop" v-type="ipv4" v-rpcid="page_policyroute_es" ></valid-input>
+    </div>
+
+
+
+</div>
