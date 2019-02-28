@@ -56,6 +56,18 @@ export class QoSController {
       this.di.notificationService.render(this.scope);
       this.scope.model.api.queryUpdate();
     }));
+
+    unsubscribers.push(this.di.$rootScope.$on('schedule-list-refresh',(event, params)=>{
+      let msg = this.translate('MODULES.LOGICAL.QOS.TAB.SCHEDULE.UPDATE.SUCCESS');
+      this.scope.alert = {
+        type: 'success',
+        msg: msg
+      }
+      this.di.notificationService.render(this.scope);
+      this.scope.model.api.queryUpdate();
+    }));
+
+
     this.scope.$on('$destroy', () => {
     });
   }
@@ -76,7 +88,10 @@ export class QoSController {
           break;
         case 'ecn':
           this.di.$rootScope.$emit('ecn-wizard-show', event.data);
-          break;  
+          break;
+        case 'schedule':
+          this.di.$rootScope.$emit('schedule-wizard-show', event.data);
+          break;
       }
     };
 
@@ -95,6 +110,10 @@ export class QoSController {
     this.scope.addECN = () => {
       this.di.$rootScope.$emit('ecn-wizard-show');
     };
+
+    // this.scope.addSchedule = () => {
+    //   this.di.$rootScope.$emit('schedule-wizard-show');
+    // };
   }
 
   init() {
@@ -142,6 +161,11 @@ export class QoSController {
           defer.resolve({'data': data});
         });
         break;
+      case 'schedule':
+        this.di.logicalDataManager.getScheduleList().then((data) => {
+          defer.resolve({'data': data});
+        });
+        break;
     }
     return defer.promise;
   }
@@ -166,7 +190,20 @@ export class QoSController {
           obj['threshold'] = entity.ecn_threshold;
           this.scope.model.entities.push(obj);
         });
-        break;  
+        break;
+      case 'schedule':
+        entities.forEach((entity)=>{
+          if(entity.name === 'bandwidth'){
+            entity.queue_weight.forEach((weight, index)=>{
+              let obj = {};
+              obj['id'] = index.toString();
+              obj['queue'] = index;
+              obj['weight'] = weight;
+              this.scope.model.entities.push(obj);
+            })
+          }
+
+        })
     }
   }
 
@@ -178,6 +215,9 @@ export class QoSController {
         break;
       case 'ecn':
         schema = this.di.logicalService.getQosEcnSchema();
+        break;
+      case 'schedule':
+        schema = this.di.logicalService.getScheduleSchema();
         break;
     }
     return schema;

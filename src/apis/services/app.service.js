@@ -734,6 +734,10 @@ export class appService {
     return this.getZoneEndpoint(true) + "/qos/ecn/v1";
   }
 
+  getScheduleListUrl(){
+    return this.getZoneEndpoint(true) + "/qos/scheduler/v1";
+  }
+
   getEGPGroupUrl(){
     return this.getZoneEndpoint(true) + "/egp/v1/group";
   }

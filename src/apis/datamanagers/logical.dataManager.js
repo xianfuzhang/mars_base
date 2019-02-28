@@ -312,6 +312,32 @@ export class LogicalDataManager{
     return defer.promise;
   }
 
+  getScheduleList(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getScheduleListUrl()).then(
+      (res) => {
+        defer.resolve(res.data.scheduler);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  putScheduleList(data){
+    let defer = this.di.$q.defer();
+    this.di.$http.put(this.di.appService.getScheduleListUrl(), data).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
+
   postCOS(params) {
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getCosListUrl(), params).then(
