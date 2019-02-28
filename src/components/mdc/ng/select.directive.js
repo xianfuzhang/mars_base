@@ -1,8 +1,8 @@
 export class mdlSelect {
   static getDI() {
     return [
+      '$window',
       '$compile',
-      '_',
       '$timeout'
     ];
   }
@@ -16,32 +16,28 @@ export class mdlSelect {
     this.restrict = 'E';
     this.template = require('../templates/select.html');
     this.scope = {
-      value: '=ngModel',
+      value: '=ngModel', //{'label': ***, 'value': ***, 'type': ***}type仅在iconSupport为true时存在
       displayLabel: '=',
       helper: '=',
       disable: '=',
+      iconSupport: '@',
       ngChange: '&',
-      valueChange: '&',
-      onInit: '&'
+      valueChange: '&'
     };
 
     this.link = (...args) => this._link.apply(this, args);
   }
 
   _link (scope, element, attrs, ngModel) {
-    let unSubscribes = [];
-    if (scope.disable) {
-      // angular.element(element.children()[0]).addClass('mdc-select--disabled');
-      // element.find('select').attr('disabled', true);
-      disable();
-    }
+    let clsReg = new RegExp('(\\s|^)selected(\\s|$)');;
+    scope.menuOpen = false;
+    scope.iconSupport = scope.iconSupport === 'true' ? true : false;
     scope.hint = scope.displayLabel && scope.displayLabel.hint;
     scope.options = scope.displayLabel && scope.displayLabel.options;
     if(scope.options){
       if(scope.value == null || typeof scope.value !== 'object'){
         scope.value = scope.options[0];
       }
-
     }
     if (scope.helper) {
       //scope.helpId = scope.helper.id;
@@ -53,57 +49,72 @@ export class mdlSelect {
       helperElement.addClass('mdc-text-field-helper-text--persistent');
     }
 
-    if (scope.value) {
-      element.find('label').addClass('mdc-floating-label--float-above');
-      element.find('div').addClass('mdc-line-ripple--active');
-    }
+    scope.toggleMenu = (event) => {
+      scope.menuOpen = !scope.menuOpen;
+      event.preventDefault();
+      event.stopPropagation();
+    };
 
-    scope.selectChange = () => {
-      element.find('label').addClass('mdc-floating-label--float-above');
-      element.find('div').addClass('mdc-line-ripple--active');
+    scope.changeSelect = (event, item) => {
+      let liElms = event.currentTarget.parentElement.children;
+      for(let i=0; i<liElms.length; i++) {
+        liElms[i].className = liElms[i].className.replace(clsReg, '');
+      }
+      event.currentTarget.className += ' selected';
+      scope.value = item;
       scope.ngChange = scope.ngChange || angular.noop;
       scope.ngChange({'$value': scope.value});
     };
 
-    function disable(){
-      angular.element(element.children()[0]).addClass('mdc-select--disabled');
-      element.find('select').attr('disabled', true);
-    }
-
-    function enable(){
-      angular.element(element.children()[0]).removeClass('mdc-select--disabled');
-      element.find('select').attr('disabled', false);
-    }
-
-    unSubscribes.push(scope.$watch('disable',(newValue)=>{
-      if(newValue === true){
-        disable();
-      } else {
-        enable();
-      }
-    }));
-
-    unSubscribes.push(scope.$watch('displayLabel.options',(newValue)=>{
-      // console.log(newValue);
-      // console.log(scope.displayLabel);
+    scope.$watch('displayLabel.options',(newValue)=>{
       scope.options = newValue;
-    }));
+    });
 
-    unSubscribes.push(scope.$watch('value',(newValue)=>{
+    scope.$watch('value',(newValue)=>{
       scope.valueChange = scope.valueChange || angular.noop;
       scope.valueChange();
-    }));
+    });
 
-    this.di.$timeout(function () {
-      if(scope.onInit){
-        scope.onInit();
+    this.di.$timeout(() => {
+      let compare = function (Obj_1, Obj_2) {
+        let state = true;
+        for (let key in Obj_1) {
+          if (typeof (Obj_2[key]) === 'undefined') {
+            state = false;
+          } 
+          else {
+            if (typeof (Obj_1[key]) === 'object') {
+              state = compare(Obj_1[key],Obj_2[key]);
+            } 
+            else {
+              if (Obj_1[key] !== Obj_2[key]) {
+                state = false;
+              }
+            }
+          }
+        }
+        return state;
+      };
+      let liNodes = element[0].querySelectorAll('.mdc-select-list-item');
+      for(let i=0; i<liNodes.length; i++) {
+        let index = parseInt(liNodes[i].getAttribute('index'));
+        if (compare(scope.options[index], scope.value)) {
+          liNodes[i].className += ' selected';
+        }
       }
-    })
+    });
+
+    let body = this.di.$window.document.querySelector('body');
+    let clickOutsideHandler = (event) => {
+      if (!element[0].contains(event.target)) {
+        scope.menuOpen = false;
+      }
+      scope.$evalAsync();
+    };
+    body.addEventListener('click', clickOutsideHandler, true);
 
     scope.$on('$destroy', () => {
-      this.di._.each(unSubscribes, (unSubscribe) => {
-        unSubscribe();
-      });
+      body.removeEventListener('click', clickOutsideHandler, true);
     });
   }
 }
