@@ -226,7 +226,7 @@ export class updateTableCols {
       //hard codeing 针对是否overflow显示不同样式
       let bodyHeight = bodyElm[0].clientHeight;
       let tableHeight = bodyElm.children()[0].clientHeight;
-      if (bodyHeight > tableHeight) {
+      if (bodyHeight >= tableHeight) {
         bodyElm[0].style.height = 'auto';
       }
       else {
@@ -279,7 +279,7 @@ export class updateTableCols {
         //hard codeing 针对是否overflow显示不同样式
         let bodyHeight = bodyElm[0].clientHeight;
         let tableHeight = bodyElm.children()[0].clientHeight;
-        if (bodyHeight > tableHeight) {
+        if (bodyHeight >= tableHeight) {
           bodyElm[0].style.height = 'auto';
         }
         else {

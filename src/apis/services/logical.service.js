@@ -60,6 +60,11 @@ export class logicalService {
         'label': this.translate('MODULES.LOGICAL.QOS.TAB.SCHEMA.ECN'),
         'value': 'ecn',
         'type': 'ecn'
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.QOS.TAB.SCHEMA.SCHEDULE'),
+        'value': 'schedule',
+        'type': 'schedule'
       }
     ];
   }
@@ -521,6 +526,42 @@ export class logicalService {
       }
     ];  
   }
+
+  getScheduleSchema() {
+    return [
+      {
+        'label': this.translate("MODULES.LOGICAL.SCHEDULE.TAB.POLICY.TABLE.QUEUE"),
+        'field': 'queue',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'30%'},
+      },
+      {
+        'label': this.translate("MODULES.LOGICAL.SCHEDULE.TAB.POLICY.TABLE.WEIGHT"),
+        'field': 'weight',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'60%'},
+      }
+    ];
+  }
+
+  getScheduleActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 3},
+      'add': {'enable': true, 'role': 3},
+      'remove': {'enable': false, 'role': 3},
+      'refresh': {'enable': true, 'role': 3},
+      'search': {'enable': false, 'role': 3}
+    };
+  }
+
+  getScheduleRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.LOGICAL.QOS.ROW.ACTION.UPDATE'),
+        'role': 3,
+        'value': 'update'
+      }
+    ];
+  }
+
 
   getEGPGroupSchema() {
     return [

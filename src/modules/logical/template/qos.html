@@ -30,6 +30,15 @@
                     on-add="addECN()">
           </mdl-table>
         </section>
+        <section class="tab-content" ng-if="tabSelected.type == 'schedule'">
+          <mdl-table actions-show="model.actionsShow"
+                     actions="model.rowActions"
+                     row-select-action="onTableRowSelectAction($event)"
+                     row-click="onTableRowClick($event)"
+                     provider="model.provider" api-ready="onApiReady($api)"
+                     on-add="addSchedule()">
+          </mdl-table>
+        </section>
       </div>
     </div>
   </section>
@@ -39,4 +48,9 @@
   <ng-controller class="ecn-wizard" ng-controller="ecnEstablishCtrl">
     <wizard></wizard>
   </ng-controller>
+
+  <ng-controller class="ecn-wizard" ng-controller="scheduleEstablishCtrl">
+    <wizard></wizard>
+  </ng-controller>
+
 </div>

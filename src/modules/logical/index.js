@@ -13,6 +13,7 @@ import {SegmentEstablishController} from './component/segment_establish/ng/Segme
 import {SegmentMemberEstablishController} from './component/segmentmember_establish/ng/segmentMemberEstablish.controller';
 import {CosEstablishController} from './component/cos_establish/ng/cosEstablish.controller';
 import {EcnEstablishController} from './component/ecn_establish/ng/ecnEstablish.controller';
+import {ScheduleEstablishController} from './component/schedule_establish/ng/scheduleEstablish.controller';
 import {EGPGroupEstablishController} from './component/epg_establish/ng/group.controller';
 import {EGPPolicyEstablishController} from './component/epg_establish/ng/policy.controller';
 import {RouteEstablishController} from './component/route_establish/ng/routeEstablish.controller';
@@ -33,6 +34,7 @@ export default angular
   .controller('SegmentMemberEstablishController', SegmentMemberEstablishController)
   .controller('cosEstablishCtrl', CosEstablishController)
   .controller('ecnEstablishCtrl', EcnEstablishController)
+  .controller('scheduleEstablishCtrl', ScheduleEstablishController)
   .controller('epgGroupEstablishCtrl', EGPGroupEstablishController)
   .controller('egpPolicyEstablishCtrl', EGPPolicyEstablishController)
   .controller('routeEstablishController', RouteEstablishController)

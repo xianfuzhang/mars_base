@@ -330,7 +330,7 @@ export class headerController{
 				
 				dstArr = message.payload.dst.split(':');
 				dstPort = dstArr[dstArr.length - 1];
-				dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
+				dstDevice = message.payload.dst.slice(0, message.payload.dst.length - dstPort.length - 1);
 				msg.title += '新增link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
 				msg.path = {
 					url: '/devices/' + srcDevice,
