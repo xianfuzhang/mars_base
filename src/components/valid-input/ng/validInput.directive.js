@@ -89,6 +89,7 @@ export class validInput {
         } else if (type === 'port_array') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.PORT_ARRAY')
         }
+
         return message;
       };
 

@@ -37,6 +37,8 @@ import {StormController} from './ng/storm.controller';
 import {StormEstablishController} from './components/storm_establish/ng/stormEstablish.controller';
 import {MonitorController} from './ng/monitor.controller';
 import {MonitorEstablishController} from './components/monitor_establish/ng/monitorEstablish.controller';
+import {HostSegmentController} from './ng/hostSegment.controller';
+import {HostSegmentEstablishController} from './components/hostsegment_establish/ng/hostSegmentEstablish.controller';
 
 export default angular
   .module('fabric', [])
@@ -70,6 +72,8 @@ export default angular
   .controller('monitorEstablishController', MonitorEstablishController)
   .controller('trunkCtrl', TrunkController)
   .controller('sflowCtrl', sFlowController)
+  .controller('hostSegmentController', HostSegmentController)
+  .controller('hostSegmentEstablishController', HostSegmentEstablishController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)

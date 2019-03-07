@@ -1,0 +1,25 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="Host Segment">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span>Host Segment</span>
+  </content-header>
+  <section class="app-body" >
+    	<div class="main__content">
+        <mdl-table actions-show="model.actionsShow"
+                   actions="model.rowActions"
+                   row-click="onTableRowClick($event)"
+                   row-select-action="onTableRowSelectAction($event)"
+                   provider="model.provider" api-ready="onAPIReady($api)"
+                   on-add="addHostSegment()"
+                   on-remove="batchRemove($value)">
+        </mdl-table>
+      </div>
+  </section>
+
+
+    <ng-controller ng-controller="hostSegmentEstablishController">
+        <wizard></wizard>
+    </ng-controller>
+</div>  

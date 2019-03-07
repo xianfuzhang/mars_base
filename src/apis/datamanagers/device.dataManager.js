@@ -571,6 +571,40 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getAllHostSegment() {
+    // let defer = this.di.$q.defer();
+    // let testValue = [
+    //   {"segment_name":"server1","device_id":"rest:192.168.40.240:80","vlan":10,"ip_address":"192.168.100.1","prefix_len":24,"ports": ["1/tag", "2/untag"]},
+    //   {"segment_name":"serve2r","device_id":"rest:192.168.40.240:80","vlan":10,"ip_address":"192.168.100.1","prefix_len":24,"ports": ["1/tag", "2/untag"]},
+    //   {"segment_name":"server3","device_id":"rest:192.168.40.240:80","vlan":10,"ip_address":"192.168.100.1","prefix_len":24,"ports": ["1/tag", "2/untag"]},
+    //   {"segment_name":"server4","device_id":"rest:192.168.40.240:80","vlan":10,"ip_address":"192.168.100.1","prefix_len":24,"ports": ["1/tag", "2/untag"]},
+    //   {"segment_name":"server5","device_id":"rest:192.168.40.240:80","vlan":10,"ip_address":"192.168.100.1","prefix_len":24,"ports": ["1/tag", "2/untag"]},
+    // ];
+    //
+    // this.di.$http.get(this.di.appService.getDeviceConfigsUrl()).then(
+    //   (res) => {
+    //     defer.resolve(testValue);
+    //   },
+    //   (error) => {
+    //     this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error +"）")
+    //     defer.resolve([]);
+    //   }
+    // );
+    // return defer.promise;
+
+
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getHostSegmentUrl(true)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
   postPFC(deviceId, param){
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getPFCUrl(deviceId), param)
@@ -754,6 +788,47 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getHostSegmentByDeviceId(device_id) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getHostSegmentByDeviceId(device_id)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  getHostSegmentByDeviceAndName(device_id, seg_name) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getHostSegmentByNameAndDeviceUrl(device_id, seg_name)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+
+
+  postHostSegment(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getHostSegmentUrl(), params)
+      .then((res) => {
+          defer.resolve(res.data);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
   createLogicalPort(params) {
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getLogicalPortUrl(), params)
@@ -840,6 +915,18 @@ export class DeviceDataManager {
           defer.reject(err.data.message);
         }
       );
+    return defer.promise;
+  }
+  deleteHostSegment(device_id, seg_name) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getHostSegmentByNameAndDeviceUrl(device_id, seg_name)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
     return defer.promise;
   }
 }

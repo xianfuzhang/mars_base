@@ -1314,6 +1314,57 @@ export class DeviceService {
     };
   }
 
+  getHostSegmentActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getHostSegmentSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.SEGMENT_NAME'),
+        'field': 'segment_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.DEVICE'),
+        'field': 'device_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.VLAN'),
+        'field': 'vlan',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.IPADDRESS'),
+        'field': 'ip_address',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.PORT'),
+        'field': 'ports',
+        'layout': {'visible': true, 'sortable': true}
+      }
+
+    ];
+  }
+
+  getHostSegmentTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ]
+  }
+
   getUpLinkSchema() {
     return [
       {

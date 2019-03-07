@@ -53,6 +53,8 @@ export class appService {
               {'label': 'sFlow', 'url': '/sflow', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.STORM'), 'url': '/storm_control', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.MONITOR'), 'url': '/monitor', 'role': 2},
+              {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
+              //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
           {
@@ -873,8 +875,20 @@ export class appService {
 
   getSFlowsUrl(device_id) {
     let str = this.getZoneEndpoint(true) + "/sflow/v1";
-    if (device_id) str += '/' + device_id; 
-    return str;  
+    if (device_id) str += '/' + device_id;
+    return str;
+  }
+
+  getHostSegmentUrl(){
+    return this.getZoneEndpoint() + `/topology/v2/host-segments`;
+  }
+
+  getHostSegmentByNameAndDeviceUrl(device_id,seg_name){
+    return this.getZoneEndpoint() + `/topology/v2/host-segments/${device_id}/${seg_name}`;
+  }
+
+  getHostSegmentByDeviceUrl(device_id,seg_name){
+    return this.getZoneEndpoint() + `/topology/v2/host-segments/${device_id}`;
   }
 }
 
