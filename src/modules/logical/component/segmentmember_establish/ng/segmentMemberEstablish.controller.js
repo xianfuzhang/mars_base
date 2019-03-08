@@ -136,6 +136,13 @@ export class SegmentMemberEstablishController {
           scope.logical_ports[port.members[0]['device_id']] = [];
         }
 
+        if(port.members.length === 1){
+          scope.logical_ports[port.members[0]['device_id']].push({'label':port.name, 'value': port.name });
+          this.di._.remove(scope._phyPorts[port.members[0]['device_id']], (port_info)=>{
+            return port_info['port'] === String(port.members[0]['port']);
+          });
+          return true;
+        }
         if(port.members[0]['device_id'] !== port.members[1]['device_id'] && !scope.logical_ports[port.members[1]['device_id']]){
           scope.logical_ports[port.members[1]['device_id']] = [];
         }
