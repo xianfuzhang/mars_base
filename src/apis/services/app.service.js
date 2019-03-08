@@ -54,6 +54,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.STORM'), 'url': '/storm_control', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.MONITOR'), 'url': '/monitor', 'role': 2},
               {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
               //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
@@ -887,9 +888,31 @@ export class appService {
     return this.getZoneEndpoint() + `/topology/v2/host-segments/${device_id}/${seg_name}`;
   }
 
-  getHostSegmentByDeviceUrl(device_id,seg_name){
+  getHostSegmentByDeviceUrl(device_id){
     return this.getZoneEndpoint() + `/topology/v2/host-segments/${device_id}`;
   }
+
+  getDHCPRelayDefaultUrl(){
+    return this.getZoneEndpoint() + `/dhcprelay/v1/default`;
+  }
+
+  getDHCPRelayDefaultByDeviceAndPortUrl(device_id, port){
+    return this.getZoneEndpoint() + `/dhcprelay/v1/default/${device_id}/${port}`;
+  }
+
+  getDHCPRelayIndirectUrl(){
+    return this.getZoneEndpoint() + `/dhcprelay/v1/indirect`;
+  }
+
+  getDHCPRelayIndirectByDeviceAndPortUrl(device_id, port){
+    return this.getZoneEndpoint() + `/dhcprelay/v1/indirect/${device_id}/${port}`;
+  }
+
+  getDHCPRelayCountersUrl(){
+    return this.getZoneEndpoint() + `/dhcprelay/v1/counters`;
+  }
+
+
 }
 
 appService.$inject = appService.getDI();

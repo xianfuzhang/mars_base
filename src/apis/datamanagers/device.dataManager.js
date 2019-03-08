@@ -605,6 +605,130 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getHostSegmentByDeviceId(device_id) {
+    // let defer = this.di.$q.defer();
+    // let testValue = [
+    //   {"segment_name":"server1","device_id":"rest:192.168.40.240:80","vlan":10,"ip_address":"192.168.100.1","prefix_len":24,"ports": ["1/tag", "2/untag"]},
+    //   {"segment_name":"serve2r","device_id":"rest:192.168.40.240:80","vlan":10,"ip_address":"192.168.100.1","prefix_len":24,"ports": ["1/tag", "2/untag"]},
+    //   {"segment_name":"server3","device_id":"rest:192.168.40.240:80","vlan":10,"ip_address":"192.168.100.1","prefix_len":24,"ports": ["1/tag", "2/untag"]},
+    //   {"segment_name":"server4","device_id":"rest:192.168.40.240:80","vlan":10,"ip_address":"192.168.100.1","prefix_len":24,"ports": ["1/tag", "2/untag"]},
+    //   {"segment_name":"server5","device_id":"rest:192.168.40.240:80","vlan":10,"ip_address":"192.168.100.1","prefix_len":24,"ports": ["1/tag", "2/untag"]},
+    // ];
+    //
+    // this.di.$http.get(this.di.appService.getHostSegmentByDeviceUrl(device_id)).then(
+    //   (res) => {
+    //     defer.resolve(testValue);
+    //   },
+    //   (error) => {
+    //     this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error +"）")
+    //     defer.resolve([]);
+    //   }
+    // );
+    // return defer.promise;
+    //
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getHostSegmentByDeviceUrl(device_id)).then(
+      (res) => {
+        defer.resolve(res.data.segments);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  getHostSegmentByDeviceAndName(device_id, seg_name) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getHostSegmentByNameAndDeviceUrl(device_id, seg_name)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+
+
+  postHostSegment(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getHostSegmentUrl(), params)
+      .then((res) => {
+          defer.resolve(res.data);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  deleteHostSegment(device_id, seg_name) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getHostSegmentByNameAndDeviceUrl(device_id, seg_name)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
+
+
+
+  getDHCPRelayDefault() {
+
+    // let defer = this.di.$q.defer();
+    // let testValue = [
+    //   {
+    //     "dhcpServerConnectPoint": "rest:192.168.40.240:80/5",
+    //     "serverIps": ["10.0.3.252", "2002:4::253"],
+    //     "gatewayIps": ["10.0.3.100", "2001:3::100"],
+    //     "relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.2", "ipv6": "2001:2::254"}}
+    //   },
+    //   {
+    //     "dhcpServerConnectPoint": "rest:192.168.40.240:80/6",
+    //     "serverIps": ["10.0.3.252", "2002:4::253"],
+    //     "gatewayIps": ["10.0.3.100", "2001:3::100"],
+    //     "relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.3", "ipv6": "2001:2::254"}}
+    //   },
+    //   {
+    //     "dhcpServerConnectPoint": "rest:192.168.40.240:80/7",
+    //     "serverIps": ["10.0.3.252", "2002:4::253"],
+    //     "gatewayIps": ["10.0.3.100", "2001:3::100"],
+    //     "relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.4", "ipv6": "2001:2::254"}}
+    //   },
+    //   {
+    //     "dhcpServerConnectPoint": "rest:192.168.40.240:80/8",
+    //     "serverIps": ["10.0.3.252", "2002:4::253"],
+    //     "gatewayIps": ["10.0.3.100", "2001:3::100"],
+    //     "relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.6", "ipv6": "2001:2::254"}}
+    //   },
+    //   {
+    //     "dhcpServerConnectPoint": "rest:192.168.40.240:80/9",
+    //     "serverIps": ["10.0.3.252", "2002:4::253"],
+    //     "gatewayIps": ["10.0.3.100", "2001:3::100"],
+    //     "relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.5", "ipv6": "2001:2::254"}}
+    //   },
+    // ];
+
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDHCPRelayDefaultUrl()).then(
+      (res) => {
+        defer.resolve(res.data.default);
+      },
+      (error) => {
+        defer.reject(error.data);
+      }
+    );
+    return defer.promise;
+  }
+
   postPFC(deviceId, param){
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getPFCUrl(deviceId), param)
@@ -801,29 +925,81 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  getHostSegmentByDeviceAndName(device_id, seg_name) {
+
+
+  postDHCPRelayDefault(params) {
     let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getHostSegmentByNameAndDeviceUrl(device_id, seg_name)).then(
+    this.di.$http.post(this.di.appService.getDHCPRelayDefaultUrl(), params)
+      .then((res) => {
+          defer.resolve(res.data);
+        },
+        (err) => {
+          defer.reject(err.data);
+        }
+      );
+    return defer.promise;
+  }
+
+  deleteDHCPRelayDefault(device_id, port) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDHCPRelayDefaultByDeviceAndPortUrl(device_id, port)).then(
       (res) => {
         defer.resolve(res.data);
       },
       (error) => {
-        defer.resolve([]);
+        defer.reject(error.data);
       }
     );
     return defer.promise;
   }
 
+  getDHCPRelayIndirect() {
 
 
-  postHostSegment(params) {
+
     let defer = this.di.$q.defer();
-    this.di.$http.post(this.di.appService.getHostSegmentUrl(), params)
+    let testValue = [
+      {"dhcpServerConnectPoint": "rest:192.168.40.240:80/10","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.2","ipv6": "2001:2::254"}}},
+      {"dhcpServerConnectPoint": "rest:192.168.40.240:80/1221","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.3","ipv6": "2001:2::254"}}},
+      {"dhcpServerConnectPoint": "rest:192.168.40.240:80/12","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.4","ipv6": "2001:2::254"}}},
+      {"dhcpServerConnectPoint": "rest:192.168.40.240:80/14","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.6","ipv6": "2001:2::254"}}},
+      {"dhcpServerConnectPoint": "rest:192.168.40.240:80/122","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.5","ipv6": "2001:2::254"}}},
+    ];
+
+    this.di.$http.get(this.di.appService.getDeviceConfigsUrl()).then(
+      (res) => {
+        defer.resolve(testValue);
+      },
+      (error) => {
+        this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error +"）")
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+
+    //
+    // let defer = this.di.$q.defer();
+    // this.di.$http.get(this.di.appService.getDHCPRelayIndirectUrl()).then(
+    //   (res) => {
+    //     defer.resolve(res.data.default);
+    //   },
+    //   (error) => {
+    //     defer.reject(error.data);
+    //   }
+    // );
+    // return defer.promise;
+  }
+
+
+
+  postDHCPRelayIndirect(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getDHCPRelayIndirectUrl(), params)
       .then((res) => {
           defer.resolve(res.data);
         },
         (err) => {
-          defer.reject(err);
+          defer.reject(err.data);
         }
       );
     return defer.promise;
@@ -917,18 +1093,56 @@ export class DeviceDataManager {
       );
     return defer.promise;
   }
-  deleteHostSegment(device_id, seg_name) {
+  // deleteHostSegment(device_id, seg_name) {
+// =======
+  deleteDHCPRelayIndirect(device_id, port) {
     let defer = this.di.$q.defer();
-    this.di.$http.delete(this.di.appService.getHostSegmentByNameAndDeviceUrl(device_id, seg_name)).then(
+    this.di.$http.delete(this.di.appService.getDHCPRelayIndirectByDeviceAndPortUrl(device_id, port)).then(
       (res) => {
         defer.resolve(res.data);
       },
       (error) => {
-        defer.reject(error.data.message);
+        defer.reject(error.data);
       }
     );
     return defer.promise;
   }
+
+  getDHCPRelayCounters() {
+    let defer = this.di.$q.defer();
+    let testValue = [
+      {"advertise":6,"host":"00:00:00:00:01:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
+      {"advertise":6,"host":"00:00:00:00:20:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
+      {"advertise":6,"host":"00:00:00:00:30:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
+      {"advertise":6,"host":"00:00:00:00:50:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
+    ];
+
+    this.di.$http.get(this.di.appService.getDeviceConfigsUrl()).then(
+      (res) => {
+        defer.resolve(testValue);
+      },
+      (error) => {
+        this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error +"）")
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+
+
+
+
+    // let defer = this.di.$q.defer();
+    // this.di.$http.get(this.di.appService.getDHCPRelayCountersUrl()).then(
+    //   (res) => {
+    //     defer.resolve(res.data.couters);
+    //   },
+    //   (error) => {
+    //     defer.reject(error.data);
+    //   }
+    // );
+    // return defer.promise;
+  }
+
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
 DeviceDataManager.$$ngIsClass = true;

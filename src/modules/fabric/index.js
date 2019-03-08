@@ -39,6 +39,7 @@ import {MonitorController} from './ng/monitor.controller';
 import {MonitorEstablishController} from './components/monitor_establish/ng/monitorEstablish.controller';
 import {HostSegmentController} from './ng/hostSegment.controller';
 import {HostSegmentEstablishController} from './components/hostsegment_establish/ng/hostSegmentEstablish.controller';
+import {DHCPRelayController} from './ng/dhcpRelay.controller';
 
 export default angular
   .module('fabric', [])
@@ -74,6 +75,7 @@ export default angular
   .controller('sflowCtrl', sFlowController)
   .controller('hostSegmentController', HostSegmentController)
   .controller('hostSegmentEstablishController', HostSegmentEstablishController)
+  .controller('dhcpRelayController', DHCPRelayController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)

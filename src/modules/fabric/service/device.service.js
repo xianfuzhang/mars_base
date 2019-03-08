@@ -10,37 +10,37 @@ export class DeviceService {
     });
 
     this.treatment4Submit = {
-      'vlan_id':{ "type":"L2MODIFICATION", "subtype":"VLAN_ID", 'field': "vlanId", 'field_type':'number'},
-      'push_vlan': {"type":"L2MODIFICATION", "subtype":"VLAN_PUSH"}
+      'vlan_id': {"type": "L2MODIFICATION", "subtype": "VLAN_ID", 'field': "vlanId", 'field_type': 'number'},
+      'push_vlan': {"type": "L2MODIFICATION", "subtype": "VLAN_PUSH"}
     };
 
     this.criteria4Submit = {
-      'in_port':{'type': 'IN_PORT', 'field':'port', 'field_type': 'string'},
-      'in_phy_port':{'type': 'IN_PHY_PORT', 'field':'port'},
-      'destination_ipv4':{'type': 'IPV4_DST', 'field':'ip'},
-      'vlan_id':{'type': 'VLAN_VID', 'field':'vlanId'},
-      'destination_ipv6':{'type': 'IPV6_DST', 'field':'ip'},
-      'ip_proto':{'type': 'IP_PROTO', 'field':'protocol'},
-      'udp_dport':{'type': 'UDP_DST', 'field':'udpPort'},
-      'udp_sport':{'type': 'UDP_SRC', 'field':'udpPort'},
-      'source_ipv4':{'type': 'IPV4_SRC', 'field':'ip'},
-      'source_ipv6':{'type': 'IPV6_SRC', 'field':'ip'},
-      'ether_type':{'type': 'ETH_TYPE', 'field':'ethType'},
-      'destination_mac':{'type': 'ETH_DST', 'field':'mac'},
-      'source_mac':{'type': 'ETH_SRC', 'field':'mac'},
-      'vlan_pcp':{'type': 'VLAN_PCP', 'field':'priority'},
-      'ip_dscp':{'type': 'IP_DSCP', 'field':'ipDscp'},
-      'ip_ecn':{'type': 'IP_ECN', 'field':'ipEcn'},
-      'tcp_sport':{'type': 'TCP_SRC', 'field':'tcpPort'},
-      'tcp_dport':{'type': 'TCP_DST', 'field':'tcpPort'},
-      'icmpv4_type':{'type': 'ICMPV4_TYPE', 'field':'icmpType'},
-      'icmpv4_code':{'type': 'ICMPV4_CODE', 'field':'icmpCode'},
-      'ipv6_flow_label':{'type': 'IPV6_FLABEL', 'field':'flowlabel'},
-      'sctp_sport':{'type': 'SCTP_SRC', 'field':'sctpPort'},
-      'sctp_dport':{'type': 'SCTP_DST', 'field':'sctpPort'},
-      'icmpv6_type':{'type': 'ICMPV6_TYPE', 'field':'icmpv6Type'},
-      'icmpv6_code':{'type': 'ICMPV6_CODE', 'field':'icmpv6Code'},
-      'ipv4_arp_spa':{'type': 'ARP_SPA', 'field':'ip'}
+      'in_port': {'type': 'IN_PORT', 'field': 'port', 'field_type': 'string'},
+      'in_phy_port': {'type': 'IN_PHY_PORT', 'field': 'port'},
+      'destination_ipv4': {'type': 'IPV4_DST', 'field': 'ip'},
+      'vlan_id': {'type': 'VLAN_VID', 'field': 'vlanId'},
+      'destination_ipv6': {'type': 'IPV6_DST', 'field': 'ip'},
+      'ip_proto': {'type': 'IP_PROTO', 'field': 'protocol'},
+      'udp_dport': {'type': 'UDP_DST', 'field': 'udpPort'},
+      'udp_sport': {'type': 'UDP_SRC', 'field': 'udpPort'},
+      'source_ipv4': {'type': 'IPV4_SRC', 'field': 'ip'},
+      'source_ipv6': {'type': 'IPV6_SRC', 'field': 'ip'},
+      'ether_type': {'type': 'ETH_TYPE', 'field': 'ethType'},
+      'destination_mac': {'type': 'ETH_DST', 'field': 'mac'},
+      'source_mac': {'type': 'ETH_SRC', 'field': 'mac'},
+      'vlan_pcp': {'type': 'VLAN_PCP', 'field': 'priority'},
+      'ip_dscp': {'type': 'IP_DSCP', 'field': 'ipDscp'},
+      'ip_ecn': {'type': 'IP_ECN', 'field': 'ipEcn'},
+      'tcp_sport': {'type': 'TCP_SRC', 'field': 'tcpPort'},
+      'tcp_dport': {'type': 'TCP_DST', 'field': 'tcpPort'},
+      'icmpv4_type': {'type': 'ICMPV4_TYPE', 'field': 'icmpType'},
+      'icmpv4_code': {'type': 'ICMPV4_CODE', 'field': 'icmpCode'},
+      'ipv6_flow_label': {'type': 'IPV6_FLABEL', 'field': 'flowlabel'},
+      'sctp_sport': {'type': 'SCTP_SRC', 'field': 'sctpPort'},
+      'sctp_dport': {'type': 'SCTP_DST', 'field': 'sctpPort'},
+      'icmpv6_type': {'type': 'ICMPV6_TYPE', 'field': 'icmpv6Type'},
+      'icmpv6_code': {'type': 'ICMPV6_CODE', 'field': 'icmpv6Code'},
+      'ipv4_arp_spa': {'type': 'ARP_SPA', 'field': 'ip'}
     };
     this.translate = this.di.$filter('translate');
   }
@@ -91,14 +91,13 @@ export class DeviceService {
 
   getEndpointActionsShow() {
     return {
-      'menu': {'enable': false, 'role': 2}, 
-      'add': {'enable': true, 'role': 2}, 
-      'remove': {'enable': true, 'role': 2}, 
-      'refresh': {'enable': true, 'role': 2}, 
+      'menu': {'enable': false, 'role': 2},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2},
       'search': {'enable': false, 'role': 2}
     };
   }
-
 
 
   getDeviceTableSchema() {
@@ -156,10 +155,10 @@ export class DeviceService {
        'layout': {'visible': true, 'sortable': true}
        },*/
       /*{
-        'label': 'CHASSIS',
-        'field': 'chassisId',
-        'layout': {'visible': true, 'sortable': true}
-      },*/
+       'label': 'CHASSIS',
+       'field': 'chassisId',
+       'layout': {'visible': true, 'sortable': true}
+       },*/
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.PROTOCOL'),
         'field': 'protocol',
@@ -329,19 +328,20 @@ export class DeviceService {
     ];
   }
 
+
   getEndpointTableSchema(type) {
     if (type && type === 'host') {
       return [
         {
-         'label': this.translate('MODULES.ENDPOINT.CREATE.TYPE'),
+          'label': this.translate('MODULES.ENDPOINT.CREATE.TYPE'),
           'field': 'type',
           'type': 'icon',
-          'layout': {'visible': true, 'sortable': true} 
+          'layout': {'visible': true, 'sortable': true}
         },
         {
-         'label': this.translate('MODULES.ENDPOINT.CREATE.DESC'),
+          'label': this.translate('MODULES.ENDPOINT.CREATE.DESC'),
           'field': 'description',
-          'layout': {'visible': true, 'sortable': true} 
+          'layout': {'visible': true, 'sortable': true}
         },
         {
           'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.MAC'),
@@ -394,6 +394,36 @@ export class DeviceService {
         }
       ];
     }
+  }
+
+  getEndpointTableSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.MAC'),
+        'field': 'mac',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.VLAN'),
+        'field': 'segment_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP'),
+        'field': 'ip',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      /*   {
+       'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.TENANT'),
+       'field': 'tenant_name',
+       'layout': {'visible': true, 'sortable': true}
+       },*/
+      {
+        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.LOCATION'),
+        'field': 'location',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
   }
 
   getEndpointTableRowActions(type) {
@@ -565,7 +595,7 @@ export class DeviceService {
       ],
       'L0MODIFICATION': [{
         'field': 'subtype',
-        'type':'object',
+        'type': 'object',
         'list': {
           'LAMBDA': [
             {'field': 'lambda', 'type': 'int'}
@@ -582,7 +612,7 @@ export class DeviceService {
       'L1MODIFICATION': [
         {
           'field': 'subtype',
-          'type':'object',
+          'type': 'object',
           'list': {
             'ODU_SIGID': [
               {'field': 'tributaryPortNumber', 'type': 'int'},
@@ -594,7 +624,7 @@ export class DeviceService {
       'L2MODIFICATION': [
         {
           'field': 'subtype',
-          'type':'object',
+          'type': 'object',
           'list': {
             'VLAN_PUSH': [],
             'VLAN_ID': [{'field': 'vlanId', 'type': 'int'}],
@@ -610,7 +640,7 @@ export class DeviceService {
       'L3MODIFICATION': [
         {
           'field': 'subtype',
-          'type':'object',
+          'type': 'object',
           'list': {
             'IPV4_SRC': [{'field': 'ip', 'type': 'ip'}],
             'IPV4_DST': [{'field': 'ip', 'type': 'ip'}],
@@ -623,7 +653,7 @@ export class DeviceService {
       'L4MODIFICATION': [
         {
           'field': 'subtype',
-          'type':'object',
+          'type': 'object',
           'list': {
             'TCP_SRC': [{'field': 'tcpPort', 'type': 'int'}],
             'UDP_SRC': [{'field': 'udpPort', 'type': 'int'}]
@@ -636,168 +666,168 @@ export class DeviceService {
   getFlowsCriteriaSchema() {
     return {
       'ETH_TYPE': [
-        {'field':'ethType','type': 'string'},
+        {'field': 'ethType', 'type': 'string'},
       ],
       'ETH_DST': [
-        {'field':'mac','type': 'mac'},
+        {'field': 'mac', 'type': 'mac'},
       ],
       'ETH_SRC': [
-        {'field':'mac','type': 'mac'},
+        {'field': 'mac', 'type': 'mac'},
       ],
       'IN_PORT': [
-        {'field':'port','type': 'string'},
+        {'field': 'port', 'type': 'string'},
       ],
       'IN_PHY_PORT': [
-        {'field':'port','type': 'string'},
+        {'field': 'port', 'type': 'string'},
       ],
       'METADATA': [
-        {'field':'metadata','type': 'string'},
+        {'field': 'metadata', 'type': 'string'},
       ],
       'VLAN_VID': [
-        {'field':'vlanId','type': 'string'},
+        {'field': 'vlanId', 'type': 'string'},
       ],
       'VLAN_PCP': [
-        {'field':'priority','type': 'string'},
+        {'field': 'priority', 'type': 'string'},
       ],
       'INNER_VLAN_VID': [
-        {'field':'innerVlanId','type': 'string'},
+        {'field': 'innerVlanId', 'type': 'string'},
       ],
       'INNER_VLAN_PCP': [
-        {'field':'innerPriority','type': 'string'},
+        {'field': 'innerPriority', 'type': 'string'},
       ],
       'IP_DSCP': [
-        {'field':'ipDscp','type': 'int'},
+        {'field': 'ipDscp', 'type': 'int'},
       ],
       'IP_ECN': [
-        {'field':'ipEcn','type': 'int'},
+        {'field': 'ipEcn', 'type': 'int'},
       ],
       'IP_PROTO': [
-        {'field':'protocol','type': 'int'},
+        {'field': 'protocol', 'type': 'int'},
       ],
       'IPV4_SRC': [
-        {'field':'ip','type': 'ip'},
+        {'field': 'ip', 'type': 'ip'},
       ],
       'IPV4_DST': [
-        {'field':'ip','type': 'ip'},
+        {'field': 'ip', 'type': 'ip'},
       ],
       'TCP_SRC': [
-        {'field':'tcpPort','type': 'int'},
+        {'field': 'tcpPort', 'type': 'int'},
       ],
       'TCP_DST': [
-        {'field':'tcpPort','type': 'int'},
+        {'field': 'tcpPort', 'type': 'int'},
       ],
       'UDP_SRC': [
-        {'field':'udpPort','type': 'int'},
+        {'field': 'udpPort', 'type': 'int'},
       ],
       'UDP_DST': [
-        {'field':'udpPort','type': 'int'},
+        {'field': 'udpPort', 'type': 'int'},
       ],
       'SCTP_SRC': [
-        {'field':'sctpPort','type': 'int'},
+        {'field': 'sctpPort', 'type': 'int'},
       ],
       'SCTP_DST': [
-        {'field':'sctpPort','type': 'int'},
+        {'field': 'sctpPort', 'type': 'int'},
       ],
       'ICMPV4_TYPE': [
-        {'field':'icmpType','type': 'string'},
+        {'field': 'icmpType', 'type': 'string'},
       ],
       'ICMPV4_CODE': [
-        {'field':'icmpCode','type': 'int'},
+        {'field': 'icmpCode', 'type': 'int'},
       ],
       'IPV6_SRC': [
-        {'field':'ip','type': 'ipv6'},
+        {'field': 'ip', 'type': 'ipv6'},
       ],
       'IPV6_DST': [
-        {'field':'ip','type': 'ipv6'},
+        {'field': 'ip', 'type': 'ipv6'},
       ],
       'IPV6_FLABEL': [
-        {'field':'flowlabel','type': 'int'},
+        {'field': 'flowlabel', 'type': 'int'},
       ],
       'ICMPV6_TYPE': [
-        {'field':'icmpv6Type','type': 'int'},
+        {'field': 'icmpv6Type', 'type': 'int'},
       ],
       'ICMPV6_CODE': [
-        {'field':'icmpv6Code','type': 'int'},
+        {'field': 'icmpv6Code', 'type': 'int'},
       ],
       'IPV6_ND_TARGET': [
-        {'field':'targetAddress','type': 'string'},
+        {'field': 'targetAddress', 'type': 'string'},
       ],
       'IPV6_ND_SLL': [
-        {'field':'mac','type': 'string'},
+        {'field': 'mac', 'type': 'string'},
       ],
       'IPV6_ND_TLL': [
-        {'field':'mac','type': 'string'},
+        {'field': 'mac', 'type': 'string'},
       ],
       'MPLS_LABEL': [
-        {'field':'label','type': 'int'},
+        {'field': 'label', 'type': 'int'},
       ],
       'IPV6_EXTHDR': [
-        {'field':'exthdrFlags','type': 'int'},
+        {'field': 'exthdrFlags', 'type': 'int'},
       ],
       'OCH_SIGID': [
-        {'field':'lambda','type': 'int'},
+        {'field': 'lambda', 'type': 'int'},
       ],
       'GRID_TYPE': [
-        {'field':'gridType','type': 'string'},
+        {'field': 'gridType', 'type': 'string'},
       ],
       'CHANNEL_SPACING': [
-        {'field':'channelSpacing','type': 'int'},
+        {'field': 'channelSpacing', 'type': 'int'},
       ],
       'SPACING_MULIPLIER': [
-        {'field':'spacingMultiplier','type': 'int'},
+        {'field': 'spacingMultiplier', 'type': 'int'},
       ],
       'SLOT_GRANULARITY': [
-        {'field':'slotGranularity','type': 'int'},
+        {'field': 'slotGranularity', 'type': 'int'},
       ],
       'OCH_SIGID': [
-        {'field':'ochSignalId','type': 'int'},
+        {'field': 'ochSignalId', 'type': 'int'},
       ],
       'TUNNEL_ID': [
-        {'field':'tunnelId','type': 'int'},
+        {'field': 'tunnelId', 'type': 'int'},
       ],
       'OCH_SIGTYPE': [
-        {'field':'ochSignalType','type': 'int'},
+        {'field': 'ochSignalType', 'type': 'int'},
       ],
       'ODU_SIGTYPE': [
-        {'field':'oduSignalType','type': 'int'},
+        {'field': 'oduSignalType', 'type': 'int'},
       ],
     }
   }
 
-  getFlowTableList(){
-    return ['10', '20', '30' , '40', '50', '60']
+  getFlowTableList() {
+    return ['10', '20', '30', '40', '50', '60']
   }
 
-  getFlowTableFirstInputRow(){
+  getFlowTableFirstInputRow() {
     return {
-      '10':[
-        {'field':'in_port', 'type':'int', 'require':'true'},
-        {'field':'vlan_id', 'type':'int_with_zero', 'require':'true'}
+      '10': [
+        {'field': 'in_port', 'type': 'int', 'require': 'true'},
+        {'field': 'vlan_id', 'type': 'int_with_zero', 'require': 'true'}
       ],
-      '20':[
+      '20': [
         // {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
         {'field': 'ether_type', 'type': 'string', 'require': 'true'},
-        {'field':'destination_mac', 'type':'mac', 'require':'true'}
+        {'field': 'destination_mac', 'type': 'mac', 'require': 'true'}
       ],
-      '30':[
+      '30': [
         // {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]}
         {'field': 'ether_type', 'type': 'string', 'require': 'true'},
       ],
-      '40':[
+      '40': [
         // {'field':'ether_type', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
         {'field': 'ether_type', 'type': 'string', 'require': 'true'},
       ],
-      '50':[
-        {'field':'vlan_id', 'type':'int','require':'true'},
-        {'field':'destination_mac', 'type':'mac','require':'false'}
+      '50': [
+        {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
+        {'field': 'destination_mac', 'type': 'mac', 'require': 'false'}
       ],
-      '60':[
+      '60': [
         // {'field':'vlan_id', 'type':'int','require':'false'}
       ]
     }
   }
 
-  getFlowTableFirstInputRowByTableId(tableId){
+  getFlowTableFirstInputRowByTableId(tableId) {
     let all = this.getFlowTableFirstInputRow();
     return all[tableId];
   }
@@ -859,8 +889,6 @@ export class DeviceService {
     }
   }
 
-
-
   getFlowTableSecondInputRow() {
 
     return {
@@ -894,13 +922,13 @@ export class DeviceService {
       },
       '40': {
         'ipv4_multicast': [
-          {'field':'vlan_id', 'type':'int','require':'true'},
+          {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
           {'field': 'destination_ipv4', 'type': 'ipv4_multi', 'require': 'true'},
           {'field': 'source_ipv4', 'type': 'ipv4', 'require': 'false'},
           // {'field': 'l3_in_port', 'type': 'int', 'require': 'false'},
         ],
         'ipv6_multicast': [
-          {'field':'vlan_id', 'type':'int','require':'true'},
+          {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
           {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'true'},
           {'field': 'source_ipv6', 'type': 'ipv6', 'require': 'false'},
           // {'field': 'l3_in_port', 'type': 'int', 'require': 'false'},
@@ -915,13 +943,13 @@ export class DeviceService {
     }
   }
 
-  getFlowTableSecondInputRowByFilter(tableId, type){
+  getFlowTableSecondInputRowByFilter(tableId, type) {
     let secondInputs = this.getFlowTableSecondInputRow();
     return secondInputs[tableId][type];
   }
 
 
-  getFlowGotoTableList(){
+  getFlowGotoTableList() {
     return {
       '10': '20',
       '20': {
@@ -930,12 +958,12 @@ export class DeviceService {
         'ipv6_multicast_mac': '40'
       },
       '30': {
-        'ipv4_multicast':'60',
-        'ipv6_multicast':'60',
+        'ipv4_multicast': '60',
+        'ipv6_multicast': '60',
       },
       '40': {
-        'ipv4_multicast':'60',
-        'ipv6_multicast':'60',
+        'ipv4_multicast': '60',
+        'ipv6_multicast': '60',
       },
       '50': {
         'unicast_vlan_bridge': '60',
@@ -946,31 +974,51 @@ export class DeviceService {
     }
   }
 
-  getFlowTableGotoTableByFilter(tableId, type){
+  getFlowTableGotoTableByFilter(tableId, type) {
     let json = this.getFlowGotoTableList();
     let res = json[tableId];
-    if(type && type !== ''){
+    if (type && type !== '') {
       res = res[type]
     }
     return res
   }
 
 
-  getFlowTableApplyActionMaps(){
-    return   {
+  getFlowTableApplyActionMaps() {
+    return {
       '10': [
-        {'field': 'vlan_id', 'type': 'int', 'require': 'true','field_label':'vlan'},
+        {'field': 'vlan_id', 'type': 'int', 'require': 'true', 'field_label': 'vlan'},
         // {'field': 'push_vlan', 'input_type':'checkbox' , 'require': 'false', 'displayLabel':{'id': 'check_push', 'label': 'Push Vlan'}},
       ],
-      '20': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
-      '30': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
+      '20': [{
+        'field': 'output_to_ctrl',
+        'require': 'false',
+        'input_type': 'checkbox',
+        'displayLabel': {'id': 'check_output', 'label': 'Output To Controller'}
+      }],
+      '30': [{
+        'field': 'output_to_ctrl',
+        'require': 'false',
+        'input_type': 'checkbox',
+        'displayLabel': {'id': 'check_output', 'label': 'Output To Controller'}
+      }],
       '40': [],
-      '50': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
-      '60': [{'field': 'output_to_ctrl', 'require': 'false','input_type':'checkbox', 'displayLabel':{'id': 'check_output', 'label': 'Output To Controller'}}],
+      '50': [{
+        'field': 'output_to_ctrl',
+        'require': 'false',
+        'input_type': 'checkbox',
+        'displayLabel': {'id': 'check_output', 'label': 'Output To Controller'}
+      }],
+      '60': [{
+        'field': 'output_to_ctrl',
+        'require': 'false',
+        'input_type': 'checkbox',
+        'displayLabel': {'id': 'check_output', 'label': 'Output To Controller'}
+      }],
     }
   }
 
-  getFlowTableApplyActionMapByTid(tableId){
+  getFlowTableApplyActionMapByTid(tableId) {
     let maps = this.getFlowTableApplyActionMaps();
     return maps[tableId];
   }
@@ -987,52 +1035,52 @@ export class DeviceService {
   }
 
   getFlowTableWriteActionMaps(){
-    return   {
+    return {
       '10': null,
       '20': null,
       '30': {
-        'ipv4_multicast':['l3_ucast_group','l3_ecmp_group'],
-        'ipv6_multicast':['l3_ucast_group','l3_ecmp_group']
+        'ipv4_multicast': ['l3_ucast_group', 'l3_ecmp_group'],
+        'ipv6_multicast': ['l3_ucast_group', 'l3_ecmp_group']
       },
-      '40':{
-        'ipv4_multicast':['l3_mcast_group'],
-        'ipv6_multicast':['l3_mcast_group']
+      '40': {
+        'ipv4_multicast': ['l3_mcast_group'],
+        'ipv6_multicast': ['l3_mcast_group']
       },
       '50': {
         'unicast_vlan_bridge': ['l2_intf_group', 'l2_unflt_intf_group'],
         'multicast_vlan_bridge': ['l2_mcast_group'],
         'dlf_vlan_bridge': ['l2_flood_group']
       },
-      '60': ['l2_intf_group' ,'l2_rewrite_group','l2_mcast_group','l3_ucast_group','l3_mcast_group','l3_ecmp_group','l2_unflt_intf_group'],
+      '60': ['l2_intf_group', 'l2_rewrite_group', 'l2_mcast_group', 'l3_ucast_group', 'l3_mcast_group', 'l3_ecmp_group', 'l2_unflt_intf_group'],
     }
   }
 
-  getFlowTableWriteActionMapByFilter(tableId, type){
+  getFlowTableWriteActionMapByFilter(tableId, type) {
     let maps = this.getFlowTableWriteActionMaps();
     let res = maps[tableId];
-    if(res === null || res instanceof Array){
+    if (res === null || res instanceof Array) {
       return res;
     } else {
       return res[type]
     }
   }
 
-  getGroupTypeMapper(){
+  getGroupTypeMapper() {
     return {
-      'l2_intf_group':'0',
-      'l2_rewrite_group':'1',
+      'l2_intf_group': '0',
+      'l2_rewrite_group': '1',
       'l3_ucast_group': '2',
-      'l2_mcast_group':'3',
-      'l2_flood_group':'4',
-      'l3_intf_group':'5',
-      'l3_mcast_group':'6',
-      'l3_ecmp_group':'7',
-      'l2_unflt_intf_group':'11'
+      'l2_mcast_group': '3',
+      'l2_flood_group': '4',
+      'l3_intf_group': '5',
+      'l3_mcast_group': '6',
+      'l3_ecmp_group': '7',
+      'l2_unflt_intf_group': '11'
     }
   }
 
 
-  getGroupNameMapper(){
+  getGroupNameMapper() {
     return {
       'l2_intf_group': 'L2_Interface',
       'l2_mcast_group': 'L2_Multicast',
@@ -1047,19 +1095,18 @@ export class DeviceService {
   }
 
 
-  getGroupNameByKey(key){
+  getGroupNameByKey(key) {
     let mapper = this.getGroupNameMapper();
     return mapper[key]
   }
 
 
-  getGroupTypeId(groupName){
+  getGroupTypeId(groupName) {
     return this.getGroupTypeMapper()[groupName];
   }
 
 
-
-  getFlowTableAclOptionList(){
+  getFlowTableAclOptionList() {
     return {
       'in_port': [
         {'field': 'in_port', 'type': 'int', 'require': 'true'},
@@ -1160,98 +1207,98 @@ export class DeviceService {
 
   // 01 : 00 : 5e : 00 :  00 : 00
   // ff : ff : ff : 80 :  00 : 00
-  isIpv4MultiMAC(mac){
+  isIpv4MultiMAC(mac) {
     let pattern = '^(0[1-9a-fA-F]|[1-9a-fA-F][0-9a-fA-F]):[0-9a-fA-F]{2}:(5[e-fE-F]|[6-9a-fA-F][0-9a-fA-F]):([0-7][0-9a-fA-F]|80)(:00){2}$';
-    return mac.search(pattern) === -1?false:true;
+    return mac.search(pattern) === -1 ? false : true;
   }
 
   //333300000000/ffff00000000
-  isIpv6MultiMAC(mac){
+  isIpv6MultiMAC(mac) {
     let pattern = '^((3[3-9a-fA-F]|[4-9a-fA-F][0-9a-fA-F]):){2}(00:){3}00$';
-    return mac.search(pattern) === -1?false:true;
+    return mac.search(pattern) === -1 ? false : true;
   }
 
 
-  getCriteriaObject(item){
+  getCriteriaObject(item) {
     let field = item['field'];
     let value = item['value'];
-    if(value === ''){
+    if (value === '') {
       return null;
     }
     let res = angular.copy(this.criteria4Submit[field]);
-    if( typeof value === 'object'){
+    if (typeof value === 'object') {
       res[res['field']] = value.value;
     } else {
       res[res['field']] = value;
     }
 
-    if(res['field']){
+    if (res['field']) {
       delete res['field'];
     }
-    if(res['field_type']){
+    if (res['field_type']) {
       delete res['field_type'];
     }
     return res;
   }
 
-  getCriteriaMacMasked(v0, v1){
+  getCriteriaMacMasked(v0, v1) {
     let field = v0['field'];
     return {
-      "type": field === 'source_mac_masked'?'ETH_SRC_MASKED':"ETH_DST_MASKED",
+      "type": field === 'source_mac_masked' ? 'ETH_SRC_MASKED' : "ETH_DST_MASKED",
       "mac": v0['value'],
       "macMask": v1['value']
     };
   }
 
-  getCriteriaReferenceObject(objId, defaultValue){
+  getCriteriaReferenceObject(objId, defaultValue) {
     let res = angular.copy(this.criteria4Submit[objId]);
     res[res['field']] = defaultValue;
-    if(res['field']){
+    if (res['field']) {
       delete res['field'];
     }
-    if(res['field_type']){
+    if (res['field_type']) {
       delete res['field_type'];
     }
     return res;
   }
 
-  getTreatmentObject(item){
+  getTreatmentObject(item) {
     let field = item['field'];
     let value = item['value'];
     // let value = item['value'];
     let res = null;
 
-    if(item['input_type'] === undefined){
+    if (item['input_type'] === undefined) {
       res = angular.copy(this.treatment4Submit[field]);
-      if( typeof value === 'object'){
+      if (typeof value === 'object') {
         value = value.value;
       }
 
       res[res['field']] = value;
-    } else if(item['input_type'] === 'checkbox'){
-      if(value === true){
+    } else if (item['input_type'] === 'checkbox') {
+      if (value === true) {
         res = angular.copy(this.treatment4Submit[field])
       }
     }
 
-    if(res && res['field']){
-      if(res['field_type'] !== undefined){
+    if (res && res['field']) {
+      if (res['field_type'] !== undefined) {
         let type = res['field_type'];
-        if(type === 'number' && typeof value === 'string'){
+        if (type === 'number' && typeof value === 'string') {
           value = parseInt(value);
         }
       } else {
         //default to string
-        if( typeof value === 'number'){
+        if (typeof value === 'number') {
           value = value + '';
         }
       }
       res[res['field']] = value;
 
-      if(res['field']){
+      if (res['field']) {
         delete res['field'];
       }
-      if(res['field_type']){
+      if (res['field_type']) {
         delete res['field_type'];
       }
     }
@@ -1339,7 +1386,7 @@ export class DeviceService {
       {
         'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.VLAN'),
         'field': 'vlan',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': true, 'width': '100px'}
       },
       {
         'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.IPADDRESS'),
@@ -1531,6 +1578,72 @@ export class DeviceService {
     ];
   }
 
+  getDHCPRelayTabSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.TAB.SCHEMA.DEFAULT'),
+        'value': 'default',
+        'type': 'default'
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.TAB.SCHEMA.INDIRECT'),
+        'value': 'indirect',
+        'type': 'indirect'
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.TAB.SCHEMA.COUNTER'),
+        'value': 'counter',
+        'type': 'counter'
+      }
+    ];
+  }
+
+
+  getDHCPRelayDefaultTableSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.CONNECT_POINT'),
+        'field': 'dhcpServerConnectPoint',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.SERVER_IPS'),
+        'field': 'serverIps',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.GATEWAY_IPS'),
+        'field': 'gatewayIps',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      // {
+      //   'label': this.translate('MODULES.DHCP_RELAY.COLUMN.AGENT_IPS'),
+      //   'field': 'agent_ips',
+      //   'layout': {'visible': true, 'sortable': true}
+      // }
+    ];
+  }
+
+  getDHCPRelayDefaultTableSubSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.SUB.COLUMN.DEVICE'),
+        'field': 'device',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.SUB.COLUMN.IPV4'),
+        'field': 'ipv4',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.SUB.COLUMN.IPV6'),
+        'field': 'ipv6',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
+
   getMonitorTableRowActions() {
     return [
       // {
@@ -1540,6 +1653,16 @@ export class DeviceService {
       // },
       {
         'label': this.translate('MODULES.FABRIC.MONITOR.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ]
+  }
+
+  getDHCPRelayTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.ROW.ACTION.DELETE'),
         'role': 2,
         'value': 'delete'
       }
@@ -1621,8 +1744,71 @@ export class DeviceService {
         'layout': {'visible': true, 'sortable': false}
       }
     ];
-  }   
+  }
+
+  getDHCPRelayActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getDHCPRelayCounterActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': false, 'role': 2},
+      'remove': {'enable': false, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+
+  getDHCPRelayCounterTableSubSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.HOST'),
+        'field': 'host',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.LOCATION'),
+        'field': 'location',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.SOLICIT'),
+        'field': 'solicit',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.REQUEST'),
+        'field': 'request',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.ADVERTISE'),
+        'field': 'advertise',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.RENEW'),
+        'field': 'renew',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.REPLY'),
+        'field': 'reply',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
+
 }
+
 
 DeviceService.$inject = DeviceService.getDI();
 DeviceService.$$ngIsClass = true;
