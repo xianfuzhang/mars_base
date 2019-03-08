@@ -13,7 +13,8 @@ import 'easing';
 import 'apis';
 import 'localStore';
 import 'ngTable';
-import 'eventEmitter'
+import 'eventEmitter';
+import 'chart';
 
 import 'login';
 import 'dashboard';
@@ -47,6 +48,7 @@ import 'marButton';
 import 'jsonEditor';
 import 'gradientScale';
 import 'splineChart';
+import 'marChart';
 
 import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, mainCtrl} from './base';
 
@@ -58,6 +60,7 @@ angular
     'pascalprecht.translate',
     '_',
     'c3',
+    'chart',
     'eventEmitter',
     'ngTable',
     'crypto',
@@ -95,7 +98,8 @@ angular
     'marButton',
     'jsonEditor',
     'gradientScale',
-    'splineChart'
+    'splineChart',
+    'marChart'
   ])
   .factory('setLanguage', ['$q', setLanguage])
   .config(['$translateProvider', configTranslate])

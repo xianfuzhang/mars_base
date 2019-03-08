@@ -11,6 +11,8 @@ export class DashboardController {
       '$q',
       'appService',
       'c3',
+      'chart',
+      'chartService',
       'dateService',
       'deviceService',
       'dashboardDataManager',
@@ -38,6 +40,13 @@ export class DashboardController {
         }).call(this);
     }).call(this);
 
+    const Chart = this.di.chart;
+    const chartService = this.di.chartService;
+    const chartStyles = chartService.styles;
+    const colorHelper = Chart.helpers;
+    let scope = this.di.$scope;
+    let switchMemoryPieChart;
+    let switchMemoryChart;
     this.translate = this.di.$filter('translate');
     this.interval_device = null;
     const CONTROLLER_STATE_INACTIVE = 'INACTIVE';
@@ -263,7 +272,7 @@ export class DashboardController {
       });
       promises.push(portsDefer.promise);
 
-      this.di.$rootScope.$emit('start_loading');
+      // this.di.$rootScope.$emit('start_loading');
       this.di.$scope.panelLoading.controller = true;
       this.di.$scope.panelLoading.switch = false;
 
@@ -271,7 +280,7 @@ export class DashboardController {
         let DI = this.di;
         convertData2View();
         DI.$scope.$apply();
-        DI.$rootScope.$emit('stop_loading');
+        // DI.$rootScope.$emit('stop_loading');
         DI.$scope.panelRefresh.controller = true;
         DI.$scope.panelLoading.controller = false;
         DI.$scope.$apply();
@@ -283,13 +292,834 @@ export class DashboardController {
       convertSwitchData();
       convertSwitchInterface2Chart();
       if(di.$scope.isAnalyzeEnable) {
-        convertSwitchCPUAnalyzer();
-        convertSwitchMemoryAnalyzer();
-        convertClusterCPUAnalyzer();
-        convertClusterMemoryAnalyzer();
+	      drawClusterCPUChart();
+	      drawClusterMemoryChart();
+	      drawSwitchCpuChart();
+	      drawSwitchMemoryChart();
+	      
+        // convertSwitchCPUAnalyzer();
+        // convertSwitchMemoryAnalyzer();
+        // convertClusterCPUAnalyzer();
+        // convertClusterMemoryAnalyzer();
       }
     }
-
+	
+	  // draw cluster cpu chart: added by yazhou.miao
+	  let drawClusterCPUChart = () => {
+		  let clusterCpuData = {
+			  labels: [],
+			  datasets: []
+		  };
+		
+		  let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.controller.cpu.analyzer, function(item){return item.analyzer.length;});
+		  clusterCpuData.labels = this.di.$scope.dashboardModel.controller.cpu.analyzer.length > 0 ?
+			  this.getCPUMemoryTimeSeries(x_times) : [];
+		
+		  let index = 0;
+		  this.di.$scope.dashboardModel.controller.cpu.analyzer.forEach((controller) => {
+			  let data = [];
+			  controller.analyzer.forEach((item) => {
+				  data.push((item.user_percent + item.system_percent).toFixed(2))
+			  });
+			  clusterCpuData.datasets.push({
+				  label: controller.name,
+				  data:data,
+				  borderColor: chartStyles.colors.colorPool[index],
+				  backgroundColor: chartStyles.colors.colorPool[index],
+				  fill: false,
+				  pointRadius: 0,
+				  pointHitRadius: 2,
+			  });
+			
+			  index++;
+		  });
+		
+		  const pad = this.pad;
+		  let ctx = document.getElementById("cluster-cpu-usage-rate");
+		  let clusterCpuChart = new Chart(ctx, {
+			  type: 'line',
+			  data: clusterCpuData,
+			  responsive: false,
+			  options: {
+				  plugins: {
+					  deferred: {
+						  // xOffset: 150,   // defer until 150px of the canvas width are inside the viewport
+						  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+						  delay: 0      // delay of 500 ms after the canvas is considered inside the viewport
+					  }
+				  },
+				  title: {
+					  display: true,
+					  text: '控制器cpu使用率',
+				  },
+				  legend: {
+					  labels: {
+						  // This more specific font property overrides the global property
+						  fontColor: chartStyles.colors.fontColor
+					  },
+					  position: 'bottom',
+					  onHover: function(e, legendItem) {
+						  let index = legendItem.datasetIndex;
+						  let ci = this.chart;
+						
+						  ci.data.datasets.forEach((value, key) => {
+						  	if(key !== index) {
+						  		value.borderColor = colorHelper.color(value.borderColor).alpha(0.5).rgbString();
+							  }
+						  })
+						  // We hid a dataset ... rerender the chart
+						  ci.update();
+					  },
+				  },
+				  tooltips: {
+					  mode: 'index',
+					  intersect: false
+				  },
+				  scales: {
+					  yAxes: [{
+						  scaleLabel: chartStyles.colors.fontColor,
+						  gridLines: {
+							  color: chartStyles.colors.gridLinesColor,
+							  lineWidth: chartStyles.lines.gridWidth
+						  },
+						  ticks: {
+							  beginAtZero: false,
+							  callback: function(value, index, values) {
+								  return value.toFixed(2) + '%';
+							  }
+						  }
+					  }],
+					  xAxes: [{
+						  scaleLabel: chartStyles.colors.fontColor,
+						  gridLines: {
+							  drawBorder: false,
+							  color: chartStyles.colors.gridLinesColor,
+							  lineWidth: chartStyles.lines.gridWidth
+						  },
+						  ticks: {
+							  callback: function(value, index, values) {
+								  value = new Date(value);
+								  return pad(value.getHours()) + ':' + pad(value.getMinutes());
+							  }
+						  }
+					  }],
+				  },
+				  // Container for pan options
+				  pan: {
+					  // Boolean to enable panning
+					  enabled: false,
+					
+					  // Panning directions. Remove the appropriate direction to disable
+					  // Eg. 'y' would only allow panning in the y direction
+					  mode: 'x',
+					  rangeMin: {
+						  // Format of min pan range depends on scale type
+						  x: null,
+						  y: null
+					  },
+					  rangeMax: {
+						  // Format of max pan range depends on scale type
+						  x: null,
+						  y: null
+					  },
+					  // Function called once panning is completed
+					  // Useful for dynamic data loading
+					  onPan: function(chart) { console.log(`I was panned!!!`); }
+				  },
+				
+				  // Container for zoom options
+				  zoom: {
+					  // Boolean to enable zooming
+					  enabled: true,
+					
+					  // Enable drag-to-zoom behavior
+					  drag: true,
+					
+					  // Drag-to-zoom rectangle style can be customized
+					  // drag: {
+					  // 	 borderColor: 'rgba(225,225,225,0.3)'
+					  // 	 borderWidth: 5,
+					  // 	 backgroundColor: 'rgb(225,225,225)'
+					  // },
+					
+					  // Zooming directions. Remove the appropriate direction to disable
+					  // Eg. 'y' would only allow zooming in the y direction
+					  mode: 'x',
+					  // rangeMin: {
+					  //   // Format of min zoom range depends on scale type
+					  //   x: null,
+					  //   y: null
+					  // },
+					  // rangeMax: {
+					  //   // Format of max zoom range depends on scale type
+					  //   x: null,
+					  //   y: null
+					  // },
+					  // Function called once zooming is completed
+					  // Useful for dynamic data loading
+					  onZoom: function(x,y,data) {
+						  let chart = this.chart;
+						  console.log(`I was zoomed!!!`);
+					  }
+				  }
+			  },
+		  });
+	  };
+	
+	  let drawClusterMemoryChart = () => {
+		  let clusterMemoryData = {
+			  labels: [],
+			  datasets: []
+		  };
+		
+		  let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.controller.memory.analyzer, function(item){return item.analyzer.length;});
+		  clusterMemoryData.labels = this.di.$scope.dashboardModel.controller.memory.analyzer.length > 0 ?
+			  this.getCPUMemoryTimeSeries(x_times) : [];
+		
+		  let index = 0;
+		  this.di.$scope.dashboardModel.controller.memory.analyzer.forEach((controller) => {
+			  let data = [];
+			  controller.analyzer.forEach((item) => {
+				  data.push(item.used_percent.toFixed(2))
+			  });
+			  clusterMemoryData.datasets.push({
+				  label: controller.name,
+				  data: data,
+				  borderColor: chartStyles.colors.colorPool[index],
+				  backgroundColor: chartStyles.colors.colorPool[index],
+				  fill: false,
+				  pointRadius: 0,
+				  pointHitRadius: 2,
+			  });
+			
+			  index++;
+		  });
+		
+		  const pad = this.pad;
+		  let ctx = document.getElementById("cluster-memory-usage-rate");
+		  let clusterMemoryChart = new Chart(ctx, {
+			  type: 'line',
+			  data: clusterMemoryData,
+			  responsive: false,
+			  options: {
+				  plugins: {
+					  deferred: {
+						  // xOffset: 150,   // defer until 150px of the canvas width are inside the viewport
+						  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+						  delay: 0      // delay of 500 ms after the canvas is considered inside the viewport
+					  }
+				  },
+				  title: {
+					  display: true,
+					  text: '控制器内存使用率',
+				  },
+				  legend: {
+					  labels: {
+						  // This more specific font property overrides the global property
+						  fontColor: chartStyles.colors.fontColor
+					  },
+					  position: 'bottom'
+				  },
+				  tooltips: {
+					  mode: 'index',
+					  intersect: false
+				  },
+				  scales: {
+					  yAxes: [{
+						  scaleLabel: chartStyles.colors.fontColor,
+						  gridLines: {
+							  color: chartStyles.colors.gridLinesColor,
+							  lineWidth: chartStyles.lines.gridWidth
+						  },
+						  ticks: {
+							  beginAtZero: false,
+							  callback: function(value, index, values) {
+								  return value.toFixed(2) + '%';
+							  }
+						  }
+					  }],
+					  xAxes: [{
+						  scaleLabel: chartStyles.colors.fontColor,
+						  gridLines: {
+							  drawBorder: false,
+							  color: chartStyles.colors.gridLinesColor,
+							  lineWidth: chartStyles.lines.gridWidth
+						  },
+						  ticks: {
+							  callback: function(value, index, values) {
+								  value = new Date(value);
+								  return pad(value.getHours()) + ':' + pad(value.getMinutes());
+							  }
+						  }
+					  }],
+				  },
+				  // Container for pan options
+				  pan: {
+					  // Boolean to enable panning
+					  enabled: false,
+					
+					  // Panning directions. Remove the appropriate direction to disable
+					  // Eg. 'y' would only allow panning in the y direction
+					  mode: 'x',
+					  rangeMin: {
+						  // Format of min pan range depends on scale type
+						  x: null,
+						  y: null
+					  },
+					  rangeMax: {
+						  // Format of max pan range depends on scale type
+						  x: null,
+						  y: null
+					  },
+					  // Function called once panning is completed
+					  // Useful for dynamic data loading
+					  onPan: function(chart) { console.log(`I was panned!!!`); }
+				  },
+				
+				  // Container for zoom options
+				  zoom: {
+					  // Boolean to enable zooming
+					  enabled: true,
+					
+					  // Enable drag-to-zoom behavior
+					  drag: true,
+					
+					  // Drag-to-zoom rectangle style can be customized
+					  // drag: {
+					  // 	 borderColor: 'rgba(225,225,225,0.3)'
+					  // 	 borderWidth: 5,
+					  // 	 backgroundColor: 'rgb(225,225,225)'
+					  // },
+					
+					  // Zooming directions. Remove the appropriate direction to disable
+					  // Eg. 'y' would only allow zooming in the y direction
+					  mode: 'x',
+					  // rangeMin: {
+					  //   // Format of min zoom range depends on scale type
+					  //   x: null,
+					  //   y: null
+					  // },
+					  // rangeMax: {
+					  //   // Format of max zoom range depends on scale type
+					  //   x: null,
+					  //   y: null
+					  // },
+					  // Function called once zooming is completed
+					  // Useful for dynamic data loading
+					  onZoom: function(x,y,data) {
+						  let chart = this.chart;
+						  console.log(`I was zoomed!!!`);
+					  }
+				  }
+			  },
+		  });
+	  };
+	  
+	  let drawSwitchCpuChart = () => {
+		  //cpu analyzer
+		  let switchCpuData = {
+			  labels: [],
+			  datasets: []
+		  };
+		  let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer);
+		  let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.cpu.analyzer, function(item){return item.analyzer.length;});
+		  switchCpuData.labels = this.di.$scope.dashboardModel.cpu.analyzer.length > 0 ?
+			  this.getCPUMemoryTimeSeries(x_times) : [];
+		
+		  let index = 0;
+		  if(records.length) {
+			  records.forEach((item, index) =>{
+				  switchCpuData.datasets.push({
+					  label: item.name,
+					  data: item.data,
+					  borderColor: chartStyles.colors.colorPool[index],
+					  backgroundColor: chartStyles.colors.colorPool[index],
+					  fill: false,
+					  pointRadius: 0,
+					  pointHitRadius: 2,
+				  });
+				
+				  index++;
+			  });
+		  }
+		  
+		  const pad = this.pad;
+		  let ctx = document.getElementById("switch-cpu-usage-rate");
+		  let clusterMemoryChart = new Chart(ctx, {
+			  type: 'line',
+			  data: switchCpuData,
+			  responsive: false,
+			  options: {
+				  plugins: {
+					  deferred: {
+						  // xOffset: 150,   // defer until 150px of the canvas width are inside the viewport
+						  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+						  delay: 0      // delay of 500 ms after the canvas is considered inside the viewport
+					  }
+				  },
+				  title: {
+					  display: true,
+					  text: '交换机cpu使用率',
+				  },
+				  legend: {
+					  labels: {
+						  // This more specific font property overrides the global property
+						  fontColor: chartStyles.colors.fontColor
+					  },
+					  position: 'bottom'
+				  },
+				  tooltips: {
+					  mode: 'index',
+					  intersect: false
+				  },
+				  scales: {
+					  yAxes: [{
+						  scaleLabel: chartStyles.colors.fontColor,
+						  gridLines: {
+							  color: chartStyles.colors.gridLinesColor,
+							  lineWidth: chartStyles.lines.gridWidth
+						  },
+						  ticks: {
+							  beginAtZero: false,
+							  callback: function(value, index, values) {
+								  return value.toFixed(2) + '%';
+							  }
+						  }
+					  }],
+					  xAxes: [{
+						  scaleLabel: chartStyles.colors.fontColor,
+						  gridLines: {
+							  drawBorder: false,
+							  color: chartStyles.colors.gridLinesColor,
+							  lineWidth: chartStyles.lines.gridWidth
+						  },
+						  ticks: {
+							  callback: function(value, index, values) {
+								  value = new Date(value);
+								  return pad(value.getHours()) + ':' + pad(value.getMinutes());
+							  }
+						  }
+					  }],
+				  },
+				  // Container for pan options
+				  pan: {
+					  // Boolean to enable panning
+					  enabled: false,
+					
+					  // Panning directions. Remove the appropriate direction to disable
+					  // Eg. 'y' would only allow panning in the y direction
+					  mode: 'x',
+					  rangeMin: {
+						  // Format of min pan range depends on scale type
+						  x: null,
+						  y: null
+					  },
+					  rangeMax: {
+						  // Format of max pan range depends on scale type
+						  x: null,
+						  y: null
+					  },
+					  // Function called once panning is completed
+					  // Useful for dynamic data loading
+					  onPan: function(chart) { console.log(`I was panned!!!`); }
+				  },
+				
+				  // Container for zoom options
+				  zoom: {
+					  // Boolean to enable zooming
+					  enabled: true,
+					
+					  // Enable drag-to-zoom behavior
+					  drag: true,
+					
+					  // Drag-to-zoom rectangle style can be customized
+					  // drag: {
+					  // 	 borderColor: 'rgba(225,225,225,0.3)'
+					  // 	 borderWidth: 5,
+					  // 	 backgroundColor: 'rgb(225,225,225)'
+					  // },
+					
+					  // Zooming directions. Remove the appropriate direction to disable
+					  // Eg. 'y' would only allow zooming in the y direction
+					  mode: 'x',
+					  // rangeMin: {
+					  //   // Format of min zoom range depends on scale type
+					  //   x: null,
+					  //   y: null
+					  // },
+					  // rangeMax: {
+					  //   // Format of max zoom range depends on scale type
+					  //   x: null,
+					  //   y: null
+					  // },
+					  // Function called once zooming is completed
+					  // Useful for dynamic data loading
+					  onZoom: function(x,y,data) {
+						  let chart = this.chart;
+						  console.log(`I was zoomed!!!`);
+					  }
+				  }
+			  },
+		  });
+	  };
+	
+	  let onClick = function(evt, chart) { // point element
+		  let ci = chart;
+		  let updateFlag = false;
+		
+		  // 1.element hover event
+		  let element = ci.getElementAtEvent(evt);
+		  if(element.length > 0)
+		  {
+			  let datasetIndex = element[0]._datasetIndex;
+			  let index = element[0]._index;
+			
+			  let chartData = {datasets:[], labels:[]};
+			  let dataset = {data:[], backgroundColor:[],label: ''};
+			  let labels = [];
+			  let data = scope.dashboardModel.memory.analyzer[datasetIndex].analyzer[index];
+			
+			  dataset.data.push(data['buffered_percent'].toFixed(2));
+			  dataset.backgroundColor.push('sandybrown');
+			  chartData.labels.push('buffered');
+			
+			  dataset.data.push(data['cached_percent'].toFixed(2));
+			  dataset.backgroundColor.push('bisque');
+			  chartData.labels.push('cached');
+			
+			  dataset.data.push(data['free_percent'].toFixed(2));
+			  dataset.backgroundColor.push('lightgreen');
+			  chartData.labels.push('free');
+			
+			  dataset.data.push(data['slab_recl_percent'].toFixed(2));
+			  dataset.backgroundColor.push('purple');
+			  chartData.labels.push('slab_recl');
+			
+			  dataset.data.push(data['slab_unrecl_percent'].toFixed(2));
+			  dataset.backgroundColor.push('chocolate');
+			  chartData.labels.push('slab_unrecl');
+			
+			  dataset.data.push(data['used_percent'].toFixed(2));
+			  dataset.backgroundColor.push('red');
+			  chartData.labels.push('used');
+			
+			  chartData.datasets.push(dataset);
+			  let newCtx = document.getElementById("switch-memory-analyzer");
+			  if(switchMemoryPieChart) {
+				  switchMemoryPieChart.destroy();
+			  }
+			  switchMemoryPieChart = new Chart(newCtx, {
+				  type: 'pie',
+				  data: chartData,
+				  options: {
+					  responsive: true,
+					  legend: {
+						  position: 'bottom',
+					  },
+					  title: {
+						  display: true,
+						  text: scope.dashboardModel.memory.analyzer[datasetIndex].name + ' - 内存使用详情',
+						  fontSize: 14
+					  },
+					  animation: {
+						  animateScale: true,
+						  animateRotate: true
+					  }
+				  }
+			  });
+		  }
+	  }
+	  
+	  let drawSwitchMemoryChart = () => {
+		  //memory analyzer
+		  let switchMemoryData = {
+			  labels: [],
+			  datasets: []
+		  };
+		  let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
+		  let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.memory.analyzer, function(item){return item.analyzer.length;});
+		  switchMemoryData.labels = this.di.$scope.dashboardModel.memory.analyzer.length > 0 ?
+			  this.getCPUMemoryTimeSeries(x_times) : [];
+		
+		  let index = 0;
+		  if(records.length) {
+			  records.forEach((item, index) =>{
+					switchMemoryData.datasets.push({
+						label: item.name,
+						data: item.data,
+						borderColor: chartStyles.colors.colorPool[index],
+						backgroundColor: chartStyles.colors.colorPool[index],
+						fill: false,
+						pointRadius: 0,
+						pointHitRadius: 2,
+					});
+				
+					index++;
+        })
+		  }
+		
+		  const pad = this.pad;
+		  const scope = this.di.$scope;
+		  const memoryAnalyzer = this.di.$scope.dashboardModel.memory.analyzer;
+		  let pieChart;
+		  let ctx = document.getElementById("switch-memory-usage-rate");
+		  
+		  let options = {
+			  title: {
+				  display: true,
+					  text: '交换机内存使用率',
+			  },
+			  scales: {
+				  yAxes: [{
+					  ticks: {
+						  beginAtZero: false,
+						  callback: function(value, index, values) {
+							  return value.toFixed(2) + '%';
+						  }
+					  }
+				  }],
+					  xAxes: [{
+						  ticks: {
+							  callback: function(value, index, values) {
+								  value = new Date(value);
+								  return pad(value.getHours()) + ':' + pad(value.getMinutes())+ ':' + pad(value.getSeconds());
+							  }
+						  }
+				  }],
+			  },
+				zoom: {
+				  // Boolean to enable zooming
+				  enabled: true,
+				  // Drag-to-zoom rectangle style can be customized
+				  backgroundColor: 'rgb(225,225,225,0.3)',
+				  // Zooming directions. Remove the appropriate direction to disable
+				  mode: 'x',
+				  // Useful for dynamic data loading
+				  onZoom: function(chart, xRange) {
+					  let ticks = chart.data.labels;
+					  let startIndex = xRange.start;
+					  let endIndex = xRange.end;
+					  if(startIndex === endIndex) {
+						  if(endIndex == ticks.length - 1) {
+							  startIndex = endIndex - 1;
+						  } else {
+							  endIndex = startIndex + 1;
+						  }
+					  }
+					
+					  // if step lower equal than 30s, don't need change scale
+					  // let originalStep = new Date(ticks[1]).getTime() - new Date(ticks[0]).getTime();
+					  // if(originalStep <= 30 * 1000) return;
+					  function getISODate(date) {
+						  return date.getUTCFullYear() +
+							  '-' + pad( date.getUTCMonth() + 1 ) +
+							  '-' + pad( date.getUTCDate() ) +
+							  'T' + pad( date.getUTCHours() ) +
+							  ':' + pad( date.getUTCMinutes() ) +
+							  ':00'  +
+							  'Z';
+					  }
+					  let start = new Date(getISODate(new Date(ticks[startIndex])));
+					  let startTime = start.getTime();
+					  let end = new Date(getISODate(new Date(ticks[endIndex])));
+					  let endTime =  end.getTime();
+					  let step = Math.floor((endTime - startTime) / ((ticks.length - 1) * 1000));
+					  step = step < 30 ? 30 : step;
+					
+					  scope.dashboardModel.memory.type.value = step;
+					  scope.dashboardModel.memory.begin_time = start;
+					  scope.dashboardModel.memory.end_time = end;
+					
+					  di.$scope.$apply();
+				  }
+			  }
+		  };
+		  // TODO: test-chart
+		  let dataArr = [];
+		  let series = [];
+		  switchMemoryData.datasets.forEach((dataset) => {
+		  	dataArr.push(dataset.data);
+		  	series.push(dataset.label)
+		  })
+		  this.di.$scope.data = dataArr;
+		  this.di.$scope.labels = switchMemoryData.labels;
+		  this.di.$scope.options = options;
+		  this.di.$scope.series = series;
+		  this.di.$scope.onClick = onClick;
+		  
+		  switchMemoryChart = new Chart(ctx, {
+			  type: 'line',
+			  data: switchMemoryData,
+			  responsive: false,
+			  options: options
+		  });
+	  };
+	
+	  let drawInterfaceRxTxChart = (dataArr, chartId, y_label, drop) => {
+		  //memory analyzer
+		  let interfaceRxTxdata = {
+			  labels: [],
+			  datasets: []
+		  };
+		  
+		  let category= [], rxs = [], pkgRecv = [], pgkSend = [], title;
+		  this.di._.forEach(dataArr, (statistic)=>{
+			  let name = getSwtAndPortName(statistic['device'], statistic['port']);
+			  interfaceRxTxdata.labels.push(name);
+			  if (y_label === 'packages') {
+				  if (drop) {
+					  pkgRecv.push(statistic['packetsRxDropped']);
+					  pgkSend.push(statistic['packetsTxDropped']);
+					
+					  title = '端口收发包';
+				  }
+				  else {
+					  pkgRecv.push(statistic['packetsReceived']);
+					  pgkSend.push(statistic['packetsSent']);
+					
+					  title = '端口丢包';
+				  }
+			  }
+			  else {
+				  pkgRecv.push(statistic['bytesReceived']);
+				  pgkSend.push(statistic['bytesSent']);
+			  }
+			
+		  });
+		  interfaceRxTxdata.datasets.push({
+			  label: '接收',
+			  backgroundColor: colorHelper.color('blue').alpha(0.8).rgbString(),
+			  data:pkgRecv,
+		  });
+		  interfaceRxTxdata.datasets.push({
+			  label: '发送',
+			  backgroundColor: colorHelper.color('salmon').alpha(0.8).rgbString(),
+			  data:pgkSend,
+		  });
+		
+		  const pad = this.pad;
+		  let ctx = document.getElementById(chartId);
+		  let rxTxPackagesChart = new Chart(ctx, {
+			  type: 'bar',
+			  data: interfaceRxTxdata,
+			  responsive: false,
+			  options: {
+				  plugins: {
+					  deferred: {
+						  //xOffset: 150,   // defer until 150px of the canvas width are inside the viewport
+						  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+						  delay: 0      // delay of 500 ms after the canvas is considered inside the viewport
+					  }
+				  },
+				  barPercentage: 0.1,
+				  title: {
+					  display: true,
+					  text: title
+				  },
+				  legend: {
+					  labels: {
+						  // This more specific font property overrides the global property
+						  fontColor: chartStyles.colors.fontColor
+					  },
+					  position: 'bottom'
+				  },
+				  tooltips: {
+					  mode: 'index',
+					  intersect: false
+				  },
+				  scales: {
+					  yAxes: [{
+						  stacked: true,
+						  scaleLabel: {
+							  display: true,
+							  labelString: 'packages'
+						  },
+						  gridLines: {
+							  color: chartStyles.colors.gridLinesColor,
+							  lineWidth: chartStyles.lines.gridWidth
+						  },
+						  barThickness: 20,
+						  ticks: {
+							  beginAtZero: false,
+							  // callback: function(value, index, values) {
+								//   return value.toFixed(2) + '%';
+							  // }
+						  }
+					  }],
+					  xAxes: [{
+						  stacked: true,
+						  scaleLabel: chartStyles.colors.fontColor,
+						  gridLines: {
+							  drawBorder: false,
+							  color: chartStyles.colors.gridLinesColor,
+							  lineWidth: chartStyles.lines.gridWidth,
+							  offsetGridLines: false
+						  },
+						  barThickness: 20,
+					  }],
+				  },
+				  // Container for pan options
+				  pan: {
+					  // Boolean to enable panning
+					  enabled: false,
+					
+					  // Panning directions. Remove the appropriate direction to disable
+					  // Eg. 'y' would only allow panning in the y direction
+					  mode: 'x',
+					  rangeMin: {
+						  // Format of min pan range depends on scale type
+						  x: null,
+						  y: null
+					  },
+					  rangeMax: {
+						  // Format of max pan range depends on scale type
+						  x: null,
+						  y: null
+					  },
+					  // Function called once panning is completed
+					  // Useful for dynamic data loading
+					  onPan: function(chart) { console.log(`I was panned!!!`); }
+				  },
+				
+				  // Container for zoom options
+				  zoom: {
+					  // Boolean to enable zooming
+					  enabled: true,
+					
+					  // Enable drag-to-zoom behavior
+					  drag: true,
+					
+					  // Drag-to-zoom rectangle style can be customized
+					  // drag: {
+					  // 	 borderColor: 'rgba(225,225,225,0.3)'
+					  // 	 borderWidth: 5,
+					  // 	 backgroundColor: 'rgb(225,225,225)'
+					  // },
+					
+					  // Zooming directions. Remove the appropriate direction to disable
+					  // Eg. 'y' would only allow zooming in the y direction
+					  mode: 'x',
+					  // rangeMin: {
+					  //   // Format of min zoom range depends on scale type
+					  //   x: null,
+					  //   y: null
+					  // },
+					  // rangeMax: {
+					  //   // Format of max zoom range depends on scale type
+					  //   x: null,
+					  //   y: null
+					  // },
+					  // Function called once zooming is completed
+					  // Useful for dynamic data loading
+					  onZoom: function(x,y,data) {
+						  let chart = this.chart;
+						  console.log(`I was zoomed!!!`);
+					  }
+				  }
+			  },
+		  });
+	  };
+	  
     let convertControllerData =()=>{
       //1. summary
       let controllerSummary = {};
@@ -344,9 +1174,13 @@ export class DashboardController {
       });
 
       let p_r_s = 'packetsRecvSent';
-      let packagesOrder = this.di._.orderBy(waitOrderPortsStatistics, p_r_s, 'desc');
-      packagesOrder.splice(5, packagesOrder.length-5);
-      chartSwtInterface(packagesOrder, 'swtInterfaceRxTxPackages', 'packages');
+      // let packagesOrder = this.di._.orderBy(waitOrderPortsStatistics, p_r_s, 'desc');
+	    let packagesOrder = this.di._.filter(waitOrderPortsStatistics, (val) => {
+	      return val['packetsRecvSent'] > 0;
+	    });
+      // packagesOrder.splice(5, packagesOrder.length-5);
+      // chartSwtInterface(packagesOrder, 'swtInterfaceRxTxPackages', 'packages');
+	    drawInterfaceRxTxChart(packagesOrder, 'interface-rxtx-packages', 'packages');
 
       /*let b_r_s = 'bytesRecvSent';
       let bytesOrder = this.di._.orderBy(waitOrderPortsStatistics, b_r_s, 'desc');
@@ -354,9 +1188,13 @@ export class DashboardController {
       chartSwtInterface(bytesOrder, 'swtInterfaceRxTxBytes', 'bytes');*/
 
       let p_d = 'packetsDrop';
-      let packagesDropOrder = this.di._.orderBy(waitOrderPortsStatistics, p_d, 'desc');
-      packagesDropOrder.splice(5, packagesDropOrder.length-5);
-      chartSwtInterface(packagesDropOrder, 'swtInterfaceRxTxDrops', 'packages', true);
+      // let packagesDropOrder = this.di._.orderBy(waitOrderPortsStatistics, p_d, 'desc');
+	    let packagesDropOrder = this.di._.filter(waitOrderPortsStatistics, (val) => {
+		    return val['packetsDrop'] > 0;
+	    });
+      // packagesDropOrder.splice(5, packagesDropOrder.length-5);
+      // chartSwtInterface(packagesDropOrder, 'swtInterfaceRxTxDrops', 'packages', true);
+	    drawInterfaceRxTxChart(packagesDropOrder, 'interface-rxtx-drops', 'packages');
     };
 
     let convertSwitchCPUAnalyzer = () => {
@@ -404,7 +1242,7 @@ export class DashboardController {
       this.di.$scope.dashboardModel.memory.chartData = memoryCols;
       this.di.$scope.dashboardModel.memory.aync = !this.di.$scope.dashboardModel.memory.aync;
     };
-
+	
     let convertClusterCPUAnalyzer = () => {
       let cpuCols = [], records = [];
       this.di.$scope.dashboardModel.controller.cpu.analyzer.forEach((controller) => {
@@ -561,7 +1399,54 @@ export class DashboardController {
     this.init_application_license().then(()=>{
       init();
     });
-
+	
+    let memoryTimeHasChanged = false;
+	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.memory.begin_time', 'dashboardModel.memory.end_time'], (a,b,c,d) => {
+		  if(!memoryTimeHasChanged) {
+			  memoryTimeHasChanged = true;
+		  	return;
+		  }
+		
+	  	this.getDevicesMemoryAnalyzer(dataModel.configDevices).then(() => {
+			  //memory analyzer
+			  let datasets = [];
+			  let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
+			
+			  let index = 0;
+			  if(records.length) {
+				  records.forEach((item, index) =>{
+					  datasets.push({
+						  label: item.name,
+						  data: item.data,
+						  borderColor: chartStyles.colors.colorPool[index],
+						  backgroundColor: chartStyles.colors.colorPool[index],
+						  fill: false,
+						  pointRadius: 0,
+						  pointHitRadius: 2,
+					  });
+					
+					  index++;
+				  })
+			  }
+			
+			  let ticks = switchMemoryChart.data.labels;
+			
+			  let start = this.di.$scope.dashboardModel.memory.begin_time.getTime();
+			  let step = this.di.$scope.dashboardModel.memory.type.value * 1000;
+			
+			  //update chart with new data
+			  let labels = [];
+			  for(let i = 0; i < ticks.length; i++) {
+				  let time = start + step * i;
+				  labels.push((new Date(time)).toISOString());
+			  }
+			  
+			  switchMemoryChart.data.datasets = datasets;
+			  switchMemoryChart.data.labels = labels;
+			  switchMemoryChart.update();
+		  });
+	  },true));
+	  
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
         unSubscribe();
@@ -713,7 +1598,7 @@ export class DashboardController {
         devices.push(deviceObj);  
       }
     });
-    devices = this.di._.orderBy(devices, 'avarage', 'desc');
+    // devices = this.di._.orderBy(devices, 'avarage', 'desc');
     return devices;
   }
 
@@ -732,12 +1617,12 @@ export class DashboardController {
         devices.push(deviceObj);
       }
     });
-    devices = this.di._.orderBy(devices, 'avarage', 'desc');
+    // devices = this.di._.orderBy(devices, 'avarage', 'desc');
     return devices;
   }
 
   getCPUMemoryTimeSeries(device) {
-    let timeseries = ['x'];
+    let timeseries = [];
     device.analyzer.forEach((record) => {
       timeseries.push(record.timepoint);
     });

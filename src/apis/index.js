@@ -14,6 +14,7 @@ import {DialogService} from './services/dialog.service';
 import {FlowService} from './services/flow.service';
 import {DateService} from './services/date.service';
 import {manageService} from './services/manage.service';
+import {chartService} from './services/chart.service';
 import {logicalService} from './services/logical.service';
 import {RoleService} from './services/role.service';
 import {ColorService} from './services/color.service';
@@ -47,6 +48,7 @@ export default angular
   .service('logDataManager', LogDataManager)
   .service('dateService', DateService)
   .service('manageService', manageService)
+	.service('chartService', chartService)
   .service('logicalService', logicalService)
   .service('roleService', RoleService)
   .service('colorService', ColorService)
