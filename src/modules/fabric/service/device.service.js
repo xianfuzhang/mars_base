@@ -1772,37 +1772,37 @@ export class DeviceService {
       {
         'label': this.translate('MODULES.DHCP_RELAY.COLUMN.HOST'),
         'field': 'host',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': true, 'width':'200px'}
       },
       {
         'label': this.translate('MODULES.DHCP_RELAY.COLUMN.LOCATION'),
         'field': 'location',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': true, 'width':'250px'}
       },
       {
         'label': this.translate('MODULES.DHCP_RELAY.COLUMN.SOLICIT'),
         'field': 'solicit',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': true, 'width':'100px'}
       },
       {
         'label': this.translate('MODULES.DHCP_RELAY.COLUMN.REQUEST'),
         'field': 'request',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': true, 'width':'100px'}
       },
       {
         'label': this.translate('MODULES.DHCP_RELAY.COLUMN.ADVERTISE'),
         'field': 'advertise',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': true, 'width':'100px'}
       },
       {
         'label': this.translate('MODULES.DHCP_RELAY.COLUMN.RENEW'),
         'field': 'renew',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': true, 'width':'100px'}
       },
       {
         'label': this.translate('MODULES.DHCP_RELAY.COLUMN.REPLY'),
         'field': 'reply',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': true, 'width':'100px'}
       }
     ];
   }

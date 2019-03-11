@@ -955,8 +955,6 @@ export class DeviceDataManager {
 
   getDHCPRelayIndirect() {
 
-
-
     let defer = this.di.$q.defer();
     let testValue = [
       {"dhcpServerConnectPoint": "rest:192.168.40.240:80/10","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.2","ipv6": "2001:2::254"}}},

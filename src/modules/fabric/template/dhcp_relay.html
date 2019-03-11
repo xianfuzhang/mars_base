@@ -34,7 +34,7 @@
           </mdl-table>
         </section>
         <section class="tab-content" ng-if="tabSelected.type == 'counter'">
-          <mdl-table actions-show="model.actionsShow"
+          <mdl-table actions-show="model.actionsShow" style="width:1000px;"
                      row-click="onTableRowClick($event)"
                      provider="model.provider" api-ready="onApiReady($api)">
           </mdl-table>
@@ -55,15 +55,12 @@
   </section>
 
 
-  <!--<ng-controller class="cos-wizard" ng-controller="cosEstablishCtrl">-->
-    <!--<wizard></wizard>-->
-  <!--</ng-controller>-->
-  <!--<ng-controller class="ecn-wizard" ng-controller="ecnEstablishCtrl">-->
-    <!--<wizard></wizard>-->
-  <!--</ng-controller>-->
+  <ng-controller class="cos-wizard" ng-controller="dhcpRelayDefaultEstablishController">
+    <wizard></wizard>
+  </ng-controller>
 
-  <!--<ng-controller class="ecn-wizard" ng-controller="scheduleEstablishCtrl">-->
-    <!--<wizard></wizard>-->
-  <!--</ng-controller>-->
+  <ng-controller class="ecn-wizard" ng-controller="dhcpRelayIndirectEstablishController">
+    <wizard></wizard>
+  </ng-controller>
 
 </div>

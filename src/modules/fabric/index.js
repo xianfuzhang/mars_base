@@ -40,6 +40,8 @@ import {MonitorEstablishController} from './components/monitor_establish/ng/moni
 import {HostSegmentController} from './ng/hostSegment.controller';
 import {HostSegmentEstablishController} from './components/hostsegment_establish/ng/hostSegmentEstablish.controller';
 import {DHCPRelayController} from './ng/dhcpRelay.controller';
+import {DHCPRelayDefaultEstablishController} from './components/dhcprelayDefault_establish/ng/dhcprelayDefaultEstablish.controller';
+import {DHCPRelayIndirectEstablishController} from './components/dhcprelayIndirect_establish/ng/dhcprelayIndirectEstablish.controller';
 
 export default angular
   .module('fabric', [])
@@ -76,6 +78,8 @@ export default angular
   .controller('hostSegmentController', HostSegmentController)
   .controller('hostSegmentEstablishController', HostSegmentEstablishController)
   .controller('dhcpRelayController', DHCPRelayController)
+  .controller('dhcpRelayDefaultEstablishController', DHCPRelayDefaultEstablishController)
+  .controller('dhcpRelayIndirectEstablishController', DHCPRelayIndirectEstablishController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)

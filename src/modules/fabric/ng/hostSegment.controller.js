@@ -48,7 +48,7 @@ export class HostSegmentController {
     };
 
     scope.addHostSegment=()=>{
-      this.di.$rootScope.$emit('hostsegment-wizard-show');
+      this.di.$rootScope.$emit('hostsegment-wizard-show',{});
     };
 
     scope.onTableRowSelectAction = ($event) => {
