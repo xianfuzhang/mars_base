@@ -8,6 +8,7 @@
 @include block(mar_section){
   /* display: inline-block; 
   background-color: rgb(244, 245, 247);*/
+  overflow: visible;
   @include element(header){
     display: block;
     position: relative;
