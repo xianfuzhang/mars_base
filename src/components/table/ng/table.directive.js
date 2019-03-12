@@ -125,17 +125,20 @@ export class mdlTable {
           col.sort = scope.tableModel.CONST_SORT_UNDEFINED;
         }
       });
-      $col.sort = $col.sort === scope.tableModel.CONST_SORT_ASC
-        ? scope.tableModel.CONST_SORT_DESC : scope.tableModel.CONST_SORT_ASC;
+      $col.sort = $col.sort === scope.tableModel.CONST_SORT_ASC ? scope.tableModel.CONST_SORT_DESC : 
+                  $col.sort === scope.tableModel.CONST_SORT_DESC ? scope.tableModel.CONST_SORT_UNDEFINED : 
+                  scope.tableModel.CONST_SORT_ASC;
       scope.tableModel.sort = {};
       scope.tableModel.sort[$col.field] = $col.sort;
 
-      let orderStr = 'asc';
-      if($col.sort === scope.tableModel.CONST_SORT_DESC){
-        orderStr = 'desc';
+      let orderStr = $col.sort === scope.tableModel.CONST_SORT_DESC ? 'desc' : 
+                    $col.sort === scope.tableModel.CONST_SORT_ASC ? 'asc' : null;
+      if (orderStr) {
+        scope.tableModel.filteredData = this.di._.orderBy(scope.tableModel.data, [$col.field],[orderStr]);  
       }
-      scope.tableModel.data = this.di._.orderBy(scope.tableModel.data,[$col.field],[orderStr]);
-      //scope.tableModel.filteredData = scope.tableModel.data;
+      else {
+        scope.tableModel.filteredData = scope.tableModel.data;
+      }
     };
 
     scope._sort = ($col) => {
@@ -144,12 +147,14 @@ export class mdlTable {
           col.sort = scope.tableModel.CONST_SORT_UNDEFINED;
         }
       });
-      $col.sort = $col.sort === scope.tableModel.CONST_SORT_ASC
-        ? scope.tableModel.CONST_SORT_DESC : scope.tableModel.CONST_SORT_ASC;
-      scope.tableModel.sort = {};
-      scope.tableModel.sort[$col.field] = $col.sort;
+      $col.sort = $col.sort === scope.tableModel.CONST_SORT_ASC ? scope.tableModel.CONST_SORT_DESC : 
+                  $col.sort === scope.tableModel.CONST_SORT_DESC ? scope.tableModel.CONST_SORT_UNDEFINED :
+                  scope.tableModel.CONST_SORT_ASC;
+      scope.tableModel.sort = {};            
+      if ($col.sort < scope.tableModel.CONST_SORT_UNDEFINED) {
+        scope.tableModel.sort[$col.field] = $col.sort;
+      }
       //scope.tableModel.pagination.currentPage = 1;
-
       scope._queryUpdate();
     };
 
@@ -434,7 +439,7 @@ export class mdlTable {
           params['search'] = scope.tableModel.search['value'];
         }
         //1: desc, 2:asc
-        if (Object.keys(scope.tableModel.sort)) {
+        if (Object.keys(scope.tableModel.sort).length > 0) {
           params['sort'] = Object.keys(scope.tableModel.sort)[0];
           params['orderBy'] = scope.tableModel.sort[params['sort']] === 1 ? 'desc' : 'asc';
         }

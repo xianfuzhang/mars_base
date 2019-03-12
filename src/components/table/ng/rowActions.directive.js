@@ -47,8 +47,8 @@ export class rowActions {
     document.body.addEventListener('click', onTriggerClickRemove, true);
 
     let calculatePosition = (event, menuElement) => {
-      let windowInnerWidth = this.di.$window.document.body.offsetWidth,
-        windowInnerHeight = this.di.$window.document.body.offsetHeight;
+      let windowInnerWidth = this.di.$window.document.body.scrollWidth,
+        windowInnerHeight = this.di.$window.document.body.scrollHeight;
       let menuHeight = scope.actions.length ? scope.actions.length * 35 + 16 : 0;
       let topPosition = event.clientY, leftPosition = event.clientX;
       if (topPosition + menuHeight > windowInnerHeight) {

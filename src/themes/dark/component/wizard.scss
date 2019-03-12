@@ -188,7 +188,6 @@
     
     @include element(form) {
       width: 350px;
-      height: 100%;
       padding: 0 15px;
       overflow-x: hidden;
   
@@ -219,9 +218,6 @@
       margin: 10px 5px 0;
     }
   }
-}
-.wizard__body__right>form{
-  height: 100%;
 }
 
 @include block(stepForm) {
