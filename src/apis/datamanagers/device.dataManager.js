@@ -596,7 +596,7 @@ export class DeviceDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getHostSegmentUrl(true)).then(
       (res) => {
-        defer.resolve(res.data);
+        defer.resolve(res.data.segments);
       },
       (error) => {
         defer.resolve([]);
@@ -668,7 +668,7 @@ export class DeviceDataManager {
 
   deleteHostSegment(device_id, seg_name) {
     let defer = this.di.$q.defer();
-    this.di.$http.delete(this.di.appService.getHostSegmentByNameAndDeviceUrl(device_id, seg_name)).then(
+    this.di.$http.delete(this.di.appService.getHostSegmentByNameUrl(seg_name)).then(
       (res) => {
         defer.resolve(res.data);
       },

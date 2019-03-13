@@ -881,35 +881,39 @@ export class appService {
   }
 
   getHostSegmentUrl(){
-    return this.getZoneEndpoint() + `/topology/v2/host-segments`;
+    return this.getZoneEndpoint(true) + `/topology/v2/host-segments`;
   }
 
   getHostSegmentByNameAndDeviceUrl(device_id,seg_name){
-    return this.getZoneEndpoint() + `/topology/v2/host-segments/${device_id}/${seg_name}`;
+    return this.getZoneEndpoint(true) + `/topology/v2/host-segments/${device_id}/${seg_name}`;
+  }
+
+  getHostSegmentByNameUrl(seg_name){
+    return this.getZoneEndpoint(true) + `/topology/v2/host-segments/${seg_name}`;
   }
 
   getHostSegmentByDeviceUrl(device_id){
-    return this.getZoneEndpoint() + `/topology/v2/host-segments/${device_id}`;
+    return this.getZoneEndpoint(true) + `/topology/v2/host-segments/${device_id}`;
   }
 
   getDHCPRelayDefaultUrl(){
-    return this.getZoneEndpoint() + `/dhcprelay/v1/default`;
+    return this.getZoneEndpoint(true) + `/dhcprelay/v1/default`;
   }
 
   getDHCPRelayDefaultByDeviceAndPortUrl(device_id, port){
-    return this.getZoneEndpoint() + `/dhcprelay/v1/default/${device_id}/${port}`;
+    return this.getZoneEndpoint(true) + `/dhcprelay/v1/default/${device_id}/${port}`;
   }
 
   getDHCPRelayIndirectUrl(){
-    return this.getZoneEndpoint() + `/dhcprelay/v1/indirect`;
+    return this.getZoneEndpoint(true) + `/dhcprelay/v1/indirect`;
   }
 
   getDHCPRelayIndirectByDeviceAndPortUrl(device_id, port){
-    return this.getZoneEndpoint() + `/dhcprelay/v1/indirect/${device_id}/${port}`;
+    return this.getZoneEndpoint(true) + `/dhcprelay/v1/indirect/${device_id}/${port}`;
   }
 
   getDHCPRelayCountersUrl(){
-    return this.getZoneEndpoint() + `/dhcprelay/v1/counters`;
+    return this.getZoneEndpoint(true) + `/dhcprelay/v1/counters`;
   }
 
 

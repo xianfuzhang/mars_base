@@ -179,7 +179,7 @@ export class HostSegmentEstablishController {
       deviceDataManager.getDeviceConfigs().then((configs)=>{
         this.di._.forEach(configs,(config)=>{
           // 顺网只允许openflow，主线目前也只允许openflow
-          if(config['id'].toLocaleLowerCase().indexOf('of') === 0) {
+          if(config['id'].toLocaleLowerCase().indexOf('of') === 0 && config['type'] === 'leaf') {
             // if(config['id'].toLocaleLowerCase().indexOf('grpc') != -1 || config['id'].toLocaleLowerCase().indexOf('rest') != -1){
             scope.displayLabel.device.options.push({'label': config['name'], 'value': config['id']})
             // }
