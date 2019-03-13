@@ -61,19 +61,38 @@ export class mdlSelect {
 
     let autoPosition = (menuEl, coordinate) => {
       const menuClientRect = menuEl.getBoundingClientRect();
-      let verticalAlign = 'top';
-      const bodyHeight = this.di.$window.document.body.scrollHeight;
-      console.log(bodyHeight, menuClientRect.height, coordinate.top, coordinate.bottom);
-      if (coordinate.top + menuClientRect.height > bodyHeight) {
-        verticalAlign = 'bottom';
+      scope.windowScroll = {x: window.pageXOffset, y: window.pageYOffset};//页面出现滚动轴拖动会产生偏移
+      scope.verticalAlign = 'top';
+      scope.bodyHeight = this.di.$window.document.body.scrollHeight;
+      if (coordinate.top + menuClientRect.height > scope.bodyHeight) {
+        scope.verticalAlign = 'bottom';
       }
 
       angular.element(menuEl).css({
-        'top': verticalAlign === 'top' ? coordinate.top + 'px' : '',
-        'bottom': verticalAlign === 'bottom' ? (bodyHeight - coordinate.bottom) + 'px' : '',
-        'left': coordinate.left + 'px',
+        'top': scope.verticalAlign === 'top' ? coordinate.top + scope.windowScroll.y + 'px' : '',
+        'bottom': scope.verticalAlign === 'bottom' 
+                  ? (scope.bodyHeight - coordinate.bottom) + scope.windowScroll.y + 'px' : '',
+        'left': coordinate.left + scope.windowScroll.x + 'px',
         'width': coordinate.width + 'px'
       });
+    };
+
+    let fixTransformInfluence = (menuEl, coordinate) => {
+      const menuClientRect = menuEl.getBoundingClientRect();
+      //transform会影响fixed position布局,计算出影响的偏移量
+      let xOffset = menuClientRect.left - coordinate.left > 0 ? menuClientRect.left - coordinate.left : 0,
+        yOffset = scope.verticalAlign === 'top' 
+            ? menuClientRect.top - coordinate.top > 0 ? menuClientRect.top - coordinate.top : 0
+            : menuClientRect.bottom - coordinate.bottom > 0 ? menuClientRect.bottom - coordinate.bottom : 0;
+
+      if (xOffset > 0 || yOffset > 0) {
+        angular.element(menuEl).css({
+          'top': scope.verticalAlign === 'top' ? coordinate.top - yOffset + scope.windowScroll.y + 'px' : '',
+          'bottom': scope.verticalAlign === 'bottom' 
+                    ? (scope.bodyHeight - coordinate.bottom - yOffset) + scope.windowScroll.y + 'px' : '',
+          'left': coordinate.left - xOffset + scope.windowScroll.x + 'px'
+        });
+      }
     };
 
     scope.toggleMenu = (event) => {
@@ -81,6 +100,7 @@ export class mdlSelect {
       menuEl.classList.add('mdc-menu--open');
       const coordinate = getNormalizedXCoordinate(event.currentTarget);
       autoPosition(menuEl, coordinate);
+      fixTransformInfluence(menuEl, coordinate);
       scope.menuOpen = !scope.menuOpen;
     };
 
