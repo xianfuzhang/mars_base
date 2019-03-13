@@ -92,7 +92,7 @@
                             </svg>
                         </div>
 
-                        <div ng-click="pathSettings()" id="path_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_PATH'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_path }" class="+front mdc-button topo_setting__button">
+                        <div ng-if="licenseModel.isCalcPathEnable" ng-click="pathSettings()" id="path_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_PATH'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_path }" class="+front mdc-button topo_setting__button">
                             <div class="path_topo" style="background-size: 28px;width:28px;height:28px;"></div>
                         </div>
 
@@ -113,16 +113,16 @@
                         </div>
 
                         <div style="margin-top:5px;">
-                            <span style="width:80px;display: inline-block"> {{'MODULES.TOPO.MONITOR.BUSY'|translate}}: </span>
-                            <valid-input style="display: inline-block;width:80px;" v-require="true" ng-model="fabricModel.busyMetric" v-type="int" v-rpcid="topo_monitor_metric" v-disabled="monitorInterval"></valid-input>
-                            <mdl-select style="display: inline-block;width:80px;" ng-model="fabricModel.busyMetricUnit" disable="monitorInterval!= null"
+                            <span style="width:80px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.MONITOR.BUSY'|translate}}: </span>
+                            <valid-input style="display: inline-block;width:80px;vertical-align: middle;" v-require="true" ng-model="fabricModel.busyMetric" v-type="int" v-rpcid="topo_monitor_metric" v-disabled="monitorInterval"></valid-input>
+                            <mdl-select style="display: inline-block;width:80px;vertical-align: middle;" ng-model="fabricModel.busyMetricUnit" disable="monitorInterval!= null"
                                         display-label="displayLabel.fluxUnits">
                             </mdl-select>
                         </div>
                         <div style="margin-top:5px;">
-                            <span style="width:80px;display: inline-block"> {{'MODULES.TOPO.MONITOR.CONGESTION'|translate}}: </span>
-                            <valid-input style="display: inline-block;width:80px;" v-require="true" ng-model="fabricModel.congestionMetric" v-type="int" v-rpcid="topo_monitor_metric" v-disabled="monitorInterval"></valid-input>
-                            <mdl-select style="display: inline-block;width:80px;" ng-model="fabricModel.congestionMetricUnit" disable="monitorInterval!= null"
+                            <span style="width:80px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.MONITOR.CONGESTION'|translate}}: </span>
+                            <valid-input style="display: inline-block;width:80px;vertical-align: middle;" v-require="true" ng-model="fabricModel.congestionMetric" v-type="int" v-rpcid="topo_monitor_metric" v-disabled="monitorInterval"></valid-input>
+                            <mdl-select style="display: inline-block;width:80px;vertical-align: middle;" ng-model="fabricModel.congestionMetricUnit" disable="monitorInterval!= null"
                                         display-label="displayLabel.fluxUnits">
                             </mdl-select>
                         </div>
@@ -135,7 +135,7 @@
                 </mar-section>
 
 
-                <mar-section ng-show="fabricModel.topoSetting.show_path"  s-title="{{'MODULES.TOPO.TITLE.PATH'|translate}}" class="detail_summary topo_path_search">
+                <mar-section ng-show="fabricModel.topoSetting.show_path && licenseModel.isCalcPathEnable"  s-title="{{'MODULES.TOPO.TITLE.PATH'|translate}}" class="detail_summary topo_path_search">
                     <transclude-body>
                         <div style="margin-top:5px;">
                             <span style="width:50px;display: inline-block"> {{'MODULES.TOPO.PATH.START'|translate}}: </span>
