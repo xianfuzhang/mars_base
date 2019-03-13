@@ -49,32 +49,38 @@ export class mdlSelect {
       helperElement.addClass('mdc-text-field-helper-text--persistent');
     }
 
-    let  getNormalizedXCoordinate = (target) => {
+    let getNormalizedXCoordinate = (target) => {
       const targetClientRect = target.getBoundingClientRect();
       return {
-        'left': targetClientRect.left + 'px',
-        'top': targetClientRect.bottom + 'px',
-        'width': targetClientRect.width + 'px'
+        'left': targetClientRect.left,
+        'top': targetClientRect.bottom,
+        'bottom': targetClientRect.top,
+        'width': targetClientRect.width
       };
     }
-    scope.toggleMenu = (event) => {
-      let menuEl;
-      if (event.target.classList.contains('mdc-select')) {
-        menuEl = event.target.lastElementChild;
+
+    let autoPosition = (menuEl, coordinate) => {
+      const menuClientRect = menuEl.getBoundingClientRect();
+      let verticalAlign = 'top';
+      const bodyHeight = this.di.$window.document.body.scrollHeight;
+      console.log(bodyHeight, menuClientRect.height, coordinate.top, coordinate.bottom);
+      if (coordinate.top + menuClientRect.height > bodyHeight) {
+        verticalAlign = 'bottom';
       }
-      else if (event.target.classList.contains('mdc-select__selected-text')) {
-        menuEl = event.target.nextElementSibling;
-      }
-      else {
-        menuEl = event.target.parentElement.nextElementSibling;
-      } 
-      const coordinate = getNormalizedXCoordinate(event.currentTarget);
+
       angular.element(menuEl).css({
-        'top': coordinate.top,
-        //'bottom': coordinate.bottom,
-        'left': coordinate.left,
-        'width': coordinate.width
+        'top': verticalAlign === 'top' ? coordinate.top + 'px' : '',
+        'bottom': verticalAlign === 'bottom' ? (bodyHeight - coordinate.bottom) + 'px' : '',
+        'left': coordinate.left + 'px',
+        'width': coordinate.width + 'px'
       });
+    };
+
+    scope.toggleMenu = (event) => {
+      let menuEl = element[0].querySelector('.mdc-select__menu');
+      menuEl.classList.add('mdc-menu--open');
+      const coordinate = getNormalizedXCoordinate(event.currentTarget);
+      autoPosition(menuEl, coordinate);
       scope.menuOpen = !scope.menuOpen;
     };
 
