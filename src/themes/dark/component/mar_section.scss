@@ -40,14 +40,14 @@
 
 
       @include state(expand){
-        animation: .15s ease-out;
-        animation-name: section_expand;
+        animation: section_expand 1.15s ease-out;
+        //animation-name: section_expand;
         transform: rotateZ(-90deg);
       }
 
       @include state(fold){
-        animation: .15s ease-out;
-        animation-name: section_fold;
+        animation: section_fold .15s ease-out;
+        //animation-name: section_fold;
         transform: rotateZ(0deg);
       }
 
