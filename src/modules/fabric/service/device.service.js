@@ -1750,7 +1750,7 @@ export class DeviceService {
     return {
       'menu': {'enable': false, 'role': 1},
       'add': {'enable': true, 'role': 2},
-      'remove': {'enable': true, 'role': 2},
+      'remove': {'enable': false, 'role': 2},
       'refresh': {'enable': true, 'role': 1},
       'search': {'enable': false, 'role': 2}
     };

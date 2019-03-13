@@ -198,7 +198,7 @@ export class DHCPRelayDefaultEstablishController {
       }
 
       return new Promise((resolve, reject) => {
-        deviceDataManager.postDHCPRelayDefault(params)
+        deviceDataManager.postDHCPRelayDefault({'default':[params]})
           .then(() => {
             rootScope.$emit('relay-default-list-refresh');
             resolve({valid: true, errorMessage: ''});
@@ -214,6 +214,7 @@ export class DHCPRelayDefaultEstablishController {
 
       scope.displayLabel.device.options = [];
       scope.displayLabel.port.options = [];
+      scope.displayLabel.device4add.options = [];
       scope.dhcpRelayModel = {
         segment_name: '',
         device: null,

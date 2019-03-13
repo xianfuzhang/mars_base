@@ -199,7 +199,7 @@ export class DHCPRelayIndirectEstablishController {
       }
 
       return new Promise((resolve, reject) => {
-        deviceDataManager.postDHCPRelayIndirect(params)
+        deviceDataManager.postDHCPRelayIndirect({'indirect':[params]})
           .then(() => {
             rootScope.$emit('relay-indirect-list-refresh');
             resolve({valid: true, errorMessage: ''});
@@ -214,6 +214,7 @@ export class DHCPRelayIndirectEstablishController {
       if (scope.showWizard) return;
 
       scope.displayLabel.device.options = [];
+      scope.displayLabel.device4add.options = [];
       scope.displayLabel.port.options = [];
       scope.dhcpRelayModel = {
         segment_name: '',

@@ -897,25 +897,32 @@ export class appService {
   }
 
   getDHCPRelayDefaultUrl(){
-    return this.getZoneEndpoint(true) + `/dhcprelay/v1/default`;
+    return this.getZoneEndpoint() + `/dhcprelay/v1/default`;
   }
 
   getDHCPRelayDefaultByDeviceAndPortUrl(device_id, port){
-    return this.getZoneEndpoint(true) + `/dhcprelay/v1/default/${device_id}/${port}`;
+    return this.getZoneEndpoint() + `/dhcprelay/v1/default/dhcpserverConnetPoint/${device_id}/${port}`;
   }
 
   getDHCPRelayIndirectUrl(){
-    return this.getZoneEndpoint(true) + `/dhcprelay/v1/indirect`;
+    return this.getZoneEndpoint() + `/dhcprelay/v1/indirect`;
   }
 
   getDHCPRelayIndirectByDeviceAndPortUrl(device_id, port){
-    return this.getZoneEndpoint(true) + `/dhcprelay/v1/indirect/${device_id}/${port}`;
+    return this.getZoneEndpoint() + `/dhcprelay/v1/indirect/dhcpserverConnetPoint/${device_id}/${port}`;
   }
 
   getDHCPRelayCountersUrl(){
-    return this.getZoneEndpoint(true) + `/dhcprelay/v1/counters`;
+    return this.getZoneEndpoint() + `/dhcprelay/v1/counters`;
   }
 
+  getUpLinkUrl(){
+    return this.getZoneEndpoint() + '/topology/v1/uplink-segments';
+  }
+
+  getUpLinkDeleteUrl(name){
+    return this.getZoneEndpoint() + '/topology/v1/uplink-segments/' + name;
+  }
 
 }
 

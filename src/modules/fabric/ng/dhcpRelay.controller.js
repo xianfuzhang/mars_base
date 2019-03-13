@@ -44,16 +44,19 @@ export class DHCPRelayController {
     scope.devices = [];
     let unsubscribers = [];
     unsubscribers.push(this.di.$rootScope.$on('relay-default-list-refresh',(event, params)=>{
-      let msg = params.update ? this.translate('MODULES.QOS.TAB.COS.UPDATE.SUCCESS')
-        : this.translate('MODULES.LOGICAL.QOS.TAB.COS.CREATE.SUCCESS');
+      // let msg = params.update ? this.translate('MODULES.QOS.TAB.COS.UPDATE.SUCCESS')
+      //   : this.translate('MODULES.LOGICAL.QOS.TAB.COS.CREATE.SUCCESS');
+
+      let msg = this.translate('MODULES.FABRIC.DHCPRELAY.DEFAULT.CREATE.SUCCESS');
       this.di.notificationService.renderSuccess(scope, msg);
       scope.model.api.queryUpdate();
     }));
 
     unsubscribers.push(this.di.$rootScope.$on('relay-indirect-list-refresh',(event, params)=>{
-      let msg = params.update ? this.translate('MODULES.LOGICAL.QOS.TAB.ECN.UPDATE.SUCCESS')
-        : this.translate('MODULES.LOGICAL.QOS.TAB.ECN.CREATE.SUCCESS');
+      // let msg = params.update ? this.translate('MODULES.LOGICAL.QOS.TAB.ECN.UPDATE.SUCCESS')
+      //   : this.translate('MODULES.LOGICAL.QOS.TAB.ECN.CREATE.SUCCESS');
 
+      let msg = this.translate('MODULES.FABRIC.DHCPRELAY.INDIRECT.CREATE.SUCCESS');
       this.di.notificationService.renderSuccess(scope, msg);
       this.scope.model.api.queryUpdate();
     }));
@@ -65,6 +68,7 @@ export class DHCPRelayController {
   initActions() {
     this.scope.onTabChange = (tab) => {
       if (tab && !this.scope.tabSwitch){
+        this.scope.model.subRelayIps = null;
         this.scope.tabSelected = tab;
         this.scope.tabSwitch = true;
         this.prepareTableData();
@@ -152,6 +156,10 @@ export class DHCPRelayController {
             });
 
             if(this.scope.tabSelected.type === 'default' || this.scope.tabSelected.type === 'indirect'){
+              if(this.scope.model.entities.length == 0){
+                this.scope.model.subRelayIps = null;
+                return ;
+              }
               this.scope.model.api.setSelectedRow(this.scope.model.entities[0].id);
               this.scope.model.subRelayIps = this.formatSubTableValue(this.scope.model.entities[0].relayAgentIps);
               this.scope.model.subApi.queryUpdate();
@@ -369,7 +377,7 @@ export class DHCPRelayController {
   getDeviceName(deviceId){
     let device =  this.di._.find(this.di.$scope.devices,{"id": deviceId});
     if(device) return device['name'];
-    else return '';
+    else return deviceId;
   }
 }
 

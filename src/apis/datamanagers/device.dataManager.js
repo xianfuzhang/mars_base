@@ -955,37 +955,37 @@ export class DeviceDataManager {
 
   getDHCPRelayIndirect() {
 
-    let defer = this.di.$q.defer();
-    let testValue = [
-      {"dhcpServerConnectPoint": "rest:192.168.40.240:80/10","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.2","ipv6": "2001:2::254"}}},
-      {"dhcpServerConnectPoint": "rest:192.168.40.240:80/1221","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.3","ipv6": "2001:2::254"}}},
-      {"dhcpServerConnectPoint": "rest:192.168.40.240:80/12","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.4","ipv6": "2001:2::254"}}},
-      {"dhcpServerConnectPoint": "rest:192.168.40.240:80/14","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.6","ipv6": "2001:2::254"}}},
-      {"dhcpServerConnectPoint": "rest:192.168.40.240:80/122","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.5","ipv6": "2001:2::254"}}},
-    ];
-
-    this.di.$http.get(this.di.appService.getDeviceConfigsUrl()).then(
-      (res) => {
-        defer.resolve(testValue);
-      },
-      (error) => {
-        this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error +"）")
-        defer.resolve([]);
-      }
-    );
-    return defer.promise;
-
-    //
     // let defer = this.di.$q.defer();
-    // this.di.$http.get(this.di.appService.getDHCPRelayIndirectUrl()).then(
+    // let testValue = [
+    //   {"dhcpServerConnectPoint": "rest:192.168.40.240:80/10","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.2","ipv6": "2001:2::254"}}},
+    //   {"dhcpServerConnectPoint": "rest:192.168.40.240:80/1221","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.3","ipv6": "2001:2::254"}}},
+    //   {"dhcpServerConnectPoint": "rest:192.168.40.240:80/12","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.4","ipv6": "2001:2::254"}}},
+    //   {"dhcpServerConnectPoint": "rest:192.168.40.240:80/14","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.6","ipv6": "2001:2::254"}}},
+    //   {"dhcpServerConnectPoint": "rest:192.168.40.240:80/122","serverIps": ["10.0.3.252", "2002:4::253"],"gatewayIps": ["10.0.3.100","2001:3::100"],"relayAgentIps": {"rest:192.168.40.240:80": {"ipv4": "10.0.2.5","ipv6": "2001:2::254"}}},
+    // ];
+    //
+    // this.di.$http.get(this.di.appService.getDeviceConfigsUrl()).then(
     //   (res) => {
-    //     defer.resolve(res.data.default);
+    //     defer.resolve(testValue);
     //   },
     //   (error) => {
-    //     defer.reject(error.data);
+    //     this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error +"）")
+    //     defer.resolve([]);
     //   }
     // );
     // return defer.promise;
+
+
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDHCPRelayIndirectUrl()).then(
+      (res) => {
+        defer.resolve(res.data.indirect);
+      },
+      (error) => {
+        defer.reject(error.data);
+      }
+    );
+    return defer.promise;
   }
 
 
@@ -1107,38 +1107,35 @@ export class DeviceDataManager {
   }
 
   getDHCPRelayCounters() {
-    let defer = this.di.$q.defer();
-    let testValue = [
-      {"advertise":6,"host":"00:00:00:00:01:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
-      {"advertise":6,"host":"00:00:00:00:20:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
-      {"advertise":6,"host":"00:00:00:00:30:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
-      {"advertise":6,"host":"00:00:00:00:50:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
-    ];
-
-    this.di.$http.get(this.di.appService.getDeviceConfigsUrl()).then(
-      (res) => {
-        defer.resolve(testValue);
-      },
-      (error) => {
-        this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error +"）")
-        defer.resolve([]);
-      }
-    );
-    return defer.promise;
-
-
-
-
     // let defer = this.di.$q.defer();
-    // this.di.$http.get(this.di.appService.getDHCPRelayCountersUrl()).then(
+    // let testValue = [
+    //   {"advertise":6,"host":"00:00:00:00:01:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
+    //   {"advertise":6,"host":"00:00:00:00:20:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
+    //   {"advertise":6,"host":"00:00:00:00:30:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
+    //   {"advertise":6,"host":"00:00:00:00:50:00/None","location":{"deviceId":"rest:192.168.40.240:80","port":3},"renew":7,"reply":8,"request":5,"solicit":4},
+    // ];
+    //
+    // this.di.$http.get(this.di.appService.getDeviceConfigsUrl()).then(
     //   (res) => {
-    //     defer.resolve(res.data.couters);
+    //     defer.resolve(testValue);
     //   },
     //   (error) => {
-    //     defer.reject(error.data);
+    //     this.di.$log.error("Url: " + this.di.appService.getDeviceConfigsUrl() + " has no response with error(" + error +"）")
+    //     defer.resolve([]);
     //   }
     // );
     // return defer.promise;
+
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDHCPRelayCountersUrl()).then(
+      (res) => {
+        defer.resolve(res.data.couters);
+      },
+      (error) => {
+        defer.reject(error.data);
+      }
+    );
+    return defer.promise;
   }
 
 }
