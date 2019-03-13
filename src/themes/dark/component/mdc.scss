@@ -120,7 +120,7 @@
   box-sizing: border-box;
   position: absolute;
   left: 0;
-  width: 100%;
+  width: calc(100% - 24px);
   height: 35px;
   bottom: 0;
   padding-left: 8px;
@@ -128,25 +128,34 @@
 }
 .mdc-select__selected-text>.icon{
   position: relative;
-  top: 8px;
+  top: 10px;
   margin-right: 5px;
   display: inline-block;
   vertical-align: middle;
 }
 .mdc-select__selected-text>.text{
   position: relative;
-  top: 8px;
+  top: 12px;
   display: inline-block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mdc-select__selected-text>.icon~.text{
+  width: calc(100% - 40px);
+  top: 5px;
 }
 .mdc-select .mdc-select__menu{
-  position: absolute;
+  //position: absolute;
+  position: fixed;
   box-sizing: border-box;
   display: none;
   max-height: 150px;
   opacity: 0;
-  left: 0;
-  top: 52px;
-  width: 100%;
+  //left: 0;
+  //top: 52px;
+  //width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 10001;
@@ -155,9 +164,9 @@
   border-radius: 0 0 4px 4px;
   box-shadow: 0 2px 2px -3px rgba(0,0,0,.2), 0 3px 3px 1px rgba(0,0,0,.14), 0 5px 5px 2px rgba(0,0,0,.12);
 }
-.mdc-select.mdc-select--no-label .mdc-select__menu{
+/* .mdc-select.mdc-select--no-label .mdc-select__menu{
   top: 35px;
-}
+} */
 .mdc-select__menu.mdc-menu--open{
   display: inline-block;
   transform: scale(1);

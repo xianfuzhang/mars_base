@@ -49,10 +49,33 @@ export class mdlSelect {
       helperElement.addClass('mdc-text-field-helper-text--persistent');
     }
 
+    let  getNormalizedXCoordinate = (target) => {
+      const targetClientRect = target.getBoundingClientRect();
+      return {
+        'left': targetClientRect.left + 'px',
+        'top': targetClientRect.bottom + 'px',
+        'width': targetClientRect.width + 'px'
+      };
+    }
     scope.toggleMenu = (event) => {
+      let menuEl;
+      if (event.target.classList.contains('mdc-select')) {
+        menuEl = event.target.lastElementChild;
+      }
+      else if (event.target.classList.contains('mdc-select__selected-text')) {
+        menuEl = event.target.nextElementSibling;
+      }
+      else {
+        menuEl = event.target.parentElement.nextElementSibling;
+      } 
+      const coordinate = getNormalizedXCoordinate(event.currentTarget);
+      angular.element(menuEl).css({
+        'top': coordinate.top,
+        //'bottom': coordinate.bottom,
+        'left': coordinate.left,
+        'width': coordinate.width
+      });
       scope.menuOpen = !scope.menuOpen;
-      event.preventDefault();
-      event.stopPropagation();
     };
 
     scope.changeSelect = (event, item) => {
@@ -104,17 +127,18 @@ export class mdlSelect {
       }
     });
 
-    let body = this.di.$window.document.querySelector('body');
-    let clickOutsideHandler = (event) => {
+    let menuClosedHandler = (event) => {
       if (!element[0].contains(event.target)) {
         scope.menuOpen = false;
       }
       scope.$evalAsync();
     };
-    body.addEventListener('click', clickOutsideHandler, true);
+    this.di.$window.addEventListener('click', menuClosedHandler, true);
+    this.di.$window.addEventListener('scroll', menuClosedHandler, true);
 
     scope.$on('$destroy', () => {
-      body.removeEventListener('click', clickOutsideHandler, true);
+      this.di.$window.removeEventListener('click', menuClosedHandler, true);
+      this.di.$window.removeEventListener('scroll', menuClosedHandler, true);
     });
   }
 }
