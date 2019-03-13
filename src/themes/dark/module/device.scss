@@ -518,3 +518,30 @@
   animation: .4s linear;
   animation-name: shake;
 }
+
+
+.topo_monitor{
+  //transform: scale(1);
+  transition: all linear .5s;
+  transform: scale(1);
+  max-height: 300px;
+  opacity: 1;
+}
+
+.topo_monitor.ng-hide{
+  max-height: 0;
+  opacity: 0;
+}
+
+.topo_path_search{
+  //transform: scale(1);
+  transition: all linear .5s;
+  transform: scale(1);
+  max-height: 300px;
+  opacity: 1;
+}
+
+.topo_path_search.ng-hide{
+  max-height: 0;
+  opacity: 0;
+}
