@@ -51,7 +51,6 @@ export class mdlSelect {
 
     let  getNormalizedXCoordinate = (target) => {
       const targetClientRect = target.getBoundingClientRect();
-      console.log('retangle area....,  left= ' + targetClientRect.left + ', top= ' + targetClientRect.bottom);
       return {
         'left': targetClientRect.left + 'px',
         'top': targetClientRect.bottom + 'px',

@@ -120,7 +120,7 @@
   box-sizing: border-box;
   position: absolute;
   left: 0;
-  width: 100%;
+  width: calc(100% - 24px);
   height: 35px;
   bottom: 0;
   padding-left: 8px;
@@ -128,15 +128,23 @@
 }
 .mdc-select__selected-text>.icon{
   position: relative;
-  top: 8px;
+  top: 10px;
   margin-right: 5px;
   display: inline-block;
   vertical-align: middle;
 }
 .mdc-select__selected-text>.text{
   position: relative;
-  top: 8px;
+  top: 12px;
   display: inline-block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mdc-select__selected-text>.icon~.text{
+  width: calc(100% - 40px);
+  top: 5px;
 }
 .mdc-select .mdc-select__menu{
   //position: absolute;
