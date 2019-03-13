@@ -58,9 +58,19 @@ export class FabricSummaryController {
     let scope = this.di.$scope;
     scope.role = this.di.roleService.getRole();
 
-    scope.isOpenflowEnable= false;
-    scope.isQosEnable= false;
-    scope.isSwtManageEnable= false;
+    scope.licenseModel = {
+      isOpenflowEnable: false,
+      isQosEnable: false,
+      isSwtManageEnable: false,
+      isLogicalPortEnable: false,
+      isCalcPathEnable: false
+    };
+
+    // scope.isOpenflowEnable= false;
+    // scope.isQosEnable= false;
+    // scope.isSwtManageEnable= false;
+    // scope.isLogicalPortEnable = false;
+    // scope.isCalcPathEnable = false;
 
 
     let initializeTransitionFlag = false;
@@ -270,13 +280,15 @@ export class FabricSummaryController {
       promises.push(endpointsDefer.promise);
 
       this.logicalPorts = [];
-      this.di.deviceDataManager.getLogicalPortsList().then((ports)=>{
-        this.logicalPorts = ports;
-        logicalPortDefer.resolve();
-      },(err)=>{
-        logicalPortDefer.resolve();
-      });
-      promises.push(logicalPortDefer.promise);
+      if(scope.licenseModel.isLogicalPortEnable){
+        this.di.deviceDataManager.getLogicalPortsList().then((ports)=>{
+          this.logicalPorts = ports;
+          logicalPortDefer.resolve();
+        },(err)=>{
+          logicalPortDefer.resolve();
+        });
+        promises.push(logicalPortDefer.promise);
+      }
 
       Promise.all(promises).then(()=>{
 
@@ -1300,40 +1312,45 @@ export class FabricSummaryController {
         let QOS_APP_NAME = 'com.nocsys.qos';
         let SWTMGT_APP_NAME = 'com.nocsys.switchmgmt';
         let LOGICALPORT_APP_NAME = 'com.nocsys.logicalport';
+        let CALCPATH_APP_NAME = 'com.nocsys.calcpath';
 
         if(allState[OPENFLOW_APP_NAME] === 'ACTIVE'){
-          scope.isOpenflowEnable= true;
+          scope.licenseModel.isOpenflowEnable= true;
         }
 
         if(allState[QOS_APP_NAME] === 'ACTIVE'){
-          scope.isQosEnable= true;
+          scope.licenseModel.isQosEnable= true;
         }
 
         if(allState[SWTMGT_APP_NAME] === 'ACTIVE'){
-          scope.isSwtManageEnable= true;
+          scope.licenseModel.isSwtManageEnable= true;
         }
 
         if(allState[LOGICALPORT_APP_NAME] === 'ACTIVE'){
-          scope.isLogicalPortEnable= true;
+          scope.licenseModel.isLogicalPortEnable= true;
+        }
+
+        if(allState[CALCPATH_APP_NAME] === 'ACTIVE'){
+          scope.licenseModel.isCalcPathEnable= true;
         }
 
 
       };
       let _reset_right_menu = () =>{
 
-        if(!scope.isOpenflowEnable){
+        if(!scope.licenseModel.isOpenflowEnable){
           this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
             return 'summary_switch_menu_create_flow' === item['msg'] || 'summary_switch_menu_show_flow' === item['msg'] ||'summary_switch_menu_create_group' === item['msg']||'summary_switch_menu_show_group' === item['msg']
           });
         }
 
-        if(!scope.isQosEnable){
+        if(!scope.licenseModel.isQosEnable){
           this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
             return 'summary_switch_pfc' === item['msg'] || 'summary_switch_menu_show_pfc' === item['msg'];
           });
         }
 
-        if(!scope.isSwtManageEnable){
+        if(!scope.licenseModel.isSwtManageEnable){
           this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
             return 'summary_switch_reboot' === item['msg'];
           });
