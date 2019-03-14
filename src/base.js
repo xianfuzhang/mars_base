@@ -110,6 +110,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/hosts', {
+      template: require('./modules/fabric/template/hosts.html'),
+      controller: 'hostController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/logical_port', {
       template: require('./modules/fabric/template/interface_group.html'),
       controller: 'interfaceGroupController',
