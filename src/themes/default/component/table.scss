@@ -343,7 +343,8 @@ th.sortable.sort-desc .icon-sort .arrow-right{
   font-size: 20px;
   font-weight: 700;
   border-bottom: 1px solid rgba(0,0,0,0.3);
-  background-color: #7accef;
+  //background-color: #7accef;
+  background: linear-gradient(to right, #99a9c1, #8ed6f3, #5d90a5 98%, #6c909c);
   border-top-right-radius: 8px;
   border-top-left-radius: 8px;
 }

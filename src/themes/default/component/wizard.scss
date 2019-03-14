@@ -11,7 +11,8 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(224,224,224,.7);
+  background: rgba(74,74,74,.7);
+  //background-color: #4a4a4a;
   z-index: 1000;
   overflow: hidden;
 
@@ -25,7 +26,8 @@
     width: 760px;
     border-radius: 8px;
     background: #fff;
-    border: 1px solid #000;
+    //border: 1px solid #000;
+    box-shadow: 0 0 3px 3px rgba(0,0,0,.4);
     overflow: hidden;
     animation: come-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
@@ -58,7 +60,8 @@
     width: 570px;
     border-radius: 8px;
     background: #fff;
-    border: 1px solid #000;
+    //border: 1px solid #000;
+    box-shadow: 0 0 3px 3px rgba(0,0,0,.4);
     overflow: hidden;
     animation: come-in-single 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
@@ -90,7 +93,8 @@
     line-height: 40px;
     padding: 5px 0;
     border-bottom: 1px solid #777;
-    background-color: #7accef;
+    //background-color: #7accef;
+    background: linear-gradient(to right, #99a9c1, #8ed6f3, #5d90a5 98%, #6c909c);
 
     @include element(title) {
       float: left;

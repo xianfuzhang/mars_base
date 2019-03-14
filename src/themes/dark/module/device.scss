@@ -107,7 +107,7 @@
     //flex-basis: auto;
     //flex-shrink: 1;
     //background-color: white;
-    overflow: scroll;
+    overflow: auto;
     padding: 0 8px;
     //display: flex;
     //flex-direction: column;
@@ -182,7 +182,7 @@
         //background-color: white;
         width: 295px;
         display: inline-block;
-        overflow: scroll;
+        overflow: auto;
       }
     }
   }
@@ -517,4 +517,29 @@
 .shake_animation{
   animation: .4s linear;
   animation-name: shake;
+}
+
+
+.topo_monitor{
+  //transform: scale(1);
+  transition: all linear .5s;
+  max-height: 300px;
+  opacity: 1;
+}
+
+.topo_monitor.ng-hide{
+  max-height: 0;
+  opacity: 0;
+}
+
+.topo_path_search{
+  //transform: scale(1);
+  transition: all linear .5s;
+  max-height: 300px;
+  opacity: 1;
+}
+
+.topo_path_search.ng-hide{
+  max-height: 0;
+  opacity: 0;
 }

@@ -1,16 +1,16 @@
 export class UpLinkEstablishController {
-	static getDI() {
-		return [
-			'$scope',
+  static getDI() {
+    return [
+      '$scope',
       '$rootScope',
       '$filter',
       '$timeout',
       '_',
       'deviceDataManager',
-		];
-	}
-	constructor(...args){
-		this.di = {};
+    ];
+  }
+  constructor(...args){
+    this.di = {};
     UpLinkEstablishController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -25,6 +25,7 @@ export class UpLinkEstablishController {
     scope.queue_regex = '^[0-7]$';
     scope.deviceId = null;
     scope.isEdit = false;
+    scope.isOpenFlow = false;
 
 
     scope.showWizard = false;
@@ -43,6 +44,7 @@ export class UpLinkEstablishController {
       device: null,
       vlan: '',
       gateway: '',
+      gateway_mac:'',
       ip_address: '',
       ports: []
     };
@@ -50,9 +52,9 @@ export class UpLinkEstablishController {
     scope.displayLabel = {
       device:{'options':[]},
       tag:{'options':[
-          {'label': 'Tag', 'value': 'tag'},
-          {'label': 'Untag', 'value':'untag'}
-        ]
+        {'label': 'Tag', 'value': 'tag'},
+        {'label': 'Untag', 'value':'untag'}
+      ]
       }
     };
 
@@ -78,7 +80,6 @@ export class UpLinkEstablishController {
       }
       return true;
     }
-
 
     scope.deletePorts = (port) =>{
       this.di._.remove(scope.upLinkModel.ports, function(n) {
@@ -123,6 +124,7 @@ export class UpLinkEstablishController {
       params['vlan'] = parseInt(scope.upLinkModel.vlan);
       params['device_id'] = scope.upLinkModel.device.value || '';
       params['gateway'] = scope.upLinkModel.gateway;
+      params['gateway_mac'] = scope.upLinkModel.gateway_mac;
       params['ip_address'] = scope.upLinkModel.ip_address;
       params['ports'] = genPortValue4Sub();
 
@@ -178,17 +180,19 @@ export class UpLinkEstablishController {
       };
       deviceDataManager.getDeviceConfigs().then((configs)=>{
         this.di._.forEach(configs,(config)=>{
-          if(config['id'].toLocaleLowerCase().indexOf('grpc') != -1 || config['id'].toLocaleLowerCase().indexOf('rest') != -1){
-            scope.displayLabel.device.options.push({'label':config['name'], 'value':config['id']})
+          // if(config['id'].toLocaleLowerCase().indexOf('grpc') != -1 || config['id'].toLocaleLowerCase().indexOf('rest') != -1){
+          if(config['type'] === 'leaf') {
+            scope.displayLabel.device.options.push({'label': config['name'], 'value': config['id']})
           }
+          // }
 
         });
         scope.upLinkModel.device = scope.displayLabel.device.options[0];
 
         scope.showWizard = true;
-        }, (error) => {
+      }, (error) => {
         scope.showWizard = true;
-        });
+      });
     };
 
     unsubscribes.push(this.di.$rootScope.$on('uplink-wizard-show', ($event) => {
@@ -200,7 +204,7 @@ export class UpLinkEstablishController {
         cb();
       })
     });
-	}
+  }
 }
 UpLinkEstablishController.$inject = UpLinkEstablishController.getDI();
 UpLinkEstablishController.$$ngIsClass = true;

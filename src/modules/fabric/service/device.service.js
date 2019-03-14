@@ -1233,6 +1233,11 @@ export class DeviceService {
         'layout': {'visible': true, 'sortable': true}
       },
       {
+        'label': this.translate('MODULES.FABRIC.UPLINK.COLUMN.GATEWAY_MAC'),
+        'field': 'gateway_mac',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
         'label': this.translate('MODULES.FABRIC.UPLINK.COLUMN.IPADDRESS'),
         'field': 'ip_address',
         'layout': {'visible': true, 'sortable': true}
