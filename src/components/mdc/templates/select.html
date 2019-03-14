@@ -6,8 +6,8 @@
     <label class="mdc-floating-label" ng-class="{'mdc-floating-label--float-above': value}">{{hint}}</label>
     <div class="mdc-line-ripple" ng-class="{'mdc-line-ripple--active': menuOpen}"></div>
     <div class="mdc-select__selected-text" ng-if="value">
-      <span class="icon" ng-if="iconSupport"><i class="material-icons">{{value.type}}</i></span>
-      <span class="text" ng-bind="value.label"></span>
+      <div class="icon" ng-if="iconSupport"><i class="material-icons">{{value.type}}</i></div>
+      <div class="text" ng-bind="value.label" title="{{value.label}}"></div>
     </div>
     <div class="mdc-select__menu" ng-class="{'mdc-menu--open': menuOpen}">
       <ul class="mdc-select-list" ng-if="options.length != 0">
@@ -16,7 +16,7 @@
           <div class="mdc-select-list-item__icon" ng-if="iconSupport">
             <i class="material-icons icon">{{item.type}}</i>
           </div>
-          <div class="mdc-select-list-item__text" ng-bind="item.label"></div>
+          <div class="mdc-select-list-item__text" ng-bind="item.label" title="{{item.label}}"></div>
         </li>
       </ul>
     </div>

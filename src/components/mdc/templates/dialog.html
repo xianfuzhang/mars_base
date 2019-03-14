@@ -2,7 +2,7 @@
        class="mdc-dialog mdc-dialog--open"
        role="alertdialog"
        aria-labelledby="my-mdc-dialog-label"
-       aria-describedby="my-mdc-dialog-description">
+       aria-describedby="my-mdc-dialog-description" stype="border:0; box-shadow: 2px 2px 2px gray">
   <div class="mdc-dialog__surface">
     <header class="mdc-dialog__header">
       <div id="my-mdc-dialog-label" class="mdc-dialog__header__title">
@@ -39,8 +39,8 @@
        role="alertdialog"
        aria-labelledby="my-mdc-dialog-label"
        aria-describedby="my-mdc-dialog-description"
-       uib-modal-window="modal-window">
-  <div class="mdc-dialog__surface" style="max-height:400px;overflow: scroll;padding:16px;">
+       uib-modal-window="modal-window" stype="border:0; box-shadow: 2px 2px 2px gray">
+  <div class="mdc-dialog__surface" style="max-height:400px;overflow: auto;padding:16px;">
     <div id="" class="mdc-dialog__header__title">
     </div>
     <pre ng-style="infoStyle">{{content}}</pre>

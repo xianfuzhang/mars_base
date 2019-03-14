@@ -13,11 +13,12 @@
   border: 1px solid #000;
   height: auto;
   background-color: #fff;
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 0 3px 3px rgba(0,0,0,.4);
+  //box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   box-sizing: border-box;
   outline: none;
   opacity: 0;
-  transform: scale(0);
+  //transform: scale(0);
 }
 .modal {
   display: flex;
@@ -39,20 +40,38 @@
   outline: none;
 }
 .modalWizard.ease_in {
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   opacity: 1;
-  transform: scale(1);
+  animation: ease_in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  /*transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: scale(1); */
 }
 .modalWizard.ease_out {
-  transition: all 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
-  opacity: 0;
-  transform: scale(0);
+  /* transition: all 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  transform: scale(0); */
+  opacity: 1;
+  animation: ease_out 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
-
+@keyframes ease_in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes ease_out {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0);
+  }
+}
 .modal-content-container {
   display: flex;
   width: 100%;
   user-select: none;
+  background: #282828;
 }
 .modal-content {
   display: flex;
@@ -126,7 +145,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgb(224, 224, 224);
+  background-color: #4a4a4a;
   //transition: all 5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
 }
 .modal-backdrop.fade {

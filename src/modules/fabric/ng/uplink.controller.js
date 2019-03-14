@@ -138,6 +138,7 @@ export class UpLinkController {
       obj.device_id = this.getDeviceName(item.device_id);
       obj.vlan = item.vlan;
       obj.gateway = item.gateway;
+      obj.gateway_mac = item.gateway_mac;
       obj.ip_address = item.ip_address;
       obj.ports = Array.isArray(item.ports)?item.ports.join(', '):"";
       entities.push(obj);

@@ -176,9 +176,56 @@ mdc设置组件颜色
   background-repeat: no-repeat;*/
   position: relative;
   display: inline-block;
-  width: 10px;
+  width: 16px;
   height: 20px;
   vertical-align: middle;
+  opacity: 0;
+  transform: translateY(25%);
+  transition: all .3s linear;
+}
+th.sortable:hover .icon-sort{
+  opacity: 0.7;
+  transform: translateY(0);
+}
+th.sortable.sort-asc .icon-sort,
+th.sortable.sort-desc .icon-sort{
+  transform: translateY(0);
+  opacity: 1;
+}
+.mdl-table-header__row th.sortable .icon-sort .arrow-middle{
+  width: 2px;
+  background-color: #f0f0f0;
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  height: 12px;
+}
+th.sortable .icon-sort .arrow-left, th.sortable .icon-sort .arrow-right{
+  position: absolute;
+  content: "";
+  width: 2px;
+  height: 8px;
+  background-color: #f0f0f0;
+}
+th.sortable .icon-sort .arrow-left{
+  top: 1px;
+  left: 6px;
+  transform: rotateZ(45deg);
+}
+th.sortable .icon-sort .arrow-right{
+  top: 1px;
+  left: 10px;
+  transform: rotateZ(-45deg);
+}
+th.sortable.sort-desc .icon-sort .arrow-left{
+  transition: all .1s linear;
+  top: 10px;
+  transform: rotate(-45deg);
+}
+th.sortable.sort-desc .icon-sort .arrow-right{
+  transition: all .1s linear;
+  top: 10px;
+  transform: rotate(45deg);
 }
 /*.mdl-table-header__row th.sortable .icon-sort-desc{
   background-image: url("../images/arrow_down.svg");
@@ -298,7 +345,8 @@ mdc设置组件颜色
   font-weight: 700;
   color: white;
   border-bottom: 1px solid rgba(0,0,0,0.3);
-  background-color: #7accef;
+  //background-color: #7accef;
+  background: linear-gradient(to right, #99a9c1, #8ed6f3, #5d90a5 98%, #6c909c);
   border-top-right-radius: 8px;
   border-top-left-radius: 8px;
 }

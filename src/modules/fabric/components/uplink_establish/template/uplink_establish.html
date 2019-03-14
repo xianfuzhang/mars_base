@@ -1,7 +1,7 @@
 <div class="uplink_establish">
 
     <div class="stepForm__input">
-        <div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.SEGMENT_NAME'|translate}}</div>
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.SEGMENT_NAME'|translate}}<span class="stepForm__input__required">*</span></div>
         <valid-input  v-name="segmentName" v-require="true" ng-model="upLinkModel.segment_name" v-rpcid="page_uplink_es" ></valid-input>
     </div>
 
@@ -12,17 +12,23 @@
     </div>
 
     <div class="stepForm__input">
-        <div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.VLAN'|translate}}</div>
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.VLAN'|translate}}<span class="stepForm__input__required">*</span></div>
         <valid-input  v-name="vlan" v-require="true" ng-model="upLinkModel.vlan" v-type="vlan" v-rpcid="page_uplink_es" ></valid-input>
     </div>
 
     <div class="stepForm__input">
-        <div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.GATEWAY'|translate}}</div>
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.GATEWAY'|translate}}<span class="stepForm__input__required">*</span></div>
         <valid-input  v-name="gw" v-require="true" ng-model="upLinkModel.gateway" v-type="ipv4"  v-rpcid="page_uplink_es" ></valid-input>
     </div>
 
     <div class="stepForm__input">
-        <div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.IPADDRESS'|translate}}</div>
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.GATEWAY_MAC'|translate}}<span ng-show="upLinkModel.device.value.indexOf('of') == 0" class="stepForm__input__required">*</span></div>
+        <valid-input ng-if="upLinkModel.device.value.indexOf('of') == 0"  v-name="gw_mac" v-require="true" ng-model="upLinkModel.gateway_mac" v-type="mac"  v-rpcid="page_uplink_es" ></valid-input>
+        <valid-input ng-if="upLinkModel.device.value.indexOf('of') != 0" v-name="gw_mac" ng-model="upLinkModel.gateway_mac" v-type="mac"  v-rpcid="page_uplink_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.IPADDRESS'|translate}}<span class="stepForm__input__required">*</span></div>
         <valid-input  v-name="ip" v-require="true" ng-model="upLinkModel.ip_address" v-type="ipv4_mask"  v-rpcid="page_uplink_es" ></valid-input>
     </div>
 

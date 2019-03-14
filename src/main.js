@@ -3,6 +3,7 @@ import './themes/default/index.scss';
 import 'angular';
 import 'angular-cookies';
 import 'angular-route';
+import 'angular-animate';
 import 'angular-translate';
 import 'angular-ui-bootstrap';
 
@@ -56,6 +57,7 @@ angular
   .module('marsApp', [
     'ngRoute',
     'ngCookies',
+    'ngAnimate',
     'ui.bootstrap',
     'pascalprecht.translate',
     '_',
