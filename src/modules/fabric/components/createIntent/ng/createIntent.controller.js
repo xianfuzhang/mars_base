@@ -91,8 +91,8 @@ export class CreateIntentController {
             dst_mac = this.scope.model.dstHost.value,
             srcEndpoint = this.di._.find(this.di.dataModel.endpoints, {'mac': src_mac}),
             dstEndpoint = this.di._.find(this.di.dataModel.endpoints, {'mac': dst_mac}),
-            src_vlan = srcEndpoint && srcEndpoint.segment_name || -1,
-            dst_vlan = dstEndpoint && dstEndpoint.segment_name || -1;
+            src_vlan = srcEndpoint && (srcEndpoint.segment === 'unknown' ? -1 : srcEndpoint.segment) || -1,
+            dst_vlan = dstEndpoint && (dstEndpoint.segment === 'unknown' ? -1 : dstEndpoint.segment) || -1;
 
         data['one'] = src_mac + '/' + src_vlan;
         data['two'] = dst_mac + '/' + dst_vlan;
@@ -155,7 +155,7 @@ export class CreateIntentController {
       this.scope.typesLabel.options.push({'label': '端点到端点', 'value': 'HostToHostIntent'});
       let options = [];
       endpoints.forEach((endpoint) => {
-        options.push({'label': endpoint.mac, 'value': endpoint.mac});        
+        options.push({'label': endpoint.id, 'value': endpoint.mac});        
       });
       this.scope.srcEndpointsLabel.options = options;
       this.scope.dstEndpointsLabel.options = options;
