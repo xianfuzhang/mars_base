@@ -230,11 +230,18 @@ export class DHCPRelayIndirectEstablishController {
         gateway_ip: '',
       };
 
-      scope.ingressPortDisplayLabel= {
-        id: 'ingressPort',
+      scope.serverIPDisplayLabel= {
+        id: 'serverIP',
           hint: "IPv4或IPv6",
           type: 'text',
           required: 'true'
+      };
+
+      scope.gatewayIPDisplayLabel= {
+        id: 'gatewayIP',
+        hint: "IPv4或IPv6",
+        type: 'text',
+        required: 'true'
       };
 
       let deviceDefer = this.di.$q.defer();

@@ -16,7 +16,7 @@
         <!--<valid-input style="width:90%;display:inline-block;" ng-model="dhcpRelayModel.server_ip" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>-->
         <div>
             <mdl-text ng-model="dhcpRelayModel.server_ip" style="display:inline-block;"
-                      display-label="ingressPortDisplayLabel">
+                      display-label="serverIPDisplayLabel">
             </mdl-text>
 
             <div class="add-btn mdc-ripple-surface" ng-click="addServerIP()">
@@ -36,7 +36,7 @@
         <!--<valid-input style="width:90%;display:inline-block;" ng-model="dhcpRelayModel.gateway_ip" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>-->
         <div>
             <mdl-text ng-model="dhcpRelayModel.gateway_ip" style="display:inline-block;"
-                      display-label="ingressPortDisplayLabel">
+                      display-label="gatewayIPDisplayLabel">
             </mdl-text>
 
             <div class="add-btn mdc-ripple-surface" ng-click="addGatewayIP()">
