@@ -6,9 +6,16 @@
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">threshold<span class="stepForm__input__required">*</span></div>
-        <mdl-text ng-model="model.threshold"
-                  helper="model.thresholdHelper"
-                  display-label="model.thresholdDisplayLabel">
-        </mdl-text>
+        <!--<mdl-text ng-model="model.threshold"-->
+                  <!--helper="model.thresholdHelper"-->
+                  <!--display-label="model.thresholdDisplayLabel">-->
+        <!--</mdl-text>-->
+        <valid-input v-require="true"
+                     v-helper="{{'MODULES.LOGICAL.QOS.TAB.ECN.THRESHOLD.HELP'|translate}}"
+                     v-message="{{'MODULES.LOGICAL.QOS.TAB.ECN.THRESHOLD.HELP'|translate}}"
+                         v-regex="dscp_regex"
+                     ng-model="model.threshold"
+                     v-rpcid="page_qos_ecn">
+        </valid-input>
     </div>
 </div>
