@@ -2,15 +2,21 @@
  * Created by wls on 2018/6/7.
  */
 
+import {MDCTextField} from '@material/textfield';
+import {MDCTextFieldHelperText} from '@material/textfield/helper-text';
+import {MDCTextFieldIcon} from '@material/textfield/icon';
+
 export class validInput {
-  static getDI () {
+  static getDI() {
     return [
       '$rootScope',
-      '$filter'
+      '$filter',
+      '$timeout',
+      'uuid'
     ];
   }
 
-  constructor (...args) {
+  constructor(...args) {
     this.di = [];
     validInput.getDI().forEach((value, index) => {
       this.di[value] = args[index];
@@ -20,16 +26,24 @@ export class validInput {
     this.restrict = 'E';
     this.template = require('../template/valid_input');
     this.translate = this.di.$filter('translate');
+    this.transclude = {
+      'trailing': '?transcludeTrailing',
+      'leading': '?transcludeLeading'
+    };
 
     this.scope = {
-      vName : '@',
+      vName: '@',
+      vLabel: '@',
+      vHelper: '@',
+      vFixedHeight: '@',
       vRequire: '@',
-      vModel : '=ngModel',
+      vModel: '=ngModel',
       ngChange: '&',
       vRegex: '=',
       vType: '=',
       vMessage: '@',
       vRpcid: '@',
+      vEmptyMessage : '@',
       vDisabled: '=',
       vStyle: '@',
       vSpan: '@',
@@ -39,100 +53,177 @@ export class validInput {
     this.link = (...args) => this._link.apply(this, args);
   }
 
-  _link (scope, element, attr) {
-    (function init(){
+  _link(scope, element, attr) {
+    (function init() {
 
       let unsubscribers = [];
-      scope.ngChange = scope.ngChange|| angular.noop;
+      scope.ngChange = scope.ngChange || angular.noop;
       scope.disabled = scope.vDisabled || false;
+      scope.id = this.di.uuid();
+      scope.help_id = scope.id + '-helper-text';
 
-      let getMessageByType = (type) =>{
+      let getMessageByType = (type) => {
 
         let message = '';
-        if(type === 'mac'){
+        if (type === 'mac') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.MAC')
-        } else if(type === 'ipv4'){
+        } else if (type === 'ipv4') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.IPV4')
-        } else if(type === 'ipv4_multi'){
+        } else if (type === 'ipv4_multi') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.IPV4_MULTI')
-        } else if(type === 'ipv6'){
+        } else if (type === 'ipv6') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.IPV6')
-        } else if (type === 'int'){
+        } else if (type === 'int') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.NUMBER')
-        } else if (type === 'vlan'){
+        } else if (type === 'vlan') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.VLAN')
-        } else if (type === 'ipv4_mask'){
+        } else if (type === 'ipv4_mask') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.IPV4_MASK')
-        } else if (type === 'ipv4_mask_or_not'){
+        } else if (type === 'ipv4_mask_or_not') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.IPV4_MASK_OR_NOT')
-        } else if (type === 'port'){
+        } else if (type === 'port') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.PORT')
         }
         return message;
       };
 
-      let getPattern = (type) =>{
+      let getPattern = (type) => {
 
         let regex = '';
-        if(type === 'mac'){
+        if (type === 'mac') {
           regex = '^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$';
-        } else if(type === 'ipv4'){
+        } else if (type === 'ipv4') {
           regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
-        } else if(type === 'ipv4_multi'){
+        } else if (type === 'ipv4_multi') {
           regex = '^(22[4-9]|23[0-9])(\\.[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]){3}$';
-        } else if(type === 'ipv6'){
+        } else if (type === 'ipv6') {
           regex = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))/;
-        } else if (type === 'int'){
+        } else if (type === 'int') {
           regex = '^\d$|^[1-9]+[0-9]*$';
-        } else if (type === 'int_with_zero'){
+        } else if (type === 'int_with_zero') {
           regex = '^\d$|^[1-9]+[0-9]*$|^0*$';
-        } else if (type === 'vlan'){
+        } else if (type === 'vlan') {
           regex = '^\d$|^[1-9]+[0-9]*$';
-        } else if (type === 'ipv4_mask'){
+        } else if (type === 'ipv4_mask') {
           regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/([0-9]|[1-2][0-9]|3[0-2])$';
-        } else if (type === 'ipv4_mask_or_not'){
+        } else if (type === 'ipv4_mask_or_not') {
           regex = '^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/([0-9]|[1-2][0-9]|3[0-2]))|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
         } else if (type === 'port') {
           regex = '^[1-9]$|^[1-9][0-9]$';
         }
-          return regex;
+        return regex;
       };
+
+      // ﻿element[0].querySelector('.mdc-select__menu');
 
       scope.validModel = {
         name: scope.vName,
-        require: scope.vRequire === 'true'? true : false,
-        ngPattern: scope.vRegex || getPattern(scope.vType||attr.vType),
+        require: scope.vRequire === 'true',
+        fixedHeight: scope.vFixedHeight === 'true', //固定高度，避免下面的info撑开整个div的高度
+        ngPattern: scope.vRegex || getPattern(scope.vType || attr.vType),
         isInvalid: false,
         change: false,
-        message: scope.vMessage || getMessageByType(scope.vType||attr.vType),
-        emptyMessage: this.translate('MODULES.REGEX.FLOW_ADD.NOTNULL'),
+        message: scope.vHelper || null,
+        emptyMessage: scope.vEmptyMessage || this.translate('MODULES.REGEX.FLOW_ADD.NOTNULL'),
+        floatLabel: scope.vLabel ? scope.vLabel : null,
         mouseOver: false,
-        focus:false
+        focus: false,
+        hasLabel: false,
+        conTrailIcon: false,
+        conLeadIcon: false,
       };
+
+      let _init = () => {
+        let inputEle = element[0].querySelector('.mdc-text-field');
+        const textField = new MDCTextField(inputEle);
+        if(scope.validModel.ngPattern !== '' && scope.validModel.ngPattern !== null){
+          // angular.element(inputEle).attr('pattern', scope.validModel.ngPattern);
+          element.find('input').attr('pattern', scope.validModel.ngPattern)
+        }
+        scope.textFieldModel = textField;
+        const helperText = new MDCTextFieldHelperText(element[0].querySelector('.mdc-text-field-helper-text'));
+        scope.textFieldHelpTextModel = helperText;
+        helperText.getDefaultFoundation().setPersistent(true);
+
+        // let iconEle= element[0].querySelector('.mdc-text-field-icon');
+        let trail_icon_span = element[0].querySelector('.valid_trail_icon');
+        if(trail_icon_span.childElementCount > 0){
+          let trail_icon =  trail_icon_span.querySelector('.mdc-text-field-icon');
+          scope.validModel.conTrailIcon = true;
+          if(trail_icon){
+            const trail_icon_obj = new MDCTextFieldIcon(trail_icon);
+          }
+        }
+
+        let lead_icon_span = element[0].querySelector('.valid_lead_icon');
+        if(lead_icon_span.childElementCount > 0){
+          let lead_icon =  lead_icon_span.querySelector('.mdc-text-field-icon');
+          scope.validModel.conLeadIcon = true;
+          if(lead_icon){
+            const lead_icon_obj = new MDCTextFieldIcon(lead_icon);
+          }
+        }
+
+
+
+      };
+      _init();
+
 
       scope.blockOrInline = {};
 
-      if(scope.vStyle){
+      if (scope.vStyle) {
         scope.vStyle = JSON.parse(scope.vStyle);
         scope.blockOrInline = scope.vStyle;
       }
 
-      if(scope.vSpan  === 'true' || scope.vSpan === true){
+      if (scope.vSpan === 'true' || scope.vSpan === true) {
         scope.blockOrInline['display'] = 'inline-block';
       }
 
-      if(scope.vList) {
+      if (scope.vList) {
         element.find('input').attr('list', scope.vList)
       }
 
-      scope.blur = () => {
+      scope.blur = ($event) => {
         scope.validModel.focus = false;
-        setTimeout(function () {
-          scope.validModel.change = true;
-          let invalid = element.children().hasClass('ng-invalid');
-          scope.validModel.isInvalid = invalid && scope.validModel.change;
-          scope.$apply();
-        })
+
+        scope.validModel.isInvalid = !scope.textFieldModel.getDefaultFoundation().isValid();
+        this.di.$timeout(()=>{
+          if(scope.validModel.isInvalid && scope.validModel.floatLabel === null){
+
+            scope.inputStyle = {'animation': '.4s linear', 'animation-name': 'shake'};
+            this.di.$timeout(()=> {
+              scope.inputStyle = {};
+            }, 500)
+
+          }
+        });
+        // 如果合理的话，则是2秒之后
+        if(scope.validModel.isInvalid){
+          if(scope.validModel.require && scope.textFieldModel.value === ''){
+            scope.validModel.message = scope.validModel.emptyMessage;
+          } else {
+            scope.validModel.message = scope.vMessage || getMessageByType(scope.vType || attr.vType);
+          }
+        } else {
+          scope.validModel.message = scope.vHelper || null;
+          // if(scope.vHelper){
+          //   scope.validModel.message = scope.vHelper || null;
+          // } else {
+          //   this.di.$timeout(()=>{
+          //     scope.validModel.message =  null;
+          //   }, 400)
+          //
+          // }
+        }
+
+        // else {
+        //   scope.validModel.message = scope.vHelper || null;
+        // }
+
+        console.log(scope.textFieldModel.getDefaultFoundation().isValid())
+
       };
 
       // scope.onchange = () => {
@@ -168,33 +259,37 @@ export class validInput {
       }
 
 
-      unsubscribers.push(this.di.$rootScope.$on(scope.vRpcid,()=>{
-        // console.log('valid input message receive=========')
-        scope.validModel.change = true;
-        let invalid = element.children().hasClass('ng-invalid');
-        scope.validModel.isInvalid = invalid && scope.validModel.change;
-
-        if(invalid){
-          scope.inputStyle = {'animation': '.4s linear', 'animation-name': 'shake'};
-          setTimeout(function () {
-            scope.inputStyle = {};
-            scope.$apply()
-          },500)
+      unsubscribers.push(this.di.$rootScope.$on(scope.vRpcid, () => {
+        if(!scope.textFieldModel.getDefaultFoundation().isValid()){
+          element.find('input')[0].focus();
+          element.find('input')[0].blur();
         }
+
+        // scope.validModel.change = true;
+        // let invalid = element.children().hasClass('ng-invalid');
+        // scope.validModel.isInvalid = invalid && scope.validModel.change;
+        //
+        // if (invalid) {
+        //   scope.inputStyle = {'animation': '.4s linear', 'animation-name': 'shake'};
+        //   setTimeout(function () {
+        //     scope.inputStyle = {};
+        //     scope.$apply()
+        //   }, 500)
+        // }
         // scope.$apply();
       }));
 
-      unsubscribers.push(scope.$watch('vModel',()=>{
+      unsubscribers.push(scope.$watch('vModel', () => {
         scope.ngChange();
       }));
-  
-      unsubscribers.push(scope.$watch('vList',(newValue, oldValue)=>{
-        if(newValue == oldValue)  return;
+
+      unsubscribers.push(scope.$watch('vList', (newValue, oldValue) => {
+        if (newValue == oldValue)  return;
         element.find('input').attr('list', scope.vList)
       }));
 
-      unsubscribers.push(scope.$watch('vDisabled',(newValue)=>{
-        if(newValue){
+      unsubscribers.push(scope.$watch('vDisabled', (newValue) => {
+        if (newValue) {
           scope.disabled = true;
         } else {
           scope.disabled = false;
@@ -206,7 +301,6 @@ export class validInput {
           unsubscribe();
         });
       });
-
 
 
     }).call(this);

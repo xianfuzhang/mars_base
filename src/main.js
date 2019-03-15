@@ -15,6 +15,7 @@ import 'apis';
 import 'localStore';
 import 'ngTable';
 import 'eventEmitter'
+import 'uuid'
 
 import 'login';
 import 'dashboard';
@@ -60,6 +61,7 @@ angular
     'pascalprecht.translate',
     '_',
     'c3',
+    'uuid',
     'eventEmitter',
     'ngTable',
     'crypto',
