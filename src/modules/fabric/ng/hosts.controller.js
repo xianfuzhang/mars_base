@@ -1,4 +1,4 @@
-export class EndPointController {
+export class HostController {
   static getDI() {
     return [
       '$scope',
@@ -7,12 +7,12 @@ export class EndPointController {
       '$filter',
       '$log',
       '_',
+      'appService',
       'roleService',
       'deviceService',
       'dialogService',
       'notificationService',
       'deviceDataManager',
-      'logicalDataManager',
       'intentDataManager',
       'modalManager',
       'tableProviderFactory'
@@ -21,7 +21,7 @@ export class EndPointController {
 
   constructor(...args){
     this.di = {};
-    EndPointController.getDI().forEach((value, index) => {
+    HostController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
     this.scope = this.di.$scope;
@@ -29,6 +29,10 @@ export class EndPointController {
     this.scope.page_title = this.translate('MODULES.SWITCHES.TAB.SCHEMA.ENDPOINT');
     this.scope.deviceObjects = {}; //id: name
     this.scope.role = this.di.roleService.getRole();
+    this.scope.types = {};
+    this.di.appService.CONST.ENDPOINT_TYPE.forEach((type) => {
+      this.scope.types[type.value] = type.type;
+    });
     this.scope.entities = [];
     this.scope.endpointModel = {
       actionsShow: this.di.deviceService.getEndpointActionsShow(),
@@ -49,7 +53,7 @@ export class EndPointController {
     
     this.scope.onTableRowSelectAction = (event) => {
       if (!event.action) return;
-      if (event.action.value === 'intent') {
+      /*if (event.action.value === 'intent') {
         if (this.scope.entities.length < 2) {
           this.scope.alert = {
             type: 'warning',
@@ -93,13 +97,12 @@ export class EndPointController {
           }
         });
       }
-      else if (event.action.value === 'delete') {
+      else */if (event.action.value === 'delete') {
         let params = {
-          'tenant': event.data.tenant_name,
           'segment': event.data.segment_name,
           'mac': event.data.mac
-        };
-        this.di.deviceDataManager.deleteEndpoint(params).then(
+        }
+        this.di.deviceDataManager.deleteEndpoint(params, 'host').then(
           () => {
             this.scope.alert = {
               type: 'success',
@@ -131,11 +134,11 @@ export class EndPointController {
     };
 
     this.scope.addEndpoint = () => {
-     /* let devices = [];
+      let devices = [];
       this.di._.forEach(this.scope.deviceObjects, (value, key) => {
         devices.push({'label': value, 'value': key});
-      });*/
-      if (Object.keys(this.scope.deviceObjects).length === 0) {
+      });
+      if (!devices.length) {
         this.scope.alert = {
           type: 'warning',
           msg: this.translate('MODULES.ENDPOINT.CREATE.WARNING.NO_DEVICE')
@@ -143,55 +146,38 @@ export class EndPointController {
         this.di.notificationService.render(this.scope);
         return;
       }
-      this.getSegmentsAndDevicesInfo().then((result) => {
-        let segmentArr = [];
-        for(let key in result.segments) {
-          segmentArr.push({
-            'label': key,
-            'value': result.segments[key]
-          });
-        } 
-        this.di.modalManager.open({
-          template: require('../components/createEndpoint/template/createEndpoint.html'),
-          controller: 'createEndpointCtrl',
-          windowClass: 'create-endpoint-modal',
+      this.di.modalManager.open({
+          template: require('../components/createHost/template/createHost.html'),
+          controller: 'createHostCtrl',
+          windowClass: 'create-host-modal',
           resolve: {
             dataModel: () => {
               return {
-                devices: this.scope.deviceObjects,
-                segments: segmentArr,
-                locations: result.locations
+                devices: devices
               };
             }
           }
         })
         .result.then((data) => {
-          if (data && !data.canceled) {
-            this.di.deviceDataManager.createEndpoint(data.result).then(
-              () => {
-                this.scope.alert = {
-                  type: 'success',
-                  msg: this.translate('MODULES.ENDPOINT.CREATE.SUCCESS')
-                }
-                this.di.notificationService.render(this.scope);
-                this.scope.endpointModel.API.queryUpdate();
-              },
-              (msg) => {
-                this.scope.alert = {
-                  type: 'warning',
-                  msg: msg
-                }
-                this.di.notificationService.render(this.scope);
+        if (data && !data.canceled) {
+          this.di.deviceDataManager.createEndpoint(data.result, 'host').then(
+            () => {
+              this.scope.alert = {
+                type: 'success',
+                msg: this.translate('MODULES.ENDPOINT.CREATE.SUCCESS')
               }
-            )
-          }
-        });
-      }, (msg) => {
-        this.scope.alert = {
-          type: 'warning',
-          msg: msg
+              this.di.notificationService.render(this.scope);
+              this.scope.endpointModel.API.queryUpdate();
+            },
+            (msg) => {
+              this.scope.alert = {
+                type: 'warning',
+                msg: msg
+              }
+              this.di.notificationService.render(this.scope);
+            }
+          )
         }
-        this.di.notificationService.render(this.scope);
       });
     };
 
@@ -220,7 +206,7 @@ export class EndPointController {
               this.scope.deviceObjects[device.id] = device.name;
             });
           }
-          this.di.deviceDataManager.getEndpoints(params).then((res) => {
+          this.di.deviceDataManager.getEndpoints(params, 'host').then((res) => {
             this.scope.entities = this.getEntities(res.data.hosts);
             defer.resolve({
               data: this.scope.entities,
@@ -232,7 +218,7 @@ export class EndPointController {
       },
       getSchema: () => {
         return {
-          schema: this.di.deviceService.getEndpointTableSchema(),
+          schema: this.di.deviceService.getEndpointTableSchema('host'),
           index_name: 'mac',
           rowCheckboxSupport: true,
           rowActionsSupport: true,
@@ -252,7 +238,8 @@ export class EndPointController {
       let obj = {};
       obj.id = endpoint.id;
       obj.mac = endpoint.mac;
-      obj.tenant_name = endpoint.tenant;
+      obj.type = this.scope.types[endpoint.type] || endpoint.type || this.scope.types['1'];
+      obj.description = endpoint.description == 'null' ? '-' : endpoint.description;
       obj.segment_name = endpoint.segment || endpoint.vlan;
       obj.ip = (endpoint.ip_addresses && endpoint.ip_addresses.join(" | ")) 
               || (endpoint.ipAddresses && endpoint.ipAddresses.join(" | "));
@@ -273,11 +260,10 @@ export class EndPointController {
     arr.forEach((item) => {
       let defer = this.di.$q.defer();
       let params = {
-        'tenant': item.tenant_name,
         'segment': item.segment_name,
         'mac': item.mac
       };
-      this.di.deviceDataManager.deleteEndpoint(params)
+      this.di.deviceDataManager.deleteEndpoint(params, 'host')
         .then(() => {
           defer.resolve();
         }, (msg) => {
@@ -300,64 +286,10 @@ export class EndPointController {
       }
       this.di.notificationService.render(this.scope);
     });
-  }
 
-  getSegmentsAndDevicesInfo() {
-    let resultDefer = this.di.$q.defer(), segmentDefer = this.di.$q.defer();
-    this.di.logicalDataManager.getSegments().then((res) => {
-      let data = res.data.segments.filter((segment) => {
-        return segment.segment_type === 'vlan';
-      });
-      data.length === 0 ? segmentDefer.reject() : segmentDefer.resolve(data);
-    });
-
-    segmentDefer.promise.then((result) => {
-      let deferArr = [];
-      result.forEach((segment) => {
-        let defer = this.di.$q.defer();
-        this.di.logicalDataManager.getSegmentVlanMember(segment.tenant_name, segment.segment_name)
-        .then((res) => {
-          let members = res.data.segment_members.filter((member) => {
-            return member.hasOwnProperty('ports');
-          })
-          members.forEach((member) => {
-            member['tenant_name'] = segment.tenant_name;
-            member['segment_name'] = segment.segment_name;
-          });
-          defer.resolve(members);
-        });
-        deferArr.push(defer.promise);
-      });
-      this.di.$q.all(deferArr).then((arr) => {
-        let segments = {}, switchPorts = {};
-        arr.forEach((item) => {
-          item.forEach((segment) => {
-            let label = segment.tenant_name + '/' + segment.segment_name;
-            if (!segments.hasOwnProperty(label)) {
-              segments[label] = {
-                'tenant': segment.tenant_name,
-                'segment': segment.segment_name
-              }
-            }
-            if (!switchPorts.hasOwnProperty(label)) {
-              switchPorts[label] = {};
-            }
-            if (!switchPorts[label].hasOwnProperty(segment.device_id)) {
-              switchPorts[label][segment.device_id] = segment.ports.map((port) => {
-                return port.split('/')[0];
-              });
-            }
-          });
-        });
-        Object.keys(switchPorts).length === 0 ? resultDefer.reject(this.translate('MODULES.ENDPOINT.CREATE.WARNING.NO_SEGMENT_PORTS')) :
-          resultDefer.resolve({'segments': segments, 'locations': switchPorts});
-      });
-    }, () => {
-      resultDefer.reject(this.translate('MODULES.ENDPOINT.CREATE.WARNING.NO_SEGMENT'));
-    });
-    return resultDefer.promise;
+    this.scope.$emit('batch-delete-endpoints');
   }
 }
 
-EndPointController.$inject = EndPointController.getDI();
-EndPointController.$$ngIsClass = true;
+HostController.$inject = HostController.getDI();
+HostController.$$ngIsClass = true;

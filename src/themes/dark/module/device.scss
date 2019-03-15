@@ -426,13 +426,13 @@
 .createIntentWizard .wizard__body__right{
   overflow: hidden;
 }
-.create-endpoint-modal, .create-intent-modal{
+.create-endpoint-modal, .create-host-modal, .create-intent-modal{
   width: 570px;
 }
 .create-endpoint-modal .column-manipulation-field__content{
   height: 300px;
 }
-.create-endpoint-modal .receiveGroup{
+.create-endpoint-modal .receiveGroup, .create-host-modal .receiveGroup{
   width: 250px;
   display: inline-block;
 }
@@ -445,6 +445,10 @@
 }
 .create-endpoint-modal .mdc-select{
   width: 175px;
+}
+.create-host-modal .mdc-select{
+  width: 175px;
+  margin-bottom: 12px;
 }
 .create-intent-modal .column-manipulation-field__content{
   height: 300px;

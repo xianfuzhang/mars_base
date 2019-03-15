@@ -324,39 +324,71 @@ export class DeviceService {
     ];
   }
 
-  getEndpointTableSchema() {
-    return [
-      {
-        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.MAC'),
-        'field': 'mac',
-        'layout': {'visible': true, 'sortable': true}
-      },
-      {
-        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.TENANT'),
-        'field': 'tenant_name',
-        'layout': {'visible': true, 'sortable': true}
-      },
-      {
-        'label': 'Segment',//this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.VLAN'),
-        'field': 'segment_name',
-        'layout': {'visible': true, 'sortable': true}
-      },
-      {
-        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP'),
-        'field': 'ip',
-        'layout': {'visible': true, 'sortable': true}
-      },
-   /*   {
-        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.TENANT'),
-        'field': 'tenant_name',
-        'layout': {'visible': true, 'sortable': true}
-      },*/
-      {
-        'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.LOCATION'),
-        'field': 'location',
-        'layout': {'visible': true, 'sortable': true}
-      }
-    ];
+  getEndpointTableSchema(type) {
+    if (type && type === 'host') {
+      return [
+        {
+         'label': this.translate('MODULES.ENDPOINT.CREATE.TYPE'),
+          'field': 'type',
+          'type': 'icon',
+          'layout': {'visible': true, 'sortable': true} 
+        },
+        {
+         'label': this.translate('MODULES.ENDPOINT.CREATE.DESC'),
+          'field': 'description',
+          'layout': {'visible': true, 'sortable': true} 
+        },
+        {
+          'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.MAC'),
+          'field': 'mac',
+          'layout': {'visible': true, 'sortable': true}
+        },
+        {
+          'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.VLAN'),
+          'field': 'segment_name',
+          'layout': {'visible': true, 'sortable': true}
+        },
+        {
+          'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP'),
+          'field': 'ip',
+          'layout': {'visible': true, 'sortable': true}
+        },
+        {
+          'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.LOCATION'),
+          'field': 'location',
+          'layout': {'visible': true, 'sortable': true}
+        }
+      ];
+    }
+    else {
+      return [
+        {
+          'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.MAC'),
+          'field': 'mac',
+          'layout': {'visible': true, 'sortable': true}
+        },
+        {
+          'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.TENANT'),
+          'field': 'tenant_name',
+          'layout': {'visible': true, 'sortable': true}
+        },
+        {
+          'label': 'Segment',//this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.VLAN'),
+          'field': 'segment_name',
+          'layout': {'visible': true, 'sortable': true}
+        },
+        {
+          'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP'),
+          'field': 'ip',
+          'layout': {'visible': true, 'sortable': true}
+        },
+        {
+          'label': this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.LOCATION'),
+          'field': 'location',
+          'layout': {'visible': true, 'sortable': true}
+        }
+      ];
+    }
   }
 
   getEndpointTableRowActions() {
