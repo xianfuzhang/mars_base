@@ -289,9 +289,9 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  getEndpoints(params) {
+  getEndpoints(params, type) {
     let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getEndPointsUrl(), {'params': params}).then(
+    this.di.$http.get(this.di.appService.getEndPointsUrl(type), {'params': params}).then(
       (res) => {
         defer.resolve(res);
       },
@@ -302,9 +302,9 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  createEndpoint(params) {
+  createEndpoint(params, type) {
     let defer = this.di.$q.defer();
-    this.di.$http.post(this.di.appService.getEndPointsUrl(), params).then(
+    this.di.$http.post(this.di.appService.getEndPointsUrl(type), params).then(
       (res) => {
         defer.resolve(res);
       },
@@ -328,9 +328,9 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
-  deleteEndpoint(mac, segment) {
+  deleteEndpoint(params, type) {
     let defer = this.di.$q.defer();
-    this.di.$http.delete(this.di.appService.getDeleteEndpointUrl(mac, segment))
+    this.di.$http.delete(this.di.appService.getDeleteEndpointUrl(type, params))
       .then((res) => {
           defer.resolve(null);
         },

@@ -16,7 +16,13 @@ export class iconRenderer {
         spec.innerHTML = '-';
       }
       else {
-        spec.innerHTML = '<div class="status_icon '+ spec.value.toLowerCase() +'"></div>';
+        if (spec.value.toLowerCase() == 'available' || spec.value.toLowerCase() == 'unavailable') {
+          spec.innerHTML = '<div class="status_icon '+ spec.value.toLowerCase() +'"></div>';
+        }
+        else {
+          spec.innerHTML = '<div class="status_icon material_icon '+ spec.value.toLowerCase() +'">'  +
+            '<i class="material-icons">'+ spec.value.toLowerCase() +'</i></div>';
+        }
       }
       return spec.innerHTML;
     };

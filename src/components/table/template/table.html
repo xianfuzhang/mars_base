@@ -80,7 +80,7 @@
           </thead>
         </table>
       </div>
-      <div class="mdl-table-body">
+      <div class="mdl-table-body" ng-class="{true: 'pagination-table', false: 'all-table'}[_isNeedPagination]">
         <table class="mdl-table">
           <tbody ng-if="tableModel.loading">
             <tr class="mdl-table-body__row"><td class="text-center"><span class="loading"></span></td></tr>

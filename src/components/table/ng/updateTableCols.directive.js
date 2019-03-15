@@ -224,9 +224,12 @@ export class updateTableCols {
     //tbody渲染以后调整td宽度（scroll宽度影响tds）
     unsubscribers.push(this.di.$rootScope.$on('table-render-ready', (event) => {
       //hard codeing 针对是否overflow显示不同样式
-      let bodyHeight = bodyElm[0].clientHeight;
-      let tableHeight = bodyElm.children()[0].clientHeight;
-      if (bodyHeight >= tableHeight) {
+      const tableHeight = bodyElm[0].parentElement.clientHeight;
+      const tbodyHeight = bodyElm.children()[0].clientHeight;
+      const isPaganation = bodyElm[0].classList.contains('pagination-table');
+      //console.log('tableHeight=' + tableHeight + ', tbodyHeight=' + tbodyHeight + ',isPaganation=' + isPaganation);
+      //theader.len + tfooter.len = 100
+      if (tableHeight - 100 >= tbodyHeight) {
         bodyElm[0].style.height = 'auto';
       }
       else {
@@ -277,9 +280,9 @@ export class updateTableCols {
       }
       scope.resizePromise = this.di.$timeout(() => {
         //hard codeing 针对是否overflow显示不同样式
-        let bodyHeight = bodyElm[0].clientHeight;
-        let tableHeight = bodyElm.children()[0].clientHeight;
-        if (bodyHeight >= tableHeight) {
+        const tableHeight = bodyElm[0].parentElement.clientHeight;
+        const tbodyHeight = bodyElm.children()[0].clientHeight;
+        if (tableHeight - 100 >= tbodyHeight) {
           bodyElm[0].style.height = 'auto';
         }
         else {

@@ -49,32 +49,58 @@ export class mdlSelect {
       helperElement.addClass('mdc-text-field-helper-text--persistent');
     }
 
-    let  getNormalizedXCoordinate = (target) => {
+    let getNormalizedXCoordinate = (target) => {
       const targetClientRect = target.getBoundingClientRect();
       return {
-        'left': targetClientRect.left + 'px',
-        'top': targetClientRect.bottom + 'px',
-        'width': targetClientRect.width + 'px'
+        'left': targetClientRect.left,
+        'top': targetClientRect.bottom,
+        'bottom': targetClientRect.top,
+        'width': targetClientRect.width
       };
     }
-    scope.toggleMenu = (event) => {
-      let menuEl;
-      if (event.target.classList.contains('mdc-select')) {
-        menuEl = event.target.lastElementChild;
+
+    let autoPosition = (menuEl, coordinate) => {
+      const menuClientRect = menuEl.getBoundingClientRect();
+      scope.windowScroll = {x: window.pageXOffset, y: window.pageYOffset};//页面出现滚动轴拖动会产生偏移
+      scope.verticalAlign = 'top';
+      scope.bodyHeight = this.di.$window.document.body.scrollHeight;
+      if (coordinate.top + menuClientRect.height > scope.bodyHeight) {
+        scope.verticalAlign = 'bottom';
       }
-      else if (event.target.classList.contains('mdc-select__selected-text')) {
-        menuEl = event.target.nextElementSibling;
-      }
-      else {
-        menuEl = event.target.parentElement.nextElementSibling;
-      } 
-      const coordinate = getNormalizedXCoordinate(event.currentTarget);
+
       angular.element(menuEl).css({
-        'top': coordinate.top,
-        //'bottom': coordinate.bottom,
-        'left': coordinate.left,
-        'width': coordinate.width
+        'top': scope.verticalAlign === 'top' ? coordinate.top + scope.windowScroll.y + 'px' : '',
+        'bottom': scope.verticalAlign === 'bottom' 
+                  ? (scope.bodyHeight - coordinate.bottom) + scope.windowScroll.y + 'px' : '',
+        'left': coordinate.left + scope.windowScroll.x + 'px',
+        'width': coordinate.width + 'px'
       });
+    };
+
+    let fixTransformInfluence = (menuEl, coordinate) => {
+      const menuClientRect = menuEl.getBoundingClientRect();
+      //transform会影响fixed position布局,计算出影响的偏移量
+      let xOffset = menuClientRect.left - coordinate.left > 0 ? menuClientRect.left - coordinate.left : 0,
+        yOffset = scope.verticalAlign === 'top' 
+            ? menuClientRect.top - coordinate.top > 0 ? menuClientRect.top - coordinate.top : 0
+            : menuClientRect.bottom - coordinate.bottom > 0 ? menuClientRect.bottom - coordinate.bottom : 0;
+
+      if (xOffset > 0 || yOffset > 0) {
+        angular.element(menuEl).css({
+          'top': scope.verticalAlign === 'top' ? coordinate.top - yOffset + scope.windowScroll.y + 'px' : '',
+          'bottom': scope.verticalAlign === 'bottom' 
+                    ? (scope.bodyHeight - coordinate.bottom - yOffset) + scope.windowScroll.y + 'px' : '',
+          'left': coordinate.left - xOffset + scope.windowScroll.x + 'px'
+        });
+      }
+    };
+
+    scope.toggleMenu = (event) => {
+      let menuEl = element[0].querySelector('.mdc-select__menu');
+      menuEl.classList.add('mdc-menu--open');
+      const coordinate = getNormalizedXCoordinate(event.currentTarget);
+      autoPosition(menuEl, coordinate);
+      fixTransformInfluence(menuEl, coordinate);
       scope.menuOpen = !scope.menuOpen;
     };
 

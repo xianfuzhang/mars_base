@@ -46,6 +46,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary', 'role': 1},
               {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.FABRIC.HOSTS'), 'url': '/hosts', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
               {'label': 'Intents', 'url': '/intents', 'role': 2},
               {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
@@ -124,6 +125,11 @@ export class appService {
           ]
         }
       },
+      //type对应google icon name，不能随意更改
+      ENDPOINT_TYPE: [
+        {'label': '主机', 'value': 1, 'type': 'devices'}, 
+        {'label': '打印机', 'value': 2, 'type': 'print'}
+      ],
       NOCSYS_APP: 'com.nocsys',
       CRYPTO_STRING: 'secret',
       DEFAULT_FILENAME: 'startup_netcfg.cfg',// default configuration file name
@@ -361,15 +367,26 @@ export class appService {
     return this.getZoneEndpoint() + '/flows/' + deviceId + '?appId=' + appId;
   }
 
-  getEndPointsUrl() {
-    return this.getZoneEndpoint(true) + '/endpoint/v1';
+  getEndPointsUrl(type) {
+    if (type && type === 'host') {
+      return this.getZoneEndpoint() + '/hosts';
+    }
+    else {
+      return this.getZoneEndpoint(true) + '/endpoint/v1';
+    }
   }
 
   // getDeleteEndpointUrl(tenant, segment, mac) {
   //   return this.getZoneEndpoint() + '/endpoints/v1/' + tenant + '/' + segment + '/' + mac;
   // }
-  getDeleteEndpointUrl(mac, segment){
-    return this.getZoneEndpoint() + '/hosts/' + mac + '/' + segment;
+  getDeleteEndpointUrl(type, params){
+    if (type && type === 'host') {
+      return this.getZoneEndpoint() + '/hosts/' + params.mac + '/' + params.segment;
+    }
+    else {
+      return this.getZoneEndpoint(true) + '/endpoint/v1/' + params.tenant + '/' + params.segment + '/' + params.mac;
+    }  
+    
   }
 
   getStormProfilesUrl() {
