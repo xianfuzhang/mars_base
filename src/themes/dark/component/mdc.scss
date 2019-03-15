@@ -179,6 +179,7 @@
 }
 .mdc-select-list>.mdc-select-list-item{
   display: flex;
+  overflow: hidden;
   height: 35px;
   line-height: 35px;
   text-align: left;
