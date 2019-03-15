@@ -26,7 +26,7 @@ export class StormEstablishController {
     scope.pps_regex = '^[5-9][0-9]{2}|[1-9][0-9]{3,6}|1[0-3][0-9]{5}|14[0-7][0-9]{4}|148[0-7][0-9]{3}|14880000$';
     scope.deviceId = null;
     scope.isEdit = false;
-    scope.wizardHeight = {"height":'400px'};
+    scope.wizardHeight = {"height":'350px'};
 
     scope.showWizard = false;
     scope.title = this.translate("MODULES.FABRIC.STORM.WIZARD");
@@ -52,11 +52,27 @@ export class StormEstablishController {
     };
 
     scope.displayLabel = {
-      device:{'options':[]},
-      status:{'options':[
+      device: {'options': [], 'hint': this.translate('MODULES.FABRIC.STORM.WIZARD.DEVICE')},
+      unicast_status: {
+        'options': [
           {'label': this.translate('MODULES.FABRIC.STORM.ES.DISPLAY.ENABLED'), 'value': true},
           {'label': this.translate('MODULES.FABRIC.STORM.ES.DISPLAY.DISABLED'), 'value': false}
-        ]
+        ],
+        'hint': this.translate('MODULES.FABRIC.STORM.WIZARD.UNICAST_ENABLED')
+      },
+      bcast_status: {
+        'options': [
+          {'label': this.translate('MODULES.FABRIC.STORM.ES.DISPLAY.ENABLED'), 'value': true},
+          {'label': this.translate('MODULES.FABRIC.STORM.ES.DISPLAY.DISABLED'), 'value': false}
+        ],
+        'hint': this.translate('MODULES.FABRIC.STORM.WIZARD.BCAST_ENABLED')
+      },
+      mcast_status: {
+        'options': [
+          {'label': this.translate('MODULES.FABRIC.STORM.ES.DISPLAY.ENABLED'), 'value': true},
+          {'label': this.translate('MODULES.FABRIC.STORM.ES.DISPLAY.DISABLED'), 'value': false}
+        ],
+        'hint': this.translate('MODULES.FABRIC.STORM.WIZARD.MCAST_ENABLED')
       }
     };
 
@@ -64,7 +80,6 @@ export class StormEstablishController {
       valid: false,
       errorMessage: ''
     };
-
 
     let validJson = {
       valid: true,
@@ -75,7 +90,7 @@ export class StormEstablishController {
       let out = document.getElementsByClassName(dom_class);
 
       if(out && out.length === 1){
-        let invalidDoms = out[0].getElementsByClassName('ng-invalid');
+        let invalidDoms = out[0].getElementsByClassName('mdc-text-field--invalid');
         if(invalidDoms && invalidDoms.length > 0){
           return false;
         }
@@ -140,7 +155,7 @@ export class StormEstablishController {
       if(scope.showWizard) return;
 
       scope.isEdit = false;
-      scope.displayLabel.device = {'options':[]};
+      scope.displayLabel.device.options = [];
       scope.title = this.translate("MODULES.FABRIC.STORM.WIZARD");
       scope.stormModel = {
         device_id: '',
@@ -175,9 +190,9 @@ export class StormEstablishController {
             scope.stormModel.bcast = data['bcast'];
             scope.stormModel.mcast = data['mcast'];
 
-            scope.stormModel.unicast_enabled = this.di._.find(scope.displayLabel.status.options, {'value':data['unicast_enabled']});
-            scope.stormModel.bcast_enabled = this.di._.find(scope.displayLabel.status.options, {'value':data['bcast_enabled']});
-            scope.stormModel.mcast_enabled = this.di._.find(scope.displayLabel.status.options, {'value':data['mcast_enabled']});
+            scope.stormModel.unicast_enabled = this.di._.find(scope.displayLabel.unicast_status.options, {'value':data['unicast_enabled']});
+            scope.stormModel.bcast_enabled = this.di._.find(scope.displayLabel.bcast_status.options, {'value':data['bcast_enabled']});
+            scope.stormModel.mcast_enabled = this.di._.find(scope.displayLabel.mcast_status.options, {'value':data['mcast_enabled']});
             scope.showWizard = true;
           },(err)=>{
             scope.showWizard = true;

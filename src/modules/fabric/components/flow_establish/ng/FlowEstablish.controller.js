@@ -139,6 +139,7 @@ export class FlowEstablishController {
     scope.criteriaSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.criteriaSchema));
     scope.tableIdSchemaList = convertList2DisLabel(this.di._.values(this.di.$scope.tableIdSchema));
     scope.table60SchemaList = convertList2DisLabel(this.di._.keys(scope.table60Schema));
+    scope.table60SchemaList['hint'] = '类型';
 
 
     scope.flowEstablishModel = {
@@ -283,7 +284,7 @@ export class FlowEstablishController {
       let out = document.getElementsByClassName(dom_class);
 
       if(out && out.length === 1){
-        let invalidDoms = out[0].getElementsByClassName('ng-invalid');
+        let invalidDoms = out[0].getElementsByClassName('mdc-text-field--invalid');
         if(invalidDoms && invalidDoms.length > 0){
           return false;
         }
@@ -801,6 +802,7 @@ export class FlowEstablishController {
       scope.criteriaPageSecondInputs = [];
       if(item.value === '60'){
         scope.table60SchemaList = convertList2DisLabel(this.di._.keys(scope.table60Schema));
+        scope.table60SchemaList['hint'] = '类型';
         scope.flowTypeJson = {'res': true, 'tableId':'60', 'type':null};
       } else {
         scope.flowTypeJson = null;

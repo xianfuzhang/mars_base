@@ -40,7 +40,7 @@ export class validInput {
       vModel: '=ngModel',
       ngChange: '&',
       vRegex: '=',
-      vType: '=',
+      vType: '@',
       vMessage: '@',
       vRpcid: '@',
       vEmptyMessage : '@',
@@ -109,7 +109,7 @@ export class validInput {
         } else if (type === 'ipv4_mask_or_not') {
           regex = '^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/([0-9]|[1-2][0-9]|3[0-2]))|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
         } else if (type === 'port') {
-          regex = '^[1-9]$|^[1-9][0-9]$';
+          regex = '^[1-9]|[1-9][0-9]$';
         }
         return regex;
       };
@@ -280,11 +280,18 @@ export class validInput {
       }));
 
       unsubscribers.push(scope.$watch('vModel', () => {
+        scope.textFieldModel.value = scope.vModel;
         scope.ngChange();
       }));
 
       unsubscribers.push(scope.$watch('vList', (newValue, oldValue) => {
         if (newValue == oldValue)  return;
+        element.find('input').attr('list', scope.vList)
+      }));
+
+
+      unsubscribers.push(scope.$watch('vLabel', (newValue, oldValue) => {
+        scope.validModel.floatLabel = scope.vLabel ? scope.vLabel : null;
         element.find('input').attr('list', scope.vList)
       }));
 

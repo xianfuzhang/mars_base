@@ -52,11 +52,13 @@
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.RACK' | translate}}</div>
-        <input class="stepForm__input__text" name="rack_id" type="text" ng-model="switch.rack_id"/>
+        <!--<input class="stepForm__input__text" name="rack_id" type="text" ng-model="switch.rack_id"/>-->
+        <valid-input ng-model="switch.rack_id" v-name="rack_id" v-rpcid="page_device_1" ></valid-input>
     </div>
     <div class="stepForm__input" ng-if="switch.protocol.value == 'snmp'">
         <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.COMMUNITY' | translate}}</div>
-        <input class="stepForm__input__text" name="community" type="text" ng-model="switch.community"/>
+        <!--<input class="stepForm__input__text" name="community" type="text" ng-model="switch.community"/>-->
+        <valid-input ng-model="switch.community" v-name="community" v-rpcid="page_device_1" ></valid-input>
         <!--<valid-input ng-model="switch.community" v-rpcid="page_device_1" ></valid-input>-->
     </div>
     <div class="stepForm__input">

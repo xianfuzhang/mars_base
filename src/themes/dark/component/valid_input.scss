@@ -24,7 +24,7 @@
 
   .focus{
     //border-color: black;
-    border-width: 2px;
+    //border-width: 2px;
   }
 
   .ng-invalid.afterBlur {
@@ -240,4 +240,12 @@
 
 .valid_input.mdc-text-field-helper-text.con_trailing_icon{
   padding: 0 3px;
+}
+
+.valid_input.mdc-text-field .mdc-floating-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.valid_input.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: rgba(255,37,48,.8);
 }
