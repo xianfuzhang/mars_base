@@ -122,6 +122,8 @@ export class FabricSummaryController {
 
     this.di.$scope.displayLabel = {
       hosts: {'options':[{'label': '请选择端点', 'value':null}]},
+      srcHosts: {'options':[{'label': '请选择端点', 'value':null}], 'hint':this.translate('MODULES.TOPO.PATH.START')},
+      dstHosts: {'options':[{'label': '请选择端点', 'value':null}], 'hint':this.translate('MODULES.TOPO.PATH.END')},
       fluxUnits: {
         'options': [
           {'label': 'Bps', 'value': 'Bps'},
@@ -590,8 +592,11 @@ export class FabricSummaryController {
         scope.displayLabel.hosts.options.push({'label':host.id, 'value':host.id})
       });
 
-      scope.fabricModel.srcHost = scope.displayLabel.hosts.options[0];
-      scope.fabricModel.dstHost = scope.displayLabel.hosts.options[0];
+      scope.displayLabel.srcHosts.options = angular.copy(scope.displayLabel.hosts.options);
+      scope.displayLabel.dstHosts.options = angular.copy(scope.displayLabel.hosts.options);
+
+      scope.fabricModel.srcHost = scope.displayLabel.srcHosts.options[0];
+      scope.fabricModel.dstHost = scope.displayLabel.dstHosts.options[0];
     };
 
 

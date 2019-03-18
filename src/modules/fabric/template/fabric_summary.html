@@ -138,21 +138,21 @@
                 <mar-section ng-show="fabricModel.topoSetting.show_path && licenseModel.isCalcPathEnable"  s-title="{{'MODULES.TOPO.TITLE.PATH'|translate}}" class="detail_summary topo_path_search">
                     <transclude-body>
                         <div style="margin-top:5px;">
-                            <span style="width:50px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.PATH.START'|translate}}: </span>
+                            <!--<span style="width:50px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.PATH.START'|translate}}: </span>-->
                             <mdl-select ng-model="fabricModel.srcHost" style="display: inline-block;vertical-align: middle;" ng-class="{'shake_animation': fabricModel.srcHost_select == false}"
-                                        display-label="displayLabel.hosts">
+                                        display-label="displayLabel.srcHosts">
                             </mdl-select>
                         </div>
                         <div style="margin-top:5px;">
-                            <span style="width:50px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.PATH.END'|translate}}: </span>
+                            <!--<span style="width:50px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.PATH.END'|translate}}: </span>-->
                             <mdl-select ng-model="fabricModel.dstHost" style="display: inline-block;vertical-align: middle;" ng-class="{'shake_animation': fabricModel.dstHost_select == false}"
-                                        display-label="displayLabel.hosts">
+                                        display-label="displayLabel.dstHosts">
                             </mdl-select>
                         </div>
                         <div style="margin-top:5px;">
-                            <span style="width:50px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.PATH.LATENCY'|translate}}: </span>
-                            <valid-input style="display: inline-block;width:80px;vertical-align: middle;" v-fixed-height="true" ng-model="fabricModel.latency" v-type="int" v-rpcid="topo_path_search" ></valid-input>
-                            <span style="width:50px;display: inline-block"> {{'MODULES.TOPO.PATH.NANOSECONDS'|translate}} </span>
+                            <!--<span style="width:50px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.PATH.LATENCY'|translate}}: </span>-->
+                            <valid-input v-label="{{'MODULES.TOPO.PATH.LATENCY'|translate}}" style="display: inline-block;width:80px;vertical-align: middle;" v-fixed-height="true" ng-model="fabricModel.latency" v-type="int" v-rpcid="topo_path_search" ></valid-input>
+                            <!--<span style="width:50px;display: inline-block"> {{'MODULES.TOPO.PATH.NANOSECONDS'|translate}} </span>-->
                         </div>
 
                         <div style="margin-top:15px;margin-left:55px;">
