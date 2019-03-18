@@ -78,24 +78,24 @@
 
                     <table class="dhcp_table" style="margin:auto">
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.STARTIP'|translate}}<span class="stepForm__input__required">*</span></div></td>
-                        <td><valid-input v-require="true" ng-model="dhcpModel.dhcpserver.startip" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.STARTIP'|translate}}<span class="stepForm__input__required">*</span></div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.STARTIP'|translate}}" v-require="true" ng-model="dhcpModel.dhcpserver.startip" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.ENDIP'|translate}}<span class="stepForm__input__required">*</span></div></td>
-                        <td><valid-input v-require="true" ng-model="dhcpModel.dhcpserver.endip" v-type="ipv4"  v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.ENDIP'|translate}}<span class="stepForm__input__required">*</span></div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.ENDIP'|translate}}" v-require="true" ng-model="dhcpModel.dhcpserver.endip" v-type="ipv4"  v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.SUBNET'|translate}}<span class="stepForm__input__required">*</span></div></td>
-                        <td><valid-input v-require="true" ng-model="dhcpModel.dhcpserver.subnet" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.SUBNET'|translate}}<span class="stepForm__input__required">*</span></div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.SUBNET'|translate}}" v-require="true" ng-model="dhcpModel.dhcpserver.subnet" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.DNS'|translate}}</div></td>
-                        <td><valid-input v-require="false" ng-model="dhcpModel.dhcpserver.domain" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.DNS'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.DNS'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.domain" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.ROUTER'|translate}}</div></td>
-                        <td><valid-input v-require="false" ng-model="dhcpModel.dhcpserver.router" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.ROUTER'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.ROUTER'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.router" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                     </table>
                   </transclude-body>
@@ -109,28 +109,28 @@
 
                     <table class="dhcp_table" style="margin:auto">
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.TTL'|translate}}</div></td>
-                        <td><valid-input v-require="false" ng-model="dhcpModel.dhcpserver.ttl" v-regex="regex.ttl_regex" v-message="{{ 'MODULES.MANAGE.DHCP.TTL.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.TTL'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.TTL'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.ttl" v-regex="regex.ttl_regex" v-message="{{ 'MODULES.MANAGE.DHCP.TTL.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.LEASE'|translate}}</div></td>
-                        <td><valid-input v-require="false" ng-model="dhcpModel.dhcpserver.lease" v-regex="regex.dhcp_int_regex" v-message="{{ 'MODULES.MANAGE.DHCP.LEASE.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.LEASE'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.LEASE'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.lease" v-regex="regex.dhcp_int_regex" v-message="{{ 'MODULES.MANAGE.DHCP.LEASE.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.RENEW'|translate}}</div></td>
-                        <td><valid-input v-require="false" ng-model="dhcpModel.dhcpserver.renew" v-regex="regex.dhcp_int_regex" v-message="{{ 'MODULES.MANAGE.DHCP.RENEW.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.RENEW'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.RENEW'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.renew" v-regex="regex.dhcp_int_regex" v-message="{{ 'MODULES.MANAGE.DHCP.RENEW.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.REBIND'|translate}}</div></td>
-                        <td><valid-input v-require="false" ng-model="dhcpModel.dhcpserver.rebind" v-regex="regex.dhcp_int_regex" v-message="{{ 'MODULES.MANAGE.DHCP.REBIND.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.REBIND'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.REBIND'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.rebind" v-regex="regex.dhcp_int_regex" v-message="{{ 'MODULES.MANAGE.DHCP.REBIND.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.DELAY'|translate}}</div></td>
-                        <td><valid-input v-require="false" ng-model="dhcpModel.dhcpserver.delay" v-regex="regex.delay_regex" v-message="{{ 'MODULES.MANAGE.DHCP.DELAY.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.DELAY'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.DELAY'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.delay" v-regex="regex.delay_regex" v-message="{{ 'MODULES.MANAGE.DHCP.DELAY.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                       <tr>
-                        <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.TIMEOUT'|translate}}</div></td>
-                        <td><valid-input v-require="false" ng-model="dhcpModel.dhcpserver.timeout" v-regex="regex.timeout_regex" v-message="{{ 'MODULES.MANAGE.DHCP.TIMEOUT.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.TIMEOUT'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.TIMEOUT'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.timeout" v-regex="regex.timeout_regex" v-message="{{ 'MODULES.MANAGE.DHCP.TIMEOUT.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
                       </tr>
                     </table>
                   </transclude-body>
@@ -170,23 +170,24 @@
               <transclude-body>
                 <table class="dhcp_table" style="margin:auto">
                   <div class="ntp_switch" style="margin-bottom: 20px;">
-                    <td><div class="stepForm__input__label" style="display:inline-block">{{'MODULES.MANAGE.DHCPV6.IS_ENABLE'|translate}}</div></td>
-                    <td>
+                    <!--<td><div class="stepForm__input__label" style="display:inline-block">{{'MODULES.MANAGE.DHCPV6.IS_ENABLE'|translate}}</div></td>-->
+                    <td style="display: flex;flex-direction: row">
+                      <div class="stepForm__input__label" style="display:inline-block;text-align: center;line-height: 45px;">{{'MODULES.MANAGE.DHCPV6.IS_ENABLE'|translate}} &nbsp : &nbsp</div>
                       <mdl-switch style="vertical-align: top" on-click="changeSwitch()" ng-model="dhcpModel.dhcpserverv6.isEnable" name="ntp_enable" display-label="{on: '是', off: '否', id: 'ntp_enable'}">
                       </mdl-switch>
                     </td>
                   </div>
                   <tr>
-                    <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.DNS_SERVER'|translate}}</div></td>
-                    <td><valid-input ng-model="dhcpModel.dhcpserverv6.dns_server" v-type="ipv6" v-rpcid="page_dhcp_v6" ></valid-input></td>
+                    <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.DNS_SERVER'|translate}}</div></td>-->
+                    <td><valid-input  v-label="{{'MODULES.MANAGE.DHCPV6.DNS_SERVER'|translate}}" ng-model="dhcpModel.dhcpserverv6.dns_server" v-type="ipv6" v-rpcid="page_dhcp_v6" ></valid-input></td>
                   </tr>
                   <tr>
-                    <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.DOMAIN_SEARCH_LIST'|translate}}</div></td>
-                    <td><valid-input ng-model="dhcpModel.dhcpserverv6.domain_search_list"  v-rpcid="page_dhcp_v6" ></valid-input></td>
+                    <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.DOMAIN_SEARCH_LIST'|translate}}</div></td>-->
+                    <td><valid-input v-label="{{'MODULES.MANAGE.DHCPV6.DOMAIN_SEARCH_LIST'|translate}}" ng-model="dhcpModel.dhcpserverv6.domain_search_list"  v-rpcid="page_dhcp_v6" ></valid-input></td>
                   </tr>
                   <tr>
-                    <td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.SNTP_SERVER'|translate}}</div></td>
-                    <td><valid-input  ng-model="dhcpModel.dhcpserverv6.sntp_server" v-type="ipv6" v-rpcid="page_dhcp_v6" ></valid-input></td>
+                    <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.SNTP_SERVER'|translate}}</div></td>-->
+                    <td><valid-input v-label="{{'MODULES.MANAGE.DHCPV6.SNTP_SERVER'|translate}}"  ng-model="dhcpModel.dhcpserverv6.sntp_server" v-type="ipv6" v-rpcid="page_dhcp_v6" ></valid-input></td>
                   </tr>
                 </table>
               </transclude-body>
