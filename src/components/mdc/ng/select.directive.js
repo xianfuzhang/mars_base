@@ -73,7 +73,8 @@ export class mdlSelect {
         'bottom': scope.verticalAlign === 'bottom' 
                   ? (scope.bodyHeight - coordinate.bottom) + scope.windowScroll.y + 'px' : '',
         'left': coordinate.left + scope.windowScroll.x + 'px',
-        'width': coordinate.width + 'px'
+        'width': 'auto',
+        'min-width': coordinate.width + 'px'
       });
     };
 
