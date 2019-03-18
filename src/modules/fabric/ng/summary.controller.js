@@ -122,7 +122,14 @@ export class FabricSummaryController {
 
     this.di.$scope.displayLabel = {
       hosts: {'options':[{'label': '请选择端点', 'value':null}]},
-      fluxUnits: {'options':[{'label':'Bps', 'value':'Bps'},{'label':'KBps', 'value':'KBps'},{'label':'MBps', 'value':'MBps'}, {'label':'GBps', 'value':'GBps'}]}
+      fluxUnits: {
+        'options': [
+          {'label': 'Bps', 'value': 'Bps'},
+          {'label': 'KBps', 'value': 'KBps'},
+          {'label': 'MBps','value': 'MBps'},
+          {'label': 'GBps', 'value': 'GBps'}],
+        'hint': '单位',
+      }
     };
 
     this.di.$scope.fabricModel = {
@@ -143,6 +150,7 @@ export class FabricSummaryController {
       dstHost_select: true,
       busyMetric: 500,
       congestionMetric: 2000,
+      latency: '',
       monitorState: this.translate('MODULES.TOPO.MONITOR.STATE_STOP'),
       busyMetricUnit: scope.displayLabel.fluxUnits.options[2],
       congestionMetricUnit: scope.displayLabel.fluxUnits.options[2]

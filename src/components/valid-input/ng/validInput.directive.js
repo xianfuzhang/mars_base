@@ -300,8 +300,10 @@ export class validInput {
       unsubscribers.push(scope.$watch('vDisabled', (newValue) => {
         if (newValue) {
           scope.disabled = true;
+          scope.textFieldModel.getDefaultFoundation().setDisabled(true);
         } else {
           scope.disabled = false;
+          scope.textFieldModel.getDefaultFoundation().setDisabled(false);
         }
       }));
 
