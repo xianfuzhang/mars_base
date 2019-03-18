@@ -60,7 +60,7 @@ export class NtpEstablishController {
       let out = document.getElementsByClassName(dom_class);
 
       if(out && out.length === 1){
-        let invalidDoms = out[0].getElementsByClassName('ng-invalid');
+        let invalidDoms = out[0].getElementsByClassName('mdc-text-field--invalid');
         if(invalidDoms && invalidDoms.length > 0){
           return false;
         }

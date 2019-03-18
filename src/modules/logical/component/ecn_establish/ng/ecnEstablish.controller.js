@@ -15,6 +15,7 @@ export class EcnEstablishController {
     });
     this.scope = this.di.$scope;
     this.scope.showWizard = false;
+    this.scope.dscp_regex = '^[1-9][0-9]?|100$';
     this.scope.steps = [
       {
         id: 'step1',
@@ -81,13 +82,28 @@ export class EcnEstablishController {
   }
 
   initActions() {
+
+    function validCurrentDom(dom_class) {
+      let out = document.getElementsByClassName(dom_class);
+
+      if(out && out.length === 1){
+        let invalidDoms = out[0].getElementsByClassName('mdc-text-field--invalid');
+        if(invalidDoms && invalidDoms.length > 0){
+          return false;
+        }
+      }
+      return true;
+    }
+
+
     this.scope.submit = () => {
       return new Promise((resolve, reject) => {
-        if(!this.validateThreshold()) {
+
+        this.di.$rootScope.$emit('page_qos_ecn');
+        if(!validCurrentDom('ecn_establish')) {
           this.scope.model.thresholdHelper.validation = 'true';
           resolve({valid: false, errorMessage: ''});
-        }
-        else {
+        } else {
           this.scope.model.thresholdHelper.validation = 'false';
           let params = {
             'queue': this.scope.model.queueObject.value,

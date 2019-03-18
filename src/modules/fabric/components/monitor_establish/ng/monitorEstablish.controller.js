@@ -26,7 +26,7 @@ export class MonitorEstablishController {
     // 500-14880000
     scope.deviceId = null;
     scope.isEdit = false;
-    scope.wizardHeight = {"height":'400px'};
+    scope.wizardHeight = {"height":'300px'};
 
     scope.showWizard = false;
     scope.title = this.translate("MODULES.FABRIC.MONITOR.WIZARD");
@@ -41,12 +41,15 @@ export class MonitorEstablishController {
     ];
 
     scope.displayLabel = {
-      device:{'options':[]},
-      direction:{'options':[
-        {'label': this.translate('MODULES.FABRIC.MONITOR.DISPLAY.BOTH'), 'value': 'both'},
-        {'label': this.translate('MODULES.FABRIC.MONITOR.DISPLAY.RX'), 'value': 'rx'},
-        {'label': this.translate('MODULES.FABRIC.MONITOR.DISPLAY.TX'), 'value': 'tx'},
-      ]
+      dst_device: {'options': [], 'hint': this.translate('MODULES.FABRIC.MONITOR.COLUMN.DST_SWITCH')},
+      src_device: {'options': [], 'hint': this.translate('MODULES.FABRIC.MONITOR.COLUMN.SOURCE_SWITCH')},
+      direction: {
+        'options': [
+          {'label': this.translate('MODULES.FABRIC.MONITOR.DISPLAY.BOTH'), 'value': 'both'},
+          {'label': this.translate('MODULES.FABRIC.MONITOR.DISPLAY.RX'), 'value': 'rx'},
+          {'label': this.translate('MODULES.FABRIC.MONITOR.DISPLAY.TX'), 'value': 'tx'},
+        ],
+        'hint': this.translate('MODULES.FABRIC.MONITOR.COLUMN.DIRECTION')
       }
     };
 
@@ -76,7 +79,7 @@ export class MonitorEstablishController {
       let out = document.getElementsByClassName(dom_class);
 
       if(out && out.length === 1){
-        let invalidDoms = out[0].getElementsByClassName('ng-invalid');
+        let invalidDoms = out[0].getElementsByClassName('mdc-text-field--invalid');
         if(invalidDoms && invalidDoms.length > 0){
           return false;
         }
@@ -146,7 +149,8 @@ export class MonitorEstablishController {
 
       scope.isEdit = false;
       scope.title = this.translate("MODULES.FABRIC.MONITOR.WIZARD");
-      scope.displayLabel.device = {'options':[]};
+      scope.displayLabel.src_device.options = [];
+      scope.displayLabel.dst_device.options = [];
       scope.monitorModel = {
         session_id: null,
         source_swt: null,
@@ -164,23 +168,24 @@ export class MonitorEstablishController {
 
       deviceDataManager.getDeviceConfigs().then((configs)=>{
         this.di._.forEach(configs,(config)=>{
-          scope.displayLabel.device.options.push({'label':config['name'], 'value':config['id']})
+          scope.displayLabel.src_device.options.push({'label':config['name'], 'value':config['id']})
+          scope.displayLabel.dst_device.options.push({'label':config['name'], 'value':config['id']})
         });
 
         if(scope.isEdit){
           deviceDataManager.getMonitor(session_id).then((res)=>{
             let data = res.data;
 
-            let src_device_index = this.di._.findIndex(scope.displayLabel.device.options,{'value': data['src']['device_id']});
-            scope.monitorModel.source_swt = scope.displayLabel.device.options[src_device_index];
+            let src_device_index = this.di._.findIndex(scope.displayLabel.src_device.options,{'value': data['src']['device_id']});
+            scope.monitorModel.source_swt = scope.displayLabel.src_device.options[src_device_index];
 
             scope.monitorModel.source_port = data['src']['port'] + '';
 
             let src_direction_index = this.di._.findIndex(scope.displayLabel.direction.options,{'value': data['src']['direction']});
             scope.monitorModel.direction = scope.displayLabel.direction.options[src_direction_index];
 
-            let dst_device_index = this.di._.findIndex(scope.displayLabel.device.options,{'value': data['target']['device_id']});
-            scope.monitorModel.dst_switch = scope.displayLabel.device.options[dst_device_index];
+            let dst_device_index = this.di._.findIndex(scope.displayLabel.dst_device.options,{'value': data['target']['device_id']});
+            scope.monitorModel.dst_switch = scope.displayLabel.dst_device.options[dst_device_index];
 
             scope.monitorModel.dst_port = data['target']['port'] + '';
             scope.showWizard = true;
@@ -212,8 +217,8 @@ export class MonitorEstablishController {
                 scope.monitorModel.session_id = 1;
               }
             }
-            scope.monitorModel.source_swt = scope.displayLabel.device.options[0];
-            scope.monitorModel.dst_switch = scope.displayLabel.device.options[0];
+            scope.monitorModel.source_swt = scope.displayLabel.src_device.options[0];
+            scope.monitorModel.dst_switch = scope.displayLabel.dst_device.options[0];
             scope.showWizard = true;
           },(err)=>{
 

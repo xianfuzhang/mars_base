@@ -15,6 +15,7 @@ export class ScheduleEstablishController {
     });
     this.scope = this.di.$scope;
     this.scope.showWizard = false;
+    this.scope.weight_regex ='^[0-9]|1[0-5]$';
     this.scope.steps = [
       {
         id: 'step1',
@@ -75,10 +76,27 @@ export class ScheduleEstablishController {
     this.initActions();
   }
 
+
+
   initActions() {
+    function validCurrentDom(dom_class) {
+      let out = document.getElementsByClassName(dom_class);
+
+      if(out && out.length === 1){
+        let invalidDoms = out[0].getElementsByClassName('mdc-text-field--invalid');
+        if(invalidDoms && invalidDoms.length > 0){
+          return false;
+        }
+      }
+      return true;
+    }
+
+
     this.scope.submit = () => {
       return new Promise((resolve, reject) => {
-        if(!this.validateWeight()) {
+
+        this.di.$rootScope.$emit('page_qos_schedule');
+        if(!validCurrentDom('qos_schedule_establish')) {
           this.scope.model.weightHelper.validation = 'true';
           resolve({valid: false, errorMessage: ''});
         }

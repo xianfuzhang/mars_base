@@ -47,7 +47,7 @@ export class mdlTable {
     scope.log = this.di.$log;
     scope.tableSize = attrs.tableSize || 'normal';
 
-    scope._isNeedPagination = scope.needPagination || false;
+    scope._isNeedPagination = scope.needPagination === 'true' ? true : false;
 
     scope.tableModel = {
       'CONST_SORT_ASC': this.di.tableConsts.CONST.SORT_ASC,

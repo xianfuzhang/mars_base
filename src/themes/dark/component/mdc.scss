@@ -77,7 +77,7 @@
   user-select: none;
 }
 .mdc-select{
-  width: 150px;
+  width: 169px;
   display: inline-block;
   cursor: pointer;
   overflow: visible;
@@ -179,6 +179,7 @@
 }
 .mdc-select-list>.mdc-select-list-item{
   display: flex;
+  overflow: hidden;
   height: 35px;
   line-height: 35px;
   text-align: left;
@@ -363,4 +364,13 @@
 
 .none {
   display: none;
+}
+
+.mdc-select:not(.mdc-select--disabled) .mdc-floating-label{
+  color: rgba(255, 255, 255, 0.8);
+}
+
+
+.mdc-select--disabled .mdc-floating-label{
+  color: rgba(255, 255, 255, 0.8);
 }

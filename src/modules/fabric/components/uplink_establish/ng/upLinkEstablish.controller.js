@@ -50,11 +50,13 @@ export class UpLinkEstablishController {
     };
 
     scope.displayLabel = {
-      device:{'options':[]},
-      tag:{'options':[
-        {'label': 'Tag', 'value': 'tag'},
-        {'label': 'Untag', 'value':'untag'}
-      ]
+      device: {'options': [], 'hint': this.translate('MODULES.FABRIC.UPLINK.COLUMN.DEVICE')},
+      tag: {
+        'options': [
+          {'label': 'Tag', 'value': 'tag'},
+          {'label': 'Untag', 'value': 'untag'}
+        ],
+        'hint': this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.TAG')
       }
     };
 
@@ -73,7 +75,7 @@ export class UpLinkEstablishController {
       let out = document.getElementsByClassName(dom_class);
 
       if(out && out.length === 1){
-        let invalidDoms = out[0].getElementsByClassName('ng-invalid');
+        let invalidDoms = out[0].getElementsByClassName('mdc-text-field--invalid');
         if(invalidDoms && invalidDoms.length > 0){
           return false;
         }
@@ -169,7 +171,7 @@ export class UpLinkEstablishController {
     scope.open = (deviceId, port) => {
       if(scope.showWizard) return;
 
-      scope.displayLabel.device = {'options':[]};
+      scope.displayLabel.device.options = [];
       scope.upLinkModel = {
         segment_name: '',
         device: null,

@@ -509,10 +509,20 @@ export class logicalService {
 
   getQosActionsShow() {
     return {
-      'menu': {'enable': false, 'role': 3}, 
-      'add': {'enable': true, 'role': 3}, 
-      'remove': {'enable': false, 'role': 3}, 
-      'refresh': {'enable': true, 'role': 3}, 
+      'menu': {'enable': false, 'role': 3},
+      'add': {'enable': true, 'role': 3},
+      'remove': {'enable': false, 'role': 3},
+      'refresh': {'enable': true, 'role': 3},
+      'search': {'enable': false, 'role': 3}
+    };
+  }
+
+  getQosScheduleActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 3},
+      'add': {'enable': false, 'role': 3},
+      'remove': {'enable': false, 'role': 3},
+      'refresh': {'enable': true, 'role': 3},
       'search': {'enable': false, 'role': 3}
     };
   }

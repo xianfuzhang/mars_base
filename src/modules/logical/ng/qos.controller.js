@@ -224,15 +224,16 @@ export class QoSController {
   }
 
   getActionsShow() {
-    /*switch(this.scope.tabSelected.type) {
+    let actions;
+    switch(this.scope.tabSelected.type) {
       case 'cos':
-        actions = this.di.logicalService.getQosActionsShow();
-        break;
       case 'ecn':
         actions = this.di.logicalService.getQosActionsShow();
-        break
-    }*/
-    let actions = this.di.logicalService.getQosActionsShow();
+        break;
+      case 'schedule':
+        actions = this.di.logicalService.getQosScheduleActionsShow();
+        break;
+    }
     return actions;
   }
 
