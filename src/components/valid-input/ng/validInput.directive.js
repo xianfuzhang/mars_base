@@ -282,7 +282,7 @@ export class validInput {
       }));
 
       unsubscribers.push(scope.$watch('vModel', () => {
-        scope.textFieldModel.value = scope.vModel;
+        scope.textFieldModel.value = scope.vModel?scope.vModel:'';
         scope.ngChange();
       }));
 

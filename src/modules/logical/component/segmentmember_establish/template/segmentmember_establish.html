@@ -45,7 +45,7 @@
                     <mdl-button class="remove" ng-click="deleteVlanPorts(port)" icon-name="remove_circle" size='small'></mdl-button>
                     <table class="inline_content_table">
                         <tr>
-                            <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{ "MODULES.LOGICAL.SEGMENT_MEMBER.PORT"|translate}}</div></td>
+                            <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{ "MODULES.LOGICAL.SEGMENT_MEMBER.PORT"|translate}}</div></td>-->
                             <td>
                                 <div class="criteria_line">
                                     <mdl-select ng-model="port.port" display-label="vlanDeviceDisplayLabel">
@@ -61,7 +61,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.LOGICAL.SEGMENT_MEMBER.TAG"|translate}}</div></td>
+                            <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.LOGICAL.SEGMENT_MEMBER.TAG"|translate}}</div></td>-->
                             <td>
                                 <div class="criteria_line">
                                     <mdl-select ng-model="port.tagValue" display-label="tagDisplayLabel">
@@ -87,7 +87,7 @@
                     <mdl-button class="remove" ng-click="deleteVlanLogicalPorts(port)" icon-name="remove_circle" size='small'></mdl-button>
                     <table class="inline_content_table">
                         <tr>
-                            <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{"MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_LOGICAL_PORTS"|translate}}</div></td>
+                            <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{"MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_LOGICAL_PORTS"|translate}}</div></td>-->
                             <td>
                                 <div class="criteria_line">
                                     <!--<valid-input v-require="true" ng-model="port.trunk"  v-rpcid="page_segmentmember_es" ></valid-input>-->
@@ -97,7 +97,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.LOGICAL.SEGMENT_MEMBER.TAG"|translate}}</div></td>
+                            <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.LOGICAL.SEGMENT_MEMBER.TAG"|translate}}</div></td>-->
                             <td>
                                 <div class="criteria_line">
                                     <mdl-select ng-model="port.tagValue" display-label="tagDisplayLabel">
@@ -122,18 +122,18 @@
                     <mdl-button class="remove" ng-click="deleteVlanMacBased(based)" icon-name="remove_circle" size='small'></mdl-button>
                     <table class="inline_content_table">
                         <tr>
-                            <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{"MODULES.LOGICAL.SEGMENT_MEMBER.MAC"|translate}}</div></td>
+                            <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{"MODULES.LOGICAL.SEGMENT_MEMBER.MAC"|translate}}</div></td>-->
                             <td>
                                 <div class="criteria_line">
-                                    <valid-input v-require="true" ng-model="based.mac" v-type="mac" v-rpcid="page_segmentmember_es" ></valid-input>
+                                    <valid-input v-label='{{"MODULES.LOGICAL.SEGMENT_MEMBER.MAC"|translate}}' v-require="true" ng-model="based.mac" v-type="mac" v-rpcid="page_segmentmember_es" ></valid-input>
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.LOGICAL.SEGMENT_MEMBER.MASK"|translate}}</div></td>
+                            <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.LOGICAL.SEGMENT_MEMBER.MASK"|translate}}</div></td>-->
                             <td>
                                 <div class="criteria_line">
-                                    <valid-input v-require="true" ng-model="based.mask" v-type="int" v-rpcid="page_segmentmember_es" ></valid-input>
+                                    <valid-input v-label='{{"MODULES.LOGICAL.SEGMENT_MEMBER.MASK"|translate}}' v-require="true" ng-model="based.mask" v-type="int" v-rpcid="page_segmentmember_es" ></valid-input>
                                 </div>
                             </td>
                         </tr>
@@ -173,7 +173,7 @@
                     <div style="display: block;">
                         <mdl-select ng-model="selected.vxlanAccessDevice" display-label="allDeviceLabel" style="display: inline-block;width:200px;">
                         </mdl-select>
-                        <valid-input style="display: inline-block;width:100px;" v-require="true" ng-model="memberModel.vxlan.access.port" v-type="int" v-rpcid="page_segmentmember_es" ></valid-input>
+                        <valid-input v-fixed-height="true" style="display: inline-block;width:100px;" v-require="true" ng-model="memberModel.vxlan.access.port" v-type="int" v-rpcid="page_segmentmember_es" ></valid-input>
                     </div>
                 </div>
                 <!--<div class="stepForm__input">-->
@@ -214,10 +214,10 @@
                     <mdl-button class="remove" ng-click="deleteVxlanIps(ip)" icon-name="remove_circle" size='small'></mdl-button>
                     <table class="inline_content_table">
                         <tr>
-                            <td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.LOGICAL.SEGMENT_MEMBER.IP"|translate}}</div></td>
+                            <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.LOGICAL.SEGMENT_MEMBER.IP"|translate}}</div></td>-->
                             <td>
                                 <div class="criteria_line">
-                                    <valid-input v-require="true" ng-model="ip.ip" v-type="ipv4" v-rpcid="page_segmentmember_es" ></valid-input>
+                                    <valid-input v-label='{{"MODULES.LOGICAL.SEGMENT_MEMBER.IP"|translate}}' v-require="true" ng-model="ip.ip" v-type="ipv4" v-rpcid="page_segmentmember_es" ></valid-input>
                                 </div>
                             </td>
                         </tr>

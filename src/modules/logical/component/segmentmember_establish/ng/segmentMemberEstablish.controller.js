@@ -37,8 +37,9 @@ export class SegmentMemberEstablishController {
     scope.vxlanTypeLabel = this.di.logicalService.getSegmentMemberVxlanTypeLabel();
     scope.vxlanAccessTypeLabel = this.di.logicalService.getSegmentMemberVxlanAccessTypeLabel();
     scope.tagDisplayLabel = this.di.logicalService.getSegmentMemberTagLabel();
-    scope.trunkDisplayLabel = {'options':[]};
-    scope.vlanDeviceDisplayLabel = {'options':[]};
+    scope.tagDisplayLabel['hint'] = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.TAG');
+    scope.trunkDisplayLabel = {'options':[], 'hint': this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ACTION.ADD_LOGICAL_PORTS')};
+    scope.vlanDeviceDisplayLabel = {'options':[], 'hint': this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.PORT')};
 
     // scope.memberType = scope.memberTypeLabel.options[0];
     // scope.vlanType = scope.vlanTypeLabel.options[0];
@@ -596,7 +597,7 @@ export class SegmentMemberEstablishController {
         scope.isSonicDevice = false;
       }
 
-      scope.vlanDeviceDisplayLabel = {'options':[]};
+      scope.vlanDeviceDisplayLabel.options = [];
       scope.vlanDeviceDisplayLabel.options = this.di._.sortBy(this.di._.map(scope._phyPorts[$value.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
         return {'label': String(portNum), 'value': String(portNum)}
       })
