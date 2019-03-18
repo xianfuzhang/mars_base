@@ -9,9 +9,10 @@
       <span>{{"MODULE.HEADER.ALERT.HEALTHYCHECK"|translate}}</span>
     </content-header>
     <div class="alert-rules flex_entirety__body__body" style="display:flex;flex-direction: row">
-      <div class="section-3-2">
+      <!--<div class="section-3-2">-->
         <div class="main__content">
           <mdl-table actions-show="healthyCheckModel.actionsShow"
+                     style="width:1000px;"
                      actions="healthyCheckModel.rowActions"
                      row-click="onTableRowClick($event)"
                      row-select-action="onHCTableRowSelectAction($event)"
@@ -20,7 +21,7 @@
           </mdl-table>
         </div>
       </div>  
-    </div>
+    <!--</div>-->
   </div>
 
     <ng-controller ng-controller="AddHealthyCheckController">

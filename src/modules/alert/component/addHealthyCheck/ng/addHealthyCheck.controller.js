@@ -47,10 +47,29 @@ export class AddHealthyCheckController {
     let di = this.di;
 
 
+    // scope.healthyCheckAddedModel.name = rule.rule_name;
+    // scope.healthyCheckAddedModel.object = di._.find(scope.displayLabel['object']['options'], {'value':object});
+    // scope.healthyCheckAddedModel.switch = res.status === "enabled"?true:false;
+    // scope.$apply();
+    //
+    // scope.healthyCheckAddedModel.level = di._.find(scope.displayLabel['level']['options'], {'value':res.alert_level});
+    // if(resource === 'port' && res.query_rx ){
+    //   resource = 'rx';
+    // } else if(resource === 'port' && res.query_tx) {
+    //   resource = 'tx';
+    // }
+    //
+    // scope.healthyCheckAddedModel.type = object === 'switch'?di._.find(scope.displayLabel['swtType']['options'], {'value':resource}):di._.find(scope.displayLabel['ctrlType']['options'], {'value':resource});
+    //
+    // scope.healthyCheckAddedModel.query.value = query.value;
+    // scope.healthyCheckAddedModel.query.continue = query.continue;
+
     scope.healthyCheckAddedModel = {
+      name: '',
       switch : true,
       query : {
-
+        value: '',
+        continue: ''
       }
     };
     scope.mode ='edit';
@@ -67,7 +86,17 @@ export class AddHealthyCheckController {
       'group':null
     };
 
+
     this.di.$scope.open = function(rule){
+      // scope.healthyCheckAddedModel = {
+      //   name: '',
+      //   switch : true,
+      //   query : {
+      //     value: '',
+      //     continue: ''
+      //   }
+      // };
+
       if(scope.showWizard) return;
       clearAll();
       if(rule){
@@ -133,6 +162,14 @@ export class AddHealthyCheckController {
           scope.displayLabel.group = formatGroups(res.group);
           scope.showWizard = true;
         });
+        scope.healthyCheckAddedModel = {
+          name: '',
+          switch : true,
+          query : {
+            value: '',
+            continue: ''
+          }
+        };
         scope.disModel = false;
       }
     };
@@ -147,7 +184,7 @@ export class AddHealthyCheckController {
     }
 
     function formatGroups(groups){
-      let res = {'options':[]};
+      let res = {'options':[], hint: translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.RECEIVE_GROUP')};
 
       di._.forEach(groups, (group)=>{
         res.options.push({'label':group.name, 'value':group.name});

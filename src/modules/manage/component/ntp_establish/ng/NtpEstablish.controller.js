@@ -29,7 +29,7 @@ export class NtpEstablishController {
     const rootScope = this.di.$rootScope;
     this.translate = this.di.$filter('translate');
 
-    scope.wizardHeight = {"height":'100px'};
+    scope.wizardHeight = {"height":'150px'};
 
     let di = this.di;
 

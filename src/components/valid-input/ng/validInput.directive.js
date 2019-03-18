@@ -46,6 +46,7 @@ export class validInput {
       vEmptyMessage : '@',
       vDisabled: '=',
       vStyle: '@',
+      vWidth: '@',
       vSpan: '@',
       vList: '@'
     };
@@ -131,6 +132,7 @@ export class validInput {
         hasLabel: false,
         conTrailIcon: false,
         conLeadIcon: false,
+        vStyle: scope.vStyle?JSON.parse(scope.vStyle):""
       };
 
       let _init = () => {
@@ -173,8 +175,8 @@ export class validInput {
       scope.blockOrInline = {};
 
       if (scope.vStyle) {
-        scope.vStyle = JSON.parse(scope.vStyle);
-        scope.blockOrInline = scope.vStyle;
+        // scope.vStyle = JSON.parse(scope.vStyle);
+        scope.blockOrInline = JSON.parse(scope.vStyle);
       }
 
       if (scope.vSpan === 'true' || scope.vSpan === true) {
