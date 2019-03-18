@@ -62,11 +62,7 @@ angular
     'pascalprecht.translate',
     '_',
     'c3',
-<<<<<<< HEAD
-    'chart',
-=======
     'uuid',
->>>>>>> 2f09d419c96e19c7cbbfd3beb7c63ceee90ddaa6
     'eventEmitter',
     'ngTable',
     'crypto',
