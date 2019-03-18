@@ -130,7 +130,10 @@ export class marSection {
           // console.log(scope.isDown);
           if(!scope.isDown && !scope.isUp){
             let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
-            scope.lastHeight = bodyDom[0].clientHeight;
+            let computedStyle = window.getComputedStyle(bodyDom[0], null);
+            //js动态计算高度时，需要去掉padding，否则动画最后有波动
+            scope.lastHeight = bodyDom[0].clientHeight - parseInt(computedStyle['paddingTop']) - parseInt(computedStyle['paddingBottom']);
+
             //scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;
           }
           scope.isDown = false;
