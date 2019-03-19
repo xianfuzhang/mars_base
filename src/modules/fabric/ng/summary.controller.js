@@ -122,7 +122,16 @@ export class FabricSummaryController {
 
     this.di.$scope.displayLabel = {
       hosts: {'options':[{'label': '请选择端点', 'value':null}]},
-      fluxUnits: {'options':[{'label':'Bps', 'value':'Bps'},{'label':'KBps', 'value':'KBps'},{'label':'MBps', 'value':'MBps'}, {'label':'GBps', 'value':'GBps'}]}
+      srcHosts: {'options':[{'label': '请选择端点', 'value':null}], 'hint':this.translate('MODULES.TOPO.PATH.START')},
+      dstHosts: {'options':[{'label': '请选择端点', 'value':null}], 'hint':this.translate('MODULES.TOPO.PATH.END')},
+      fluxUnits: {
+        'options': [
+          {'label': 'Bps', 'value': 'Bps'},
+          {'label': 'KBps', 'value': 'KBps'},
+          {'label': 'MBps','value': 'MBps'},
+          {'label': 'GBps', 'value': 'GBps'}],
+        'hint': '单位',
+      }
     };
 
     this.di.$scope.fabricModel = {
@@ -143,6 +152,7 @@ export class FabricSummaryController {
       dstHost_select: true,
       busyMetric: 500,
       congestionMetric: 2000,
+      latency: '',
       monitorState: this.translate('MODULES.TOPO.MONITOR.STATE_STOP'),
       busyMetricUnit: scope.displayLabel.fluxUnits.options[2],
       congestionMetricUnit: scope.displayLabel.fluxUnits.options[2]
@@ -582,8 +592,11 @@ export class FabricSummaryController {
         scope.displayLabel.hosts.options.push({'label':host.id, 'value':host.id})
       });
 
-      scope.fabricModel.srcHost = scope.displayLabel.hosts.options[0];
-      scope.fabricModel.dstHost = scope.displayLabel.hosts.options[0];
+      scope.displayLabel.srcHosts.options = angular.copy(scope.displayLabel.hosts.options);
+      scope.displayLabel.dstHosts.options = angular.copy(scope.displayLabel.hosts.options);
+
+      scope.fabricModel.srcHost = scope.displayLabel.srcHosts.options[0];
+      scope.fabricModel.dstHost = scope.displayLabel.dstHosts.options[0];
     };
 
 

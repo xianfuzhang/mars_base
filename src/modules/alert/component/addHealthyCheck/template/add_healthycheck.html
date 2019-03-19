@@ -1,17 +1,17 @@
 <div class="add_healthycheck">
 
     <div class="name add_healthycheck__content">
-        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.RULE_NAME'|translate}}</div>
+        <!--<div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.RULE_NAME'|translate}}</div>-->
         <div class="add_healthycheck__content__input">
             <!--<input ng-if="!disModel" style="border-radius: 2px;" class="stepForm__input__text ng-valid ng-not-empty ng-valid-required" type="text" ng-model="healthyCheckAddedModel.name" ng-required="true" required="required" />-->
-            <valid-input ng-if="!disModel"  v-require="true" ng-model="healthyCheckAddedModel.name" v-rpcid="page_healthy_check" ></valid-input>
-            <div ng-if="disModel" class="add_healthycheck__disabled_input">{{healthyCheckAddedModel.name}}</div>
+            <valid-input v-disabled="disModel" v-label="{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.RULE_NAME'|translate}}"  v-require="true" ng-model="healthyCheckAddedModel.name" v-rpcid="page_healthy_check" ></valid-input>
+            <!--<div ng-if="disModel" class="add_healthycheck__disabled_input">{{healthyCheckAddedModel.name}}</div>-->
         </div>
     </div>
 
 
     <div class="object add_healthycheck__content">
-        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.OBJECT'|translate}}</div>
+        <!--<div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.OBJECT'|translate}}</div>-->
         <div class="add_healthycheck__content__input">
             <mdl-select ng-model="healthyCheckAddedModel.object"
                         disable="disModel"
@@ -21,7 +21,7 @@
     </div>
 
     <div class="type add_healthycheck__content">
-        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.TYPE'|translate}}</div>
+        <!--<div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.TYPE'|translate}}</div>-->
         <div class="add_healthycheck__content__input">
             <mdl-select ng-if="healthyCheckAddedModel.object.value == 'switch'" ng-model="healthyCheckAddedModel.type"
                         disable="disModel"
@@ -37,7 +37,7 @@
     </div>
 
     <div class="receive_group add_healthycheck__content">
-        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.RECEIVE_GROUP'|translate}}</div>
+        <!--<div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.RECEIVE_GROUP'|translate}}</div>-->
         <div class="add_healthycheck__content__input">
 
             <mdl-select ng-model="healthyCheckAddedModel.group" style="overflow: visible"
@@ -50,7 +50,7 @@
     </div>
 
     <div class="alert_level add_healthycheck__content">
-        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.ALERT_LEVEL'|translate}}</div>
+        <!--<div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.TABLE.ALERT_LEVEL'|translate}}</div>-->
         <div class="add_healthycheck__content__input">
             <mdl-select ng-model="healthyCheckAddedModel.level"
                         disable="disModel"
@@ -59,29 +59,30 @@
         </div>
     </div>
 
-    <div class="query add_healthycheck__content">
-        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.CONDITION'|translate}}</div>
-        <div class="add_healthycheck__content__input">
+    <div class="query add_healthycheck__content" style="align-items:flex-end;">
+        <!--<div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.CONDITION'|translate}}</div>-->
 
-            <mdl-select ng-model="healthyCheckAddedModel.query.condition" style="float: left;"
+            <mdl-select ng-model="healthyCheckAddedModel.query.condition" style="margin-right:20px;"
                         display-label="displayLabel.condition">
             </mdl-select>
-
             <!--<input style="width: 70px;float: left;border-radius: 2px;margin: 0 12px;" class="stepForm__input__text  ng-valid ng-not-empty " type="text" ng-model="healthyCheckAddedModel.query.value" ng-required="true"  ng-pattern="num_regex" />-->
 
-            <valid-input  v-style='{"width": "70px","float": "left","border-radius": "2px","margin": "0 12px"}' v-require="true" ng-model="healthyCheckAddedModel.query.value" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_healthy_check" ></valid-input>
+            <valid-input v-style='{"width": "50px"}'
+                         v-label="{{ (healthyCheckAddedModel.type.value == 'rx' || healthyCheckAddedModel.type.value == 'tx')?'Mbps':'%'}}"
+                         v-require="true"
+                         v-fixed-height="true"
+                         ng-model="healthyCheckAddedModel.query.value" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_healthy_check" ></valid-input>
 
-            <div style="display: inline-block;">{{ (healthyCheckAddedModel.type.value == 'rx' || healthyCheckAddedModel.type.value == 'tx')?'Mbps':'%'}}</div>
-        </div>
+            <!--<div style="display: inline-block;">{{ (healthyCheckAddedModel.type.value == 'rx' || healthyCheckAddedModel.type.value == 'tx')?'Mbps':'%'}}</div>-->
     </div>
 
-    <div class="query add_healthycheck__content">
-        <div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.CONDITION.CONTINUE'|translate}}</div>
+    <div class="query add_healthycheck__content" style="align-items:flex-end;">
+        <!--<div class="add_healthycheck__content__label">{{'MODULES.ALERT.HEALTHY_CHECK.CONDITION.CONTINUE'|translate}}</div>-->
         <div class="add_healthycheck__content__input">
             <!--<input style="width: 70px;float: left;border-radius: 2px;margin: 0 12px 0 0;" class="stepForm__input__text  ng-valid ng-not-empty " type="text" ng-model="healthyCheckAddedModel.query.continue" ng-required="true"  ng-pattern="num_regex" />-->
 
-            <valid-input  v-style='{"width": "70px","float": "left","border-radius": "2px","margin": "0 12px 0 0"}' v-require="true" ng-model="healthyCheckAddedModel.query.continue" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_healthy_check" ></valid-input>
-            <div style="display: inline-block;">{{'MODULES.ALERT.HEALTHY_CHECK.CONDITION.SECOND'|translate}}</div>
+            <valid-input v-label="{{'MODULES.ALERT.HEALTHY_CHECK.CONDITION.CONTINUE_SECONDS'|translate}}" v-style='{"width": "70px"}' v-require="true" ng-model="healthyCheckAddedModel.query.continue" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_healthy_check" ></valid-input>
+            <!--<div style="display: inline-block;">{{'MODULES.ALERT.HEALTHY_CHECK.CONDITION.SECOND'|translate}}</div>-->
         </div>
     </div>
 
@@ -92,7 +93,6 @@
             <mdl-switch ng-model="healthyCheckAddedModel.switch"
                         display-label="displayLabel.status">
             </mdl-switch>
-
         </div>
     </div>
 

@@ -11,8 +11,10 @@
     <!--<span  class="valid_input__message" ng-style="resizeStyle" ng-show="(vModel !== '' && vModel !== undefined) && validModel.isInvalid && validModel.mouseOver && validModel.focus != true">{{validModel.message}}</span>-->
     <!--<span  class="valid_input__message" ng-style="resizeStyle" ng-show="(vModel == '' || vModel == undefined)&& validModel.mouseOver && validModel.change && validModel.require && validModel.focus != true">{{validModel.emptyMessage}}</span>-->
 <!--</div>-->
-<div>
-    <div class="valid_input mdc-text-field" ng-class="{'mdc-text-field--no-label': validModel.floatLabel == null ,'mdc-text-field--with-trailing-icon':validModel.conTrailIcon,'mdc-text-field--with-leading-icon':validModel.conLeadIcon}">
+<div style="position: relative;">
+    <div class="valid_input mdc-text-field"
+         ng-style='validModel.vStyle'
+         ng-class="{'mdc-text-field--no-label': validModel.floatLabel == null ,'mdc-text-field--with-trailing-icon':validModel.conTrailIcon,'mdc-text-field--with-leading-icon':validModel.conLeadIcon}">
         <!--<input type="text" id="{{id}}" class="mdc-text-field__input">-->
         <span class="valid_lead_icon" ng-transclude='leading'>
             <!-- 示例 -->

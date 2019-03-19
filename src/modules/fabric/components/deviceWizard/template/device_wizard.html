@@ -37,18 +37,36 @@
             <!--Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future.-->
         <!--</div>-->
     </div>
-    <div class="stepForm__input">
+    <div class="stepForm__input" style="display: flex;flex-direction: row">
+        <div ng-if="switch.protocol.value == 'of'">
+            <div  class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MANAGEMENT_ADDRESS' | translate}}<span class="stepForm__input__required">*</span></div>
+            <div>
+                <valid-input v-require="true" v-list="ip-datalist" v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
+            </div>
+        </div>
+        <div ng-if="switch.protocol.value != 'of'">
+            <div  class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MANAGEMENT_ADDRESS' | translate}} & {{::'MODULES.SWITCHES.SWITCH.COLUMN.PORT' | translate}}<span class="stepForm__input__required">*</span></div>
+            <div style="display: flex;flex-direction: row;">
+                <valid-input v-require="true" v-list="ip-datalist" v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
+                <span class="stepForm__input__separator" style="margin-top: 10px;" >&nbsp;:&nbsp;</span>
+                <valid-input  v-require="true" v-span="true" ng-model="switch.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
+            </div>
+        </div>
+        <datalist id="ip-datalist">
+            <option ng-value="ip" ng-repeat="ip in ip_addresses"/>
+        </datalist>
+        <!--
         <div ng-if="switch.protocol.value != 'of'" class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MANAGEMENT_ADDRESS' | translate}} & {{::'MODULES.SWITCHES.SWITCH.COLUMN.PORT' | translate}}<span class="stepForm__input__required">*</span></div>
-        <valid-input ng-if="switch.protocol.value != 'of'" v-require="true" v-list="ip-datalist" v-span="true" v-style='{"width":"70%"}' ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
+        <valid-input ng-if="switch.protocol.value != 'of'" v-require="true" v-list="ip-datalist" v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
 
         <div ng-if="switch.protocol.value == 'of'" class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MANAGEMENT_ADDRESS' | translate}}<span class="stepForm__input__required">*</span></div>
-        <valid-input ng-if="switch.protocol.value == 'of'" v-require="true" v-list="ip-datalist"  v-style='{"width":"100%"}' v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
+        <valid-input ng-if="switch.protocol.value == 'of'" v-require="true" v-list="ip-datalist" v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
         <datalist id="ip-datalist">
             <option ng-value="ip" ng-repeat="ip in ip_addresses"/>
         </datalist>
         <span class="stepForm__input__separator" ng-if="switch.protocol.value != 'of'">&nbsp;:&nbsp;</span>
-        <valid-input ng-if="switch.protocol.value != 'of'" v-require="true" v-span="true" v-style='{"width":"20%"}' ng-model="switch.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
-
+        <valid-input ng-if="switch.protocol.value != 'of'" v-require="true" v-span="true" ng-model="switch.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
+        -->
     </div>
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.RACK' | translate}}</div>

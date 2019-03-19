@@ -193,6 +193,7 @@
   max-height: 60px;
   height: auto;
   opacity: 1;
+  margin-bottom: 0;
 }
 
 .valid_input.mdc-text-field-helper-text.input_is_invalid{
@@ -248,4 +249,24 @@
 
 .valid_input.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-floating-label {
   color: rgba(255,37,48,.8);
+}
+
+.valid_input.mdc-text-field .mdc-line-ripple{
+  background-color: var(--mdc-theme-background, #fff);
+}
+
+.valid_input.mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input {
+  border-bottom-color: rgba(255, 255, 255, 1);
+}
+
+.valid_input.mdc-text-field--invalid:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input {
+  border-bottom-color: #b00020;
+}
+
+.valid_input.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-line-ripple {
+  background-color: #b00020;
+}
+
+.valid_input.mdc-text-field--disabled{
+  opacity: .38;
 }

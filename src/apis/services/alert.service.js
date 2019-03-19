@@ -238,7 +238,7 @@ export class alertService {
       {
         'label': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.DESCRIPTION'),
         'field': 'description',
-        'layout': {'visible': true, 'sortable': true, 'fixed': true}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true,'width':'200px'}
       }
     ];
   }
@@ -286,7 +286,7 @@ export class alertService {
 
 
   getHcObjectDisLabel(){
-    return {options: [{label: '交换机', value: 'switch'}, {label: '控制器', value: 'controller'}]}
+    return {options: [{label: '交换机', value: 'switch'}, {label: '控制器', value: 'controller'}],'hint': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.OBJECT')}
   }
 
   getHcTypeSwtDisLabel(){
@@ -297,7 +297,7 @@ export class alertService {
         {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.DISK'), value: 'disk'},
         {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.RX'), value: 'rx'},
         {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.TX'), value: 'tx'}
-      ]
+      ], hint : this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.TYPE')
     }
   }
 
@@ -307,7 +307,7 @@ export class alertService {
         {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.CPU'), value: 'cpu'},
         {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.MEM'), value: 'ram'},
         {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.TYPE.DISK'), value: 'disk'},
-      ]
+      ], hint : this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.TYPE')
     }
   }
 
@@ -315,13 +315,14 @@ export class alertService {
     return {options: [
               {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.LEVEL.HIGHT'), value: 1},
               {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.LEVEL.LOW'), value: 0}
-            ]}
+            ], hint: this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.ALERT_LEVEL')}
   }
 
   getHcConditionDisLabel(){
     return {options: [
               {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.QUERY.GT'), value: 'gt'} ,
-              {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.QUERY.LT'), value: 'lt'}]}
+              {label: this.translate('MODULES.ALERT.HEALTHY_CHECK.QUERY.LT'), value: 'lt'}],
+            hint: this.translate('MODULES.ALERT.HEALTHY_CHECK.CONDITION')}
   }
 
   getHcStatusDisLabel(){
