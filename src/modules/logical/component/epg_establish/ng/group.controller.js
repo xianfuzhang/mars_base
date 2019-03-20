@@ -33,9 +33,11 @@ export class EGPGroupEstablishController {
       nameHelper: {
         'id': 'nameHelper',
         'validation': 'false',
+        'content': this.di.$filter('translate')('MODULES.TRUNK.CREATE.FORM.NAME.HELP')
       },
       nameDisplayLabel: {
-        'id': 'nameLabel'
+        'id': 'nameLabel',
+        'regType': 'nameString'
       },
       addressHelper: {
         'id': 'thresholdHelp',
@@ -44,7 +46,8 @@ export class EGPGroupEstablishController {
         'content': this.di.$filter('translate')('MODULES.LOGICAL.EGP.TAB.GROUP.MAC.HELP')
       },
       addressDisplayLabel: {
-        'id': 'addressLabel'
+        'id': 'addressLabel',
+        'regType': 'mac'
       }
     }
 

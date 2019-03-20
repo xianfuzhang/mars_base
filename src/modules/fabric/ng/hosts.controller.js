@@ -36,7 +36,7 @@ export class HostController {
     this.scope.entities = [];
     this.scope.endpointModel = {
       actionsShow: this.di.deviceService.getEndpointActionsShow(),
-      rowActions: this.di.deviceService.getEndpointTableRowActions(),
+      rowActions: this.di.deviceService.getEndpointTableRowActions('host'),
       endpointProvider: null,
       API: null
     };

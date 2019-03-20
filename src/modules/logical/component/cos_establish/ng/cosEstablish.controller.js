@@ -5,7 +5,8 @@ export class CosEstablishController {
       '$filter',
       '_',
       '$rootScope',
-      'logicalDataManager'
+      'logicalDataManager',
+      'regexService'
     ];
   }
   constructor(...args){
@@ -44,7 +45,8 @@ export class CosEstablishController {
         'content': this.di.$filter('translate')('MODULES.LOGICAL.QOS.TAB.COS.DSCP.HELP')
       },
       dscpDisplayLabel: {
-        'id': 'dscpLabel'
+        'id': 'dscpLabel',
+        'regType': 'dscp_number'
       }
     }
 
@@ -112,8 +114,7 @@ export class CosEstablishController {
   }
 
   validateDSCP() {
-    const DSCP_REG = /^([0-9],?)*([0-9])$/;
-    return DSCP_REG.test(this.scope.model.dscp.toString());
+    return this.scope.model.dscp? this.di.regexService.excute('dscp_number', this.scope.model.dscp.toString()) : false;
   }
 }
 

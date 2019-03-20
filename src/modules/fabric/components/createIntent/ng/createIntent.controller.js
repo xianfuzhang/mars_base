@@ -56,6 +56,7 @@ export class CreateIntentController {
       ingressPortDisplayLabel: {
         id: 'ingressPort',
         hint: this.translate('MODULES.ENDPOINT.CREATE.FORM.PORT'),
+        regType: 'positive_int',
         type: 'text',
         required: 'true'
       },
@@ -67,6 +68,7 @@ export class CreateIntentController {
       egressPortDisplayLabel: {
         id: 'egressPort',
         hint: this.translate('MODULES.ENDPOINT.CREATE.FORM.PORT'),
+        regType: 'positive_int',
         type: 'text',
         required: 'true'
       },

@@ -2,7 +2,8 @@ export class mdlText {
   static getDI() {
     return [
       '$compile',
-      '_'
+      '_',
+      'regexService'
     ];
   }
 
@@ -20,7 +21,7 @@ export class mdlText {
       helper: '=',
       disable: '@',
       datalist:'@',
-      formatValidate: '&'
+      formatValidate: '&' //在blur中已经做了正则校验，该方法用于范围的校验，字符长度、整数范围等
     };
     this.link = (...args) => this._link.apply(this, args);
   }
@@ -32,6 +33,7 @@ export class mdlText {
 
     scope.hint = scope.displayLabel && scope.displayLabel.hint;
     scope.id = scope.displayLabel && scope.displayLabel.id;
+    scope.regType = scope.displayLabel && scope.displayLabel.regType;
     scope.type = scope.displayLabel && scope.displayLabel.type || 'text';
     scope.required = scope.displayLabel && scope.displayLabel.required || 'false';
     scope.helpId = scope.helper && scope.helper.id;
@@ -88,6 +90,9 @@ export class mdlText {
     scope.blur = () => {
       if (!scope.value) {
         element.find('label').removeClass('mdc-floating-label--float-above');
+      }
+      if (scope.regType) {
+        scope.helper.validation = this.di.regexService.excute(scope.regType, scope.value) ? 'false' : 'true';
       }
       angular.element(element.children()[0]).removeClass('mdc-text-field--focused');
       element.find('div').removeClass('mdc-line-ripple--active');

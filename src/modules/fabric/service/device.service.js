@@ -391,21 +391,25 @@ export class DeviceService {
     }
   }
 
-  getEndpointTableRowActions() {
-    return [
+  getEndpointTableRowActions(type) {
+    let arr = [
       {
         'label': this.translate('MODULES.SWITCHES.ENDPOINT.ROW.ACTION.DELETE'),
         'role': 2,
         'value': 'delete'
-      },
-      {
-        'label': 'Intent',
-        'role': 2,
-        'value': 'intent'
       }
     ];
+    if (!type) {
+      arr.push(
+        {
+          'label': 'Intent',
+          'role': 2,
+          'value': 'intent'
+        }
+      )
+    }
+    return arr;
   }
-
 
   getSummaryLinkTableSchema() {
     return [
