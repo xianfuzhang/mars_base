@@ -7,7 +7,6 @@ export class chartService {
       '$location',
       '$filter',
       '_',
-	    'chart'
     ];
   }
 
@@ -18,8 +17,10 @@ export class chartService {
     });
 	  let theme = this.getTheme();
 	
-	  const Chart = this.di.chart;
+	  let Chart = require('chart.js');
 	  const colorHelper = Chart.helpers.color;
+	  
+	  this.helpers = Chart.helpers;
 	
 	  this.styles = {
 		  colors: {

@@ -12,7 +12,6 @@ class AliasProvider {
       'localStore': path.resolve('src/libs/localstore/'),
       'crypto': path.resolve('src/libs/crypto/'),
       'eventEmitter': path.resolve('src/libs/eventEmitter/'),
-	    'chart': path.resolve('src/libs/chart/'),
     };
   }
 

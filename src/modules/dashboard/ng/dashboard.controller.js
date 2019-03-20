@@ -11,7 +11,6 @@ export class DashboardController {
       '$q',
       'appService',
       'c3',
-      'chart',
       'chartService',
       'dateService',
       'deviceService',
@@ -40,183 +39,291 @@ export class DashboardController {
         }).call(this);
     }).call(this);
 
-    const Chart = this.di.chart;
     const chartService = this.di.chartService;
     const chartStyles = chartService.styles;
-    const colorHelper = Chart.helpers;
     let scope = this.di.$scope;
-    let switchMemoryPieChart;
-    let switchMemoryChart;
     this.translate = this.di.$filter('translate');
     this.interval_device = null;
     const CONTROLLER_STATE_INACTIVE = 'INACTIVE';
     this.SWITCHES_CPU_MEMORY_STATISTIC_NS = 'switches_cpu_memory_statistic_ns';
     this.CLUSTERS_CPU_MEMORY_STATISTIC_NS = 'clusters_cpu_memory_statistic_ns';
     let unSubscribers = [];
-    let dataModel = {};
-    let date = this.di.dateService.getTodayObject();
-    let before = this.di.dateService.getBeforeDateObject(20*60*1000);
-    this.di.$scope.dashboardModel = {
-      'controllerSummary':{},
-      'controllerStatistic':{},
-      'switchSummary':{
-        leafCount:0,
-        spineCount:0,
-        unknownCount:0,
-        unavailableCount:0,
-      },
-      cpu: {
-        'type': null, //minute, hour, day
-        'begin_date': new Date(before.year, before.month, before.day),
-        'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
-        'end_date': new Date(date.year, date.month, date.day),
-        'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
-        'analyzer': []
-      },
-      memory: {
-        'type': null, //minute, hour, day
-        'begin_date': new Date(before.year, before.month, before.day),
-        'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
-        'end_date': new Date(date.year, date.month, date.day),
-        'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
-        'analyzer': []
-      },
-      controller: {
-        cpu: {
-          'type': null, //minute, hour, day
-          'begin_date': new Date(before.year, before.month, before.day),
-          'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
-          'end_date': new Date(date.year, date.month, date.day),
-          'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
-          'analyzer': []
-        },
-        memory: {
-          'type': null, //minute, hour, day
-          'begin_date': new Date(before.year, before.month, before.day),
-          'begin_time': new Date(before.year, before.month, before.day, before.hour, before.minute, 0),
-          'end_date': new Date(date.year, date.month, date.day),
-          'end_time': new Date(date.year, date.month, date.day, date.hour, date.minute, 0),
-          'analyzer': []
-        },
-      },
-      timeRange: [
-        {label: this.translate('MODULES.DASHBOARD.TIMERANGE.MINUTE'), value: 60},
-        {label: this.translate('MODULES.DASHBOARD.TIMERANGE.HOUR'), value: 180},
-        {label: this.translate('MODULES.DASHBOARD.TIMERANGE.DAY'), value: 3600},
-      ]
+    let dataModel = {
+    	selectedClusterCpu: [],
+	    selectedClusterMemory: [],
+	    selectedSwitchCpu: [],
+	    selectedSwitchMemory: [],
     };
-
+    let date = this.di.dateService.getTodayObject();
+    let before = this.di.dateService.getBeforeDateObject(30*60*1000); // 前30分钟
+    const GRID_NUM = 30; // chart grid number
+    let begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
+    let end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
+    this.di.$scope.dashboardModel = {
+	    'controllerSummary': {},
+	    'controllerStatistic': {},
+	    'switchSummary': {
+		    leafCount: 0,
+		    spineCount: 0,
+		    unknownCount: 0,
+		    unavailableCount: 0,
+	    },
+	    cpu: {
+		    'begin_time': begin_time,
+		    'end_time': end_time,
+		    'step': 60,
+		    'origin_begin_time': begin_time,
+		    'origin_end_time': end_time,
+		    'analyzer': []
+	    },
+	    memory: {
+		    'begin_time': begin_time,
+		    'end_time': end_time,
+		    'step': 60,
+		    'origin_begin_time': begin_time,
+		    'origin_end_time': end_time,
+		    'analyzer': []
+	    },
+	    controller: {
+		    cpu: {
+			    'begin_time': begin_time,
+			    'end_time': end_time,
+			    'step': 60,
+			    'origin_begin_time': begin_time,
+			    'origin_end_time': end_time,
+			    'analyzer': []
+		    },
+		    memory: {
+			    'begin_time': begin_time,
+			    'end_time': end_time,
+			    'step': 60,
+			    'origin_begin_time': begin_time,
+			    'origin_end_time': end_time,
+			    'analyzer': []
+		    },
+	    },
+	    clusterCpuPieChart: {},
+	    clusterMemoryPieChart: {},
+	    switchMemoryPieChart: {},
+	    switchCpuPieChart: {},
+    };
+    
+    this.di.$scope.clusterCpuChartConfig = {
+		  data: [],
+		  labels: [],
+			options: {},
+		  series: [],
+			onClick: () => {}
+	  }
+	  this.di.$scope.clusterMemoryChartConfig = {
+		  data: [],
+		  labels: [],
+			options: {},
+		  series: [],
+			onClick: () => {}
+	  }
+	  this.di.$scope.switchCpuChartConfig = {
+		  data: [],
+		  labels: [],
+			options: {},
+		  series: [],
+			onClick: () => {}
+	  }
+	  this.di.$scope.switchMemoryChartConfig = {
+		  data: [],
+		  labels: [],
+			options: {},
+		  series: [],
+			onClick: () => {}
+	  }
+	  this.di.$scope.clusterCpuPieChartConfig = {
+		  data: [],
+		  labels: [],
+		  options: {},
+		  colors: []
+	  }
+	  this.di.$scope.clusterMemoryPieChartConfig = {
+		  data: [],
+		  labels: [],
+		  options: {},
+		  colors: [],
+	  }
+	  this.di.$scope.switchCpuPieChartConfig = {
+		  data: [],
+		  labels: [],
+		  options: {},
+		  colors: [],
+	  }
+	  this.di.$scope.switchMemoryPieChartConfig = {
+		  data: [],
+		  labels: [],
+		  options: {},
+		  colors: [],
+	  }
+	  this.di.$scope.interfaceRxTxPackagesChartConfig = {
+		  data: [],
+		  labels: [],
+		  options: {},
+		  colors: []
+	  }
+	  this.di.$scope.interfaceDropPackagesChartConfig = {
+		  data: [],
+		  labels: [],
+		  options: {},
+		  colors: []
+	  }
+	
     this.di.$scope.panelRefresh = {
       controller : false,
       swt : false,
     };
-
+	
     this.di.$scope.panelLoading = {
       controller : false,
       swt : false,
     };
 
-   /* this.di.$scope.rangeConfiguration = (type) => {
-      let begin_date, end_date, begin_time, end_time;
-      if (type === 'cpu') {
-        begin_date = this.di.$scope.dashboardModel.cpu.begin_date;
-        end_date = this.di.$scope.dashboardModel.cpu.end_date;
-        begin_time = this.di.$scope.dashboardModel.cpu.begin_time;
-        end_time = this.di.$scope.dashboardModel.cpu.end_time;
-      }
-      else {
-        begin_date = this.di.$scope.dashboardModel.memory.begin_date;
-        end_date = this.di.$scope.dashboardModel.memory.end_date;
-        begin_time = this.di.$scope.dashboardModel.memory.begin_time;
-        end_time = this.di.$scope.dashboardModel.memory.end_time;
-      }
-      this.di.modalManager.open({
-          template: require('../template/dateRangeConfiguration.html'),
-          controller: 'dateRangeConfigurationCtrl',
-          windowClass: 'date-rate-modal',
-          resolve: {
-            dataModel: () => {
-              return {
-                'begin_date': begin_date,
-                'begin_time': begin_time,
-                'end_date': end_date,
-                'end_time': end_time 
-              };
-            }
-          }
-        })
-        .result.then((data) => {
-        if (data && !data.canceled) {
-          //console.log(data);
-          if (type === 'cpu') {
-            this.di.$scope.dashboardModel.cpu.begin_date = data.data.begin_date;
-            this.di.$scope.dashboardModel.cpu.begin_time = data.data.begin_date;
-            this.di.$scope.dashboardModel.cpu.end_date = data.data.end_date;
-            this.di.$scope.dashboardModel.cpu.end_time = data.data.end_date;
-
-            this.getDevicesCPUAnalyzer(dataModel.devices).then(() => {
-              convertSwitchCPUAnalyzer();
-            });
-          }
-          else {
-            this.di.$scope.dashboardModel.memory.begin_date = data.data.begin_date;
-            this.di.$scope.dashboardModel.memory.begin_time = data.data.begin_date;
-            this.di.$scope.dashboardModel.memory.end_date = data.data.end_date;
-            this.di.$scope.dashboardModel.memory.end_time = data.data.end_date;
-
-             this.getDevicesMemoryAnalyzer(dataModel.devices).then(() => {
-              convertSwitchMemoryAnalyzer();
-            });
-          }
-        }
-      });
-    };*/
-
-    this.di.$scope.timeRangeSelect = (type, $value) => {
-      let before;
-      //20分钟
-      if ($value.value === 60) {
-        before = this.di.dateService.getBeforeDateObject(20*60*1000);
-      }
-      //1小时
-      else if ($value.value === 180) {
-        before = this.di.dateService.getBeforeDateObject(60*60*1000); 
-      }
-      //1天
-      else{
-        before = this.di.dateService.getBeforeDateObject(24*60*60*1000); 
-      }
-      if (type === 'device-cpu') {
-        this.di.$scope.dashboardModel.cpu.type = $value;
-        this.di.$scope.dashboardModel.cpu.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
-        this.getDevicesCPUAnalyzer(dataModel.configDevices).then(() => {
-          convertSwitchCPUAnalyzer();
-        });
-      }
-      else if (type === 'device-memory') {
-        this.di.$scope.dashboardModel.memory.type = $value;
-        this.di.$scope.dashboardModel.memory.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
-        this.getDevicesMemoryAnalyzer(dataModel.configDevices).then(() => {
-          convertSwitchMemoryAnalyzer();
-        });
-      }
-      else if (type === 'controller-cpu') {
-        this.di.$scope.dashboardModel.controller.cpu.type = $value;
-        this.di.$scope.dashboardModel.controller.cpu.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
-        this.getClustersCPUAnalyzer(dataModel.cluster).then(() => {
-          convertClusterCPUAnalyzer();
-        });
-      }
-      else if (type === 'controller-memory') {
-        this.di.$scope.dashboardModel.controller.memory.type = $value;
-        this.di.$scope.dashboardModel.controller.memory.begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
-        this.getClustersMemoryAnalyzer(dataModel.cluster).then(() => {
-          convertClusterMemoryAnalyzer();
-        });
-      }
-    };
-
-    let di = this.di;
+    this.di.$scope.resetTimeScale = (type) => {
+	    if (type === 'device-cpu') {
+		    this.di.$scope.dashboardModel.cpu.begin_time = scope.dashboardModel.cpu.origin_begin_time;
+		    this.di.$scope.dashboardModel.cpu.end_time = scope.dashboardModel.cpu.origin_end_time;
+		    this.di.$scope.dashboardModel.cpu.step = Math.floor((scope.dashboardModel.cpu.origin_end_time.getTime() - scope.dashboardModel.cpu.origin_begin_time) / (GRID_NUM * 1000));
+	    }
+	    else if (type === 'device-memory') {
+		    this.di.$scope.dashboardModel.memory.begin_time = scope.dashboardModel.memory.origin_begin_time;
+		    this.di.$scope.dashboardModel.memory.end_time = scope.dashboardModel.memory.origin_end_time;
+		    this.di.$scope.dashboardModel.memory.step = Math.floor((scope.dashboardModel.memory.origin_end_time.getTime() - scope.dashboardModel.memory.origin_begin_time) / (GRID_NUM * 1000));
+	    }
+	    else if (type === 'controller-cpu') {
+		    this.di.$scope.dashboardModel.controller.cpu.begin_time = scope.dashboardModel.controller.cpu.origin_begin_time;
+		    this.di.$scope.dashboardModel.controller.cpu.end_time = scope.dashboardModel.controller.cpu.origin_end_time;
+		    this.di.$scope.dashboardModel.controller.cpu.step = Math.floor((scope.dashboardModel.controller.cpu.origin_end_time.getTime() - scope.dashboardModel.controller.cpu.origin_begin_time) / (GRID_NUM * 1000));
+	    }
+	    else if (type === 'controller-memory') {
+		    this.di.$scope.dashboardModel.controller.memory.begin_time = scope.dashboardModel.controller.memory.origin_begin_time;
+		    this.di.$scope.dashboardModel.controller.memory.end_time = scope.dashboardModel.controller.memory.origin_end_time;
+		    this.di.$scope.dashboardModel.controller.memory.step = Math.floor((scope.dashboardModel.controller.memory.origin_end_time.getTime() - scope.dashboardModel.controller.memory.origin_begin_time) / (GRID_NUM * 1000));
+	    }
+    }
+	
+    this.di.$scope.chartSetting = (type) => {
+    	let chartDataArr = [];
+	    let analyzer = [];
+	    let records = [];
+	    let beginTime, endTime;
+	    switch(type) {
+		    case 'controller-cpu':
+			    analyzer = this.di.$scope.dashboardModel.controller.cpu.analyzer;
+			
+			    analyzer.forEach((controller) => {
+				    chartDataArr.push(controller.name);
+			    });
+			
+			    beginTime = this.di.$scope.dashboardModel.controller.cpu.begin_time;
+			    endTime = this.di.$scope.dashboardModel.controller.cpu.end_time;
+		    	break;
+		    case 'controller-memory':
+			    analyzer = this.di.$scope.dashboardModel.controller.memory.analyzer;
+			
+			    analyzer.forEach((controller) => {
+				    chartDataArr.push(controller.name);
+			    });
+			
+			    beginTime = this.di.$scope.dashboardModel.controller.memory.begin_time;
+			    endTime = this.di.$scope.dashboardModel.controller.memory.end_time;
+			    break;
+		    case 'device-cpu':
+			    analyzer = this.di.$scope.dashboardModel.cpu.analyzer;
+			    records = this.getDevicesCPUChartData(analyzer);
+			
+			    if(records.length) {
+				    records.forEach((item, index) =>{
+					    chartDataArr.push(item.name);
+				    });
+			    }
+			
+			    beginTime = this.di.$scope.dashboardModel.cpu.begin_time;
+			    endTime = this.di.$scope.dashboardModel.cpu.end_time;
+			    break;
+		    case 'device-memory':
+			    analyzer = this.di.$scope.dashboardModel.memory.analyzer;
+			    records = this.getDevicesMemoryChartData(analyzer);
+			    if(records.length) {
+				    records.forEach((item, index) =>{
+					    chartDataArr.push(item.name)
+				    })
+			    }
+			
+			    beginTime = this.di.$scope.dashboardModel.memory.begin_time;
+			    endTime = this.di.$scope.dashboardModel.memory.end_time;
+			    break;
+	    }
+	    
+	    this.di.modalManager.open({
+		    template: require('../template/chart_setting.html'),
+		    controller: 'showChartSettingCtrl',
+		    windowClass: 'show-chart-setting-modal',
+		    resolve: {
+			    dataModel: () => {
+			    	return {
+			    		chartType: type,
+					    chartDataArr: chartDataArr,
+					    beginTime: beginTime,
+					    endTime: endTime
+				    }
+			    }
+		    }
+	    }).result.then((res) => {
+		    if (res && !res.canceled) {
+					let selectedData = [];
+					if(Array.isArray(res.data.selectedData)) {
+						selectedData = res.data.selectedData;
+			    } else if(typeof res.data.selectedData == 'string'){
+						selectedData = [res.data.selectedData]
+					}
+					switch(type) {
+						case 'controller-cpu':
+							dataModel.selectedClusterCpu = selectedData;
+							
+							scope.dashboardModel.controller.cpu.origin_begin_time = res.data.beginTime;
+							scope.dashboardModel.controller.cpu.origin_end_time = res.data.endTime;
+							scope.dashboardModel.controller.cpu.begin_time = res.data.beginTime;
+							scope.dashboardModel.controller.cpu.end_time = res.data.endTime;
+							scope.dashboardModel.controller.cpu.step = Math.floor((scope.dashboardModel.controller.cpu.origin_end_time.getTime() - scope.dashboardModel.controller.cpu.origin_begin_time) / (GRID_NUM * 1000));
+							break;
+						case 'controller-memory':
+							dataModel.selectedClusterMemory = selectedData;
+							
+							scope.dashboardModel.controller.memory.origin_begin_time = res.data.beginTime;
+							scope.dashboardModel.controller.memory.origin_end_time = res.data.endTime;
+							scope.dashboardModel.controller.memory.begin_time = res.data.beginTime;
+							scope.dashboardModel.controller.memory.end_time = res.data.endTime;
+							scope.dashboardModel.controller.memory.step = Math.floor((scope.dashboardModel.controller.memory.origin_end_time.getTime() - scope.dashboardModel.controller.memory.origin_begin_time) / (GRID_NUM * 1000));
+							break;
+						case 'device-cpu':
+							dataModel.selectedSwitchCpu = selectedData;
+							
+							scope.dashboardModel.cpu.origin_begin_time = res.data.beginTime;
+							scope.dashboardModel.cpu.origin_end_time = res.data.endTime;
+							scope.dashboardModel.cpu.begin_time = res.data.beginTime;
+							scope.dashboardModel.cpu.end_time = res.data.endTime;
+							scope.dashboardModel.cpu.step = Math.floor((scope.dashboardModel.cpu.origin_end_time.getTime() - scope.dashboardModel.cpu.origin_begin_time) / (GRID_NUM * 1000));
+							break;
+						case 'device-memory':
+							dataModel.selectedSwitchMemory = selectedData;
+							
+							scope.dashboardModel.memory.origin_begin_time = res.data.beginTime;
+							scope.dashboardModel.memory.origin_end_time = res.data.endTime;
+							scope.dashboardModel.memory.begin_time = res.data.beginTime;
+							scope.dashboardModel.memory.end_time = res.data.endTime;
+							scope.dashboardModel.memory.step = Math.floor((scope.dashboardModel.memory.origin_end_time.getTime() - scope.dashboardModel.memory.origin_begin_time) / (GRID_NUM * 1000));
+							break;
+					}
+		    }
+	    });
+    }
+    
+    const di = this.di;
 
     let init =() =>{
       let promises = [];
@@ -292,577 +399,229 @@ export class DashboardController {
       convertSwitchData();
       convertSwitchInterface2Chart();
       if(di.$scope.isAnalyzeEnable) {
-	      drawClusterCPUChart();
-	      drawClusterMemoryChart();
-	      drawSwitchCpuChart();
-	      drawSwitchMemoryChart();
-	      
-        // convertSwitchCPUAnalyzer();
-        // convertSwitchMemoryAnalyzer();
-        // convertClusterCPUAnalyzer();
-        // convertClusterMemoryAnalyzer();
+	      setClusterCPUChartData();
+	      setClusterMemoryChartData();
+	      setSwitchCpuChartData();
+	      setSwitchMemoryChartData();
       }
     }
 	
 	  // draw cluster cpu chart: added by yazhou.miao
-	  let drawClusterCPUChart = () => {
-		  let clusterCpuData = {
-			  labels: [],
-			  datasets: []
-		  };
+	  let setClusterCPUChartData = () => {
+		  let dataArr = [];
+		  let series = [];
+		  let labelsArr = [];
+		  let analyzer = this.di.$scope.dashboardModel.controller.cpu.analyzer;
 		
-		  let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.controller.cpu.analyzer, function(item){return item.analyzer.length;});
-		  clusterCpuData.labels = this.di.$scope.dashboardModel.controller.cpu.analyzer.length > 0 ?
+		  let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+		  labelsArr = analyzer.length > 0 ?
 			  this.getCPUMemoryTimeSeries(x_times) : [];
 		
-		  let index = 0;
-		  this.di.$scope.dashboardModel.controller.cpu.analyzer.forEach((controller) => {
+		  analyzer.forEach((controller) => {
 			  let data = [];
 			  controller.analyzer.forEach((item) => {
 				  data.push((item.user_percent + item.system_percent).toFixed(2))
 			  });
-			  clusterCpuData.datasets.push({
-				  label: controller.name,
-				  data:data,
-				  borderColor: chartStyles.colors.colorPool[index],
-				  backgroundColor: chartStyles.colors.colorPool[index],
-				  fill: false,
-				  pointRadius: 0,
-				  pointHitRadius: 2,
-			  });
-			
-			  index++;
+			  dataArr.push(data);
+			  series.push(controller.name);
 		  });
 		
 		  const pad = this.pad;
-		  let ctx = document.getElementById("cluster-cpu-usage-rate");
-		  let clusterCpuChart = new Chart(ctx, {
-			  type: 'line',
-			  data: clusterCpuData,
-			  responsive: false,
-			  options: {
-				  plugins: {
-					  deferred: {
-						  // xOffset: 150,   // defer until 150px of the canvas width are inside the viewport
-						  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-						  delay: 0      // delay of 500 ms after the canvas is considered inside the viewport
-					  }
-				  },
-				  title: {
-					  display: true,
-					  text: '控制器cpu使用率',
-				  },
-				  legend: {
-					  labels: {
-						  // This more specific font property overrides the global property
-						  fontColor: chartStyles.colors.fontColor
-					  },
-					  position: 'bottom',
-					  onHover: function(e, legendItem) {
-						  let index = legendItem.datasetIndex;
-						  let ci = this.chart;
-						
-						  ci.data.datasets.forEach((value, key) => {
-						  	if(key !== index) {
-						  		value.borderColor = colorHelper.color(value.borderColor).alpha(0.5).rgbString();
-							  }
-						  })
-						  // We hid a dataset ... rerender the chart
-						  ci.update();
-					  },
-				  },
-				  tooltips: {
-					  mode: 'index',
-					  intersect: false
-				  },
-				  scales: {
-					  yAxes: [{
-						  scaleLabel: chartStyles.colors.fontColor,
-						  gridLines: {
-							  color: chartStyles.colors.gridLinesColor,
-							  lineWidth: chartStyles.lines.gridWidth
-						  },
-						  ticks: {
-							  beginAtZero: false,
-							  callback: function(value, index, values) {
-								  return value.toFixed(2) + '%';
-							  }
-						  }
-					  }],
-					  xAxes: [{
-						  scaleLabel: chartStyles.colors.fontColor,
-						  gridLines: {
-							  drawBorder: false,
-							  color: chartStyles.colors.gridLinesColor,
-							  lineWidth: chartStyles.lines.gridWidth
-						  },
-						  ticks: {
-							  callback: function(value, index, values) {
-								  value = new Date(value);
-								  return pad(value.getHours()) + ':' + pad(value.getMinutes());
-							  }
-						  }
-					  }],
-				  },
-				  // Container for pan options
-				  pan: {
-					  // Boolean to enable panning
-					  enabled: false,
-					
-					  // Panning directions. Remove the appropriate direction to disable
-					  // Eg. 'y' would only allow panning in the y direction
-					  mode: 'x',
-					  rangeMin: {
-						  // Format of min pan range depends on scale type
-						  x: null,
-						  y: null
-					  },
-					  rangeMax: {
-						  // Format of max pan range depends on scale type
-						  x: null,
-						  y: null
-					  },
-					  // Function called once panning is completed
-					  // Useful for dynamic data loading
-					  onPan: function(chart) { console.log(`I was panned!!!`); }
-				  },
-				
-				  // Container for zoom options
-				  zoom: {
-					  // Boolean to enable zooming
-					  enabled: true,
-					
-					  // Enable drag-to-zoom behavior
-					  drag: true,
-					
-					  // Drag-to-zoom rectangle style can be customized
-					  // drag: {
-					  // 	 borderColor: 'rgba(225,225,225,0.3)'
-					  // 	 borderWidth: 5,
-					  // 	 backgroundColor: 'rgb(225,225,225)'
-					  // },
-					
-					  // Zooming directions. Remove the appropriate direction to disable
-					  // Eg. 'y' would only allow zooming in the y direction
-					  mode: 'x',
-					  // rangeMin: {
-					  //   // Format of min zoom range depends on scale type
-					  //   x: null,
-					  //   y: null
-					  // },
-					  // rangeMax: {
-					  //   // Format of max zoom range depends on scale type
-					  //   x: null,
-					  //   y: null
-					  // },
-					  // Function called once zooming is completed
-					  // Useful for dynamic data loading
-					  onZoom: function(x,y,data) {
-						  let chart = this.chart;
-						  console.log(`I was zoomed!!!`);
-					  }
-				  }
+		  let options = {
+			  title: {
+				  display: true,
+					text: '控制器cpu使用率',
 			  },
-		  });
+			  scales: {
+				  yAxes: [{
+					  ticks: {
+						  beginAtZero: false,
+						  callback: function(value, index, values) {
+							  return value.toFixed(2) + '%';
+						  }
+					  }
+				  }],
+				  xAxes: [{
+					  ticks: {
+						  callback: function(value, index, values) {
+							  value = new Date(value);
+							  return pad(value.getHours()) + ':' + pad(value.getMinutes()) + ':' + pad(value.getSeconds());
+						  }
+					  }
+				  }],
+			  },
+			  // Container for zoom options
+			  zoom: {
+				  onZoom: lineChartOnZoom('cluster-cpu-chart')
+			  }
+		  };
+		  this.di.$scope.clusterCpuChartConfig.data = dataArr;
+		  this.di.$scope.clusterCpuChartConfig.labels = labelsArr;
+		  this.di.$scope.clusterCpuChartConfig.options = options;
+		  this.di.$scope.clusterCpuChartConfig.series = series;
+		  this.di.$scope.clusterCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.controller.cpu.analyzer, scope.clusterCpuPieChartConfig);
+		  this.di.$scope.clusterCpuChartConfig.onHover = lineChartOnHover();
+		
+		  // set pie chart data with first dataset and first data
+		  if(dataArr.length > 0 && labelsArr.length > 0) {
+			  let xLabel = labelsArr[0];
+			  let data = analyzer[0].analyzer[0]
+			  let title = analyzer[0].name + ' - ' + formatLocalTime(xLabel);
+			
+			  setCpuPieChartData(data,title,this.di.$scope.clusterCpuPieChartConfig)
+		  }
+		  
 	  };
 	
-	  let drawClusterMemoryChart = () => {
-		  let clusterMemoryData = {
-			  labels: [],
-			  datasets: []
-		  };
-		
-		  let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.controller.memory.analyzer, function(item){return item.analyzer.length;});
-		  clusterMemoryData.labels = this.di.$scope.dashboardModel.controller.memory.analyzer.length > 0 ?
+	  let setClusterMemoryChartData = () => {
+		  let dataArr = [];
+		  let series = [];
+		  let labelsArr = [];
+		  let analyzer = this.di.$scope.dashboardModel.controller.memory.analyzer
+		  let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+		  labelsArr = analyzer.length > 0 ?
 			  this.getCPUMemoryTimeSeries(x_times) : [];
 		
-		  let index = 0;
-		  this.di.$scope.dashboardModel.controller.memory.analyzer.forEach((controller) => {
+		  analyzer.forEach((controller) => {
 			  let data = [];
 			  controller.analyzer.forEach((item) => {
 				  data.push(item.used_percent.toFixed(2))
 			  });
-			  clusterMemoryData.datasets.push({
-				  label: controller.name,
-				  data: data,
-				  borderColor: chartStyles.colors.colorPool[index],
-				  backgroundColor: chartStyles.colors.colorPool[index],
-				  fill: false,
-				  pointRadius: 0,
-				  pointHitRadius: 2,
-			  });
-			
-			  index++;
+			  dataArr.push(data);
+			  series.push(controller.name)
 		  });
 		
 		  const pad = this.pad;
-		  let ctx = document.getElementById("cluster-memory-usage-rate");
-		  let clusterMemoryChart = new Chart(ctx, {
-			  type: 'line',
-			  data: clusterMemoryData,
-			  responsive: false,
-			  options: {
-				  plugins: {
-					  deferred: {
-						  // xOffset: 150,   // defer until 150px of the canvas width are inside the viewport
-						  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-						  delay: 0      // delay of 500 ms after the canvas is considered inside the viewport
-					  }
-				  },
-				  title: {
-					  display: true,
-					  text: '控制器内存使用率',
-				  },
-				  legend: {
-					  labels: {
-						  // This more specific font property overrides the global property
-						  fontColor: chartStyles.colors.fontColor
-					  },
-					  position: 'bottom'
-				  },
-				  tooltips: {
-					  mode: 'index',
-					  intersect: false
-				  },
-				  scales: {
-					  yAxes: [{
-						  scaleLabel: chartStyles.colors.fontColor,
-						  gridLines: {
-							  color: chartStyles.colors.gridLinesColor,
-							  lineWidth: chartStyles.lines.gridWidth
-						  },
-						  ticks: {
-							  beginAtZero: false,
-							  callback: function(value, index, values) {
-								  return value.toFixed(2) + '%';
-							  }
-						  }
-					  }],
-					  xAxes: [{
-						  scaleLabel: chartStyles.colors.fontColor,
-						  gridLines: {
-							  drawBorder: false,
-							  color: chartStyles.colors.gridLinesColor,
-							  lineWidth: chartStyles.lines.gridWidth
-						  },
-						  ticks: {
-							  callback: function(value, index, values) {
-								  value = new Date(value);
-								  return pad(value.getHours()) + ':' + pad(value.getMinutes());
-							  }
-						  }
-					  }],
-				  },
-				  // Container for pan options
-				  pan: {
-					  // Boolean to enable panning
-					  enabled: false,
-					
-					  // Panning directions. Remove the appropriate direction to disable
-					  // Eg. 'y' would only allow panning in the y direction
-					  mode: 'x',
-					  rangeMin: {
-						  // Format of min pan range depends on scale type
-						  x: null,
-						  y: null
-					  },
-					  rangeMax: {
-						  // Format of max pan range depends on scale type
-						  x: null,
-						  y: null
-					  },
-					  // Function called once panning is completed
-					  // Useful for dynamic data loading
-					  onPan: function(chart) { console.log(`I was panned!!!`); }
-				  },
-				
-				  // Container for zoom options
-				  zoom: {
-					  // Boolean to enable zooming
-					  enabled: true,
-					
-					  // Enable drag-to-zoom behavior
-					  drag: true,
-					
-					  // Drag-to-zoom rectangle style can be customized
-					  // drag: {
-					  // 	 borderColor: 'rgba(225,225,225,0.3)'
-					  // 	 borderWidth: 5,
-					  // 	 backgroundColor: 'rgb(225,225,225)'
-					  // },
-					
-					  // Zooming directions. Remove the appropriate direction to disable
-					  // Eg. 'y' would only allow zooming in the y direction
-					  mode: 'x',
-					  // rangeMin: {
-					  //   // Format of min zoom range depends on scale type
-					  //   x: null,
-					  //   y: null
-					  // },
-					  // rangeMax: {
-					  //   // Format of max zoom range depends on scale type
-					  //   x: null,
-					  //   y: null
-					  // },
-					  // Function called once zooming is completed
-					  // Useful for dynamic data loading
-					  onZoom: function(x,y,data) {
-						  let chart = this.chart;
-						  console.log(`I was zoomed!!!`);
-					  }
-				  }
-			  },
-		  });
+		  let options = {
+	      title: {
+	        display: true,
+	        text: '控制器内存使用率',
+	      },
+	      scales: {
+	        yAxes: [{
+	          ticks: {
+	            beginAtZero: false,
+	            callback: function(value, index, values) {
+	              return value.toFixed(2) + '%';
+	            }
+	          }
+	        }],
+	        xAxes: [{
+	          ticks: {
+	            callback: function(value, index, values) {
+	              value = new Date(value);
+	              return pad(value.getHours()) + ':' + pad(value.getMinutes())+ ':' + pad(value.getSeconds());;
+	            }
+	          }
+	        }],
+	      },
+	      // Container for zoom options
+	      zoom: {
+	        // Useful for dynamic data loading
+	        onZoom: lineChartOnZoom('cluster-memory-chart')
+	      }
+	    };
+		
+		  this.di.$scope.clusterMemoryChartConfig.data = dataArr;
+		  this.di.$scope.clusterMemoryChartConfig.labels = labelsArr;
+		  this.di.$scope.clusterMemoryChartConfig.options = options;
+		  this.di.$scope.clusterMemoryChartConfig.series = series;
+		  this.di.$scope.clusterMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.controller.memory.analyzer, scope.clusterMemoryPieChartConfig);
+		  this.di.$scope.clusterMemoryChartConfig.onHover = lineChartOnHover();
+		
+		  if(dataArr.length > 0 && labelsArr.length > 0) {
+			  let xLabel = labelsArr[0];
+			  let data = analyzer[0].analyzer[0];
+			  let title = analyzer[0].name + ' - ' + formatLocalTime(xLabel)
+			
+			  setMemoryPieChartData(data, title, this.di.$scope.clusterMemoryPieChartConfig)
+		  }
 	  };
 	  
-	  let drawSwitchCpuChart = () => {
+	  let setSwitchCpuChartData = () => {
 		  //cpu analyzer
-		  let switchCpuData = {
-			  labels: [],
-			  datasets: []
-		  };
-		  let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer);
-		  let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.cpu.analyzer, function(item){return item.analyzer.length;});
-		  switchCpuData.labels = this.di.$scope.dashboardModel.cpu.analyzer.length > 0 ?
+		  let dataArr = [];
+		  let series = [];
+		  let analyzer = this.di.$scope.dashboardModel.cpu.analyzer;
+		  let records = this.getDevicesCPUChartData(analyzer);
+		  let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+		  let labelsArr = analyzer.length > 0 ?
 			  this.getCPUMemoryTimeSeries(x_times) : [];
 		
-		  let index = 0;
 		  if(records.length) {
 			  records.forEach((item, index) =>{
-				  switchCpuData.datasets.push({
-					  label: item.name,
-					  data: item.data,
-					  borderColor: chartStyles.colors.colorPool[index],
-					  backgroundColor: chartStyles.colors.colorPool[index],
-					  fill: false,
-					  pointRadius: 0,
-					  pointHitRadius: 2,
-				  });
-				
-				  index++;
+				  dataArr.push(item.data);
+				  series.push(item.name);
 			  });
 		  }
 		  
 		  const pad = this.pad;
-		  let ctx = document.getElementById("switch-cpu-usage-rate");
-		  let clusterMemoryChart = new Chart(ctx, {
-			  type: 'line',
-			  data: switchCpuData,
-			  responsive: false,
-			  options: {
-				  plugins: {
-					  deferred: {
-						  // xOffset: 150,   // defer until 150px of the canvas width are inside the viewport
-						  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-						  delay: 0      // delay of 500 ms after the canvas is considered inside the viewport
-					  }
-				  },
-				  title: {
-					  display: true,
-					  text: '交换机cpu使用率',
-				  },
-				  legend: {
-					  labels: {
-						  // This more specific font property overrides the global property
-						  fontColor: chartStyles.colors.fontColor
-					  },
-					  position: 'bottom'
-				  },
-				  tooltips: {
-					  mode: 'index',
-					  intersect: false
-				  },
-				  scales: {
-					  yAxes: [{
-						  scaleLabel: chartStyles.colors.fontColor,
-						  gridLines: {
-							  color: chartStyles.colors.gridLinesColor,
-							  lineWidth: chartStyles.lines.gridWidth
-						  },
-						  ticks: {
-							  beginAtZero: false,
-							  callback: function(value, index, values) {
-								  return value.toFixed(2) + '%';
-							  }
-						  }
-					  }],
-					  xAxes: [{
-						  scaleLabel: chartStyles.colors.fontColor,
-						  gridLines: {
-							  drawBorder: false,
-							  color: chartStyles.colors.gridLinesColor,
-							  lineWidth: chartStyles.lines.gridWidth
-						  },
-						  ticks: {
-							  callback: function(value, index, values) {
-								  value = new Date(value);
-								  return pad(value.getHours()) + ':' + pad(value.getMinutes());
-							  }
-						  }
-					  }],
-				  },
-				  // Container for pan options
-				  pan: {
-					  // Boolean to enable panning
-					  enabled: false,
-					
-					  // Panning directions. Remove the appropriate direction to disable
-					  // Eg. 'y' would only allow panning in the y direction
-					  mode: 'x',
-					  rangeMin: {
-						  // Format of min pan range depends on scale type
-						  x: null,
-						  y: null
-					  },
-					  rangeMax: {
-						  // Format of max pan range depends on scale type
-						  x: null,
-						  y: null
-					  },
-					  // Function called once panning is completed
-					  // Useful for dynamic data loading
-					  onPan: function(chart) { console.log(`I was panned!!!`); }
-				  },
-				
-				  // Container for zoom options
-				  zoom: {
-					  // Boolean to enable zooming
-					  enabled: true,
-					
-					  // Enable drag-to-zoom behavior
-					  drag: true,
-					
-					  // Drag-to-zoom rectangle style can be customized
-					  // drag: {
-					  // 	 borderColor: 'rgba(225,225,225,0.3)'
-					  // 	 borderWidth: 5,
-					  // 	 backgroundColor: 'rgb(225,225,225)'
-					  // },
-					
-					  // Zooming directions. Remove the appropriate direction to disable
-					  // Eg. 'y' would only allow zooming in the y direction
-					  mode: 'x',
-					  // rangeMin: {
-					  //   // Format of min zoom range depends on scale type
-					  //   x: null,
-					  //   y: null
-					  // },
-					  // rangeMax: {
-					  //   // Format of max zoom range depends on scale type
-					  //   x: null,
-					  //   y: null
-					  // },
-					  // Function called once zooming is completed
-					  // Useful for dynamic data loading
-					  onZoom: function(x,y,data) {
-						  let chart = this.chart;
-						  console.log(`I was zoomed!!!`);
-					  }
-				  }
+		  let options = {
+			  title: {
+				  display: true,
+				  text: '交换机cpu使用率',
 			  },
-		  });
+			  scales: {
+				  yAxes: [{
+					  ticks: {
+						  beginAtZero: false,
+						  callback: function(value, index, values) {
+							  return value.toFixed(2) + '%';
+						  }
+				    }
+			    }],
+				  xAxes: [{
+					  ticks: {
+						  callback: function(value, index, values) {
+							  value = new Date(value);
+							  return pad(value.getHours()) + ':' + pad(value.getMinutes()) + ':' + pad(value.getSeconds());
+						  }
+				    }
+				  }],
+				},
+			  // Container for zoom options
+			  zoom: {
+				  // Useful for dynamic data loading
+				  onZoom: lineChartOnZoom('switch-cpu-chart')
+			  }
+	    }
+		
+		  this.di.$scope.switchCpuChartConfig.data = dataArr;
+		  this.di.$scope.switchCpuChartConfig.labels = labelsArr;
+		  this.di.$scope.switchCpuChartConfig.options = options;
+		  this.di.$scope.switchCpuChartConfig.series = series;
+		  this.di.$scope.switchCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.cpu.analyzer, scope.switchCpuPieChartConfig);
+		  this.di.$scope.switchCpuChartConfig.onHover = lineChartOnHover();
+		
+		  if(dataArr.length > 0 && labelsArr.length > 0) {
+			  let xLabel = labelsArr[0];
+			  let data = analyzer[0].analyzer[0];
+			  let title = analyzer[0].name + ' - ' + formatLocalTime(xLabel)
+			
+			  setCpuPieChartData(data, title, this.di.$scope.switchCpuPieChartConfig)
+		  }
 	  };
 	
-	  let onClick = function(evt, chart) { // point element
-		  let ci = chart;
-		  let updateFlag = false;
-		
-		  // 1.element hover event
-		  let element = ci.getElementAtEvent(evt);
-		  if(element.length > 0)
-		  {
-			  let datasetIndex = element[0]._datasetIndex;
-			  let index = element[0]._index;
-			
-			  let chartData = {datasets:[], labels:[]};
-			  let dataset = {data:[], backgroundColor:[],label: ''};
-			  let labels = [];
-			  let data = scope.dashboardModel.memory.analyzer[datasetIndex].analyzer[index];
-			
-			  dataset.data.push(data['buffered_percent'].toFixed(2));
-			  dataset.backgroundColor.push('sandybrown');
-			  chartData.labels.push('buffered');
-			
-			  dataset.data.push(data['cached_percent'].toFixed(2));
-			  dataset.backgroundColor.push('bisque');
-			  chartData.labels.push('cached');
-			
-			  dataset.data.push(data['free_percent'].toFixed(2));
-			  dataset.backgroundColor.push('lightgreen');
-			  chartData.labels.push('free');
-			
-			  dataset.data.push(data['slab_recl_percent'].toFixed(2));
-			  dataset.backgroundColor.push('purple');
-			  chartData.labels.push('slab_recl');
-			
-			  dataset.data.push(data['slab_unrecl_percent'].toFixed(2));
-			  dataset.backgroundColor.push('chocolate');
-			  chartData.labels.push('slab_unrecl');
-			
-			  dataset.data.push(data['used_percent'].toFixed(2));
-			  dataset.backgroundColor.push('red');
-			  chartData.labels.push('used');
-			
-			  chartData.datasets.push(dataset);
-			  let newCtx = document.getElementById("switch-memory-analyzer");
-			  if(switchMemoryPieChart) {
-				  switchMemoryPieChart.destroy();
-			  }
-			  switchMemoryPieChart = new Chart(newCtx, {
-				  type: 'pie',
-				  data: chartData,
-				  options: {
-					  responsive: true,
-					  legend: {
-						  position: 'bottom',
-					  },
-					  title: {
-						  display: true,
-						  text: scope.dashboardModel.memory.analyzer[datasetIndex].name + ' - 内存使用详情',
-						  fontSize: 14
-					  },
-					  animation: {
-						  animateScale: true,
-						  animateRotate: true
-					  }
-				  }
-			  });
-		  }
-	  }
-	  
-	  let drawSwitchMemoryChart = () => {
+	  let setSwitchMemoryChartData = () => {
 		  //memory analyzer
-		  let switchMemoryData = {
-			  labels: [],
-			  datasets: []
-		  };
-		  let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
-		  let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.memory.analyzer, function(item){return item.analyzer.length;});
-		  switchMemoryData.labels = this.di.$scope.dashboardModel.memory.analyzer.length > 0 ?
+		  let dataArr = [];
+		  let series = [];
+		  let analyzer = this.di.$scope.dashboardModel.memory.analyzer;
+		  let records = this.getDevicesMemoryChartData(analyzer);
+		  let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+		  let labelsArr = analyzer.length > 0 ?
 			  this.getCPUMemoryTimeSeries(x_times) : [];
 		
 		  let index = 0;
 		  if(records.length) {
 			  records.forEach((item, index) =>{
-					switchMemoryData.datasets.push({
-						label: item.name,
-						data: item.data,
-						borderColor: chartStyles.colors.colorPool[index],
-						backgroundColor: chartStyles.colors.colorPool[index],
-						fill: false,
-						pointRadius: 0,
-						pointHitRadius: 2,
-					});
-				
-					index++;
-        })
+				  dataArr.push(item.data);
+				  series.push(item.name)
+			  })
 		  }
 		
 		  const pad = this.pad;
 		  const scope = this.di.$scope;
-		  const memoryAnalyzer = this.di.$scope.dashboardModel.memory.analyzer;
-		  let pieChart;
-		  let ctx = document.getElementById("switch-memory-usage-rate");
 		  
 		  let options = {
 			  title: {
@@ -878,13 +637,13 @@ export class DashboardController {
 						  }
 					  }
 				  }],
-					  xAxes: [{
-						  ticks: {
-							  callback: function(value, index, values) {
-								  value = new Date(value);
-								  return pad(value.getHours()) + ':' + pad(value.getMinutes())+ ':' + pad(value.getSeconds());
-							  }
+				  xAxes: [{
+					  ticks: {
+						  callback: function(value, index, values) {
+							  value = new Date(value);
+							  return pad(value.getHours()) + ':' + pad(value.getMinutes())+ ':' + pad(value.getSeconds());
 						  }
+					  }
 				  }],
 			  },
 				zoom: {
@@ -895,230 +654,314 @@ export class DashboardController {
 				  // Zooming directions. Remove the appropriate direction to disable
 				  mode: 'x',
 				  // Useful for dynamic data loading
-				  onZoom: function(chart, xRange) {
-					  let ticks = chart.data.labels;
-					  let startIndex = xRange.start;
-					  let endIndex = xRange.end;
-					  if(startIndex === endIndex) {
-						  if(endIndex == ticks.length - 1) {
-							  startIndex = endIndex - 1;
-						  } else {
-							  endIndex = startIndex + 1;
-						  }
-					  }
-					
-					  // if step lower equal than 30s, don't need change scale
-					  // let originalStep = new Date(ticks[1]).getTime() - new Date(ticks[0]).getTime();
-					  // if(originalStep <= 30 * 1000) return;
-					  function getISODate(date) {
-						  return date.getUTCFullYear() +
-							  '-' + pad( date.getUTCMonth() + 1 ) +
-							  '-' + pad( date.getUTCDate() ) +
-							  'T' + pad( date.getUTCHours() ) +
-							  ':' + pad( date.getUTCMinutes() ) +
-							  ':00'  +
-							  'Z';
-					  }
-					  let start = new Date(getISODate(new Date(ticks[startIndex])));
-					  let startTime = start.getTime();
-					  let end = new Date(getISODate(new Date(ticks[endIndex])));
-					  let endTime =  end.getTime();
-					  let step = Math.floor((endTime - startTime) / ((ticks.length - 1) * 1000));
-					  step = step < 30 ? 30 : step;
-					
-					  scope.dashboardModel.memory.type.value = step;
-					  scope.dashboardModel.memory.begin_time = start;
-					  scope.dashboardModel.memory.end_time = end;
-					
-					  di.$scope.$apply();
-				  }
+				  onZoom: lineChartOnZoom('switch-memory-chart')
 			  }
 		  };
-		  // TODO: test-chart
-		  let dataArr = [];
-		  let series = [];
-		  switchMemoryData.datasets.forEach((dataset) => {
-		  	dataArr.push(dataset.data);
-		  	series.push(dataset.label)
-		  })
-		  this.di.$scope.data = dataArr;
-		  this.di.$scope.labels = switchMemoryData.labels;
-		  this.di.$scope.options = options;
-		  this.di.$scope.series = series;
-		  this.di.$scope.onClick = onClick;
 		  
-		  switchMemoryChart = new Chart(ctx, {
-			  type: 'line',
-			  data: switchMemoryData,
-			  responsive: false,
-			  options: options
-		  });
+		  this.di.$scope.switchMemoryChartConfig.data = dataArr;
+		  this.di.$scope.switchMemoryChartConfig.labels = labelsArr;
+		  this.di.$scope.switchMemoryChartConfig.options = options;
+		  this.di.$scope.switchMemoryChartConfig.series = series;
+		  this.di.$scope.switchMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.memory.analyzer, scope.switchMemoryPieChartConfig);
+		  this.di.$scope.switchMemoryChartConfig.onHover = lineChartOnHover();
+		
+		  if(dataArr.length > 0 && labelsArr.length > 0){
+			  let xLabel = labelsArr[0];
+			  let data = analyzer[0].analyzer[0];
+			  let title = analyzer[0].name + ' - ' + formatLocalTime(xLabel)
+			
+			  setMemoryPieChartData(data, title, this.di.$scope.switchMemoryPieChartConfig)
+		  }
 	  };
 	
-	  let drawInterfaceRxTxChart = (dataArr, chartId, y_label, drop) => {
-		  //memory analyzer
-		  let interfaceRxTxdata = {
-			  labels: [],
-			  datasets: []
-		  };
-		  
-		  let category= [], rxs = [], pkgRecv = [], pgkSend = [], title;
+	  let setInterfaceRxTxChartData = (dataArr, chartId, y_label, drop) => {
+		  let category= [], rxs = [], pkgRecv = [], pgkSend = [], title, labelsArr = [];
 		  this.di._.forEach(dataArr, (statistic)=>{
 			  let name = getSwtAndPortName(statistic['device'], statistic['port']);
-			  interfaceRxTxdata.labels.push(name);
+			  labelsArr.push(name);
 			  if (y_label === 'packages') {
 				  if (drop) {
 					  pkgRecv.push(statistic['packetsRxDropped']);
 					  pgkSend.push(statistic['packetsTxDropped']);
 					
-					  title = '端口收发包';
+					  title = '端口丢包';
 				  }
 				  else {
 					  pkgRecv.push(statistic['packetsReceived']);
 					  pgkSend.push(statistic['packetsSent']);
 					
-					  title = '端口丢包';
+					  title = '端口收发包';
 				  }
 			  }
 			  else {
 				  pkgRecv.push(statistic['bytesReceived']);
 				  pgkSend.push(statistic['bytesSent']);
 			  }
-			
-		  });
-		  interfaceRxTxdata.datasets.push({
-			  label: '接收',
-			  backgroundColor: colorHelper.color('blue').alpha(0.8).rgbString(),
-			  data:pkgRecv,
-		  });
-		  interfaceRxTxdata.datasets.push({
-			  label: '发送',
-			  backgroundColor: colorHelper.color('salmon').alpha(0.8).rgbString(),
-			  data:pgkSend,
 		  });
 		
 		  const pad = this.pad;
-		  let ctx = document.getElementById(chartId);
-		  let rxTxPackagesChart = new Chart(ctx, {
-			  type: 'bar',
-			  data: interfaceRxTxdata,
-			  responsive: false,
-			  options: {
-				  plugins: {
-					  deferred: {
-						  //xOffset: 150,   // defer until 150px of the canvas width are inside the viewport
-						  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-						  delay: 0      // delay of 500 ms after the canvas is considered inside the viewport
-					  }
-				  },
-				  barPercentage: 0.1,
-				  title: {
-					  display: true,
-					  text: title
-				  },
-				  legend: {
-					  labels: {
-						  // This more specific font property overrides the global property
-						  fontColor: chartStyles.colors.fontColor
+		  let options = {
+			  title: {
+				  text: title
+			  },
+			  scales: {
+				  yAxes: [{
+					  stacked: true,
+					  scaleLabel: {
+						  display: true,
+						  labelString: 'packages'
 					  },
-					  position: 'bottom'
-				  },
-				  tooltips: {
-					  mode: 'index',
-					  intersect: false
-				  },
-				  scales: {
-					  yAxes: [{
-						  stacked: true,
-						  scaleLabel: {
-							  display: true,
-							  labelString: 'packages'
-						  },
-						  gridLines: {
-							  color: chartStyles.colors.gridLinesColor,
-							  lineWidth: chartStyles.lines.gridWidth
-						  },
-						  barThickness: 20,
-						  ticks: {
-							  beginAtZero: false,
-							  // callback: function(value, index, values) {
-								//   return value.toFixed(2) + '%';
-							  // }
-						  }
-					  }],
+					  ticks: {
+						  beginAtZero: false,
+						  // callback: function(value, index, values) {
+						  //   return value.toFixed(2) + '%';
+						  // }
+					  }
+				  }],
 					  xAxes: [{
-						  stacked: true,
-						  scaleLabel: chartStyles.colors.fontColor,
-						  gridLines: {
-							  drawBorder: false,
-							  color: chartStyles.colors.gridLinesColor,
-							  lineWidth: chartStyles.lines.gridWidth,
-							  offsetGridLines: false
-						  },
-						  barThickness: 20,
-					  }],
-				  },
-				  // Container for pan options
-				  pan: {
-					  // Boolean to enable panning
-					  enabled: false,
-					
-					  // Panning directions. Remove the appropriate direction to disable
-					  // Eg. 'y' would only allow panning in the y direction
-					  mode: 'x',
-					  rangeMin: {
-						  // Format of min pan range depends on scale type
-						  x: null,
-						  y: null
-					  },
-					  rangeMax: {
-						  // Format of max pan range depends on scale type
-						  x: null,
-						  y: null
-					  },
-					  // Function called once panning is completed
-					  // Useful for dynamic data loading
-					  onPan: function(chart) { console.log(`I was panned!!!`); }
-				  },
+					  stacked: true,
+				  }],
+			  },
+		  }
+		  
+		  if(drop) {
+			  scope.interfaceDropPackagesChartConfig.data = [pkgRecv, pgkSend];
+			  scope.interfaceDropPackagesChartConfig.labels = labelsArr;
+			  scope.interfaceDropPackagesChartConfig.series = ['接收', '发送'];
+			  scope.interfaceDropPackagesChartConfig.colors = [{backgroundColor: 'rgb(0,0,255)'}, {backgroundColor: 'rgb(250,128,114)'}];
+			  scope.interfaceDropPackagesChartConfig.options = options;
+		  } else {
+			  scope.interfaceRxTxPackagesChartConfig.data = [pkgRecv, pgkSend];
+			  scope.interfaceRxTxPackagesChartConfig.labels = labelsArr;
+			  scope.interfaceRxTxPackagesChartConfig.series = ['接收', '发送'];
+			  scope.interfaceRxTxPackagesChartConfig.colors = [{backgroundColor: 'rgb(0,0,255)'}, {backgroundColor: 'rgb(250,128,114)'}];
+			  scope.interfaceRxTxPackagesChartConfig.options = options;
+		  }
+	  };
+	
+	  let cpuChartOnClick = function(analyzer, pieChartModel) {
+		  return function(evt, chart) { // point element
+			  // 1.element hover event
+			  let element = chart.getElementAtEvent(evt);
+			  if(element.length > 0)
+			  {
+				  let datasetIndex = element[0]._datasetIndex;
+				  let index = element[0]._index;
+				  let xLabel = chart.data.labels[index];
 				
-				  // Container for zoom options
-				  zoom: {
-					  // Boolean to enable zooming
-					  enabled: true,
-					
-					  // Enable drag-to-zoom behavior
-					  drag: true,
-					
-					  // Drag-to-zoom rectangle style can be customized
-					  // drag: {
-					  // 	 borderColor: 'rgba(225,225,225,0.3)'
-					  // 	 borderWidth: 5,
-					  // 	 backgroundColor: 'rgb(225,225,225)'
-					  // },
-					
-					  // Zooming directions. Remove the appropriate direction to disable
-					  // Eg. 'y' would only allow zooming in the y direction
-					  mode: 'x',
-					  // rangeMin: {
-					  //   // Format of min zoom range depends on scale type
-					  //   x: null,
-					  //   y: null
-					  // },
-					  // rangeMax: {
-					  //   // Format of max zoom range depends on scale type
-					  //   x: null,
-					  //   y: null
-					  // },
-					  // Function called once zooming is completed
-					  // Useful for dynamic data loading
-					  onZoom: function(x,y,data) {
-						  let chart = this.chart;
-						  console.log(`I was zoomed!!!`);
-					  }
+				  let data = analyzer[datasetIndex].analyzer[index];
+				  let title = analyzer[datasetIndex].name + ' - ' + formatLocalTime(xLabel);
+				  
+				  setCpuPieChartData(data, title, pieChartModel)
+				  
+				  scope.$apply();
+			  }
+		  }
+	  }
+	  
+	  let memoryChartOnClick = function(analyzer, pieChartModel) {
+		  return function(evt, chart) { // point element
+			  // 1.element hover event
+			  let element = chart.getElementAtEvent(evt);
+			  if(element.length > 0)
+			  {
+				  let datasetIndex = element[0]._datasetIndex;
+				  let index = element[0]._index;
+				  let xLabel = chart.data.labels[index];
+				
+				  let data = analyzer[datasetIndex].analyzer[index];
+				  let title = analyzer[datasetIndex].name + ' - ' + formatLocalTime(xLabel)
+				
+					setMemoryPieChartData(data, title, pieChartModel)
+				
+				  scope.$apply();
+			  }
+		  }
+	  }
+	  
+	  let setCpuPieChartData = (data, title, pieChartConfig) => {
+		  // set pie chart data with first dataset and first data
+		  let chartData = {datasets:[], labels:[]};
+		  let dataset = {data:[], backgroundColor:[], label: ''};
+		
+		  dataset.data.push(data['wait_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(255,255,255)');
+		  chartData.labels.push('wait');
+		
+		  dataset.data.push(data['softirq_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(255,228,196)');
+		  chartData.labels.push('softirq');
+		
+		  dataset.data.push(data['idle_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(144,238,144)');
+		  chartData.labels.push('idle');
+		
+		  dataset.data.push(data['system_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(128,0,128)');
+		  chartData.labels.push('system');
+		
+		  dataset.data.push(data['steal_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(210,105,30)');
+		  chartData.labels.push('steal');
+		
+		  dataset.data.push(data['user_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(255,0,0)');
+		  chartData.labels.push('user');
+		
+		  dataset.data.push(data['nice_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(244,164,96)');
+		  chartData.labels.push('nice');
+		
+		  dataset.data.push(data['interrupt_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(0,128,128)');
+		  chartData.labels.push('interrupt');
+		
+		  chartData.datasets.push(dataset);
+		
+		  let pieOptions = {
+			  plugins: {
+				  deferred: {
+					  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+					  delay: 2000      // delay of 500 ms after the canvas is considered inside the viewport
 				  }
 			  },
-		  });
-	  };
+			  title: {
+				  text: title,
+			  }
+		  }
+		
+		  pieChartConfig.data = dataset.data;
+		  pieChartConfig.labels = chartData.labels;
+		  pieChartConfig.colors = dataset.backgroundColor;
+		  pieChartConfig.options = pieOptions;
+	  }
+	
+	  let setMemoryPieChartData = (data, title, pieChartConfig) => {
+		  let chartData = {datasets:[], labels:[]};
+		  let dataset = {data:[], backgroundColor:[], label: ''};
+		
+		  dataset.data.push(data['buffered_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(244,164,96)');
+		  chartData.labels.push('buffered');
+		
+		  dataset.data.push(data['cached_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(255,228,196)');
+		  chartData.labels.push('cached');
+		
+		  dataset.data.push(data['free_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(144,238,144)');
+		  chartData.labels.push('free');
+		
+		  dataset.data.push(data['slab_recl_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(128,0,128)');
+		  chartData.labels.push('slab_recl');
+		
+		  dataset.data.push(data['slab_unrecl_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(210,105,30)');
+		  chartData.labels.push('slab_unrecl');
+		
+		  dataset.data.push(data['used_percent'].toFixed(2));
+		  dataset.backgroundColor.push('rgb(255,0,0)');
+		  chartData.labels.push('used');
+		
+		  chartData.datasets.push(dataset);
+		
+		  let options = {
+			  plugins: {
+				  deferred: {
+					  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+					  delay: 2000      // delay of 500 ms after the canvas is considered inside the viewport
+				  }
+			  },
+			  title: {
+				  text: title,
+			  }
+		  }
+		
+		  pieChartConfig.data = dataset.data;
+		  pieChartConfig.labels = chartData.labels;
+		  pieChartConfig.colors = dataset.backgroundColor;
+		  pieChartConfig.options = options;
+	  }
+	  
+	  let lineChartOnHover = function() {
+		  return function(event, chart) {
+			  // 1.element hover event
+			  let element = chart.getElementAtEvent(event);
+			  if(element.length > 0)
+			  {
+				  let index = element[0]._index;
+			  }
+			
+			  // 2.recover line style when click the grid area
+			  const box = chart.boxes[0];
+			  let minTop = 0;
+			  if(box.position == 'bottom') {
+				  box.legendHitBoxes.forEach((item, index) => {
+					  if(index == 0 || minTop > item.top) {
+						  minTop = item.top;
+					  }
+				  })
+			  }
+			  if((box.position === "top" && event.layerY >= box.height) || (box.position === "bottom" && event.layerY < minTop) || (box.position === "right" && event.layerX <= box.left)) {
+				  chart.data.datasets.forEach((value, key) => {
+					  value.borderColor = chartService.helpers.color(value.borderColor).alpha(1).rgbString();
+					  value.backgroundColor = chartService.helpers.color(value.backgroundColor).alpha(0.2).rgbString(),
+					  value.borderWidth = chartStyles.lines.borderWidth;
+				    value.pointRadius = 1;
+				  })
+				  
+				  chart.update();
+			  }
+		  }
+	  }
+	
+	  let lineChartOnZoom = (chartType) => {
+	  	return function(chart, xRange) {
+			  let ticks = chart.data.labels;
+			  let startIndex = xRange.start;
+			  let endIndex = xRange.end;
+			  if(startIndex === endIndex) {
+				  if(endIndex == ticks.length - 1) {
+					  startIndex = endIndex - 1;
+				  } else {
+					  endIndex = startIndex + 1;
+				  }
+			  }
+			
+			  let start = new Date(getISODate(new Date(ticks[startIndex])));
+			  let startTime = start.getTime();
+			  let end = new Date(getISODate(new Date(ticks[endIndex])));
+			  let endTime =  end.getTime();
+			  let step = Math.floor((endTime - startTime) / ((ticks.length - 1) * 1000));
+			  step = step < 30 ? 30 : step;
+			
+			  switch(chartType) {
+				  case 'cluster-cpu-chart':
+					  scope.dashboardModel.controller.cpu.begin_time = start;
+					  scope.dashboardModel.controller.cpu.end_time = end;
+					  scope.dashboardModel.controller.cpu.step = step;
+				  	break;
+				  case 'cluster-memory-chart':
+					  scope.dashboardModel.controller.memory.begin_time = start;
+					  scope.dashboardModel.controller.memory.end_time = end;
+					  scope.dashboardModel.controller.memory.step = step;
+				  	break;
+				  case 'switch-cpu-chart':
+					  scope.dashboardModel.cpu.begin_time = start;
+					  scope.dashboardModel.cpu.end_time = end;
+					  scope.dashboardModel.cpu.step = step;
+				  	break;
+				  case 'switch-memory-chart':
+					  scope.dashboardModel.memory.begin_time = start;
+					  scope.dashboardModel.memory.end_time = end;
+					  scope.dashboardModel.memory.step = step;
+				  	break;
+			  }
+			  
+			  scope.$apply()
+		  }
+	  }
 	  
     let convertControllerData =()=>{
       //1. summary
@@ -1180,7 +1023,7 @@ export class DashboardController {
 	    });
       // packagesOrder.splice(5, packagesOrder.length-5);
       // chartSwtInterface(packagesOrder, 'swtInterfaceRxTxPackages', 'packages');
-	    drawInterfaceRxTxChart(packagesOrder, 'interface-rxtx-packages', 'packages');
+	    setInterfaceRxTxChartData(packagesOrder, 'interface-rxtx-packages', 'packages');
 
       /*let b_r_s = 'bytesRecvSent';
       let bytesOrder = this.di._.orderBy(waitOrderPortsStatistics, b_r_s, 'desc');
@@ -1194,156 +1037,8 @@ export class DashboardController {
 	    });
       // packagesDropOrder.splice(5, packagesDropOrder.length-5);
       // chartSwtInterface(packagesDropOrder, 'swtInterfaceRxTxDrops', 'packages', true);
-	    drawInterfaceRxTxChart(packagesDropOrder, 'interface-rxtx-drops', 'packages');
+	    setInterfaceRxTxChartData(packagesDropOrder, 'interface-rxtx-drops', 'packages', true);
     };
-
-    let convertSwitchCPUAnalyzer = () => {
-      //cpu analyzer
-      let cpuCols = [];
-      let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer);
-      let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.cpu.analyzer, function(item){return item.analyzer.length;});
-      let x_axis = this.di.$scope.dashboardModel.cpu.analyzer.length > 0 ?
-        this.getCPUMemoryTimeSeries(x_times) : ['x'];
-      cpuCols.push(x_axis);  
-      if(records.length) {
-        records.forEach((item, index) =>{
-          //只取top5
-          if (index < 5) {
-            let arr = [];
-            arr.push(item.name);
-            arr = arr.concat(item.data);
-            cpuCols.push(arr);  
-          }
-        });
-      }
-      this.di.$scope.dashboardModel.cpu.chartData = cpuCols;
-      this.di.$scope.dashboardModel.cpu.aync = !this.di.$scope.dashboardModel.cpu.aync;
-    };
-
-    let convertSwitchMemoryAnalyzer = () => {
-      //memory analyzer
-      let memoryCols = [];
-      let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
-      let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.memory.analyzer, function(item){return item.analyzer.length;});
-      let x_axis = this.di.$scope.dashboardModel.memory.analyzer.length > 0 ? 
-          this.getCPUMemoryTimeSeries(x_times) : ['x'];
-      memoryCols.push(x_axis);
-      if(records.length) {
-        records.forEach((item, index) =>{
-          //只取top5
-          if (index < 5) {
-            let arr = [];
-            arr.push(item.name);
-            arr = arr.concat(item.data);
-            memoryCols.push(arr);  
-          }
-        });
-      }
-      this.di.$scope.dashboardModel.memory.chartData = memoryCols;
-      this.di.$scope.dashboardModel.memory.aync = !this.di.$scope.dashboardModel.memory.aync;
-    };
-	
-    let convertClusterCPUAnalyzer = () => {
-      let cpuCols = [], records = [];
-      this.di.$scope.dashboardModel.controller.cpu.analyzer.forEach((controller) => {
-        let data = [controller.name];
-        controller.analyzer.forEach((item) => {
-          data.push((item.user_percent + item.system_percent).toFixed(2))
-        });
-        records.push(data);
-      });
-      let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.controller.cpu.analyzer, function(item){return item.analyzer.length;});
-      let x_axis = this.di.$scope.dashboardModel.controller.cpu.analyzer.length > 0 ? 
-          this.getCPUMemoryTimeSeries(x_times) : ['x'];
-      cpuCols.push(x_axis);    
-      if (records.length) {
-        cpuCols= cpuCols.concat(records);
-      }
-      this.di.$scope.dashboardModel.controller.cpu.chartData = cpuCols;
-      this.di.$scope.dashboardModel.controller.cpu.aync = !this.di.$scope.dashboardModel.controller.cpu.aync;
-    };
-
-    let convertClusterMemoryAnalyzer = () => {
-      let memoryCols = [], records = [];
-      this.di.$scope.dashboardModel.controller.memory.analyzer.forEach((controller) => {
-        let data = [controller.name];
-        controller.analyzer.forEach((item) => {
-          data.push(item.used_percent.toFixed(2))
-        });
-        records.push(data);
-      });
-      let x_times = this.di._.maxBy(this.di.$scope.dashboardModel.controller.memory.analyzer, function(item){return item.analyzer.length;});
-      let x_axis = this.di.$scope.dashboardModel.controller.memory.analyzer.length > 0 ? 
-          this.getCPUMemoryTimeSeries(x_times) : ['x'];
-      memoryCols.push(x_axis);    
-      if (records.length) {
-        memoryCols = memoryCols.concat(records);
-      }
-      this.di.$scope.dashboardModel.controller.memory.chartData = memoryCols;
-      this.di.$scope.dashboardModel.controller.memory.aync = !this.di.$scope.dashboardModel.controller.memory.aync;
-    };
-
-    let chartSwtInterface = (top5, bindTo, y_label, drop) =>{
-      let category= [], rxs = [], pkgRecv = ['接收'], pgkSend = ['发送'];
-      this.di._.forEach(top5, (statistic)=>{
-        let name = getSwtAndPortName(statistic['device'], statistic['port']);
-        category.push(name);
-        if (y_label === 'packages') {
-          if (drop) {
-            pkgRecv.push(statistic['packetsRxDropped']);
-            pgkSend.push(statistic['packetsTxDropped']);
-          }
-          else {
-            pkgRecv.push(statistic['packetsReceived']);
-            pgkSend.push(statistic['packetsSent']);    
-          }
-        }
-        else {
-          pkgRecv.push(statistic['bytesReceived']);
-          pgkSend.push(statistic['bytesSent']);  
-        }
-             
-      });
-      rxs.push(pkgRecv);
-      rxs.push(pgkSend);
-      
-      let chart = this.di.c3.generate({
-        bindto: '#' + bindTo,
-        data: {
-          columns: rxs,
-          type: 'bar',
-         groups: [['接收', '发送']]
-        },
-        color: {
-          pattern: ['#0077cb', '#c78500']
-        },
-        axis: {
-          x: {
-            type: 'category',
-            height: 40,
-            categories: category
-          },
-          y:{
-            label: y_label
-          }
-        },
-        tooltip: {
-          format: {
-            title: (index) => { 
-              let d = category[index].indexOf('(');
-              let str;
-              if (d !== -1) {
-                str = category[index].substring(0, d);
-              }
-              else {
-                str = category[index]; 
-              }
-              return str;
-            }
-          }
-    }
-      });
-    }
 
     let convertSwitchData =()=>{
       let leafSwt = this.di._.filter(dataModel['devices'], { 'type': 'leaf'});
@@ -1380,6 +1075,60 @@ export class DashboardController {
       }
       return dayStr + hourStr;
     };
+	
+	  let getFilteredDataModel = (type) => {
+		  let dataArr = [];
+		
+		  switch(type) {
+			  case 'controller-cpu':
+				  if(Array.isArray(dataModel.selectedClusterCpu) && dataModel.selectedClusterCpu.length > 0) {
+					  dataModel.cluster.forEach((data) => {
+						  if(dataModel.selectedClusterCpu.indexOf(data.id) > -1) {
+							  dataArr.push(data)
+						  }
+					  })
+				  } else {
+					  dataArr = dataModel.cluster;
+				  }
+				
+				  break;
+			  case 'controller-memory':
+				  if(Array.isArray(dataModel.selectedClusterMemory) && dataModel.selectedClusterMemory.length > 0) {
+					  dataModel.cluster.forEach((data) => {
+						  if(dataModel.selectedClusterMemory.indexOf(data.id) > -1) {
+							  dataArr.push(data)
+						  }
+					  })
+				  } else {
+					  dataArr = dataModel.cluster;
+				  }
+				  break;
+			  case 'device-cpu':
+				  if(Array.isArray(dataModel.selectedSwitchCpu) && dataModel.selectedSwitchCpu.length > 0) {
+					  dataModel.configDevices.forEach((data) => {
+						  if(dataModel.selectedSwitchCpu.indexOf(data.id) > -1) {
+							  dataArr.push(data)
+						  }
+					  })
+				  } else {
+					  dataArr = dataModel.configDevices;
+				  }
+				  break;
+			  case 'device-memory':
+				  if(Array.isArray(dataModel.selectedSwitchMemory) && dataModel.selectedSwitchMemory.length > 0) {
+					  dataModel.configDevices.forEach((data) => {
+						  if(dataModel.selectedSwitchMemory.indexOf(data.id) > -1) {
+							  dataArr.push(data)
+						  }
+					  })
+				  } else {
+					  dataArr = dataModel.configDevices;
+				  }
+				  break;
+		  }
+		
+		  return dataArr;
+	  }
 
     let getSwtAndPortName = (deviceId, portNo) =>{
       return getPortName(deviceId, portNo) + '(' +  getSwtName(deviceId) +')';
@@ -1395,11 +1144,183 @@ export class DashboardController {
       // if(port)
       return port && port['annotations']['portName'] || '';
     };
-
+	
+	  let getISODate = (date) => {
+		  return date.getUTCFullYear() +
+			  '-' + pad( date.getUTCMonth() + 1 ) +
+			  '-' + pad( date.getUTCDate() ) +
+			  'T' + pad( date.getUTCHours() ) +
+			  ':' + pad( date.getUTCMinutes() ) +
+			  ':00'  +
+			  'Z';
+	  }
+	
+	  let formatLocalTime = (time) => {
+		  let _fillInt= (num, count)=>{
+			  if(!count){
+				  count = 2;
+			  }
+			  let numStr = num + '';
+			  if(numStr.length !== count) {
+				  return '0'.repeat(count - numStr.length) + numStr
+			  } else
+				  return num
+		  };
+		
+		  let d = new Date(time);
+		  let res = _fillInt(d.getHours()) +  ':' +
+			  _fillInt(d.getMinutes()) + ':' +
+			  _fillInt(d.getSeconds()) + ' ' +
+			  _fillInt(d.getDate()) + '/' +
+			  _fillInt(d.getMonth() + 1)
+		
+		  return res
+	  }
+	  
+	  let pad = (number) => {
+		  if ( number < 10 ) {
+			  return '0' + number;
+		  }
+		  return number;
+	  }
+	  
     this.init_application_license().then(()=>{
       init();
     });
 	
+	  let clusterCpuTimeHasChanged = false;
+	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.controller.cpu.begin_time', 'dashboardModel.controller.cpu.end_time'], (a,b,c,d) => {
+		  if(!clusterCpuTimeHasChanged) {
+			  clusterCpuTimeHasChanged = true;
+			  return;
+		  }
+		
+		  this.getClustersCPUAnalyzer(getFilteredDataModel('controller-cpu')).then(() => {
+			  //memory analyzer
+			  let dataArr = [];
+			  let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.controller.cpu.analyzer);
+			
+			  if(records.length) {
+				  records.forEach((item, index) =>{
+					  dataArr.push(item.data)
+				  })
+			  }
+			
+			  let start = this.di.$scope.dashboardModel.controller.cpu.begin_time.getTime();
+			  let end = this.di.$scope.dashboardModel.controller.cpu.end_time.getTime();
+			  let step = this.di.$scope.dashboardModel.controller.cpu.step * 1000;
+			
+			  //update chart with new data
+			  let labels = [];
+			  let curTime = 0;
+			  for(let i = 0; curTime <= end; i++) {
+				  curTime = start + step * i;
+				  labels.push((new Date(curTime)).toISOString());
+			  }
+			
+			  this.di.$scope.clusterCpuChartConfig.data = dataArr;
+			  this.di.$scope.clusterCpuChartConfig.labels = labels;
+			  this.di.$scope.clusterCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.controller.cpu.analyzer, scope.clusterCpuPieChartConfig);
+			
+			  // set pie chart data with first dataset and first data
+			  if(dataArr.length > 0 && labels.length > 0) {
+				  let xLabel = labels[0];
+				  let data = scope.dashboardModel.controller.cpu.analyzer[0].analyzer[0]
+				  let title = scope.dashboardModel.controller.cpu.analyzer[0].name + ' - ' + formatLocalTime(xLabel);
+				
+				  setCpuPieChartData(data,title,scope.clusterCpuPieChartConfig)
+			  }
+		  });
+	  },true));
+	
+	  let clusterMemoryTimeHasChanged = false;
+	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.controller.memory.begin_time', 'dashboardModel.controller.memory.end_time'], (a,b,c,d) => {
+		  if(!clusterMemoryTimeHasChanged) {
+			  clusterMemoryTimeHasChanged = true;
+			  return;
+		  }
+		
+		  this.getClustersMemoryAnalyzer(getFilteredDataModel('controller-memory')).then(() => {
+			  //memory analyzer
+			  let dataArr = [];
+			  let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.controller.memory.analyzer);
+			
+			  if(records.length) {
+				  records.forEach((item, index) =>{
+					  dataArr.push(item.data)
+				  })
+			  }
+			
+			  let start = this.di.$scope.dashboardModel.controller.memory.begin_time.getTime();
+			  let end = this.di.$scope.dashboardModel.controller.memory.end_time.getTime();
+			  let step = this.di.$scope.dashboardModel.controller.memory.step * 1000;
+			
+			  //update chart with new data
+			  let labels = [];
+			  let curTime = 0;
+			  for(let i = 0; curTime <= end; i++) {
+				  curTime = start + step * i;
+				  labels.push((new Date(curTime)).toISOString());
+			  }
+			
+			  this.di.$scope.clusterMemoryChartConfig.data = dataArr;
+			  this.di.$scope.clusterMemoryChartConfig.labels = labels;
+			  this.di.$scope.clusterMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.controller.memory.analyzer, scope.clusterMemoryPieChartConfig);
+			
+			  if(dataArr.length > 0 && labels.length > 0) {
+				  let xLabel = labels[0];
+				  let data = scope.dashboardModel.controller.memory.analyzer[0].analyzer[0];
+				  let title = scope.dashboardModel.controller.memory.analyzer[0].name + ' - ' + formatLocalTime(xLabel)
+				
+				  setMemoryPieChartData(data, title, scope.clusterMemoryPieChartConfig)
+			  }
+		  });
+	  },true));
+	
+	  let cpuTimeHasChanged = false;
+	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.cpu.begin_time', 'dashboardModel.cpu.end_time'], (a,b,c,d) => {
+		  if(!cpuTimeHasChanged) {
+			  cpuTimeHasChanged = true;
+			  return;
+		  }
+		
+		  this.getDevicesCPUAnalyzer(getFilteredDataModel('device-cpu')).then(() => {
+			  //memory analyzer
+			  let dataArr = [];
+			  let records = this.getDevicesCPUAnalyzer(this.di.$scope.dashboardModel.cpu.analyzer);
+			
+			  if(records.length) {
+				  records.forEach((item, index) =>{
+					  dataArr.push(item.data)
+				  })
+			  }
+			
+			  let start = this.di.$scope.dashboardModel.cpu.begin_time.getTime();
+			  let end = this.di.$scope.dashboardModel.cpu.end_time.getTime();
+			  let step = this.di.$scope.dashboardModel.cpu.step * 1000;
+			
+			  //update chart with new data
+			  let labels = [];
+			  let curTime = 0;
+			  for(let i = 0; curTime <= end; i++) {
+				  curTime = start + step * i;
+				  labels.push((new Date(curTime)).toISOString());
+			  }
+			
+			  this.di.$scope.switchCpuChartConfig.data = dataArr;
+			  this.di.$scope.switchCpuChartConfig.labels = labels;
+			  this.di.$scope.switchCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.cpu.analyzer, scope.switchCpuPieChartConfig);
+			
+			  if(dataArr.length > 0 && labels.length > 0) {
+				  let xLabel = labels[0];
+				  let data = scope.dashboardModel.cpu.analyzer[0].analyzer[0];
+				  let title = scope.dashboardModel.cpu.analyzer[0].name + ' - ' + formatLocalTime(xLabel)
+				
+				  setCpuPieChartData(data, title, this.di.$scope.switchCpuPieChartConfig)
+			  }
+		  });
+	  },true));
+	  
     let memoryTimeHasChanged = false;
 	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.memory.begin_time', 'dashboardModel.memory.end_time'], (a,b,c,d) => {
 		  if(!memoryTimeHasChanged) {
@@ -1407,53 +1328,50 @@ export class DashboardController {
 		  	return;
 		  }
 		
-	  	this.getDevicesMemoryAnalyzer(dataModel.configDevices).then(() => {
+	  	this.getDevicesMemoryAnalyzer(getFilteredDataModel('device-memory')).then(() => {
 			  //memory analyzer
-			  let datasets = [];
+			  let dataArr = [];
 			  let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
 			
-			  let index = 0;
 			  if(records.length) {
 				  records.forEach((item, index) =>{
-					  datasets.push({
-						  label: item.name,
-						  data: item.data,
-						  borderColor: chartStyles.colors.colorPool[index],
-						  backgroundColor: chartStyles.colors.colorPool[index],
-						  fill: false,
-						  pointRadius: 0,
-						  pointHitRadius: 2,
-					  });
-					
-					  index++;
+					  dataArr.push(item.data)
 				  })
 			  }
 			
-			  let ticks = switchMemoryChart.data.labels;
-			
 			  let start = this.di.$scope.dashboardModel.memory.begin_time.getTime();
-			  let step = this.di.$scope.dashboardModel.memory.type.value * 1000;
+			  let end = this.di.$scope.dashboardModel.memory.end_time.getTime();
+			  let step = this.di.$scope.dashboardModel.memory.step * 1000;
 			
 			  //update chart with new data
 			  let labels = [];
-			  for(let i = 0; i < ticks.length; i++) {
-				  let time = start + step * i;
-				  labels.push((new Date(time)).toISOString());
+			  let curTime = 0;
+			  for(let i = 0; curTime <= end; i++) {
+				  curTime = start + step * i;
+				  labels.push((new Date(curTime)).toISOString());
 			  }
-			  
-			  switchMemoryChart.data.datasets = datasets;
-			  switchMemoryChart.data.labels = labels;
-			  switchMemoryChart.update();
-		  });
+			
+			  this.di.$scope.switchMemoryChartConfig.data = dataArr;
+			  this.di.$scope.switchMemoryChartConfig.labels = labels;
+			  this.di.$scope.switchMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.memory.analyzer, scope.switchMemoryPieChartConfig);
+			
+			  if(dataArr.length > 0 && labels.length > 0) {
+				  let xLabel = labels[0];
+				  let data = scope.dashboardModel.memory.analyzer[0].analyzer[0];
+				  let title = scope.dashboardModel.memory.analyzer[0].name + ' - ' + formatLocalTime(xLabel)
+				
+				  setMemoryPieChartData(data, title, this.di.$scope.switchCpuPieChartConfig)
+			  }
+	  	});
 	  },true));
-	  
+	
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
         unSubscribe();
       });
     });
   }
-
+  
   getSwitchesCPUMemoryStatisticFromLS(switches) {
     //10分钟以内不重复获取
     let defer = this.di.$q.defer();
@@ -1518,7 +1436,7 @@ export class DashboardController {
 
     let startTime = this.getISODate(this.di.$scope.dashboardModel.cpu.begin_time);
     let endTime = this.getISODate(this.di.$scope.dashboardModel.cpu.end_time);
-    let solution_second = this.di.$scope.dashboardModel.cpu.type.value;//3600;//this.getResolutionSecond(startTime, endTime);
+    let solution_second = this.di.$scope.dashboardModel.cpu.step;//3600;//this.getResolutionSecond(startTime, endTime);
     let deferredArr = [];
 
     devices.forEach((device) => {
@@ -1546,7 +1464,7 @@ export class DashboardController {
 
     let startTime = this.getISODate(this.di.$scope.dashboardModel.memory.begin_time);
     let endTime = this.getISODate(this.di.$scope.dashboardModel.memory.end_time);
-    let solution_second = this.di.$scope.dashboardModel.memory.type.value;//3600;//this.getResolutionSecond(startTime, endTime);
+    let solution_second = this.di.$scope.dashboardModel.memory.step;//3600;//this.getResolutionSecond(startTime, endTime);
     let deferredArr = [];
 
     devices.forEach((device) => {
@@ -1707,7 +1625,7 @@ export class DashboardController {
     }
     let startTime = this.getISODate(this.di.$scope.dashboardModel.controller.cpu.begin_time);
     let endTime = this.getISODate(this.di.$scope.dashboardModel.controller.cpu.end_time);
-    let solution_second = this.di.$scope.dashboardModel.controller.cpu.type.value;//3600;//this.getResolutionSecond(startTime, endTime);
+    let solution_second = this.di.$scope.dashboardModel.controller.cpu.step;//3600;//this.getResolutionSecond(startTime, endTime);
     let deferredArr = [];
     clusters.forEach((cluster) => {
       let defer = this.di.$q.defer();
@@ -1733,7 +1651,7 @@ export class DashboardController {
     }
     let startTime = this.getISODate(this.di.$scope.dashboardModel.controller.memory.begin_time);
     let endTime = this.getISODate(this.di.$scope.dashboardModel.controller.memory.end_time);
-    let solution_second = this.di.$scope.dashboardModel.controller.memory.type.value;//3600;//this.getResolutionSecond(startTime, endTime);
+    let solution_second = this.di.$scope.dashboardModel.controller.memory.step;//3600;//this.getResolutionSecond(startTime, endTime);
     let deferredArr = [];
     clusters.forEach((cluster) => {
       let defer = this.di.$q.defer();

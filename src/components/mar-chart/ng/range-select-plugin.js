@@ -7,18 +7,14 @@
  * Released under the MIT license
  * https://github.com/chartjs/chartjs-plugin-zoom/blob/master/LICENSE.md
  */
-(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-
-},{}],2:[function(require,module,exports){
-/*jslint browser:true, devel:true, white:true, vars:true */
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('chart.js')) :
+		typeof define === 'function' && define.amd ? define(['chart.js'], factory) :
+			(factory(global.Chart));
+}(this, (function (Chart) { 'use strict';
 /*global require*/
 
-// hammer JS for touch support
-var Hammer = require('hammerjs');
-Hammer = typeof(Hammer) === 'function' ? Hammer : window.Hammer;
-
 // Get the chart variable
-var Chart = require('chart.js');
 Chart = typeof(Chart) === 'function' ? Chart : window.Chart;
 var helpers = Chart.helpers;
 
@@ -446,4 +442,4 @@ let zoomPlugin = {
 
 module.exports = zoomPlugin;
 
-},{"chart.js":1,"hammerjs":1}]},{},[2]);
+})));
