@@ -7,7 +7,8 @@ export class CreateHostController {
       '_',
       '$modalInstance',
       'dataModel',
-      'appService'
+      'appService',
+      'regexService'
 		];
 	}
 	constructor(...args){
@@ -15,10 +16,10 @@ export class CreateHostController {
     CreateHostController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
-    this.MAC_REG = /^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$/;
+    /*this.MAC_REG = /^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$/;
     this.INT_REG = /^[1-9]\d*|-[1-9]\d*$/;
     this.POSITIVE_INT_REG = /^[1-9]\d*$/;
-    this.IP_REG = /^(((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))$/;
+    this.IP_REG = /^(((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))$/;*/
     this.scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
     this.scope.addedReceiverModel = [];
@@ -56,6 +57,7 @@ export class CreateHostController {
         id: 'mac',
         hint: 'MAC',
         type: 'text',
+        regType: 'mac',
         required: 'true'
       },
       vlanHelper: {
@@ -67,6 +69,7 @@ export class CreateHostController {
         id: 'vlan',
         hint: 'VLAN',
         type: 'text',
+        regType: 'int',
         required: 'true'
       }
     };
@@ -97,6 +100,7 @@ export class CreateHostController {
           'ipDisplayLabel': {
             'id': 'ip' + this.scope.ipIndex,
             'hint': 'IP',
+            'regType': 'ip',
             'type': 'text',
             'required': 'true'
           }
@@ -120,6 +124,7 @@ export class CreateHostController {
           'portDisplayLabel': {
             'id': 'port'  + this.scope.locationIndex,
             'hint': this.translate('MODULES.ENDPOINT.CREATE.FORM.PORT'),
+            'regType': 'positive_int',
             'type': 'text',
             'required': 'true'
           }
@@ -136,28 +141,12 @@ export class CreateHostController {
     };
 
     this.scope.save = (event) =>{
-      let invalid = false;
       if (this.scope.model.endpointForm.$invalid || this.scope.canceled) {
         return;
       }
-      if (!this.scope.model.mac || this.regExp('mac', this.scope.model.mac)) {
-        this.scope.model.macHelper.validation = 'true';
-        invalid = true;
-      }
-      else {
-        this.scope.model.macHelper.validation = 'false';
-      }
-      if (!this.scope.model.vlan || this.regExp('int', this.scope.model.vlan)){
-        this.scope.model.vlanHelper.validation = 'true';
-        invalid = true;
-      }
-      else {
-        this.scope.model.vlanHelper.validation = 'false';
-      }
-      if (invalid || this.validateIPLocation()) {
+      if (this.validateIPLocation()) {
         return;
       }
-
       let ips = [], locations = [];
       for(let i=0; i< this.scope.addedReceiverModel.length; i++) {
         if (this.scope.addedReceiverModel[i].type === 'ip') {
@@ -189,15 +178,36 @@ export class CreateHostController {
   validateIPLocation() {
     let ips = this.di._.filter(this.scope.addedReceiverModel, {'type': 'ip'});
     let locations = this.di._.filter(this.scope.addedReceiverModel, {'type': 'location'});
+    let invalid = false;
 
     this.scope.model.ip_hint = ips.length === 0 ? true : false;
     this.scope.model.location_hint = locations.length === 0  ? true : false;
     if(ips.length === 0 || locations.length === 0) {
-      return true;
+      invalid = true;
     }
-    let invalid = false;
+    if (!this.di.regexService.excute('mac', this.scope.model.mac)) {
+      this.scope.model.macHelper.validation = 'true';
+      invalid = true;
+    }
+    else {
+      this.scope.model.macHelper.validation = 'false';
+    }
+    if (!this.di.regexService.excute('int', this.scope.model.vlan)){
+      this.scope.model.vlanHelper.validation = 'true';
+      invalid = true;
+    }
+    else {
+      const value = this.scope.model.vlan;
+      if ((value<= 0 && value != -1) || value >= 4095) {
+        this.scope.model.vlanHelper.validation = 'true';
+        invalid = true;   
+      }
+      else {
+        this.scope.model.vlanHelper.validation = 'false';  
+      }
+    }
     for(let i=0; i< ips.length; i++) {
-      if (!ips[i].ip || this.regExp('ip', ips[i].ip)) {
+      if (!this.di.regexService.excute('ip', ips[i].ip)) {
         ips[i].ipHelper.validation = 'true';
         invalid = true;
       }
@@ -206,35 +216,13 @@ export class CreateHostController {
       }
     }
     for(let j=0; j< locations.length; j++) {
-      if (!locations[j].port || this.regExp('positive_int', locations[j].port)) {
+      if (!this.di.regexService.excute('positive_int', locations[j].port)) {
         locations[j].portHelper.validation = 'true';
         invalid = true;
       }
       else {
         locations[j].portHelper.validation = 'false';
       }
-    }
-    return invalid;
-  }
-
-  regExp(type, value) {
-    let invalid = true;
-    switch (type){
-      case 'mac':
-        invalid = !this.MAC_REG.test(value);
-        break;
-      case 'int':
-        invalid = !this.INT_REG.test(value);
-        if (!invalid && ((value<= 0 && value != -1) || value >= 4095)) {
-          invalid = true;
-        }
-        break;
-      case 'positive_int':
-        invalid = !this.POSITIVE_INT_REG.test(value);
-        break;  
-      case 'ip':
-        invalid = !this.IP_REG.test(value);
-        break;
     }
     return invalid;
   }

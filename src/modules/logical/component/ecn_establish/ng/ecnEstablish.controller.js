@@ -129,7 +129,7 @@ export class EcnEstablishController {
 
   validateThreshold() {
     const DSCP_REG = /^([0-9])+$/;
-    return DSCP_REG.test(this.scope.model.threshold);
+    return this.scope.model.threshold ? DSCP_REG.test(this.scope.model.threshold) : false;
   }
 }
 

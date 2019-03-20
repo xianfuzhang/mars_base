@@ -225,6 +225,7 @@
   "MODULES.SWITCH.MENU.CREATE_GROUP": "Create Group",
   "MODULES.SWITCH.MENU.SHOW_GROUP": "Show Groups",
   "MODULES.SWITCH.MENU.REBOOT":"Reboot",
+  "MODULES.TRUNK.CREATE.FORM.NAME.HELP": "Characters can contain Chinese, English alphabet, numbers, -, _, (,)",
   "MODULES.INTENT.COLUMN.SRC_END": "Src Endpoint",
   "MODULES.INTENT.COLUMN.DST_END": "Dst Endpoint",
   "MODULES.INTENT.COLUMN.TYPE": "Type",

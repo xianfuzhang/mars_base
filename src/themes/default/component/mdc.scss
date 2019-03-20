@@ -48,6 +48,12 @@
   height: 30px;
   padding: 0;
 }
+.text-field-container .mdc-text-field-helper-text{
+  display: none;
+}
+.text-field-container .mdc-text-field--invalid + .mdc-text-field-helper-text--validation-msg{
+  display: block;
+}
 .mdc-form-field .mdc-checkbox-label{
   user-select: none;
 }
