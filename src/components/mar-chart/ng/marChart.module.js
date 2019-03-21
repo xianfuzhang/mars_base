@@ -139,7 +139,6 @@ export function ChartJsProvider () {
 					delay: 0      // delay of 500 ms after the canvas is considered inside the viewport
 				}
 			},
-			barPercentage: 0.1,
 			title: {
 				display: true,
 			},
@@ -159,7 +158,6 @@ export function ChartJsProvider () {
 						color: DEFAULT_STYLES.colors.gridLinesColor,
 						lineWidth: DEFAULT_STYLES.lines.gridWidth
 					},
-					barThickness: 20,
 				}],
 				xAxes: [{
 					scaleLabel: DEFAULT_STYLES.colors.fontColor,
@@ -169,7 +167,6 @@ export function ChartJsProvider () {
 						lineWidth: DEFAULT_STYLES.lines.gridWidth,
 						offsetGridLines: false
 					},
-					barThickness: 20,
 				}],
 			}
 		}
@@ -363,27 +360,33 @@ export function ChartJsFactory (ChartJs, $timeout) {
 		// mutate colors in this case as we don't want
 		// the colors to change on each refresh
 		if (notEnoughColors) scope.chartColors = colors;
-		return colors.map(convertColor);
-	}
+		
+		let res = []
+		colors.forEach((color) => {
+      res.push(convertColor(color, scope))
+		});
+    
+    return res;
+  }
 	
-	function convertColor (color) {
+	function convertColor (color, scope) {
 		// Allows RGB and RGBA colors to be input as a string: e.g.: "rgb(159,204,0)", "rgba(159,204,0, 0.5)"
-		if (typeof color === 'string' && color.startsWith('rgb')) return getColor(rgbStringToRgb(color));
+		if (typeof color === 'string' && color.startsWith('rgb')) return getColor(rgbStringToRgb(color), scope);
 		// Allows hex colors to be input as a string.
-		if (typeof color === 'string' && color[0] === '#') return getColor(hexToRgb(color.substr(1)));
+		if (typeof color === 'string' && color[0] === '#') return getColor(hexToRgb(color.substr(1)), scope);
 		// Allows colors to be input as an object, bypassing getColor() entirely
 		if (typeof color === 'object' && color !== null) return color;
 		// Allows colors to be input as a color string.
 		// if (typeof color === 'string'&& !isEmpty(color)) return color;
-		return getRandomColor();
+		return getRandomColor(scope);
 	}
 	
-	function getRandomColor () {
+	function getRandomColor (scope) {
 		let color = [getRandomInt(0, 255), getRandomInt(0, 255), getRandomInt(0, 255)];
-		return getColor(color);
+		return getColor(color,scope);
 	}
 	
-	function getColor (color) {
+	function getColor (color, scope) {
 		let alpha = color[3] || 1;
 		color = color.slice(0, 3);
 		return {
@@ -395,7 +398,7 @@ export function ChartJsFactory (ChartJs, $timeout) {
 			// pointBorderColor: '#fff',
 			pointHoverBorderColor: rgba(color, alpha),
 			// pointHoverBorderColor: '#fff',
-			fill: false,
+			fill: scope.chartFill == true ? true : false,
 			lineTension: 0
 		};
 	}

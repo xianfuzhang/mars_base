@@ -142,7 +142,7 @@
 }
 
 .elasticsearch-csv-file .conditions .query {
-  height: 215px;
+  height: 300px;
   border-radius:5px;
   font-size:14px;
 }
@@ -228,4 +228,43 @@
 
 .elasticsearch .mdc-select.mdc-select__no-label > .mdc-select__native-control{
   color: #4C4C4C;
+}
+
+.elasticsearch .setting-group {
+  position:absolute;
+  top: 20px;
+  right: 50px;
+}
+.elasticsearch .setting-group .item {
+  float: right;
+  cursor: pointer;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.show-download-modal {
+  width: 500px;
+}
+
+.show-download-modal .content {
+  width: 200px;
+  height: auto;
+  margin: 10px auto;
+  padding: 10px 30px;
+}
+
+.show-download-modal .content .text{
+  font-size: 14px;
+}
+
+.show-download-modal .content .text .indice{
+  font-weight: bold;
+}
+
+.show-download-modal .content .text .size{
+  font-size: 16px;
+}
+
+.show-input-filename-modal {
+  width: 350px;
 }

@@ -6,24 +6,17 @@
  	<form class="dateRange__form" name="dialogModel.form" autocomplete="off" novalidate>
 		<div class="column-manipulation-field__content elasticsearch-csv-file">
 			<div class="conditions">
-                <p style="font-size: 12px;color:red" ng-show="errMsg" ng-bind="errMsg"></p>
-				<div>
-                    <div class="label" style="display: inline-block">选择indice:<span class="must">*</span></div>
-					<mdl-select ng-model="dataModel.selectedIndice"
-								display-label="{options: indiceOptions}"
-								style="font-size:16px !important;">
-					</mdl-select>
-				</div>
+				<p style="font-size: 12px;color:red" ng-show="errMsg" ng-bind="errMsg"></p>
 
-                <div style="margin-top:20px;">
-                    <div class="label" style="display: inline-block">设置Query:</div>
-                    <div class="query" ng-show="dataModel.option" jsoneditor ng-model="dataModel.query" options="options" prefix-text="true"></div>
-                </div>
+				<div>
+					<div class="label" style="display: inline-block">设置Query条件(选填):</div>
+					<div class="query" ng-show="chartModel.option" jsoneditor ng-model="chartModel.query" options="options" prefix-text="true"></div>
+				</div>
 			</div>
 		</div>
 	 	<div class="column-manipulation-field__footer">
 			<div style="display: inline-block;float: right; margin-left: 15px;">
-				<mar-button btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.DOWNLOAD' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-white btn-sm'" btn-click="generate($event)" btn-disabled="globalInvalid" />
+				<mar-button btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.DOWNLOAD' | translate" btn-type="'cloud_download'" btn-icon="'done'" btn-class="'btn-white btn-sm'" btn-click="generate($event)" btn-disabled="globalInvalid" />
 			</div>
 
 			<div style="display: inline-block;float: right;">

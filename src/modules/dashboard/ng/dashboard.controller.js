@@ -718,8 +718,9 @@ export class DashboardController {
 						  // }
 					  }
 				  }],
-					  xAxes: [{
+					xAxes: [{
 					  stacked: true,
+            barThickness: 40,
 				  }],
 			  },
 		  }
