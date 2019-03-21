@@ -23,6 +23,7 @@
     flex-direction: column;
     /* padding: 0 8px; */
     height: 100%;
+    overflow-y: auto;
 
     @include element(header){
       flex-basis: 30px;

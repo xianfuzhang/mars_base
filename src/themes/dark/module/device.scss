@@ -29,7 +29,7 @@
 
 .\+show.mdc-button.topo_setting__button {
   border: 1px solid lightgray;
-  background-color: gray;
+  background-color: #000;
 }
 
 .topo_setting__button svg{
@@ -98,7 +98,7 @@
   //height: 100%;
   .mar_section{
     background: transparent !important;
-    color: white;
+    color: map_get($colors, body_color);
     box-shadow: none !important;
   }
 
@@ -338,12 +338,12 @@
   height: 500px;
   margin-right: 20px;
   margin-bottom: 20px;
-  background: rgb(244, 245, 247);
+  background: #171819;
 }
 .fan-sensors h2, .psu-sensors h2, .temp-sensors h2{
   margin: 0;
   padding: 10px;
-  border-bottom: 1px solid rgb(233, 233, 233);
+  border-bottom: 1px solid #000;
 }    
 .fan-sensor, .temp-sensor{
   display: flex;

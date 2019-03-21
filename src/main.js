@@ -6,6 +6,7 @@ import 'angular-route';
 import 'angular-animate';
 import 'angular-translate';
 import 'angular-ui-bootstrap';
+import 'angular-material';
 
 import 'lodashService';
 import 'crypto';
@@ -49,11 +50,13 @@ import 'marButton';
 import 'jsonEditor';
 import 'gradientScale';
 import 'splineChart';
+import 'marChart';
 
 import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, mainCtrl} from './base';
 
 angular
   .module('marsApp', [
+    'ngMaterial',
     'ngRoute',
     'ngCookies',
     'ngAnimate',
@@ -99,7 +102,8 @@ angular
     'marButton',
     'jsonEditor',
     'gradientScale',
-    'splineChart'
+    'splineChart',
+    'marChart'
   ])
   .factory('setLanguage', ['$q', setLanguage])
   .config(['$translateProvider', configTranslate])

@@ -86,7 +86,7 @@
       padding: 15px;
       border: 1px solid #47b8e0;
       background-color: transparent;
-      color: white;
+      color: map_get($colors, body_color);
 
 
       .mdc-radio__outer-circle{
@@ -147,5 +147,5 @@
 }
 
 .configuration__content .jsoneditor-field, .jsoneditor-value {
-  color: #ffffff;
+  color: map_get($colors, body_color);
 }

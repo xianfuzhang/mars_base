@@ -25,14 +25,13 @@ export class  GenerateCSVFileDialogController {
     }
     
     this.scope = this.di.$scope;
-    this.scope.indiceOptions = this.di.dataModel.indiceOptions;
-    this.scope.selectedIndice = this.scope.indiceOptions[0];
     this.scope.globalInvalid = false;
     this.scope.errMsg = '';
-    this.scope.dataModel = {
+    this.scope.chartModel = {
     	option: 'indice',
-	    selectedIndice: this.scope.indiceOptions[0],
-      query: this.di._.cloneDeep(defaultQuery)
+      query: this.di._.cloneDeep(defaultQuery),
+	    indice: this.di.dataModel.indiceName,
+	    size: this.di.dataModel.indiceSize
     }
     
     // listen the json content change function
@@ -58,10 +57,11 @@ export class  GenerateCSVFileDialogController {
       event.stopPropagation();
 		};
 		
+  
 		this.scope.generate = (event) => {
-      let query = this.di._.isEqual(this.scope.dataModel.query, defaultQuery) ? false : this.scope.dataModel.query;
+      let query = this.di._.isEqual(this.scope.chartModel.query, defaultQuery) ? false : this.scope.chartModel.query;
       
-      this.di.manageDataManager.generateElasticsearchCSVFile(this.scope.dataModel.selectedIndice.value, query)
+      this.di.manageDataManager.generateElasticsearchCSVFile(this.scope.chartModel.indice, query)
 				.then((res) => {
           this.di.$modalInstance.close({
             canceled: false,
@@ -73,14 +73,6 @@ export class  GenerateCSVFileDialogController {
 			
  			event.stopPropagation();
 		};
-		
-		
-		const generateCSVFile = () => {
-      let defer = this.di.$q.defer();
-			
-			
-			return defer.promise;
-		}
 	}
   
 }

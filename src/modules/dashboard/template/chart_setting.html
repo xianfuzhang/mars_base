@@ -1,0 +1,30 @@
+<div class="column-manipulation-field">
+    <div class="column-manipulation-field__header">
+        <span class="column-manipulation-field__title"
+            ng-bind="title"></span>
+    </div>
+    <div class="content">
+				<div class="input_item">
+						<div class="label">选择控制器：</div>
+						<mdl-select ng-model="chartModel.selectedData"
+												display-label="dataOptions">
+						</mdl-select>
+				</div>
+
+				<div class="input_item">
+					<div class="label">时间区间：</div>
+					<div><input type="datetime-local" ng-model="chartModel.beginTime" value="{{beginTime}}"/></div>
+					<div class="label">至</div>
+					<div><input type="datetime-local" ng-model="chartModel.endTime" value="{{endTime}}"/></div>
+				</div>
+    </div>
+    <div class="column-manipulation-field__footer">
+        <div style="display: inline-block;float: right; margin-left: 15px;">
+            <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" />
+        </div>
+
+        <div style="display: inline-block;float: right;">
+            <mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)" />
+        </div>
+    </div>
+</div>
