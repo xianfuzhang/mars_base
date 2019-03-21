@@ -3,6 +3,7 @@ export class tablePagination {
     return [
       '$log',
       '$filter',
+      '$timeout',
       'tableConsts'
     ];
   }
@@ -32,14 +33,21 @@ export class tablePagination {
       'label':this.di.tableConsts.CONST.PAGINATION.defaultPageSize,
       'value':this.di.tableConsts.CONST.PAGINATION.defaultPageSize
     };
+    scope.preNumber = scope.model.value;
     scope.numPages = 1;
     scope.currentPage = 1;
     scope.pageStart = 0;
     scope.pageEnd = 0;
     scope.pages = [];
 
-    scope._changeSelect = (childScope) => {
-      scope.model = childScope.model;
+    scope._changeSelect = ($value) => {
+      scope.preNumber = scope.model.value;
+      scope.model = $value;
+      if (!scope._isNeedPagination) {
+        scope.tableModel.pagination.number = scope.model.value;
+        scope.tableModel.pagination.numberOfPages = scope.tableModel.pagination.totalItemCount === 0 ?
+          1 : Math.ceil(scope.tableModel.pagination.totalItemCount / scope.tableModel.pagination.number);
+      }
       scope._selectPage(1);
     };
 
@@ -48,11 +56,24 @@ export class tablePagination {
         scope.tableModel.pagination.start = (page - 1) * scope.model.value;
         scope.tableModel.pagination.number = scope.model.value;
         scope.tableModel.removeItems = [];
-        scope._queryUpdate(scope._getTableParams());
-        scope.tableModel.filteredData.forEach((item) => {
-          item.isChecked = false;
-        });
-        //scope.$emit('pagination-checkbox-unselect');
+        if (scope._isNeedPagination) {
+          scope._queryUpdate(scope._getTableParams());
+        }
+        else {
+          scope.tableModel.filteredData = scope._clientDataPagination();
+          scope.tableModel.filteredData.forEach((item) => {
+            item.isChecked = false;
+          });
+          //当filteredData数据变少时不会触发table-render-ready指令$last === true，需要手动触发
+          if (scope.tableModel.pagination.number > scope.preNumber) {
+            scope._render();  
+          }
+          else {
+            this.di.$timeout(() =>{
+              scope.$emit('table-render-ready');  
+            });
+          }
+        }
       }
     };
 
@@ -83,20 +104,12 @@ export class tablePagination {
       for (i = start; i < end; i++) {
         scope.pages.push(i);
       }
-
-      /*if (prevPage !== scope.currentPage) {
-        scope.stPageChange({newPage: scope.currentPage});
-      }*/
     }
 
     //table state --> view
     scope.$watch(function () {
       return scope.tableModel.pagination;
     }, redraw, true);
-
-    scope.$watch('currentPage', (c) => {
-      scope.inputPage = c;
-    });
   }
 }
 
