@@ -4,7 +4,8 @@ export class CreateUserAccountController {
       '$log',
       '$scope',
       '$filter',
-      '$modalInstance'
+      '$modalInstance',
+      'regexService'
     ];
   }
 
@@ -16,7 +17,6 @@ export class CreateUserAccountController {
 
     this.scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
-    this.USER_NAME_REGX = /^[A-Za-z0-9]+$/;
     this.scope.userModel = {
       userForm: {},
       user_name: null,
@@ -25,18 +25,20 @@ export class CreateUserAccountController {
       userNameDisplayLabel: {
         id: 'username',
         hint: this.translate('MODULE.ACCOUNT.CREATE.NAME'),
+        regType: 'account',
         type: 'text',
         required: 'true'
       },
       userNameHelper: {
         id: 'userNameHelper',
         validation: 'false',
-        //content: this.translate('MODULE.LOGIN.FORM.USERNAME.HELP')
+        content: this.translate('MODULE.LOGIN.FORM.USERNAME.HELP')
       },
       passwordDisplayLabel: {
         id: 'password',
         hint: this.translate('MODULE.ACCOUNT.CREATE.PASSWORD'),
         //type: 'password',
+        regType: 'nameString',
         required: 'true'
       },
       passwordHelper: {
@@ -84,7 +86,7 @@ export class CreateUserAccountController {
         this.scope.userModel.userNameHelper.content = this.translate('MODULE.LOGIN.FORM.USERNAME.HELP');
         invalid = true;
       }
-      else if (!this.nameParse(this.scope.userModel.user_name))  {
+      else if (!this.di.regexService.excute('account', this.scope.userModel.user_name))  {
        this.scope.userModel.userNameHelper.validation = 'true';
        this.scope.userModel.userNameHelper.content = this.translate('MODULE.ACCOUNT.CREATE.NAME.HELP');
         invalid = true; 
@@ -129,19 +131,6 @@ export class CreateUserAccountController {
         result: data
       });
     };
-  }
-
-  nameParse(accountName) {
-    let i = 0;
-    let status = true;
-    while(i < accountName.length) {
-      if(!this.USER_NAME_REGX.test(accountName.charAt(i))) {
-        status = false;
-      }
-      i++;
-    }
-    if (accountName.length < 5 || accountName.length > 20) status = false;
-    return status;
   }
 }
 CreateUserAccountController.$inject = CreateUserAccountController.getDI();

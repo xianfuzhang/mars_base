@@ -436,7 +436,7 @@
   width: 250px;
   display: inline-block;
 }
-.create-endpoint-modal .error-msg{
+.create-endpoint-modal .error-msg, .create-host-modal .error-msg{
   font-size: 0.75rem;
   line-height: 1.25rem;
   font-weight: 400;

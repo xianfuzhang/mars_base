@@ -33,7 +33,11 @@ export class TrunkController {
       members: [],
       membersDetail: [],
       nameHelper: {
-        validation: 'false'
+        validation: 'false',
+        content: this.translate('MODULES.TRUNK.CREATE.FORM.NAME.HELP')
+      },
+      nameDisplayLabel: {
+        'regType': 'nameString'
       },
       mlagEnableLabel: {
         id: 'check_1', 

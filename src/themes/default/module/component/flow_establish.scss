@@ -89,6 +89,7 @@
   @include element(header){
     display: inline-block;
     margin-top: 2px;
+    margin-bottom: 16px;
 
     div{
       display: inline-block;
@@ -101,6 +102,14 @@
   }
 
   @include element(body){
+    &.ng-enter{
+      animation: enter_criteria 0.5s cubic-bezier(.55, 0, .55, .2);
+    }
+
+    &.ng-leave,&.ng-move {
+      animation: leave_criteria 0.5s cubic-bezier(.55, 0, .55, .2);
+    }
+
     .type {
       top: -8px;
       left: 16px;
@@ -113,7 +122,7 @@
     }
 
     @include element(item){
-      margin-top: 16px;
+      //margin-top: 16px;
       border-radius: 3px;
       border: 1px solid gray;
       display: block;
@@ -174,4 +183,28 @@ select.mdc-select__native-control {
 
 .flow_criteria .topo_table {
   border-spacing: 2px 2px;
+}
+
+
+@keyframes enter_criteria {
+  from{
+    max-height: 0px;
+    opacity: 0;
+  }
+  to {
+    max-height: 200px;
+    opacity: 1;
+  }
+}
+
+@keyframes leave_criteria {
+  from {
+    max-height: 200px;
+    opacity: 1;
+  }
+  to {
+    max-height: 0px;
+    margin:0;
+    opacity: 0;
+  }
 }

@@ -26,7 +26,8 @@ import {LogicalDataManager} from './datamanagers/logical.dataManager';
 import {WebsocketService} from './services/ws.service';
 import {applicationService} from './services/application.service';
 import {flowCacheService} from './services/flowCache.service';
-import {MessageWebsocketService} from './services/message.service'
+import {MessageWebsocketService} from './services/message.service';
+import {regexService} from './services/regex.service';
 
 export default angular
   .module('apis', [])
@@ -59,4 +60,5 @@ export default angular
   .service('manageDataManager', ManageDataManager)
   .service('logicalDataManager', LogicalDataManager)
 	.service('messageService', MessageWebsocketService)
+  .service('regexService', regexService)
   .name;

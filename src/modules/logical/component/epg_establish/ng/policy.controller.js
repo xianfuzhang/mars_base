@@ -65,10 +65,12 @@ export class EGPPolicyEstablishController {
       rules: [],
       nameHelper: {
         'id': 'nameHelper',
-        'validation': 'false'
+        'validation': 'false',
+        'content': this.translate('MODULES.TRUNK.CREATE.FORM.NAME.HELP')
       },
       nameDisplayLabel: {
-        'id': 'nameLabel'
+        'id': 'nameLabel',
+        'regType': 'nameString'
       },
     };
     this.scope.ruleIndex = 0;
@@ -183,16 +185,16 @@ export class EGPPolicyEstablishController {
           }
         },
         'labels': {
-          'srcPortDisplayLabel': 'srcPortLabel' + this.scope.ruleIndex,
-          'dstPortDisplayLabel': 'dstPortLabel' + this.scope.ruleIndex,
-          'icmpTypeDisplayLabel': 'icmpTypeLabel' + this.scope.ruleIndex,
-          'icmpCodeDisplayLabel': 'icmpCodeLabel' + this.scope.ruleIndex,
-          'icmpTypeDisplayLabel': 'icmpTypeLabel' + this.scope.ruleIndex,
-          'icmpCodeDisplayLabel': 'icmpCodeLabel' + this.scope.ruleIndex,
-          'srcIpDisplayLabel': 'srcIpLabel' + this.scope.ruleIndex,
-          'dstIpDisplayLabel': 'dstIpLabel' + this.scope.ruleIndex,
-          'dstMacDisplayLabel': 'dstMacLabel' + this.scope.ruleIndex,
-          'vlanDisplayLabel': 'vlanLabel' + this.scope.ruleIndex
+          'srcPortDisplayLabel': {'id': 'srcPortLabel' + this.scope.ruleIndex, 'regType': 'positive_int'},
+          'dstPortDisplayLabel': {'id': 'dstPortLabel' + this.scope.ruleIndex, 'regType': 'positive_int'},
+          'icmpTypeDisplayLabel': {'id': 'icmpTypeLabel' + this.scope.ruleIndex, 'regType': 'number'},
+          'icmpCodeDisplayLabel': {'id': 'icmpCodeLabel' + this.scope.ruleIndex, 'regType': 'number'},
+          //'icmpTypeDisplayLabel': 'icmpTypeLabel' + this.scope.ruleIndex,
+          //'icmpCodeDisplayLabel': 'icmpCodeLabel' + this.scope.ruleIndex,
+          'srcIpDisplayLabel': {'id': 'srcIpLabel' + this.scope.ruleIndex, 'regType': 'ip_mask'},
+          'dstIpDisplayLabel': {'id': 'dstIpLabel' + this.scope.ruleIndex, 'regType': 'ip_mask'},
+          'dstMacDisplayLabel': {'id': 'dstMacLabel' + this.scope.ruleIndex, 'regType': 'mac'},
+          'vlanDisplayLabel': {'id': 'vlanLabel' + this.scope.ruleIndex, 'regType': 'vlan_number'}
         },
         'ruleActions': [
           {

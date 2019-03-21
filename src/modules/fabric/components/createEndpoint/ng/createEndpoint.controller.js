@@ -6,7 +6,8 @@ export class CreateEndpointController {
       '$filter',
       '_',
       '$modalInstance',
-      'dataModel'
+      'dataModel',
+      'regexService'
 		];
 	}
 	constructor(...args){
@@ -14,10 +15,10 @@ export class CreateEndpointController {
     CreateEndpointController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
-    this.MAC_REG = /^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$/;
+    /*this.MAC_REG = /^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$/;
     this.INT_REG = /^[1-9]\d*|-[1-9]\d*$/;
     this.POSITIVE_INT_REG = /^[1-9]\d*$/;
-    this.IP_REG = /^(((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))$/;
+    this.IP_REG = /^(((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))\.){3}((\d{1,2})|(1\d{1,2})|(2[0-4]\d)|(25[0-5]))$/;*/
     this.scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
     this.scope.addedReceiverModel = [];
@@ -39,6 +40,7 @@ export class CreateEndpointController {
         id: 'mac',
         hint: 'MAC',
         type: 'text',
+        regType: 'mac',
         required: 'true'
       },
       vlanHelper: {
@@ -80,6 +82,7 @@ export class CreateEndpointController {
             'id': 'ip' + this.scope.ipIndex,
             'hint': 'IP',
             'type': 'text',
+            'regType': 'ip',
             'required': 'true'
           }
         }
@@ -168,20 +171,10 @@ export class CreateEndpointController {
 
     this.scope.save = (event) =>{
       let invalid = false;
+      if (this.validateMACIPLocation()) return;
       if (this.scope.model.endpointForm.$invalid || this.scope.canceled) {
         return;
       }
-      if (!this.scope.model.mac || this.regExp('mac', this.scope.model.mac)) {
-        this.scope.model.macHelper.validation = 'true';
-        invalid = true;
-      }
-      else {
-        this.scope.model.macHelper.validation = 'false';
-      }
-      if (invalid || this.validateIPLocation()) {
-        return;
-      }
-
       let ips = [], locations = [];
       for(let i=0; i< this.scope.addedReceiverModel.length; i++) {
         if (this.scope.addedReceiverModel[i].type === 'ip') {
@@ -212,46 +205,30 @@ export class CreateEndpointController {
     };
 	}
 
-  validateIPLocation() {
+  validateMACIPLocation() {
     let ips = this.di._.filter(this.scope.addedReceiverModel, {'type': 'ip'});
     let locations = this.di._.filter(this.scope.addedReceiverModel, {'type': 'location'});
-
+    let invalid = false;
     this.scope.model.ip_hint = ips.length === 0 ? true : false;
     this.scope.model.location_hint = locations.length === 0  ? true : false;
     if(ips.length === 0 || locations.length === 0) {
-      return true;
+      invalid = true;
     }
-    let invalid = false;
+    if (!this.di.regexService.excute('mac', this.scope.model.mac)) {
+      invalid = true;  
+      this.scope.model.macHelper.validation = 'true';
+    }
+    else {
+      this.scope.model.macHelper.validation = 'false';
+    }
     for(let i=0; i< ips.length; i++) {
-      if (!ips[i].ip || this.regExp('ip', ips[i].ip)) {
+      if (!this.di.regexService.excute('ip', ips[i].ip)) {
         ips[i].ipHelper.validation = 'true';
         invalid = true;
       }
       else {
         ips[i].ipHelper.validation = 'false';
       }
-    }
-    return invalid;
-  }
-
-  regExp(type, value) {
-    let invalid = true;
-    switch (type){
-      case 'mac':
-        invalid = !this.MAC_REG.test(value);
-        break;
-      case 'int':
-        invalid = !this.INT_REG.test(value);
-        if (!invalid && ((value<= 0 && value != -1) || value >= 4095)) {
-          invalid = true;
-        }
-        break;
-      case 'positive_int':
-        invalid = !this.POSITIVE_INT_REG.test(value);
-        break;  
-      case 'ip':
-        invalid = !this.IP_REG.test(value);
-        break;
     }
     return invalid;
   }
