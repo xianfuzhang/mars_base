@@ -62,6 +62,7 @@ export class mdlTable {
       rowCheckboxSupport: false,
       //rowActions: [],
       data: [],
+      inlineFilterData: [],
       filteredData: [],
 
       index_name: null,
@@ -130,14 +131,18 @@ export class mdlTable {
                   scope.tableModel.CONST_SORT_ASC;
       scope.tableModel.sort = {};
       scope.tableModel.sort[$col.field] = $col.sort;
+      scope._orderInlineFilterData();
+      scope.tableModel.filteredData = scope._clientDataPagination(); 
+    };
 
-      let orderStr = $col.sort === scope.tableModel.CONST_SORT_DESC ? 'desc' : 
-                    $col.sort === scope.tableModel.CONST_SORT_ASC ? 'asc' : null;
-      if (orderStr) {
-        scope.tableModel.filteredData = this.di._.orderBy(scope.tableModel.data, [$col.field],[orderStr]);  
-      }
-      else {
-        scope.tableModel.filteredData = scope.tableModel.data;
+    scope._orderInlineFilterData = () => {
+      if (Object.keys(scope.tableModel.sort).length > 0) {
+        const field = Object.keys(scope.tableModel.sort)[0], 
+              order = scope.tableModel.sort[field] === scope.tableModel.CONST_SORT_DESC ? 'desc' : 
+                      scope.tableModel.sort[field] === scope.tableModel.CONST_SORT_ASC ? 'asc' : null;
+        if (order) {
+          scope.tableModel.inlineFilterData = this.di._.orderBy(scope.tableModel.inlineFilterData, [field], [order]);  
+        }
       }
     };
 
@@ -261,6 +266,8 @@ export class mdlTable {
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
       if (scope._isNeedPagination === false ||  scope._isNeedPagination === 'false') {
         scope.inlineFilter();
+        scope._orderInlineFilterData();
+        scope.tableModel.filteredData = scope._clientDataPagination();
         scope.clearRowCheck();
         scope._render();
       }
@@ -269,10 +276,13 @@ export class mdlTable {
       }
     };
     scope._clearSearch = (event) => {
+      scope.tableModel.pagination.start = 0;
       scope.tableModel.searchResult = '';
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
       if (scope._isNeedPagination === false ||  scope._isNeedPagination === 'false') {
         scope.inlineFilter();
+        scope._orderInlineFilterData();
+        scope.tableModel.filteredData = scope._clientDataPagination();
         scope.clearRowCheck();
         scope._render();
       }
@@ -283,13 +293,14 @@ export class mdlTable {
     };
 
     scope.inlineFilter = () => {
+      scope.tableModel.inlineFilterData = [];
       if (!scope.tableModel.search['value']) {
-        scope.tableModel.filteredData = scope.tableModel.data;
+        scope.tableModel.inlineFilterData = scope.tableModel.data;
       }
       else {
         let reg = new RegExp(scope.tableModel.search['value']);
         let tmpData = angular.copy(scope.tableModel.data);
-        scope.tableModel.filteredData = tmpData.filter((item) => {
+        scope.tableModel.inlineFilterData = tmpData.filter((item) => {
           let match = false;
           for(let key in item) {
             if (scope.tableModel.columnsByField[key] && 'string' === typeof item[key] && reg.test(item[key])) {
@@ -300,6 +311,10 @@ export class mdlTable {
           return match;
         });
       }
+
+      scope.tableModel.pagination.totalItemCount = scope.tableModel.inlineFilterData.length;
+      scope.tableModel.pagination.numberOfPages = scope.tableModel.pagination.totalItemCount === 0 ?
+          1 : Math.ceil(scope.tableModel.pagination.totalItemCount / scope.tableModel.pagination.number);
     };
 
     scope.clearRowCheck = () => {
@@ -308,9 +323,7 @@ export class mdlTable {
         item.isChecked = false;
       });
     };
-    /*scope._filter = (event) => {
-      tableCtrl.onFilter();
-    };*/
+
 
     /*****************************************************************************
      data handle
@@ -328,13 +341,18 @@ export class mdlTable {
     scope._onDataSuccess = (response) => {
       response = response || {};
       scope.tableModel.data = response.data || [];
+      scope.tableModel.pagination.totalItemCount = scope._isNeedPagination ? 
+          response.count || 0 : scope.tableModel.data.length;
+      scope.tableModel.pagination.numberOfPages = scope.tableModel.pagination.totalItemCount === 0 ?
+          1 : Math.ceil(scope.tableModel.pagination.totalItemCount / scope.tableModel.pagination.number);
 
-      scope.tableModel.pagination.totalItemCount = response.count || 0;
-      scope.tableModel.pagination.numberOfPages = response.count === 0 ?
-        1 : Math.ceil(response.count / scope.tableModel.pagination.number);
-
-      //scope._prepareFilteredData();
-      scope.tableModel.filteredData = scope.tableModel.data;
+      if (scope._isNeedPagination) {
+        scope.tableModel.filteredData = scope.tableModel.data;
+      } 
+      else {
+        scope.inlineFilter();
+        scope.tableModel.filteredData = scope._clientDataPagination();
+      }     
       scope.tableModel.filteredData.forEach((item) => {
         item.isChecked = false;
       });
@@ -449,6 +467,12 @@ export class mdlTable {
       }
       
       return params;
+    };
+
+    scope._clientDataPagination = () => {
+      let pgResult = scope.tableModel.inlineFilterData.slice(scope.tableModel.pagination.start, 
+          scope.tableModel.pagination.start + scope.tableModel.pagination.number);
+      return pgResult;
     };
 
     /*****************************************************************************
