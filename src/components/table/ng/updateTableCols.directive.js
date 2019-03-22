@@ -44,7 +44,6 @@ export class updateTableCols {
       // console.log("getColsWidth..., body y scroll = " + (bodyElm[0].offsetWidth - bodyElm[0].clientWidth));
       body_x_scroll_width = bodyElm[0].offsetHeight - bodyElm[0].clientHeight;
       body_y_scroll_width = bodyElm[0].offsetWidth - bodyElm[0].clientWidth;
-
       if (!cols.length) {
         let thElms = headerElm.find('th');
         for(let i=0; i< thElms.length; i++) {
@@ -180,7 +179,7 @@ export class updateTableCols {
         for(let i=0; i< tdElms.length; i++) {
           if (!cols[i].hide) {
             if (i === tdElms.length -1 && body_y_scroll_width > 0) {
-              tdElms.eq(i)[0].style.width = (cols[i].width - body_y_scroll_width + 1) + 'px';
+              tdElms.eq(i)[0].style.width = (cols[i].width - body_y_scroll_width) + 'px';
             }
             else {
               tdElms.eq(i)[0].style.width = cols[i].width + 'px';   
