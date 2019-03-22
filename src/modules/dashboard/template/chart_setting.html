@@ -5,7 +5,7 @@
     </div>
     <div class="content">
 				<div class="input_item">
-						<div class="label">选择控制器：</div>
+						<div class="label">选择交换机：</div>
 						<mdl-select ng-model="chartModel.selectedData"
 												display-label="dataOptions">
 						</mdl-select>
@@ -13,14 +13,15 @@
 
 				<div class="input_item">
 					<div class="label">时间区间：</div>
-					<div><input type="datetime-local" ng-model="chartModel.beginTime" value="{{beginTime}}"/></div>
+					<div><input type="datetime-local" ng-model="chartModel.beginTime" ng-change="timeChange()" value="{{beginTime}}"/></div>
 					<div class="label">至</div>
-					<div><input type="datetime-local" ng-model="chartModel.endTime" value="{{endTime}}"/></div>
+					<div><input type="datetime-local" ng-model="chartModel.endTime" ng-change="timeChange()" value="{{endTime}}"/></div>
+					<span class="error" ng-show="chartModel.errMsg" ng-bind="chartModel.errMsg"></span>
 				</div>
     </div>
     <div class="column-manipulation-field__footer">
         <div style="display: inline-block;float: right; margin-left: 15px;">
-            <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" />
+            <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="invalid" />
         </div>
 
         <div style="display: inline-block;float: right;">
