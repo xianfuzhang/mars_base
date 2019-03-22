@@ -11,7 +11,7 @@ class AliasProvider {
       'apis': path.resolve('src/apis/'),
       'localStore': path.resolve('src/libs/localstore/'),
       'crypto': path.resolve('src/libs/crypto/'),
-      'eventEmitter': path.resolve('src/libs/eventEmitter/')
+      'eventEmitter': path.resolve('src/libs/eventEmitter/'),
     };
   }
 
@@ -53,7 +53,8 @@ class AliasProvider {
       'datePicker': path.resolve('src/components/date-picker'),
       'jsonEditor': path.resolve('src/components/jsoneditor'),
       'gradientScale': path.resolve('src/components/gradient-scale'),
-      'splineChart': path.resolve('src/components/spline-chart')
+      'splineChart': path.resolve('src/components/spline-chart'),
+	    'marChart': path.resolve('src/components/mar-chart')
     };
   }
 

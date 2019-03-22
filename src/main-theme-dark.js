@@ -5,6 +5,7 @@ import 'angular-cookies';
 import 'angular-route';
 import 'angular-translate';
 import 'angular-ui-bootstrap';
+import 'angular-material';
 
 import 'lodashService';
 import 'crypto';
@@ -14,7 +15,7 @@ import 'easing';
 import 'apis';
 import 'localStore';
 import 'ngTable';
-import 'eventEmitter'
+import 'eventEmitter';
 
 import 'login';
 import 'dashboard';
@@ -48,11 +49,13 @@ import 'marButton';
 import 'jsonEditor';
 import 'gradientScale';
 import 'splineChart';
+import 'marChart';
 
 import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, mainCtrl} from './base';
 
 angular
   .module('marsApp', [
+    'ngMaterial',
     'ngRoute',
     'ngCookies',
     'ui.bootstrap',
@@ -97,7 +100,8 @@ angular
     'marButton',
     'jsonEditor',
     'gradientScale',
-    'splineChart'
+    'splineChart',
+    'marChart'
   ])
   .factory('setLanguage', ['$q', setLanguage])
   .config(['$translateProvider', configTranslate])

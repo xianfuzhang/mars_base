@@ -14,7 +14,7 @@ export class  InputFilenameDialogController {
 			this.di[value] = args[index];
 		});
 		this.scope = this.di.$scope;
-		this.scope.fileNameRegex = /^[\w\-.]+$/i;
+		this.scope.fileNameRegex = '^[\w\-.]+$';
 		this.scope.dialogModel = {
 			filename: ''
 		};

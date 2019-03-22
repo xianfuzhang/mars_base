@@ -8,55 +8,64 @@
             <span ng-bind="::'MODULE.HEADER.MANAGE.ELASTICSEARCH' | translate"></span>
         </content-header>
 
-        <div class="flex_entirety__body__body" style="margin:0 auto;">
-            <div class="dashboard__horizontal_box">
-                <div>
-                    <mar-section s-title="空间占用情况统计" no-fold="true" class="detail_summary dash_mar_section">
-                        <transclude-body>
-                            <div class="content_panel_parent">
-                                <content-panel is-load="panelLoading.controller">
-                                    <div>
-                                        <div id="indice-summary" class="content_panel_dash_chart"></div>
-                                    </div>
-                                </content-panel>
-                            </div>
-                        </transclude-body>
-                    </mar-section>
+        <div class="flex_entirety__body__body dashboard__body">
+            <div class="mars-row">
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md" style="width:100%;position:relative;">
+                        <canvas id="elasticsearch-indice-summary" height="90"
+                                class="chart chart-bar"
+                                chart-type="bar"
+                                chart-data="indiceSummaryChartConfig.data"
+                                chart-labels="indiceSummaryChartConfig.labels"
+                                chart-colors="indiceSummaryChartConfig.colors"
+                                chart-series="indiceSummaryChartConfig.series"
+                                chart-options="indiceSummaryChartConfig.options"
+                                chart-click="indiceSummaryChartConfig.onClick">
+                        </canvas>
 
-                    <div style="display:inline-block;margin-top:20px;margin-left: 90px;">
-                        <mar-button btn-style="'width:150px;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.BACKUP' | translate" btn-class="'btn-white btn-lg'" btn-icon="'backup'" btn-click="backup()" btn-disabled="loading" />
-                    </div>
-                    <div style="display:inline-block;margin-top:20px;margin-left: 20px">
-                        <mar-button btn-style="'width:150px;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.DOWNLOAD' | translate" btn-class="'btn-black btn-lg'" btn-icon="'cloud_download'" btn-click="download()" btn-disabled="loading" />
+                        <div class="setting-group">
+                            <div class="item" title="备份" ng-click="backup()"><i class="material-icons">backup</i></div>
+                        </div>
+                        <!--<div style="margin:0 auto;width:500px;">-->
+                            <!--<div style="display:inline-block;margin-top:20px;margin-left: 90px;">-->
+                                <!--<mar-button btn-style="'width:150px;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.BACKUP' | translate" btn-class="'btn-white btn-lg'" btn-icon="'backup'" btn-click="backup()" btn-disabled="loading" />-->
+                            <!--</div>-->
+                            <!--<div style="display:inline-block;margin-top:20px;margin-left: 20px">-->
+                                <!--<mar-button btn-style="'width:150px;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.DOWNLOAD' | translate" btn-class="'btn-black btn-lg'" btn-icon="'cloud_download'" btn-click="download()" btn-disabled="loading" />-->
+                            <!--</div>-->
+                        <!--</div>-->
                     </div>
                 </div>
 
-                <div>
-                    <mar-section s-title="收录数据总量时间分布" no-fold="true"
-                                 class="detail_summary dash_mar_section memory_rate">
-                        <transclude-title>
-                            <mdl-select ng-model="dashboardModel.indiceSelectedOption"
-                                        display-label="{options: dashboardModel.indiceOptions}"
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md" style="width:100%;position:relative;">
+                        <canvas id="elasticsearch-indice-analyzer" height="100"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-fill="true"
+                                chart-data="indiceAnalyzerChartConfig.data"
+                                chart-labels="indiceAnalyzerChartConfig.labels"
+                                chart-series="indiceAnalyzerChartConfig.series"
+                                chart-options="indiceAnalyzerChartConfig.options"
+                                chart-click="indiceAnalyzerChartConfig.onClick"
+                                chart-hover="indiceAnalyzerChartConfig.onHover">
+                        </canvas>
+
+                        <div class="setting-group">
+                            <mdl-select ng-model="elasticsearchModel.indiceSelectedOption"
+                                        display-label="{options: elasticsearchModel.indiceOptions}"
                                         disable="loading"
                                         ng-change="indiceSelect($value)">
                             </mdl-select>
-                        </transclude-title>
-                        <transclude-body>
-                            <div class="content_panel_parent">
-                                <content-panel is-load="panelLoading.controller">
-                                    <div>
-                                        <div id="indiceAnalyzer" class="content_panel_dash_chart"></div>
-                                    </div>
-                                </content-panel>
-                            </div>
-                        </transclude-body>
-
-                    </mar-section>
-
-                    <div style="margin-top:20px;margin-left: 180px">
-                        <mar-button btn-style="'width:200px;background:#0077cb;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.REMOVE' | translate" btn-class="'btn-black btn-lg'" btn-icon="'delete_forever'" btn-click="clear()" btn-disabled="loading" />
+                            <div class="item" title="恢复时间区间" ng-click="resetTimeScale()"><i class="material-icons">undo</i></div>
+                            <div class="item" title="清理空间" ng-click="clear()"><i class="material-icons">delete_forever</i></div>
+                        </div>
+                        <!--<div style="margin-top:20px;margin-left: 180px;">-->
+                            <!--<mar-button btn-style="'width:200px;background:#0077cb;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.REMOVE' | translate" btn-class="'btn-black btn-lg'" btn-icon="'delete_forever'" btn-click="clear()" btn-disabled="loading" />-->
+                        <!--</div>-->
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     </div>

@@ -95,6 +95,7 @@
     height: 40px;
     line-height: 40px;
     padding: 5px 0;
+    color: #fff;
     border-bottom: 1px solid #777;
     //background-color: #7accef;
     background: linear-gradient(to right, #99a9c1, #8ed6f3, #5d90a5 98%, #6c909c);
@@ -144,17 +145,18 @@
         //background: -ms-linear-gradient(left,#ECF0F0,#BCBCBC);
         //background: linear-gradient(left,#ECF0F0,#BCBCBC);
         border-bottom: 1px solid #666666;
-        color: #fff;
+        color: map_get($colors, body_color);
         white-space: nowrap;
         overflow: hidden;
         cursor: pointer;
 
         &:hover {
-          background-color: #808080;
+          background-color: #101010;
         }
 
         @include state(active) {
-          background-color: #808080;
+          background-color: #000;
+          color: #fff;
         }
       }
     }
@@ -166,6 +168,7 @@
       width: 567px;
       background: #282828;
       box-sizing: border-box;
+      //box-sizing: border-box;
       overflow: auto;
   
       @include state(single) {
@@ -219,7 +222,7 @@
 
     @include element(btn) {
       display: inline-block;
-      margin: 10px 5px 0;
+      margin: 7px 5px 0;
     }
   }
 }
@@ -261,7 +264,7 @@
       border: 1px solid darkgray;
       box-sizing: border-box;
       border-radius: 5px;
-      background-color: lightgray;
+      background-color: map_get($colors, input_background_color);
     }
     
     @include element(text-prefix) {
@@ -307,7 +310,7 @@
 }
 
 .wizard__body .mdc-form-field > label {
-  color: #fff;
+  color: map_get($colors, body_color);
 }
 
 .wizard__body .mdc-radio .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background .mdc-radio__outer-circle {

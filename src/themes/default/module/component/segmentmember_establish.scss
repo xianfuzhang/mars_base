@@ -83,6 +83,35 @@
   padding: 12px 30px 12px 12px;
   position: relative;
   box-shadow: 2px 2px 2px lightgray;
+  transition: all .5s linear;
+  overflow: hidden;
+}
+
+
+.inline_content .item.ng-enter{
+  animation: enter_anim 0.5s cubic-bezier(.55, 0, .55, .2);
+}
+@keyframes enter_anim {
+  from{
+    max-height: 0px;
+    opacity: 0;
+  }
+  to {
+    max-height: 200px;
+    opacity: 1;
+  }
+}
+
+
+.item.ng-leave,.item.ng-move {
+  animation: leave_anim 0.5s cubic-bezier(.55, 0, .55, .2);
+}
+
+@keyframes leave_anim {
+  to {
+    max-height: 0px;
+    opacity: 0;
+  }
 }
 
 .inline_content .item .type{

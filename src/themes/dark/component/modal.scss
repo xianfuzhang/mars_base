@@ -78,7 +78,8 @@
   flex-direction: column;
   overflow: hidden;
   flex-grow: 1;
-  border: 1px solid #4D4D4D;
+  //border: 1px solid #4D4D4D;
+  box-shadow: 2px 2px 12px black;
 }
 .x-icon {
   position: absolute;
@@ -175,5 +176,5 @@
 }
 
 .modalWizard .jsoneditor-field, .jsoneditor-value {
-  color: #ffffff;
+  color: map_get($colors, body_color);
 }
