@@ -49,6 +49,12 @@ export class tablePagination {
           1 : Math.ceil(scope.tableModel.pagination.totalItemCount / scope.tableModel.pagination.number);
       }
       scope._selectPage(1);
+     //当filteredData数据变少时不会触发table-render-ready指令$last === true，需要手动触发
+      if (scope.tableModel.pagination.number < scope.preNumber) {
+        this.di.$timeout(() =>{
+          scope.$emit('table-render-ready');  
+        });
+      }
     };
 
     scope._selectPage = (page) => {
@@ -64,15 +70,7 @@ export class tablePagination {
           scope.tableModel.filteredData.forEach((item) => {
             item.isChecked = false;
           });
-          //当filteredData数据变少时不会触发table-render-ready指令$last === true，需要手动触发
-          if (scope.tableModel.pagination.number > scope.preNumber) {
-            scope._render();  
-          }
-          else {
-            this.di.$timeout(() =>{
-              scope.$emit('table-render-ready');  
-            });
-          }
+          scope._render();
         }
       }
     };
