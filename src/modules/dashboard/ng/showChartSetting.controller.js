@@ -42,11 +42,28 @@ export class ShowChartSettingController {
 		];
 		
 		scope.dataOptions = { options: [{label:'-- 全部 --', value:''}]};
+		
+    // TODO: array handle
+		let selectedData = this.di.dataModel.selectedData[0];
+    
+    scope.chartModel = {
+      beginTime: this.di.dataModel.beginTime,
+      endTime: this.di.dataModel.endTime,
+      selectedData: scope.dataOptions[0]
+    };
+    
 		this.di.dataModel.chartDataArr.forEach((data) => {
 			scope.dataOptions.options.push({
 				label: data,
 				value: data
 			})
+			
+			if(data == selectedData) {
+        scope.chartModel.selectedData = {
+          label: data,
+          value: data
+        }
+			}
 		})
 		
 		this.date = this.di.$filter('date');
@@ -57,16 +74,27 @@ export class ShowChartSettingController {
 		let endTime = this.di.dataModel.endTime;
 		scope.endTime = this.date(endTime, 'yyyy-MM-dd\'T\'HH:mm');
 		
-    scope.chartModel = {
-    	beginTime: this.di.dataModel.beginTime,
-	    endTime: this.di.dataModel.endTime,
-	    selectedData: scope.dataOptions[0]
-    };
-    
     let init = () => {
     
     };
 
+    scope.timeChange = () => {
+    	let range = (scope.chartModel.endTime.getTime() - scope.chartModel.beginTime.getTime()) / 1000
+	    if(range > 24 * 3600) {
+        scope.chartModel.errMsg = '时间区间不能超过24h';
+        scope.invalid = true;
+	    } else if(range <= 0) {
+        scope.chartModel.errMsg = '时间区间不合法';
+        scope.invalid = true;
+      } else if(range < 30 * 60) {
+        scope.chartModel.errMsg = '时间区间不能小于30分钟';
+        scope.invalid = true;
+      } else {
+        scope.chartModel.errMsg = '';
+        scope.invalid = false;
+	    }
+    }
+    
     scope.cancel = (event) => {
       this.di.$modalInstance.dismiss({
         canceled: true
@@ -78,7 +106,7 @@ export class ShowChartSettingController {
       this.di.$modalInstance.close({
         canceled: false,
         data: {
-          selectedData: scope.chartModel.selectedData.value,
+          selectedData: scope.chartModel.selectedData.value ? [scope.chartModel.selectedData.value] : [],
 	        beginTime: scope.chartModel.beginTime,
 	        endTime: scope.chartModel.endTime,
         }
