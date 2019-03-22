@@ -53,26 +53,28 @@ export class mdlSelect {
       const targetClientRect = target.getBoundingClientRect();
       return {
         'left': targetClientRect.left,
-        'top': targetClientRect.bottom,
-        'bottom': targetClientRect.top,
+        'top': targetClientRect.top,
+        'bottom': targetClientRect.bottom,
         'width': targetClientRect.width
       };
     }
 
     let autoPosition = (menuEl, coordinate) => {
       const menuClientRect = menuEl.getBoundingClientRect();
-      scope.windowScroll = {x: window.pageXOffset, y: window.pageYOffset};//页面出现滚动轴拖动会产生偏移
+      scope.scroll = {
+        'x': document.body.scrollWidth - document.body.clientWidth, 
+        'y': document.body.scrollHeight - document.body.clientHeight
+      };//页面出现滚动轴拖动会产生偏移
       scope.verticalAlign = 'top';
       scope.bodyHeight = this.di.$window.document.body.scrollHeight;
-      if (coordinate.top + menuClientRect.height > scope.bodyHeight) {
+      if (coordinate.bottom + menuClientRect.height > scope.bodyHeight) {
         scope.verticalAlign = 'bottom';
       }
-
+      //fixed布局在有滚动轴情况下根据bottom放置有问题，全部使用top放置
       angular.element(menuEl).css({
-        'top': scope.verticalAlign === 'top' ? coordinate.top + scope.windowScroll.y + 'px' : '',
-        'bottom': scope.verticalAlign === 'bottom' 
-                  ? (scope.bodyHeight - coordinate.bottom) + scope.windowScroll.y + 'px' : '',
-        'left': coordinate.left + scope.windowScroll.x + 'px',
+        'top': scope.verticalAlign === 'top' ? coordinate.bottom + scope.scroll.y + 'px' 
+                : (coordinate.top - menuClientRect.height) + scope.scroll.y + 'px',
+        'left': coordinate.left + scope.scroll.x + 'px',
         'width': 'auto',
         'min-width': coordinate.width + 'px'
       });
@@ -81,17 +83,16 @@ export class mdlSelect {
     let fixTransformInfluence = (menuEl, coordinate) => {
       const menuClientRect = menuEl.getBoundingClientRect();
       //transform会影响fixed position布局,计算出影响的偏移量
-      let xOffset = menuClientRect.left - coordinate.left > 0 ? menuClientRect.left - coordinate.left : 0,
-        yOffset = scope.verticalAlign === 'top' 
-            ? menuClientRect.top - coordinate.top > 0 ? menuClientRect.top - coordinate.top : 0
-            : menuClientRect.bottom - coordinate.bottom > 0 ? menuClientRect.bottom - coordinate.bottom : 0;
-
+      let xOffset = Math.abs(menuClientRect.left - coordinate.left) === 0 ? 
+                    Math.abs(menuClientRect.left - coordinate.left) : 0,
+          yOffset = scope.verticalAlign === 'top' 
+            ? menuClientRect.top - coordinate.bottom > 0 ? menuClientRect.top - coordinate.bottom : 0
+            : coordinate.top - menuClientRect.bottom > 0 ? coordinate.top - menuClientRect.bottom : 0;
       if (xOffset > 0 || yOffset > 0) {
         angular.element(menuEl).css({
-          'top': scope.verticalAlign === 'top' ? coordinate.top - yOffset + scope.windowScroll.y + 'px' : '',
-          'bottom': scope.verticalAlign === 'bottom' 
-                    ? (scope.bodyHeight - coordinate.bottom - yOffset) + scope.windowScroll.y + 'px' : '',
-          'left': coordinate.left - xOffset + scope.windowScroll.x + 'px'
+          'top': scope.verticalAlign === 'top' ? coordinate.bottom - yOffset + scope.scroll.y + 'px' 
+                  : coordinate.top - menuClientRect.height - yOffset + scope.scroll.y + 'px',
+          'left': coordinate.left - xOffset + scope.scroll.x + 'px'
         });
       }
     };
