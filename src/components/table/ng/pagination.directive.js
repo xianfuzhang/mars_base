@@ -33,7 +33,6 @@ export class tablePagination {
       'label':this.di.tableConsts.CONST.PAGINATION.defaultPageSize,
       'value':this.di.tableConsts.CONST.PAGINATION.defaultPageSize
     };
-    scope.preNumber = scope.model.value;
     scope.numPages = 1;
     scope.currentPage = 1;
     scope.pageStart = 0;
@@ -41,7 +40,6 @@ export class tablePagination {
     scope.pages = [];
 
     scope._changeSelect = ($value) => {
-      scope.preNumber = scope.model.value;
       scope.model = $value;
       if (!scope._isNeedPagination) {
         scope.tableModel.pagination.number = scope.model.value;
@@ -49,12 +47,6 @@ export class tablePagination {
           1 : Math.ceil(scope.tableModel.pagination.totalItemCount / scope.tableModel.pagination.number);
       }
       scope._selectPage(1);
-     //当filteredData数据变少时不会触发table-render-ready指令$last === true，需要手动触发
-      if (scope.tableModel.pagination.number < scope.preNumber) {
-        this.di.$timeout(() =>{
-          scope.$emit('table-render-ready');  
-        });
-      }
     };
 
     scope._selectPage = (page) => {
@@ -71,6 +63,11 @@ export class tablePagination {
             item.isChecked = false;
           });
           scope._render();
+          //当filteredData数据变少时不会触发table-render-ready指令$last === true，需要手动触发
+          //翻页时下一页数据少不需要滚动轴，此时也需要手动触发
+          this.di.$timeout(() =>{
+            scope.$emit('table-render-ready');  
+          });
         }
       }
     };
