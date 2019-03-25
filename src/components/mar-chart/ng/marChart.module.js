@@ -110,7 +110,7 @@ export function ChartJsProvider () {
 				// Boolean to enable zooming
 				enabled: true,
 				// Drag-to-zoom rectangle style can be customized
-				backgroundColor: 'rgb(225,225,225,0.3)',
+				backgroundColor: theme == 'theme_default' ? 'rgb(0,0,0,0.2)' : 'rgb(225,225,225,0.3)',
 				// Zooming directions. Remove the appropriate direction to disable
 				mode: 'x',
 			}
