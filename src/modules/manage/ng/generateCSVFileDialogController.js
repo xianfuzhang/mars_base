@@ -4,6 +4,7 @@ export class  GenerateCSVFileDialogController {
 			'$scope',
 			'$modalInstance',
 			'$q',
+			'$filter',
 			'dataModel',
 			'_',
 			'dateService',
@@ -33,6 +34,8 @@ export class  GenerateCSVFileDialogController {
 	    indice: this.di.dataModel.indiceName,
 	    size: this.di.dataModel.indiceSize
     }
+    
+    this.scope.title = this.di.$filter('translate')("MODULES.MANAGE.ELASTICSEARCH.BUTTON.DOWNLOAD") + ' ' + this.di.dataModel.indiceName;
     
     // listen the json content change function
     let onChangeText = (stringText) => {
