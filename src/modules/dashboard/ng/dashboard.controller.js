@@ -56,7 +56,7 @@ export class DashboardController {
     };
     let date = this.di.dateService.getTodayObject();
     let before = this.di.dateService.getBeforeDateObject(30*60*1000); // 前30分钟
-    const GRID_NUM = 30; // chart grid number
+    const GRID_NUM = 24; // chart grid number
     let begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
     let end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
     this.di.$scope.dashboardModel = {
@@ -74,7 +74,8 @@ export class DashboardController {
 		    'step': 60,
 		    'origin_begin_time': begin_time,
 		    'origin_end_time': end_time,
-		    'analyzer': []
+		    'analyzer': [],
+        selectedData: [],
 	    },
 	    memory: {
 		    'begin_time': begin_time,
@@ -82,7 +83,9 @@ export class DashboardController {
 		    'step': 60,
 		    'origin_begin_time': begin_time,
 		    'origin_end_time': end_time,
-		    'analyzer': []
+		    'analyzer': [],
+        selectedData: [],
+        
 	    },
 	    controller: {
 		    cpu: {
@@ -91,7 +94,8 @@ export class DashboardController {
 			    'step': 60,
 			    'origin_begin_time': begin_time,
 			    'origin_end_time': end_time,
-			    'analyzer': []
+			    'analyzer': [],
+          selectedData: [],
 		    },
 		    memory: {
 			    'begin_time': begin_time,
@@ -99,7 +103,8 @@ export class DashboardController {
 			    'step': 60,
 			    'origin_begin_time': begin_time,
 			    'origin_end_time': end_time,
-			    'analyzer': []
+			    'analyzer': [],
+          selectedData: [],
 		    },
 	    },
 	    clusterCpuPieChart: {},
@@ -207,7 +212,7 @@ export class DashboardController {
     }
 	
     this.di.$scope.chartSetting = (type) => {
-    	let chartDataArr = [];
+    	let chartDataArr = [], selectedData = [];
 	    let analyzer = [];
 	    let records = [];
 	    let beginTime, endTime;
@@ -221,6 +226,7 @@ export class DashboardController {
 			
 			    beginTime = this.di.$scope.dashboardModel.controller.cpu.begin_time;
 			    endTime = this.di.$scope.dashboardModel.controller.cpu.end_time;
+          selectedData = this.di.$scope.dashboardModel.controller.cpu.selectedData;
 		    	break;
 		    case 'controller-memory':
 			    analyzer = this.di.$scope.dashboardModel.controller.memory.analyzer;
@@ -231,6 +237,7 @@ export class DashboardController {
 			
 			    beginTime = this.di.$scope.dashboardModel.controller.memory.begin_time;
 			    endTime = this.di.$scope.dashboardModel.controller.memory.end_time;
+          selectedData = this.di.$scope.dashboardModel.controller.memory.selectedData;
 			    break;
 		    case 'device-cpu':
 			    analyzer = this.di.$scope.dashboardModel.cpu.analyzer;
@@ -244,6 +251,7 @@ export class DashboardController {
 			
 			    beginTime = this.di.$scope.dashboardModel.cpu.begin_time;
 			    endTime = this.di.$scope.dashboardModel.cpu.end_time;
+          selectedData = this.di.$scope.dashboardModel.cpu.selectedData;
 			    break;
 		    case 'device-memory':
 			    analyzer = this.di.$scope.dashboardModel.memory.analyzer;
@@ -256,6 +264,7 @@ export class DashboardController {
 			
 			    beginTime = this.di.$scope.dashboardModel.memory.begin_time;
 			    endTime = this.di.$scope.dashboardModel.memory.end_time;
+          selectedData = this.di.$scope.dashboardModel.memory.selectedData;
 			    break;
 	    }
 	    
@@ -268,6 +277,7 @@ export class DashboardController {
 			    	return {
 			    		chartType: type,
 					    chartDataArr: chartDataArr,
+              selectedData: selectedData,
 					    beginTime: beginTime,
 					    endTime: endTime
 				    }
@@ -278,12 +288,12 @@ export class DashboardController {
 					let selectedData = [];
 					if(Array.isArray(res.data.selectedData)) {
 						selectedData = res.data.selectedData;
-			    } else if(typeof res.data.selectedData == 'string'){
+			    } else if(typeof res.data.selectedData == 'string' && res.data.selectedData){
 						selectedData = [res.data.selectedData]
 					}
 					switch(type) {
 						case 'controller-cpu':
-							dataModel.selectedClusterCpu = selectedData;
+              scope.dashboardModel.controller.cpu.selectedData = selectedData;
 							
 							scope.dashboardModel.controller.cpu.origin_begin_time = res.data.beginTime;
 							scope.dashboardModel.controller.cpu.origin_end_time = res.data.endTime;
@@ -292,7 +302,7 @@ export class DashboardController {
 							scope.dashboardModel.controller.cpu.step = Math.floor((scope.dashboardModel.controller.cpu.origin_end_time.getTime() - scope.dashboardModel.controller.cpu.origin_begin_time) / (GRID_NUM * 1000));
 							break;
 						case 'controller-memory':
-							dataModel.selectedClusterMemory = selectedData;
+              scope.dashboardModel.controller.memory.selectedData = selectedData;
 							
 							scope.dashboardModel.controller.memory.origin_begin_time = res.data.beginTime;
 							scope.dashboardModel.controller.memory.origin_end_time = res.data.endTime;
@@ -301,7 +311,7 @@ export class DashboardController {
 							scope.dashboardModel.controller.memory.step = Math.floor((scope.dashboardModel.controller.memory.origin_end_time.getTime() - scope.dashboardModel.controller.memory.origin_begin_time) / (GRID_NUM * 1000));
 							break;
 						case 'device-cpu':
-							dataModel.selectedSwitchCpu = selectedData;
+              scope.dashboardModel.cpu.selectedData = selectedData;
 							
 							scope.dashboardModel.cpu.origin_begin_time = res.data.beginTime;
 							scope.dashboardModel.cpu.origin_end_time = res.data.endTime;
@@ -310,7 +320,7 @@ export class DashboardController {
 							scope.dashboardModel.cpu.step = Math.floor((scope.dashboardModel.cpu.origin_end_time.getTime() - scope.dashboardModel.cpu.origin_begin_time) / (GRID_NUM * 1000));
 							break;
 						case 'device-memory':
-							dataModel.selectedSwitchMemory = selectedData;
+              scope.dashboardModel.memory.selectedData = selectedData;
 							
 							scope.dashboardModel.memory.origin_begin_time = res.data.beginTime;
 							scope.dashboardModel.memory.origin_end_time = res.data.endTime;
@@ -935,7 +945,7 @@ export class DashboardController {
 			  let end = new Date(getISODate(new Date(ticks[endIndex])));
 			  let endTime =  end.getTime();
 			  let step = Math.floor((endTime - startTime) / ((ticks.length - 1) * 1000));
-			  step = step < 30 ? 30 : step;
+			  step = step < 30 ? 30 : step > 3600 ? 3600 : step;
 			
 			  switch(chartType) {
 				  case 'cluster-cpu-chart':
@@ -1080,11 +1090,13 @@ export class DashboardController {
 	  let getFilteredDataModel = (type) => {
 		  let dataArr = [];
 		
+		  let selectedData = [];
 		  switch(type) {
 			  case 'controller-cpu':
-				  if(Array.isArray(dataModel.selectedClusterCpu) && dataModel.selectedClusterCpu.length > 0) {
+          selectedData = scope.dashboardModel.controller.cpu.selectedData;
+				  if(Array.isArray(selectedData) && selectedData.length > 0) {
 					  dataModel.cluster.forEach((data) => {
-						  if(dataModel.selectedClusterCpu.indexOf(data.id) > -1) {
+						  if(selectedData.indexOf(data.name) > -1) {
 							  dataArr.push(data)
 						  }
 					  })
@@ -1094,9 +1106,10 @@ export class DashboardController {
 				
 				  break;
 			  case 'controller-memory':
-				  if(Array.isArray(dataModel.selectedClusterMemory) && dataModel.selectedClusterMemory.length > 0) {
+          selectedData = scope.dashboardModel.controller.memory.selectedData;
+          if(Array.isArray(selectedData) && selectedData.length > 0) {
 					  dataModel.cluster.forEach((data) => {
-						  if(dataModel.selectedClusterMemory.indexOf(data.id) > -1) {
+						  if(selectedData.indexOf(data.name) > -1) {
 							  dataArr.push(data)
 						  }
 					  })
@@ -1105,9 +1118,10 @@ export class DashboardController {
 				  }
 				  break;
 			  case 'device-cpu':
-				  if(Array.isArray(dataModel.selectedSwitchCpu) && dataModel.selectedSwitchCpu.length > 0) {
+          selectedData = scope.dashboardModel.cpu.selectedData;
+          if(Array.isArray(selectedData) && selectedData.length > 0) {
 					  dataModel.configDevices.forEach((data) => {
-						  if(dataModel.selectedSwitchCpu.indexOf(data.id) > -1) {
+						  if(selectedData.indexOf(data.name) > -1) {
 							  dataArr.push(data)
 						  }
 					  })
@@ -1116,9 +1130,10 @@ export class DashboardController {
 				  }
 				  break;
 			  case 'device-memory':
-				  if(Array.isArray(dataModel.selectedSwitchMemory) && dataModel.selectedSwitchMemory.length > 0) {
+          selectedData = scope.dashboardModel.memory.selectedData;
+          if(Array.isArray(selectedData) && selectedData.length > 0) {
 					  dataModel.configDevices.forEach((data) => {
-						  if(dataModel.selectedSwitchMemory.indexOf(data.id) > -1) {
+						  if(selectedData.indexOf(data.name) > -1) {
 							  dataArr.push(data)
 						  }
 					  })
@@ -1190,7 +1205,7 @@ export class DashboardController {
     });
 	
 	  let clusterCpuTimeHasChanged = false;
-	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.controller.cpu.begin_time', 'dashboardModel.controller.cpu.end_time'], (a,b,c,d) => {
+	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.controller.cpu.begin_time', 'dashboardModel.controller.cpu.end_time', 'dashboardModel.controller.cpu.selectedData'], () => {
 		  if(!clusterCpuTimeHasChanged) {
 			  clusterCpuTimeHasChanged = true;
 			  return;
@@ -1235,7 +1250,7 @@ export class DashboardController {
 	  },true));
 	
 	  let clusterMemoryTimeHasChanged = false;
-	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.controller.memory.begin_time', 'dashboardModel.controller.memory.end_time'], (a,b,c,d) => {
+	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.controller.memory.begin_time', 'dashboardModel.controller.memory.end_time', 'dashboardModel.controller.memory.selectedData'], () => {
 		  if(!clusterMemoryTimeHasChanged) {
 			  clusterMemoryTimeHasChanged = true;
 			  return;
@@ -1279,7 +1294,7 @@ export class DashboardController {
 	  },true));
 	
 	  let cpuTimeHasChanged = false;
-	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.cpu.begin_time', 'dashboardModel.cpu.end_time'], (a,b,c,d) => {
+	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.cpu.begin_time', 'dashboardModel.cpu.end_time', 'dashboardModel.cpu.selectedData'], () => {
 		  if(!cpuTimeHasChanged) {
 			  cpuTimeHasChanged = true;
 			  return;
@@ -1288,7 +1303,7 @@ export class DashboardController {
 		  this.getDevicesCPUAnalyzer(getFilteredDataModel('device-cpu')).then(() => {
 			  //memory analyzer
 			  let dataArr = [];
-			  let records = this.getDevicesCPUAnalyzer(this.di.$scope.dashboardModel.cpu.analyzer);
+			  let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer);
 			
 			  if(records.length) {
 				  records.forEach((item, index) =>{
@@ -1323,7 +1338,7 @@ export class DashboardController {
 	  },true));
 	  
     let memoryTimeHasChanged = false;
-	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.memory.begin_time', 'dashboardModel.memory.end_time'], (a,b,c,d) => {
+	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.memory.begin_time', 'dashboardModel.memory.end_time', 'dashboardModel.memory.selectedData'], () => {
 		  if(!memoryTimeHasChanged) {
 			  memoryTimeHasChanged = true;
 		  	return;

@@ -190,6 +190,9 @@
   cursor: pointer;
   margin-left: 20px;
 }
+.dashboard__body .left-panel .setting-group .item:hover {
+  color: #a1a1a1;
+}
 .dashboard__body .right-panel{
   flex-grow:1;position:relative;
 }
@@ -315,10 +318,9 @@
 .show-chart-setting-modal .content {
   width: 200px;
   height: auto;
-  margin: 10px auto;
+  margin: 0 auto;
   padding: 10px 30px;
   font-size: 13px;
-  border: 1px solid #282828;
   border-radius: 5px;
 }
 
@@ -331,7 +333,7 @@
 }
 
 .show-chart-setting-modal .content .input_item {
-  padding: 10px 0;
+  padding: 5px 0;
 }
 
 .show-chart-setting-modal .content .input_item input{
@@ -341,5 +343,11 @@
 .show-chart-setting-modal .content .input_item .label{
   font-weight: bold;
   padding:5px 0;
+}
+
+.show-chart-setting-modal .content .input_item .error{
+  font-weight: bold;
+  padding-top:5px;
+  color: orangered;
 }
 
