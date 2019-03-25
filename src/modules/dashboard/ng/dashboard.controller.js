@@ -76,6 +76,7 @@ export class DashboardController {
 		    'origin_end_time': end_time,
 		    'analyzer': [],
         selectedData: [],
+        loading: true
 	    },
 	    memory: {
 		    'begin_time': begin_time,
@@ -85,6 +86,7 @@ export class DashboardController {
 		    'origin_end_time': end_time,
 		    'analyzer': [],
         selectedData: [],
+        loading: true
         
 	    },
 	    controller: {
@@ -96,6 +98,7 @@ export class DashboardController {
 			    'origin_end_time': end_time,
 			    'analyzer': [],
           selectedData: [],
+          loading: true
 		    },
 		    memory: {
 			    'begin_time': begin_time,
@@ -105,6 +108,7 @@ export class DashboardController {
 			    'origin_end_time': end_time,
 			    'analyzer': [],
           selectedData: [],
+          loading: true
 		    },
 	    },
 	    clusterCpuPieChart: {},
@@ -118,28 +122,32 @@ export class DashboardController {
 		  labels: [],
 			options: {},
 		  series: [],
-			onClick: () => {}
+			onClick: () => {},
+      isRealtime: false
 	  }
 	  this.di.$scope.clusterMemoryChartConfig = {
 		  data: [],
 		  labels: [],
 			options: {},
 		  series: [],
-			onClick: () => {}
+			onClick: () => {},
+      isRealtime: false
 	  }
 	  this.di.$scope.switchCpuChartConfig = {
 		  data: [],
 		  labels: [],
 			options: {},
 		  series: [],
-			onClick: () => {}
+			onClick: () => {},
+      isRealtime: false
 	  }
 	  this.di.$scope.switchMemoryChartConfig = {
 		  data: [],
 		  labels: [],
 			options: {},
 		  series: [],
-			onClick: () => {}
+			onClick: () => {},
+      isRealtime: false
 	  }
 	  this.di.$scope.clusterCpuPieChartConfig = {
 		  data: [],
@@ -345,12 +353,22 @@ export class DashboardController {
 
       this.di.dashboardDataManager.getCluster().then((res)=>{
         dataModel['cluster'] = res;
+        clusterDefer.resolve();
+        
         if(this.di.$scope.isAnalyzeEnable){
-          this.getClusterCPUMemoryStatisticFromLS(res).then(() => {
-            clusterDefer.resolve();
-          });
-        } else {
-          clusterDefer.resolve();
+          this.getClustersCPUAnalyzer(res).then(() => {
+            setClusterCPUChartData();
+            di.$scope.dashboardModel.controller.cpu.loading = false;
+          }, () => {
+            console.error("Can't get controller cpu analyzer data.");
+          })
+          
+          this.getClustersMemoryAnalyzer(res).then(() => {
+            setClusterMemoryChartData();
+            di.$scope.dashboardModel.controller.memory.loading = false;
+          }, () => {
+            console.error("Can't get controller memory analyzer data.");
+          })
         }
       });
       promises.push(clusterDefer.promise);
@@ -365,14 +383,23 @@ export class DashboardController {
         this.di.deviceDataManager.getDevices().then((res)=>{
           dataModel['configDevices'] = configs;
           dataModel['devices'] = this.di.deviceService.getAllDevices(configs, res.data.devices);
+          devicesDefer.resolve();
+          
           if(this.di.$scope.isAnalyzeEnable){
-            this.getSwitchesCPUMemoryStatisticFromLS(configs).then(() => {
-              devicesDefer.resolve();
+            this.getDevicesCPUAnalyzer(configs).then(() => {
+              setSwitchCpuChartData();
+              di.$scope.dashboardModel.cpu.loading = false;
+            }, (err) => {
+              console.error("Can't get device cpu analyzer data.");
             });
-          } else {
-            devicesDefer.resolve();
+            
+            this.getDevicesMemoryAnalyzer(configs).then(() => {
+              setSwitchMemoryChartData();
+              di.$scope.dashboardModel.memory.loading = false;
+            }, (err) => {
+              console.error("Can't get device memory analyzer data.");
+            });
           }
-
         });
       });
       promises.push(devicesDefer.promise);
@@ -395,26 +422,17 @@ export class DashboardController {
 
       Promise.all(promises).then(()=>{
         let DI = this.di;
-        convertData2View();
+        convertControllerData();
+        convertSwitchData();
+        convertSwitchInterface2Chart();
+        
         DI.$scope.$apply();
         // DI.$rootScope.$emit('stop_loading');
-        DI.$scope.panelRefresh.controller = true;
-        DI.$scope.panelLoading.controller = false;
-        DI.$scope.$apply();
+        // DI.$scope.panelRefresh.controller = true;
+        // DI.$scope.panelLoading.controller = false;
+        // DI.$scope.$apply();
       });
     };
-    
-    function convertData2View() {
-      convertControllerData();
-      convertSwitchData();
-      convertSwitchInterface2Chart();
-      if(di.$scope.isAnalyzeEnable) {
-	      setClusterCPUChartData();
-	      setClusterMemoryChartData();
-	      setSwitchCpuChartData();
-	      setSwitchMemoryChartData();
-      }
-    }
 	
 	  // draw cluster cpu chart: added by yazhou.miao
 	  let setClusterCPUChartData = () => {
@@ -833,7 +851,7 @@ export class DashboardController {
 			  plugins: {
 				  deferred: {
 					  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-					  delay: 2000      // delay of 500 ms after the canvas is considered inside the viewport
+					  delay: 1500      // delay of 500 ms after the canvas is considered inside the viewport
 				  }
 			  },
 			  title: {
@@ -881,7 +899,7 @@ export class DashboardController {
 			  plugins: {
 				  deferred: {
 					  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-					  delay: 2000      // delay of 500 ms after the canvas is considered inside the viewport
+					  delay: 1500      // delay of 500 ms after the canvas is considered inside the viewport
 				  }
 			  },
 			  title: {

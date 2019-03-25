@@ -55,7 +55,9 @@ export class ElasticsearchController {
         'min_time': '',
         'max_time': ''
       },
-      indiceOptions: []
+      indiceOptions: [],
+      summaryLoading: true,
+      analyzerLoading: true
     };
   
     scope.indiceSummaryChartConfig = {
@@ -197,6 +199,7 @@ export class ElasticsearchController {
         });
   
         setIndiceSummaryChartData(dataModel.indices);
+        scope.elasticsearchModel.summaryLoading = false;
   
         if(scope.elasticsearchModel.indiceOptions.length == 0) return;
   
@@ -206,6 +209,7 @@ export class ElasticsearchController {
         // get indice size by time
         this.getIndiceAnalyzer().then( () => {
           setIndiceAnalyzerChartData();
+          scope.elasticsearchModel.analyzerLoading = false;
           scope.loading = false;
         }, () => {
           scope.loading = false;
