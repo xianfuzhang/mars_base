@@ -23,7 +23,7 @@
                                 chart-click="indiceSummaryChartConfig.onClick">
                         </canvas>
 
-                        <div class="setting-group">
+                        <div class="setting-group" ng-show="!elasticsearchModel.summaryLoading">
                             <div class="item" title="备份" ng-click="backup()"><i class="material-icons">backup</i></div>
                         </div>
                         <!--<div style="margin:0 auto;width:500px;">-->
@@ -51,7 +51,7 @@
                                 chart-hover="indiceAnalyzerChartConfig.onHover">
                         </canvas>
 
-                        <div class="setting-group">
+                        <div class="setting-group" ng-show="!elasticsearchModel.analyzerLoading">
                             <mdl-select ng-model="elasticsearchModel.indiceSelectedOption"
                                         display-label="{options: elasticsearchModel.indiceOptions}"
                                         disable="loading"
@@ -69,6 +69,4 @@
             </div>
         </div>
     </div>
-
-    <loading default-closed="true"></loading>
 </div>
