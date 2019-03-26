@@ -357,7 +357,12 @@ export class mdlTable {
         item.isChecked = false;
       });
       //scope.onDataReady();
-      scope._render();
+      if (scope.tableModel.filteredData.length === 0) {
+        scope.$emit('table-render-ready');
+      }
+      else {
+        scope._render();  
+      }
     };
 
     scope._onDataError = () => {
