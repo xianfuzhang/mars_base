@@ -1,4 +1,4 @@
-<nav>
+<nav ng-if="tableModel.filteredData.length > 0">
   <ul class="pagination">
     <li>
       <div class="pagination--page" ng-class="{'pagination--page__small': tableSize === 'small'}">
