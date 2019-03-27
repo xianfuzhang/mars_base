@@ -8,6 +8,7 @@
       <span>{{'MODULE.HEADER.MANAGE.DHCP' | translate}}</span>
     </content-header>
     <section class="app-body">
+      <div class="mars-col-24">
       <div class="main__content">
         <mdl-tabs ng-model="tabSelected" options="tabs"
                   class-list="main__content__device-detail-tabs"
@@ -154,7 +155,7 @@
           </div>
         </section>
         <section class="tab-content" ng-if="tabSelected.type == 'ipmac_mapping'">
-          <mdl-table style="width:600px;" actions-show="dhcpModel.actionsShow"
+          <mdl-table actions-show="dhcpModel.actionsShow"
                      actions="dhcpModel.rowActions"
                      row-select-action="onDHCPTableRowSelectAction($event)"
                      provider="dhcpModel.dhcpTableProvider" api-ready="onDHPAPIReady($api)"
@@ -205,12 +206,13 @@
         </section>
 
         <section class="tab-content" ng-if="tabSelected.type == 'ipmac_mapping_v6'">
-          <mdl-table style="width:800px;" actions-show="dhcpModel.v6actionsShow"
+          <mdl-table actions-show="dhcpModel.v6actionsShow"
                      actions="dhcpModel.v6rowActions"
                      provider="dhcpModel.dhcpv6TableProvider" api-ready="onDHCPV6APIReady($api)"
                     >
           </mdl-table>
         </section>
+      </div>
       </div>
     </section>
   </div>

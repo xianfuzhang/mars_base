@@ -193,14 +193,14 @@
 .license .license__app {
   position: relative;
   width: 100%;
-  height: calc(100% - 50px);
+  height: calc(100% - 80px);
 }
 
 .license .license__upload {
   display: flex;
   position: absolute;
   right: 0;
-  top: -20px;
+  //top: -20px;
 }
 .license .license__upload .save {
   margin-left: 0;
@@ -217,6 +217,10 @@
   opacity: .6;
   font-weight: 700;
   width: 100px;
+}
+.license .mdl-table-field{
+  padding-top: 50px;
+  box-sizing: border-box;
 }
 
 .elasticsearch .mar_section__header{

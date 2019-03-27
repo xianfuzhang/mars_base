@@ -6,7 +6,7 @@
     <span ng-bind="'MODULE.HEADER.MANAGE.LICENSE'|translate"></span>
   </content-header>
   <section class="app-body">
-    <div class="section-3-2">
+    <div class="mars-col-24">
       <div class="main__content license">
         <div class="license__detail">
           <div class="license__row">
@@ -47,7 +47,7 @@
               <mar-button btn-text="'上传'" btn-class="'btn-black btn-sm'" btn-icon="'backup'" btn-disabled="licenseModel.uploadBtnDisable" btn-click="save()" />
             </div>
           </div>
-          <div class="license__app__label">应用列表如下：</div>
+          <!-- <div class="license__app__label">应用列表如下：</div> -->
           <mdl-table provider="licenseModel.licenseTableProvider" api-ready="onApiReady($api)">
           </mdl-table>
         </section>

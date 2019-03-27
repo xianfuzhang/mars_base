@@ -8,25 +8,21 @@
       <span>{{'MODULE.HEADER.MANAGE.NTP' | translate}}</span>
     </content-header>
     <section class="app-body">
+      <div class="mars-col-24">
       <div class="main__content">
         <div class="ntp_switch" style="margin-bottom: 20px;">
           <div class="stepForm__input__label" style="display:inline-block">{{'MODULES.MANAGE.NTP.IS_ENABLE'|translate}}</div>
           <mdl-switch style="vertical-align: top" on-click="changeSwitch()" ng-model="ntpmodel.isEnable" name="ntp_enable" display-label="{on: '是', off: '否', id: 'ntp_enable'}">
           </mdl-switch>
         </div>
-        <div style="height:100%">
-          <!--<mar-section s-title="{{'MODULES.MANAGE.DHCP.TAB.DHCP_SERVER_V6'|translate}}" no-fold="true" class="">-->
-            <!--<transclude-body>-->
-              <mdl-table style="width:300px;" actions-show="ntpmodel.actionsShow"
-                         actions="ntpmodel.rowActions"
-                         row-select-action="onNTPTableRowSelectAction($event)"
-                         provider="ntpmodel.ntpTableProvider" api-ready="onNtpAPIReady($api)"
-                         on-add="add()">
-              </mdl-table>
-            <!--</transclude-body>-->
-          <!--</mar-section>-->
-        </div>
+        <mdl-table actions-show="ntpmodel.actionsShow"
+                   actions="ntpmodel.rowActions"
+                   row-select-action="onNTPTableRowSelectAction($event)"
+                   provider="ntpmodel.ntpTableProvider" api-ready="onNtpAPIReady($api)"
+                   on-add="add()">
+        </mdl-table>
       </div>
+     </div> 
     </section>
   </div>
 

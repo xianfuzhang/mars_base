@@ -12,7 +12,7 @@
                 on-select="onTabChange($value)">
       </mdl-tabs>
       <div style="display:flex;height:100%" ng-if="tabSelected.type == 'segment'">
-        <div class="section-3-2">
+        <div class="mars-col-16">
           <div class="main__content">
             <section class="tab-content">
               <mdl-table actions-show="detailModel.actionsShow"
@@ -25,7 +25,7 @@
             </section>
           </div>
         </div>
-        <div class="section-3-1" ng-if="tabSelected.type === 'segment' && segment">
+        <div class="mars-col-8" ng-if="tabSelected.type === 'segment' && segment">
           <div class="segment-detail">
             <h3 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.TITLE'|translate"></h3>
             <div class="segment-vlan-member" ng-show="segment.type === 'vlan'">
