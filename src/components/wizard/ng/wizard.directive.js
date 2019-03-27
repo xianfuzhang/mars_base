@@ -25,7 +25,7 @@ export class Wizard {
     this.link = (...args) => this._link.apply(this, args);
   }
 
-  _link (scope) {
+  _link (scope, element) {
     let unsubscribers = [];
 
     let init = () => {
@@ -115,6 +115,7 @@ export class Wizard {
           
           if (result.valid == false) {
             scope.errorMessage = result.errorMessage || '';
+            document.getElementsByClassName('wizard__body__right')[0].scrollTop = 0;
           } else {
             // scope.showWizard = false;
             _closeWizard();
@@ -122,6 +123,10 @@ export class Wizard {
 
           scope.$apply();
         });
+    }
+    
+    scope.closeMessage = function() {
+      scope.errorMessage = '';
     }
 
     const sce = this.di.$sce;
