@@ -225,9 +225,9 @@
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: auto;
-  //margin-right: 5px;
+  max-width: 160px;
+  min-width: 80px;
   border-right: 1px solid hsla(0, 0%, 40%, 1);
-  //border-radius: 4px;
   line-height: 2.75rem;
   background-color: hsla(0, 0%, 30%, 1);
   color: #fff;
@@ -253,6 +253,9 @@
 }
 .mdc-tab.mdc-tab--active .mdc-tab__indicator{
   transform: scale3d(1, 1, 1);
+}
+.mdc-tab-scroller__scroll-content{
+  display: flex;
 }
 .mdc-tab-scroller__scroll-content .mdc-tab::after{
   top: 0;
