@@ -643,7 +643,7 @@ export class DeviceDataManager {
           defer.resolve(res);
         },
         (err) => {
-          defer.reject(err);
+          defer.resolve(err);
         }
       );
     return defer.promise;
