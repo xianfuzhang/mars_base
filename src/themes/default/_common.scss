@@ -5,3 +5,7 @@ body{
   background-color: map_get($colors, body_background_color);
   color: map_get($colors, body_color);
 }
+
+:focus {
+  outline: none;
+}
