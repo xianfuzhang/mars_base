@@ -16,7 +16,7 @@
                           on-select="onTabChange($value)">
                 </mdl-tabs>
 
-                <section class="tab-content" ng-show="tabSelected.type == 'realtime'" style="position:relative;height: calc(100% - 50px);">
+                <section class="tab-content" ng-show="tabSelected.type == 'realtime'" style="position:relative;height: calc(100% - 120px);">
                     <div class="realtime-log-actions">
                         <div class="realtime-log-actions__action realtime-log-actions__select" >
                             <mdl-select style="display:inline-flex;"
@@ -46,7 +46,7 @@
 
                 </section>
 
-                <section class="tab-content" ng-if="tabSelected.type == 'history'" style="height: calc(100% - 40px);">
+                <section class="tab-content" ng-if="tabSelected.type == 'history'" style="height: calc(100% - 80px);">
                     <mdl-table actions-show="logModel.actionsShow"
                                actions="logModel.rowActions"
                                provider="logModel.logProvider" api-ready="onLogAPIReady($api)"

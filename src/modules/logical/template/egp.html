@@ -6,7 +6,7 @@
     <span>EGP</span>
   </content-header>
   <section class="app-body tenant-detail">
-    <div class="mars-col-12 ">
+    <div class="mars-col-16">
       <div class="main__content">
         <mdl-tabs ng-model="tabSelected" options="tabs"
                   class-list="main__content__device-detail-tabs"
@@ -32,7 +32,7 @@
         </section>
       </div>
     </div>
-    <div class="mars-col-12 policy-rules" ng-if="tabSelected.type == 'policy' && policyModel.policy">
+    <div class="mars-col-6 policy-rules" ng-if="tabSelected.type == 'policy' && policyModel.policy">
       <h3 ng-bind="policyModel.ruleName"></h3>
       <mdl-table class="policy-rules-table" provider="policyModel.provider" api-ready="onRulesApiReady($api)">
       </mdl-table>
