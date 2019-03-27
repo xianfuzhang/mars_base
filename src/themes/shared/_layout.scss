@@ -74,9 +74,10 @@ input:-webkit-autofill:active {
 .main__content{
   display: flex;
   overflow: hidden;
-  padding: 20px 20px 0;
+  //padding: 20px 20px 0;
+  padding: 24px;
   flex-direction: column;
-  height: calc(100% - 10px);
+  height: 100%;
   width: 100%;
   box-sizing: border-box;
 }
