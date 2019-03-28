@@ -22,7 +22,8 @@ export class updateTableCols {
           bodyElm = element.children().eq(1);
     let unsubscribers = [];
     let cols = []; // {'resize-col-0': element, 'width:' 100, 'hide': false}
-    let body_x_scroll_width = 0, body_y_scroll_width = 0;
+    let body_x_scroll_width = 0, body_y_scroll_width = 0, 
+        table_width = element[0].clientWidth,  origin_table_width = element[0].clientWidth;
 
     //检查thead中是否有th的width小于60px
     let colsMinInspect = () => {
@@ -38,10 +39,6 @@ export class updateTableCols {
     };
     //获取thead中所有的th以及对应的width
     let getColsWidth = () => {
-      // console.log("getColsWidth..., body offsetHeight = " + bodyElm[0].offsetHeight + ", body clientHeight = " + bodyElm[0].clientHeight);
-      // console.log("getColsWidth..., body x scroll = " + (bodyElm[0].offsetHeight - bodyElm[0].clientHeight));
-      // console.log("getColsWidth..., body offsetWidth = " + bodyElm[0].offsetWidth + ", body clientWidth = " + bodyElm[0].clientWidth);
-      // console.log("getColsWidth..., body y scroll = " + (bodyElm[0].offsetWidth - bodyElm[0].clientWidth));
       body_x_scroll_width = bodyElm[0].offsetHeight - bodyElm[0].clientHeight;
       body_y_scroll_width = bodyElm[0].offsetWidth - bodyElm[0].clientWidth;
       if (!cols.length) {
@@ -52,91 +49,7 @@ export class updateTableCols {
           obj['width'] = thElms.eq(i)[0].clientWidth - 2; //table的padding默认是2px
           obj['hide'] = thElms.eq(i).hasClass('ng-hide');
           cols.push(obj);
-          //console.log('get::ColsWidth...index=' + i + ' , width=' + obj['width']);
         }
-      }
-      //update
-      else {
-        // console.log('_last_g_offset:' + _last_g_offset + " ; g_offset:"+ g_offset);
-        let willChangeLen = 0;
-
-        //向右拖
-        if(g_offset === _last_g_offset){
-          return;
-        } else if(g_offset > _last_g_offset){
-          //获取右侧可变框的数量
-          for(let index = 0; index < cols.length ; index ++){
-            if(index > curIndex && cols[index]['width'] > CONST_MIN_WIDTH ){
-              willChangeLen += 1;
-            }
-          }
-          //右侧没有压缩的框，则不发生变动
-          if(willChangeLen === 0){
-            return;
-          }
-          let changedWidth = (g_offset - _last_g_offset)/willChangeLen;
-          for(let index = cols.length -1 ; index >=0 ; index --){
-            let colObj = cols[index];
-            if (!colObj.type) {
-              if(index < curIndex) {
-                //固定左侧的框，防止意外变动
-                colObj['width'] = colObj['width'];
-                colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
-              }else if(index === curIndex){
-                // colObj['width'] = curAllWidth[index] + g_offset;
-                colObj['width'] = colObj['width'] + (g_offset - _last_g_offset);
-                colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
-              } else {
-                // 当前框已经到了最小值
-                if(colObj['width'] <= CONST_MIN_WIDTH){
-                  continue;
-                }
-                colObj['width'] = colObj['width'] - changedWidth;
-                colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
-              }
-            }
-          }
-
-        } else {
-          //向左拖
-          willChangeLen = cols.length - curIndex -1;
-          let changedWidth = (g_offset - _last_g_offset)/willChangeLen;
-          if(cols[curIndex]['width'] <= CONST_MIN_WIDTH){
-            return ;
-          }
-
-          for(let index = cols.length -1 ; index >=0 ; index --){
-            let colObj = cols[index];
-            if (!colObj.type) {
-              if(index < curIndex) {
-                //固定左侧的框，防止意外变动
-                colObj['width'] = colObj['width'];
-                colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
-              }else if(index === curIndex){
-                colObj['width'] = colObj['width'] + (g_offset - _last_g_offset);
-                colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
-              } else {
-                colObj['width'] = colObj['width'] - changedWidth;
-                colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
-              }
-            }
-          }
-        }
-        // cols.forEach((colObj, index) => {
-        //   if (!colObj.type) {
-        //     if(index < curIndex) {
-        //       return;
-        //     }else if(index === curIndex){
-        //       colObj['width'] = curAllWidth[index] + g_offset; //table的padding默认是2px
-        //       colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
-        //     } else {
-        //       // colObj['width'] = colObj['resize-col-' +index].clientWidth - 2; //table的padding默认是2px
-        //       colObj['width'] = curAllWidth[index] - changedWidth; //table的padding默认是2px
-        //       colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
-        //       //console.log('getColsWidth...index=' + index + ' , width=' + colObj['width']);
-        //     }
-        //   }
-        // });
       }
       if (body_x_scroll_width > 0) {
         //cols没有x-sroll-patch，新增col，然后更新width
@@ -162,6 +75,99 @@ export class updateTableCols {
         }
       }
     };
+
+    let modifyColsByMouseMoveEvent = () => {
+      //向右拖
+      let willChangeLen = 0;
+      if(g_offset === _last_g_offset){
+        return;
+      } 
+      else if(g_offset > _last_g_offset){
+        //获取右侧可变框的数量
+        for(let index = 0; index < cols.length ; index ++){
+          if(index > curIndex && cols[index]['width'] > CONST_MIN_WIDTH ){
+            willChangeLen += 1;
+          }
+        }
+        //右侧没有压缩的框，则不发生变动
+        if(willChangeLen === 0){
+          return;
+        }
+        let changedWidth = (g_offset - _last_g_offset)/willChangeLen;
+        for(let index = cols.length -1 ; index >=0 ; index --){
+          let colObj = cols[index];
+          if (!colObj.type) {
+            if(index < curIndex) {
+              //固定左侧的框，防止意外变动
+              colObj['width'] = colObj['width'];
+              colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
+            }else if(index === curIndex){
+              // colObj['width'] = curAllWidth[index] + g_offset;
+              colObj['width'] = colObj['width'] + (g_offset - _last_g_offset);
+              colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
+            } else {
+              // 当前框已经到了最小值
+              if(colObj['width'] <= CONST_MIN_WIDTH){
+                continue;
+              }
+              colObj['width'] = colObj['width'] - changedWidth;
+              colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
+            }
+          }
+        }
+      } 
+      else {
+        //向左拖
+        willChangeLen = cols.length - curIndex -1;
+        let changedWidth = (g_offset - _last_g_offset)/willChangeLen;
+        if(cols[curIndex]['width'] <= CONST_MIN_WIDTH){
+          return ;
+        }
+        for(let index = cols.length -1 ; index >=0 ; index --){
+          let colObj = cols[index];
+          if (!colObj.type) {
+            if(index < curIndex) {
+              //固定左侧的框，防止意外变动
+              colObj['width'] = colObj['width'];
+              colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
+            }else if(index === curIndex){
+              colObj['width'] = colObj['width'] + (g_offset - _last_g_offset);
+              colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
+            } else {
+              colObj['width'] = colObj['width'] - changedWidth;
+              colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
+            }
+          }
+        }
+      }
+    };
+
+    let modifyColsByResizeEvent = () => {
+      let willChangeLen = 0;
+      //窗口变大table自动扩展不影响，窗口变小table调整col 宽度
+      if (table_width < origin_table_width) {
+        for(let index = 0; index < cols.length; index ++){
+          if(cols[index]['width'] > CONST_MIN_WIDTH ){
+            willChangeLen += 1;
+          }
+        }
+        if(willChangeLen === 0){
+          return;
+        }
+        let colWidth = (origin_table_width - table_width)/willChangeLen;
+        for(let index = 0; index < cols.length; index ++){
+          let colObj = cols[index];
+          if (!colObj.type) {
+            if(colObj['width'] <= CONST_MIN_WIDTH){
+              continue;
+            }
+            colObj['width'] = colObj['width'] - colWidth;
+            colObj['hide'] = angular.element(colObj['resize-col-' + index]).hasClass('ng-hide');
+          }
+        }
+      }
+    };
+
     let updateColsWidth = () => {
       let thElms = headerElm.find('th');
       for(let i=0; i< thElms.length; i++) {
@@ -198,8 +204,6 @@ export class updateTableCols {
       //最后一列不可以拖动
       let isLast = false;
       curIndex = -1;
-      // console.log("on 'mousemove-th-col' ====>" )
-
       cols.forEach((colObj, index) => {
         if(dict.element == colObj['resize-col-' + index]){
           curIndex = index;
@@ -208,11 +212,9 @@ export class updateTableCols {
           }
         }
       });
-
       if(!isLast){
         document.addEventListener('mousemove', mousemoveEvent, false);
       }
-
     });
 
     //显示隐藏columns时调整table的tds width
@@ -257,6 +259,7 @@ export class updateTableCols {
 
         //统计table header th的width
         getColsWidth();
+        modifyColsByMouseMoveEvent();
         updateColsWidth();
         //修改对应class的width
         updateBodyColsWidth();
@@ -287,8 +290,9 @@ export class updateTableCols {
         else {
           bodyElm[0].style.height = 'calc(100% - 100px)';
         }
-
+        table_width = element[0].clientWidth;
         getColsWidth();
+        modifyColsByResizeEvent();
         updateColsWidth();
         updateBodyColsWidth();
       }, 500);
