@@ -5,7 +5,6 @@ import 'angular-cookies';
 import 'angular-route';
 import 'angular-translate';
 import 'angular-ui-bootstrap';
-import 'angular-material';
 
 import 'lodashService';
 import 'crypto';

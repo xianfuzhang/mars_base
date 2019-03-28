@@ -115,6 +115,10 @@
       margin-top: 5px;
       background: url('../../assets/images/dialog-close.png') 100% 100% no-repeat;
       cursor: pointer;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   
     @include element(alert) {

@@ -6,7 +6,6 @@ import 'angular-route';
 import 'angular-animate';
 import 'angular-translate';
 import 'angular-ui-bootstrap';
-import 'angular-material';
 
 import 'lodashService';
 import 'crypto';
