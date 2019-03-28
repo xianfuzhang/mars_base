@@ -282,6 +282,10 @@ export class headerController{
             }
           }
         }
+        if (!tenantState) {
+          let logicalIndex = this.di._.findIndex(origins, {'group': 'Logical'});
+          if (logicalIndex > -1) origins.splice(logicalIndex , 1);
+        }
         this.scope.menues = origins;
       }
     });
