@@ -54,7 +54,6 @@ import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, 
 
 angular
   .module('marsApp', [
-    'ngMaterial',
     'ngRoute',
     'ngCookies',
     'ui.bootstrap',
