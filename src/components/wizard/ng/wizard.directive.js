@@ -115,7 +115,6 @@ export class Wizard {
           
           if (result.valid == false) {
             scope.errorMessage = result.errorMessage || '';
-            document.getElementsByClassName('wizard__body__right')[0].scrollTop = 0;
           } else {
             // scope.showWizard = false;
             _closeWizard();
