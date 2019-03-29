@@ -28,10 +28,9 @@
 
     <div class="stepForm__input multiple_ip">
         <div class="stepForm__input__label">IP Address</div>
-        <valid-input style="display:inline-block;" ng-model="segmentModel.ip_address" v-rpcid="page_device_1"  v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>
-        <div class="add-btn" ng-click="addIPAddress()">
-            <i class="material-icons">add</i>
-        </div>
+        <valid-input style="display:inline-block;" name="ip_address" ng-model="segmentModel.ip_address" v-rpcid="page_device_1" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>
+        <mdl-button ng-click="addIPAddress()" icon-name="add"
+                    disabled="wizardForm.ip_address.$invalid"></mdl-button>
         <div class="" style="margin-top:5px;" ng-show="segmentModel.ip_addresses.length">
             <div class="types-label" ng-repeat="ip in segmentModel.ip_addresses">
                 <span ng-bind="ip"></span>

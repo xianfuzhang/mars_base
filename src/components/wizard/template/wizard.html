@@ -5,6 +5,10 @@
                 {{title}}
             </div>
 
+            <div class="wizard__header__alert" ng-class="{'+single': steps.length < 2}" ng-show="errorMessage != ''">
+                <span ng-bind="errorMessage"></span>
+                <span class="wizard__header__alert__close" ng-click="closeMessage()"><i style="font-size:18px;" class="material-icons">cancel</i></span>
+            </div>
             <div class="wizard__header__dismiss" ng-click="postCancel()"></div>
         </div>
 
@@ -14,10 +18,6 @@
             </div>
 
             <div class="wizard__body__right" ng-class="{'+single': steps.length < 2}">
-                <div class="wizard__body__right__alert" ng-show="errorMessage != ''">
-                    <span ng-bind="errorMessage"></span>
-                    <span style="float:right;cursor: pointer;" ng-click="closeMessage()"><i style="font-size:18px;" class="material-icons">cancel</i></span>
-                </div>
                 <form name="wizardForm" autocomplete="off" novalidate>
                     <div class="wizard__body__form" ng-class="{'+single': steps.length < 2}">
                         <div ng-show="curIndex == $index" ng-repeat="step in steps track by $index" class="wizard__body__right__content">

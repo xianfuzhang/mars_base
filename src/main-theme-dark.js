@@ -5,7 +5,6 @@ import 'angular-cookies';
 import 'angular-route';
 import 'angular-translate';
 import 'angular-ui-bootstrap';
-import 'angular-material';
 
 import 'lodashService';
 import 'crypto';
@@ -55,7 +54,6 @@ import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, 
 
 angular
   .module('marsApp', [
-    'ngMaterial',
     'ngRoute',
     'ngCookies',
     'ui.bootstrap',

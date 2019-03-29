@@ -115,6 +115,51 @@
       margin-top: 5px;
       background: url('../../assets/images/dialog-close.png') 100% 100% no-repeat;
       cursor: pointer;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  
+    @include element(alert) {
+      position: absolute;
+      top: 52px;
+      right: 0;
+      width: 570px;
+      box-sizing: border-box;
+      padding: 10px 0;
+      color: #8a6d3b;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      background-color: #fcf8e3;
+      border-color: #faebcc;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      opacity: 0.8;
+      z-index: 100;
+    
+      @include state(single) {
+        width: 100%;
+      }
+      
+      &.ng-hide {
+        opacity: 0;
+      }
+      
+      &.ng-hide-add {
+        transition: all linear 0.5s;
+      }
+  
+      &.ng-hide-remove {
+        transition: all linear 0.5s;
+      }
+    
+      @include element(close) {
+        float: right;
+        cursor: pointer;
+        margin-right: 20px;
+      }
     }
   }
 
@@ -170,6 +215,7 @@
       box-sizing: border-box;
       //box-sizing: border-box;
       overflow: auto;
+      position: relative;
   
       @include state(single) {
         width: 100%;
@@ -181,7 +227,13 @@
       }
       
       @include element(alert) {
-        padding: 10px;
+        position: absolute;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 15px 0;
         color: #8a6d3b;
         font-size: 14px;
         font-weight: bold;
