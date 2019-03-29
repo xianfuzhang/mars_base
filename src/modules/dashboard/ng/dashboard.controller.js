@@ -766,13 +766,13 @@ export class DashboardController {
 			  scope.interfaceDropPackagesChartConfig.data = [pkgRecv, pgkSend];
 			  scope.interfaceDropPackagesChartConfig.labels = labelsArr;
 			  scope.interfaceDropPackagesChartConfig.series = ['接收', '发送'];
-			  scope.interfaceDropPackagesChartConfig.colors = [{backgroundColor: 'rgb(0,0,255)'}, {backgroundColor: 'rgb(250,128,114)'}];
+			  scope.interfaceDropPackagesChartConfig.colors = [{backgroundColor: 'rgb(144,238,144)'}, {backgroundColor: 'rgb(250,128,114)'}];
 			  scope.interfaceDropPackagesChartConfig.options = options;
 		  } else {
 			  scope.interfaceRxTxPackagesChartConfig.data = [pkgRecv, pgkSend];
 			  scope.interfaceRxTxPackagesChartConfig.labels = labelsArr;
 			  scope.interfaceRxTxPackagesChartConfig.series = ['接收', '发送'];
-			  scope.interfaceRxTxPackagesChartConfig.colors = [{backgroundColor: 'rgb(0,0,255)'}, {backgroundColor: 'rgb(250,128,114)'}];
+			  scope.interfaceRxTxPackagesChartConfig.colors = [{backgroundColor: 'rgb(144,238,144)'}, {backgroundColor: 'rgb(250,128,114)'}];
 			  scope.interfaceRxTxPackagesChartConfig.options = options;
 		  }
 	  };
