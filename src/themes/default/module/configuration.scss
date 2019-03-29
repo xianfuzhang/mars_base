@@ -99,9 +99,10 @@
     
     @include element(form){
       padding: 15px;
-      border: 1px solid #3883fa;
+      border: 1px solid #d8d9da;
       background-color: #FFF;
       color: #000;
+      border-radius: 5px;
       
       @include state(disable) {
         border: 1px solid #dfdfdf;
@@ -205,4 +206,13 @@
   100% {
     border: 2px solid lightgray;
   }
+}
+
+.configuration__content div.jsoneditor {
+  border: thin solid #d8d9da;
+}
+
+.configuration__content div.jsoneditor-menu {
+  background-color: #010101;
+  border-bottom: 1px solid #d8d9da;
 }
