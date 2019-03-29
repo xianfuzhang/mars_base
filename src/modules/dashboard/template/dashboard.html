@@ -90,7 +90,7 @@
             <div class="mars-row" ng-if="isAnalyzeEnable">
               <div class="mars-row-flex">
                 <div class="col-gutter-md left-panel">
-                  <canvas id="cluster-cpu-usage-rate" height="130"
+                  <canvas id="cluster-cpu-usage-rate" height="350"
                           class="chart chart-line"
                           chart-type="line"
                           chart-data="clusterCpuChartConfig.data"
@@ -99,46 +99,46 @@
                           chart-fill="false"
                           chart-options="clusterCpuChartConfig.options"
                           chart-click="clusterCpuChartConfig.onClick"
-													chart-hover="clusterCpuChartConfig.onHover">
+                          chart-hover="clusterCpuChartConfig.onHover">
                   </canvas>
 
-									<div class="setting-group" ng-show="!dashboardModel.controller.cpu.loading">
-										<div class="item" title="设置" ng-click="chartSetting('controller-cpu')"><i class="material-icons">settings</i></div>
-										<div class="item" title="恢复" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">undo</i></div>
-										<div class="item" title="{{clusterCpuChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
-									</div>
+                  <div class="setting-group" ng-show="!dashboardModel.controller.cpu.loading">
+                      <div class="item" title="设置" ng-click="chartSetting('controller-cpu')"><i class="material-icons">settings</i></div>
+                      <div class="item" title="恢复" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">undo</i></div>
+                      <div class="item" title="{{clusterCpuChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
+                  </div>
                 </div>
                 <div class="col-gutter-md right-panel">
-									<canvas id="cluster-cpu-analyzer-piechart" height="250"
-													class="chart chart-pie"
-													chart-type="pie"
-													chart-data="clusterCpuPieChartConfig.data"
-													chart-labels="clusterCpuPieChartConfig.labels"
-													chart-options="clusterCpuPieChartConfig.options"
-													chart-colors="clusterCpuPieChartConfig.colors">
-									</canvas>
+                    <canvas id="cluster-cpu-analyzer-piechart" height="200"
+                            class="chart chart-pie"
+                            chart-type="pie"
+                            chart-data="clusterCpuPieChartConfig.data"
+                            chart-labels="clusterCpuPieChartConfig.labels"
+                            chart-options="clusterCpuPieChartConfig.options"
+                            chart-colors="clusterCpuPieChartConfig.colors">
+                    </canvas>
                 </div>
               </div>
 
               <div class="mars-row-flex">
                 <div class="col-gutter-md left-panel">
-                  <canvas id="cluster-memory-usage-rate" height="130"
-                          class="chart chart-line"
-                          chart-type="line"
-                          chart-data="clusterMemoryChartConfig.data"
-                          chart-labels="clusterMemoryChartConfig.labels"
-                          chart-series="clusterMemoryChartConfig.series"
-                          chart-fill="false"
-                          chart-options="clusterMemoryChartConfig.options"
-                          chart-click="clusterMemoryChartConfig.onClick"
-													chart-hover="clusterMemoryChartConfig.onHover">
-                  </canvas>
+                    <canvas id="cluster-memory-usage-rate" height="350"
+                            class="chart chart-line"
+                            chart-type="line"
+                            chart-data="clusterMemoryChartConfig.data"
+                            chart-labels="clusterMemoryChartConfig.labels"
+                            chart-series="clusterMemoryChartConfig.series"
+                            chart-fill="false"
+                            chart-options="clusterMemoryChartConfig.options"
+                            chart-click="clusterMemoryChartConfig.onClick"
+                            chart-hover="clusterMemoryChartConfig.onHover">
+                    </canvas>
 
-									<div class="setting-group" ng-show="!dashboardModel.controller.memory.loading">
-										<div class="item" title="设置" ng-click="chartSetting('controller-memory')"><i class="material-icons">settings</i></div>
-										<div class="item" title="恢复" ng-click="resetTimeScale('controller-memory')"><i class="material-icons">undo</i></div>
-										<div class="item" title="{{clusterMemoryChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
-									</div>
+                    <div class="setting-group" ng-show="!dashboardModel.controller.memory.loading">
+                        <div class="item" title="设置" ng-click="chartSetting('controller-memory')"><i class="material-icons">settings</i></div>
+                        <div class="item" title="恢复" ng-click="resetTimeScale('controller-memory')"><i class="material-icons">undo</i></div>
+                        <div class="item" title="{{clusterMemoryChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
+                    </div>
                 </div>
                 <div class="col-gutter-md right-panel">
                   <canvas id="cluster-memory-analyzer-piechart" height="250"
@@ -153,42 +153,42 @@
               </div>
             </div>
 
-						<div class="mars-row" ng-if="isAnalyzeEnable">
-							<div class="mars-row-flex">
+            <div class="mars-row" ng-if="isAnalyzeEnable">
+              <div class="mars-row-flex">
                 <div class="col-gutter-md left-panel">
-                  <canvas id="switch-cpu-usage-rate" height="150"
-                          class="chart chart-line"
-                          chart-type="line"
-                          chart-data="switchCpuChartConfig.data"
-                          chart-labels="switchCpuChartConfig.labels"
-                          chart-series="switchCpuChartConfig.series"
-                          chart-fill="false"
-                          chart-options="switchCpuChartConfig.options"
-                          chart-click="switchCpuChartConfig.onClick"
-													chart-hover="switchCpuChartConfig.onHover">
-                  </canvas>
+                    <canvas id="switch-cpu-usage-rate" height="350"
+                              class="chart chart-line"
+                              chart-type="line"
+                              chart-data="switchCpuChartConfig.data"
+                              chart-labels="switchCpuChartConfig.labels"
+                              chart-series="switchCpuChartConfig.series"
+                              chart-fill="false"
+                              chart-options="switchCpuChartConfig.options"
+                              chart-click="switchCpuChartConfig.onClick"
+                              chart-hover="switchCpuChartConfig.onHover">
+                      </canvas>
 
-									<div class="setting-group"  ng-show="!dashboardModel.cpu.loading">
-										<div class="item" title="设置" ng-click="chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
-										<div class="item" title="恢复" ng-click="resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
-										<div class="item" title="{{switchCpuChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
-									</div>
+                    <div class="setting-group"  ng-show="!dashboardModel.cpu.loading">
+                        <div class="item" title="设置" ng-click="chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
+                        <div class="item" title="恢复" ng-click="resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
+                        <div class="item" title="{{switchCpuChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
+                    </div>
                 </div>
                 <div class="col-gutter-md right-panel">
                   <canvas id="switch-cpu-analyzer-piechart" height="250"
-													class="chart chart-pie"
-													chart-type="pie"
-													chart-data="switchCpuPieChartConfig.data"
-													chart-labels="switchCpuPieChartConfig.labels"
-													chart-options="switchCpuPieChartConfig.options"
-													chart-colors="switchCpuPieChartConfig.colors">
-									</canvas>
+                          class="chart chart-pie"
+                          chart-type="pie"
+                          chart-data="switchCpuPieChartConfig.data"
+                          chart-labels="switchCpuPieChartConfig.labels"
+                          chart-options="switchCpuPieChartConfig.options"
+                          chart-colors="switchCpuPieChartConfig.colors">
+                  </canvas>
                 </div>
-							</div>
+              </div>
 
-							<div class="mars-row-flex">
-								<div class="col-gutter-md left-panel">
-                  <canvas id="switch-memory-usage-rate" height="120"
+              <div class="mars-row-flex">
+                <div class="col-gutter-md left-panel">
+                    <canvas id="switch-memory-usage-rate" height="350"
                           class="chart chart-line"
                           chart-type="line"
                           chart-data="switchMemoryChartConfig.data"
@@ -197,77 +197,77 @@
                           chart-fill="false"
                           chart-options="switchMemoryChartConfig.options"
                           chart-click="switchMemoryChartConfig.onClick"
-													chart-hover="switchMemoryChartConfig.onHover">
+                          chart-hover="switchMemoryChartConfig.onHover">
                   </canvas>
 
-									<div class="setting-group"  ng-show="!dashboardModel.memory.loading">
-										<div class="item" title="设置" ng-click="chartSetting('device-memory')"><i class="material-icons">settings</i></div>
-										<div class="item" title="恢复" ng-click="resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
-										<div class="item" title="{{switchMemoryChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
-									</div>
-								</div>
-								<div class="col-gutter-md right-panel">
-									<canvas id="switch-memory-analyzer-piechart" height="250"
-													class="chart chart-pie"
-													chart-type="pie"
-													chart-data="switchMemoryPieChartConfig.data"
-													chart-labels="switchMemoryPieChartConfig.labels"
-													chart-options="switchMemoryPieChartConfig.options"
-													chart-colors="switchMemoryPieChartConfig.colors">
-									</canvas>
-								</div>
-						</div>
-						</div>
+                    <div class="setting-group"  ng-show="!dashboardModel.memory.loading">
+                        <div class="item" title="设置" ng-click="chartSetting('device-memory')"><i class="material-icons">settings</i></div>
+                        <div class="item" title="恢复" ng-click="resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
+                        <div class="item" title="{{switchMemoryChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
+                    </div>
+                </div>
+                <div class="col-gutter-md right-panel">
+                    <canvas id="switch-memory-analyzer-piechart" height="250"
+                            class="chart chart-pie"
+                            chart-type="pie"
+                            chart-data="switchMemoryPieChartConfig.data"
+                            chart-labels="switchMemoryPieChartConfig.labels"
+                            chart-options="switchMemoryPieChartConfig.options"
+                            chart-colors="switchMemoryPieChartConfig.colors">
+                    </canvas>
+                </div>
+              </div>
+            </div>
 
-						<div class="mars-row" ng-if="isAnalyzeEnable">
-							<div class="mars-row-flex">
-								<div class="col-gutter-md left-panel">
-									<canvas id="interface-rxtx-packages" height="150"
-													class="chart chart-bar"
-													chart-type="bar"
-													chart-data="interfaceRxTxPackagesChartConfig.data"
-													chart-labels="interfaceRxTxPackagesChartConfig.labels"
-													chart-colors="interfaceRxTxPackagesChartConfig.colors"
-													chart-fill="false"
-													chart-series="interfaceRxTxPackagesChartConfig.series"
-													chart-options="interfaceRxTxPackagesChartConfig.options">
-									</canvas>
+            <div class="mars-row" ng-if="isAnalyzeEnable">
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md left-panel">
+                        <canvas id="interface-rxtx-packages" height="400"
+                                class="chart chart-bar"
+                                chart-type="bar"
+                                chart-data="interfaceRxTxPackagesChartConfig.data"
+                                chart-labels="interfaceRxTxPackagesChartConfig.labels"
+                                chart-colors="interfaceRxTxPackagesChartConfig.colors"
+                                chart-fill="false"
+                                chart-series="interfaceRxTxPackagesChartConfig.series"
+                                chart-options="interfaceRxTxPackagesChartConfig.options">
+                        </canvas>
 
-									<div style="position:absolute;top:28px;right:28px;cursor: pointer;">
-										<div style="float:right;margin-left:20px" title="设置"><i class="material-icons">settings</i></div>
-									</div>
-								</div>
-								<div class="col-gutter-md right-panel">
-									<canvas id="interface-rxtx-packages-analyzer" height="250">
+                        <div style="position:absolute;top:28px;right:28px;cursor: pointer;">
+                            <div style="float:right;margin-left:20px" title="设置"><i class="material-icons">settings</i></div>
+                        </div>
+                    </div>
+                    <div class="col-gutter-md right-panel">
+                        <canvas id="interface-rxtx-packages-analyzer" height="250">
 
-									</canvas>
-								</div>
-							</div>
+                        </canvas>
+                    </div>
+                </div>
 
-							<div class="mars-row-flex">
-								<div class="col-gutter-md left-panel">
-									<canvas id="interface-rxtx-drops" height="150"
-													class="chart chart-bar"
-													chart-type="bar"
-													chart-data="interfaceDropPackagesChartConfig.data"
-													chart-labels="interfaceDropPackagesChartConfig.labels"
-													chart-colors="interfaceDropPackagesChartConfig.colors"
-													chart-fill="false"
-													chart-series="interfaceDropPackagesChartConfig.series"
-													chart-options="interfaceDropPackagesChartConfig.options">
-									</canvas>
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md left-panel">
+                        <canvas id="interface-rxtx-drops" height="400"
+                                class="chart chart-bar"
+                                chart-type="bar"
+                                chart-data="interfaceDropPackagesChartConfig.data"
+                                chart-labels="interfaceDropPackagesChartConfig.labels"
+                                chart-colors="interfaceDropPackagesChartConfig.colors"
+                                chart-fill="false"
+                                chart-series="interfaceDropPackagesChartConfig.series"
+                                chart-options="interfaceDropPackagesChartConfig.options">
+                        </canvas>
 
-									<div style="position:absolute;top:28px;right:28px;cursor: pointer;">
-										<div style="float:right;margin-left:20px" title="设置"><i class="material-icons">settings</i></div>
-									</div>
-								</div>
-								<div class="col-gutter-md right-panel">
-									<canvas id="interface-drop-packages-analyzer" height="250">
+                        <div style="position:absolute;top:28px;right:28px;cursor: pointer;">
+                            <div style="float:right;margin-left:20px" title="设置"><i class="material-icons">settings</i></div>
+                        </div>
+                    </div>
+                    <div class="col-gutter-md right-panel">
+                        <canvas id="interface-drop-packages-analyzer" height="250">
 
-									</canvas>
-								</div>
-							</div>
-						</div>
+                        </canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
