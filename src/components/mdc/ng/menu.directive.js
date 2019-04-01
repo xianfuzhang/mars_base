@@ -53,12 +53,18 @@ export class mdlMenu {
           // menu.open = false;
           let menuEl = element[0];
           let allHeight = document.body.offsetHeight;
+          menuEl.classList.add('mdc-menu--open');
           if(scope.location.y + scope.data.length * 48 > allHeight){
             menuEl.style.top = (scope.location.y - scope.data.length * 48 )  + 'px';
           } else {
             menuEl.style.top = scope.location.y + 'px';
           }
-          menuEl.style.left = scope.location.x + 'px';
+          if (scope.location.x + menuEl.clientWidth >= document.body.offsetWidth) {
+            menuEl.style.left = scope.location.x - menuEl.clientWidth + 'px';
+          }
+          else {
+            menuEl.style.left = scope.location.x + 'px';  
+          }
 
           this.menu.setAnchorCorner(Corner.BOTTOM_END);
           // this.menu.quickOpen = false;
