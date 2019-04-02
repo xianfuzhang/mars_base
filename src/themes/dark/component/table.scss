@@ -5,6 +5,8 @@ mdc设置组件颜色
   !* @alternate *!
   color: var(--mdl-theme-text-icon-on-background, rgba(0, 0, 0, 0.38)); }*/
 .mdl-table-field{
+  display: flex;
+  flex-direction: column;
   height: 100%;
   padding: 0 5%;
   background-color: #4d4d4d;
@@ -296,7 +298,7 @@ th.sortable.sort-desc .icon-sort .arrow-right{
   border-radius: 4px;
   font-size: 13px;
   overflow: hidden;
-  height: calc(100% - 60px);
+  height: 100%;
 }
 .mdc-menu.table-row-action-list{
   min-width: 80px;
