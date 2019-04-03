@@ -84,9 +84,9 @@
     
     @include element(form){
       padding: 15px;
-      border: 1px solid #47b8e0;
-      background-color: transparent;
+      background-color: #010101;
       color: map_get($colors, body_color);
+      border-radius: 5px;
 
 
       .mdc-radio__outer-circle{
@@ -137,9 +137,13 @@
   }
 }
 
+.configuration__content div.jsoneditor {
+  border: thin solid #000;
+}
+
 .configuration__content .jsoneditor-text {
   color: #FFFFFF;
-  background-color: #1a1a1a;
+  background-color: #010101;
 }
 
 .configuration__content .jsoneditor-tree {
@@ -148,4 +152,9 @@
 
 .configuration__content .jsoneditor-field, .jsoneditor-value {
   color: map_get($colors, body_color);
+}
+
+.configuration__content div.jsoneditor-menu {
+  background-color: #010101;
+  border-bottom: 1px solid #282828;
 }

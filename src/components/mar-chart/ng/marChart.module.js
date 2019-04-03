@@ -48,7 +48,8 @@ export function ChartJsService () {
  */
 export function ChartJsProvider () {
 	let globalDefaultOptions = {
-		responsible: true,
+    responsive: true,
+    maintainAspectRatio: false
 	}
 	
 	let options = {
