@@ -105,6 +105,9 @@ export class LoginController {
               try{
                 let _path = window.atob(query.lastp);
                 let _search = JSON.parse(window.atob(query.lasts));
+                if(_path === '/login' || _path ===  'login'){
+                  this.di.$location.path('/');
+                }
                 this.di.$location.path(_path).search(_search);
               } catch(e){
                 this.di.$location.path('/');
