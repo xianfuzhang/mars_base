@@ -137,6 +137,7 @@
 .mdc-icon-button.modal__close{
   right: 0;
   position: absolute;
+  z-index: 1;
 }
 .modal-backdrop {
   position: fixed;
