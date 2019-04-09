@@ -84,6 +84,8 @@ export class validInput {
           message = this.translate('MODULES.REGEX.FLOW_ADD.IPV4_MASK_OR_NOT')
         } else if (type === 'port') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.PORT')
+        } else if (type === 'host'){
+          message = this.translate('MODULES.REGEX.FLOW_ADD.HOST')
         }
         return message;
       };
@@ -111,6 +113,8 @@ export class validInput {
           regex = '^((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/([0-9]|[1-2][0-9]|3[0-2]))|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
         } else if (type === 'port') {
           regex = '^[1-9]|[1-9][0-9]$';
+        } else if( type === 'host'){
+          regex = '^[a-zA-z]+[0-9a-zA-Z\.\-]*$'
         }
         return regex;
       };

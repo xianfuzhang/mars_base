@@ -2,7 +2,7 @@
     <input type="hidden" ng-model="switch.id">
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.NAME' | translate}}<span class="stepForm__input__required">*</span></div>
-        <valid-input v-require="true" ng-model="switch.name" v-rpcid="page_device_1" ></valid-input>
+        <valid-input v-require="true" ng-model="switch.name" v-rpcid="page_device_1" v-type="host"></valid-input>
         <!--<input class="stepForm__input__text" name="name" type="text" ng-blur="nameChange=true" ng-model="switch.name" ng-required="true"/>-->
         <!--<span class="stepForm__input__error" ng-show="wizardForm.name.$invalid && nameChange">必填项</span>-->
     </div>

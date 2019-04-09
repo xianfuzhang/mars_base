@@ -173,6 +173,7 @@
   "MODULES.REGEX.FLOW_ADD.IPV6": "IPv6地址无效!",
   "MODULES.REGEX.FLOW_ADD.MAC": "Mac地址无效!",
   "MODULES.REGEX.FLOW_ADD.NOTNULL":"必填项",
+  "MODULES.REGEX.FLOW_ADD.HOST":"请输入正确的主机名称. 规则:以字母开头，字母和数字的组合，特殊字符只可以使用 - 和 . ",
   "MODULES.REGEX.PFC_ADD.PORT":"请输入正确的端口号!",
   "MODULES.REGEX.PFC_ADD.QUEUE":"请输入正确的队列号(0-7)!",
   "MODULES.TOPO.BUTTON_TOOLTIP.REFRESH": "刷新",
