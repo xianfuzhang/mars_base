@@ -15,7 +15,7 @@
         <div ng-repeat="(field, inputItemArr) in inputItemObject">
             <div ng-repeat="inputItem in inputItemArr">
                 <!--<div class="stepForm__input__label">{{inputItem.field_label}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span><span ng-if="inputItem.field == 'ether_type'"  ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)"><i class="material-icons" style="vertical-align: bottom;cursor: pointer;">help</i><span></span></div>-->
-                <valid-input ng-if="inputItem.input_type == undefined" v-require="{{inputItem.require}}" ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_criteria" >
+                <valid-input ng-if="inputItem.input_type == undefined" v-require="{{inputItem.require}}" v-label="{{inputItem.field_label}}" ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_criteria" >
                     <transclude-trailing>
                         <i ng-if="inputItem.field == 'ether_type'" ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)" class="material-icons mdc-text-field__icon" style="cursor: pointer;">help</i>
                     </transclude-trailing>
