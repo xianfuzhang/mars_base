@@ -854,7 +854,7 @@ export class FlowEstablishController {
         if(input.field === 'destination_mac'){
           mac =  input.value;
         } else if(input.field === 'ether_type'){
-          ethType =  input.value.value;
+          ethType =  input.value;
         }
       });
 
@@ -873,7 +873,7 @@ export class FlowEstablishController {
       let ethType = null;
       this.di._.forEach(inputs, (input)=>{
         if(input.field === 'ether_type'){
-          ethType =  input.value.value;
+          ethType =  input.value;
         }
       });
 
@@ -888,7 +888,7 @@ export class FlowEstablishController {
       let ethType = null;
       this.di._.forEach(inputs, (input)=>{
         if(input.field === 'ether_type'){
-          ethType =  input.value.value;
+          ethType =  input.value;
         }
       });
 
