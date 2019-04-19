@@ -86,7 +86,8 @@ export class TrunkController {
   initActions() {
     this.scope.open = (data)  => {
       if(this.scope.showWizard) return;
-      this.scope.title = this.scope.edit ? '修改端口聚合' : '创建端口聚合';
+      this.scope.title = this.scope.edit ? 
+        this.translate('MODULES.FABRIC.TRUNK.UPDATE_TRUNK') : this.translate('MODULES.FABRIC.TRUNK.CREATE_TRUNK');
       this.initSelectOptions();
       this.scope.showWizard = true;
     };

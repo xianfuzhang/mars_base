@@ -61,7 +61,8 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        this.di.$log.error("Url: " + this.di.appService.getDevicesUrl() + " has no response with error(" + error.data.message +"）")
+        //error返回格式没有data字段导致console报错
+        //this.di.$log.error("Url: " + this.di.appService.getDevicesUrl() + " has no response with error(" + error.data.message +"）")
         defer.resolve({'data': {'devices': [], 'total': 0}});
       }
     );
