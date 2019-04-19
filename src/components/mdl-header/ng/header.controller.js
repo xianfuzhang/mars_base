@@ -6,6 +6,7 @@ export class headerController{
       '$cookies',
       '$location',
       '$window',
+      '$filter',
       '_',
       'crypto',
       'appService',
@@ -32,6 +33,9 @@ export class headerController{
 	  this.scope.messages = [];
 	  this.scope.hasUnreadMsg = false;
 	  this.devices = [];
+    this.scope.userConfig = [
+      {'label': this.di.$filter('translate')('MODULE.HEADER.ACCOUNT.LOGOUT'), 'url': '/logout'}
+    ];
     //this.scope.alerts_acount = 0;
     this.scope.location = (url, event) => {
       event && event.stopPropagation();
@@ -112,7 +116,6 @@ export class headerController{
   }
 
   init() {
-    this.scope.userConfig = angular.copy(this.scope.groups.user.items);
     this.scope.menus = this.di.localStoreService.getSyncStorage().get('menus');
     let useraccount = this.di.$cookies.get('useraccount');
     if (!useraccount || !this.scope.menus) {

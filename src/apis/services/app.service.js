@@ -115,15 +115,7 @@ export class appService {
             ]
           }
 
-        ],
-        'user': {
-          //username暂时是用来显示的，后期是通过接口返回。或者是通过session
-          //'UserName':'Nocsys',
-          'items': [
-            //{'label': this.translate('MODULE.LOGIN.USERACCOUNT.MANAGER'), 'url': '/account_manage'},
-            {'label': this.translate('MODULE.HEADER.ACCOUNT.LOGOUT'), 'url': '/logout'}
-          ]
-        }
+        ]
       },
       //type对应google icon name，不能随意更改
       ENDPOINT_TYPE: [
@@ -162,6 +154,35 @@ export class appService {
       }
     });
     this.roleFilterMenu = menu;
+  }
+
+  updateMenuTranslation() {
+    this.CONST.HEADER.menu[0].label = this.translate('MODULE.HEADER.FABRIC');
+    this.CONST.HEADER.menu[0].items[0].label = this.translate('MODULE.HEADER.FABRIC.SUMMARY');
+    this.CONST.HEADER.menu[0].items[1].label = this.translate('MODULE.HEADER.FABRIC.DEVICE');
+    this.CONST.HEADER.menu[0].items[2].label = this.translate('MODULE.HEADER.FABRIC.ENDPOINTS');
+    this.CONST.HEADER.menu[0].items[3].label = this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT');
+    this.CONST.HEADER.menu[0].items[7].label = this.translate('MODULE.HEADER.FABRIC.STORM');
+    this.CONST.HEADER.menu[0].items[8].label = this.translate('MODULE.HEADER.FABRIC.MONITOR');
+    this.CONST.HEADER.menu[1].label = this.translate('MODULE.HEADER.LOGICAL');
+    this.CONST.HEADER.menu[2].label = this.translate('MODULE.HEADER.ALERT');
+    this.CONST.HEADER.menu[2].items[0].label = this.translate('MODULE.HEADER.ALERT.ALERT');
+    this.CONST.HEADER.menu[2].items[1].label = this.translate('MODULE.HEADER.ALERT.HEALTHYCHECK');
+    this.CONST.HEADER.menu[2].items[2].label = this.translate('MODULE.HEADER.ALERT.INFORM');
+    this.CONST.HEADER.menu[3].label = this.translate('MODULE.HEADER.CONFIG');
+    this.CONST.HEADER.menu[3].items[0].label = this.translate('MODULE.HEADER.CONFIG.CONFIGURATION');
+    this.CONST.HEADER.menu[3].items[1].label = this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY');
+    this.CONST.HEADER.menu[4].label = this.translate('MODULE.HEADER.LOG');
+    this.CONST.HEADER.menu[4].items[0].label = this.translate('MODULE.LOG.PAGE.TITLE');
+    this.CONST.HEADER.menu[5].label = this.translate('MODULE.HEADER.ACCOUNT');
+    this.CONST.HEADER.menu[5].items[0].label = this.translate('MODULE.HEADER.ACCOUNT.ACCOUNT_MANAGER');
+    this.CONST.HEADER.menu[6].label = this.translate('MODULE.HEADER.MANAGE');
+    this.CONST.HEADER.menu[6].items[0].label = this.translate('MODULE.HEADER.MANAGE.DHCP');
+    this.CONST.HEADER.menu[6].items[1].label = this.translate('MODULE.HEADER.MANAGE.NTP');
+    this.CONST.HEADER.menu[6].items[2].label = this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH');
+    this.CONST.HEADER.menu[6].items[3].label = this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO');
+    this.CONST.HEADER.menu[6].items[4].label = this.translate('MODULE.HEADER.MANAGE.APPLICATION');
+    this.CONST.HEADER.menu[6].items[5].label = this.translate('MODULE.HEADER.MANAGE.LICENSE');
   }
 
   getZoneEndpoint(isComponent, isAuth) {
