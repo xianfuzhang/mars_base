@@ -497,9 +497,15 @@ export class DeviceDetailController {
         })
         break;
       case 'link':
-        this.di.deviceDataManager.getDeviceLinks(this.scope.deviceId, params).then((res) => {
-          defer.resolve({'data': res.data, 'total': res.data.total});
-        });
+        this.di.deviceDataManager.getDeviceConfigs().then((devices) => {
+          this.scope.switches = {};
+          devices.forEach((device) => {
+            this.scope.switches[device.id] = device.name;
+          });
+          this.di.deviceDataManager.getDeviceLinks(this.scope.deviceId, params).then((res) => {
+            defer.resolve({'data': res.data, 'total': res.data.total});
+          });
+        });        
         break;
       case 'statistic':
         this.di.deviceDataManager.getDevicePortsStatistics(this.scope.deviceId, params).then((res) => {
@@ -613,9 +619,9 @@ export class DeviceDetailController {
         entities.links.forEach((entity) => {
           let obj = {};
           obj['id'] =  entity.src.device + '_' + entity.src.port;
-          obj['src_device'] = entity.src.device;
+          obj['src_device'] = this.scope.switches[entity.src.device] || entity.src.device;
           obj['src_port'] = entity.src.port;
-          obj['dst_device'] = entity.dst.device;
+          obj['dst_device'] = this.scope.switches[entity.dst.device] || entity.dst.device;
           obj['dst_port'] = entity.dst.port;
           obj['state'] = entity.state;
           obj['type'] = entity.type;
