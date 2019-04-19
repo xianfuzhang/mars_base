@@ -38,7 +38,9 @@ export class PolicyRouteEstablishController {
     scope.selected = {};
     scope.isTrunkEnable = false;
 
-    scope.actionDisplayLabel = {'options':[{'label':'允许','value':'permit'},{'label':'拒绝','value':'deny'}]};
+    scope.actionDisplayLabel = {'options':
+        [{'label': this.translate('MODULES.LOGICAL.POLICY_ROUTER.PERMIT'),'value':'permit'},
+          {'label': this.translate('MODULES.LOGICAL.POLICY_ROUTER.DENY'),'value':'deny'}]};
     scope.protocolDisplayLabel = {
       icmpLabel: {
         id: 'icmp',
@@ -134,7 +136,7 @@ export class PolicyRouteEstablishController {
     };
 
     scope.deviceChange = ($value) =>{
-      scope.portDisplayLabel = {'options':[{'label':'请选择', 'value': null }]};
+      scope.portDisplayLabel = {'options':[{'label': this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT'), 'value': null }]};
       scope.portDisplayLabel.options = scope.portDisplayLabel.options.concat(this.di._.sortBy(this.di._.map(scope._phyPorts[$value.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
         return {'label': String(portNum), 'value': String(portNum)}
       }));
@@ -170,8 +172,8 @@ export class PolicyRouteEstablishController {
       };
 
       scope.segmentDisplayLabel = {'options':[]};
-      scope.deviceDisplayLabel = {'options':[{'label':'请选择', 'value': null }]};
-      scope.portDisplayLabel = {'options':[{'label':'请选择', 'value': null }]};
+      scope.deviceDisplayLabel = {'options':[{'label':this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT'), 'value': null }]};
+      scope.portDisplayLabel = {'options':[{'label':this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT'), 'value': null }]};
 
       scope.tenantName = tenant;
       scope.routeName = routeName;
@@ -326,14 +328,14 @@ export class PolicyRouteEstablishController {
 
       if(scope.policyRouteEsModel.segments.length === 0 && scope.policyRouteEsModel.ingress_ports.length ===0){
         return new Promise((resolve, reject) => {
-          inValidJson_Copy.errorMessage = "请至少填写segment和port中的一项!";
+          inValidJson_Copy.errorMessage = this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT_SEGMENT');
           resolve(inValidJson_Copy);
         });
       }
 
       if(!scope.policyRouteEsModel.protocol.icmp && !scope.policyRouteEsModel.protocol.tcp && !scope.policyRouteEsModel.protocol.udp ){
         return new Promise((resolve, reject) => {
-          inValidJson_Copy.errorMessage = "请至少选择一种协议!";
+          inValidJson_Copy.errorMessage = this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT_PROTOCOL');
           resolve(inValidJson_Copy);
         });
       }

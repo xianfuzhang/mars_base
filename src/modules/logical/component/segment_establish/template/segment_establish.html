@@ -1,18 +1,19 @@
 <div class="stepForm">
     <div class="stepForm__input">
-        <div class="stepForm__input__label">Tenant名称<span class="stepForm__input__required">*</span></div>
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT.CREATE.TENANT'|translate}}<span class="stepForm__input__required">*</span></div>
         <mdl-select ng-model="segmentModel.selectedTenant"
                     display-label="tenantNameDisLab" disable="defaultTenant != ''">
         </mdl-select>
     </div>
 
     <div class="stepForm__input">
-        <div class="stepForm__input__label">Segment名称<span class="stepForm__input__required">*</span></div>
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.SEGMENT.CREATE.SEGMENT'|translate}}<span class="stepForm__input__required">*</span></div>
         <valid-input v-require="true" ng-model="segmentModel.name" v-rpcid="page_device_1" v-disabled="mode == 'update'"></valid-input>
     </div>
 
     <div class="stepForm__input">
-        <div class="stepForm__input__label" style="text-decoration: underline">Segment类型<span class="stepForm__input__required">*</span></div>
+        <div class="stepForm__input__label" style="text-decoration: underline">{{'MODULES.LOGICAL.SEGMENT.CREATE.SEGMENT_TYPE'|translate}}
+        <span class="stepForm__input__required">*</span></div>
         <mdl-radio ng-model="segmentModel.type" name="type" value="vlan" disable="mode == 'update'"
                    display-label="{id: 'check_1', label: 'Vlan', name: 'role', value: 'vlan'}">
         </mdl-radio>
@@ -27,7 +28,7 @@
     </div>
 
     <div class="stepForm__input multiple_ip">
-        <div class="stepForm__input__label">IP Address</div>
+        <div class="stepForm__input__label" ng-bind="'MODULES.LOGICAL.SEGMENT.CREATE.IP'|translate"></div>
         <valid-input style="display:inline-block;" name="ip_address" ng-model="segmentModel.ip_address" v-rpcid="page_device_1" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>
         <mdl-button ng-click="addIPAddress()" icon-name="add"
                     disabled="wizardForm.ip_address.$invalid"></mdl-button>

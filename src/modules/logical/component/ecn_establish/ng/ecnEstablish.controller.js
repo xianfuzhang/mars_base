@@ -54,13 +54,13 @@ export class EcnEstablishController {
       this.scope.model.thresholdHelper.persistent = 'true';
       this.scope.model.thresholdHelper.validation = 'false';
       if (data) {
-        this.scope.title = '更新ECN';
+        this.scope.title = this.di.$filter('translate')('MODULES.LOGICAL.QOS.ECN.UPDATE_COS');
         this.scope.model.update = true;
         this.scope.model.queueObject = this.di._.find(this.scope.queuesLabel.options, {'value': data.queue});
         this.scope.model.threshold = data.threshold;
       }
       else {
-        this.scope.title = '添加ECN';
+        this.scope.title = this.di.$filter('translate')('MODULES.LOGICAL.QOS.ECN.CREATE_COS');
         this.scope.model.update = false;
         this.scope.model.queueObject = this.scope.queuesLabel.options[0];
         this.scope.model.threshold = null;

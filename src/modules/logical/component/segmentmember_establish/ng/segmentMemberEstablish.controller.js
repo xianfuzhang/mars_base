@@ -287,7 +287,7 @@ export class SegmentMemberEstablishController {
 
 
               if(!scope.memberModel.vlanDevice){
-                scope.errorMessage = "Device Id" + data['device_id']  + "不存在！";
+                scope.errorMessage = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ERROR_DEVICE', {'deviceId': data['device_id']});
               }
               scope.isVlanDeviceDisable = true;
 
@@ -332,7 +332,7 @@ export class SegmentMemberEstablishController {
                 }
                 // scope.allDeviceLabel.options = [];
                 if(scope.allDeviceLabel.options.length === 0){
-                  this.di.notificationService.renderWarning(scope, "没有可用的交换机！")
+                  this.di.notificationService.renderWarning(scope, this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.NO_AVAILABLE_DEVICE'));
                   scope.showWizard = false;
                   scope.$apply();
                   return;
@@ -550,7 +550,7 @@ export class SegmentMemberEstablishController {
 
     scope.addVlanLogicalPorts = () => {
       if(scope.trunkDisplayLabel.options.length === 0){
-        scope.errorMessage = "交换机 " + scope.selected.vlanDevice.label+ " 上没有创建端口聚合！";
+        scope.errorMessage = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ERROR_NO_LOGICAL_PORT', {'deviceName': scope.selected.vlanDevice.label});
         return;
       }
       scope.memberModel.vlanLogicalPorts.push({'trunk':scope.trunkDisplayLabel.options[0], 'tagValue': scope.tagDisplayLabel.options[0]})
@@ -746,14 +746,14 @@ export class SegmentMemberEstablishController {
               let ins = this.di._.find(scope._pvids[scope.selected.vlanDevice.value], {'port': port.port.value});
               if(ins){
                 validJson_Copy.valid = false;
-                validJson_Copy.errorMessage = '端口：'+port.port.value+' 上已经设置过Untag!';
+                validJson_Copy.errorMessage = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ERROR_PORT_HAVE_UNTAG', {port: port.port.value});
                 return false;
               }
             }
           });
         } else if(scope.memberModel.vlanPorts.length === 0 && scope.memberModel.vlanLogicalPorts.length === 0 && scope.memberModel.vlanMacBased.length === 0){
           validJson_Copy.valid = false;
-          validJson_Copy.errorMessage = '请至少添加一项';
+          validJson_Copy.errorMessage =  this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ERROR_HAVE_MEMBER');
         }
 
         // if(scope.selected.vlanType.value === 'normal'){
@@ -784,7 +784,7 @@ export class SegmentMemberEstablishController {
       } else {
         if(scope.selected.vxlanType.value === 'network' && scope.memberModel.vxlanIps.length === 0){
           validJson_Copy.valid = false;
-          validJson_Copy.errorMessage = '请添加IP';
+          validJson_Copy.errorMessage = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ERROR_HAVE_IP');
         }
       }
 

@@ -32,7 +32,7 @@ export class SegmentEstablishController {
   
     // wizard params
     scope.showWizard = false;
-    scope.title = '添加Segment';
+    scope.title = translate('MODULES.LOGICAL.SEGMENT.CREATE_SEGMENT');
     scope.mode = 'create';
     scope.steps = [
       {
@@ -45,7 +45,7 @@ export class SegmentEstablishController {
     scope.tenantNameDisLab = {
       options: [
         {
-          label: '——请选择——',
+          label: translate('MODULES.LOGICAL.SEGMENT.SELECT_OPTION'),
           value: ''
         }
       ]

@@ -105,7 +105,7 @@ export class EGPPolicyEstablishController {
     this.scope.open = (data)=> {
       if(this.scope.showWizard) return;
       this.initWizardParams(data);
-      this.scope.title = '添加Policy';
+      this.scope.title = this.translate("MODULES.LOGICAL.EGP.POLICY.CREATE_POLICY");
       this.scope.showWizard = true;
     };
 

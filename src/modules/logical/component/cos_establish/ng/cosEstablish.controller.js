@@ -55,13 +55,13 @@ export class CosEstablishController {
       this.scope.model.dscpHelper.persistent = 'true';
       this.scope.model.dscpHelper.validation = 'false';
       if (data) {
-        this.scope.title = '更新COS';
+        this.scope.title = this.di.$filter('translate')('MODULES.LOGICAL.QOS.COS.UPDATE_COS');
         this.scope.model.update = true;
         this.scope.model.queueObject = this.di._.find(this.scope.queuesLabel.options, {'value': data.queue});
         this.scope.model.dscp = data.dscp.toString();
       }
       else {
-        this.scope.title = '添加COS';
+        this.scope.title = this.di.$filter('translate')('MODULES.LOGICAL.QOS.COS.CREATE_COS');
         this.scope.model.update = false;
         this.scope.model.queueObject = this.scope.queuesLabel.options[0];
         this.scope.model.dscp = null;

@@ -54,7 +54,7 @@ export class EGPGroupEstablishController {
     this.scope.open = (data)  => {
       if(this.scope.showWizard) return;
       this.initMDLParams(data);
-      this.scope.title = '添加Group';
+      this.scope.title = this.di.$filter('translate')('MODULES.LOGICAL.EGP.GROUP.CREATE_GROUP');
       this.scope.showWizard = true;
     };
 

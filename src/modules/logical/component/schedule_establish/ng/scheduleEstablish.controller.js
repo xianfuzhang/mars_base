@@ -55,7 +55,7 @@ export class ScheduleEstablishController {
       this.scope.model.weightHelper.persistent = 'true';
       this.scope.model.weightHelper.validation = 'false';
 
-      this.scope.title = '更新权重';
+      this.scope.title = this.di.$filter('translate')('MODULES.LOGICAL.WEIGHT.UPDATE_WEIGHT');
       this.scope.model.update = true;
       this.scope.model.queueObject = this.di._.find(this.scope.queuesLabel.options, {'value': data.queue});
       this.scope.model.weight = data.weight.toString();
@@ -113,7 +113,8 @@ export class ScheduleEstablishController {
             if(parseInt(this.scope.model.weight) === 0){
               let zeroIndex = param.queue_weight.findIndex((n)=> n === 0);
               if(zeroIndex !== -1 && zeroIndex !== this.scope.model.queueObject.value){
-                resolve({valid: false, errorMessage: '权重0已经被 queue '+ zeroIndex+ '设置过!'});
+                resolve({valid: false, errorMessage: 
+                  this.translate('MODULES.LOGICAL.WEIGHT.ERROR_MESSAGE', {'queueId': zeroIndex})});
                 return false;
               }
             }

@@ -227,14 +227,14 @@ export class RouteEstablishController {
 
       if(scope.tenantType === 'Normal' && scope.routeEsModel.segments.length === 0){
         return new Promise((resolve, reject) => {
-          inValidJson_Copy.errorMessage = '请至少选择一个Segment';
+          inValidJson_Copy.errorMessage = this.translate('MODULES.LOGICAL.ROUTER.SELECT_SEGEMNT');
           resolve(inValidJson_Copy);
         });
       }
 
       if(scope.tenantType === 'System' && scope.routeEsModel.tenantRouters.length === 0){
         return new Promise((resolve, reject) => {
-          inValidJson_Copy.errorMessage = '请至少选择一个路由';
+          inValidJson_Copy.errorMessage = this.translate('MODULES.LOGICAL.ROUTER.SELECT_ROUTER');
           resolve(inValidJson_Copy);
         });
       }
