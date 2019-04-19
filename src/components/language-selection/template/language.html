@@ -1,0 +1,8 @@
+<div class="language-wrapper">
+	<div class="language-base" 
+				ng-class="{true: 'language-base_cn', false: 'language-base_en'}[selection === 'cn']"
+				ng-click="setLanguage()">
+	</div>
+	<span ng-if="selection === 'cn'">中文</span>
+	<span ng-if="selection === 'en'">English</span>
+</div>
