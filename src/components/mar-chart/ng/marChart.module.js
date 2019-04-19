@@ -399,7 +399,7 @@ export function ChartJsFactory (ChartJs, $timeout) {
 			// pointBorderColor: '#fff',
 			pointHoverBorderColor: rgba(color, alpha),
 			// pointHoverBorderColor: '#fff',
-			fill: scope.chartFill == true ? true : false,
+			fill: (scope && scope.chartFill == true) ? true : false,
 			lineTension: 0
 		};
 	}
