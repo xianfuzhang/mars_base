@@ -54,7 +54,8 @@ class AliasProvider {
       'jsonEditor': path.resolve('src/components/jsoneditor'),
       'gradientScale': path.resolve('src/components/gradient-scale'),
       'splineChart': path.resolve('src/components/spline-chart'),
-	    'marChart': path.resolve('src/components/mar-chart')
+	    'marChart': path.resolve('src/components/mar-chart'),
+      'languageSelection': path.resolve('src/components/language-selection'),
     };
   }
 

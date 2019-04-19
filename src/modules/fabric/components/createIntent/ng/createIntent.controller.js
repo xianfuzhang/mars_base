@@ -154,7 +154,7 @@ export class CreateIntentController {
         srcDevice = this.di.dataModel.srcDevice || null;
 
     if ((from ==='intent' || from ==='endpoint') && endpoints.length >0) {
-      this.scope.typesLabel.options.push({'label': '端点到端点', 'value': 'HostToHostIntent'});
+      this.scope.typesLabel.options.push({'label': this.translate('MODULES.FABRIC.INTENT.HOST_TYPE'), 'value': 'HostToHostIntent'});
       let options = [];
       endpoints.forEach((endpoint) => {
         options.push({'label': endpoint.id, 'value': endpoint.mac});        
@@ -172,7 +172,7 @@ export class CreateIntentController {
       this.scope.model.dstHost = options[0];
     }
     if ((from ==='intent' || from ==='device') && devices.length >0) {
-      this.scope.typesLabel.options.push({'label': '端口到端口', 'value': 'PointToPointIntent'});
+      this.scope.typesLabel.options.push({'label':  this.translate('MODULES.FABRIC.INTENT.POINT_TYPE'), 'value': 'PointToPointIntent'});
       let options = [];
       devices.forEach((device) => {
         options.push({'label': device.name, 'value': device.id});

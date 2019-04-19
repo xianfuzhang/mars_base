@@ -66,7 +66,7 @@ export class mdlText {
     }
     if (scope.helper) {
       helperElement = this.di.$compile('<p id="{{helpId}}" aria-hidden="true"' +
-        'class="mdc-text-field-helper-text" >{{content}} </p>')(scope);
+        'class="mdc-text-field-helper-text" ng-bind="content"></p>')(scope);
       element.append(helperElement);
       element.find('input').attr('aria-controls', scope.helpId);
       element.find('input').attr('aria-describedby', scope.helpId);
@@ -126,7 +126,10 @@ export class mdlText {
       }
     }));
     
-     scope.$watch('helper.validation', (newVal, oldVal) => {
+    scope.$watch('displayLabel.hint', (newVal, oldVal) => {
+      scope.hint = newVal;
+    });
+    scope.$watch('helper.validation', (newVal, oldVal) => {
       if (scope.helper) {
         changeValidationState();
       }

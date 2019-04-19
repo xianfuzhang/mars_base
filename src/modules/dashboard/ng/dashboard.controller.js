@@ -43,6 +43,8 @@ export class DashboardController {
     const chartStyles = chartService.styles;
     let scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
+    scope.REALTIME_DATA = this.translate('MODULES.DASHBOARD.REALTIME_DATA');
+    scope.HISTORY_DATA = this.translate('MODULES.DASHBOARD.HISTORY_DATA');
     this.interval_device = null;
     const CONTROLLER_STATE_INACTIVE = 'INACTIVE';
     this.SWITCHES_CPU_MEMORY_STATISTIC_NS = 'switches_cpu_memory_statistic_ns';
@@ -443,7 +445,7 @@ export class DashboardController {
 		  let options = {
 			  title: {
 				  display: true,
-					text: '控制器cpu使用率',
+					text: this.translate('MODULES.DASHBOARD.CONTROLLER_CPU_USAGE'),
 			  },
 			  scales: {
 				  yAxes: [{
@@ -514,7 +516,7 @@ export class DashboardController {
 		  let options = {
 	      title: {
 	        display: true,
-	        text: '控制器内存使用率',
+	        text: this.translate('MODULES.DASHBOARD.CONTROLLER_MEMORY_USAGE'),
 	      },
 	      scales: {
 	        yAxes: [{
@@ -584,7 +586,7 @@ export class DashboardController {
 		  let options = {
 			  title: {
 				  display: true,
-				  text: '交换机cpu使用率',
+				  text: this.translate('MODULES.DASHBOARD.SWITCH_CPU_USAGE'),
 			  },
 			  scales: {
 				  yAxes: [{
@@ -657,7 +659,7 @@ export class DashboardController {
 		  let options = {
 			  title: {
 				  display: true,
-					  text: '交换机内存使用率',
+					  text: this.translate('MODULES.DASHBOARD.SWITCH_MEMORY_USAGE'),
 			  },
 			  scales: {
 				  yAxes: [{
@@ -721,13 +723,13 @@ export class DashboardController {
 					  pkgRecv.push(statistic['packetsRxDropped']);
 					  pgkSend.push(statistic['packetsTxDropped']);
 					
-					  title = '端口丢包';
+					  title = this.translate('MODULES.DASHBOARD.PORT_DROP_PACKAGE');
 				  }
 				  else {
 					  pkgRecv.push(statistic['packetsReceived']);
 					  pgkSend.push(statistic['packetsSent']);
 					
-					  title = '端口收发包';
+					  title = this.translate('MODULES.DASHBOARD.PORT_RXTX_PACKAGE');
 				  }
 			  }
 			  else {
@@ -765,13 +767,15 @@ export class DashboardController {
 		  if(drop) {
 			  scope.interfaceDropPackagesChartConfig.data = [pkgRecv, pgkSend];
 			  scope.interfaceDropPackagesChartConfig.labels = labelsArr;
-			  scope.interfaceDropPackagesChartConfig.series = ['接收', '发送'];
+			  scope.interfaceDropPackagesChartConfig.series = [this.translate('MODULES.DASHBOARD.RECEIVE'),
+			   this.translate('MODULES.DASHBOARD.SENT')];
 			  scope.interfaceDropPackagesChartConfig.colors = [{backgroundColor: 'rgb(144,238,144)'}, {backgroundColor: 'rgb(250,128,114)'}];
 			  scope.interfaceDropPackagesChartConfig.options = options;
 		  } else {
 			  scope.interfaceRxTxPackagesChartConfig.data = [pkgRecv, pgkSend];
 			  scope.interfaceRxTxPackagesChartConfig.labels = labelsArr;
-			  scope.interfaceRxTxPackagesChartConfig.series = ['接收', '发送'];
+			  scope.interfaceRxTxPackagesChartConfig.series = [this.translate('MODULES.DASHBOARD.RECEIVE'),
+			   this.translate('MODULES.DASHBOARD.SENT')];
 			  scope.interfaceRxTxPackagesChartConfig.colors = [{backgroundColor: 'rgb(144,238,144)'}, {backgroundColor: 'rgb(250,128,114)'}];
 			  scope.interfaceRxTxPackagesChartConfig.options = options;
 		  }

@@ -3,6 +3,7 @@ export class DeviceWizardController {
     return [
       '$scope',
       '$rootScope',
+      '$filter',
       '$log',
       '$q',
       '$timeout',
@@ -57,7 +58,7 @@ export class DeviceWizardController {
 
     scope.showWizard = false;
     scope.mode = 'add'; // 'add': add a new switch | 'update': update the switch
-    scope.title = '添加交换机';
+    scope.title = this.di.$filter('translate')('COMPONENT.DEVICEWIZARD.TITLE.CREATE_DEVICE');
     scope.steps = [
       {
         id: 'step1',
@@ -235,7 +236,7 @@ export class DeviceWizardController {
               resolve({valid: true, errorMessage: ''});
             }, (err) => {
               // scope.switch = _.cloneDeep(initSwitch);
-              resolve({valid: false, errorMessage: '保存失败！'});
+              resolve({valid: false, errorMessage: this.di.$filter('translate')('COMPONENT.DEVICEWIZARD.SAVE_FAIL')});
             });
         }
       });
@@ -243,7 +244,7 @@ export class DeviceWizardController {
   
     unsubscribes.push(scope.$watch('mode', (newMode, oldMode) => {
       if(newMode == 'update') {
-        scope.title = '修改交换机配置';
+        scope.title = this.di.$filter('translate')('COMPONENT.DEVICEWIZARD.TITLE.UPDATE_DEVICE') ;
       }
     }));
 

@@ -10,7 +10,7 @@
     </div>
 
     <div ng-if="treatmentPageGroup.groups != null" class="stepForm__input">
-        <div class="stepForm__input__label">Group类型</div>
+        <div class="stepForm__input__label" ng-bind="'MODULES.FABRIC.FLOW.ESTABLISH.GROUP_TYPE'|translate"></div>
         <mdl-select ng-model="treatmentPageGroup.groupTypeSelected" value-change="groupChanged()"
                     display-label="treatmentPageGroup.groupsDisplayLabel" >
         </mdl-select>

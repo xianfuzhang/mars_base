@@ -1,5 +1,8 @@
 <div class="login">
   <div class="login-fields">
+    <div class="language-location">
+      <language-selection></language-selection>
+    </div>
     <form class="login__form" name="loginForm" autocomplete="off" novalidate>
       <div class="login-fields__logo"></div>
       <div class="login-fields__username login-fields__element">
@@ -15,10 +18,7 @@
         </mdl-text>
       </div>
       <div class="login-fields__btn login-fields__element">
-        <!--<button class="mdc-button" ng-bind="'MODULE.LOGIN.FORM.SIGN_IN' | translate"-->
-                <!--ng-click="login($event)">-->
-        <!--</button>-->
-        <mar-button btn-text="::'MODULE.LOGIN.FORM.SIGN_IN' | translate" btn-icon="'account_circle'" btn-style="'width:180px'" btn-class="'btn-white btn-lg'" btn-click="login($event)" btn-disabled="loginForm.$invalid" />
+        <mar-button btn-text="loginModel.buttomText" btn-icon="'account_circle'" btn-style="'width:180px'" btn-class="'btn-white btn-lg'" btn-click="login($event)" btn-disabled="loginForm.$invalid" />
       </div>
       <div class="login-fields__message-error login-fields__element" ng-show="showBrowserMsg">
         <span>{{ loginModel.errorMessage }}</span>

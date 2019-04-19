@@ -116,14 +116,14 @@ export class MonitorEstablishController {
       }
 
       if(!params['src']['device_id']){
-        inValidJson_Copy['errorMessage'] = "请选择源交换机!";
+        inValidJson_Copy['errorMessage'] = this.translate('MODULES.FABRIC.MONITOR.SELECT_SRC_DEVICE');
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
       }
 
       if(!params['target']['device_id']){
-        inValidJson_Copy['errorMessage'] = "请选择目的交换机!";
+        inValidJson_Copy['errorMessage'] = this.translate('MODULES.FABRIC.MONITOR.SELECT_DST_DEVICE');
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });

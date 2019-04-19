@@ -81,7 +81,7 @@ export class PfcEstablishController {
       params['port'] = parseInt(scope.pfcModel.port);
 
       if(scope.pfcModel.queue.length === 0){
-        inValidJson_Copy['errorMessage'] = "请至少添加一个Queue!";
+        inValidJson_Copy['errorMessage'] = this.translate("MODULES.FABRIC.PFC.ERROR_MESSAGE");
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });

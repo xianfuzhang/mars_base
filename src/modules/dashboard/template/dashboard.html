@@ -2,7 +2,7 @@
     <!--<mar-header></mar-header>-->
     <mdl-header></mdl-header>
     <div class="flex_entirety__body">
-        <content-header big-title="首页">
+        <content-header big-title="{{'MODULES.DASHBOARD.HOME'|translate}}">
             <span>Mars Cloud</span>
         </content-header>
         <div class="flex_entirety__body__body dashboard__body">
@@ -18,7 +18,7 @@
                         <div class="widget-right">
                           <div class="widget-top">
                             <div class="large">{{dashboardModel.controllerSummary.count}}</div>
-                            <div class="medium">控制器</div>
+                            <div class="medium" ng-bind="'MODULES.DASHBOARD.CONTROLLER'|translate"></div>
                           </div>
                         </div>
                       </div>
@@ -69,15 +69,18 @@
                         <div class="widget-right">
                           <div class="material-icon-right-container">
                             <div class="large">{{dashboardModel.controllerSummary.inactives.length}}</div>
-                            <div class="small margin-left-8">异常控制器</div>
+                            <div class="small margin-left-8" 
+                                ng-bind="'MODULES.DASHBOARD.ABNORMAL_CONTROLLER'|translate"></div>
                           </div>
                           <div class="material-icon-right-container">
                             <div class="large">{{dashboardModel.switchSummary.unknownCount}}</div>
-                            <div class="small margin-left-8">待加入交换机</div>
+                            <div class="small margin-left-8"
+                                ng-bind="'MODULES.DASHBOARD.IDLE_SWITCH'|translate"></div>
                           </div>
                           <div class="material-icon-right-container">
                             <div class="large">{{dashboardModel.switchSummary.unavailableCount}}</div>
-                            <div class="small margin-left-8">异常交换机</div>
+                            <div class="small margin-left-8"
+                                ng-bind="'MODULES.DASHBOARD.ABNORMAL_SWITCH'|translate"></div>
                           </div>
                         </div>
                       </div>
@@ -103,9 +106,10 @@
                   </canvas>
 
                   <div class="setting-group" ng-show="!dashboardModel.controller.cpu.loading">
-                      <div class="item" title="设置" ng-click="chartSetting('controller-cpu')"><i class="material-icons">settings</i></div>
-                      <div class="item" title="恢复" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">undo</i></div>
-                      <div class="item" title="{{clusterCpuChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
+                      <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('controller-cpu')"><i class="material-icons">settings</i></div>
+                      <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">undo</i></div>
+                      <div class="item" title="{{clusterCpuChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}"
+                        ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
                   </div>
                 </div>
                 <div class="col-gutter-md right-panel">
@@ -135,9 +139,9 @@
                     </canvas>
 
                     <div class="setting-group" ng-show="!dashboardModel.controller.memory.loading">
-                        <div class="item" title="设置" ng-click="chartSetting('controller-memory')"><i class="material-icons">settings</i></div>
-                        <div class="item" title="恢复" ng-click="resetTimeScale('controller-memory')"><i class="material-icons">undo</i></div>
-                        <div class="item" title="{{clusterMemoryChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
+                        <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('controller-memory')"><i class="material-icons">settings</i></div>
+                        <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('controller-memory')"><i class="material-icons">undo</i></div>
+                        <div class="item" title="{{clusterMemoryChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
                     </div>
                 </div>
                 <div class="col-gutter-md right-panel">
@@ -169,9 +173,9 @@
                       </canvas>
 
                     <div class="setting-group"  ng-show="!dashboardModel.cpu.loading">
-                        <div class="item" title="设置" ng-click="chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
-                        <div class="item" title="恢复" ng-click="resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
-                        <div class="item" title="{{switchCpuChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
+                        <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
+                        <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
+                        <div class="item" title="{{switchCpuChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
                     </div>
                 </div>
                 <div class="col-gutter-md right-panel">
@@ -201,9 +205,9 @@
                   </canvas>
 
                     <div class="setting-group"  ng-show="!dashboardModel.memory.loading">
-                        <div class="item" title="设置" ng-click="chartSetting('device-memory')"><i class="material-icons">settings</i></div>
-                        <div class="item" title="恢复" ng-click="resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
-                        <div class="item" title="{{switchMemoryChartConfig.isRealtime ? '实时数据' : '历史数据'}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
+                        <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-memory')"><i class="material-icons">settings</i></div>
+                        <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
+                        <div class="item" title="{{switchMemoryChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>
                     </div>
                 </div>
                 <div class="col-gutter-md right-panel">
@@ -234,7 +238,7 @@
                         </canvas>
 
                         <div style="position:absolute;top:28px;right:28px;cursor: pointer;">
-                            <div style="float:right;margin-left:20px" title="设置"><i class="material-icons">settings</i></div>
+                            <div style="float:right;margin-left:20px" title="{{'MODULES.DASHBOARD.SETTING'|translate}}"><i class="material-icons">settings</i></div>
                         </div>
                     </div>
                     <div class="col-gutter-md right-panel">
@@ -258,7 +262,7 @@
                         </canvas>
 
                         <div style="position:absolute;top:28px;right:28px;cursor: pointer;">
-                            <div style="float:right;margin-left:20px" title="设置"><i class="material-icons">settings</i></div>
+                            <div style="float:right;margin-left:20px" title="{{'MODULES.DASHBOARD.SETTING'|translate}}"><i class="material-icons">settings</i></div>
                         </div>
                     </div>
                     <div class="col-gutter-md right-panel">

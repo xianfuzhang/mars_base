@@ -49,6 +49,7 @@ import 'jsonEditor';
 import 'gradientScale';
 import 'splineChart';
 import 'marChart';
+import 'languageSelection';
 
 import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, mainCtrl} from './base';
 
@@ -99,7 +100,8 @@ angular
     'jsonEditor',
     'gradientScale',
     'splineChart',
-    'marChart'
+    'marChart',
+    'languageSelection'
   ])
   .factory('setLanguage', ['$q', setLanguage])
   .config(['$translateProvider', configTranslate])

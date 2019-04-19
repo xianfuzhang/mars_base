@@ -166,6 +166,7 @@
   "MODULES.REGEX.FLOW_ADD.PORT": "Invalid Port!",
   "MODULES.REGEX.FLOW_ADD.IPV4": "Invalid IPv4 address!",
   "MODULES.REGEX.FLOW_ADD.IPV4_MASK": "Invalid IP/Mask!(Example: 192.168.1.1/24)",
+  "MODULES.REGEX.FLOW_ADD.IPV4_MASK_OR_NOT": "Invalid IP/Mask!(Example: 192.168.1.1 or 192.168.1.1/24)",
   "MODULES.REGEX.FLOW_ADD.IPV4_MULTI": "Invalid IPv4 multicast address!!",
   "MODULES.REGEX.FLOW_ADD.TIMEOUT": "Please input the right timeout number!",
   "MODULES.REGEX.FLOW_ADD.PRIORITY": "Please input the right priority number!",
@@ -336,5 +337,14 @@
   "MODULES.PORT.MLAG.DISABLE": "Disable",
   "MODULES.PORT.DELETE.SUCCESS": "Delete Logical Port Success",
   "MODULES.PORT.DIALOG.BATCH.DELETE.WARNING":"Sure to delete Logical Port?",
-  "MODULES.PORT.BATCH.DELETE.SUCCESS": "Batch delete Logical Port Success"
+  "MODULES.PORT.BATCH.DELETE.SUCCESS": "Batch delete Logical Port Success",
+  "MODULES.FABRIC.INTENT.HOST_TYPE": "Endpoint To Endpoint",
+  "MODULES.FABRIC.INTENT.POINT_TYPE": "Point To Point",
+  "MODULES.FABRIC.FLOW.ESTABLISH.GROUP_TYPE": "Group Type",
+  "MODULES.FABRIC.GROUP.ESTABLISH.SELECT":"--Select--",
+  "MODULES.FABRIC.GROUP.ESTABLISH.CREATE": "Create Group",
+  "MODULES.FABRIC.MONITOR.SELECT_SRC_DEVICE": "Please select a source deivce",
+  "MODULES.FABRIC.MONITOR.SELECT_DST_DEVICE": "Please select a destination deivce",
+  "MODULES.FABRIC.PFC.ERROR_MESSAGE": "Please add at least one Queue!",
+  "MODULES.FABRIC.PFC.PORT": "Port"
 }

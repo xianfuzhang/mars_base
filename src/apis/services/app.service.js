@@ -127,8 +127,8 @@ export class appService {
       },
       //type对应google icon name，不能随意更改
       ENDPOINT_TYPE: [
-        {'label': '主机', 'value': 1, 'type': 'devices'}, 
-        {'label': '打印机', 'value': 2, 'type': 'print'}
+        {'label': this.translate('MODULES.COMMON.HOST'), 'value': 1, 'type': 'devices'}, 
+        {'label': this.translate('MODULES.COMMON.PRINT'), 'value': 2, 'type': 'print'}
       ],
       NOCSYS_APP: 'com.nocsys',
       CRYPTO_STRING: 'secret',

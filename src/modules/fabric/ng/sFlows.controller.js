@@ -23,7 +23,10 @@ export class sFlowsController {
 
     this.scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
-    this.types = {'HostToHostIntent': '端点到端点', 'PointToPointIntent': '端口到端口'};
+    this.types = {
+      'HostToHostIntent': this.translate('MODULES.FABRIC.INTENT.HOST_TYPE'), 
+      'PointToPointIntent': this.translate('MODULES.FABRIC.INTENT.POINT_TYPE')
+    };
     this.scope.devices = [];
     this.scope.model = {
     	'actionsShow':  this.di.deviceDetailService.getSFlowActionsShow(),

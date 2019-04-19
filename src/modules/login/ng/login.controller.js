@@ -3,6 +3,7 @@ export class LoginController {
     return [
       '$log',
       '$scope',
+      '$rootScope',
       '$filter',
       '$location',
       '$cookies',
@@ -48,7 +49,8 @@ export class LoginController {
         validation: 'false',
         content: this.translate('MODULE.LOGIN.FORM.PASSWORD.HELP')
       },
-      errorMessage: null
+      errorMessage: null,
+      buttomText: this.translate('MODULE.LOGIN.FORM.SIGN_IN')
     };
     this.scope.showBrowserMsg = false;
 
@@ -129,6 +131,20 @@ export class LoginController {
           this.scope.loginModel.errorMessage = this.di.loginService.validateErrorMsg(res ? res.status : null);
         });
     };
+
+    let unsubscribers = [];
+    unsubscribers.push(this.di.$rootScope.$on('$translateChangeSuccess', () => {
+      this.scope.loginModel.userNameDisplayLabel.hint = this.translate('MODULE.LOGIN.FORM.USERNAME.HINT');
+      this.scope.loginModel.nameHelper.content = this.translate('MODULE.LOGIN.FORM.USERNAME.HELP');
+      this.scope.loginModel.passwordDisplayLabel.hint = this.translate('MODULE.LOGIN.FORM.PASSWORD.HINT');
+      this.scope.loginModel.passwordHelper.content = this.translate('MODULE.LOGIN.FORM.PASSWORD.HELP');
+      this.scope.loginModel.buttomText = this.translate('MODULE.LOGIN.FORM.SIGN_IN');
+    }));
+    this.scope.$on('$destroy', () => {
+      unsubscribers.forEach((cb) => {
+        cb();
+      });
+    });
   }
 }
 

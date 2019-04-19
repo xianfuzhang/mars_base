@@ -152,6 +152,44 @@ input:-webkit-autofill:active {
 .col-gutter-lg{
   padding: 32px;
 }
+.language-location{
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 24px;
+}
+.language-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.language-wrapper span{
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+.language-base{
+  height: 48px;
+  width: 48px;
+  background-size: 48px 48px;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: background-image 1s ease-in-out;
+}
+.language-base_en{
+  background-image: url('../../assets/images/en.png');
+}
+.language-base_cn{
+  background-image: url('../../assets/images/cn.png');
+}
+.navbar-inner__right .language-base{
+  width: 32px;
+  height: 32px;
+  background-size: 32px 32px;
+  margin-right: 20px;
+}
 input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active{
  -webkit-text-fill-color: inherit; 
 }

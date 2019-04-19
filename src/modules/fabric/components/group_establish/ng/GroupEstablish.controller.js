@@ -39,7 +39,7 @@ export class GroupEstablishController {
   
     // wizard params
     scope.showWizard = false;
-    scope.title = '添加Group';
+    scope.title = translate('MODULES.FABRIC.GROUP.ESTABLISH.CREATE');
     scope.steps = [
       {
         id: 'step1',
@@ -93,7 +93,7 @@ export class GroupEstablishController {
     scope.L2InterfaceGroupsDisLab = {
       options: [
         {
-          label: '--请选择--',
+          label: translate('MODULES.FABRIC.GROUP.ESTABLISH.SELECT'),
           value: ''
         }
       ]
@@ -102,7 +102,7 @@ export class GroupEstablishController {
     scope.L2UnfilteredInterfaceGroupDisLab = {
       options: [
         {
-          label: '--请选择--',
+          label: translate('MODULES.FABRIC.GROUP.ESTABLISH.SELECT'),
           value: ''
         }
       ]
@@ -111,7 +111,7 @@ export class GroupEstablishController {
     scope.L3InterfaceGroupDisLab = {
       options: [
         {
-          label: '--请选择--',
+          label: translate('MODULES.FABRIC.GROUP.ESTABLISH.SELECT'),
           value: ''
         }
       ]
@@ -120,7 +120,7 @@ export class GroupEstablishController {
     scope.L3ECMPGroupDisLab = {
       options: [
         {
-          label: '--请选择--',
+          label: translate('MODULES.FABRIC.GROUP.ESTABLISH.SELECT'),
           value: ''
         }
       ]
@@ -129,7 +129,7 @@ export class GroupEstablishController {
     scope.L3UnicastGroupDisLab = {
       options: [
         {
-          label: '--请选择--',
+          label: translate('MODULES.FABRIC.GROUP.ESTABLISH.SELECT'),
           value: ''
         }
       ]
@@ -537,31 +537,31 @@ export class GroupEstablishController {
     const initGroupDisLabOptions = () => {
       scope.L2InterfaceGroupsDisLab.options = [
         {
-          label: '--请选择--',
+          label: translate('MODULES.FABRIC.GROUP.ESTABLISH.SELECT'),
           value: ''
         }
       ];
       scope.L3UnicastGroupDisLab.options = [
         {
-          label: '--请选择--',
+          label: translate('MODULES.FABRIC.GROUP.ESTABLISH.SELECT'),
           value: ''
         }
       ];
       scope.L3InterfaceGroupDisLab.options = [
         {
-          label: '--请选择--',
+          label: translate('MODULES.FABRIC.GROUP.ESTABLISH.SELECT'),
           value: ''
         }
       ];
       scope.L3ECMPGroupDisLab.options = [
         {
-          label: '--请选择--',
+          label: translate('MODULES.FABRIC.GROUP.ESTABLISH.SELECT'),
           value: ''
         }
       ];
       scope.L2UnfilteredInterfaceGroupDisLab.options = [
         {
-          label: '--请选择--',
+          label: translate('MODULES.FABRIC.GROUP.ESTABLISH.SELECT'),
           value: ''
         }
       ];
