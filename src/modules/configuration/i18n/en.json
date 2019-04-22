@@ -17,5 +17,14 @@
   "MODULES.CONFIGURATION_LIST.ERROR.FILENAME.INVALID": "The file name is invalid,please enter a new file name!",
   "MODULES.CONFIGURATION_LIST.ERROR.JSONCONDIG": "The config content has error,please modify the config with json style!",
   "MODULES.CONFIGURATION_LIST.ERROR.SAVE": "Failed to save the file!",
-  "MODULES.CONFIGURATION_LIST.SUCCESS.SAVE": "Success to save the file!"
+  "MODULES.CONFIGURATION_LIST.SUCCESS.SAVE": "Success to save the file!",
+  "MODUELS.CONFIGURATION.SELECT_CONFIG": "Select configuration:",
+  "MODUELS.CONFIGURATION.MANIPULATION": "Manipulation Mode:",
+  "MODUELS.CONFIGURATION.CONFIG_NAME":"Config Name:",
+  "MODUELS.CONFIGURATION.BROWSE": "Browse",
+  "MODUELS.CONFIGURATION.EDIT": "Edit",
+  "MODUELS.CONFIGURATION.ADD": "Add",
+  "MODUELS.CONFIGURATION.SAVE": "Save as boot default configuration",
+  "MODUELS.CONFIGURATION.RUN_CONFIG": "Current running configuration",
+  "MODUELS.CONFIGURATION.BOOT_CONFIG": "Boot default configuration"
 }

@@ -96,13 +96,13 @@ export class ElasticsearchController {
         
           this.di.manageDataManager.putBackupElasticsearch(filename).then(
             (res) => { // success to save
-              this.di.dialogService.createDialog('success', '备份成功！')
+              this.di.dialogService.createDialog('success', this.translate('MODULES.MANAGE.ELASTICSEARCH.BACKUP.SUCCESS'))
                 .then((data)=>{
                   scope.loading = false;
                 })
             },
             (err) => { // error to save
-              this.di.dialogService.createDialog('error', '备份失败！')
+              this.di.dialogService.createDialog('error', this.translate('MODULES.MANAGE.ELASTICSEARCH.BACKUP.FAILED'))
                 .then((data)=>{
                   scope.loading = false;
                 })
@@ -142,7 +142,7 @@ export class ElasticsearchController {
             (res) => { // success to save
               DI.$rootScope.$emit('stop_loading');
   
-              DI.dialogService.createDialog('success', '清理成功！')
+              DI.dialogService.createDialog('success', this.translate('MODULES.MANAGE.ELASTICSEARCH.CLEAR.SUCCESS'))
                 .then((data)=>{
                   init(); // 初始化
                 }, () => {
@@ -151,7 +151,7 @@ export class ElasticsearchController {
             },
             (err) => { // error to save
               DI.$rootScope.$emit('stop_loading');
-              DI.dialogService.createDialog('error', '清理失败！')
+              DI.dialogService.createDialog('error', this.translate('MODULES.MANAGE.ELASTICSEARCH.CLEAR.FAILED'))
                 .then((data)=>{
                   scope.loading = false;
                   
@@ -234,7 +234,7 @@ export class ElasticsearchController {
       const pad = this.pad;
       let options = {
         title: {
-          text: '空间占用情况统计'
+          text: this.translate('MODULES.MANAGE.ELASTICSEARCH.SPACE_STATIC')
         },
         scales: {
           yAxes: [{
@@ -255,7 +255,7 @@ export class ElasticsearchController {
             label: (tooltipItem) => {
               let value = parseFloat(tooltipItem.yLabel);
               
-              return '占用空间:' + formatSize(value, y_label);
+              return this.translate('MODULES.MANAGE.ELASTICSEARCH.STORAGE_USAGE_NUM', {'number': formatSize(value, y_label)});
             }
           }
         }
@@ -263,7 +263,7 @@ export class ElasticsearchController {
     
       scope.indiceSummaryChartConfig.data = dataArr;
       scope.indiceSummaryChartConfig.labels = labelsArr;
-      scope.indiceSummaryChartConfig.series = ['占用空间'];
+      scope.indiceSummaryChartConfig.series = [this.translate('MODULES.MANAGE.ELASTICSEARCH.STORAGE_USAGE')];
       scope.indiceSummaryChartConfig.colors = [{backgroundColor: 'rgb(250,128,114)'}];
       scope.indiceSummaryChartConfig.options = options;
       scope.indiceSummaryChartConfig.onClick = barChartOnClick(indices);
@@ -289,13 +289,13 @@ export class ElasticsearchController {
       let options = {
         title: {
           display: true,
-          text: '收录数据总量时间分布',
+          text: this.translate('MODULES.MANAGE.ELASTICSEARCH.DATA_TIME'),
         },
         scales: {
           yAxes: [{
             scaleLabel: {
               display: true,
-              labelString: 'count数量'
+              labelString: this.translate('MODULES.MANAGE.ELASTICSEARCH.COUNT')
             },
             ticks: {
               beginAtZero: false,
@@ -360,7 +360,7 @@ export class ElasticsearchController {
                   DI.$window.location.href = DI.appService.getDownloadFileUrl(arr[arr.length - 1]);
                   scope.loading = false;
                 }, (error) => {
-                  DI.dialogService.createDialog('error', '下载失败！')
+                  DI.dialogService.createDialog('error', this.translate('MODULES.MANAGE.ELASTICSEARCH.DOWNLOAD_FAILED'))
                     .then((data)=>{
                       scope.loading = false;
                     });
@@ -488,7 +488,7 @@ export class ElasticsearchController {
               // });
             
             }, (error) => {
-              this.di.dialogService.createDialog('error', '下载失败！')
+              this.di.dialogService.createDialog('error',  this.translate('MODULES.MANAGE.ELASTICSEARCH.DOWNLOAD_FAILED'))
                 .then((data)=>{
                   scope.loading = false;
                 });

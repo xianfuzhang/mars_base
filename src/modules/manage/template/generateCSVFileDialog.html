@@ -9,7 +9,7 @@
 				<p style="font-size: 12px;color:red" ng-show="errMsg" ng-bind="errMsg"></p>
 
 				<div>
-					<div class="label" style="display: inline-block">设置Query条件(选填):</div>
+					<div class="label" style="display: inline-block" ngbind="'MODULES.MANAGE.ELASTICSEARCH.QUERY'|translate"></div>
 					<div class="query" ng-show="chartModel.option" jsoneditor ng-model="chartModel.query" options="options" prefix-text="true"></div>
 				</div>
 			</div>

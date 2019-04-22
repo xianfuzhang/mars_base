@@ -5,16 +5,16 @@
     </div>
     <div class="content">
 				<div class="input_item">
-						<div class="label">选择交换机：</div>
+						<div class="label" ng-bind="'MODULES.DASHBOARD.SETTING.SELECT_SWITCH'|translate"></div>
 						<mdl-select ng-model="chartModel.selectedData"
 												display-label="dataOptions">
 						</mdl-select>
 				</div>
 
 				<div class="input_item">
-					<div class="label">时间区间：</div>
+					<div class="label" ng-bind="'MODULES.DASHBOARD.SETTING.TIME_RANGE'|translate"></div>
 					<div><input type="datetime-local" ng-model="chartModel.beginTime" ng-change="timeChange()" value="{{beginTime}}"/></div>
-					<div class="label">至</div>
+					<div class="label" ng-bind="'MODULES.DASHBOARD.SETTING.TO'|translate"></div>
 					<div><input type="datetime-local" ng-model="chartModel.endTime" ng-change="timeChange()" value="{{endTime}}"/></div>
 					<span class="error" ng-show="chartModel.errMsg" ng-bind="chartModel.errMsg"></span>
 				</div>

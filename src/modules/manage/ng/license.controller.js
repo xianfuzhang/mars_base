@@ -32,6 +32,7 @@ export class LicenseController {
     scope.licenseModel = {
       uploadBtnDisable: true,
       detail: {},
+      uploadLabel: this.translate('MODULES.MANAGE.LICENSE.UPLOAD'),
       // actionsShow: this.di.manageService.getLicenseTableActionsShow(),
       // rowActions: this.di.manageService.getLicenseTableRowActions(),
       licenseTableProvider: null,
@@ -66,7 +67,8 @@ export class LicenseController {
     }
     
     let _formatData = (res) =>{
-      scope.licenseModel.detail.valid = res.valid;
+      scope.licenseModel.detail.valid = res.valid ? 
+        this.translate('MODULES.MANAGE.LICENSE.VAILD') : this.translate('MODULES.MANAGE.LICENSE.INVAILD');
       scope.licenseModel.detail.scenario = res.scenario;
       scope.licenseModel.detail.maxSwitches = res.maxSwitches;
       scope.licenseModel.detail.startTime = getLocalDate(res.startTime);

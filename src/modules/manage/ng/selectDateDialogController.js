@@ -57,7 +57,7 @@ export class SelectDateDialogController {
 
 		this.scope.save = (event) => {
 			if(!this.scope.dialogModel || !(this.scope.dialogModel.endtime instanceof Date)) {
-				this.scope.errMsg = '请选择时间！'
+				this.scope.errMsg = this.di.$filter('translate')('MODULES.MANAGE.ELASTICSEARCH.SELECT_DATE');
         return;
 			}
 			

@@ -39,7 +39,7 @@ export class ReceiveGroupEstablishController {
     scope.nameModel.groupName = "";
 
     scope.showWizard = false;
-    scope.title = '添加接收群组';
+    scope.title = translate('MODULES.ALERT.RECEIVE_GROUP.CREATE_GROUP');
     scope.steps = [
       {
         id: 'step1',

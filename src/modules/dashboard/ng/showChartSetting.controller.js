@@ -41,7 +41,7 @@ export class ShowChartSettingController {
 			{label: this.translate('MODULES.DASHBOARD.TIMERANGE.DAY'), value: 24 * 60 * 2},
 		];
 		
-		scope.dataOptions = { options: [{label:'-- 全部 --', value:''}]};
+		scope.dataOptions = { options: [{label: this.translate('MODULES.DASHBOARD.SETTING.SELECT_ALL'), value:''}]};
 		
     // TODO: array handle
 		let selectedData = this.di.dataModel.selectedData[0];
@@ -81,13 +81,13 @@ export class ShowChartSettingController {
     scope.timeChange = () => {
     	let range = (scope.chartModel.endTime.getTime() - scope.chartModel.beginTime.getTime()) / 1000
 	    if(range > 24 * 3600) {
-        scope.chartModel.errMsg = '时间区间不能超过24h';
+        scope.chartModel.errMsg = this.translate('MODULES.DASHBOARD.SETTING.ERROR_TIME_RANGE_LONG');
         scope.invalid = true;
 	    } else if(range <= 0) {
-        scope.chartModel.errMsg = '时间区间不合法';
+        scope.chartModel.errMsg = this.translate('MODULES.DASHBOARD.SETTING.ERROR_TIME_RANGE_LONG');
         scope.invalid = true;
       } else if(range < 30 * 60) {
-        scope.chartModel.errMsg = '时间区间不能小于30分钟';
+        scope.chartModel.errMsg = this.translate('MODULES.DASHBOARD.SETTING.ERROR_TIME_RANGE_SHORT');
         scope.invalid = true;
       } else {
         scope.chartModel.errMsg = '';

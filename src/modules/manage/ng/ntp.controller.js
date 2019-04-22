@@ -46,6 +46,8 @@ export class NTPController {
           'value': 'delete'
         }
       ],
+      enable_label: {on: this.translate('MODULES.MANAGE.NTP.ENABLE.YES'), 
+        off: this.translate('MODULES.MANAGE.NTP.ENABLE.NO'), id: 'ntp_enable'},
       ntpTableProvider:null,
       api: "",
     };

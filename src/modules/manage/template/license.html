@@ -13,7 +13,7 @@
             <div class="license__item">
               <label class="license__item-label"
                      ng-bind="'MODULES.MANAGE.LICENSE.COLUMN.VALID'|translate"></label>
-              <span class="license__item-value" ng-bind="licenseModel.detail.valid ? '有效' : '失效'"></span>
+              <span class="license__item-value">{{licenseModel.detail.valid}}</span>
             </div>
             <div class="license__item">
               <label class="license__item-label"
@@ -41,10 +41,10 @@
         </div>
         <section class="license__app">
           <div class="license__upload">
-            <div class="label">上传证书文件：</div>
+            <div class="label" ng-bind="'MODULES.MANAGE.LICENSE.UPLOAD_FILE'|translate"></div>
             <mdl-upload change="uploadFile(event)" height="50px"></mdl-upload>
             <div class="save">
-              <mar-button btn-text="'上传'" btn-class="'btn-black btn-sm'" btn-icon="'backup'" btn-disabled="licenseModel.uploadBtnDisable" btn-click="save()" />
+              <mar-button btn-text="licenseModel.uploadLabel" btn-class="'btn-black btn-sm'" btn-icon="'backup'" btn-disabled="licenseModel.uploadBtnDisable" btn-click="save()" />
             </div>
           </div>
           <!-- <div class="license__app__label">应用列表如下：</div> -->

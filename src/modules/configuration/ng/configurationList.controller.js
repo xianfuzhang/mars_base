@@ -44,7 +44,10 @@ export class ConfigurationListController {
     // scope.fileNameSelectedDisLab = {hint: this.translate('MODULES.CONFIGURATION.FILENAME'),options:[]};
     scope.fileNameSelectedDisLab = {options:[]};
     scope.saveBtnLabel = this.translate('MODULES.CONFIGURATION.OPTION.UPDATE');
-    
+    scope.broseLabel = {id: 'show_radio', label: this.translate('MODUELS.CONFIGURATION.BROWSE'), name: 'mode', value: 'show'};
+    scope.editLabel = {id: 'edit_radio', label: this.translate('MODUELS.CONFIGURATION.EDIT'), name: 'mode', value: 'edit'};
+    scope.addLabel = {id: 'add_radio', label: this.translate('MODUELS.CONFIGURATION.ADD'), name: 'mode', value: 'add'};
+    scope.saveLabel = {id: 'add_radio', label: this.translate('MODUELS.CONFIGURATION.SAVE'), name: 'mode', value: 'start_up'};
     // listen the json content change function
     let onChangeText = function(stringText) {
       try {
@@ -176,7 +179,7 @@ export class ConfigurationListController {
       this.di.configurationDataManager.getConfigurationFileList()
         .then((res)=>{
 
-          let opts = [{label:"当前运行配置",value:"default"}];
+          let opts = [{label:this.translate('MODUELS.CONFIGURATION.RUN_CONFIG'),value:"default"}];
           let startUpFile = '';
           if(res && res['files'] && res['files'] instanceof Array){
             this.di._.forEach(res['files'], (item)=>{
@@ -189,7 +192,7 @@ export class ConfigurationListController {
           }
           
           if(startUpFile != ''){
-            opts.splice(1, 0, {label:'开机默认配置', value:DEFAULT_FILENAME})
+            opts.splice(1, 0, {label:this.translate('MODUELS.CONFIGURATION.BOOT_CONFIG'), value:DEFAULT_FILENAME})
           }
 
           scope.fileNameSelectedDisLab.options = opts;

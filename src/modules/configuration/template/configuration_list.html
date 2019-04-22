@@ -18,7 +18,7 @@
 
         <div class="configuration__operation__form" ng-class="{'+disable': configurationListModel.globalInvalid }">
           <div class="configuration__operation__form__input">
-            <div class="configuration__operation__form__input__label">选择配置：</div>
+            <div class="configuration__operation__form__input__label" ng-bind="'MODUELS.CONFIGURATION.SELECT_CONFIG'|translate"></div>
             <mdl-select ng-model="configurationListModel.fileNameSelected"
                         disable="configurationListModel.globalInvalid"
                         display-label="fileNameSelectedDisLab">
@@ -26,25 +26,25 @@
           </div>
 
           <div class="configuration__operation__form__input">
-            <div class="configuration__operation__form__input__label">操作模式：</div>
+            <div class="configuration__operation__form__input__label" ng-bind="'MODUELS.CONFIGURATION.MANIPULATION'|translate"></div>
             <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
-                       display-label="{id: 'show_radio', label: '浏览', name: 'mode', value: 'show'}">
+                       display-label="broseLabel">
             </mdl-radio>
             <mdl-radio ng-hide="configurationListModel.fileNameSelected.value == 'default'"
                        ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
-                       display-label="{id: 'edit_radio', label: '编辑', name: 'mode', value: 'edit'}">
+                       display-label="editLabel">
             </mdl-radio>
             <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
-                       display-label="{id: 'add_radio', label: '新增', name: 'mode', value: 'add'}">
+                       display-label="addLabel">
             </mdl-radio>
             <mdl-radio ng-hide="configurationListModel.fileNameSelected.value == 'startup_netcfg.cfg'"
                        ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
-                       display-label="{id: 'add_radio', label: '另存为开机默认配置', name: 'mode', value: 'start_up'}">
+                       display-label="saveLabel">
             </mdl-radio>
           </div>
 
           <div class="configuration__operation__form__input" ng-show="configurationListModel.mode == 'add'">
-            <div class="configuration__operation__form__input__label">配置名称：</div>
+            <div class="configuration__operation__form__input__label" ng-bind="'MODUELS.CONFIGURATION.CONFIG_NAME'|translate"></div>
 
             <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="fileName" style="width:200px;margin-top:8px;">
               <input type="text" id="tf-outlined" class="mdc-text-field__input" ng-model="configurationListModel.fileName" ng-value="configurationListModel.mode == 'add' ? '' : configurationListModel.fileNameSelected.value" maxlength="255">

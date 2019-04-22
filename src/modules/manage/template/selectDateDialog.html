@@ -7,7 +7,7 @@
 		<div class="column-manipulation-field__content elasticsearch-form">
 			<div class="conditions">
 				<div>
-					<div class="label">选择Indice:</div>
+					<div class="label" ng-bind="'MODULES.MANAGE.ELASTICSEARCH.INDICE'|translate"></div>
 					<mdl-select ng-model="indiceSelectedOption"
 								display-label="{options: indiceOptions}"
 								ng-change="indiceSelect($value)"
@@ -15,7 +15,7 @@
 					</mdl-select>
 				</div>
 				<div style="margin-top: 20px;">
-					<div class="label">截止时间:</div>
+					<div class="label" ng-bind="'MODULES.MANAGE.ELASTICSEARCH.DEADLINE'|translate"></div>
 					<input class="date-input" type="datetime-local" value="{{defaultTime}}" ng-model="dialogModel.endtime" max="{{dateTo}}">
 					<p style="font-size: 12px;color:red" ng-show="errMsg" ng-bind="errMsg"></p>
 				</div>

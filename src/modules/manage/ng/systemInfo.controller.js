@@ -36,12 +36,12 @@ export class SystemInfoController {
 
     scope.labelModel = {
         "commit": "Git Commit",
-        "version": "版本",
-        "build_server": "编译服务器",
-        "build_date": "编译时间",
-        "logstash": "logstash版本",
-        "elasticsearch": "elasticsearch版本",
-        "nginx": "nginx版本",
+        "version": this.translate('MODULES.MANAGE.SYSTEMINFO.VERSION'),
+        "build_server": this.translate('MODULES.MANAGE.SYSTEMINFO.BUILD_SERVER'),
+        "build_date": this.translate('MODULES.MANAGE.SYSTEMINFO.BUILD_TIME'),
+        "logstash": this.translate('MODULES.MANAGE.SYSTEMINFO.LOGSTASH_VERSTION'),
+        "elasticsearch": this.translate('MODULES.MANAGE.SYSTEMINFO.ELASTIC_VERSTION'),
+        "nginx": this.translate('MODULES.MANAGE.SYSTEMINFO.NGINX_VERSTION')
     };
 
     scope.infoList = ['commit', 'version', 'build_server', 'build_date', 'logstash', 'elasticsearch', 'nginx'];

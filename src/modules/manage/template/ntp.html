@@ -12,7 +12,7 @@
       <div class="main__content">
         <div class="ntp_switch" style="margin-bottom: 20px;">
           <div class="stepForm__input__label" style="display:inline-block">{{'MODULES.MANAGE.NTP.IS_ENABLE'|translate}}</div>
-          <mdl-switch style="vertical-align: top" on-click="changeSwitch()" ng-model="ntpmodel.isEnable" name="ntp_enable" display-label="{on: '是', off: '否', id: 'ntp_enable'}">
+          <mdl-switch style="vertical-align: top" on-click="changeSwitch()" ng-model="ntpmodel.isEnable" name="ntp_enable" display-label="ntpmodel.enable_label">
           </mdl-switch>
         </div>
         <mdl-table actions-show="ntpmodel.actionsShow"
