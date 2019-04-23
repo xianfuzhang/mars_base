@@ -1138,6 +1138,86 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getDHCPRelayInterface() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDHCPRelayInterfaceUrl()).then(
+      (res) => {
+        defer.resolve(res.data.interfaces);
+      },
+      (error) => {
+        defer.reject(error.data);
+      }
+    );
+    return defer.promise;
+  }
+
+
+
+  postDHCPRelayInterface(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getDHCPRelayInterfaceUrl(), params)
+      .then((res) => {
+          defer.resolve(res.data);
+        },
+        (err) => {
+          defer.reject(err.data);
+        }
+      );
+    return defer.promise;
+  }
+
+  deleteDHCPRelayInterface(connectPoint, vlan) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDHCPRelayInterfaceByDeviceAndPortUrl(connectPoint, vlan)).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.reject(error.data);
+      }
+    );
+    return defer.promise;
+  }
+
+  getUpLink(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getUpLinkUrl())
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.resolve({'data': {'uplinkSegments': []}});
+        }
+      );
+    return defer.promise;
+  }
+
+  postUpLink(param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getUpLinkUrl(), param)
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
+  deleteUpLink(name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getUpLinkDeleteUrl(name))
+      .then((res) => {
+          defer.resolve(res);
+        },
+        (err) => {
+          defer.reject(err);
+        }
+      );
+    return defer.promise;
+  }
+
 }
 DeviceDataManager.$inject = DeviceDataManager.getDI();
 DeviceDataManager.$$ngIsClass = true;

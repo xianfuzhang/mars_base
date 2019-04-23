@@ -912,6 +912,14 @@ export class appService {
     return this.getZoneEndpoint() + `/dhcprelay/v1/indirect/dhcpserverConnetPoint/${device_id}/${port}`;
   }
 
+  getDHCPRelayInterfaceUrl(){
+    return this.getZoneEndpoint() + `/dhcprelay/v1/interfaces`;
+  }
+
+  getDHCPRelayInterfaceByDeviceAndPortUrl(connectPoint, vlan){
+    return this.getZoneEndpoint() + `/dhcprelay/v1/interfaces/${connectPoint}/${vlan}`;
+  }
+
   getDHCPRelayCountersUrl(){
     return this.getZoneEndpoint() + `/dhcprelay/v1/counters`;
   }

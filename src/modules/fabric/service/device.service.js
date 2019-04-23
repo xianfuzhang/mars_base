@@ -1591,6 +1591,11 @@ export class DeviceService {
         'type': 'indirect'
       },
       {
+        'label': this.translate('MODULES.DHCP_RELAY.TAB.SCHEMA.INTERFACE'),
+        'value': 'interface',
+        'type': 'interface'
+      },
+      {
         'label': this.translate('MODULES.DHCP_RELAY.TAB.SCHEMA.COUNTER'),
         'value': 'counter',
         'type': 'counter'
@@ -1623,6 +1628,32 @@ export class DeviceService {
       // }
     ];
   }
+
+  getDHCPRelayInterfaceTableSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.CONNECT_POINT'),
+        'field': 'connectPoint',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.VLAN'),
+        'field': 'vlan',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.IP'),
+        'field': 'ip',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.DHCP_RELAY.COLUMN.MAC'),
+        'field': 'mac',
+        'layout': {'visible': true, 'sortable': true}
+      },
+    ];
+  }
+
 
   getDHCPRelayDefaultTableSubSchema() {
     return [

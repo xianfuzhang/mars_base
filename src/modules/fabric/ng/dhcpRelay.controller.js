@@ -61,6 +61,17 @@ export class DHCPRelayController {
       this.scope.model.api.queryUpdate();
     }));
 
+
+    unsubscribers.push(this.di.$rootScope.$on('relay-interface-list-refresh',(event, params)=>{
+      // let msg = params.update ? this.translate('MODULES.LOGICAL.QOS.TAB.ECN.UPDATE.SUCCESS')
+      //   : this.translate('MODULES.LOGICAL.QOS.TAB.ECN.CREATE.SUCCESS');
+
+      let msg = this.translate('MODULES.FABRIC.DHCPRELAY.INTERFACE.CREATE.SUCCESS');
+      this.di.notificationService.renderSuccess(scope, msg);
+      this.scope.model.api.queryUpdate();
+    }));
+
+
     this.scope.$on('$destroy', () => {
     });
   }
@@ -111,6 +122,23 @@ export class DHCPRelayController {
           }
           // this.di.$rootScope.$emit('relay-indirect-wizard-show', event.data);
           break;
+        case 'interface':
+          if (event.action.value === 'delete') {
+            this.di.dialogService.createDialog('warning', this.translate('MODULES.FABRIC.DHCPRELAY.INTERFACE.DIALOG.DELETE.WARNING'))
+              .then(()=>{
+                this.di.deviceDataManager.deleteDHCPRelayInterface(encodeURIComponent(event.data.id), encodeURIComponent(event.data.vlan)).then(
+                  () => {
+                    this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.FABRIC.DHCPRELAY.INTERFACE.DELETE.SUCCESS'));
+                    this.scope.model.api.queryUpdate();
+                  },
+                  (msg) => {
+                    this.di.notificationService.renderWarning(this.scope, msg);
+                  }
+                );
+              },()=>{})
+          }
+          // this.di.$rootScope.$emit('relay-indirect-wizard-show', event.data);
+          break;
         case 'counter':
           break;
       }
@@ -139,6 +167,10 @@ export class DHCPRelayController {
 
     this.scope.addIndirect = () => {
       this.di.$rootScope.$emit('relay-indirect-wizard-show');
+    };
+
+    this.scope.addInterface = () => {
+      this.di.$rootScope.$emit('relay-interface-wizard-show');
     };
   }
 
@@ -232,6 +264,11 @@ export class DHCPRelayController {
           defer.resolve({'data': data});
         });
         break;
+      case 'interface':
+        this.di.deviceDataManager.getDHCPRelayInterface().then((data) => {
+          defer.resolve({'data': data});
+        });
+        break;
       case 'counter':
         this.di.deviceDataManager.getDHCPRelayCounters().then((data) => {
           defer.resolve({'data': data});
@@ -289,20 +326,40 @@ export class DHCPRelayController {
           this.scope.model.entities.push(obj);
         });
         break;
-      case 'counter':
-        entities.forEach((entity)=>{
+      case 'interface':
+        entities.forEach((entity) => {
           let obj = {};
-
-          obj['host'] = entity.host;
-          obj['location'] = this.getDeviceName(entity.location.deviceId) + '/' + entity.location.port;
-          obj['id'] = obj['host'] + obj['location'];
-          obj['solicit'] = entity.solicit;
-          obj['request'] = entity.request;
-          obj['advertise'] = entity.advertise;
-          obj['renew'] = entity.renew;
-          obj['reply'] = entity.reply;
+          obj['id'] = entity.connectPoint;
+          let pointArr = entity.connectPoint.split('/');
+          obj['point_device'] = pointArr[0];
+          obj['point_port'] = pointArr[1];
+          obj['connectPoint'] = this.getDeviceName(pointArr[0]) + '/' + pointArr[1] ;
+          obj['ip'] = entity.ip;
+          obj['mac'] = entity.mac;
+          let vlanArr = entity.vlan.split('/');
+          obj['vlan_id'] = vlanArr[0];
+          obj['vlan_type'] = vlanArr[1];
+          obj['vlan'] = entity.vlan
           this.scope.model.entities.push(obj);
         });
+        break;
+      case 'counter':
+        if(entities){
+          entities.forEach((entity)=>{
+            let obj = {};
+
+            obj['host'] = entity.host;
+            obj['location'] = this.getDeviceName(entity.location.deviceId) + '/' + entity.location.port;
+            obj['id'] = obj['host'] + obj['location'];
+            obj['solicit'] = entity.solicit;
+            obj['request'] = entity.request;
+            obj['advertise'] = entity.advertise;
+            obj['renew'] = entity.renew;
+            obj['reply'] = entity.reply;
+            this.scope.model.entities.push(obj);
+          });
+        }
+
     }
   }
 
@@ -314,6 +371,9 @@ export class DHCPRelayController {
         break;
       case 'indirect':
         schema = this.di.deviceService.getDHCPRelayDefaultTableSchema();
+        break;
+      case 'interface':
+        schema = this.di.deviceService.getDHCPRelayInterfaceTableSchema();
         break;
       case 'counter':
         schema = this.di.deviceService.getDHCPRelayCounterTableSubSchema();
@@ -331,6 +391,9 @@ export class DHCPRelayController {
       case 'indirect':
         actions = this.di.deviceService.getDHCPRelayActionsShow();
         break;
+      case 'interface':
+        actions = this.di.deviceService.getDHCPRelayActionsShow();
+        break;
       case 'counter':
         actions = this.di.deviceService.getDHCPRelayCounterActionsShow();
         break;
@@ -346,6 +409,9 @@ export class DHCPRelayController {
         actions = this.di.deviceService.getDHCPRelayTableRowActions();
         break;
       case 'indirect':
+        actions = this.di.deviceService.getDHCPRelayTableRowActions();
+        break;
+      case 'interface':
         actions = this.di.deviceService.getDHCPRelayTableRowActions();
         break;
       case 'counter':

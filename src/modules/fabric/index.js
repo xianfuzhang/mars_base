@@ -42,6 +42,7 @@ import {HostSegmentEstablishController} from './components/hostsegment_establish
 import {DHCPRelayController} from './ng/dhcpRelay.controller';
 import {DHCPRelayDefaultEstablishController} from './components/dhcprelayDefault_establish/ng/dhcprelayDefaultEstablish.controller';
 import {DHCPRelayIndirectEstablishController} from './components/dhcprelayIndirect_establish/ng/dhcprelayIndirectEstablish.controller';
+import {DHCPRelayInterfaceEstablishController} from './components/dhcprelayInterface_establish/ng/dhcprelayInterfaceEstablish.controller';
 
 export default angular
   .module('fabric', [])
@@ -80,6 +81,7 @@ export default angular
   .controller('dhcpRelayController', DHCPRelayController)
   .controller('dhcpRelayDefaultEstablishController', DHCPRelayDefaultEstablishController)
   .controller('dhcpRelayIndirectEstablishController', DHCPRelayIndirectEstablishController)
+  .controller('dhcpRelayInterfaceEstablishController', DHCPRelayInterfaceEstablishController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)
