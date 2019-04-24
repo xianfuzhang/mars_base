@@ -182,16 +182,20 @@
 
 .dashboard__body .left-panel .setting-group {
   position:absolute;
-  top:28px;
+  top:16px;
   right:28px;
 }
 .dashboard__body .left-panel .setting-group .item {
   float: right;
   cursor: pointer;
   margin-left: 20px;
+  height:24px;
+  border-radius: 50%;
+  padding: 5px;
 }
 .dashboard__body .left-panel .setting-group .item:hover {
-  color: #a1a1a1;
+  //color: #a1a1a1;
+  background-color: lightgray;
 }
 .dashboard__body .right-panel{
   flex-grow:1;position:relative;
@@ -351,3 +355,6 @@
   color: orangered;
 }
 
+.mars-row-flex{
+  background-color: #eff3f6;
+}
