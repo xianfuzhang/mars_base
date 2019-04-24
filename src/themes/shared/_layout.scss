@@ -190,6 +190,12 @@ input:-webkit-autofill:active {
   background-size: 32px 32px;
   margin-right: 20px;
 }
+.tenant__body .mdl-table-field__content, .qos .mdl-table-field__content, 
+.egp .mdl-table-field__content, .account_manager .mdl-table-field__content,
+.ipv4_mapping .mdl-table-field__content, .ipv6_mapping .mdl-table-field__content,
+.ntp .mdl-table-field__content{
+  width: 600px;
+}
 input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active{
  -webkit-text-fill-color: inherit; 
 }
