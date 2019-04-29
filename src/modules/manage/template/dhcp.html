@@ -154,7 +154,7 @@
 
           </div>
         </section>
-        <section class="tab-content" ng-if="tabSelected.type == 'ipmac_mapping'">
+        <section class="tab-content ipv4_mapping" ng-if="tabSelected.type == 'ipmac_mapping'">
           <mdl-table actions-show="dhcpModel.actionsShow"
                      actions="dhcpModel.rowActions"
                      row-select-action="onDHCPTableRowSelectAction($event)"
@@ -205,7 +205,7 @@
           </div>
         </section>
 
-        <section class="tab-content" ng-if="tabSelected.type == 'ipmac_mapping_v6'">
+        <section class="tab-content ipv6_mapping" ng-if="tabSelected.type == 'ipmac_mapping_v6'">
           <mdl-table actions-show="dhcpModel.v6actionsShow"
                      actions="dhcpModel.v6rowActions"
                      provider="dhcpModel.dhcpv6TableProvider" api-ready="onDHCPV6APIReady($api)"

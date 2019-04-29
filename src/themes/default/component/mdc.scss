@@ -63,6 +63,9 @@
 .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label{
   color: #47B8E0;
 }
+.mdc-text-field .mdc-floating-label{
+  white-space: nowrap;
+}
 .mdc-checkbox.mdc-checkbox__normal::before, .mdc-checkbox.mdc-checkbox__normal::after,
 .mdc-checkbox.mdc-checkbox__small::before, .mdc-checkbox.mdc-checkbox__small::after{
   width: 0;
