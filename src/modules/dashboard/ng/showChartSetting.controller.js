@@ -32,6 +32,9 @@ export class ShowChartSettingController {
 			case 'device-memory':
 				chartTitle = this.translate("MODULES.DASHBOARD.CHART.SWITCH_MEMORY.TITLE");
 				break;
+      case 'device-disk':
+        chartTitle = this.translate("MODULES.DASHBOARD.CHART.SWITCH_DISK.TITLE");
+        break;
 		}
 		scope.title = chartTitle;
 		
@@ -79,12 +82,14 @@ export class ShowChartSettingController {
     };
 
     scope.timeChange = () => {
+      if(!scope.chartModel.endTime || !scope.chartModel.beginTime) return;
+
     	let range = (scope.chartModel.endTime.getTime() - scope.chartModel.beginTime.getTime()) / 1000
 	    if(range > 24 * 3600) {
         scope.chartModel.errMsg = this.translate('MODULES.DASHBOARD.SETTING.ERROR_TIME_RANGE_LONG');
         scope.invalid = true;
 	    } else if(range <= 0) {
-        scope.chartModel.errMsg = this.translate('MODULES.DASHBOARD.SETTING.ERROR_TIME_RANGE_LONG');
+        scope.chartModel.errMsg = this.translate('MODULES.DASHBOARD.SETTING.ERROR_TIME_RANGE_INVALID');
         scope.invalid = true;
       } else if(range < 30 * 60) {
         scope.chartModel.errMsg = this.translate('MODULES.DASHBOARD.SETTING.ERROR_TIME_RANGE_SHORT');
