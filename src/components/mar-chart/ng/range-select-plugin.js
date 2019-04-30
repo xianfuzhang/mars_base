@@ -283,6 +283,8 @@ zoomNS.panFunctions.logarithmic = panNumericalScale;
 zoomNS.panCumulativeDelta = 0;
 zoomNS.zoomCumulativeDelta = 0;
 
+const MIN_DISTANCE = 10; // set minimum distance of mouse moving
+
 // Chartjs Zoom Plugin
 let zoomPlugin = {
 	id: 'zoom',
@@ -360,7 +362,7 @@ let zoomPlugin = {
 				chartInstance.zoom._dragZoomStart = null;
 				chartInstance.zoom._dragZoomEnd = null;
 
-				if (dragDistance > 0) {
+				if (dragDistance > MIN_DISTANCE) {
 					// doZoom(chartInstance, zoom, {
 					// 	x: (dragDistance / 2) + startX,
 					// 	y: (yAxis.bottom - yAxis.top) / 2,

@@ -1459,45 +1459,46 @@ export class DashboardController {
 		
 		  this.getClustersCPUAnalyzer(getFilteredDataModel('controller-cpu')).then(() => {
 			  //memory analyzer
-			  let dataArr = [];
-			  let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.controller.cpu.analyzer);
-			
-			  if(records.length) {
-				  records.forEach((item, index) =>{
-					  dataArr.push(item.data)
-				  })
-			  }
-			
-			  let start = this.di.$scope.dashboardModel.controller.cpu.begin_time.getTime();
-			  let end = this.di.$scope.dashboardModel.controller.cpu.end_time.getTime();
-			  let step = this.di.$scope.dashboardModel.controller.cpu.step * 1000;
-			
-			  //update chart with new data
-			  let labels = [];
-			  let curTime = 0;
-			  for(let i = 0; curTime <= end; i++) {
-				  curTime = start + step * i;
-				  labels.push((new Date(curTime)).toISOString());
-			  }
-			
-			  this.di.$scope.clusterCpuChartConfig.data = dataArr;
-			  this.di.$scope.clusterCpuChartConfig.labels = labels;
-			  this.di.$scope.clusterCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.controller.cpu.analyzer, scope.clusterCpuPieChartConfig);
-			
-			  // set pie chart data with first dataset and first data
-			  if(dataArr.length > 0 && labels.length > 0) {
-				  let xLabel = labels[0];
-          let data,title;
-
-          scope.dashboardModel.controller.cpu.analyzer.forEach((controller) => {
-            if(controller.analyzer.length > 0 && !data) {
-              data = controller.analyzer[0];
-              title = controller.name + ' - ' + formatLocalTime(xLabel);
-            }
-          })
-
-				  setCpuPieChartData(data,title,scope.clusterCpuPieChartConfig)
-			  }
+			  // let dataArr = [];
+			  // let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.controller.cpu.analyzer);
+        //
+			  // if(records.length) {
+				 //  records.forEach((item, index) =>{
+					//   dataArr.push(item.data)
+				 //  })
+			  // }
+        //
+			  // let start = this.di.$scope.dashboardModel.controller.cpu.begin_time.getTime();
+			  // let end = this.di.$scope.dashboardModel.controller.cpu.end_time.getTime();
+			  // let step = this.di.$scope.dashboardModel.controller.cpu.step * 1000;
+        //
+			  // //update chart with new data
+			  // let labels = [];
+			  // let curTime = 0;
+			  // for(let i = 0; curTime <= end; i++) {
+				 //  curTime = start + step * i;
+				 //  labels.push((new Date(curTime)).toISOString());
+			  // }
+        //
+			  // this.di.$scope.clusterCpuChartConfig.data = dataArr;
+			  // this.di.$scope.clusterCpuChartConfig.labels = labels;
+			  // this.di.$scope.clusterCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.controller.cpu.analyzer, scope.clusterCpuPieChartConfig);
+        //
+			  // // set pie chart data with first dataset and first data
+			  // if(dataArr.length > 0 && labels.length > 0) {
+				 //  let xLabel = labels[0];
+         //  let data,title;
+        //
+         //  scope.dashboardModel.controller.cpu.analyzer.forEach((controller) => {
+         //    if(controller.analyzer.length > 0 && !data) {
+         //      data = controller.analyzer[0];
+         //      title = controller.name + ' - ' + formatLocalTime(xLabel);
+         //    }
+         //  })
+        //
+				 //  setCpuPieChartData(data,title,scope.clusterCpuPieChartConfig)
+			  // }
+        setClusterCPUChartData();
 		  });
 	  },true));
 	
@@ -1509,45 +1510,46 @@ export class DashboardController {
 		  }
 		
 		  this.getClustersMemoryAnalyzer(getFilteredDataModel('controller-memory')).then(() => {
-			  //memory analyzer
-			  let dataArr = [];
-			  let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.controller.memory.analyzer);
-			
-			  if(records.length) {
-				  records.forEach((item, index) =>{
-					  dataArr.push(item.data)
-				  })
-			  }
-			
-			  let start = this.di.$scope.dashboardModel.controller.memory.begin_time.getTime();
-			  let end = this.di.$scope.dashboardModel.controller.memory.end_time.getTime();
-			  let step = this.di.$scope.dashboardModel.controller.memory.step * 1000;
-			
-			  //update chart with new data
-			  let labels = [];
-			  let curTime = 0;
-			  for(let i = 0; curTime <= end; i++) {
-				  curTime = start + step * i;
-				  labels.push((new Date(curTime)).toISOString());
-			  }
-			
-			  this.di.$scope.clusterMemoryChartConfig.data = dataArr;
-			  this.di.$scope.clusterMemoryChartConfig.labels = labels;
-			  this.di.$scope.clusterMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.controller.memory.analyzer, scope.clusterMemoryPieChartConfig);
-			
-			  if(dataArr.length > 0 && labels.length > 0) {
-				  let xLabel = labels[0];
-          let data,title;
-
-          scope.dashboardModel.controller.memory.analyzer.forEach((controller) => {
-            if(controller.analyzer.length > 0 && !data) {
-              data = controller.analyzer[0];
-              title = controller.name + ' - ' + formatLocalTime(xLabel);
-            }
-          })
-
-				  setMemoryPieChartData(data, title, scope.clusterMemoryPieChartConfig)
-			  }
+			  // //memory analyzer
+			  // let dataArr = [];
+			  // let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.controller.memory.analyzer);
+        //
+			  // if(records.length) {
+				 //  records.forEach((item, index) =>{
+					//   dataArr.push(item.data)
+				 //  })
+			  // }
+        //
+			  // let start = this.di.$scope.dashboardModel.controller.memory.begin_time.getTime();
+			  // let end = this.di.$scope.dashboardModel.controller.memory.end_time.getTime();
+			  // let step = this.di.$scope.dashboardModel.controller.memory.step * 1000;
+        //
+			  // //update chart with new data
+			  // let labels = [];
+			  // let curTime = 0;
+			  // for(let i = 0; curTime <= end; i++) {
+				 //  curTime = start + step * i;
+				 //  labels.push((new Date(curTime)).toISOString());
+			  // }
+        //
+			  // this.di.$scope.clusterMemoryChartConfig.data = dataArr;
+			  // this.di.$scope.clusterMemoryChartConfig.labels = labels;
+			  // this.di.$scope.clusterMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.controller.memory.analyzer, scope.clusterMemoryPieChartConfig);
+        //
+			  // if(dataArr.length > 0 && labels.length > 0) {
+				 //  let xLabel = labels[0];
+         //  let data,title;
+        //
+         //  scope.dashboardModel.controller.memory.analyzer.forEach((controller) => {
+         //    if(controller.analyzer.length > 0 && !data) {
+         //      data = controller.analyzer[0];
+         //      title = controller.name + ' - ' + formatLocalTime(xLabel);
+         //    }
+         //  })
+        //
+				 //  setMemoryPieChartData(data, title, scope.clusterMemoryPieChartConfig)
+			  // }
+        setClusterMemoryChartData();
 		  });
 	  },true));
 	
@@ -1559,45 +1561,46 @@ export class DashboardController {
 		  }
 		
 		  this.getDevicesCPUAnalyzer(getFilteredDataModel('device-cpu')).then(() => {
-			  //memory analyzer
-			  let dataArr = [];
-			  let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer);
-			
-			  if(records.length) {
-				  records.forEach((item, index) =>{
-					  dataArr.push(item.data)
-				  })
-			  }
-			
-			  let start = this.di.$scope.dashboardModel.cpu.begin_time.getTime();
-			  let end = this.di.$scope.dashboardModel.cpu.end_time.getTime();
-			  let step = this.di.$scope.dashboardModel.cpu.step * 1000;
-			
-			  //update chart with new data
-			  let labels = [];
-			  let curTime = 0;
-			  for(let i = 0; curTime <= end; i++) {
-				  curTime = start + step * i;
-				  labels.push((new Date(curTime)).toISOString());
-			  }
-			
-			  this.di.$scope.switchCpuChartConfig.data = dataArr;
-			  this.di.$scope.switchCpuChartConfig.labels = labels;
-			  this.di.$scope.switchCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.cpu.analyzer, scope.switchCpuPieChartConfig);
-			
-			  if(dataArr.length > 0 && labels.length > 0) {
-				  let xLabel = labels[0];
-          let data,title;
-
-          scope.dashboardModel.cpu.analyzer.forEach((controller) => {
-            if(controller.analyzer.length > 0 && !data) {
-              data = controller.analyzer[0];
-              title = controller.name + ' - ' + formatLocalTime(xLabel);
-            }
-          })
-				
-				  setCpuPieChartData(data, title, this.di.$scope.switchCpuPieChartConfig)
-			  }
+			  // //memory analyzer
+			  // let dataArr = [];
+			  // let records = this.getDevicesCPUChartData(this.di.$scope.dashboardModel.cpu.analyzer);
+        //
+			  // if(records.length) {
+				 //  records.forEach((item, index) =>{
+					//   dataArr.push(item.data)
+				 //  })
+			  // }
+        //
+			  // let start = this.di.$scope.dashboardModel.cpu.begin_time.getTime();
+			  // let end = this.di.$scope.dashboardModel.cpu.end_time.getTime();
+			  // let step = this.di.$scope.dashboardModel.cpu.step * 1000;
+        //
+			  // //update chart with new data
+			  // let labels = [];
+			  // let curTime = 0;
+			  // for(let i = 0; curTime <= end; i++) {
+				 //  curTime = start + step * i;
+				 //  labels.push((new Date(curTime)).toISOString());
+			  // }
+        //
+			  // this.di.$scope.switchCpuChartConfig.data = dataArr;
+			  // this.di.$scope.switchCpuChartConfig.labels = labels;
+			  // this.di.$scope.switchCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.cpu.analyzer, scope.switchCpuPieChartConfig);
+        //
+			  // if(dataArr.length > 0 && labels.length > 0) {
+				 //  let xLabel = labels[0];
+         //  let data,title;
+        //
+         //  scope.dashboardModel.cpu.analyzer.forEach((controller) => {
+         //    if(controller.analyzer.length > 0 && !data) {
+         //      data = controller.analyzer[0];
+         //      title = controller.name + ' - ' + formatLocalTime(xLabel);
+         //    }
+         //  })
+        //
+				 //  setCpuPieChartData(data, title, this.di.$scope.switchCpuPieChartConfig)
+			  // }
+        setSwitchCpuChartData();
 		  });
 	  },true));
 	  
@@ -1610,44 +1613,45 @@ export class DashboardController {
 		
 	  	this.getDevicesMemoryAnalyzer(getFilteredDataModel('device-memory')).then(() => {
 			  //memory analyzer
-			  let dataArr = [];
-			  let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
-			
-			  if(records.length) {
-				  records.forEach((item, index) =>{
-					  dataArr.push(item.data)
-				  })
-			  }
-			
-			  let start = this.di.$scope.dashboardModel.memory.begin_time.getTime();
-			  let end = this.di.$scope.dashboardModel.memory.end_time.getTime();
-			  let step = this.di.$scope.dashboardModel.memory.step * 1000;
-			
-			  //update chart with new data
-			  let labels = [];
-			  let curTime = 0;
-			  for(let i = 0; curTime <= end; i++) {
-				  curTime = start + step * i;
-				  labels.push((new Date(curTime)).toISOString());
-			  }
-			
-			  this.di.$scope.switchMemoryChartConfig.data = dataArr;
-			  this.di.$scope.switchMemoryChartConfig.labels = labels;
-			  this.di.$scope.switchMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.memory.analyzer, scope.switchMemoryPieChartConfig);
-			
-			  if(dataArr.length > 0 && labels.length > 0) {
-				  let xLabel = labels[0];
-          let data,title;
-
-          scope.dashboardModel.memory.analyzer.forEach((controller) => {
-            if(controller.analyzer.length > 0 && !data) {
-              data = controller.analyzer[0];
-              title = controller.name + ' - ' + formatLocalTime(xLabel);
-            }
-          })
-				
-				  setMemoryPieChartData(data, title, this.di.$scope.switchMemoryPieChartConfig)
-			  }
+			  // let dataArr = [];
+			  // let records = this.getDevicesMemoryChartData(this.di.$scope.dashboardModel.memory.analyzer);
+        //
+			  // if(records.length) {
+				 //  records.forEach((item, index) =>{
+					//   dataArr.push(item.data)
+				 //  })
+			  // }
+        //
+			  // let start = this.di.$scope.dashboardModel.memory.begin_time.getTime();
+			  // let end = this.di.$scope.dashboardModel.memory.end_time.getTime();
+			  // let step = this.di.$scope.dashboardModel.memory.step * 1000;
+        //
+			  // //update chart with new data
+			  // let labels = [];
+			  // let curTime = 0;
+			  // for(let i = 0; curTime <= end; i++) {
+				 //  curTime = start + step * i;
+				 //  labels.push((new Date(curTime)).toISOString());
+			  // }
+        //
+			  // this.di.$scope.switchMemoryChartConfig.data = dataArr;
+			  // this.di.$scope.switchMemoryChartConfig.labels = labels;
+			  // this.di.$scope.switchMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.memory.analyzer, scope.switchMemoryPieChartConfig);
+        //
+			  // if(dataArr.length > 0 && labels.length > 0) {
+				 //  let xLabel = labels[0];
+         //  let data,title;
+        //
+         //  scope.dashboardModel.memory.analyzer.forEach((controller) => {
+         //    if(controller.analyzer.length > 0 && !data) {
+         //      data = controller.analyzer[0];
+         //      title = controller.name + ' - ' + formatLocalTime(xLabel);
+         //    }
+         //  })
+        //
+				 //  setMemoryPieChartData(data, title, this.di.$scope.switchMemoryPieChartConfig)
+			  // }
+        setSwitchMemoryChartData();
 	  	});
 	  },true));
 
@@ -1659,45 +1663,46 @@ export class DashboardController {
       }
 
       this.getDevicesDiskAnalyzer(getFilteredDataModel('device-disk')).then(() => {
-        //disk analyzer
-        let dataArr = [];
-        let records = this.getDevicesDiskChartData(this.di.$scope.dashboardModel.disk.analyzer);
-
-        if(records.length) {
-          records.forEach((item, index) =>{
-            dataArr.push(item.data)
-          })
-        }
-
-        let start = this.di.$scope.dashboardModel.disk.begin_time.getTime();
-        let end = this.di.$scope.dashboardModel.disk.end_time.getTime();
-        let step = this.di.$scope.dashboardModel.disk.step * 1000;
-
-        //update chart with new data
-        let labels = [];
-        let curTime = 0;
-        for(let i = 0; curTime <= end; i++) {
-          curTime = start + step * i;
-          labels.push((new Date(curTime)).toISOString());
-        }
-
-        this.di.$scope.switchDiskChartConfig.data = dataArr;
-        this.di.$scope.switchDiskChartConfig.labels = labels;
-        this.di.$scope.switchDiskChartConfig.onClick = diskChartOnClick(scope.dashboardModel.disk.analyzer, scope.switchDiskPieChartConfig);
-
-        if(dataArr.length > 0 && labels.length > 0) {
-          let xLabel = labels[0];
-          let data,title;
-
-          scope.dashboardModel.disk.analyzer.forEach((controller) => {
-            if(controller.analyzer.length > 0 && !data) {
-              data = controller.analyzer[0];
-              title = controller.name + ' - ' + formatLocalTime(xLabel);
-            }
-          })
-
-          setDiskPieChartData(data, title, this.di.$scope.switchDiskPieChartConfig)
-        }
+        // //disk analyzer
+        // let dataArr = [];
+        // let records = this.getDevicesDiskChartData(this.di.$scope.dashboardModel.disk.analyzer);
+        //
+        // if(records.length) {
+        //   records.forEach((item, index) =>{
+        //     dataArr.push(item.data)
+        //   })
+        // }
+        //
+        // let start = this.di.$scope.dashboardModel.disk.begin_time.getTime();
+        // let end = this.di.$scope.dashboardModel.disk.end_time.getTime();
+        // let step = this.di.$scope.dashboardModel.disk.step * 1000;
+        //
+        // //update chart with new data
+        // let labels = [];
+        // let curTime = 0;
+        // for(let i = 0; curTime <= end; i++) {
+        //   curTime = start + step * i;
+        //   labels.push((new Date(curTime)).toISOString());
+        // }
+        //
+        // this.di.$scope.switchDiskChartConfig.data = dataArr;
+        // this.di.$scope.switchDiskChartConfig.labels = labels;
+        // this.di.$scope.switchDiskChartConfig.onClick = diskChartOnClick(scope.dashboardModel.disk.analyzer, scope.switchDiskPieChartConfig);
+        //
+        // if(dataArr.length > 0 && labels.length > 0) {
+        //   let xLabel = labels[0];
+        //   let data,title;
+        //
+        //   scope.dashboardModel.disk.analyzer.forEach((controller) => {
+        //     if(controller.analyzer.length > 0 && !data) {
+        //       data = controller.analyzer[0];
+        //       title = controller.name + ' - ' + formatLocalTime(xLabel);
+        //     }
+        //   })
+        //
+        //   setDiskPieChartData(data, title, this.di.$scope.switchDiskPieChartConfig)
+        // }
+        setSwitchDiskChartData();
       });
     },true));
 	
