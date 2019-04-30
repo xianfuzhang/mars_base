@@ -78,6 +78,8 @@
   line-height: 20px;
   font-size: 12px;
   padding: 0 10px;
+  transform: scale(1);
+  transition: transform linear .1s;
 }
 
 .btn-sm:hover:not(.disabled) {

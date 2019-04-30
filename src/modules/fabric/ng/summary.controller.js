@@ -528,14 +528,14 @@ export class FabricSummaryController {
         scope.fabricModel.monitorState = this.translate('MODULES.TOPO.MONITOR.STATE_RUNNING');
       } else {
         let baseStr = this.translate('MODULES.TOPO.MONITOR.STATE_RUNNING');
-        if(scope.fabricModel.monitorState.length - baseStr.length <6){
+        if(scope.fabricModel.monitorState.length - baseStr.length < 12){
           scope.fabricModel.monitorState = scope.fabricModel.monitorState + '·';
         } else {
           scope.fabricModel.monitorState = this.translate('MODULES.TOPO.MONITOR.STATE_RUNNING');
         }
         scope.$apply();
       }
-      monitorStateInterval = setTimeout(loop_monitor_state,500)
+      monitorStateInterval = setTimeout(loop_monitor_state,200)
     };
 
     let getLinkId = (deviceIds, ports) =>{
@@ -572,7 +572,7 @@ export class FabricSummaryController {
 
     let _calcLinkColor = (bytesFlux) =>{
       let LINE_NORMAL = '136,234,136';
-      let LINE_BUSY = '252, 212, 104  ';
+      let LINE_BUSY = '252,212,104';
       let LINE_CONGESTION = "255,0,0";
       if(bytesFlux >= busyMetric && bytesFlux < congestionMetric){
         return [LINE_BUSY, 'busy'];

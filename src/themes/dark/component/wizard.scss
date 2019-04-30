@@ -34,24 +34,25 @@
   
     @include keyframes(come-in) {
       0% {
-        transform: scale(0);
+        transform: scaleY(0);
       }
       100% {
-        transform: scale(1);
+        transform: scaleY(1);
       }
     }
 
     @include keyframes(come-out) {
       0% {
-        transform: scale(1);
+        transform: scaleY(1);
       }
       100% {
-        transform: scale(0);
+        transform: scaleY(0);
       }
     }
     
     @include state(hide) {
-      animation: come-out 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+      //animation: come-out 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+      animation: come-out-single 0.5s cubic-bezier(0.95, 0.05, 0.795, 0.035);
     }
 
 
@@ -70,24 +71,25 @@
     
     @include keyframes(come-in-single) {
       0% {
-        transform: scale(0);
+        transform: scaleY(0);
       }
       100% {
-        transform: scale(1);
+        transform: scaleY(1);
       }
     }
 
     @include keyframes(come-out-single) {
       0% {
-        transform: scale(1);
+        transform: scaleY(1);
       }
       100% {
-        transform: scale(0);
+        transform: scaleY(0);
       }
     }
 
     @include state(hide) {
-      animation: come-out-single 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+      //animation: come-out-single 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+      animation: come-out-single 0.5s cubic-bezier(0.95, 0.05, 0.795, 0.035);
     }
   }
 
@@ -96,9 +98,9 @@
     line-height: 40px;
     padding: 5px 0;
     color: #fff;
-    border-bottom: 1px solid #777;
-    //background-color: #7accef;
-    background: linear-gradient(to right, #99a9c1, #8ed6f3, #5d90a5 98%, #6c909c);
+    //border-bottom: 1px solid #777;
+    background-color: #2d2d2d;
+    //background: linear-gradient(to right, #99a9c1, #8ed6f3, #5d90a5 98%, #6c909c);
 
     @include element(title) {
       float: left;
@@ -175,7 +177,7 @@
       //background: -moz-linear-gradient(top,#CCCCCC,#F0F0F0);
       //background: -ms-linear-gradient(top,#CCCCCC,#F0F0F0);
       //background: linear-gradient(top,#CCCCCC,#F0F0F0);
-      background-color: #1a1a1a;
+      background-color: #414141;
       overflow: hidden;
 
       @include element(step) {
@@ -211,7 +213,8 @@
       padding: 3px 10px 5px;
       height: 100%;
       width: 567px;
-      background: #282828;
+      background: #414141;
+      //background: #282828;
       box-sizing: border-box;
       //box-sizing: border-box;
       overflow: auto;
@@ -259,12 +262,13 @@
   @include element(footer) {
     width: 100%;
     height: 50px;
-    border-top: 1px solid #777;
-    background-color: #191919;
-    background: -webkit-linear-gradient(left,#000000,#4C4C4C,#000000);
-    background: -moz-linear-gradient(left,#000000,#4C4C4C,#000000);
-    background: -ms-linear-gradient(left,#000000,#4C4C4C,#000000);
-    background: linear-gradient(left,#000000,#4C4C4C,#000000);
+    //border-top: 1px solid #777;
+    background-color: #414141;
+    //background-color: #191919;
+    //background: -webkit-linear-gradient(left,#000000,#4C4C4C,#000000);
+    //background: -moz-linear-gradient(left,#000000,#4C4C4C,#000000);
+    //background: -ms-linear-gradient(left,#000000,#4C4C4C,#000000);
+    //background: linear-gradient(left,#000000,#4C4C4C,#000000);
 
     @include element(btn-group) {
       display: block;
