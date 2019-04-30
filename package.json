@@ -10,6 +10,7 @@
     "postinstall": "npm --prefix ./devtools/mock install ./devtools/mock",
     "prebuild:dev": "node build.js",
     "build:dev": "webpack --config devtools/webpack/webpack.config",
+    "postbuild:dev": "concurrently \"webpack-dev-server --config devtools/webpack/webpack.config\" \"nodemon devtools/mock/app/app.js --config devtools/mock/app/nodemon.json \"",
     "prestart": "npm install",
     "prebuild:code": "node build.js",
     "build:code": "webpack --config devtools/webpack/webpack.config",
