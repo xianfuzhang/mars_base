@@ -526,6 +526,30 @@ export class appService {
     return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/memory/' + deviceId + '/' + startTime + '/' + endTime + '/' + resolutionSecond;
   }
 
+  getDeviceDiskAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/disk/' + deviceId + '/' + startTime + '/' + endTime + '/' + resolutionSecond;
+  }
+
+  getNginxTypeAnalyzerUrl(type, startTime, endTime) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/nginx/' + startTime + '/' + endTime +  '/type/' + type.toLowerCase();
+  }
+
+  getNginxTimerangeAnalyzerUrl(startTime, endTime, resolutionSecond, ip) {
+    if(ip) {
+      return this.getZoneEndpoint(true) + '/analyzer/v1/nginx/' + startTime + '/' + endTime +  '/' + resolutionSecond + '/clientip/' + ip;
+    } else {
+      return this.getZoneEndpoint(true) + '/analyzer/v1/nginx/' + startTime + '/' + endTime +  '/' + resolutionSecond;
+    }
+  }
+
+  getSyslogAnalyzerUrl(startTime, endTime, resolutionSecond) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/syslog/' + startTime + '/' + endTime +  '/' + resolutionSecond;
+  }
+
+  getFilebeatAnalyzerUrl(type, startTime, endTime, resolutionSecond) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/filebeat/' + type + '/' + startTime + '/' + endTime +  '/' + resolutionSecond;
+  }
+
   getIntentsUrl() {
     return this.getZoneEndpoint() + '/intents';
   }
@@ -603,7 +627,8 @@ export class appService {
     
     return url;
   }
-  
+
+
   getDownloadFileUrl(filename) {
 	  let useraccount = this.di.$cookies.get('useraccount');
 	  let crypto = require('crypto-js');

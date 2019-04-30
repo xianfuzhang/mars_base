@@ -381,6 +381,19 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getDeviceDiskAnalyzer(deviceId, startTime, endTime, resolutionSecond) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getDeviceDiskAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond)).then(
+      (res) => {
+        defer.resolve(res.data.disk);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
   getDeviceTemperatureSensors(deviceId) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getTemperatureSensorsUrl(deviceId)).then(
