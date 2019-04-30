@@ -221,6 +221,37 @@
                     </canvas>
                 </div>
               </div>
+
+              <div class="mars-row-flex">
+                    <div class="col-gutter-md left-panel">
+                        <canvas id="switch-disk-usage-rate" height="350"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-data="switchDiskChartConfig.data"
+                                chart-labels="switchDiskChartConfig.labels"
+                                chart-series="switchDiskChartConfig.series"
+                                chart-fill="false"
+                                chart-options="switchDiskChartConfig.options"
+                                chart-click="switchDiskChartConfig.onClick"
+                                chart-hover="switchDiskChartConfig.onHover">
+                        </canvas>
+
+                        <div class="setting-group"  ng-show="!dashboardModel.disk.loading">
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-disk')"><i class="material-icons">settings</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-disk')"><i class="material-icons">undo</i></div>
+                        </div>
+                    </div>
+                    <div class="col-gutter-md right-panel">
+                        <canvas id="switch-disk-analyzer-piechart" height="250"
+                                class="chart chart-pie"
+                                chart-type="pie"
+                                chart-data="switchDiskPieChartConfig.data"
+                                chart-labels="switchDiskPieChartConfig.labels"
+                                chart-options="switchDiskPieChartConfig.options"
+                                chart-colors="switchDiskPieChartConfig.colors">
+                        </canvas>
+                    </div>
+                </div>
             </div>
 
             <div class="mars-row" ng-if="isAnalyzeEnable">

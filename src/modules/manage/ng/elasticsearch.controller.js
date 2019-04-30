@@ -14,6 +14,7 @@ export class ElasticsearchController {
       'c3',
       'dialogService',
       'dateService',
+      'chartService',
       'dashboardDataManager',
       'manageDataManager',
       'modalManager',
@@ -41,6 +42,8 @@ export class ElasticsearchController {
     this.scope = this.di.$scope;
     const scope = this.di.$scope;
     const DI = this.di;
+    const chartService = this.di.chartService;
+    const chartStyles = chartService.styles;
     this.scope.pageTitle = this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH');
     
     let unSubscribers = [];
@@ -48,6 +51,12 @@ export class ElasticsearchController {
     const INTERVAL_COUNT = 30;
     let date = DI.dateService.getTodayObject();
     let before = DI.dateService.getBeforeDateObject(20*60*1000);
+
+    const CHART_GRID_NUM = 36; // chart grid number
+    let ngxin_before = this.di.dateService.getBeforeDateObject(60*1000*60 * 24); // 前一天
+    let nginx_begin_time = new Date(ngxin_before.year, ngxin_before.month, ngxin_before.day, ngxin_before.hour, ngxin_before.minute, 0);
+    let ngin_end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
+
     scope.elasticsearchModel = {
       selectedIndice: '',
       indice: {
@@ -57,9 +66,113 @@ export class ElasticsearchController {
       },
       indiceOptions: [],
       summaryLoading: true,
-      analyzerLoading: true
+      analyzerLoading: true,
     };
-  
+
+    scope.nginxTypeAnalyzer = {
+      selectedOption: {},
+      typesOptions: [
+        {
+          label: "URL",
+          value: "url"
+        },
+        {
+          label: "IP",
+          value: "clientip",
+
+        }
+      ],
+      dataModel: null,
+      startTime: nginx_begin_time,
+      endTime: ngin_end_time,
+      loading: true,
+      chartConfig: {
+        data: [],
+        labels: [],
+        options: {},
+        colors: [],
+        series: []
+      }
+    };
+
+    scope.nginxTimerangeAnalyzer = {
+      selectedOption: {},
+      typesOptions: [
+        {
+          label: "URL",
+          value: "url"
+        },
+        {
+          label: "IP",
+          value: "clientip",
+
+        }
+      ],
+      dataModel: null,
+      startTime: nginx_begin_time,
+      endTime: ngin_end_time,
+      loading: true,
+      chartConfig: {
+        data: [],
+        labels: [],
+        options: {},
+        colors: [],
+        series: []
+      },
+      pieChartConfig: {
+        data: [],
+        labels: [],
+        colors: [],
+        options: []
+      }
+    };
+
+    scope.syslogAnalyzer = {
+      dataModel: null,
+      startTime: nginx_begin_time,
+      endTime: ngin_end_time,
+      loading: true,
+      chartConfig: {
+        data: [],
+        labels: [],
+        options: {},
+        colors: [],
+        series: []
+      }
+    };
+
+    scope.filebeatAnalyzer = {
+      selectedOption: {},
+      typesOptions: [
+        {
+          label: "thread",
+          value: "thread"
+        },
+        {
+          label: "handler",
+          value: "handler",
+
+        }
+      ],
+      dataModel: null,
+      startTime: nginx_begin_time,
+      endTime: ngin_end_time,
+      loading: true,
+      chartConfig: {
+        data: [],
+        labels: [],
+        options: {},
+        colors: [],
+        series: []
+      },
+      pieChartConfig: {
+        data: [],
+        labels: [],
+        colors: [],
+        options: []
+      }
+    };
+
     scope.indiceSummaryChartConfig = {
       data: [],
       labels: [],
@@ -74,7 +187,7 @@ export class ElasticsearchController {
       series: [],
       onClick: () => {}
     }
-  
+
     scope.backup = () => {
       scope.loading = true;
     
@@ -185,10 +298,20 @@ export class ElasticsearchController {
         scope.loading = false;
       })
     }
-    
+
+    scope.nginxTypeSelect = ($value) => {
+      scope.nginxTypeAnalyzer.selectedOption = $value;
+      scope.nginxTypeAnalyzer.loading = true;
+    };
+
+    scope.filebeatTypeSelect = ($value) => {
+      scope.filebeatAnalyzer.selectedOption = $value;
+      scope.filebeatAnalyzer.loading = true;
+    };
+
     let init =() =>{
       scope.loading = true;
-      
+
       // get indices sumary
       this.di.manageDataManager.getElasticsearcStatus().then((res) => {
         dataModel['indices'] = res.data.indices;
@@ -215,8 +338,57 @@ export class ElasticsearchController {
           scope.loading = false;
         })
       })
+
+      // get nginx analyzer by timerange
+      let resolutionSecond = Math.floor((scope.nginxTimerangeAnalyzer.endTime.getTime() - scope.nginxTimerangeAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+      this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond).then((res) => {
+        scope.nginxTimerangeAnalyzer.dataModel = res;
+        scope.nginxTimerangeAnalyzer.loading = false;
+        setNginxChartLineData();
+      }, () => {
+        scope.nginxTimerangeAnalyzer.dataModel = [];
+        scope.nginxTimerangeAnalyzer.loading = false;
+        setNginxChartLineData();
+      });
+
+      // get nginx analyzer by type
+      scope.nginxTypeAnalyzer.selectedOption = scope.nginxTypeAnalyzer.typesOptions[0];
+      this.di.manageDataManager.getNginxTypeAnalyzer(scope.nginxTypeAnalyzer.selectedOption.value, this.getISODate(scope.nginxTypeAnalyzer.startTime), this.getISODate(scope.nginxTypeAnalyzer.endTime)).then((res) => {
+        scope.nginxTypeAnalyzer.dataModel = res;
+        scope.nginxTypeAnalyzer.loading = false;
+        setNginxChartBarData();
+      }, () => {
+        scope.nginxTypeAnalyzer.dataModel = [];
+        scope.nginxTypeAnalyzer.loading = false;
+        setNginxChartBarData();
+      });
+
+      // get syslog analyzer by timerange
+      let syslogSeconds = Math.floor((scope.syslogAnalyzer.endTime.getTime() - scope.syslogAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+      this.di.manageDataManager.getSyslogAnalyzer(this.getISODate(scope.syslogAnalyzer.startTime), this.getISODate(scope.syslogAnalyzer.endTime), syslogSeconds).then((res) => {
+        scope.syslogAnalyzer.dataModel = res;
+        scope.syslogAnalyzer.loading = false;
+        setSyslogChartLineData();
+      }, () => {
+        scope.syslogAnalyzer.dataModel = [];
+        scope.syslogAnalyzer.loading = false;
+        setSyslogChartLineData();
+      });
+
+      // get filebeat analyzer by timerange
+      scope.filebeatAnalyzer.selectedOption = scope.filebeatAnalyzer.typesOptions[0];
+      let filebeatSeconds = Math.floor((scope.filebeatAnalyzer.endTime.getTime() - scope.filebeatAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+      this.di.manageDataManager.getFilebeatAnalyzer(scope.filebeatAnalyzer.selectedOption.value, this.getISODate(scope.filebeatAnalyzer.startTime), this.getISODate(scope.filebeatAnalyzer.endTime), filebeatSeconds).then((res) => {
+        scope.filebeatAnalyzer.dataModel = res;
+        scope.filebeatAnalyzer.loading = false;
+        setFilebeatChartLineData();
+      }, () => {
+        scope.filebeatAnalyzer.dataModel = [];
+        scope.filebeatAnalyzer.loading = false;
+        setFilebeatChartLineData();
+      });
     };
-    
+
     let setIndiceSummaryChartData = (indices) => {
       let dataArr = [], labelsArr = [];
     
@@ -313,7 +485,7 @@ export class ElasticsearchController {
         // Container for zoom options
         zoom: {
           // Useful for dynamic data loading
-          onZoom: lineChartOnZoom()
+          onZoom: lineChartOnZoom('indice-analyzer')
         }
       }
     
@@ -321,10 +493,234 @@ export class ElasticsearchController {
       scope.indiceAnalyzerChartConfig.labels = labelsArr;
       scope.indiceAnalyzerChartConfig.options = options;
       scope.indiceAnalyzerChartConfig.series = series;
-      // this.di.$scope.indiceAnalyzerChartConfig.onClick = cpuChartOnClick(scope.elasticsearchModel.cpu.analyzer, scope.switchCpuPieChartConfig);
-      // this.di.$scope.indiceAnalyzerChartConfig.onHover = lineChartOnHover();
     };
-  
+
+    let setNginxChartBarData = () => {
+      let dataList = [], labelsArr = [];
+      let dataArray = scope.nginxTypeAnalyzer.dataModel;
+      let key = scope.nginxTypeAnalyzer.selectedOption.value == 'url' ? 'url' : 'clientIp';
+      this.di._.forEach(dataArray, (statistic)=>{
+        // let urlArr = statistic[key].split('/');
+        // let label = urlArr.length > 1 ? urlArr[0] + '/.../' + urlArr[urlArr.length - 1] : urlArr[0];
+        labelsArr.push(statistic[key]);
+        dataList.push(statistic['count']);
+      });
+
+      const pad = this.pad;
+      let options = {
+        title: {
+          text: "访问具体情况分析"
+        },
+        scales: {
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: '访问次数'
+            },
+            ticks: {
+              beginAtZero: false,
+            }
+          }],
+          xAxes: [{
+            barThickness: 40,
+            ticks: {
+              callback: (value) => {
+                let urlArr = value.split('/');
+                return urlArr.length > 3 ? urlArr[0] == '' ? urlArr[1] + '/.../' + urlArr[urlArr.length - 1] : urlArr[0] + '/.../' + urlArr[urlArr.length - 1] : value;
+              },
+            }
+          }],
+        },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              return labelsArr[tooltipItem[0].index];
+            }
+          }
+        }
+      }
+
+      scope.nginxTypeAnalyzer.chartConfig.data = [dataList];
+      scope.nginxTypeAnalyzer.chartConfig.series = ['访问次数'];
+      scope.nginxTypeAnalyzer.chartConfig.labels = labelsArr;
+      scope.nginxTypeAnalyzer.chartConfig.options = options;
+      scope.nginxTypeAnalyzer.chartConfig.colors = [{backgroundColor: 'rgb(255,228,181)'}]
+    };
+
+    let setNginxChartLineData = () => {
+      let dataArr = [];
+      let series = ['访问次数'];
+      let labelsArr = [];
+      let dataArray = scope.nginxTimerangeAnalyzer.dataModel;
+
+      labelsArr = this.getTimeSeries(dataArray);
+
+      dataArray.forEach((data) => {
+        dataArr.push(data.count);
+      });
+
+      const pad = this.pad;
+      let options = {
+        title: {
+          display: true,
+          text: "访问情况统计",
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: false,
+              labelString: '访问次数'
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              callback: function(value, index, values) {
+                value = new Date(value);
+                return pad(value.getHours()) + ':' + pad(value.getMinutes()) + ':' + pad(value.getSeconds());
+              }
+            }
+          }],
+        },
+        // Container for zoom options
+        zoom: {
+          onZoom: lineChartOnZoom('nginx-analyzer')
+        }
+      };
+      scope.nginxTimerangeAnalyzer.chartConfig.data = [dataArr];
+      scope.nginxTimerangeAnalyzer.chartConfig.labels = labelsArr;
+      scope.nginxTimerangeAnalyzer.chartConfig.options = options;
+      scope.nginxTimerangeAnalyzer.chartConfig.series = series;
+      scope.nginxTimerangeAnalyzer.chartConfig.onClick = nginxLineChartOnClick();
+      scope.nginxTimerangeAnalyzer.chartConfig.onHover = lineChartOnHover();
+
+      // set pie chart data with first dataset and first data
+      if(dataArr.length > 0 && labelsArr.length > 0) {
+        setNginxPieChartData(dataArr[0], formatLocalTime(labelsArr[0]))
+      }
+    };
+
+    let setSyslogChartLineData = () => {
+      let dataArr = [];
+      let series = [];
+      let labelsArr = [];
+      let dataModel = scope.syslogAnalyzer.dataModel;
+
+      labelsArr = this.getSyslogTimeSeries(dataModel);
+
+      for(let key in dataModel){
+        let dataList = [];
+        dataModel[key].forEach((data) => {
+          dataList.push(data.count);
+        })
+
+        dataArr.push(dataList);
+        series.push(key);
+      };
+
+      const pad = this.pad;
+      let options = {
+        title: {
+          display: true,
+          text: "系统日志统计情况",
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: false,
+              labelString: '次数'
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              callback: function(value, index, values) {
+                value = new Date(value);
+                return pad(value.getHours()) + ':' + pad(value.getMinutes()) + ':' + pad(value.getSeconds());
+              }
+            }
+          }],
+        },
+        // Container for zoom options
+        zoom: {
+          onZoom: lineChartOnZoom('syslog-analyzer')
+        }
+      };
+      scope.syslogAnalyzer.chartConfig.data = dataArr;
+      scope.syslogAnalyzer.chartConfig.labels = labelsArr;
+      scope.syslogAnalyzer.chartConfig.options = options;
+      scope.syslogAnalyzer.chartConfig.series = series;
+      scope.syslogAnalyzer.chartConfig.onClick = nginxLineChartOnClick();
+      scope.syslogAnalyzer.chartConfig.onHover = lineChartOnHover();
+
+      // set pie chart data with first dataset and first data
+      if(labelsArr.length > 0) {
+        let xLabel = labelsArr[0];
+        let data,title = '';
+
+        let first = false;
+        for(let key in dataModel){
+          if(!first && dataModel[key].length > 0) {
+            data = dataModel[key][0]['programs'];
+            title = key + ' - ' + formatLocalTime(xLabel);
+            first = true;
+          }
+        }
+
+        setSyslogPieChartData(data,title)
+      }
+    };
+
+    let setFilebeatChartLineData = () => {
+      let dataArr = [];
+      let series = [];
+      let labelsArr = [];
+      let dataModel = scope.filebeatAnalyzer.dataModel;
+
+      labelsArr = this.getTimeSeries(dataModel);
+
+      dataModel.forEach((data) => {
+        dataArr.push(data.count);
+      })
+
+      const pad = this.pad;
+      let options = {
+        title: {
+          display: true,
+          text: "系统日志统计情况",
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: false,
+              labelString: '次数'
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              callback: function(value, index, values) {
+                value = new Date(value);
+                return pad(value.getHours()) + ':' + pad(value.getMinutes()) + ':' + pad(value.getSeconds());
+              }
+            }
+          }],
+        },
+        // Container for zoom options
+        zoom: {
+          onZoom: lineChartOnZoom('filebeat-analyzer')
+        }
+      };
+      scope.filebeatAnalyzer.chartConfig.data = dataArr;
+      scope.filebeatAnalyzer.chartConfig.labels = labelsArr;
+      scope.filebeatAnalyzer.chartConfig.options = options;
+      scope.filebeatAnalyzer.chartConfig.series = series;
+      scope.filebeatAnalyzer.chartConfig.onClick = nginxLineChartOnClick();
+      scope.filebeatAnalyzer.chartConfig.onHover = lineChartOnHover();
+
+      // set pie chart data with first dataset and first data
+      if(dataArr.length > 0 && labelsArr.length > 0) {
+        setFilebeatPieChartData(dataModel[0], formatLocalTime(labelsArr[0]))
+      }
+    };
+
     let barChartOnClick = (analyzer) => {
       return function (evt, chart) { // point element
         // 1.element hover event
@@ -396,7 +792,7 @@ export class ElasticsearchController {
           chart.data.datasets.forEach((value, key) => {
             value.borderColor = chartService.helpers.color(value.borderColor).alpha(1).rgbString();
             value.backgroundColor = chartService.helpers.color(value.backgroundColor).alpha(0.2).rgbString(),
-              value.borderWidth = chartStyles.lines.borderWidth;
+            value.borderWidth = chartStyles.lines.borderWidth;
             value.pointRadius = 1;
           })
         
@@ -405,7 +801,7 @@ export class ElasticsearchController {
       }
     }
   
-    let lineChartOnZoom = () => {
+    let lineChartOnZoom = (chartType) => {
       return function(chart, xRange) {
         let ticks = chart.data.labels;
         let startIndex = xRange.start;
@@ -418,14 +814,149 @@ export class ElasticsearchController {
           }
         }
       
-        let startTime = new Date(ticks[startIndex]).getTime();
-        let endTime = new Date(ticks[endIndex]).getTime();
-      
-        scope.elasticsearchModel.indice.min_time = startTime;
-        scope.elasticsearchModel.indice.max_time = endTime;
-      
+        let startTime = new Date(ticks[startIndex]);
+        let endTime = new Date(ticks[endIndex]);
+
+        switch(chartType) {
+          case 'indice-analyzer':
+            scope.elasticsearchModel.indice.min_time = startTime.getTime();
+            scope.elasticsearchModel.indice.max_time = endTime.getTime();
+          case 'nginx-analyzer':
+            scope.nginxTimerangeAnalyzer.startTime = startTime;
+            scope.nginxTimerangeAnalyzer.endTime = endTime;
+        }
+
         scope.$apply()
       }
+    }
+
+    let nginxLineChartOnClick = function() {
+      let analyzer = scope.nginxTimerangeAnalyzer.dataModel;
+
+      return function(evt, chart) { // point element
+        // 1.element hover event
+        let element = chart.getElementAtEvent(evt);
+        if(element.length > 0)
+        {
+          let datasetIndex = element[0]._datasetIndex;
+          let index = element[0]._index;
+          let xLabel = chart.data.labels[index];
+
+          let data = analyzer[index].clients;
+          let title = formatLocalTime(xLabel);
+
+          setNginxPieChartData(data, title)
+
+          scope.$apply();
+        }
+      }
+    }
+
+    let setNginxPieChartData = (dataArr, title) => {
+      // initial
+      scope.nginxTimerangeAnalyzer.pieChartConfig.data = [];
+      scope.nginxTimerangeAnalyzer.pieChartConfig.labels = [];
+
+      if(!dataArr) return;
+
+      // set pie chart data with first dataset and first data
+      let chartData = {datasets:[], labels:[]};
+      let dataset = {data:[], backgroundColor:[], label: ''};
+
+      dataArr.forEach((data) => {
+        dataset.data.push(data.count);
+        chartData.labels.push(data.ip);
+      });
+
+      chartData.datasets.push(dataset);
+
+      let pieOptions = {
+        plugins: {
+          deferred: {
+            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+            delay: 1000      // delay of 500 ms after the canvas is considered inside the viewport
+          }
+        },
+        title: {
+          text: title,
+        }
+      }
+
+      scope.nginxTimerangeAnalyzer.pieChartConfig.data = dataset.data;
+      scope.nginxTimerangeAnalyzer.pieChartConfig.labels = chartData.labels;
+      // scope.nginxTimerangeAnalyzer.pieChartConfig.colors = dataset.backgroundColor;
+      scope.nginxTimerangeAnalyzer.pieChartConfig.options = pieOptions;
+    }
+
+    let setSyslogPieChartData = (dataArr, title) => {
+      // initial
+      scope.syslogAnalyzer.pieChartConfig.data = [];
+      scope.syslogAnalyzer.pieChartConfig.labels = [];
+
+      if(!dataArr) return;
+
+      // set pie chart data with first dataset and first data
+      let chartData = {datasets:[], labels:[]};
+      let dataset = {data:[], backgroundColor:[], label: ''};
+
+      dataArr.forEach((data) => {
+        dataset.data.push(data.count);
+        chartData.labels.push(data.key);
+      });
+
+      chartData.datasets.push(dataset);
+
+      let pieOptions = {
+        plugins: {
+          deferred: {
+            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+            delay: 1000      // delay of 500 ms after the canvas is considered inside the viewport
+          }
+        },
+        title: {
+          text: title,
+        }
+      }
+
+      scope.syslogAnalyzer.pieChartConfig.data = dataset.data;
+      scope.syslogAnalyzer.pieChartConfig.labels = chartData.labels;
+      // scope.nginxTimerangeAnalyzer.pieChartConfig.colors = dataset.backgroundColor;
+      scope.syslogAnalyzer.pieChartConfig.options = pieOptions;
+    }
+
+    let setFilebeatPieChartData = (dataArr, title) => {
+      // initial
+      scope.filebeatAnalyzer.pieChartConfig.data = [];
+      scope.filebeatAnalyzer.pieChartConfig.labels = [];
+
+      if(!dataArr) return;
+
+      // set pie chart data with first dataset and first data
+      let chartData = {datasets:[], labels:[]};
+      let dataset = {data:[], backgroundColor:[], label: ''};
+
+      dataArr.forEach((data) => {
+        dataset.data.push(data.count);
+        chartData.labels.push(data.key);
+      });
+
+      chartData.datasets.push(dataset);
+
+      let pieOptions = {
+        plugins: {
+          deferred: {
+            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
+            delay: 1000      // delay of 500 ms after the canvas is considered inside the viewport
+          }
+        },
+        title: {
+          text: title,
+        }
+      }
+
+      scope.filebeatAnalyzer.pieChartConfig.data = dataset.data;
+      scope.filebeatAnalyzer.pieChartConfig.labels = chartData.labels;
+      scope.filebeatAnalyzer.pieChartConfig.options = pieOptions;
     }
     
     let formatSize = (size, unit) => {
@@ -498,6 +1029,28 @@ export class ElasticsearchController {
         scope.loading = false;
       });
     };
+
+    let formatLocalTime = (time) => {
+      let _fillInt= (num, count)=>{
+        if(!count){
+          count = 2;
+        }
+        let numStr = num + '';
+        if(numStr.length !== count) {
+          return '0'.repeat(count - numStr.length) + numStr
+        } else
+          return num
+      };
+
+      let d = new Date(time);
+      let res = _fillInt(d.getHours()) +  ':' +
+        _fillInt(d.getMinutes()) + ':' +
+        _fillInt(d.getSeconds()) + ' ' +
+        _fillInt(d.getDate()) + '/' +
+        _fillInt(d.getMonth() + 1)
+
+      return res
+    }
     
     this.di.$timeout(function () {init()});
   
@@ -518,7 +1071,82 @@ export class ElasticsearchController {
   
       
     },true));
-    
+
+    let nginxTypeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['nginxTypeAnalyzer.startTime', 'nginxTypeAnalyzer.startTime', 'nginxTypeAnalyzer.selectedOption'], () => {
+      if(!nginxTypeHasChanged) {
+        nginxTypeHasChanged = true;
+        return;
+      }
+
+      this.di.manageDataManager.getNginxTypeAnalyzer(scope.nginxTypeAnalyzer.selectedOption.value, this.getISODate(scope.nginxTypeAnalyzer.startTime), this.getISODate(scope.nginxTypeAnalyzer.endTime)).then((res) => {
+        scope.nginxTypeAnalyzer.dataModel = res;
+        scope.nginxTypeAnalyzer.loading = false;
+        setNginxChartBarData();
+      }, () => {
+        scope.nginxTypeAnalyzer.dataModel = [];
+        scope.nginxTypeAnalyzer.loading = false;
+        setNginxChartBarData();
+      });
+    },true));
+
+    let nginxTimerangeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['nginxTimerangeAnalyzer.startTime', 'nginxTimerangeAnalyzer.startTime'], () => {
+      if(!nginxTimerangeHasChanged) {
+        nginxTimerangeHasChanged = true;
+        return;
+      }
+
+      let resolutionSecond = Math.floor((scope.nginxTimerangeAnalyzer.endTime.getTime() - scope.nginxTimerangeAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+      this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond).then((res) => {
+        scope.nginxTimerangeAnalyzer.dataModel = res;
+        scope.nginxTimerangeAnalyzer.loading = false;
+        setNginxChartLineData();
+      }, () => {
+        scope.nginxTimerangeAnalyzer.dataModel = [];
+        scope.nginxTimerangeAnalyzer.loading = false;
+        setNginxChartLineData();
+      });
+    },true));
+
+    let syslogTimerangeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['syslogTimerangeAnalyzer.startTime', 'syslogTimerangeAnalyzer.startTime'], () => {
+      if(!syslogTimerangeHasChanged) {
+        syslogTimerangeHasChanged = true;
+        return;
+      }
+
+      let resolutionSecond = Math.floor((scope.syslogAnalyzer.endTime.getTime() - scope.syslogAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+      this.di.manageDataManager.getSyslogAnalyzer(this.getISODate(scope.syslogAnalyzer.startTime), this.getISODate(scope.syslogAnalyzer.endTime), resolutionSecond).then((res) => {
+        scope.syslogAnalyzer.dataModel = res;
+        scope.syslogAnalyzer.loading = false;
+        setSyslogChartLineData();
+      }, () => {
+        scope.syslogAnalyzer.dataModel = [];
+        scope.syslogAnalyzer.loading = false;
+        setSyslogChartLineData();
+      });
+    },true));
+
+    let filebeatTimerangeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['filebeatAnalyzer.startTime', 'filebeatAnalyzer.startTime', 'filebeatAnalyzer.selectedOption'], () => {
+      if(!filebeatTimerangeHasChanged) {
+        filebeatTimerangeHasChanged = true;
+        return;
+      }
+
+      let resolutionSecond = Math.floor((scope.filebeatAnalyzer.endTime.getTime() - scope.filebeatAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+      this.di.manageDataManager.getFilebeatAnalyzer(scope.filebeatAnalyzer.selectedOption.value, this.getISODate(scope.filebeatAnalyzer.startTime), this.getISODate(scope.filebeatAnalyzer.endTime), resolutionSecond).then((res) => {
+        scope.filebeatAnalyzer.dataModel = res;
+        scope.filebeatAnalyzer.loading = false;
+        setFilebeatChartLineData();
+      }, () => {
+        scope.filebeatAnalyzer.dataModel = [];
+        scope.filebeatAnalyzer.loading = false;
+        setFilebeatChartLineData();
+      });
+    },true));
+
     scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
         unSubscribe();
@@ -632,7 +1260,7 @@ export class ElasticsearchController {
       ':' + this.pad( date.getUTCMinutes() ) +
       'Z';
   }
-  
+
   getIndexDataDistribution(index) {
     let defer = this.di.$q.defer();
     let params = {
@@ -713,7 +1341,43 @@ export class ElasticsearchController {
     
     return es_search_json
   };
-  
+
+  getISODate(date) {
+    return date.getUTCFullYear() +
+      '-' + this.pad( date.getUTCMonth() + 1 ) +
+      '-' + this.pad( date.getUTCDate() ) +
+      'T' + this.pad( date.getUTCHours() ) +
+      ':' + this.pad( date.getUTCMinutes() ) +
+      'Z';
+  }
+
+  getTimeSeries(dataArr) {
+    let timeseries = [];
+    dataArr.forEach((data) => {
+      timeseries.push(data.timepoint);
+    });
+
+    return timeseries;
+  }
+
+  getSyslogTimeSeries(dataArr) {
+    let timeseries = [];
+
+    if(!dataArr.length) return timeseries;
+
+    let first = false;
+    for(let key in dataArr) {
+      if(first) continue;
+
+      first = true;
+      dataArr[key].forEach((data) => {
+        timeseries.push(data.timepoint);
+      })
+    }
+
+    return timeseries;
+  }
+
   pad(number) {
     if ( number < 10 ) {
       return '0' + number;

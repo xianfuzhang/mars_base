@@ -198,7 +198,59 @@ export class ManageDataManager{
     );
     return defer.promise;
   }
-  
+
+  getNginxTypeAnalyzer(type, startTime, endTime) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getNginxTypeAnalyzerUrl(type, startTime, endTime)).then(
+      (res) => {
+        defer.resolve(res.data.statistic);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  getNginxTimerangeAnalyzer(startTime, endTime, resolutionSecond, ip) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getNginxTimerangeAnalyzerUrl(startTime, endTime, resolutionSecond, ip)).then(
+      (res) => {
+        defer.resolve(res.data.statistic);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
+  getSyslogAnalyzer(startTime, endTime, resolutionSecond) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getSyslogAnalyzerUrl(startTime, endTime, resolutionSecond)).then(
+      (res) => {
+        defer.resolve(res.data.syslog);
+      },
+      (error) => {
+        defer.resolve({});
+      }
+    );
+    return defer.promise;
+  }
+
+  getFilebeatAnalyzer(type, startTime, endTime, resolutionSecond) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getFilebeatAnalyzerUrl(type, startTime, endTime, resolutionSecond)).then(
+      (res) => {
+        defer.resolve(res.data.filebeat);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
   deleteElasticsearcIndexByTime(index, params) {
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getElasticsearchDeleteIndexUrl(index), params).then(
