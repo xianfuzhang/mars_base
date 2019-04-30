@@ -370,9 +370,9 @@ th.sortable.sort-desc .icon-sort .arrow-right{
   font-size: 20px;
   font-weight: 700;
   color: white;
-  border-bottom: 1px solid rgba(0,0,0,0.3);
-  //background-color: #7accef;
-  background: linear-gradient(to right, #99a9c1, #8ed6f3, #5d90a5 98%, #6c909c);
+  //border-bottom: 1px solid rgba(0,0,0,0.3);
+  background-color: #2d2d2d;
+  //background: linear-gradient(to right, #99a9c1, #8ed6f3, #5d90a5 98%, #6c909c);
   border-top-right-radius: 8px;
   border-top-left-radius: 8px;
 }
@@ -380,7 +380,7 @@ th.sortable.sort-desc .icon-sort .arrow-right{
   height: 230px;
   padding: 12px;
   overflow-y: auto;
-  background: #282828;
+  background: #414141;
   color: #fff;
 }
 
@@ -428,12 +428,12 @@ th.sortable.sort-desc .icon-sort .arrow-right{
 }
 .column-manipulation-field__footer{
   height: 48px;
-  border-top: 1px solid rgba(0, 0, 0, 0.3);
+  //border-top: 1px solid rgba(0, 0, 0, 0.3);
   padding: 6px 20px;
   box-sizing: border-box;
   font-size: 14px;
-  background-color: #191919;
-  background: -webkit-linear-gradient(left, #000000, #4C4C4C, #000000);
+  background-color: #414141;
+  //background: -webkit-linear-gradient(left, #000000, #4C4C4C, #000000);
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 }

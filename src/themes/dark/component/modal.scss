@@ -10,7 +10,7 @@
   overflow: visible!important;
   margin: 0 auto;
   border-radius: 8px;
-  border: 1px solid #000;
+  //border: 1px solid #000;
   height: auto;
   background-color: #fff;
   box-shadow: 0 0 3px 3px rgba(0,0,0,.4);
@@ -41,7 +41,7 @@
 }
 .modalWizard.ease_in {
   opacity: 1;
-  animation: ease_in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: ease_in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   /*transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transform: scale(1); */
 }
@@ -49,22 +49,23 @@
   /* transition: all 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
   transform: scale(0); */
   opacity: 1;
-  animation: ease_out 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  //animation: ease_out 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  animation: ease_out 0.6s cubic-bezier(0.95, 0.05, 0.795, 0.035);
 }
 @keyframes ease_in {
   from {
-    transform: scale(0);
+    transform: scaleY(0);
   }
   to {
-    transform: scale(1);
+    transform: scaleY(1);
   }
 }
 @keyframes ease_out {
   from {
-    transform: scale(1);
+    transform: scaleY(1);
   }
   to {
-    transform: scale(0);
+    transform: scaleY(0);
   }
 }
 .modal-content-container {
@@ -178,4 +179,9 @@
 
 .modalWizard .jsoneditor-field, .jsoneditor-value {
   color: map_get($colors, body_color);
+}
+
+
+.modalWizard .mdc-text-field--invalid:not(.mdc-text-field--disabled).mdc-text-field--invalid + .mdc-text-field-helper-text--validation-msg {
+  color: #fd123d;
 }
