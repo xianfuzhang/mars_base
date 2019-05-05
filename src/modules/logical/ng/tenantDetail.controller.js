@@ -128,6 +128,12 @@ export class TenantDetail {
       this._initRoute();
     }));
 
+
+    unsubscribers.push(this.di.$rootScope.$on('policyroute-config-success', (event) => {
+      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.CREATE.SUCCESS'));
+      this.scope.detailModel.api4policy.queryUpdate();
+    }));
+
     unsubscribers.push(this.di.$rootScope.$on('staticroute-config-success', (event) => {
       this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.LOGICAL.TENANT.DETAIL.STATICROUTE.CREATE.SUCCESS'));
       this.scope.detailModel.api4static.queryUpdate();

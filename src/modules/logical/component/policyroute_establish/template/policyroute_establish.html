@@ -21,9 +21,9 @@
 
     <div class="stepForm__input multiple_ip">
         <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.POLICYROUTE.COLUMN.INGRESS_PORTS'|translate}}</div>
-        <mdl-select ng-model="policyRouteEsModel.curDevice" display-label="deviceDisplayLabel" ng-change="deviceChange($value)"  style="display: inline-block;margin-right: 10px;">
+        <mdl-select ng-model="policyRouteEsModel.curDevice" display-label="deviceDisplayLabel" ng-change="deviceChange($value)" class="customSelect" style="display: inline-block;margin-right: 10px;">
         </mdl-select>
-        <mdl-select ng-model="policyRouteEsModel.curPort" display-label="portDisplayLabel" style="display: inline-block">
+        <mdl-select ng-model="policyRouteEsModel.curPort" display-label="portDisplayLabel" class="customSelect" style="display: inline-block;">
         </mdl-select>
         <div class="add-btn" ng-click="addDevicePort()">
             <i class="material-icons">add</i>

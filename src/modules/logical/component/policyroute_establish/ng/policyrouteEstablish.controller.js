@@ -136,7 +136,7 @@ export class PolicyRouteEstablishController {
     };
 
     scope.deviceChange = ($value) =>{
-      scope.portDisplayLabel = {'options':[{'label': this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT'), 'value': null }]};
+      scope.portDisplayLabel = {'options':[{'label': this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT_PORT'), 'value': null }]};
       scope.portDisplayLabel.options = scope.portDisplayLabel.options.concat(this.di._.sortBy(this.di._.map(scope._phyPorts[$value.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
         return {'label': String(portNum), 'value': String(portNum)}
       }));
@@ -172,8 +172,8 @@ export class PolicyRouteEstablishController {
       };
 
       scope.segmentDisplayLabel = {'options':[]};
-      scope.deviceDisplayLabel = {'options':[{'label':this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT'), 'value': null }]};
-      scope.portDisplayLabel = {'options':[{'label':this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT'), 'value': null }]};
+      scope.deviceDisplayLabel = {'options':[{'label':this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT_DEVICE'), 'value': null }]};
+      scope.portDisplayLabel = {'options':[{'label':this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT_PORT'), 'value': null }]};
 
       scope.tenantName = tenant;
       scope.routeName = routeName;
@@ -316,6 +316,7 @@ export class PolicyRouteEstablishController {
       }
     };
 
+    let self = this;
     scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
 
@@ -328,14 +329,14 @@ export class PolicyRouteEstablishController {
 
       if(scope.policyRouteEsModel.segments.length === 0 && scope.policyRouteEsModel.ingress_ports.length ===0){
         return new Promise((resolve, reject) => {
-          inValidJson_Copy.errorMessage = this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT_SEGMENT');
+          inValidJson_Copy.errorMessage = self.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT_SEGMENT');
           resolve(inValidJson_Copy);
         });
       }
 
       if(!scope.policyRouteEsModel.protocol.icmp && !scope.policyRouteEsModel.protocol.tcp && !scope.policyRouteEsModel.protocol.udp ){
         return new Promise((resolve, reject) => {
-          inValidJson_Copy.errorMessage = this.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT_PROTOCOL');
+          inValidJson_Copy.errorMessage = self.translate('MODULES.LOGICAL.POLICY_ROUTER.SELECT_PROTOCOL');
           resolve(inValidJson_Copy);
         });
       }

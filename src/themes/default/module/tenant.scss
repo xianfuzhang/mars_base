@@ -29,3 +29,22 @@
 .segment-detail__item-value{
   margin-left:10px;
 }
+
+.customSelect .mdc-select{
+  width: 145px;
+}
+
+.add-btn .material-icons{
+  background: #d8d8d888;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  padding: 2px;
+  transform: scale(1);
+  transition: transform linear .1s;
+}
+
+.add-btn .material-icons:hover{
+  transform: scale(1.1);
+  background: #d8d8d8d8;
+}
