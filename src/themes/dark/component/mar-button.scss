@@ -100,6 +100,8 @@
   color: #333;
   background-color: #f0f0f0;
   border-color: #ccc;
+  transform: scale(1);
+  transition: transform linear .1s;
 }
 
 .btn-white:hover {
@@ -126,6 +128,8 @@
 .btn-black {
   color: #fff;
   background-color: #090909;
+  transform: scale(1);
+  transition: transform linear .1s;
 }
 
 .btn-black:hover {
