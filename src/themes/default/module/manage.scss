@@ -44,7 +44,11 @@
 }
 
 .dhcp .mar_section__body{
-  background: none;
+  background: #fbfbfb;
+}
+
+.dhcp .mdc-card{
+  box-shadow: none;
 }
 
 .dhcp .valid_input__message{

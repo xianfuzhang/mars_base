@@ -1,5 +1,6 @@
-<div class="wizard" ng-if="showWizard">
-    <div class="{{steps.length < 2 ? 'wizard__dialog-single': 'wizard__dialog'}}" ng-class="{'+hide': isWizardClosing}">
+<div class="wizard" ng-if="showWizard" >
+    <div style="perspective: 800px;">
+    <div  class="{{steps.length < 2 ? 'wizard__dialog-single': 'wizard__dialog'}}" ng-class="{'+hide': isWizardClosing}">
         <div class="wizard__header">
             <div class="wizard__header__title">
                 {{title}}
@@ -53,5 +54,6 @@
             </div>
         </div>
 
+    </div>
     </div>
 </div>

@@ -12,17 +12,17 @@
   @include element(header){
     display: block;
     position: relative;
-    border-bottom: 1px solid #E5E5E5;
+    //border-bottom: 1px solid #E5E5E5;
     white-space: nowrap;
     padding-left: 2px;
     cursor: pointer;
     color: #4C4C4C;
     font-weight: 200;
     font-size: 18px;
-    border-bottom: 1px solid whitesmoke;
+    //border-bottom: 1px solid whitesmoke;
     min-width:400px;
     outline: none;
-    //background-color: lightgray;
+    background-color: #414141;
 
 
     @include element(icon){

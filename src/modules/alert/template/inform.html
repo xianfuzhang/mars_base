@@ -18,9 +18,9 @@
         </mdl-tabs>
       <!-- </div> -->
       <!-- <div style="margin-top: 16px;flex-shrink: 1;flex-grow: 1;"> -->
-        <section class="tab-content" ng-show="tabSelected.type == 'receive_group'">
-          <div style="display: block;">
-            <div style="width:60%; display: inline-block;vertical-align: top;">
+        <section class="tab-content" ng-show="tabSelected.type == 'receive_group'" style="height:calc(100% - 100px)">
+          <div style="display: block;height:100%">
+            <div style="width:60%; display: inline-block;vertical-align: top;;height:100%">
             <mdl-table actions-show="informModel.receiveGroupTb.actionsShow"
                        actions="informModel.receiveGroupTb.rowActions"
                        row-click="onTableRowClick($event)"
@@ -93,7 +93,7 @@
         <!--<section class="tab-content">-->
 
 
-          <div style="width:100%;display: inline-block;margin-top: 20px;">
+          <div style="display: inline-block;margin-top: 20px;">
 
             <div class="sender_wechat_section">
               <mar-section s-title="{{'MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING'|translate}}" no-fold="true" class="">
@@ -227,19 +227,21 @@
                       <!--<div class="mdc-notched-outline__idle"></div>-->
                     <!--</div>-->
                   <!--</div>-->
-              </div></div>
+              </div>
+            <div style="margin-top:20px;text-align: center">
 
-          <div style="margin-top:20px;">
-
-            <div style="display: inline-block;">
-              <!--<button id="server_config_clear" ng-click="clearServerConfig()" class="mdc-button mdc-button&#45;&#45;raised" style="width:200px;height:50px;font-size:20px;color:white;">{{ "MODULES.ALERT.SERVER_CONFIG.CLEAR_SETTING"|translate}}</button>-->
-              <mar-button btn-id="'server_config_clear'" btn-text="::'MODULES.ALERT.SERVER_CONFIG.CLEAR_SETTING' | translate" btn-icon="'clear'" btn-class="'btn-white btn-lg'" btn-click="clearServerConfig()" />
-            </div>
-            <div style="display: inline-block;margin-left: 20px;">
-              <!--<button id="server_config_save" ng-click="saveServerConfig()" class="mdc-button mdc-button&#45;&#45;raised" style="width:200px;height:50px;font-size:20px;color:white;">{{ "MODULES.ALERT.SERVER_CONFIG.SAVE_SETTING"|translate}}</button>-->
-              <mar-button id="'server_config_save'" btn-text="::'MODULES.ALERT.SERVER_CONFIG.SAVE_SETTING' | translate" btn-icon="'done'" btn-class="'btn-black btn-lg'" btn-click="saveServerConfig()"/>
+              <div style="display: inline-block;">
+                <!--<button id="server_config_clear" ng-click="clearServerConfig()" class="mdc-button mdc-button&#45;&#45;raised" style="width:200px;height:50px;font-size:20px;color:white;">{{ "MODULES.ALERT.SERVER_CONFIG.CLEAR_SETTING"|translate}}</button>-->
+                <mar-button btn-id="'server_config_clear'" btn-text="::'MODULES.ALERT.SERVER_CONFIG.CLEAR_SETTING' | translate" btn-icon="'clear'" btn-class="'btn-white btn-lg'" btn-click="clearServerConfig()" />
+              </div>
+              <div style="display: inline-block;margin-left: 20px;">
+                <!--<button id="server_config_save" ng-click="saveServerConfig()" class="mdc-button mdc-button&#45;&#45;raised" style="width:200px;height:50px;font-size:20px;color:white;">{{ "MODULES.ALERT.SERVER_CONFIG.SAVE_SETTING"|translate}}</button>-->
+                <mar-button id="'server_config_save'" btn-text="::'MODULES.ALERT.SERVER_CONFIG.SAVE_SETTING' | translate" btn-icon="'done'" btn-class="'btn-black btn-lg'" btn-click="saveServerConfig()"/>
+              </div>
             </div>
           </div>
+
+
         </section>
       <!-- </div> -->
       </div>

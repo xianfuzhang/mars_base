@@ -22,9 +22,13 @@
 
 .tenant-detail .mar_section{
   background: none;
-  border: 1px solid #aaaaaa;
+  border: 1px solid #f1f1f1;
   border-radius: 5px;
-  box-shadow: 2px 2px 2px gray;
+  //box-shadow: 2px 2px 2px gray;
+}
+
+.tenant-detail .mdc-card{
+  box-shadow: none;
 }
 
 //.tenant-detail .mar_section__body{
