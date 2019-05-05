@@ -140,6 +140,14 @@
   position: absolute;
   z-index: 1;
 }
+
+.wizard__header__dismiss.modal__close{
+  right: 0;
+  position: absolute;
+  z-index: 1;
+  top: 5px;
+}
+
 .modal-backdrop {
   position: fixed;
   z-index: 1040;

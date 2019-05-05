@@ -9,7 +9,10 @@
                 <span ng-bind="errorMessage"></span>
                 <span class="wizard__header__alert__close" ng-click="closeMessage()"><i style="font-size:18px;" class="material-icons">cancel</i></span>
             </div>
-            <div class="wizard__header__dismiss" ng-click="postCancel()"></div>
+            <div class="wizard__header__dismiss" ng-click="postCancel()">
+                <div class="border"></div>
+                <i class="material-icons">add</i>
+            </div>
         </div>
 
         <div class="wizard__body" ng-style="wizardStyle">
