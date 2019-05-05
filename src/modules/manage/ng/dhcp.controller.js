@@ -90,10 +90,26 @@ export class DHCPController {
             });
         } else if(event.action.value === 'edit'){
           this.di.$rootScope.$emit('ipmac-wizard-show', event.data.host.split('/')[0]);
+        } else if(event.action.value === 'save'){
+          _save_2_static(event)
+        } else if(event.action.value === 'init_device'){
+          this.di.$rootScope.$emit('switch-wizard-show-4-dhcp', event.data.host.split('/')[0], event.data.ip);
         }
       }
     };
 
+
+    let _save_2_static = (event) =>{
+      let mac = event.data.host.split('/')[0];
+      let ip = event.data.ip;
+      this.di.manageDataManager.postMacAndIpBindings({'mac':mac, 'ip':ip})
+        .then((res) => {
+          this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.DHCP.IPMAC.CREATE.SUCCESS'));
+          scope.dhcpModel.dhcpAPI.queryUpdate();
+        }, (error) => {
+          this.di.notificationService.renderWarning(scope, error.data.message);
+        });
+    }
 
 
     let default_ttl = 63;
@@ -170,6 +186,16 @@ export class DHCPController {
           'search': {'enable': false, 'role': 3}
         },
         rowActions:[
+          {
+            'label': this.translate('MODULES.MANAGE.DHCP.TABLE.INIT_DEVICE'),
+            'role': 3,
+            'value': 'init_device'
+          },
+          {
+            'label': this.translate('MODULES.MANAGE.DHCP.TABLE.SAVE'),
+            'role': 3,
+            'value': 'save'
+          },
           {
             'label': this.translate('MODULES.MANAGE.DHCP.TABLE.EDIT'),
             'role': 3,

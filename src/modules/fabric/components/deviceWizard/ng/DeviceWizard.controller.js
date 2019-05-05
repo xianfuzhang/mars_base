@@ -281,6 +281,12 @@ export class DeviceWizardController {
     unsubscribes.push(this.di.$rootScope.$on('switch-wizard-show', ($event, deviceId) => {
       scope.open(deviceId);
     }));
+
+    unsubscribes.push(this.di.$rootScope.$on('switch-wizard-show-4-dhcp', ($event, mac, ip) => {
+      scope.open();
+      scope.switch.mac_address = mac;
+      scope.switch.managementAddress = ip;
+    }));
     
     scope.$on('$destroy', () => {
       unsubscribes.forEach((cb) => {
