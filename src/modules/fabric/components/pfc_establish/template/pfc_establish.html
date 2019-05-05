@@ -8,7 +8,7 @@
 
     <div class="stepForm__input multiple_ip">
         <div class="stepForm__input__label">Queue</div>
-        <valid-input style="width:90%;display:inline-block;" ng-model="pfcModel.singleQueue" v-rpcid="page_pfc_es" v-regex="queue_regex" v-message="{{ 'MODULES.REGEX.PFC_ADD.QUEUE' | translate}}"></valid-input>
+        <valid-input style="display:inline-block;" ng-model="pfcModel.singleQueue" v-rpcid="page_pfc_es" v-regex="queue_regex" v-message="{{ 'MODULES.REGEX.PFC_ADD.QUEUE' | translate}}"></valid-input>
         <div class="add-btn" ng-click="addQueue()">
             <i class="material-icons">add</i>
         </div>

@@ -178,7 +178,7 @@
       &:hover {
         .border{
           border-top: 1px solid black;
-          animation: border_rotate linear infinite 1s ;
+          animation: border_rotate linear infinite .7s ;
         }
         //transform: scale(1.05);
       }
