@@ -283,12 +283,12 @@ export class LogController {
   getTabSchema() {
     return [
       {
-        'label': '实时日志',
+        'label': this.translate('MODULE.LOG.TAB.REALTIME'),
         'value': 'realtime',
         'type': 'realtime'
       },
       {
-        'label': '历史日志',
+        'label': this.translate('MODULE.LOG.TAB.HISTORY'),
         'value': 'history',
         'type': 'history'
       }
