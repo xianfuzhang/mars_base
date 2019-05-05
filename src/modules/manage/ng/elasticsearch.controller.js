@@ -458,6 +458,7 @@ export class ElasticsearchController {
       }
   
       const pad = this.pad;
+      const getFormatedDateTime = this.getFormatedDateTime;
       let options = {
         title: {
           display: true,
@@ -477,10 +478,18 @@ export class ElasticsearchController {
             ticks: {
               callback: function(value, index, values) {
                 let d = new Date(value);
-                return pad(d.getMonth() + 1) + '-' + d.getDate() + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+                return pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
               }
             }
           }],
+        },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            }
+          }
         },
         // Container for zoom options
         zoom: {
@@ -551,15 +560,16 @@ export class ElasticsearchController {
       let dataArr = [];
       let series = ['访问次数'];
       let labelsArr = [];
-      let dataArray = scope.nginxTimerangeAnalyzer.dataModel;
+      let dataModel = scope.nginxTimerangeAnalyzer.dataModel;
 
-      labelsArr = this.getTimeSeries(dataArray);
+      labelsArr = this.getTimeSeries(dataModel);
 
-      dataArray.forEach((data) => {
+      dataModel.forEach((data) => {
         dataArr.push(data.count);
       });
 
       const pad = this.pad;
+      const getFormatedDateTime = this.getFormatedDateTime;
       let options = {
         title: {
           display: true,
@@ -581,6 +591,14 @@ export class ElasticsearchController {
             }
           }],
         },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            }
+          }
+        },
         // Container for zoom options
         zoom: {
           onZoom: lineChartOnZoom('nginx-analyzer')
@@ -595,7 +613,7 @@ export class ElasticsearchController {
 
       // set pie chart data with first dataset and first data
       if(dataArr.length > 0 && labelsArr.length > 0) {
-        setNginxPieChartData(dataArr[0], formatLocalTime(labelsArr[0]))
+        setNginxPieChartData(dataModel[0].clients, formatLocalTime(labelsArr[0]))
       }
     };
 
@@ -618,6 +636,7 @@ export class ElasticsearchController {
       };
 
       const pad = this.pad;
+      const getFormatedDateTime = this.getFormatedDateTime;
       let options = {
         title: {
           display: true,
@@ -638,6 +657,14 @@ export class ElasticsearchController {
               }
             }
           }],
+        },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            }
+          }
         },
         // Container for zoom options
         zoom: {
@@ -671,7 +698,7 @@ export class ElasticsearchController {
 
     let setFilebeatChartLineData = () => {
       let dataArr = [];
-      let series = [];
+      let series = [scope.filebeatAnalyzer.selectedOption.value];
       let labelsArr = [];
       let dataModel = scope.filebeatAnalyzer.dataModel;
 
@@ -682,10 +709,11 @@ export class ElasticsearchController {
       })
 
       const pad = this.pad;
+      const getFormatedDateTime = this.getFormatedDateTime;
       let options = {
         title: {
           display: true,
-          text: "系统日志统计情况",
+          text: "Mars系统日志统计情况",
         },
         scales: {
           yAxes: [{
@@ -703,11 +731,20 @@ export class ElasticsearchController {
             }
           }],
         },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            }
+          }
+        },
         // Container for zoom options
         zoom: {
           onZoom: lineChartOnZoom('filebeat-analyzer')
         }
       };
+
       scope.filebeatAnalyzer.chartConfig.data = dataArr;
       scope.filebeatAnalyzer.chartConfig.labels = labelsArr;
       scope.filebeatAnalyzer.chartConfig.options = options;
@@ -717,7 +754,8 @@ export class ElasticsearchController {
 
       // set pie chart data with first dataset and first data
       if(dataArr.length > 0 && labelsArr.length > 0) {
-        setFilebeatPieChartData(dataModel[0], formatLocalTime(labelsArr[0]))
+        let data = scope.filebeatAnalyzer.selectedOption.value == 'thread' ? dataModel[0].threads : dataModel[0].handlers;
+        setFilebeatPieChartData(data, formatLocalTime(labelsArr[0]))
       }
     };
 
@@ -1252,15 +1290,6 @@ export class ElasticsearchController {
     return timeseries;
   }
   
-  getISODate(date) {
-    return date.getUTCFullYear() +
-      '-' + this.pad( date.getUTCMonth() + 1 ) +
-      '-' + this.pad( date.getUTCDate() ) +
-      'T' + this.pad( date.getUTCHours() ) +
-      ':' + this.pad( date.getUTCMinutes() ) +
-      'Z';
-  }
-
   getIndexDataDistribution(index) {
     let defer = this.di.$q.defer();
     let params = {
@@ -1351,6 +1380,28 @@ export class ElasticsearchController {
       'Z';
   }
 
+  getFormatedDateTime(date) {
+    let _fillInt = (num, count) => {
+      if(!count){
+        count = 2;
+      }
+      let numStr = num + '';
+      if(numStr.length !== count) {
+        return '0'.repeat(count - numStr.length) + numStr
+      } else
+        return num
+    };
+
+    let res = date.getFullYear() +
+      '-' + _fillInt(date.getMonth() + 1) +
+      '-' + _fillInt(date.getDate()) +
+      ' ' + _fillInt(date.getHours()) +
+      ':' + _fillInt(date.getMinutes()) +
+      ':' + _fillInt(date.getSeconds());
+
+    return res
+  }
+
   getTimeSeries(dataArr) {
     let timeseries = [];
     dataArr.forEach((data) => {
@@ -1378,12 +1429,16 @@ export class ElasticsearchController {
     return timeseries;
   }
 
-  pad(number) {
-    if ( number < 10 ) {
-      return '0' + number;
+  pad(num, count) {
+    if(!count){
+      count = 2;
     }
-    return number;
-  }
+    let numStr = num + '';
+    if(numStr.length !== count) {
+      return '0'.repeat(count - numStr.length) + numStr
+    } else
+      return num
+  };
 }
 
 ElasticsearchController.$inject = ElasticsearchController.getDI();

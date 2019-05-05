@@ -97,6 +97,10 @@ export function ChartJsProvider () {
 						color: DEFAULT_STYLES.colors.gridLinesColor,
 						lineWidth: DEFAULT_STYLES.lines.gridWidth
 					},
+          ticks: {
+            suggestedMin: 0,
+            suggestedMax: 10,
+          }
 				}],
 				xAxes: [{
 					scaleLabel: DEFAULT_STYLES.colors.fontColor,
@@ -159,6 +163,10 @@ export function ChartJsProvider () {
 						color: DEFAULT_STYLES.colors.gridLinesColor,
 						lineWidth: DEFAULT_STYLES.lines.gridWidth
 					},
+          ticks: {
+            suggestedMin: 0,
+            suggestedMax: 10,
+          }
 				}],
 				xAxes: [{
 					scaleLabel: DEFAULT_STYLES.colors.fontColor,
