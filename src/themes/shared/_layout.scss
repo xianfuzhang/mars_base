@@ -109,12 +109,28 @@ input:-webkit-autofill:active {
   box-sizing: border-box;
 }
 .mars-row-flex{
+  position: relative;
   display: flex;
   flex-flow: row wrap;
   margin-bottom: 16px;
   border-radius: 8px;
   transition: box-shadow 300ms ease-in-out;
 }
+
+.mars-row-flex .chart-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: url('../../assets/images/loading.gif');
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  margin-left: -34px;
+  margin-top: -34px;
+  background-size: 34px 34px;
+  z-index: 99;
+}
+
 .mars-row-flex-space-between{
   justify-content: space-between;
 }

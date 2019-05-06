@@ -111,6 +111,11 @@ export class ElasticsearchController {
       dataModel: null,
       startTime: nginx_begin_time,
       endTime: ngin_end_time,
+      selectedIpOption: null,
+      ipOptions: [{
+        label: '--全部IP--',
+        value: ''
+      }],
       loading: true,
       chartConfig: {
         data: [],
@@ -304,6 +309,11 @@ export class ElasticsearchController {
       scope.nginxTypeAnalyzer.loading = true;
     };
 
+    scope.nginxIpSelect = ($value) => {
+      scope.nginxTimerangeAnalyzer.selectedIpOption = $value;
+      // scope.filebeatAnalyzer.loading = true;
+    };
+
     scope.filebeatTypeSelect = ($value) => {
       scope.filebeatAnalyzer.selectedOption = $value;
       scope.filebeatAnalyzer.loading = true;
@@ -314,6 +324,11 @@ export class ElasticsearchController {
 
       // get indices sumary
       this.di.manageDataManager.getElasticsearcStatus().then((res) => {
+        res.data.indices.forEach((indice) => {
+          if(indice.size === undefined) {
+            indice.size = '0kb'
+          }
+        })
         dataModel['indices'] = res.data.indices;
   
         scope.elasticsearchModel.indiceOptions = [];
@@ -340,15 +355,16 @@ export class ElasticsearchController {
       })
 
       // get nginx analyzer by timerange
+      scope.nginxTimerangeAnalyzer.selectedIpOption = scope.nginxTimerangeAnalyzer.ipOptions[0];
       let resolutionSecond = Math.floor((scope.nginxTimerangeAnalyzer.endTime.getTime() - scope.nginxTimerangeAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
       this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond).then((res) => {
         scope.nginxTimerangeAnalyzer.dataModel = res;
         scope.nginxTimerangeAnalyzer.loading = false;
-        setNginxChartLineData();
+        setNginxChartLineData(true);
       }, () => {
         scope.nginxTimerangeAnalyzer.dataModel = [];
         scope.nginxTimerangeAnalyzer.loading = false;
-        setNginxChartLineData();
+        setNginxChartLineData(true);
       });
 
       // get nginx analyzer by type
@@ -518,7 +534,7 @@ export class ElasticsearchController {
       const pad = this.pad;
       let options = {
         title: {
-          text: "访问具体情况分析"
+          text: "具体访问情况分析"
         },
         scales: {
           yAxes: [{
@@ -556,24 +572,40 @@ export class ElasticsearchController {
       scope.nginxTypeAnalyzer.chartConfig.colors = [{backgroundColor: 'rgb(255,228,181)'}]
     };
 
-    let setNginxChartLineData = () => {
+    let setNginxChartLineData = (initial) => {  // initial: 初始化
       let dataArr = [];
       let series = ['访问次数'];
       let labelsArr = [];
+      let clientIps = [];
       let dataModel = scope.nginxTimerangeAnalyzer.dataModel;
 
       labelsArr = this.getTimeSeries(dataModel);
 
       dataModel.forEach((data) => {
         dataArr.push(data.count);
+
+        if(initial) {
+          data.clients.forEach((client) => {
+            if(clientIps.indexOf(client.ip) === -1) {
+              clientIps.push(client.ip);
+              scope.nginxTimerangeAnalyzer.ipOptions.push({
+                label: client.ip,
+                value: client.ip
+              });
+            }
+          });
+        }
       });
 
       const pad = this.pad;
       const getFormatedDateTime = this.getFormatedDateTime;
+
+      let title = "访问情况统计";
+      title = scope.nginxTimerangeAnalyzer.selectedIpOption.value ? scope.nginxTimerangeAnalyzer.selectedIpOption.value + ' - ' + title : title;
       let options = {
         title: {
           display: true,
-          text: "访问情况统计",
+          text: title,
         },
         scales: {
           yAxes: [{
@@ -613,7 +645,8 @@ export class ElasticsearchController {
 
       // set pie chart data with first dataset and first data
       if(dataArr.length > 0 && labelsArr.length > 0) {
-        setNginxPieChartData(dataModel[0].clients, formatLocalTime(labelsArr[0]))
+        let pieData = dataModel[0].clients ? dataModel[0].clients : [{count:dataModel[0].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}]
+        setNginxPieChartData(pieData, formatLocalTime(labelsArr[0]))
       }
     };
 
@@ -745,7 +778,7 @@ export class ElasticsearchController {
         }
       };
 
-      scope.filebeatAnalyzer.chartConfig.data = dataArr;
+      scope.filebeatAnalyzer.chartConfig.data = [dataArr];
       scope.filebeatAnalyzer.chartConfig.labels = labelsArr;
       scope.filebeatAnalyzer.chartConfig.options = options;
       scope.filebeatAnalyzer.chartConfig.series = series;
@@ -880,10 +913,10 @@ export class ElasticsearchController {
           let index = element[0]._index;
           let xLabel = chart.data.labels[index];
 
-          let data = analyzer[index].clients;
+          let data = analyzer[index].clients ? analyzer[index].clients : [{count: analyzer[index].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}];
           let title = formatLocalTime(xLabel);
 
-          setNginxPieChartData(data, title)
+          setNginxPieChartData(data, title);
 
           scope.$apply();
         }
@@ -1129,14 +1162,15 @@ export class ElasticsearchController {
     },true));
 
     let nginxTimerangeHasChanged = false;
-    unSubscribers.push(this.di.$scope.$watchGroup(['nginxTimerangeAnalyzer.startTime', 'nginxTimerangeAnalyzer.startTime'], () => {
+    unSubscribers.push(this.di.$scope.$watchGroup(['nginxTimerangeAnalyzer.startTime', 'nginxTimerangeAnalyzer.endTime', 'nginxTimerangeAnalyzer.selectedIpOption'], () => {
       if(!nginxTimerangeHasChanged) {
         nginxTimerangeHasChanged = true;
         return;
       }
 
       let resolutionSecond = Math.floor((scope.nginxTimerangeAnalyzer.endTime.getTime() - scope.nginxTimerangeAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
-      this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond).then((res) => {
+
+      this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond, scope.nginxTimerangeAnalyzer.selectedIpOption.value).then((res) => {
         scope.nginxTimerangeAnalyzer.dataModel = res;
         scope.nginxTimerangeAnalyzer.loading = false;
         setNginxChartLineData();
@@ -1148,7 +1182,7 @@ export class ElasticsearchController {
     },true));
 
     let syslogTimerangeHasChanged = false;
-    unSubscribers.push(this.di.$scope.$watchGroup(['syslogTimerangeAnalyzer.startTime', 'syslogTimerangeAnalyzer.startTime'], () => {
+    unSubscribers.push(this.di.$scope.$watchGroup(['syslogTimerangeAnalyzer.startTime', 'syslogTimerangeAnalyzer.endTime'], () => {
       if(!syslogTimerangeHasChanged) {
         syslogTimerangeHasChanged = true;
         return;
@@ -1167,7 +1201,7 @@ export class ElasticsearchController {
     },true));
 
     let filebeatTimerangeHasChanged = false;
-    unSubscribers.push(this.di.$scope.$watchGroup(['filebeatAnalyzer.startTime', 'filebeatAnalyzer.startTime', 'filebeatAnalyzer.selectedOption'], () => {
+    unSubscribers.push(this.di.$scope.$watchGroup(['filebeatAnalyzer.startTime', 'filebeatAnalyzer.endTime', 'filebeatAnalyzer.selectedOption'], () => {
       if(!filebeatTimerangeHasChanged) {
         filebeatTimerangeHasChanged = true;
         return;
@@ -1209,7 +1243,7 @@ export class ElasticsearchController {
     let kbFlag = false, mbFlag = false, gbFlag = false;
     
     indices.forEach(indice => {
-      let unit = indice.size.slice(indice.size.length - 2, indice.size.length);
+      let unit = indice.size ? indice.size.slice(indice.size.length - 2, indice.size.length) : 'kb';
       if(unit.toUpperCase() == 'KB')
         kbFlag = true;
       if(unit.toUpperCase() == 'MB')
@@ -1219,8 +1253,8 @@ export class ElasticsearchController {
     })
   
     indices.forEach(indice => {
-      let num = indice.size.slice(0,indice.size.length - 2)
-      let unit = indice.size.slice(indice.size.length - 2, indice.size.length);
+      let num = indice.size ? indice.size.slice(0,indice.size.length - 2) : 0;
+      let unit = indice.size ? indice.size.slice(indice.size.length - 2, indice.size.length) : 'kb';
       if(kbFlag) {
         if(unit.toUpperCase() == 'MB')
           indice.size = parseFloat(num) * 1024 + 'KB';

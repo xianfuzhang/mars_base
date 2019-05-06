@@ -35,6 +35,8 @@
                             <!--</div>-->
                         <!--</div>-->
                     </div>
+
+                    <div class="chart-loading" ng-show="elasticsearchModel.summaryLoading"></div>
                 </div>
 
                 <div class="mars-row-flex">
@@ -64,6 +66,8 @@
                             <!--<mar-button btn-style="'width:200px;background:#0077cb;'" btn-text="::'MODULES.MANAGE.ELASTICSEARCH.BUTTON.REMOVE' | translate" btn-class="'btn-black btn-lg'" btn-icon="'delete_forever'" btn-click="clear()" btn-disabled="loading" />-->
                         <!--</div>-->
                     </div>
+
+                    <div class="chart-loading" ng-show="elasticsearchModel.analyzerLoading"></div>
                 </div>
 
                 <div class="mars-row-flex">
@@ -80,7 +84,11 @@
                                 chart-hover="nginxTimerangeAnalyzer.chartConfig.onHover">
                         </canvas>
 
-                        <div class="setting-group" ng-show="!nginxTimerangeAnalyzer.loading">
+                        <div class="setting-group" ng-if="!nginxTimerangeAnalyzer.loading">
+                            <mdl-select ng-model="nginxTimerangeAnalyzer.selectedIpOption"
+                                        display-label="{options: nginxTimerangeAnalyzer.ipOptions}"
+                                        ng-change="nginxIpSelect($value)">
+                            </mdl-select>
                             <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('nginx-timerange')"><i class="material-icons">settings</i></div>
                             <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('nginx-timerange')"><i class="material-icons">undo</i></div>
                         </div>
@@ -94,6 +102,8 @@
                                 chart-options="nginxTimerangeAnalyzer.pieChartConfig.options">
                         </canvas>
                     </div>
+
+                    <div class="chart-loading" ng-show="nginxTimerangeAnalyzer.loading"></div>
                 </div>
 
                 <div class="mars-row-flex">
@@ -118,6 +128,8 @@
                             <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('nginx-type')"><i class="material-icons">undo</i></div>
                         </div>
                     </div>
+
+                    <div class="chart-loading" ng-show="nginxTypeAnalyzer.loading"></div>
                 </div>
 
                 <div class="mars-row-flex">
@@ -148,6 +160,8 @@
                                 chart-options="syslogAnalyzer.pieChartConfig.options">
                         </canvas>
                     </div>
+
+                    <div class="chart-loading" ng-show="syslogAnalyzer.loading"></div>
                 </div>
 
                 <div class="mars-row-flex">
@@ -182,6 +196,8 @@
                                 chart-options="filebeatAnalyzer.pieChartConfig.options">
                         </canvas>
                     </div>
+
+                    <div class="chart-loading" ng-show="filebeatAnalyzer.loading"></div>
                 </div>
             </div>
         </div>
