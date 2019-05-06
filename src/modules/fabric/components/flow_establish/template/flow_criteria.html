@@ -11,7 +11,7 @@
         </mdl-select>
     </div>
 
-    <div ng-if=" flowEstablishModel.tableIdType.value !='60'" ng-repeat="inputItemObject in criteriaPageSecondInputs" class="stepForm__input">
+    <div ng-if=" flowEstablishModel.tableIdType.value !='60' && flowEstablishModel.tableIdType.value !='0'" ng-repeat="inputItemObject in criteriaPageSecondInputs" class="stepForm__input">
         <div ng-repeat="(field, inputItemArr) in inputItemObject">
             <div ng-repeat="inputItem in inputItemArr">
                 <!--<div class="stepForm__input__label">{{inputItem.field_label}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span><span ng-if="inputItem.field == 'ether_type'"  ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)"><i class="material-icons" style="vertical-align: bottom;cursor: pointer;">help</i><span></span></div>-->
@@ -58,10 +58,39 @@
 
             </div>
         </div>
-
     </div>
 
 
+    <div ng-if=" flowEstablishModel.tableIdType.value =='0'">
+        <div class="flow_criteria__header">
+            <mdl-select ng-model="flowEstablishModel.table0SchemaOption"
+                        display-label="table0SchemaList">
+            </mdl-select>
+
+            <div class="flow_criteria__header__action" style="vertical-align: bottom;">
+                <mdl-button ng-click="addTable0Acl()" icon-name="add"></mdl-button>
+            </div>
+        </div>
+        <div ng-repeat="inputItemObject in criteriaPageSecondInputs" class="stepForm__input flow_criteria__body">
+            <div ng-repeat="(field, inputItemArr) in inputItemObject" class="flow_criteria__body__item">
+                <div class="type"> {{field}} </div>
+                <mdl-button class="remove" ng-click="delTable0Acl(field)" icon-name="remove_circle" size='small'></mdl-button>
+                <div ng-repeat="inputItem in inputItemArr">
+                    <valid-input style="display: inline-block;" ng-if="inputItem.input_type == undefined" v-label="{{inputItem.field_label}}" v-require="{{inputItem.require}}"
+                                 ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_criteria">
+                        <transclude-trailing>
+                            <i ng-if="inputItem.field == 'ether_type'" ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)" class="material-icons mdc-text-field__icon" style="cursor: pointer;">help</i>
+                        </transclude-trailing>
+                    </valid-input>
+
+                    <mdl-select ng-if="inputItem.input_type =='select'" ng-model="inputItem.value"
+                                display-label="inputItem.displayLabel">
+                    </mdl-select>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <!--<div class="flow_criteria__name">{{ 'MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR_TYPE'|translate}}</div>-->
     <!--<div class="flow_criteria__header">-->
         <!--<mdl-select ng-model="flowEstablishModel.criteriaType"-->

@@ -86,6 +86,8 @@ export class validInput {
           message = this.translate('MODULES.REGEX.FLOW_ADD.PORT')
         } else if (type === 'host'){
           message = this.translate('MODULES.REGEX.FLOW_ADD.HOST')
+        } else if (type === 'port_array') {
+          message = this.translate('MODULES.REGEX.FLOW_ADD.PORT_ARRAY')
         }
         return message;
       };
@@ -115,6 +117,8 @@ export class validInput {
           regex = '^[1-9]|[1-9][0-9]$';
         } else if( type === 'host'){
           regex = '^[a-zA-z]+[0-9a-zA-Z\.\-]*$'
+        } else if( type === 'port_array'){
+          regex = '^(([1-9]|[1-9][0-9])\\s*,\\s*)*([1-9]|[1-9][0-9])$'
         }
         return regex;
       };

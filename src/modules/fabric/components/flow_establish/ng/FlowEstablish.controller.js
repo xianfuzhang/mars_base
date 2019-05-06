@@ -75,6 +75,7 @@ export class FlowEstablishController {
     };
 
     this.di.$scope.showWizard = false;
+    this.di.$scope.showTableId = true;
     this.di.$scope.title = '添加Flow';
     this.di.$scope.steps = [
       {
@@ -99,6 +100,7 @@ export class FlowEstablishController {
     this.di.$scope.criteriaSchema = this.di.deviceService.getFlowsCriteriaSchema();
     this.di.$scope.tableIdSchema = this.di.deviceService.getFlowTableList();
     scope.table60Schema = this.di.deviceService.getFlowTableAclOptionList();
+    scope.table0Schema = this.di.deviceService.getFlowTableNormalInputRow();
 
 
     scope.treatmentPageGroup = {};
@@ -140,13 +142,15 @@ export class FlowEstablishController {
     scope.tableIdSchemaList = convertList2DisLabel(this.di._.values(this.di.$scope.tableIdSchema));
     scope.table60SchemaList = convertList2DisLabel(this.di._.keys(scope.table60Schema));
     scope.table60SchemaList['hint'] = '类型';
-
+    scope.table0SchemaList = convertList2DisLabel(this.di._.keys(scope.table0Schema));;
+    scope.table0SchemaList['hint'] = '类型';
 
     scope.flowEstablishModel = {
       instructionType: angular.copy(scope.instructionSchemaList.options[0]),
       criteriaType: angular.copy(scope.criteriaSchemaList.options[0]),
       tableIdType: scope.tableIdSchemaList.options[5],
       table60SchemaOption: angular.copy(scope.table60SchemaList.options[0]),
+      table0SchemaOption: angular.copy(scope.table0SchemaList.options[0]),
     };
 
     let _addValue2input = (input) =>{
@@ -246,6 +250,19 @@ export class FlowEstablishController {
         scope.flow = initFlow;
         scope.curDeviceId = deviceId;
 
+      this.di.deviceDataManager.getDeviceConfig(deviceId).then((res) => {
+        if (res) {
+          let mfr = res.mfr;
+          // let mfr = 'pica8'; // Test code
+          if(mfr.toLowerCase() === 'pica8' || mfr.toLowerCase() === 'h3c'){
+            scope.showTableId = false;
+            reset4table0();
+            scope.showWizard = true;
+            // scope.$apply();
+            return;
+          }
+        }
+        scope.showTableId = true;
         this.di.deviceDataManager.getDeviceGroups(scope.curDeviceId).then((res)=>{
           if(res && res.data.groups.length > 0) {
             scope.deviceGroupsMapper = classifyGroups(res.data.groups);
@@ -257,6 +274,9 @@ export class FlowEstablishController {
             scope.$apply();
           });
         });
+      });
+
+
 
         // console.log(scope.flowEstablishModel.tableIdType);
         // this.di.$timeout(() => {
@@ -332,6 +352,22 @@ export class FlowEstablishController {
       }
 
     };
+
+    let initializeTable0Action = () =>{
+      scope.treatmentOutputDisplayLabel = {'options': [
+        {'label':'CONTROLLER','value':'CONTROLLER'},
+        {'label':'PORT','value':'PORT'},
+        {'label':'DROP','value':'DROP'},
+        {'label':'STRIP VLAN','value':'STRIP_VLAN'},
+      ]}
+
+      scope.treatmentModel = {
+        output: null,
+        push_vlan: null,
+        ports: null
+      };
+    };
+
 
     let checkCriteriaValue = () => {
       let status = true;
@@ -477,6 +513,11 @@ export class FlowEstablishController {
           return inValidJson_Copy;
         }
 
+        if(scope.flowEstablishModel.tableIdType.value ==='0' && scope.criteriaPageSecondInputs.length === 0){
+          inValidJson_Copy['errorMessage'] = "请至少添加一个选择器!";
+          return inValidJson_Copy;
+        }
+
         let resJson = checkCriteriaValue();
         if(!resJson.res){
           inValidJson_Copy['errorMessage'] = resJson.message;
@@ -574,8 +615,13 @@ export class FlowEstablishController {
           }
         }
 
-        if(_ifTable60SchemaListContain('ether_type')){
+
+        if(scope.flowEstablishModel.tableIdType.value === '60' && _ifTable60SchemaListContain('ether_type')){
           _addTable60SelectItem('ether_type');
+        }
+
+        if(scope.flowEstablishModel.tableIdType.value === '0' && _ifTable0SchemaListContain('ether_type')){
+          _addTable0SelectItem('ether_type');
         }
       } else if(curOptId === 'udp_sport' || curOptId === 'udp_dport'){
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
@@ -599,8 +645,12 @@ export class FlowEstablishController {
           }
         }
 
-        if(_ifTable60SchemaListContain('ether_type')){
+        if(scope.flowEstablishModel.tableIdType.value === '60' && _ifTable60SchemaListContain('ether_type')){
           _addTable60SelectItem('ether_type');
+        }
+
+        if(scope.flowEstablishModel.tableIdType.value === '0' && _ifTable0SchemaListContain('ether_type')){
+          _addTable0SelectItem('ether_type');
         }
       } else if(curOptId === 'icmpv4_type' || curOptId === 'icmpv4_code'){
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
@@ -684,6 +734,29 @@ export class FlowEstablishController {
       return true;
     };
 
+    scope.addTable0Acl = ()=>{
+      let curOptId = scope.flowEstablishModel.table0SchemaOption.value;
+      let option = angular.copy(scope.table0Schema[scope.flowEstablishModel.table0SchemaOption.value]);
+
+      if(getReferenceInput(curOptId)){
+        _addTable0SelectItem(curOptId);
+      }
+      // scope.criteriaPageSecondInputs.push(addValue2Table60Input(curOptId, scope.table60Schema[curOptId]));
+      // this.di._.remove(scope.table60SchemaList.options, (option)=>{
+      //   return option.value === curOptId;
+      // });
+    };
+
+    let _ifTable0SchemaListContain = (curOptId) => {
+      let res = false;
+      this.di._.forEach(scope.table0SchemaList.options, (option)=>{
+        if(option.value === curOptId){
+          res = true;
+        }
+      });
+      return res;
+    };
+
     scope.addTable60Acl = ()=>{
       let curOptId = scope.flowEstablishModel.table60SchemaOption.value;
       let option = angular.copy(scope.table60Schema[scope.flowEstablishModel.table60SchemaOption.value]);
@@ -696,7 +769,6 @@ export class FlowEstablishController {
       //   return option.value === curOptId;
       // });
     };
-
 
     let _ifTable60SchemaListContain = (curOptId) => {
       let res = false;
@@ -745,6 +817,27 @@ export class FlowEstablishController {
         return false;
       });
       scope.table60SchemaList.options.push({'label':field, 'value':field});
+    };
+
+    let _addTable0SelectItem = (curOptId) => {
+      scope.criteriaPageSecondInputs.push(addValue2Table60Input(curOptId, scope.table0Schema[curOptId]));
+      this.di._.remove(scope.table0SchemaList.options, (option)=>{
+        return option.value === curOptId;
+      });
+      scope.flowEstablishModel.table0SchemaOption = scope.table0SchemaList.options[0];
+    };
+
+    scope.delTable0Acl = (field)=> {
+      this.di._.remove(scope.criteriaPageSecondInputs, (input)=>{
+        let keys = this.di._.keys(input);
+        for(let i =0 ; i < keys.length; i ++){
+          if(keys[i] === field){
+            return true;
+          }
+        }
+        return false;
+      });
+      scope.table0SchemaList.options.push({'label':field, 'value':field});
     };
 
     this.di.$scope.changeInstructionSelect = (uuid, item, $value) => {
@@ -958,6 +1051,51 @@ export class FlowEstablishController {
     //   return criterias;
     // };
 
+    let formatNormalCriteriaValue = () =>{
+      let criteria = [];
+
+      this.di._.forEach(scope.criteriaPageFirstInputs, (input)=>{
+        // criteria.push(this.di.deviceService.getCriteriaObject(input));
+        let res = this.di.deviceService.getCriteriaObject(input);
+        if(res !== null) criteria.push(res);
+      });
+
+      this.di._.forEach(scope.criteriaPageSecondInputs, (inputJson)=>{
+        let keys = this.di._.keys(inputJson);
+        this.di._.forEach(keys, (key)=>{
+          let value = inputJson[key];
+          if(value instanceof Array && value.length > 0){
+            if(value.length === 1){
+              let res = this.di.deviceService.getCriteriaObject(value[0]);
+              if(res !== null) criteria.push(res);
+            } else if (value.length === 2){
+
+              //暂时先处理mask相关的代码，其他多字段连接类型另加逻辑处理// TODO
+              let v0 , v1;
+              if(value[0].field.indexOf('mask') !== -1 && value[0].field.indexOf('mac') === -1){
+                v0 = value[1];
+                v1 = value[0];
+              } else {
+                v0 = value[0];
+                v1 = value[1];
+              }
+              let res;
+              if(v0['field'].indexOf('mac') !== -1){
+                res = this.di.deviceService.getCriteriaMacMasked(v0, v1);
+              } else {
+                v0.value = v0.value + '/' + v1.value;
+                res = this.di.deviceService.getCriteriaObject(v0);
+              }
+              if(res !== null) criteria.push(res);
+
+            }
+          }
+        });
+
+      });
+
+      return criteria;
+    };
 
     let formatOfdpaCriteriaValue = () =>{
       let criteria = [];
@@ -1066,6 +1204,39 @@ export class FlowEstablishController {
       }
     };
 
+
+    let formatNormalInstructionValue = () =>{
+      let treatment = [];
+
+      if(scope.treatmentModel.output.value === 'PORT'){
+        treatment.push({
+          "type": "OUTPUT",
+          "port": scope.treatmentModel.ports.replace(' ', '')
+        });
+
+        if(scope.treatmentModel.push_vlan !== null && scope.treatmentModel.push_vlan !== ''){
+          treatment.push({
+            "type":"L2MODIFICATION",
+            "subtype":"VLAN_PUSH"
+          });
+          treatment.push({
+            "type":"L2MODIFICATION",
+            "subtype":"VLAN_ID",
+            "vlanId": parseInt(scope.treatmentModel.push_vlan)
+          });
+        }
+      } else if(scope.treatmentModel.output.value === 'DROP'){
+        // DROP do nothing
+      } else {
+        treatment.push({
+          "type": "OUTPUT",
+          "port": scope.treatmentModel.output.value
+        })
+      }
+
+      return treatment;
+    };
+
     let formatOfdpaInstructionValue = () =>{
       let treatment = [];
 
@@ -1120,6 +1291,22 @@ export class FlowEstablishController {
 
     };
 
+    let reset4table0 = () => {
+      scope.flow.priority = '100';
+      scope.flow.timeout = '10000';
+      scope.flow.isPermanent = true;
+
+      scope.flowEstablishModel.tableIdType = {label: '0', value :'0'};
+      scope.flowTypeJson = {'res': true, 'tableId':'0', 'type':null};
+      scope.criteriaPageSecondInputs = [];
+      scope.table0SchemaList = convertList2DisLabel(this.di._.keys(scope.table0Schema));
+
+      initializeTable0Action();
+
+      // scope.changeTableId(scope.flowEstablishModel.tableIdType);
+
+    };
+
     this.di.$scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
       // if(di.$scope.criteriasModel && di.$scope.criteriasModel.length === 0){
@@ -1139,15 +1326,26 @@ export class FlowEstablishController {
         });
       }
 
-      if(scope.flowTypeJson['tableId'] === '50' && (scope.treatmentPageGroup.groups === null || scope.treatmentPageGroup.groupSelected.value === -1)){
+      if(scope.flowEstablishModel.tableIdType.value !== '0'
+        && scope.flowTypeJson['tableId'] === '50'
+        && (scope.treatmentPageGroup.groups === null || scope.treatmentPageGroup.groupSelected.value === -1)){
         inValidJson_Copy['errorMessage'] = "Table 50的flow需要指定group!";
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
       }
 
-      let instructions = formatOfdpaInstructionValue();
-      let criteria = formatOfdpaCriteriaValue();
+      // let instructions = formatOfdpaInstructionValue();
+      // let criteria = formatOfdpaCriteriaValue();
+
+      let instructions,criteria;
+      if(scope.flowEstablishModel.tableIdType.value === '0'){
+        instructions = formatNormalInstructionValue();
+        criteria = formatNormalCriteriaValue();
+      } else {
+        instructions = formatOfdpaInstructionValue();
+        criteria = formatOfdpaCriteriaValue();
+      }
 
       if(instructions.length === 0){
         inValidJson_Copy['errorMessage'] = "请配置Flow的处理方式!";

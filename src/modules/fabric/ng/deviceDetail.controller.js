@@ -70,6 +70,13 @@ export class DeviceDetailController {
 
           this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE') + "(" + this.scope.detailValue.name + ")";
           this.scope.detailValue.leaf_group = !this.scope.detailValue.leaf_group ? '-' : this.scope.detailValue.leaf_group;
+
+          // res.mfr = 'pica8'; //Test code
+          if(res.mfr.toLowerCase() === 'pica8' || res.mfr.toLowerCase() === 'h3c'){
+            this.di._.remove(this.scope.tabs, (tab)=>{
+              return tab['value'] === 'group';
+            });
+          }
         }
         this.init();
       });

@@ -798,6 +798,62 @@ export class DeviceService {
   }
 
 
+  getFlowTableNormalInputRow(){
+    //For table 0 and device for h3c/pica8
+    return {
+      'in_port': [
+        {'field': 'in_port', 'type': 'int', 'require': 'true'},
+      ],
+      'ether_type': [
+        {'field': 'ether_type', 'type': 'string', 'require': 'true'},
+        // {'field': 'ether_type', 'type': 'string', 'require': 'true', 'input_type':'select', 'select_value':[{'label':'IPv4','value':'0x0800'},{'label':'IPv6','value':'0x86dd'}]},
+        //{'label':'PROFINET','value':'0x8892'}
+      ],
+      'source_mac': [
+        {'field': 'source_mac', 'type': 'mac', 'require': 'true'},
+        // {'field': 'source_mac_mask', 'type': 'string', 'require': 'false'},
+      ],
+      'destination_mac': [
+        {'field': 'destination_mac', 'type': 'mac', 'require': 'true'},
+        // {'field': 'destination_mac_mask', 'type': 'string', 'require': 'false'},
+      ],
+      'vlan_id': [
+        {'field': 'vlan_id', 'type': 'int', 'require': 'true'},
+      ],
+      'source_ipv4': [
+        {'field': 'source_ipv4', 'type': 'ipv4', 'require': 'true'},
+        {'field': 'ipv4_mask', 'type': 'int', 'require': 'true'},
+      ],
+      'destination_ipv4': [
+        {'field': 'destination_ipv4', 'type': 'ipv4', 'require': 'true'},
+        {'field': 'ipv4_mask', 'type': 'int', 'require': 'true'},
+      ],
+      'source_ipv6': [
+        {'field': 'source_ipv6', 'type': 'ipv6', 'require': 'true'},
+        {'field': 'ipv6_mask', 'type': 'int', 'require': 'true'},
+      ],
+      'destination_ipv6': [
+        {'field': 'destination_ipv6', 'type': 'ipv6', 'require': 'true'},
+        {'field': 'ipv6_mask', 'type': 'int', 'require': 'true'},
+      ],
+      'ip_proto': [
+        {'field': 'ip_proto', 'type': 'int', 'require': 'true'},
+      ],
+      'tcp_sport': [
+        {'field': 'tcp_sport', 'type': 'int', 'require': 'true'},
+      ],
+      'tcp_dport': [
+        {'field': 'tcp_dport', 'type': 'int', 'require': 'true'},
+      ],
+      'udp_sport': [
+        {'field': 'udp_sport', 'type': 'int', 'require': 'true'},
+      ],
+      'udp_dport': [
+        {'field': 'udp_dport', 'type': 'int', 'require': 'true'},
+      ]
+    }
+  }
+
 
 
   getFlowTableSecondInputRow() {
@@ -912,6 +968,17 @@ export class DeviceService {
   getFlowTableApplyActionMapByTid(tableId){
     let maps = this.getFlowTableApplyActionMaps();
     return maps[tableId];
+  }
+
+  getFlowTable0ApplyActionMaps(){
+    return [
+      {'field': 'output_to_ctrl', 'require': 'false','input_type':'select', 'displayLabel':{'options': [
+                                                                                                          {'label':'CONTROLLER','value':'controller'},
+                                                                                                          {'label':'PORT','value':'port'},
+                                                                                                          {'label':'DROP','value':'drop'},
+                                                                                                          {'label':'STRIP VLAN','value':'strip_vlan'},
+                                                                                                       ]}}
+    ]
   }
 
   getFlowTableWriteActionMaps(){
