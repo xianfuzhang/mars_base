@@ -44,6 +44,8 @@ export class ElasticsearchController {
     const DI = this.di;
     const chartService = this.di.chartService;
     const chartStyles = chartService.styles;
+    const getFormatedDateTime = this.getFormatedDateTime;
+
     this.scope.pageTitle = this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH');
     
     let unSubscribers = [];
@@ -55,7 +57,7 @@ export class ElasticsearchController {
     const CHART_GRID_NUM = 36; // chart grid number
     let ngxin_before = this.di.dateService.getBeforeDateObject(60*1000*60 * 24); // 前一天
     let nginx_begin_time = new Date(ngxin_before.year, ngxin_before.month, ngxin_before.day, ngxin_before.hour, ngxin_before.minute, 0);
-    let ngin_end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
+    let nginx_end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
 
     scope.elasticsearchModel = {
       selectedIndice: '',
@@ -84,7 +86,7 @@ export class ElasticsearchController {
       ],
       dataModel: null,
       startTime: nginx_begin_time,
-      endTime: ngin_end_time,
+      endTime: nginx_end_time,
       loading: true,
       chartConfig: {
         data: [],
@@ -110,7 +112,9 @@ export class ElasticsearchController {
       ],
       dataModel: null,
       startTime: nginx_begin_time,
-      endTime: ngin_end_time,
+      endTime: nginx_end_time,
+      originStartTime: nginx_begin_time,
+      originEndTime: nginx_end_time,
       selectedIpOption: null,
       ipOptions: [{
         label: '--全部IP--',
@@ -135,7 +139,9 @@ export class ElasticsearchController {
     scope.syslogAnalyzer = {
       dataModel: null,
       startTime: nginx_begin_time,
-      endTime: ngin_end_time,
+      endTime: nginx_end_time,
+      originStartTime: nginx_begin_time,
+      originEndTime: nginx_end_time,
       loading: true,
       chartConfig: {
         data: [],
@@ -161,7 +167,9 @@ export class ElasticsearchController {
       ],
       dataModel: null,
       startTime: nginx_begin_time,
-      endTime: ngin_end_time,
+      endTime: nginx_end_time,
+      originStartTime: nginx_begin_time,
+      originEndTime: nginx_end_time,
       loading: true,
       chartConfig: {
         data: [],
@@ -284,39 +292,120 @@ export class ElasticsearchController {
     
     scope.indiceSelect = ($value) => {
       scope.elasticsearchModel.selectedIndice = $value.value;
-      scope.loading = true;
+      scope.elasticsearchModel.analyzerLoading = true;
       
       this.getIndiceAnalyzer().then(() => {
         setIndiceAnalyzerChartData();
-        scope.loading = false;
+        scope.elasticsearchModel.analyzerLoading = false;
       }, () => {
         setIndiceAnalyzerChartData();
-        scope.loading = false;
+        scope.elasticsearchModel.analyzerLoading = false;
       });
     };
   
-    scope.resetTimeScale = () => {
-      this.getIndiceAnalyzer().then( () => {
-        setIndiceAnalyzerChartData();
-        scope.loading = false;
-      }, () => {
-        scope.loading = false;
-      })
+    scope.resetTimeScale = (chartType) => {
+      switch(chartType) {
+        case 'indice-analyzer':
+          scope.elasticsearchModel.analyzerLoading = true;
+
+          this.getIndiceAnalyzer().then( () => {
+            setIndiceAnalyzerChartData();
+            scope.elasticsearchModel.analyzerLoading = false;
+          }, () => {
+            scope.elasticsearchModel.analyzerLoading = false;
+          })
+          break;
+        case 'nginx-analyzer':
+          scope.nginxTimerangeAnalyzer.startTime = scope.nginxTimerangeAnalyzer.originStartTime;
+          scope.nginxTimerangeAnalyzer.endTime = scope.nginxTimerangeAnalyzer.originEndTime;
+          break;
+        case 'syslog-analyzer':
+          scope.syslogAnalyzer.startTime = scope.syslogAnalyzer.originStartTime;
+          scope.syslogAnalyzer.endTime = scope.syslogAnalyzer.originEndTime;
+          break;
+        case 'filebeat-analyzer':
+          scope.filebeatAnalyzer.startTime = scope.filebeatAnalyzer.originStartTime;
+          scope.filebeatAnalyzer.endTime = scope.filebeatAnalyzer.originEndTime;
+          break;
+      }
+    }
+
+    scope.chartSetting = (type) => {
+      let beginTime, endTime;
+      switch(type) {
+        case 'nginx-type-analyzer':
+          beginTime = scope.nginxTypeAnalyzer.startTime;
+          endTime = scope.nginxTypeAnalyzer.endTime;
+          break;
+        case 'nginx-analyzer':
+          beginTime = scope.nginxTimerangeAnalyzer.startTime;
+          endTime = scope.nginxTimerangeAnalyzer.endTime;
+          break;
+        case 'syslog-analyzer':
+          beginTime = scope.syslogAnalyzer.startTime;
+          endTime = scope.syslogAnalyzer.endTime;
+          break;
+        case 'filebeat-analyzer':
+          beginTime = scope.filebeatAnalyzer.startTime;
+          endTime = scope.filebeatAnalyzer.endTime;
+          break;
+      }
+
+      this.di.modalManager.open({
+        template: require('../template/chart_setting.html'),
+        controller: 'showChartSettingCtrl',
+        windowClass: 'show-chart-setting-modal',
+        resolve: {
+          dataModel: () => {
+            return {
+              chartType: type,
+              beginTime: beginTime,
+              endTime: endTime
+            }
+          }
+        }
+      }).result.then((res) => {
+        if (res && !res.canceled) {
+          switch(type) {
+            case 'nginx-type-analyzer':
+              scope.nginxTypeAnalyzer.originStartTime = res.data.beginTime;
+              scope.nginxTypeAnalyzer.originEndTime = res.data.endTime;
+              scope.nginxTypeAnalyzer.startTime = res.data.beginTime;
+              scope.nginxTypeAnalyzer.endTime = res.data.endTime;
+              break;
+            case 'nginx-analyzer':
+              scope.nginxTimerangeAnalyzer.originStartTime = res.data.beginTime;
+              scope.nginxTimerangeAnalyzer.originEndTime = res.data.endTime;
+              scope.nginxTimerangeAnalyzer.startTime = res.data.beginTime;
+              scope.nginxTimerangeAnalyzer.endTime = res.data.endTime;
+              break;
+            case 'syslog-analyzer':
+              scope.syslogAnalyzer.originStartTime = res.data.beginTime;
+              scope.syslogAnalyzer.originEndTime = res.data.endTime;
+              scope.syslogAnalyzer.startTime = res.data.beginTime;
+              scope.syslogAnalyzer.endTime = res.data.endTime;
+              break;
+            case 'filebeat-analyzer':
+              scope.filebeatAnalyzer.originStartTime = res.data.beginTime;
+              scope.filebeatAnalyzer.originEndTime = res.data.endTime;
+              scope.filebeatAnalyzer.startTime = res.data.beginTime;
+              scope.filebeatAnalyzer.endTime = res.data.endTime;
+              break;
+          }
+        }
+      });
     }
 
     scope.nginxTypeSelect = ($value) => {
       scope.nginxTypeAnalyzer.selectedOption = $value;
-      scope.nginxTypeAnalyzer.loading = true;
     };
 
     scope.nginxIpSelect = ($value) => {
       scope.nginxTimerangeAnalyzer.selectedIpOption = $value;
-      // scope.filebeatAnalyzer.loading = true;
     };
 
     scope.filebeatTypeSelect = ($value) => {
       scope.filebeatAnalyzer.selectedOption = $value;
-      scope.filebeatAnalyzer.loading = true;
     };
 
     let init =() =>{
@@ -474,7 +563,6 @@ export class ElasticsearchController {
       }
   
       const pad = this.pad;
-      const getFormatedDateTime = this.getFormatedDateTime;
       let options = {
         title: {
           display: true,
@@ -598,7 +686,6 @@ export class ElasticsearchController {
       });
 
       const pad = this.pad;
-      const getFormatedDateTime = this.getFormatedDateTime;
 
       let title = "访问情况统计";
       title = scope.nginxTimerangeAnalyzer.selectedIpOption.value ? scope.nginxTimerangeAnalyzer.selectedIpOption.value + ' - ' + title : title;
@@ -646,7 +733,7 @@ export class ElasticsearchController {
       // set pie chart data with first dataset and first data
       if(dataArr.length > 0 && labelsArr.length > 0) {
         let pieData = dataModel[0].clients ? dataModel[0].clients : [{count:dataModel[0].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}]
-        setNginxPieChartData(pieData, formatLocalTime(labelsArr[0]))
+        setNginxPieChartData(pieData, getFormatedDateTime(new Date(labelsArr[0])))
       }
     };
 
@@ -669,7 +756,6 @@ export class ElasticsearchController {
       };
 
       const pad = this.pad;
-      const getFormatedDateTime = this.getFormatedDateTime;
       let options = {
         title: {
           display: true,
@@ -708,7 +794,7 @@ export class ElasticsearchController {
       scope.syslogAnalyzer.chartConfig.labels = labelsArr;
       scope.syslogAnalyzer.chartConfig.options = options;
       scope.syslogAnalyzer.chartConfig.series = series;
-      scope.syslogAnalyzer.chartConfig.onClick = nginxLineChartOnClick();
+      scope.syslogAnalyzer.chartConfig.onClick = syslogChartOnClick();
       scope.syslogAnalyzer.chartConfig.onHover = lineChartOnHover();
 
       // set pie chart data with first dataset and first data
@@ -720,7 +806,7 @@ export class ElasticsearchController {
         for(let key in dataModel){
           if(!first && dataModel[key].length > 0) {
             data = dataModel[key][0]['programs'];
-            title = key + ' - ' + formatLocalTime(xLabel);
+            title = key + ' - ' + getFormatedDateTime(new Date(xLabel));
             first = true;
           }
         }
@@ -742,7 +828,6 @@ export class ElasticsearchController {
       })
 
       const pad = this.pad;
-      const getFormatedDateTime = this.getFormatedDateTime;
       let options = {
         title: {
           display: true,
@@ -782,13 +867,13 @@ export class ElasticsearchController {
       scope.filebeatAnalyzer.chartConfig.labels = labelsArr;
       scope.filebeatAnalyzer.chartConfig.options = options;
       scope.filebeatAnalyzer.chartConfig.series = series;
-      scope.filebeatAnalyzer.chartConfig.onClick = nginxLineChartOnClick();
+      scope.filebeatAnalyzer.chartConfig.onClick = filebeatChartOnClick();
       scope.filebeatAnalyzer.chartConfig.onHover = lineChartOnHover();
 
       // set pie chart data with first dataset and first data
       if(dataArr.length > 0 && labelsArr.length > 0) {
         let data = scope.filebeatAnalyzer.selectedOption.value == 'thread' ? dataModel[0].threads : dataModel[0].handlers;
-        setFilebeatPieChartData(data, formatLocalTime(labelsArr[0]))
+        setFilebeatPieChartData(data, getFormatedDateTime(new Date(labelsArr[0])));
       }
     };
 
@@ -892,9 +977,19 @@ export class ElasticsearchController {
           case 'indice-analyzer':
             scope.elasticsearchModel.indice.min_time = startTime.getTime();
             scope.elasticsearchModel.indice.max_time = endTime.getTime();
+            break;
           case 'nginx-analyzer':
             scope.nginxTimerangeAnalyzer.startTime = startTime;
             scope.nginxTimerangeAnalyzer.endTime = endTime;
+            break;
+          case 'syslog-analyzer':
+            scope.syslogAnalyzer.startTime = startTime;
+            scope.syslogAnalyzer.endTime = endTime;
+            break;
+          case 'filebeat-analyzer':
+            scope.filebeatAnalyzer.startTime = startTime;
+            scope.filebeatAnalyzer.endTime = endTime;
+            break;
         }
 
         scope.$apply()
@@ -914,9 +1009,51 @@ export class ElasticsearchController {
           let xLabel = chart.data.labels[index];
 
           let data = analyzer[index].clients ? analyzer[index].clients : [{count: analyzer[index].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}];
-          let title = formatLocalTime(xLabel);
+          let title = getFormatedDateTime(new Date(xLabel));
 
           setNginxPieChartData(data, title);
+
+          scope.$apply();
+        }
+      }
+    }
+
+    let syslogChartOnClick = function() {
+      let analyzer = scope.syslogAnalyzer.dataModel;
+
+      return function(evt, chart) { // point element
+        // 1.element hover event
+        let element = chart.getElementAtEvent(evt);
+        if(element.length > 0)
+        {
+          let datasetIndex = element[0]._datasetIndex;
+          let index = element[0]._index;
+          let xLabel = chart.data.labels[index];
+
+          let data = analyzer[index].clients ? analyzer[index].clients : [{count: analyzer[index].count, ip: scope.syslogAnalyzer.selectedIpOption.value}];
+          let title = getFormatedDateTime(new Date(xLabel));
+
+          setSyslogPieChartData(data, title);
+
+          scope.$apply();
+        }
+      }
+    }
+
+    let filebeatChartOnClick = function() {
+      let analyzer = scope.filebeatAnalyzer.dataModel;
+
+      return function(evt, chart) { // point element
+        // 1.element hover event
+        let element = chart.getElementAtEvent(evt);
+        if(element.length > 0)
+        {
+          let datasetIndex = element[0]._datasetIndex;
+          let index = element[0]._index;
+          let xLabel = chart.data.labels[index];
+
+          let data = scope.filebeatAnalyzer.selectedOption.value == 'thread' ? analyzer[index].threads : analyzer[index].handlers;
+          setFilebeatPieChartData(data, getFormatedDateTime(new Date(xLabel)));
 
           scope.$apply();
         }
@@ -1131,13 +1268,15 @@ export class ElasticsearchController {
         indiceTimeHasChanged = true;
         return;
       }
-      
+
+      scope.elasticsearchModel.analyzerLoading = true;
+
       this.getIndiceAnalyzerWithTime().then(() => {
         setIndiceAnalyzerChartData();
-        scope.loading = false;
+        scope.elasticsearchModel.analyzerLoading = false;
       }, () => {
         setIndiceAnalyzerChartData();
-        scope.loading = false;
+        scope.elasticsearchModel.analyzerLoading = false;
       });
   
       
@@ -1149,6 +1288,8 @@ export class ElasticsearchController {
         nginxTypeHasChanged = true;
         return;
       }
+
+      scope.nginxTypeAnalyzer.loading = true;
 
       this.di.manageDataManager.getNginxTypeAnalyzer(scope.nginxTypeAnalyzer.selectedOption.value, this.getISODate(scope.nginxTypeAnalyzer.startTime), this.getISODate(scope.nginxTypeAnalyzer.endTime)).then((res) => {
         scope.nginxTypeAnalyzer.dataModel = res;
@@ -1168,8 +1309,10 @@ export class ElasticsearchController {
         return;
       }
 
-      let resolutionSecond = Math.floor((scope.nginxTimerangeAnalyzer.endTime.getTime() - scope.nginxTimerangeAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+      scope.nginxTimerangeAnalyzer.loading = true;
 
+      let resolutionSecond = Math.floor((scope.nginxTimerangeAnalyzer.endTime.getTime() - scope.nginxTimerangeAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+      resolutionSecond = resolutionSecond < 30 ? 30 : resolutionSecond > 3600 ? 3600 : resolutionSecond;
       this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond, scope.nginxTimerangeAnalyzer.selectedIpOption.value).then((res) => {
         scope.nginxTimerangeAnalyzer.dataModel = res;
         scope.nginxTimerangeAnalyzer.loading = false;
@@ -1188,7 +1331,10 @@ export class ElasticsearchController {
         return;
       }
 
+      scope.syslogAnalyzer.loading = true;
+
       let resolutionSecond = Math.floor((scope.syslogAnalyzer.endTime.getTime() - scope.syslogAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+      resolutionSecond = resolutionSecond < 30 ? 30 : resolutionSecond > 3600 ? 3600 : resolutionSecond;
       this.di.manageDataManager.getSyslogAnalyzer(this.getISODate(scope.syslogAnalyzer.startTime), this.getISODate(scope.syslogAnalyzer.endTime), resolutionSecond).then((res) => {
         scope.syslogAnalyzer.dataModel = res;
         scope.syslogAnalyzer.loading = false;
@@ -1207,7 +1353,10 @@ export class ElasticsearchController {
         return;
       }
 
+      scope.filebeatAnalyzer.loading = true;
+
       let resolutionSecond = Math.floor((scope.filebeatAnalyzer.endTime.getTime() - scope.filebeatAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+      resolutionSecond = resolutionSecond < 30 ? 30 : resolutionSecond > 3600 ? 3600 : resolutionSecond;
       this.di.manageDataManager.getFilebeatAnalyzer(scope.filebeatAnalyzer.selectedOption.value, this.getISODate(scope.filebeatAnalyzer.startTime), this.getISODate(scope.filebeatAnalyzer.endTime), resolutionSecond).then((res) => {
         scope.filebeatAnalyzer.dataModel = res;
         scope.filebeatAnalyzer.loading = false;
