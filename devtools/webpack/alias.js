@@ -6,6 +6,7 @@ class AliasProvider {
     return {
       'lodashService': path.resolve('src/libs/lodash/'),
       'c3Service': path.resolve('src/libs/c3/'),
+      'd3Service': path.resolve('src/libs/d3/'),
       'uuid': path.resolve('src/libs/uuid/'),
       'easing': path.resolve('src/libs/easing/'),
       'apis': path.resolve('src/apis/'),

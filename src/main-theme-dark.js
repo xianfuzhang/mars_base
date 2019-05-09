@@ -9,6 +9,7 @@ import 'angular-ui-bootstrap';
 import 'lodashService';
 import 'crypto';
 import 'c3Service';
+import 'd3Service';
 import 'uuid';
 import 'easing';
 import 'apis';
@@ -61,6 +62,7 @@ angular
     'pascalprecht.translate',
     '_',
     'c3',
+    'd3',
     'uuid',
     'eventEmitter',
     'ngTable',
