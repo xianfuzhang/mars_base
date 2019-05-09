@@ -21,14 +21,17 @@ export class DonutTopo {
       leafs: '=',
       others:'=',
       links:'=',
-      logicalPorts:'=',
       topoSetting:'='
     };
     this.link = (...args) => this._link.apply(this, args);
 	}
 
 	_link(scope, element, attr) {
-		scope.switches = scope.spines.concat(scope.leafs, scope.others) || [];
+		scope.spines = scope.spines || [];
+		scope.leafs = scope.leafs || [];
+		scope.others = scope.others || [];
+		scope.links = scope.links || [];
+		scope.switches = scope.spines.concat(scope.leafs, scope.others);
 		scope.topo_width = element[0].clientWidth;
 		scope.topo_height = element[0].clientHeight;
 		scope.outerRadius = Math.min(scope.topo_width, scope.topo_height) * 0.35;
