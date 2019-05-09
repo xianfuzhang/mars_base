@@ -1,4 +1,4 @@
-export class ShowChartSettingController {
+export class ChartSettingDialogController {
 	static getDI() {
 		return [
 			'$scope',
@@ -11,7 +11,7 @@ export class ShowChartSettingController {
 
 	constructor(...args) {
 		this.di = {};
-    ShowChartSettingController.getDI().forEach((value, index) => {
+    ChartSettingDialogController.getDI().forEach((value, index) => {
 			this.di[value] = args[index];
 		});
 		let scope = this.di.$scope;
@@ -21,16 +21,16 @@ export class ShowChartSettingController {
 		let chartTitle = '';
 		switch(this.di.dataModel.chartType) {
       case 'nginx-type-analyzer':
-        chartTitle = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_CPU.TITLE");
+        chartTitle = this.translate("MODULES.MANAGE.ELASTICSEARCH.CHART.NGINX_TYPE_SETTING");
         break;
       case 'nginx-analyzer':
-        chartTitle = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_MEMORY.TITLE");
+        chartTitle = this.translate("MODULES.MANAGE.ELASTICSEARCH.CHART.NGINX_SETTING");
         break;
       case 'syslog-analyzer':
-        chartTitle = this.translate("MODULES.DASHBOARD.CHART.SWITCH_CPU.TITLE");
+        chartTitle = this.translate("MODULES.MANAGE.ELASTICSEARCH.CHART.SYSLOG");
         break;
       case 'filebeat-analyzer':
-        chartTitle = this.translate("MODULES.DASHBOARD.CHART.SWITCH_MEMORY.TITLE");
+        chartTitle = this.translate("MODULES.MANAGE.ELASTICSEARCH.CHART.FILEBEAT");
         break;
 		}
 		scope.title = chartTitle;
@@ -96,5 +96,5 @@ export class ShowChartSettingController {
     init();
 	}
 }
-ShowChartSettingController.$inject = ShowChartSettingController.getDI();
-ShowChartSettingController.$$ngIsClass = true;
+ChartSettingDialogController.$inject = ChartSettingDialogController.getDI();
+ChartSettingDialogController.$$ngIsClass = true;
