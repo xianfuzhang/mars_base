@@ -146,6 +146,56 @@ export class LoginController {
         cb();
       });
     });
+
+    let scope = this.scope;
+    let di = this.di;
+    if(window.parent !== window){
+      window.addEventListener('message', function(e) {
+        if (e.source != window.parent)
+          return;
+        console.log(e.data);
+        let userArr = e.data.split(':');
+        if(userArr.length === 2){
+          di.loginDataManager.doLogin(userArr[0], userArr[1])
+            .then((res) => {
+              if(res){
+                let groups = res.data.groups;
+                let role = 1;
+                if (groups.includes(di.appService.CONST.SUPER_GROUP)) {
+                  role = 3;
+                }
+                else if (groups.includes(di.appService.CONST.ADMIN_GROUP)) {
+                  role = 2;
+                }
+                else if (groups.includes(di.appService.CONST.GUEST_GROUP)) {
+                  role = 1;
+                }
+                di.appService.setLoginRole(role);
+                di.appService.filterMenuByLoginRole();
+
+                di.localStoreService.getSyncStorage().set('menus',
+                  {
+                    'role': role,
+                    'groups': di.appService.roleFilterMenu
+                  });
+                di.$location.path('/');
+              } else {
+                scope.showBrowserMsg = true;
+                scope.loginModel.errorMessage = di.loginService.validateErrorMsg(res ? res.status : null);
+              }
+            }, (res) => {
+              scope.showBrowserMsg = true;
+              scope.loginModel.errorMessage = di.loginService.validateErrorMsg(res ? res.status : null);
+            });
+        } else {
+          console.log('The user account and password from parent iframe are not correct!')
+        }
+
+
+      }, false);
+
+      window.parent.postMessage('finished', '*');
+    }
   }
 }
 
