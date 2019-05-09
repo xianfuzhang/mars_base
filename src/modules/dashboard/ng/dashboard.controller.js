@@ -42,6 +42,9 @@ export class DashboardController {
     const chartService = this.di.chartService;
     const chartStyles = chartService.styles;
     let scope = this.di.$scope;
+    const getFormattedNumber = this.getFormattedNumber;
+    const getFormatedDateTime = this.getFormatedDateTime;
+
     this.translate = this.di.$filter('translate');
     scope.REALTIME_DATA = this.translate('MODULES.DASHBOARD.REALTIME_DATA');
     scope.HISTORY_DATA = this.translate('MODULES.DASHBOARD.HISTORY_DATA');
@@ -516,6 +519,23 @@ export class DashboardController {
 					  }
 				  }],
 			  },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += (tooltipItem.yLabel + '%');
+              return label;
+            }
+          }
+        },
 			  // Container for zoom options
 			  zoom: {
 				  onZoom: lineChartOnZoom('cluster-cpu-chart')
@@ -587,6 +607,23 @@ export class DashboardController {
 	          }
 	        }],
 	      },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += (tooltipItem.yLabel + '%');
+              return label;
+            }
+          }
+        },
 	      // Container for zoom options
 	      zoom: {
 	        // Useful for dynamic data loading
@@ -657,6 +694,23 @@ export class DashboardController {
 				    }
 				  }],
 				},
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += (tooltipItem.yLabel + '%');
+              return label;
+            }
+          }
+        },
 			  // Container for zoom options
 			  zoom: {
 				  // Useful for dynamic data loading
@@ -730,6 +784,23 @@ export class DashboardController {
 					  }
 				  }],
 			  },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += (tooltipItem.yLabel + '%');
+              return label;
+            }
+          }
+        },
 				zoom: {
 				  // Boolean to enable zooming
 				  enabled: true,
@@ -807,6 +878,23 @@ export class DashboardController {
               }
             }
           }],
+        },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += (tooltipItem.yLabel + '%');
+              return label;
+            }
+          }
         },
         zoom: {
           // Boolean to enable zooming
@@ -891,6 +979,19 @@ export class DashboardController {
             barThickness: 40,
 				  }],
 			  },
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += getFormattedNumber(tooltipItem.yLabel);
+              return label;
+            }
+          }
+        },
 		  }
 		  
 		  if(drop) {
@@ -1926,6 +2027,44 @@ export class DashboardController {
       return '0' + number;
     }
     return number;
+  }
+
+  getFormatedDateTime(date) {
+    let _fillInt = (num, count) => {
+      if(!count){
+        count = 2;
+      }
+      let numStr = num + '';
+      if(numStr.length !== count) {
+        return '0'.repeat(count - numStr.length) + numStr
+      } else
+        return num
+    };
+
+    let res = date.getFullYear() +
+      '-' + _fillInt(date.getMonth() + 1) +
+      '-' + _fillInt(date.getDate()) +
+      ' ' + _fillInt(date.getHours()) +
+      ':' + _fillInt(date.getMinutes()) +
+      ':' + _fillInt(date.getSeconds());
+
+    return res
+  }
+
+  getFormattedNumber(num) {
+    let numArr = num.toString().split('');
+    let numLength = numArr.length;
+    let formattedNum = '';
+    let diffCount = numLength % 3;
+    for(let i = 1; i <= numLength; i++) {
+      formattedNum += numArr[i-1];
+
+      if((i - diffCount) % 3 == 0 && i < numLength) {
+        formattedNum += ','
+      }
+    }
+
+    return formattedNum;
   }
 
   getClusterCPUMemoryStatisticFromLS(clusters) {
