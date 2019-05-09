@@ -140,13 +140,9 @@ export class DonutTopo {
 	          .attr("d", newArc)
 	          .style("fill", "none");
 	      })
-	      .on('click', function(d){
-	      	_this.di.d3.select('g.links')
-	      		.selectAll('path')
-	      		.attr('stroke', function(ld){
-	      			return ld.source.device === d.data.id || ld.target.device === d.data.id ? 'red' : '#006EA4';
-	      		});
-	      });
+	      .on('click', clickOuterDonut)
+	      .on('mouseover', mouseoverOuterDonut)
+	      .on('mouseout', mouseoutOuterDonut);
     };
     	
     let drawInnerDonut = () => {
@@ -174,15 +170,7 @@ export class DonutTopo {
 	        d.data['y'] = centroid[1];
 	        scope.portArcArr.push(d);
 	      })
-	      .on('click', function(d){
-	      	_this.di.d3.select('g.links')
-	      		.selectAll('path')
-	      		.attr('stroke', function(ld){
-	      			return (ld.source.device === d.data.device && ld.source.port === d.data.port) 
-	      				|| (ld.target.device === d.data.device && ld.target.port === d.data.port) 
-	      				? 'red' : '#006EA4';
-	      		});
-	      });
+	      .on('click', clickInnerDonut);
     };
 
     let drawPortLinks = () => {
@@ -213,7 +201,9 @@ export class DonutTopo {
 		    .append('path')
 		    .attr('class', 'link')
 		    .attr('d', drawDPath)
-		    .attr('stroke', '#006EA4')
+		    .attr('stroke', (d) => {
+		    	return scope.topoSetting.show_links === 2 ? '#006EA4' : 'none';
+		    })
 		    .attr('stroke-width', 2)
 		    .attr('fill', 'none')
 		    .on('click', function(d){
@@ -237,6 +227,61 @@ export class DonutTopo {
             .text(function(d) { return d.data.name;});
     };
 
+    let clickOuterDonut = (d) => {
+    	this.di.d3.select('g.links')
+    		.selectAll('path')
+    		.attr('stroke', function(ld){
+    			if (scope.topoSetting.show_links === 2) {
+    				return ld.source.device === d.data.id || ld.target.device === d.data.id ? 'red' : '#006EA4';	
+    			}
+    			else if (scope.topoSetting.show_links === 1) {
+    				return ld.source.device === d.data.id || ld.target.device === d.data.id ? '#006EA4' : 'none';		
+    			}
+    			else if (scope.topoSetting.show_links === 0) {
+    				return 'none';
+    			}
+    		});
+    	let showArray = [];
+      let sw = this.di._.find(scope.switches, {'id': d.data.id});
+      showArray = this.di.switchService.getSpineShowInfo(sw);	
+    	scope.$emit("switch_select",{event:this.di.d3.event, id: d.data.id, type: sw.type, value: showArray});	
+    };
+
+    let mouseoverOuterDonut = (d) => {
+    	if(scope.topoSetting.show_tooltips){
+    		let showArray = [];
+        let sw = this.di._.find(scope.switches, {'id': d.data.id});
+        showArray = this.di.switchService.getSpineShowInfo(sw);
+        scope.$emit("show_tooltip",{event:this.di.d3.event, value: showArray});
+      }
+    };
+
+    let mouseoutOuterDonut = (d) => {
+    	if(scope.topoSetting.show_tooltips){
+        scope.$emit("hide_tooltip");
+      }
+    };
+
+    let clickInnerDonut = (d) => {
+    	this.di.d3.select('g.links')
+    		.selectAll('path')
+    		.attr('stroke', function(ld){
+    			if (scope.topoSetting.show_links === 2) {
+    				return (ld.source.device === d.data.device && ld.source.port === d.data.port) 
+	    				|| (ld.target.device === d.data.device && ld.target.port === d.data.port) 
+	    				? 'red' : '#006EA4';	
+    			}
+    			else if (scope.topoSetting.show_links === 1) {
+    				return (ld.source.device === d.data.device && ld.source.port === d.data.port) 
+	    				|| (ld.target.device === d.data.device && ld.target.port === d.data.port) 
+	    				? '#006EA4' : 'none';	
+    			}
+    			else if (scope.topoSetting.show_links === 0) {
+    				return 'none';
+    			}
+    		});
+    };
+
     getDonutTopo();
 
     let clickOuterTopoHandler = (event) => {
@@ -258,6 +303,14 @@ export class DonutTopo {
     	}, 500);
     };
     angular.element(this.di.$window).bind('resize', onResize);
+
+    scope.$watch('topoSetting.show_links', (newVal, oldVal) => {
+    	this.di.d3.select('g.links')
+    		.selectAll('path')
+    			.attr('stroke', () => {
+    				return scope.topoSetting.show_links === 2 ? '#006EA4' : 'none';
+    			});
+    }, false);
 		scope.$on('$destroy', () => {
 			document.removeEventListener('click', clickOuterTopoHandler);
 			angular.element(this.di.$window).unbind('resize', onResize);
