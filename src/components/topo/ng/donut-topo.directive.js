@@ -4,7 +4,9 @@ export class DonutTopo {
 			'$window',
 			'$templateCache',
 			'$timeout',
-			'd3'
+			'_',
+			'd3',
+			'switchService'
 		];
 	}
 	constructor(...args) {
@@ -77,20 +79,20 @@ export class DonutTopo {
 			let switchObject = {}, i = 0;
 			scope.switches.forEach(function(sw) {
 		    switchObject[sw.id] = sw;
-		    switchObject[sw.id]['ports'] = [];
+		    switchObject[sw.id]['linkPorts'] = [];
 		  });
 		  while (i < scope.links.length) {
-		  	if (switchObject[scope.links[i]['src']['device']] && !switchObject[scope.links[i]['src']['device']]['ports'].includes(scope.links[i]['src']['port'])) {
-		  		switchObject[scope.links[i]['src']['device']]['ports'].push(scope.links[i]['src']['port']);
+		  	if (switchObject[scope.links[i]['src']['device']] && !switchObject[scope.links[i]['src']['device']]['linkPorts'].includes(scope.links[i]['src']['port'])) {
+		  		switchObject[scope.links[i]['src']['device']]['linkPorts'].push(scope.links[i]['src']['port']);
 		  	}
-		    if (switchObject[scope.links[i]['dst']['device']] && !switchObject[scope.links[i]['dst']['device']]['ports'].includes(scope.links[i]['dst']['port'])) {
-		    	switchObject[scope.links[i]['dst']['device']]['ports'].push(scope.links[i]['dst']['port']);	
+		    if (switchObject[scope.links[i]['dst']['device']] && !switchObject[scope.links[i]['dst']['device']]['linkPorts'].includes(scope.links[i]['dst']['port'])) {
+		    	switchObject[scope.links[i]['dst']['device']]['linkPorts'].push(scope.links[i]['dst']['port']);	
 		    }
 		    i++;
 		  }
 		  for(let key in switchObject) {
 		  	let switchArc, startArc = 0, endArc = 0, t = 0, portLen = 0;
-		  	switchObject[key]['ports'].sort(function(a, b){ return a - b ;});
+		  	switchObject[key]['linkPorts'].sort(function(a, b){ return a - b ;});
 		  	for(let s = 0; s < scope.switchArcData.length; s++){
 		      if (key === scope.switchArcData[s]['data']['id']) {
 		        switchArc = scope.switchArcData[s];
@@ -99,9 +101,9 @@ export class DonutTopo {
 		    }
 				startArc = switchArc.startAngle + OUTER_ARC_PADDING * 3 / 4; //此处由于outer arc padding存在，需要手动微调
 		    endArc = switchArc.endAngle - OUTER_ARC_PADDING * 3 / 4;
-		    portLen = switchObject[key]['ports'].length;
+		    portLen = switchObject[key]['linkPorts'].length;
 		    if (portLen > 0) t = (endArc - startArc) / portLen;
-		    switchObject[key]['ports'].forEach((port, i) => {
+		    switchObject[key]['linkPorts'].forEach((port, i) => {
 		      let arc = {
 		        'data': {'port': port, 'device': switchObject[key]['id']},
 		        'index': '' + key + i,
