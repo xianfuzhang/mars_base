@@ -317,6 +317,8 @@ export class FabricSummaryController {
         DI.$scope.fabricModel['deLogicalPorts'] = angular.copy(this.logicalPorts);
         DI.$scope.fabricModel.isShowTopo = true;
 
+        DI.$scope.fabricModel.devices = angular.copy(devices);
+
         if(DI.$scope.fabricModel.topoSetting.show_path){
           _render_path_select(this.endpoints);
         }

@@ -50,6 +50,7 @@ export class Loading {
 
       scope.isLoading = false;
       function  start(isOutCall) {
+        return;
         if(scope.isLoading && isOutCall){
           console.log('Loading component has been called')
           return;

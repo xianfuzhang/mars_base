@@ -38,6 +38,7 @@ import 'marSection';
 import 'contentPanel';
 import 'footer';
 import 'topo';
+import 'forceTopo';
 import 'validInput';
 import 'loading';
 import 'deviceTooltip';
@@ -90,6 +91,7 @@ angular
     'contentPanel',
     'footer',
     'topo',
+    'forceTopo',
     'validInput',
     'loading',
     'deviceTooltip',

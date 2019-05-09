@@ -6,6 +6,8 @@ class AliasProvider {
     return {
       'lodashService': path.resolve('src/libs/lodash/'),
       'c3Service': path.resolve('src/libs/c3/'),
+      'd3Service': path.resolve('src/libs/d3/'),
+      'd3ForceService': path.resolve('src/libs/d3-force/'),
       'uuid': path.resolve('src/libs/uuid/'),
       'easing': path.resolve('src/libs/easing/'),
       'apis': path.resolve('src/apis/'),
@@ -45,6 +47,7 @@ class AliasProvider {
       'mdlTable': path.resolve('src/components/table'),
       'modal': path.resolve('src/components/modal'),     
       'topo': path.resolve('src/components/topo/'),
+      'forceTopo': path.resolve('src/components/force-topo/'),
       'validInput': path.resolve('src/components/valid-input/'),
       'loading': path.resolve('src/components/loading/'),
       'deviceTooltip': path.resolve('src/components/device-tooltip/'),

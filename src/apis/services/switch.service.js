@@ -61,6 +61,20 @@ export class switchService {
     return showArray;
   }
 
+
+  getNormalShowInfo(sw){
+    let showArray = [];
+    showArray.push({'label': 'ID', 'value': sw.id});
+    showArray.push({'label': this.translate('MODULES.COMMON.NAME'), 'value': sw.name});
+    // showArray.push({'label': this.translate('MODULES.COMMON.TYPE'), 'value': sw.type});
+    showArray.push({'label': this.translate('MODULES.COMMON.AVAILABLE'), 'value': sw.available});
+    showArray.push({'label': this.translate('MODULES.COMMON.MAC'), 'value': sw.mac});
+    showArray.push({'label': this.translate('MODULES.COMMON.CONNECT_SINCE'), 'value': sw.lastUpdate});
+    showArray.push({'label': this.translate('MODULES.COMMON.MANAGEMENT_ADDRESS'), 'value': sw.mgmtIpAddress});
+    showArray.push({'label': this.translate('MODULES.COMMON.RACK_ID'), 'value': sw.rack_id});
+    return showArray;
+  }
+
   getSwitchName(id, swArr){
     let sw = this.di._.filter(swArr, function(sw) { return id == sw.id });
     if( sw.length == 1){

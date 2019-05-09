@@ -10,6 +10,8 @@ import 'angular-ui-bootstrap';
 import 'lodashService';
 import 'crypto';
 import 'c3Service';
+import 'd3Service';
+import 'd3ForceService';
 import 'easing';
 import 'apis';
 import 'localStore';
@@ -39,6 +41,7 @@ import 'marSection';
 import 'contentPanel';
 import 'footer';
 import 'topo';
+import 'forceTopo';
 import 'validInput';
 import 'loading';
 import 'deviceTooltip';
@@ -63,6 +66,8 @@ angular
     'pascalprecht.translate',
     '_',
     'c3',
+    'd3',
+    'd3-force',
     'uuid',
     'eventEmitter',
     'ngTable',
@@ -92,6 +97,7 @@ angular
     'contentPanel',
     'footer',
     'topo',
+    'forceTopo',
     'validInput',
     'loading',
     'deviceTooltip',
