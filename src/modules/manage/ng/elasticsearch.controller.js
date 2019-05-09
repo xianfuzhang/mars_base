@@ -45,6 +45,7 @@ export class ElasticsearchController {
     const chartService = this.di.chartService;
     const chartStyles = chartService.styles;
     const getFormatedDateTime = this.getFormatedDateTime;
+    const getFormattedNumber = this.getFormattedNumber;
 
     this.scope.pageTitle = this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH');
     
@@ -156,13 +157,13 @@ export class ElasticsearchController {
       selectedOption: {},
       typesOptions: [
         {
-          label: "thread",
-          value: "thread"
-        },
-        {
           label: "handler",
           value: "handler",
 
+        },
+        {
+          label: "thread",
+          value: "thread"
         }
       ],
       dataModel: null,
@@ -353,7 +354,7 @@ export class ElasticsearchController {
 
       this.di.modalManager.open({
         template: require('../template/chart_setting.html'),
-        controller: 'showChartSettingCtrl',
+        controller: 'chartSettingDialogCtrl',
         windowClass: 'show-chart-setting-modal',
         resolve: {
           dataModel: () => {
@@ -592,6 +593,15 @@ export class ElasticsearchController {
             title: (tooltipItem) => {
               let value = new Date(labelsArr[tooltipItem[0].index]);
               return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += getFormattedNumber(tooltipItem.yLabel);
+              return label;
             }
           }
         },
@@ -622,7 +632,7 @@ export class ElasticsearchController {
       const pad = this.pad;
       let options = {
         title: {
-          text: "具体访问情况分析"
+          text: "API具体访问情况分析"
         },
         scales: {
           yAxes: [{
@@ -648,6 +658,15 @@ export class ElasticsearchController {
           callbacks: {
             title: (tooltipItem) => {
               return labelsArr[tooltipItem[0].index];
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += getFormattedNumber(tooltipItem.yLabel);
+              return label;
             }
           }
         }
@@ -687,7 +706,7 @@ export class ElasticsearchController {
 
       const pad = this.pad;
 
-      let title = "访问情况统计";
+      let title = "API访问情况统计";
       title = scope.nginxTimerangeAnalyzer.selectedIpOption.value ? scope.nginxTimerangeAnalyzer.selectedIpOption.value + ' - ' + title : title;
       let options = {
         title: {
@@ -715,6 +734,15 @@ export class ElasticsearchController {
             title: (tooltipItem) => {
               let value = new Date(labelsArr[tooltipItem[0].index]);
               return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += getFormattedNumber(tooltipItem.yLabel);
+              return label;
             }
           }
         },
@@ -759,7 +787,7 @@ export class ElasticsearchController {
       let options = {
         title: {
           display: true,
-          text: "系统日志统计情况",
+          text: "Syslog日志统计情况",
         },
         scales: {
           yAxes: [{
@@ -782,6 +810,15 @@ export class ElasticsearchController {
             title: (tooltipItem) => {
               let value = new Date(labelsArr[tooltipItem[0].index]);
               return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += getFormattedNumber(tooltipItem.yLabel);
+              return label;
             }
           }
         },
@@ -854,6 +891,15 @@ export class ElasticsearchController {
             title: (tooltipItem) => {
               let value = new Date(labelsArr[tooltipItem[0].index]);
               return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += getFormattedNumber(tooltipItem.yLabel);
+              return label;
             }
           }
         },
@@ -1145,7 +1191,7 @@ export class ElasticsearchController {
 
       dataArr.forEach((data) => {
         dataset.data.push(data.count);
-        chartData.labels.push(data.key);
+        chartData.labels.push(data.key ? data.key : '未知');
       });
 
       chartData.datasets.push(dataset);
@@ -1610,6 +1656,22 @@ export class ElasticsearchController {
     }
 
     return timeseries;
+  }
+
+  getFormattedNumber(num) {
+    let numArr = num.toString().split('');
+    let numLength = numArr.length;
+    let formattedNum = '';
+    let diffCount = numLength % 3;
+    for(let i = 1; i <= numLength; i++) {
+      formattedNum += numArr[i-1];
+
+      if((i - diffCount) % 3 == 0 && i < numLength) {
+        formattedNum += ','
+      }
+    }
+
+    return formattedNum;
   }
 
   pad(num, count) {
