@@ -170,7 +170,9 @@ export class DonutTopo {
 	        d.data['y'] = centroid[1];
 	        scope.portArcArr.push(d);
 	      })
-	      .on('click', clickInnerDonut);
+	      .on('click', clickInnerDonut)
+	      .on('mouseover', mouseoverInnerDonut)
+	      .on('mouseout', mouseoutInnerDonut);
     };
 
     let drawPortLinks = () => {
@@ -280,6 +282,30 @@ export class DonutTopo {
     				return 'none';
     			}
     		});
+    };
+
+    let mouseoverInnerDonut = (d) => {
+    	this.di.d3.select('g.links')
+    		.selectAll('path')
+    		.each((ld) => {
+    			if ((ld.source.device === d.data.device && ld.source.port === d.data.port) || 
+    					(ld.target.device === d.data.device && ld.target.port === d.data.port)) {
+    				let locations = [ld.source, ld.target];
+    				g.append('g')
+    					.classed('tooltips', true)
+    					.selectAll('text')
+    					.data(locations)
+    					.enter()
+    					.append('text')
+    					.attr('x', d => d.x)
+    					.attr('y', d => d.y)
+    					.text(d => d.port);
+    			}
+    		});
+    };
+
+    let mouseoutInnerDonut = (d) => {
+    	g.selectAll('g.tooltips').remove();
     };
 
     getDonutTopo();
