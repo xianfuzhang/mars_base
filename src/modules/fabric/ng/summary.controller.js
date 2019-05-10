@@ -40,6 +40,17 @@ export class FabricSummaryController {
       this.di[value] = args[index];
     });
 
+    this.di.$window.requestAnimFrame = (function(callback) {
+      return this.di.$window.requestAnimationFrame
+        || this.di.$window.webkitRequestAnimationFrame
+        || this.di.$window.mozRequestAnimationFrame
+        || this.di.$window.oRequestAnimationFrame
+        || this.di.$window.msRequestAnimationFrame
+        || (function(callback) {
+          this.di.$window.setTimeout(callback, 1000 / 60);
+        }).call(this);
+    }).call(this);
+
     this.translate = this.di.$filter('translate');
 
     let fabric_storage_ns = "storage_farbic_";

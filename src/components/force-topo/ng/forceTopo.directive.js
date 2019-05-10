@@ -51,6 +51,28 @@ export class ForceTopo {
       this.hostNodes = {};
       // scope.selectedDeviceId = null;
 
+      // TEST Code START  ======= 此处代码是用来测试distance算法是否合理
+      /*let devices = [{"available":true,"community":null,"id":"rest:192.168.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"192.168.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:192.168.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:192.168.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"192.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"192.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"192.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.168.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.168.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:292.168.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"292.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"292.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:192.169.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"192.169.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:192.169.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:192.169.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"192.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"192.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"192.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.169.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.169.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:292.169.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"292.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"292.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"}];
+       let links =[{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.225:80","port":"49"},"src":{"device":"rest:192.168.40.227:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.230:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.229:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.227:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.226:80","port":"51"},"src":{"device":"rest:192.168.40.229:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.226:80","port":"52"},"src":{"device":"rest:192.168.40.230:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.229:80","port":"49"},"src":{"device":"rest:192.168.40.225:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.226:80","port":"49"},"src":{"device":"rest:192.168.40.227:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.227:80","port":"49"},"src":{"device":"rest:192.168.40.225:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.225:80","port":"51"},"src":{"device":"rest:192.168.40.229:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.225:80","port":"52"},"src":{"device":"rest:192.168.40.230:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.230:80","port":"49"},"src":{"device":"rest:192.168.40.225:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.225:80","port":"49"},"src":{"device":"rest:292.168.40.227:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.230:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.229:80","port":"50"},"src":{"device":"rest:292.168.40.226:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.227:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.226:80","port":"51"},"src":{"device":"rest:292.168.40.229:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.226:80","port":"52"},"src":{"device":"rest:192.168.40.230:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.229:80","port":"49"},"src":{"device":"rest:292.168.40.225:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.226:80","port":"49"},"src":{"device":"rest:292.168.40.227:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.227:80","port":"49"},"src":{"device":"rest:292.168.40.225:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.225:80","port":"51"},"src":{"device":"rest:292.168.40.229:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.225:80","port":"52"},"src":{"device":"rest:292.168.40.230:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.230:80","port":"49"},"src":{"device":"rest:292.168.40.225:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.225:80","port":"49"},"src":{"device":"rest:192.169.40.227:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.230:80","port":"50"},"src":{"device":"rest:192.169.40.226:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.229:80","port":"50"},"src":{"device":"rest:192.169.40.226:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.227:80","port":"50"},"src":{"device":"rest:192.169.40.226:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.226:80","port":"51"},"src":{"device":"rest:192.169.40.229:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.226:80","port":"52"},"src":{"device":"rest:192.169.40.230:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.229:80","port":"49"},"src":{"device":"rest:192.169.40.225:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.226:80","port":"49"},"src":{"device":"rest:192.169.40.227:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.227:80","port":"49"},"src":{"device":"rest:192.169.40.225:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.225:80","port":"51"},"src":{"device":"rest:192.169.40.229:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.225:80","port":"52"},"src":{"device":"rest:192.168.40.230:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.230:80","port":"49"},"src":{"device":"rest:192.168.40.225:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.225:80","port":"49"},"src":{"device":"rest:292.169.40.227:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.230:80","port":"50"},"src":{"device":"rest:192.169.40.226:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.229:80","port":"50"},"src":{"device":"rest:292.168.40.226:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.227:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.226:80","port":"51"},"src":{"device":"rest:292.169.40.229:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.226:80","port":"52"},"src":{"device":"rest:192.168.40.230:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.229:80","port":"49"},"src":{"device":"rest:292.168.40.225:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.226:80","port":"49"},"src":{"device":"rest:292.169.40.227:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.227:80","port":"49"},"src":{"device":"rest:292.169.40.225:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.225:80","port":"51"},"src":{"device":"rest:292.168.40.229:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.225:80","port":"52"},"src":{"device":"rest:292.168.40.230:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.230:80","port":"49"},"src":{"device":"rest:292.168.40.225:80","port":"52"},"state":"ACTIVE","type":"DIRECT"}];
+
+       let len = 30;
+       scope.devices = [];
+       scope.links = links.slice(0, len);
+
+       this.di._.forEach(scope.links , (link)=>{
+       let device1 = this.di._.find(devices, {"id": link.src.device});
+       let device2 = this.di._.find(devices, {"id": link.dst.device});
+       if(!this.di._.find(scope.devices, {"id": device1.id})){
+       scope.devices.push(device1)
+       }
+
+       if(!this.di._.find(scope.devices, {"id": device2.id})){
+       scope.devices.push(device2)
+       }
+       });*/
+      // TEST Code END ======
+
+
       this.source_devices = scope.devices;
       this.formated_devices = scope.devices;
 
@@ -60,26 +82,32 @@ export class ForceTopo {
       this.linkIds = [];
 
 
-      let getLinkId = (deviceIds, ports) =>{
+      let getLinkId = (deviceIds, ports) => {
         let newDeviceIds = this.di._.sortBy(deviceIds);
-        if(newDeviceIds[0] !== deviceIds[0]){
+        if (newDeviceIds[0] !== deviceIds[0]) {
           let tmp = ports[0];
           ports[0] = ports[1];
           ports[1] = tmp;
         }
         return newDeviceIds[0] + ':' + ports[0] + '_' + newDeviceIds[1] + ':' + ports[1];
       };
-      
+
       let formatLinks = (links) => {
         this.formated_links = [];
         this.di._.forEach(links, (link) => {
           // let newDeviceIds = this.di._.sortBy([link.src.device, link.dst.device]);
           // let linkId = newDeviceIds.join('-');
-          
+
           let linkId = getLinkId([link.src.device, link.dst.device], [link.src.port, link.dst.port]);
           if (this.di._.findIndex(this.linkIds, linkId) === -1) {
             this.linkIds.push(linkId);
-            this.formated_links.push({'source': link.src.device, 'target': link.dst.device, 'id': linkId,'value':1, 'link': link});
+            this.formated_links.push({
+              'source': link.src.device,
+              'target': link.dst.device,
+              'id': linkId,
+              'value': 1,
+              'link': link
+            });
           }
         })
       };
@@ -121,6 +149,7 @@ export class ForceTopo {
         genTopo();
       };
 
+      //TODO 看来只有吧path过来的node和link都加到原来的node中，否则新开的话，会有各种各样的问题，蛋疼
       this.simulation = null;
       this.linkNode = null;
       this.deviceNode = null;
@@ -170,16 +199,76 @@ export class ForceTopo {
       };
 
 
+      let _links;
+
       let reCenter = () => {
         let parentNode = element[0].parentNode;
         this.width = parentNode.offsetWidth;
         this.height = parentNode.offsetHeight;
 
 
+        let distance = 100;
+        if (scope.devices.length !== 0) {
+          let _distance = Math.sqrt(this.width * this.height * 0.7 / scope.devices.length);
+          // console.log(_distance)
+          // console.log('*************');
+          if (_distance > 500) distance = 500; else distance = _distance;
+        }
+
+
         this.simulation
           .force("center", DI.d3.forceCenter(this.width / 2, this.height / 2))
+        // .force("link", DI.d3.forceLink(_links).id(d => d.id).distance(d => {return distance}))
+        // .force("charge", DI.d3.forceManyBody().strength(-30))
+        // .force("collide", DI.d3.forceCollide(30));
       };
 
+      scope.curSelectedDeviceId = null;
+      let addSelectEffect = (node) => {
+        // this.di.d3.select(node).select('rect').attr('fill','#d5f6ff')
+        this.di.d3
+          .select(node)
+          .select('rect')
+          .classed('node-select', true)
+          .classed('node-unselect', false)
+      };
+
+      let removeSelectEffect = () => {
+        // this.deviceNode.select('rect').attr('fill', 'gray');
+        this.deviceNode
+          .select('rect')
+          .classed('node-select', false)
+          .classed('node-unselect', true)
+        if(this.hostNode){
+          this.hostNode
+            .select('rect')
+            .classed('node-select', false)
+            .classed('node-unselect', true)
+        }
+      };
+
+      let _calcPoint_X = (point) => {
+        if (point < BOUNDARY_SIZE) {
+          return BOUNDARY_SIZE
+        }
+        if (point > this.width - BOUNDARY_SIZE) {
+          return this.width - BOUNDARY_SIZE
+        }
+        return point;
+      }
+
+      let _calcPoint_Y = (point) => {
+        if (point < BOUNDARY_SIZE) {
+          return BOUNDARY_SIZE
+        }
+        if (point > this.height - BOUNDARY_SIZE) {
+          return this.height - BOUNDARY_SIZE
+        }
+        return point;
+      };
+
+      this.pathLinks = null;
+      this.hostNode = null;
       let genTopo = () => {
 
 
@@ -188,22 +277,75 @@ export class ForceTopo {
         this.height = parentNode.offsetHeight;
 
 
-        const links = this.formated_links.map(d => Object.create(d));
-        const nodes = this.formated_devices.map(d => Object.create(d));
+        scope._links = this.formated_links.map(d => Object.create(d));
+        scope._nodes = this.formated_devices.map(d => Object.create(d));
+
+        scope.distance = SVG_LINE_LENGTH;
+        scope.strength = -10;
+        if (scope.devices.length !== 0) {
+          let _distance = Math.sqrt(this.width * this.height * 0.7 / scope.devices.length);
+          // console.log(_distance)
+          // console.log('*************')
+          if (_distance > 500) scope.distance = 500; else scope.distance = _distance;
+
+          if (scope.devices.length >= 10 && scope.devices.length < 20) {
+            scope.strength = -6;
+          } else if (scope.devices.length >= 20 && scope.devices.length < 30) {
+            scope.strength = -3;
+          } else if (scope.devices.length > 30) {
+            scope.strength = 0;
+          }
+        }
 
 
-        this.simulation = DI.d3.forceSimulation(nodes)
-          .force("link", DI.d3.forceLink(links).id(d => d.id).distance(d => {return SVG_LINE_LENGTH}))
-          .force("charge", DI.d3.forceManyBody().strength(-30))
-          .force("collide", DI.d3.forceCollide(30).strength(0.2).iterations(3));
+        this.simulation = DI.d3.forceSimulation(scope._nodes)
+          .force("link", DI.d3.forceLink(scope._links).id(d => d.id).distance(d => {
+            return scope.distance
+          }))
+          .force("charge", DI.d3.forceManyBody().strength(scope.strength))
+          .force("collide", DI.d3.forceCollide(40).strength(0.2).iterations(5));
+
 
         reCenter();
 
-
         svg = this.di.d3.select('svg')
           .on('click', function () {
-            DI.$rootScope.$emit('topo_unselect')
+            DI.$rootScope.$emit('topo_unselect');
+            scope.curSelectedDeviceId = null;
+            removeSelectEffect();
           });
+
+
+        this.defs = svg.append('defs');
+        // 3.1 添加箭头
+
+
+        this.marker = this.defs
+          .append("marker")
+          .attr('id', "marker")
+          .attr("markerWidth", 20)    //marker视窗的宽
+          .attr("markerHeight", 20)   //marker视窗的高
+          .attr("refX", scope.distance/3)            //refX和refY，指的是图形元素和marker连接的位置坐标
+          .attr("refY", 8)
+          .attr("orient", "auto")     //orient="auto"设置箭头的方向为自动适应线条的方向
+          .attr("markerUnits", "userSpaceOnUse")  //marker是否进行缩放 ,默认值是strokeWidth,会缩放
+          .append("path")
+          .attr("d", "M 0 0 16 8 0 16Z")    //箭头的路径 从 （0,0） 到 （8,4） 到（0,8）
+          .attr("fill", "rgb(236,234,136)");
+
+
+        this.start_marker = this.defs
+          .append("marker")
+          .attr('id', "start_marker")
+          .attr("markerWidth", 20)    //marker视窗的宽
+          .attr("markerHeight", 20)   //marker视窗的高
+          .attr("refX", -scope.distance/3)            //refX和refY，指的是图形元素和marker连接的位置坐标
+          .attr("refY", 8)
+          .attr("orient", "auto")     //orient="auto"设置箭头的方向为自动适应线条的方向
+          .attr("markerUnits", "userSpaceOnUse")  //marker是否进行缩放 ,默认值是strokeWidth,会缩放
+          .append("path")
+          .attr("d", "M 0 0 16 8 0 16Z")    //箭头的路径 从 （0,0） 到 （8,4） 到（0,8）
+          .attr("fill", "rgb(236,234,136)");
         // .on('resize',reCenter);
 
         // let simulation = this.simulation;
@@ -212,13 +354,13 @@ export class ForceTopo {
         //     .force("center", DI.d3.forceCenter(100, 200))
         // },2000)
 
+        //.style('marker-end','url(#marker)')
+
         this.linkNode = svg.append("g")
-          .attr("stroke", "#999")
-          .attr("stroke-opacity", 0.6)
+          .classed('force-topo__line-normal', true)
           .selectAll("line")
-          .data(links)
-          .join("line").attr('linkid', d=>d.id)
-          .attr("stroke-width", d => Math.sqrt(d.value));
+          .data(scope._links)
+          .join("line").attr('linkid', d => d.id);
 
         let mouseOutHandler = (evt) => {
           if (scope.topoSetting.show_tooltips) {
@@ -241,19 +383,16 @@ export class ForceTopo {
             };
             DI.$rootScope.$emit("show_tooltip", {event: evt, value: showArray});
           }
-          // DI.d3.select(this)
-          //   .append('text')
-          //   .attr('x', '-6')
-          //   .attr('y', '-10')
-          //   .attr('stroke','black')
-          //   .attr('stroke-width','1')
-          //   .html(deviceId)
-          //
-          // DI.d3.select(this).select('text').remove('text');
         }
 
         function clickHandler() {
           DI.d3.event.stopPropagation();
+          removeSelectEffect();
+
+          // if (scope.curSelectedDeviceId !== null) {
+          //   removeSelectEffect();
+          // }
+
           if (scope.topoSetting.show_tooltips) {
             DI.$rootScope.$emit("hide_tooltip");
           }
@@ -261,52 +400,78 @@ export class ForceTopo {
           let sw = DI._.find(scope.devices, {'id': deviceId});
           let showArray = DI.switchService.getNormalShowInfo(sw);
           DI.$rootScope.$emit("switch_select", {event: null, id: deviceId, type: null, value: showArray});
+
+          scope.curSelectedDeviceId = deviceId;
+          addSelectEffect(this)
         };
 
         this.deviceNode = svg.append("g")
-          .attr("stroke", "#fff")
-          .attr("stroke-width", 1.5)
+          .classed('force-topo__node-normal', true)
           .selectAll("g")
-          .data(nodes)
-          .join('g').attr("width", ICON_SIZE).attr("height", ICON_SIZE).attr('fill', 'gray').attr('deviceId', d => d.id)
-          .html('<rect x="-6" y="-6" width="36" height="36"/><path style="pointer-events: none" d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>')
+          .data(scope._nodes)
+          .join('g').attr("width", ICON_SIZE).attr("height", ICON_SIZE).attr('deviceId', d => d.id)
+          .html(d => {
+            let device_status_class = 'force-topo__path-normal';
+            if (!d.available) {
+              device_status_class = 'force-topo__path-error';
+            }
+            return '<rect x="-6" y="-6" rx="3" ry="3" width="36" height="36" class="force-topo__node-outline" /><path class="' + device_status_class + '" style="pointer-events: none" d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>'
+          })
           .call(drag(this.simulation))
           .on('click', clickHandler);
-          // .on('mouseover', mouseOverHandler)
-          // .on('mouseout', mouseOutHandler)
+        // .on('mouseover', mouseOverHandler)
+        // .on('mouseout', mouseOutHandler)
+
+
+
+
+        // this.pathLinks = svg.append("g");
 
 
         this.simulation.on("tick", () => {
           this.linkNode
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y);
+            .attr("x1", d => _calcPoint_X(d.source.x))
+            .attr("y1", d => _calcPoint_Y(d.source.y))
+            .attr("x2", d => _calcPoint_X(d.target.x))
+            .attr("y2", d => _calcPoint_Y(d.target.y));
 
+
+          // if(this.pathLinks !== null){
+          //   this.pathLinks
+          //     .attr("x1", d => _calcPoint_X(d.source.x))
+          //     .attr("y1", d => _calcPoint_Y(d.source.y))
+          //     .attr("x2", d => _calcPoint_X(d.target.x))
+          //     .attr("y2", d => _calcPoint_Y(d.target.y));
+          // }
+          //
+          // if(this.hostNode!== null){
+          //   this.hostNode.attr('transform', d => {
+          //     let x, y;
+          //     x = _calcPoint_X(d.x);
+          //     y = _calcPoint_Y(d.y);
+          //     return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
+          //   });
+          // }
           this.deviceNode.attr('transform', d => {
             let x, y;
-            if (d.x > this.width - BOUNDARY_SIZE) {
-              x = this.width - BOUNDARY_SIZE;
-            } else if (d.x < BOUNDARY_SIZE) {
-              x = BOUNDARY_SIZE;
-            } else x = d.x;
 
-            if (d.y > this.height - BOUNDARY_SIZE) {
-              y = this.height - BOUNDARY_SIZE;
-            } else if (d.y < BOUNDARY_SIZE) {
-              y = BOUNDARY_SIZE;
-            } else y = d.y;
+            x = _calcPoint_X(d.x);
+            y = _calcPoint_Y(d.y);
+            // if (d.x > this.width - BOUNDARY_SIZE) {
+            //   x = this.width - BOUNDARY_SIZE;
+            // } else if (d.x < BOUNDARY_SIZE) {
+            //   x = BOUNDARY_SIZE;
+            // } else x = d.x;
+            //
+            // if (d.y > this.height - BOUNDARY_SIZE) {
+            //   y = this.height - BOUNDARY_SIZE;
+            // } else if (d.y < BOUNDARY_SIZE) {
+            //   y = BOUNDARY_SIZE;
+            // } else y = d.y;
 
             return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
           });
         });
-
-
-        // this.simulation.start();
-        // let simulation = this.simulation;
-        // setTimeout(function () {
-        //   simulation.stop();
-        // }, 10000)
       };
 
       // let getLinkId = (deviceIds, ports) => {
@@ -381,21 +546,209 @@ export class ForceTopo {
       //
       // }));
 
-      unsubscribers.push(this.di.$rootScope.$on('show_path', ($event, params) => {
-        clearPath();
-        this.paths = params;
-        showPath();
+      let showPath = (paths) => {
+        svg.select('#path_link').remove();
 
+        let switchLinks = [];
+        this.di._.forEach(paths, path=>{
+          if(path.type !== 'EDGE'){
+            switchLinks.push({source: path.src.split('/')[0], target: path.dst.split('/')[0], id: path.src.split('/')[0] + '-' + path.dst.split('/')[0]})
+          }
+          if(path.type === 'EDGE'){
+            let host = {};
+            let src_arr = path['src'].split('/');
+            let dst_arr = path['dst'].split('/');
+            if(src_arr.length === 3){
+              switchLinks.push({source: path.src, target: path.dst.split('/')[0], id: path.src + '-' + path.dst.split('/')[0]})
+            }
+            if(dst_arr.length === 3){
+              switchLinks.push({source: path.src.split('/')[0], target: path.dst, id: path.src.split('/')[0] + '-' + path.dst})
+            }
+          }
+        })
+        let _p_links = switchLinks.map(d => Object.create(d));
+
+        return _p_links
+
+      };
+
+
+      let genPathHost = (paths) => {
+        svg.select('#path_host').remove();
+        let hosts = [];
+        this.di._.forEach(paths, path=>{
+          if(path['type'] === 'EDGE'){
+            let host = {};
+            let src_arr = path['src'].split('/');
+            let dst_arr = path['dst'].split('/');
+            if(src_arr.length === 3){
+              // host['id'] =  src_arr[0] + '/' +src_arr[1];
+              host['id'] =  path['src'];
+            }
+            if(dst_arr.length === 3){
+              // host['id'] =  dst_arr[0] + '/' +dst_arr[1];
+              host['id'] =  path['dst'];
+            }
+            hosts.push(host);
+          }
+        });
+        const hostObjs = hosts.map(d => Object.create(d));
+
+        return hostObjs;
+
+
+      }
+
+
+      let clearPathAll = () =>{
+        this.simulation.stop();
+        this.simulation = DI.d3.forceSimulation(scope._nodes)
+        // this.simulation.nodes(scope._nodes.concat(hostObjs));
+          .force("link", DI.d3.forceLink(scope._links).id(d => d.id).distance(d => {
+            // console.log(' =======  show path')
+            // console.log(scope.distance)
+            return scope.distance;
+          }))
+          .force("charge", DI.d3.forceManyBody().strength(scope.strength))
+          .force("collide", DI.d3.forceCollide(40).strength(0.2).iterations(5));
+        reCenter();
+
+        this.simulation.on("tick", () => {
+          this.linkNode
+            .attr("x1", d => _calcPoint_X(d.source.x))
+            .attr("y1", d => _calcPoint_Y(d.source.y))
+            .attr("x2", d => _calcPoint_X(d.target.x))
+            .attr("y2", d => _calcPoint_Y(d.target.y));
+
+          this.deviceNode.attr('transform', d => {
+            let x, y;
+
+            x = _calcPoint_X(d.x);
+            y = _calcPoint_Y(d.y);
+
+            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
+          });
+        });
+
+        // this.simulation.nodes(scope._nodes);
+        // this.simulation.force("link", DI.d3.forceLink(scope._links).id(d => d.id).distance(d => {
+        //   // console.log(' =======  show path')
+        //   // console.log(scope.distance)
+        //   return scope.distance;
+        // }))
+        svg.select('#path_link').remove();
+        svg.select('#path_host').remove();
+        this.pathLinks = null;
+        this.hostNode = null;
+
+        // this.simulation.stop();
+        // this.simulation.tick();
+        // this.simulation.restart();
+
+      };
+
+      unsubscribers.push(this.di.$rootScope.$on('show_path', ($event, params) => {
+        // clearPath();
+        let paths = params;
+        let hostObjs = genPathHost(paths);
+        let pLinks = showPath(paths);
+
+        this.simulation.stop();
+        this.simulation = DI.d3.forceSimulation(scope._nodes.concat(hostObjs))
+        // this.simulation.nodes(scope._nodes.concat(hostObjs));
+          .force("link", DI.d3.forceLink(scope._links.concat(pLinks)).id(d => d.id).distance(d => {
+            // console.log(' =======  show path')
+            // console.log(scope.distance)
+            return scope.distance;
+          }))
+          .force("charge", DI.d3.forceManyBody().strength(scope.strength))
+          .force("collide", DI.d3.forceCollide(40).strength(0.2).iterations(5));
+        reCenter();
+
+        this.simulation.on("tick", () => {
+          this.linkNode
+            .attr("x1", d => _calcPoint_X(d.source.x))
+            .attr("y1", d => _calcPoint_Y(d.source.y))
+            .attr("x2", d => _calcPoint_X(d.target.x))
+            .attr("y2", d => _calcPoint_Y(d.target.y));
+
+
+          this.pathLinks
+            .attr("x1", d => _calcPoint_X(d.source.x))
+            .attr("y1", d => _calcPoint_Y(d.source.y))
+            .attr("x2", d => _calcPoint_X(d.target.x))
+            .attr("y2", d => _calcPoint_Y(d.target.y));
+
+          this.hostNode.attr('transform', d => {
+            let x, y;
+            x = _calcPoint_X(d.x);
+            y = _calcPoint_Y(d.y);
+            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
+          });
+          this.deviceNode.attr('transform', d => {
+            let x, y;
+
+            x = _calcPoint_X(d.x);
+            y = _calcPoint_Y(d.y);
+
+            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
+          });
+        });
+
+        // this.simulation.stop();
+        // this.simulation.tick();
+        // this.simulation.restart();
+
+
+
+
+        this.pathLinks = svg.append("g").attr('id','path_link')
+          .style('marker-end','url(#marker)')
+          .style('marker-start','url(#start_marker)')
+          .style('stroke-width','3')
+          .style('stroke','rgb(236,234,136)')
+          .selectAll("line")
+          .data(pLinks)
+          .join("line");
+
+        // .attr('transform', 'translate(' + (this.width/2) + ',' + (this.height/2 ) + ')')
+        this.hostNode = svg.append("g").attr('id','path_host')
+          .selectAll("g")
+          .data(hostObjs)
+          .join('g').attr("width", ICON_SIZE).attr("height", ICON_SIZE).attr('host_mac', d => d.id)
+          .html(d => {
+            return '<rect x="-6" y="-6" rx="3" ry="3" width="36" height="36" class="force-topo__node-outline" /><path class="force-topo__host" style="pointer-events: none" xmlns="http://www.w3.org/2000/svg" d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>'
+          })
+          .call(drag(this.simulation))
+          .on('click', function clickHandler() {
+            DI.d3.event.stopPropagation();
+
+            removeSelectEffect();
+            DI.$rootScope.$emit('topo_unselect');
+
+            // if (scope.curSelectedDeviceId !== null) {
+            //   removeSelectEffect();
+            //   DI.$rootScope.$emit('topo_unselect');
+            // }
+
+            // if (scope.topoSetting.show_tooltips) {
+            //   DI.$rootScope.$emit("hide_tooltip");
+            // }
+            let mac = this.getAttribute('host_mac');
+            // DI.$rootScope.$emit("switch_select", {event: null, id: deviceId, type: null, value: showArray});
+
+            scope.curSelectedDeviceId = null;
+            addSelectEffect(this)
+          });
       }));
 
-
-      let _completeDeviceName4FlowInfo = (detail) =>{
+      let _completeDeviceName4FlowInfo = (detail) => {
         let res = angular.copy(detail);
         let src = detail.src.device;
         let dst = detail.dst.device;
 
-        let src_sw = DI._.find(scope.devices,{'id':src});
-        let dst_sw = DI._.find(scope.devices,{'id':dst});
+        let src_sw = DI._.find(scope.devices, {'id': src});
+        let dst_sw = DI._.find(scope.devices, {'id': dst});
         res.src.device_name = src_sw.name;
         res.dst.device_name = dst_sw.name;
         return res;
@@ -404,36 +757,38 @@ export class ForceTopo {
       unsubscribers.push(this.di.$rootScope.$on('changeLinksColor', ($event, params) => {
 
         let links_color = params;
+        this.linkNode.classed('force-topo__line-normal', false);
         this.linkNode
-          .attr('stroke-width',2)
-          .attr('stroke', d=>{
-              let _link = d.link;
-              let linkId = getLinkId([_link.src.device, _link.dst.device], [_link.src.port, _link.dst.port]);
-              return 'rgb(' + links_color[linkId].color + ')';
-            })
+          .attr('stroke-width', 2)
+          .attr('stroke', d => {
+            let _link = d.link;
+            let linkId = getLinkId([_link.src.device, _link.dst.device], [_link.src.port, _link.dst.port]);
+            return 'rgb(' + links_color[linkId].color + ')';
+          })
           .on('mouseover', function () {
-              let linkid = this.getAttribute('linkid');
-              if(scope.topoSetting.show_monitor){
-                let res = _completeDeviceName4FlowInfo(links_color[linkid]);
-                let mouseEvent = DI.d3.mouse(this);
+            let linkid = this.getAttribute('linkid');
+            if (scope.topoSetting.show_monitor) {
+              let res = _completeDeviceName4FlowInfo(links_color[linkid]);
+              let mouseEvent = DI.d3.mouse(this);
 
-                let x = element[0].getBoundingClientRect();
+              let x = element[0].getBoundingClientRect();
 
-                let evt = {
-                  'clientX': mouseEvent[0] + x.left,
-                  'clientY':  mouseEvent[1] + x.top
-                };
-                DI.$rootScope.$emit("show_link_tooltip",{event:evt, value: res});
-              }
-            })
+              let evt = {
+                'clientX': mouseEvent[0] + x.left,
+                'clientY': mouseEvent[1] + x.top
+              };
+              DI.$rootScope.$emit("show_link_tooltip", {event: evt, value: res});
+            }
+          })
           .on('mouseout', function () {
             DI.$rootScope.$emit("hide_link_tooltip");
           });
       }));
 
 
-      unsubscribers.push(this.di.$rootScope.$on('clearLinksColor',($event)=>{
-        this.linkNode.attr('stroke', '#999').attr('stroke-width',1);
+      unsubscribers.push(this.di.$rootScope.$on('clearLinksColor', ($event) => {
+        this.linkNode.classed('force-topo__line-normal', true).attr('stroke-width', null).attr('stroke', null);
+        // attr('stroke', '#999').attr('stroke-width',1);
       }));
 
       unsubscribers.push(scope.$watch('topoSetting.show_tooltips', (newValue, oldValue) => {
@@ -442,9 +797,14 @@ export class ForceTopo {
             .append('text')
             .attr('x', '-6')
             .attr('y', '-10')
-            .attr('stroke','black')
-            .attr('stroke-width','1')
-            .text(d=> {return getDeviceName(d.id)})
+            .classed('force-topo__text', true)
+            .text(d => {
+              return getDeviceName(d.id)
+            })
+
+
+          // .attr('stroke','black')
+          // .attr('stroke-width','1')
         } else {
           this.deviceNode
             .select('text').remove();
@@ -453,16 +813,9 @@ export class ForceTopo {
 
 
       unsubscribers.push(this.di.$rootScope.$on('hide_path', () => {
-        clearPath();
+        clearPathAll();
       }));
 
-      unsubscribers.push(this.di.$rootScope.$on('show_ports', () => {
-        if (scope.topoSetting.show_ports) {
-          genAllPorts()
-        } else {
-          crushAllPorts()
-        }
-      }));
 
       scope.$on('$destroy', () => {
         unsubscribers.forEach((unsubscribe) => {

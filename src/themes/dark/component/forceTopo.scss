@@ -1,0 +1,63 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+//@include block(topo){
+//  //background-image: url("../../assets/images/graphback.png") ;
+//  //background-repeat: repeat-y;
+//}
+
+@include block(force-topo) {
+
+  @include element(node-normal) {
+    stroke: #fff;
+    stroke-width: 1.5;
+    fill: #565656;
+  }
+
+  @include element(text) {
+    stroke: whitesmoke;
+    stroke-width: 1;
+
+  }
+
+  @include element(host) {
+    stroke: whitesmoke;
+    //fill: white;
+  }
+
+  @include element(path-normal) {
+    stroke: green;
+    //stroke-width: 1.5;
+    fill: white;
+  }
+
+  @include element(path-error) {
+    stroke: red;
+    //stroke-width: 1.5;
+    fill: white;
+  }
+
+  @include element(node-outline) {
+    fill: #292929;
+    stroke-width: 2;
+    stroke: #b7b2b2;
+  }
+
+  @include element(line-normal) {
+    stroke: whitesmoke;
+    stroke-width: 1;
+  }
+
+}
+.force-topo__node-outline.node-select {
+  fill: #3D9CBD;
+
+}
+.force-topo__node-outline.node-unselect {
+  fill: #292929;
+}
