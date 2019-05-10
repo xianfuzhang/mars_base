@@ -1,6 +1,7 @@
 export class DonutTopo {
 	static getDI () {
 		return [
+			'$rootScope',
 			'$window',
 			'$templateCache',
 			'$timeout',
@@ -33,6 +34,8 @@ export class DonutTopo {
 		scope.leafs = scope.leafs || [];
 		scope.others = scope.others || [];
 		scope.links = scope.links || [];
+		scope.monitorLinkColors =  {}; // 通过事件changeLinksColor更新
+		scope.monitorState = false; //开始监控
 		scope.switches = scope.spines.concat(scope.leafs, scope.others);
 		scope.topo_width = element[0].clientWidth;
 		scope.topo_height = element[0].clientHeight;
@@ -308,16 +311,41 @@ export class DonutTopo {
     	g.selectAll('g.tooltips').remove();
     };
 
+    let updateLinksByMonitorColor = () => {
+    	let _this = this;
+    	this.di.d3.select('g.links')
+    		.selectAll('path')
+    		.each(function(d){
+    			let linkId = d.source.device + ':' + d.source.port + '_' + d.target.device + ':' + d.target.port,
+    				linkId1 = d.target.device + ':' + d.target.port + '_' + d.source.device + ':' + d.source.port;
+    			if (scope.monitorLinkColors[linkId]) {
+    				_this.di.d3.select(this).attr('stroke', 'rgb(' + scope.monitorLinkColors[linkId]['color'] + ')');
+    			}
+    			else if (scope.monitorLinkColors[linkId1]) {
+    				_this.di.d3.select(this).attr('stroke', 'rgb(' + scope.monitorLinkColors[linkId1]['color'] + ')');
+    			}
+    			else {
+    				_this.di.d3.select(this).attr('stroke',() => {
+		      		return scope.topoSetting.show_links === 2 ? '#51A7CD' : 'none';
+		      	});	
+    			}
+    		});
+    };
+
     getDonutTopo();
 
     let clickOuterTopoHandler = (event) => {
     	if (event.target.tagName !== 'path') {
-    		this.di.d3.select('g.links')
+    		if (scope.topoSetting.show_monitor && scope.monitorState) {
+    			updateLinksByMonitorColor();
+    		}
+    		else {
+    			this.di.d3.select('g.links')
 	      	.selectAll('path')
 	      	.attr('stroke', () => {
 	      		return scope.topoSetting.show_links === 2 ? '#51A7CD' : 'none';
-	      	});
-    		return;
+	      	});	
+    		}
     	}
     };
     document.addEventListener('click', clickOuterTopoHandler, false);
@@ -339,9 +367,26 @@ export class DonutTopo {
     				return scope.topoSetting.show_links === 2 ? '#51A7CD' : 'none';
     			});
     }, false);
+
+    let unsubscribers = [];
+    unsubscribers.push(this.di.$rootScope.$on('changeLinksColor', (event, param) => {
+    	scope.monitorState = true;
+    	scope.monitorLinkColors = param;
+    	updateLinksByMonitorColor();
+    }));
+    unsubscribers.push(this.di.$rootScope.$on('clearLinksColor', (event) => {
+    	scope.monitorState = false;
+    	this.di.d3.select('g.links')
+    		.selectAll('path')
+    		.attr('stroke', () => {
+  				return scope.topoSetting.show_links === 2 ? '#51A7CD' : 'none';
+  			});
+    }));
+
 		scope.$on('$destroy', () => {
 			document.removeEventListener('click', clickOuterTopoHandler);
 			angular.element(this.di.$window).unbind('resize', onResize);
+			unsubscribers.forEach((cb) => cb());
 		});	
 	}
 }
