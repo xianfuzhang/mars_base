@@ -202,7 +202,7 @@ export class DonutTopo {
 		    .attr('class', 'link')
 		    .attr('d', drawDPath)
 		    .attr('stroke', (d) => {
-		    	return scope.topoSetting.show_links === 2 ? '#006EA4' : 'none';
+		    	return scope.topoSetting.show_links === 2 ? '#51A7CD' : 'none';
 		    })
 		    .attr('stroke-width', 2)
 		    .attr('fill', 'none')
@@ -232,10 +232,10 @@ export class DonutTopo {
     		.selectAll('path')
     		.attr('stroke', function(ld){
     			if (scope.topoSetting.show_links === 2) {
-    				return ld.source.device === d.data.id || ld.target.device === d.data.id ? 'red' : '#006EA4';	
+    				return ld.source.device === d.data.id || ld.target.device === d.data.id ? '#1B4A78' : '#51A7CD';	
     			}
     			else if (scope.topoSetting.show_links === 1) {
-    				return ld.source.device === d.data.id || ld.target.device === d.data.id ? '#006EA4' : 'none';		
+    				return ld.source.device === d.data.id || ld.target.device === d.data.id ? '#51A7CD' : 'none';		
     			}
     			else if (scope.topoSetting.show_links === 0) {
     				return 'none';
@@ -269,12 +269,12 @@ export class DonutTopo {
     			if (scope.topoSetting.show_links === 2) {
     				return (ld.source.device === d.data.device && ld.source.port === d.data.port) 
 	    				|| (ld.target.device === d.data.device && ld.target.port === d.data.port) 
-	    				? 'red' : '#006EA4';	
+	    				? '#1B4A78' : '#51A7CD';	
     			}
     			else if (scope.topoSetting.show_links === 1) {
     				return (ld.source.device === d.data.device && ld.source.port === d.data.port) 
 	    				|| (ld.target.device === d.data.device && ld.target.port === d.data.port) 
-	    				? '#006EA4' : 'none';	
+	    				? '#51A7CD' : 'none';	
     			}
     			else if (scope.topoSetting.show_links === 0) {
     				return 'none';
@@ -288,7 +288,9 @@ export class DonutTopo {
     	if (event.target.tagName !== 'path') {
     		this.di.d3.select('g.links')
 	      	.selectAll('path')
-	      	.attr('stroke', '#006EA4');
+	      	.attr('stroke', () => {
+	      		return scope.topoSetting.show_links === 2 ? '#51A7CD' : 'none';
+	      	});
     		return;
     	}
     };
@@ -308,7 +310,7 @@ export class DonutTopo {
     	this.di.d3.select('g.links')
     		.selectAll('path')
     			.attr('stroke', () => {
-    				return scope.topoSetting.show_links === 2 ? '#006EA4' : 'none';
+    				return scope.topoSetting.show_links === 2 ? '#51A7CD' : 'none';
     			});
     }, false);
 		scope.$on('$destroy', () => {
