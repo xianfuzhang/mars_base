@@ -13,13 +13,24 @@
         <div class="summary__body__content flex_entirety__body__body">
 
             <div ng-style="resize_right_plus" class="summary_drawer_left">
-                <topo ng-if="fabricModel.isShowTopo" spines="fabricModel.deSpines"
+                <topo ng-if="fabricModel.isShowTopo && fabricModel.topoType.value  =='spine_leaf'" spines="fabricModel.deSpines"
                                                      leafs="fabricModel.deLeafs"
                                                      others="fabricModel.deOthers"
                                                      links="fabricModel.deLinks"
                                                      logical-ports="fabricModel.deLogicalPorts"
                                                      topo-setting="fabricModel.topoSetting">
                 </topo>
+
+                <force-topo ng-if="fabricModel.isShowTopo && fabricModel.topoType.value =='force'"
+                      devices="fabricModel.devices"
+                      links="fabricModel.deLinks"
+                      topo-setting="fabricModel.topoSetting">
+                </force-topo>
+                <!--<div style="width:100%;height:100%;">-->
+                    <!--<svg  class="testsvg" width="100%" height="100%" >-->
+
+                    <!--</svg>-->
+                <!--</div>-->
             </div>
             <div class="line_space summary_drawer_line_space" ng-style="resize_right" ng-mousedown="resize_div($event)">
                 <div class="line">
@@ -32,6 +43,11 @@
             <div class="right_div summary_drawer_right" ng-style="resize_length">
                 <mar-section s-title="{{'MODULES.TOPO.TITLE.SETTING'|translate}}" class="topo_setting">
                     <transclude-body>
+                    <div>
+                        <mdl-select  ng-model="fabricModel.topoType"
+                                    display-label="displayLabel.topoTypes">
+                        </mdl-select>
+                    </div>
                     <div style="margin:2px;">
                         <div ng-click="topoRefresh()" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.REFRESH'|translate}}" id="refresh_topo"  class="+front mdc-button topo_setting__button">
                             <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
@@ -47,11 +63,11 @@
                             </svg>
 
                         </div>
-                        <div ng-click="lineSetting()" id="line_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_LINES'|translate}}" ng-class="{'+show':fabricModel.topoSetting.show_links}"  class="+front mdc-button topo_setting__button">
+                        <div ng-click="lineSetting()" ng-if="fabricModel.topoType.value  =='spine_leaf'" id="line_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_LINES'|translate}}" ng-class="{'+show':fabricModel.topoSetting.show_links}"  class="+front mdc-button topo_setting__button">
                             <i class="material-icons">link</i>
                         </div>
 
-                        <div ng-click="portSettings()" id="port_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_PORTS'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_ports }" class="+front mdc-button topo_setting__button">
+                        <div ng-click="portSettings()" ng-if="fabricModel.topoType.value  =='spine_leaf'" id="port_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_PORTS'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_ports }" class="+front mdc-button topo_setting__button">
                             <svg style="height:24px;width:24px;margin:0;" class="mdc-button__icon" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-334 518 44 49" width="44pt" height="49pt">
                                 <g stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
                                     <g>

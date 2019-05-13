@@ -142,6 +142,13 @@ export class FabricSummaryController {
           {'label': 'MBps','value': 'MBps'},
           {'label': 'GBps', 'value': 'GBps'}],
         'hint': '单位',
+      },
+      topoTypes: {
+        'options': [
+          {'label': '力图', 'value': 'force'},
+          {'label': 'Spine Leaf', 'value': 'spine_leaf'}
+        ],
+        'hint': '拓扑类型',
       }
     };
 
@@ -1241,6 +1248,13 @@ export class FabricSummaryController {
 
     }));
 
+
+    unsubscribers.push(this.di.$scope.$watch('fabricModel.topoType',(newValue, oldValue)=>{
+      if(newValue === 'force'){
+
+      }
+
+    }));
 
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unsubscribers, (unsubscribe) => {

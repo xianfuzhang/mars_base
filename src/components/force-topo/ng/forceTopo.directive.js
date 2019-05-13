@@ -513,7 +513,11 @@ export class ForceTopo {
             DI.$rootScope.$emit('topo_unselect');
             scope.curSelectedDeviceId = null;
             removeSelectEffect();
-          });
+          })
+          .on('contextmenu',function () {
+            d3.event.preventDefault();
+            // DI.$rootScope.$emit('topo_unselect');
+          });;
 
 
         this.defs = svg.append('defs');
@@ -944,6 +948,23 @@ export class ForceTopo {
         unsubscribers.forEach((unsubscribe) => {
           unsubscribe();
         });
+
+        this.simulation.on('tick', null);
+        this.deviceNode.selectAll('g')
+          .call(angular.noop)
+          .on('click', angular.noop)
+          .on('contextmenu',angular.noop);
+
+        if(this.hostNode)
+          this.hostNode
+            .selectAll("g")
+            .call(angular.noop)
+            .on('click', angular.noop);
+
+        if(this.pathLinks)
+          this.pathLinks
+            .selectAll("line")
+            .on('click', angular.noop);
 
         angular.element(this.di.$window).off('resize');
 
