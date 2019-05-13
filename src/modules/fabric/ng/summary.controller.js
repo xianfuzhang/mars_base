@@ -146,7 +146,8 @@ export class FabricSummaryController {
       topoTypes: {
         'options': [
           {'label': '力图', 'value': 'force'},
-          {'label': 'Spine Leaf', 'value': 'spine_leaf'}
+          {'label': 'Spine Leaf', 'value': 'spine_leaf'},
+          {'label': 'Donut', 'value': 'donut'}
         ],
         'hint': '拓扑类型',
       }

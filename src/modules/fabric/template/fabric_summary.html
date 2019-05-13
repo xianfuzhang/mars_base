@@ -26,6 +26,13 @@
                       links="fabricModel.deLinks"
                       topo-setting="fabricModel.topoSetting">
                 </force-topo>
+
+                <donut-topo ng-if="fabricModel.isShowTopo && fabricModel.topoType.value  =='donut'" spines="fabricModel.deSpines"
+                      leafs="fabricModel.deLeafs"
+                      others="fabricModel.deOthers"
+                      links="fabricModel.deLinks"
+                      topo-setting="fabricModel.topoSetting">
+                </donut-topo>
                 <!--<div style="width:100%;height:100%;">-->
                     <!--<svg  class="testsvg" width="100%" height="100%" >-->
 
