@@ -224,6 +224,18 @@ export class ForceTopo {
       };
 
       scope.curSelectedDeviceId = null;
+
+
+
+      let addHostSelectEffect = (node) => {
+        // this.di.d3.select(node).select('rect').attr('fill','#d5f6ff')
+        this.di.d3
+          .select(node)
+          .select('rect')
+          .classed('host-select', true)
+          .classed('host-unselect', false)
+      };
+
       let addSelectEffect = (node) => {
         // this.di.d3.select(node).select('rect').attr('fill','#d5f6ff')
         this.di.d3
@@ -242,8 +254,8 @@ export class ForceTopo {
         if(this.hostNode){
           this.hostNode
             .select('rect')
-            .classed('node-select', false)
-            .classed('node-unselect', true)
+            .classed('host-select', false)
+            .classed('host-unselect', true)
         }
       };
 
@@ -267,10 +279,198 @@ export class ForceTopo {
         return point;
       };
 
+
+      function clickHandler() {
+        console.log(DI.d3.mouse(this))
+        DI.d3.event.stopPropagation();
+        removeSelectEffect();
+
+        // if (scope.curSelectedDeviceId !== null) {
+        //   removeSelectEffect();
+        // }
+
+
+        if (scope.topoSetting.show_tooltips) {
+          DI.$rootScope.$emit("hide_tooltip");
+        }
+        let deviceId = this.getAttribute('deviceId');
+        let sw = DI._.find(scope.devices, {'id': deviceId});
+        let showArray = DI.switchService.getNormalShowInfo(sw);
+        DI.$rootScope.$emit("switch_select", {event: null, id: deviceId, type: null, value: showArray});
+
+        scope.curSelectedDeviceId = deviceId;
+        addSelectEffect(this)
+      };
+
+
+
+
+      let mouseOutHandler = (evt) => {
+        if (scope.topoSetting.show_tooltips) {
+          this.di.$rootScope.$emit("hide_tooltip");
+        }
+      };
+
+
+
+      function mouseOverHandler(d, i) {
+        if (isDrag) {
+          return;
+        }
+        let deviceId = this.getAttribute('deviceId');
+        let sw = DI._.find(scope.devices, {'id': deviceId});
+        let showArray = DI.switchService.getNormalShowInfo(sw);
+
+        if (scope.topoSetting.show_tooltips) {
+          let evt = {
+            'clientX': this.getBoundingClientRect().left + NODE_SIZE / 2,
+            'clientY': this.getBoundingClientRect().top + NODE_SIZE / 2
+          };
+          DI.$rootScope.$emit("show_tooltip", {event: evt, value: showArray});
+        }
+      }
+
+      let add_origin_link = () =>{
+        this.linkNode = svg.append("g").attr('id', 'origin_link')
+          .classed('force-topo__line-normal', true)
+          .selectAll("line")
+          .data(scope._links)
+          .join("line").attr('linkid', d => d.id);
+      };
+
+      let remove_origin_link = () =>{
+        svg.select('#origin_link').remove();
+        delete this.linkNode;
+        this.linkNode = null;
+      }
+
+      let remove_origin_node = () =>{
+        svg.select('#origin_node').remove();
+        delete this.deviceNode;
+        this.deviceNode = null;
+      }
+
+      let add_origin_nodes = () =>{
+        this.deviceNode = svg.append("g").attr('id', 'origin_node')
+          .classed('force-topo__node-normal', true)
+          .selectAll("g")
+          .data(scope._nodes)
+          .join('g').attr("width", ICON_SIZE).attr("height", ICON_SIZE).attr('deviceId', d => d.id).style('cursor','pointer')
+          .html(d => {
+            let device_status_class = 'force-topo__path-normal';
+            if (!d.available) {
+              device_status_class = 'force-topo__path-error';
+            }
+            return '<rect x="-6" y="-6" rx="3" ry="3" width="36" height="36" class="force-topo__node-outline" /><path class="' + device_status_class + '" style="pointer-events: none" d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>'
+          })
+          .call(drag(this.simulation))
+          .on('click', clickHandler)
+          .on('contextmenu',function () {
+
+            // 255,124,9
+
+            d3.event.preventDefault();
+            let deviceId = this.getAttribute('deviceId');
+            // console.log(this.getBoundingClientRect())
+            // console.log(DI.d3.clientPoint(this, 'contextmenu'))
+            // console.log(DI.d3.mouse(this))
+            DI.$rootScope.$emit("switch_opt",{event: calc_mouse_location(this), id: deviceId});
+           });
+      };
+
+      let simulation_origin_tick_callback = () =>{
+        this.simulation.on("tick", () => {
+          this.linkNode
+            .attr("x1", d => _calcPoint_X(d.source.x))
+            .attr("y1", d => _calcPoint_Y(d.source.y))
+            .attr("x2", d => _calcPoint_X(d.target.x))
+            .attr("y2", d => _calcPoint_Y(d.target.y));
+
+          this.deviceNode.attr('transform', d => {
+            let x, y;
+            x = _calcPoint_X(d.x);
+            y = _calcPoint_Y(d.y);
+            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
+          });
+        });
+      }
+
+
+      let simulation_all_tick_callback = () =>{
+        this.simulation.on("tick", () => {
+          this.linkNode
+            .attr("x1", d => _calcPoint_X(d.source.x))
+            .attr("y1", d => _calcPoint_Y(d.source.y))
+            .attr("x2", d => _calcPoint_X(d.target.x))
+            .attr("y2", d => _calcPoint_Y(d.target.y));
+
+
+          this.pathLinks
+            .attr("x1", d => _calcPoint_X(d.source.x))
+            .attr("y1", d => _calcPoint_Y(d.source.y))
+            .attr("x2", d => _calcPoint_X(d.target.x))
+            .attr("y2", d => _calcPoint_Y(d.target.y));
+
+          this.hostNode.attr('transform', d => {
+            let x, y;
+            x = _calcPoint_X(d.x);
+            y = _calcPoint_Y(d.y);
+            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
+          });
+
+          this.deviceNode.attr('transform', d => {
+            let x, y;
+
+            x = _calcPoint_X(d.x);
+            y = _calcPoint_Y(d.y);
+
+            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
+          });
+        });
+      };
+
+      function hostClickHandler(evt){
+        let hostId = this.hostId;
+        DI.$rootScope.$emit("host_select",{event:evt, id: hostId});
+      }
+
+
+      let calc_mouse_location = (self) =>{
+        // let mouseEvent = DI.d3.mouse(self);
+        let x = self.getBoundingClientRect();
+        let evt = {
+          'clientX': NODE_SIZE/2 + x.left,
+          'clientY': NODE_SIZE/2 + x.top
+        };
+        return evt
+      };
+
+      function pathClickHandler() {
+        DI.d3.event.stopPropagation();
+        let data = DI.d3.select(this).datum();
+        let param = { 'start':{id: data.__proto__.source}, 'end':{id: data.__proto__.target }};
+
+        param.start['type'] = 'SWITCH';
+        param.end['type'] = 'SWITCH';
+        if(data.host){
+          if(data.host === 'source'){
+            param.start['type'] = 'HOST';
+            param.end['port'] = data.target_port;
+          } else {
+            param.end['type'] = 'HOST';
+            param.start['port'] = data.source_port;
+          }
+        } else {
+          param.start['port'] = data.source_port;
+          param.end['port'] = data.target_port;
+        }
+        DI.$rootScope.$emit("path_select", {event: calc_mouse_location(this), value: param});
+      }
+
+
       this.pathLinks = null;
       this.hostNode = null;
       let genTopo = () => {
-
 
         let parentNode = element[0].parentNode;
         this.width = parentNode.offsetWidth;
@@ -331,7 +531,7 @@ export class ForceTopo {
           .attr("markerUnits", "userSpaceOnUse")  //marker是否进行缩放 ,默认值是strokeWidth,会缩放
           .append("path")
           .attr("d", "M 0 0 16 8 0 16Z")    //箭头的路径 从 （0,0） 到 （8,4） 到（0,8）
-          .attr("fill", "rgb(236,234,136)");
+          .attr("fill", "rgb(255,124,9)");
 
 
         this.start_marker = this.defs
@@ -345,133 +545,13 @@ export class ForceTopo {
           .attr("markerUnits", "userSpaceOnUse")  //marker是否进行缩放 ,默认值是strokeWidth,会缩放
           .append("path")
           .attr("d", "M 0 0 16 8 0 16Z")    //箭头的路径 从 （0,0） 到 （8,4） 到（0,8）
-          .attr("fill", "rgb(236,234,136)");
+          .attr("fill", "rgb(255,124,9)");
         // .on('resize',reCenter);
 
-        // let simulation = this.simulation;
-        // setTimeout(function () {
-        //   simulation
-        //     .force("center", DI.d3.forceCenter(100, 200))
-        // },2000)
+        add_origin_link();
+        add_origin_nodes();
 
-        //.style('marker-end','url(#marker)')
-
-        this.linkNode = svg.append("g")
-          .classed('force-topo__line-normal', true)
-          .selectAll("line")
-          .data(scope._links)
-          .join("line").attr('linkid', d => d.id);
-
-        let mouseOutHandler = (evt) => {
-          if (scope.topoSetting.show_tooltips) {
-            this.di.$rootScope.$emit("hide_tooltip");
-          }
-        };
-
-        function mouseOverHandler(d, i) {
-          if (isDrag) {
-            return;
-          }
-          let deviceId = this.getAttribute('deviceId');
-          let sw = DI._.find(scope.devices, {'id': deviceId});
-          let showArray = DI.switchService.getNormalShowInfo(sw);
-
-          if (scope.topoSetting.show_tooltips) {
-            let evt = {
-              'clientX': this.getBoundingClientRect().left + NODE_SIZE / 2,
-              'clientY': this.getBoundingClientRect().top + NODE_SIZE / 2
-            };
-            DI.$rootScope.$emit("show_tooltip", {event: evt, value: showArray});
-          }
-        }
-
-        function clickHandler() {
-          DI.d3.event.stopPropagation();
-          removeSelectEffect();
-
-          // if (scope.curSelectedDeviceId !== null) {
-          //   removeSelectEffect();
-          // }
-
-          if (scope.topoSetting.show_tooltips) {
-            DI.$rootScope.$emit("hide_tooltip");
-          }
-          let deviceId = this.getAttribute('deviceId');
-          let sw = DI._.find(scope.devices, {'id': deviceId});
-          let showArray = DI.switchService.getNormalShowInfo(sw);
-          DI.$rootScope.$emit("switch_select", {event: null, id: deviceId, type: null, value: showArray});
-
-          scope.curSelectedDeviceId = deviceId;
-          addSelectEffect(this)
-        };
-
-        this.deviceNode = svg.append("g")
-          .classed('force-topo__node-normal', true)
-          .selectAll("g")
-          .data(scope._nodes)
-          .join('g').attr("width", ICON_SIZE).attr("height", ICON_SIZE).attr('deviceId', d => d.id)
-          .html(d => {
-            let device_status_class = 'force-topo__path-normal';
-            if (!d.available) {
-              device_status_class = 'force-topo__path-error';
-            }
-            return '<rect x="-6" y="-6" rx="3" ry="3" width="36" height="36" class="force-topo__node-outline" /><path class="' + device_status_class + '" style="pointer-events: none" d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>'
-          })
-          .call(drag(this.simulation))
-          .on('click', clickHandler);
-        // .on('mouseover', mouseOverHandler)
-        // .on('mouseout', mouseOutHandler)
-
-
-
-
-        // this.pathLinks = svg.append("g");
-
-
-        this.simulation.on("tick", () => {
-          this.linkNode
-            .attr("x1", d => _calcPoint_X(d.source.x))
-            .attr("y1", d => _calcPoint_Y(d.source.y))
-            .attr("x2", d => _calcPoint_X(d.target.x))
-            .attr("y2", d => _calcPoint_Y(d.target.y));
-
-
-          // if(this.pathLinks !== null){
-          //   this.pathLinks
-          //     .attr("x1", d => _calcPoint_X(d.source.x))
-          //     .attr("y1", d => _calcPoint_Y(d.source.y))
-          //     .attr("x2", d => _calcPoint_X(d.target.x))
-          //     .attr("y2", d => _calcPoint_Y(d.target.y));
-          // }
-          //
-          // if(this.hostNode!== null){
-          //   this.hostNode.attr('transform', d => {
-          //     let x, y;
-          //     x = _calcPoint_X(d.x);
-          //     y = _calcPoint_Y(d.y);
-          //     return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
-          //   });
-          // }
-          this.deviceNode.attr('transform', d => {
-            let x, y;
-
-            x = _calcPoint_X(d.x);
-            y = _calcPoint_Y(d.y);
-            // if (d.x > this.width - BOUNDARY_SIZE) {
-            //   x = this.width - BOUNDARY_SIZE;
-            // } else if (d.x < BOUNDARY_SIZE) {
-            //   x = BOUNDARY_SIZE;
-            // } else x = d.x;
-            //
-            // if (d.y > this.height - BOUNDARY_SIZE) {
-            //   y = this.height - BOUNDARY_SIZE;
-            // } else if (d.y < BOUNDARY_SIZE) {
-            //   y = BOUNDARY_SIZE;
-            // } else y = d.y;
-
-            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
-          });
-        });
+        simulation_origin_tick_callback();
       };
 
       // let getLinkId = (deviceIds, ports) => {
@@ -552,17 +632,25 @@ export class ForceTopo {
         let switchLinks = [];
         this.di._.forEach(paths, path=>{
           if(path.type !== 'EDGE'){
-            switchLinks.push({source: path.src.split('/')[0], target: path.dst.split('/')[0], id: path.src.split('/')[0] + '-' + path.dst.split('/')[0]})
+            switchLinks.push({
+              source: path.src.split('/')[0],
+              target: path.dst.split('/')[0],
+              id: path.src.split('/')[0] + '-' + path.dst.split('/')[0],
+              host:null,
+              source_port: path.src.split('/')[1],
+              target_port:  path.dst.split('/')[1]})
           }
           if(path.type === 'EDGE'){
             let host = {};
             let src_arr = path['src'].split('/');
             let dst_arr = path['dst'].split('/');
             if(src_arr.length === 3){
-              switchLinks.push({source: path.src, target: path.dst.split('/')[0], id: path.src + '-' + path.dst.split('/')[0]})
+              let host_id = src_arr[0] + '/' + src_arr[1];
+              switchLinks.push({source: host_id, target: path.dst.split('/')[0], id: host_id + '-' + path.dst.split('/')[0], host: 'source', source_port: null, target_port:  path.dst.split('/')[1]})
             }
             if(dst_arr.length === 3){
-              switchLinks.push({source: path.src.split('/')[0], target: path.dst, id: path.src.split('/')[0] + '-' + path.dst})
+              let host_id = dst_arr[0] + '/' + dst_arr[1];
+              switchLinks.push({source: path.src.split('/')[0], target: host_id, id: path.src.split('/')[0] + '-' + host_id, host: 'target', source_port: path.src.split('/')[1], target_port:  null})
             }
           }
         })
@@ -583,11 +671,11 @@ export class ForceTopo {
             let dst_arr = path['dst'].split('/');
             if(src_arr.length === 3){
               // host['id'] =  src_arr[0] + '/' +src_arr[1];
-              host['id'] =  path['src'];
+              host['id'] =  src_arr[0] + '/' + src_arr[1];
             }
             if(dst_arr.length === 3){
               // host['id'] =  dst_arr[0] + '/' +dst_arr[1];
-              host['id'] =  path['dst'];
+              host['id'] =  dst_arr[0] + '/' + dst_arr[1];
             }
             hosts.push(host);
           }
@@ -601,7 +689,12 @@ export class ForceTopo {
 
 
       let clearPathAll = () =>{
+        if(this.pathLinks == null && this.hostNode == null){
+          return;
+        }
         this.simulation.stop();
+
+
         this.simulation = DI.d3.forceSimulation(scope._nodes)
         // this.simulation.nodes(scope._nodes.concat(hostObjs));
           .force("link", DI.d3.forceLink(scope._links).id(d => d.id).distance(d => {
@@ -613,34 +706,39 @@ export class ForceTopo {
           .force("collide", DI.d3.forceCollide(40).strength(0.2).iterations(5));
         reCenter();
 
-        this.simulation.on("tick", () => {
-          this.linkNode
-            .attr("x1", d => _calcPoint_X(d.source.x))
-            .attr("y1", d => _calcPoint_Y(d.source.y))
-            .attr("x2", d => _calcPoint_X(d.target.x))
-            .attr("y2", d => _calcPoint_Y(d.target.y));
+        remove_origin_link();
+        remove_origin_node();
 
-          this.deviceNode.attr('transform', d => {
-            let x, y;
 
-            x = _calcPoint_X(d.x);
-            y = _calcPoint_Y(d.y);
+        add_origin_link();
+        add_origin_nodes();
+        simulation_origin_tick_callback();
 
-            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
-          });
-        });
+        // this.simulation.on("tick", () => {
+        //   this.linkNode
+        //     .attr("x1", d => _calcPoint_X(d.source.x))
+        //     .attr("y1", d => _calcPoint_Y(d.source.y))
+        //     .attr("x2", d => _calcPoint_X(d.target.x))
+        //     .attr("y2", d => _calcPoint_Y(d.target.y));
+        //
+        //   this.deviceNode.attr('transform', d => {
+        //     let x, y;
+        //
+        //     x = _calcPoint_X(d.x);
+        //     y = _calcPoint_Y(d.y);
+        //
+        //     return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
+        //   });
+        // });
 
-        // this.simulation.nodes(scope._nodes);
-        // this.simulation.force("link", DI.d3.forceLink(scope._links).id(d => d.id).distance(d => {
-        //   // console.log(' =======  show path')
-        //   // console.log(scope.distance)
-        //   return scope.distance;
-        // }))
+
         svg.select('#path_link').remove();
         svg.select('#path_host').remove();
         this.pathLinks = null;
         this.hostNode = null;
 
+
+        showName();
         // this.simulation.stop();
         // this.simulation.tick();
         // this.simulation.restart();
@@ -653,10 +751,17 @@ export class ForceTopo {
         let hostObjs = genPathHost(paths);
         let pLinks = showPath(paths);
 
+        svg.select('#origin_node').remove();
+        svg.select('#origin_link').remove();
+        remove_origin_link();
+        remove_origin_node();
+
+        let _path_all_nodes = scope._nodes.concat(hostObjs);
+        let _path_all_links = scope._links.concat(pLinks);
+
         this.simulation.stop();
-        this.simulation = DI.d3.forceSimulation(scope._nodes.concat(hostObjs))
-        // this.simulation.nodes(scope._nodes.concat(hostObjs));
-          .force("link", DI.d3.forceLink(scope._links.concat(pLinks)).id(d => d.id).distance(d => {
+        this.simulation = DI.d3.forceSimulation(_path_all_nodes)
+          .force("link", DI.d3.forceLink(_path_all_links).id(d => d.id).distance(d => {
             // console.log(' =======  show path')
             // console.log(scope.distance)
             return scope.distance;
@@ -665,62 +770,32 @@ export class ForceTopo {
           .force("collide", DI.d3.forceCollide(40).strength(0.2).iterations(5));
         reCenter();
 
-        this.simulation.on("tick", () => {
-          this.linkNode
-            .attr("x1", d => _calcPoint_X(d.source.x))
-            .attr("y1", d => _calcPoint_Y(d.source.y))
-            .attr("x2", d => _calcPoint_X(d.target.x))
-            .attr("y2", d => _calcPoint_Y(d.target.y));
+        simulation_all_tick_callback();
 
-
-          this.pathLinks
-            .attr("x1", d => _calcPoint_X(d.source.x))
-            .attr("y1", d => _calcPoint_Y(d.source.y))
-            .attr("x2", d => _calcPoint_X(d.target.x))
-            .attr("y2", d => _calcPoint_Y(d.target.y));
-
-          this.hostNode.attr('transform', d => {
-            let x, y;
-            x = _calcPoint_X(d.x);
-            y = _calcPoint_Y(d.y);
-            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
-          });
-          this.deviceNode.attr('transform', d => {
-            let x, y;
-
-            x = _calcPoint_X(d.x);
-            y = _calcPoint_Y(d.y);
-
-            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
-          });
-        });
-
-        // this.simulation.stop();
-        // this.simulation.tick();
-        // this.simulation.restart();
-
-
+        add_origin_link();
+        add_origin_nodes();
 
 
         this.pathLinks = svg.append("g").attr('id','path_link')
           .style('marker-end','url(#marker)')
           .style('marker-start','url(#start_marker)')
-          .style('stroke-width','3')
-          .style('stroke','rgb(236,234,136)')
+          .style('stroke-width','5')
+          .style('stroke','rgb(255,124,9)')
+          .style('cursor','pointer')
           .selectAll("line")
           .data(pLinks)
-          .join("line");
+          .join("line")
+          .on('click', pathClickHandler);
 
-        // .attr('transform', 'translate(' + (this.width/2) + ',' + (this.height/2 ) + ')')
         this.hostNode = svg.append("g").attr('id','path_host')
           .selectAll("g")
           .data(hostObjs)
-          .join('g').attr("width", ICON_SIZE).attr("height", ICON_SIZE).attr('host_mac', d => d.id)
+          .join('g').attr("width", ICON_SIZE).attr("height", ICON_SIZE).attr('host_mac', d => d.id).style('cursor','pointer')
           .html(d => {
             return '<rect x="-6" y="-6" rx="3" ry="3" width="36" height="36" class="force-topo__node-outline" /><path class="force-topo__host" style="pointer-events: none" xmlns="http://www.w3.org/2000/svg" d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>'
           })
           .call(drag(this.simulation))
-          .on('click', function clickHandler() {
+          .on('click', function clickHandler(d, i) {
             DI.d3.event.stopPropagation();
 
             removeSelectEffect();
@@ -735,12 +810,47 @@ export class ForceTopo {
             //   DI.$rootScope.$emit("hide_tooltip");
             // }
             let mac = this.getAttribute('host_mac');
+
+            DI.$rootScope.$emit("host_select",{event:calc_mouse_location(this), id: mac});
             // DI.$rootScope.$emit("switch_select", {event: null, id: deviceId, type: null, value: showArray});
 
             scope.curSelectedDeviceId = null;
-            addSelectEffect(this)
+            addHostSelectEffect(this)
           });
+
+        showName();
       }));
+
+
+      let showName = () => {
+        if(scope.topoSetting.show_tooltips){
+          this.deviceNode
+            .append('text')
+            .attr('x', '-6')
+            .attr('y', '-10')
+            .classed('force-topo__text', true)
+            .text(d => {
+              return getDeviceName(d.id)
+            })
+
+          if(this.hostNode){
+            this.hostNode
+              .append('text')
+              .attr('x', '-6')
+              .attr('y', '-10')
+              .classed('force-topo__text', true)
+              .text(d => d.id)
+          }
+        } else {
+          this.deviceNode
+            .select('text').remove();
+
+          if(this.hostNode){
+            this.hostNode
+              .select('text').remove();
+          }
+        }
+      };
 
       let _completeDeviceName4FlowInfo = (detail) => {
         let res = angular.copy(detail);
@@ -753,6 +863,7 @@ export class ForceTopo {
         res.dst.device_name = dst_sw.name;
         return res;
       };
+
 
       unsubscribers.push(this.di.$rootScope.$on('changeLinksColor', ($event, params) => {
 
@@ -769,15 +880,13 @@ export class ForceTopo {
             let linkid = this.getAttribute('linkid');
             if (scope.topoSetting.show_monitor) {
               let res = _completeDeviceName4FlowInfo(links_color[linkid]);
-              let mouseEvent = DI.d3.mouse(this);
+              // let mouseEvent = DI.d3.mouse(this);
 
-              let x = element[0].getBoundingClientRect();
-
-              let evt = {
-                'clientX': mouseEvent[0] + x.left,
-                'clientY': mouseEvent[1] + x.top
-              };
-              DI.$rootScope.$emit("show_link_tooltip", {event: evt, value: res});
+              // let evt = {
+              //   'clientX': mouseEvent[0] + x.left,
+              //   'clientY': mouseEvent[1] + x.top
+              // };
+              DI.$rootScope.$emit("show_link_tooltip", {event: calc_mouse_location(this), value: res});
             }
           })
           .on('mouseout', function () {
@@ -803,11 +912,25 @@ export class ForceTopo {
             })
 
 
+          if(this.hostNode){
+            this.hostNode
+              .append('text')
+              .attr('x', '-6')
+              .attr('y', '-10')
+              .classed('force-topo__text', true)
+              .text(d => d.id)
+          }
+
           // .attr('stroke','black')
           // .attr('stroke-width','1')
         } else {
           this.deviceNode
             .select('text').remove();
+
+          if(this.hostNode){
+            this.hostNode
+              .select('text').remove();
+          }
         }
       }));
 

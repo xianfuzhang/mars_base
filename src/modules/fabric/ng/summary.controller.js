@@ -824,7 +824,7 @@ export class FabricSummaryController {
       pathHost_detail.append(tr);
 
       firstTdContent = '<div>' + this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP') + '</div>';
-      secondTdContent = '<div>'+ host.ipAddresses.join(',') +'</div>';
+      secondTdContent = '<div>'+ host.ip_addresses.join(',') +'</div>';
       tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
       pathHost_detail.append(tr);
 

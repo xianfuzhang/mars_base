@@ -57,6 +57,13 @@
   fill: #3D9CBD;
 
 }
-.force-topo__node-outlinenode-unselect {
+.force-topo__node-outline.node-unselect {
+  fill: rgb(255, 255, 255);
+}
+
+.force-topo__node-outline.host-select {
+  fill: rgb(255,124,9)
+}
+.force-topo__node-outline.host-unselect {
   fill: rgb(255, 255, 255);
 }
