@@ -6,3 +6,22 @@
   //background-image: url("../../assets/images/graphback.png") ;
   //background-repeat: repeat-y;
 }
+.topo-container .outerLabels > text{
+	user-select: none;
+	fill: #d8d9da;
+}
+.topo-container g.outer, .topo-container g.inner, .topo-container g.links{
+	cursor: pointer;
+}
+
+.topo-container g.outer > path, .topo-container g.inner > path{
+	transition: transform 0.3s ease-out;
+}
+.topo-container g.outer > path:hover{
+	stroke-width: 2;
+	transform: scale(1.01);
+}
+.topo-container g.inner > path:hover{
+	stroke-width: 2;
+	transform: scale(1.01);
+}

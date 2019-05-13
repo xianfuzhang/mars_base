@@ -610,7 +610,7 @@ export class DeviceDetailController {
           obj['element'] = entity.element;
           obj['port_name'] = entity.annotations.portName;
           obj['port_mac'] = entity.annotations.portMac;
-          obj['port_id'] = entity.port;
+          obj['port_id'] = parseInt(entity.port);
           obj['isEnabled'] = entity.isEnabled;
           obj['port_status'] = entity.isEnabled === true ? 'Up' : 'Down';
           obj['link_status'] = entity.annotations.linkStatus.toLowerCase() === 'up' ? 'available' : 'unavailable';
