@@ -100,6 +100,7 @@ input:-webkit-autofill:active {
   height: 100%;
   width: 100%;
 }
+
 .mars-row {
   position: relative;
   margin-left: 0;
@@ -112,9 +113,8 @@ input:-webkit-autofill:active {
   position: relative;
   display: flex;
   flex-flow: row wrap;
+  justify-content: space-between;
   margin-bottom: 16px;
-  border-radius: 8px;
-  transition: box-shadow 300ms ease-in-out;
 }
 
 .mars-row-flex .chart-loading {
@@ -129,6 +129,16 @@ input:-webkit-autofill:active {
   margin-top: -34px;
   background-size: 34px 34px;
   z-index: 99;
+}
+
+.mars-row-flex .dashboard-panel {
+  width: 40%;
+}
+.mars-row-flex .dashboard-panel:first-child {
+  margin-right: 15px;
+}
+.mars-row-flex .dashboard-panel:last-child {
+  margin-left: 15px;
 }
 
 .mars-row-flex-space-between{
@@ -167,7 +177,7 @@ input:-webkit-autofill:active {
   padding: 16px;
 }
 .col-gutter-md{
-  padding: 24px;
+  padding: 12px 24px;
 }
 .col-gutter-lg{
   padding: 32px;
