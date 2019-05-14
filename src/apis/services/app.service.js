@@ -109,6 +109,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.NTP'), 'url': '/ntp', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3},
+              {'label': this.translate('MODULE.HEADER.MANAGE.ANALYZER'), 'url': '/analyzer', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO'), 'url': '/system_info', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.APPLICATION'), 'url': '/application', 'role': 3},
 							{'label': this.translate('MODULE.HEADER.MANAGE.LICENSE'), 'url': '/license', 'role': 3}
@@ -180,9 +181,10 @@ export class appService {
     this.CONST.HEADER.menu[6].items[0].label = this.translate('MODULE.HEADER.MANAGE.DHCP');
     this.CONST.HEADER.menu[6].items[1].label = this.translate('MODULE.HEADER.MANAGE.NTP');
     this.CONST.HEADER.menu[6].items[2].label = this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH');
-    this.CONST.HEADER.menu[6].items[3].label = this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO');
-    this.CONST.HEADER.menu[6].items[4].label = this.translate('MODULE.HEADER.MANAGE.APPLICATION');
-    this.CONST.HEADER.menu[6].items[5].label = this.translate('MODULE.HEADER.MANAGE.LICENSE');
+    this.CONST.HEADER.menu[6].items[3].label = this.translate('MODULE.HEADER.MANAGE.ANALYZER');
+    this.CONST.HEADER.menu[6].items[4].label = this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO');
+    this.CONST.HEADER.menu[6].items[5].label = this.translate('MODULE.HEADER.MANAGE.APPLICATION');
+    this.CONST.HEADER.menu[6].items[6].label = this.translate('MODULE.HEADER.MANAGE.LICENSE');
   }
 
   getZoneEndpoint(isComponent, isAuth) {

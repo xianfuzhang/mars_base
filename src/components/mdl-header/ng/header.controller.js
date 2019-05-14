@@ -282,6 +282,20 @@ export class headerController{
                   if (sflowIndex > -1) origins[fabricIndex]['items'].splice(sflowIndex, 1);
                 }
                 break;
+              case 'com.nocsys.analyzer':
+                let index8 = this.di._.findIndex(origins, {'group': 'Manage'});
+                if (index8 > -1) {
+                  let anaIndex = this.di._.findIndex(origins[index8]['items'], {'url': '/analyzer'});
+                  if (anaIndex > -1) origins[index8]['items'].splice(anaIndex, 1);
+
+                  // let ntpIndex = this.di._.findIndex(origins[index4]['items'], {'url': '/ntp'});
+                  // if (ntpIndex > -1) origins[index4]['items'].splice(ntpIndex, 1);
+                }
+
+
+                break;
+
+                
             }
           }
         }

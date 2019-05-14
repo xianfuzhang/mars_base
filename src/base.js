@@ -294,6 +294,13 @@ function configRouterfunction ($routeProvider,
 				loggedin: checkLoggedIn
 			}
 		})
+    .when('/analyzer', {
+      template: require('./modules/manage/template/analyzer.html'),
+      controller: 'analyzerController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/storm_control', {
       template: require('./modules/fabric/template/storm.html'),
       controller: 'stormController',

@@ -1,0 +1,144 @@
+<div class="flex_entirety elasticsearch">
+    <mdl-header></mdl-header>
+
+    <div class="flex_entirety__body">
+        <content-header big-title="{{pageTitle}}">
+            <a href="/">Mars Cloud</a>
+            <span>•</span>
+            <span ng-bind="::'MODULE.HEADER.MANAGE.ANALYZER' | translate"></span>
+        </content-header>
+
+        <div class="flex_entirety__body__body dashboard__body">
+            <div class="mars-row">
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md left-panel">
+                        <canvas id="nginx-analyzer-line" height="350"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-data="nginxTimerangeAnalyzer.chartConfig.data"
+                                chart-labels="nginxTimerangeAnalyzer.chartConfig.labels"
+                                chart-series="nginxTimerangeAnalyzer.chartConfig.series"
+                                chart-fill="false"
+                                chart-options="nginxTimerangeAnalyzer.chartConfig.options"
+                                chart-click="nginxTimerangeAnalyzer.chartConfig.onClick"
+                                chart-hover="nginxTimerangeAnalyzer.chartConfig.onHover">
+                        </canvas>
+
+                        <div class="setting-group" ng-if="!nginxTimerangeAnalyzer.loading">
+                            <mdl-select ng-model="nginxTimerangeAnalyzer.selectedIpOption"
+                                        display-label="{options: nginxTimerangeAnalyzer.ipOptions}"
+                                        ng-change="nginxIpSelect($value)">
+                            </mdl-select>
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('nginx-analyzer')"><i class="material-icons">settings</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('nginx-analyzer')"><i class="material-icons">undo</i></div>
+                        </div>
+
+                        <div class="chart-loading" ng-show="nginxTimerangeAnalyzer.loading"></div>
+                    </div>
+                    <div class="col-gutter-md right-panel">
+                        <canvas id="nginx-analyzer-piechart" height="250"
+                                class="chart chart-pie"
+                                chart-type="pie"
+                                chart-data="nginxTimerangeAnalyzer.pieChartConfig.data"
+                                chart-labels="nginxTimerangeAnalyzer.pieChartConfig.labels"
+                                chart-options="nginxTimerangeAnalyzer.pieChartConfig.options">
+                        </canvas>
+                    </div>
+                </div>
+
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md" style="width:100%;position:relative;">
+                        <canvas id="nginx-type-bar" height="350"
+                                class="chart chart-bar"
+                                chart-type="bar"
+                                chart-data="nginxTypeAnalyzer.chartConfig.data"
+                                chart-labels="nginxTypeAnalyzer.chartConfig.labels"
+                                chart-colors="nginxTypeAnalyzer.chartConfig.colors"
+                                chart-fill="false"
+                                chart-series="nginxTypeAnalyzer.chartConfig.series"
+                                chart-options="nginxTypeAnalyzer.chartConfig.options">
+                        </canvas>
+
+                        <div class="setting-group" ng-show="!nginxTypeAnalyzer.loading">
+                            <mdl-select ng-model="nginxTypeAnalyzer.selectedOption"
+                                        display-label="{options: nginxTypeAnalyzer.typesOptions}"
+                                        ng-change="nginxTypeSelect($value)">
+                            </mdl-select>
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('nginx-type-analyzer')"><i class="material-icons">settings</i></div>
+                        </div>
+
+                        <div class="chart-loading" ng-show="nginxTypeAnalyzer.loading"></div>
+                    </div>
+                </div>
+
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md left-panel">
+                        <canvas id="syslog-analyzer-line" height="350"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-data="syslogAnalyzer.chartConfig.data"
+                                chart-labels="syslogAnalyzer.chartConfig.labels"
+                                chart-series="syslogAnalyzer.chartConfig.series"
+                                chart-fill="false"
+                                chart-options="syslogAnalyzer.chartConfig.options"
+                                chart-click="syslogAnalyzer.chartConfig.onClick"
+                                chart-hover="syslogAnalyzer.chartConfig.onHover">
+                        </canvas>
+
+                        <div class="setting-group" ng-show="!syslogAnalyzer.loading">
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('syslog-analyzer')"><i class="material-icons">settings</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('syslog-analyzer')"><i class="material-icons">undo</i></div>
+                        </div>
+
+                        <div class="chart-loading" ng-show="syslogAnalyzer.loading"></div>
+                    </div>
+                    <div class="col-gutter-md right-panel">
+                        <canvas id="syslog-analyzer-piechart" height="250"
+                                class="chart chart-pie"
+                                chart-type="pie"
+                                chart-data="syslogAnalyzer.pieChartConfig.data"
+                                chart-labels="syslogAnalyzer.pieChartConfig.labels"
+                                chart-options="syslogAnalyzer.pieChartConfig.options">
+                        </canvas>
+                    </div>
+                </div>
+
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md left-panel">
+                        <canvas id="filebeat-analyzer-line" height="350"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-data="filebeatAnalyzer.chartConfig.data"
+                                chart-labels="filebeatAnalyzer.chartConfig.labels"
+                                chart-series="filebeatAnalyzer.chartConfig.series"
+                                chart-fill="false"
+                                chart-options="filebeatAnalyzer.chartConfig.options"
+                                chart-click="filebeatAnalyzer.chartConfig.onClick"
+                                chart-hover="filebeatAnalyzer.chartConfig.onHover">
+                        </canvas>
+
+                        <div class="setting-group" ng-show="!filebeatAnalyzer.loading">
+                            <mdl-select ng-model="filebeatAnalyzer.selectedOption"
+                                        display-label="{options: filebeatAnalyzer.typesOptions}"
+                                        ng-change="filebeatTypeSelect($value)">
+                            </mdl-select>
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('filebeat-analyzer')"><i class="material-icons">settings</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('filebeat-analyzer')"><i class="material-icons">undo</i></div>
+                        </div>
+
+                        <div class="chart-loading" ng-show="filebeatAnalyzer.loading"></div>
+                    </div>
+                    <div class="col-gutter-md right-panel">
+                        <canvas id="filebeat-analyzer-piechart" height="250"
+                                class="chart chart-pie"
+                                chart-type="pie"
+                                chart-data="filebeatAnalyzer.pieChartConfig.data"
+                                chart-labels="filebeatAnalyzer.pieChartConfig.labels"
+                                chart-options="filebeatAnalyzer.pieChartConfig.options">
+                        </canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

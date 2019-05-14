@@ -3,6 +3,7 @@
 import {DHCPController} from './ng/dhcp.controller';
 import {NTPController} from './ng/ntp.controller';
 import {ElasticsearchController} from './ng/elasticsearch.controller';
+import {AnalyzerController} from './ng/analyzer.controller';
 import {ChartSettingDialogController} from './ng/chartSettingDialog.controller';
 import {SelectDateDialogController} from './ng/selectDateDialogController';
 import {InputFilenameDialogController} from './ng/inputFilenameDialogController';
@@ -19,6 +20,7 @@ export default angular
   .controller('dhcpController', DHCPController)
   .controller('ntpController', NTPController)
   .controller('elasticsearchController', ElasticsearchController)
+  .controller('analyzerController', AnalyzerController)
   .controller('chartSettingDialogCtrl', ChartSettingDialogController)
   .controller('selectDateDialogController', SelectDateDialogController)
   .controller('inputFilenameDialogController', InputFilenameDialogController)
