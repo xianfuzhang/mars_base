@@ -781,6 +781,7 @@ export class FabricSummaryController {
       let rightStr = this.di.$scope.resize_right_plus['right'];
       let right = Number(rightStr.substr(0, rightStr.indexOf("px")));
       this.di.$scope.resize_right_plus['width'] = (win_width - right) + 'px';
+      this.di.$rootScope.$emit('resize_summary');
       this.di.$scope.$apply();
     });
 
@@ -1261,6 +1262,7 @@ export class FabricSummaryController {
       this.di._.each(unsubscribers, (unsubscribe) => {
         unsubscribe();
       });
+      angular.element(this.di.$window).off('resize');
       scope.stopMonitor();
       // this.di.$log.info('FabricSummaryController', 'Destroyed');
     });

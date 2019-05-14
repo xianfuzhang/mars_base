@@ -1142,14 +1142,24 @@ export class Topo {
         }
       };
 
-      angular.element(this.di.$window).bind('resize', () => {
-        console.log('exec resize');
+
+      // this.di.$timeout(()=>{
+      //   console.log('===> TOPO start to bind resize');
+      //   angular.element(this.di.$window).bind('resize', () => {
+      //     console.log('exec resize in topo');
+      //     resize(false);
+      //     // if(this.resizeTimeout){
+      //     //   this.di.$timeout.cancel(this.resizeTimeout);
+      //     // }
+      //     // self.resizeTimeout = this.di.$timeout(resize, 500);
+      //   });
+      // })
+
+
+      unsubscribers.push(this.di.$rootScope.$on('resize_summary', () => {
         resize(false);
-        // if(this.resizeTimeout){
-        //   this.di.$timeout.cancel(this.resizeTimeout);
-        // }
-        // self.resizeTimeout = this.di.$timeout(resize, 500);
-      });
+      }));
+
 
       unsubscribers.push(this.di.$rootScope.$on('resize_canvas',() =>{
         console.log('receive resize_canvas');
@@ -1219,14 +1229,13 @@ export class Topo {
         unsubscribers.forEach((unsubscribe) => {
           unsubscribe();
         });
-
+        // console.log('===<< topo start to un bind resize');
+        // angular.element(this.di.$window).off('resize');
+        // element = null;
       });
 
     }).call(this);
 
-    scope.$on('$destroy', ()=>{
-      angular.element(this.di.$window).off('resize');
-    });
   }
 
 

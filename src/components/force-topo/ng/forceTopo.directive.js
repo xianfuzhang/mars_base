@@ -604,11 +604,20 @@ export class ForceTopo {
         })
       };
 
-      angular.element(this.di.$window).bind('resize', () => {
-        console.log('exec resize');
+      // this.di.$timeout(()=> {
+      //   console.log('===> FORCETOPO start to bind resize');
+      //   angular.element(this.di.$window).bind('resize', () => {
+      //     console.log('exec resize in force topo');
+      //     reCenter();
+      //     this.simulation.restart();
+      //   });
+      // });
+
+      unsubscribers.push(this.di.$rootScope.$on('resize_summary', () => {
+        console.log('receive resize_canvas');
         reCenter();
         this.simulation.restart();
-      });
+      }));
 
       unsubscribers.push(this.di.$rootScope.$on('resize_canvas', () => {
         console.log('receive resize_canvas');
@@ -945,6 +954,12 @@ export class ForceTopo {
 
 
       scope.$on('$destroy', () => {
+
+        // console.log('===<< forcetopo start to un bind resize');
+        // angular.element(this.di.$window).off('resize');
+        // element = null;
+
+
         unsubscribers.forEach((unsubscribe) => {
           unsubscribe();
         });
@@ -966,7 +981,7 @@ export class ForceTopo {
             .selectAll("line")
             .on('click', angular.noop);
 
-        angular.element(this.di.$window).off('resize');
+
 
       });
 
