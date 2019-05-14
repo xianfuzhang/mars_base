@@ -89,7 +89,7 @@ export function ChartJsProvider () {
 			},
 			tooltips: {
 				mode: 'index',
-				intersect: false
+				intersect: true
 			},
 			scales: {
 				yAxes: [{
@@ -403,7 +403,7 @@ export function ChartJsFactory (ChartJs, $timeout) {
 			pointBackgroundColor: rgba(color, alpha),
 			pointHoverBackgroundColor: rgba(color, 0.8),
 			borderColor: rgba(color, alpha),
-			pointRadius: 1,
+			pointRadius: 2,
 			// pointBorderColor: '#fff',
 			pointHoverBorderColor: rgba(color, alpha),
 			// pointHoverBorderColor: '#fff',

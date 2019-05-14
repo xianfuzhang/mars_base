@@ -530,6 +530,10 @@ export class appService {
     return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/disk/' + deviceId + '/' + startTime + '/' + endTime + '/' + resolutionSecond;
   }
 
+  getClusterInterfaceAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/mgmg_ports/' + deviceId + '/' + startTime + '/' + endTime + '/' + resolutionSecond;
+  }
+
   getNginxTypeAnalyzerUrl(type, startTime, endTime) {
     return this.getZoneEndpoint(true) + '/analyzer/v1/nginx/' + startTime + '/' + endTime +  '/type/' + type.toLowerCase();
   }
