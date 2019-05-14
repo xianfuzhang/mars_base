@@ -22,7 +22,7 @@
   @include element(text) {
     stroke: whitesmoke;
     stroke-width: 1;
-
+    user-select: none;
   }
 
   @include element(host) {

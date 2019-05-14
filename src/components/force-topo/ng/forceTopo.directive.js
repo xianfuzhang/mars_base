@@ -445,6 +445,16 @@ export class ForceTopo {
         return evt
       };
 
+      let calc_linkmouse_location = (self) =>{
+        let mouseEvent = DI.d3.mouse(self);
+        let x = element[0].getBoundingClientRect();
+        let evt = {
+          'clientX': mouseEvent[0] + x.left,
+          'clientY': mouseEvent[1] + x.top
+        };
+        return evt
+      };
+
       function pathClickHandler() {
         DI.d3.event.stopPropagation();
         let data = DI.d3.select(this).datum();
@@ -899,7 +909,7 @@ export class ForceTopo {
               //   'clientX': mouseEvent[0] + x.left,
               //   'clientY': mouseEvent[1] + x.top
               // };
-              DI.$rootScope.$emit("show_link_tooltip", {event: calc_mouse_location(this), value: res});
+              DI.$rootScope.$emit("show_link_tooltip", {event: calc_linkmouse_location(this), value: res});
             }
           })
           .on('mouseout', function () {
