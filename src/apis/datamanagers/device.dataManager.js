@@ -394,6 +394,19 @@ export class DeviceDataManager {
     return defer.promise;
   }
 
+  getClusterInteraceAnalyzer(deviceId, startTime, endTime, resolutionSecond) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getClusterInterfaceAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond)).then(
+      (res) => {
+        defer.resolve(res.data.portstats);
+      },
+      (error) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
+
   getDeviceTemperatureSensors(deviceId) {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getTemperatureSensorsUrl(deviceId)).then(

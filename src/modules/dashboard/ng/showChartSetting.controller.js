@@ -37,7 +37,8 @@ export class ShowChartSettingController {
         break;
 		}
 		scope.title = chartTitle;
-		
+
+		scope.selectOptionTitle = ['controller-cpu', 'controller-memory', 'controller-interface'].indexOf(this.di.dataModel.chartType) < 0 ? this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH') : this.translate('MODULES.DASHBOARD.SETTING.SELECT_CONTROLLER')
 		scope.timeRangeOptions = [ // 时间间隔
 			{label: this.translate('MODULES.DASHBOARD.TIMERANGE.MINUTE'), value: 60},
 			{label: this.translate('MODULES.DASHBOARD.TIMERANGE.HOUR'), value: 120},
