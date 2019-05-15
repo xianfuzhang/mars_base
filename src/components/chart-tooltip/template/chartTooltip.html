@@ -1,0 +1,20 @@
+<div class='tooltip_all_page' ng-style="tooltipAllPageStyle" ng-click="hide()">
+    <div class="chartTooltip" ng-style="tooltipStyle" ng-click="stopPro($event)">
+        <div class="chartTooltip__arrow" ng-class="{'+right': isRight, '+left': !isRight}" ng-style="arrowStyle"></div>
+        <div class="chartTooltip__content">
+            <div class="chartTooltip__content__body">
+                <div class="col-gutter-md right-panel">
+                    <canvas id="chartTooltipCanvas" height="300"
+                            class="chart chart-bar">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--chart-type="pie"-->
+<!--chart-data="chartModel.data"-->
+<!--chart-labels="chartModel.labels"-->
+<!--chart-options="chartModel.options"-->
+<!--chart-colors="chartModel.colors">-->
