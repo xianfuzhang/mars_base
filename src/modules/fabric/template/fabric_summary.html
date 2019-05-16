@@ -70,7 +70,7 @@
                             </svg>
 
                         </div>
-                        <div ng-click="lineSetting()" ng-if="fabricModel.topoType.value  =='spine_leaf'" id="line_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_LINES'|translate}}" ng-class="{'+show':fabricModel.topoSetting.show_links}"  class="+front mdc-button topo_setting__button">
+                        <div ng-click="lineSetting()" ng-if="fabricModel.topoType.value !='force'" id="line_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_LINES'|translate}}" ng-class="{'+show':fabricModel.topoSetting.show_links}"  class="+front mdc-button topo_setting__button">
                             <i class="material-icons">link</i>
                         </div>
 
