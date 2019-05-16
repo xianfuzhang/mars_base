@@ -36,6 +36,11 @@
                    ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.TYPE'|translate"></label>
             <span class="device-detail__item-value">{{detailValue.type}}</span>
           </div>
+          <div ng-if="detailValue.type == 'leaf' && detailValue.leafGroup.name != null" class="device-detail__item">
+            <label class="device-detail__item-label"
+                   ng-bind="'MODULES.PORT.MLAG.LEAFGROUP'|translate"></label>
+            <span class="device-detail__item-value">{{detailValue.leafGroup.name}}</span>
+          </div>
           <div class="device-detail__item">
             <label class="device-detail__item-label"
                    ng-bind="'MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'|translate"></label>

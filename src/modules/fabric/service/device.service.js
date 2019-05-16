@@ -73,7 +73,7 @@ export class DeviceService {
 
   getDeviceActionsShow() {
     return {
-      'menu': {'enable': false, 'role': 2},
+      'menu': {'enable': true, 'role': 2},
       'add': {'enable': true, 'role': 2},
       'remove': {'enable': true, 'role': 2},
       'refresh': {'enable': true, 'role': 2}, 
@@ -128,6 +128,11 @@ export class DeviceService {
         'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.TYPE'),
         'field': 'type',
         'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.LEAF_GROUP_NAME'),
+        'field': 'leaf_group',
+        'layout': {'visible': false, 'sortable': true}
       },
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.ROLE'),
@@ -1263,6 +1268,7 @@ export class DeviceService {
       obj.ip = item.mgmtIpAddress;
       obj.mac = item.mac;
       obj.type = item.type;
+      obj.leaf_group = (item.type === 'leaf' && item.leafGroup.name)? item.leafGroup.name: '-';
       obj.role = origin && origin.role || '-';
       obj.rack_id = origin && origin.rackId || '-';
       obj.available = item.available === true ? 'available' : 'unavailable';
