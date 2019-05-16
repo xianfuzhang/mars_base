@@ -6,11 +6,12 @@
   //background-image: url("../../assets/images/graphback.png") ;
   //background-repeat: repeat-y;
 }
-.topo-container .outerLabels > text{
+.topo-container .outerLabels > text, .topo-container .tooltips > text{
 	user-select: none;
 	fill: #333;
+	pointer-events: none;
 }
-.topo-container g.outer, .topo-container g.inner, .topo-container g.links{
+.topo-container g.outer, .topo-container g.inner, .topo-container g.links, .topo-container g.searchPaths > path{
 	cursor: pointer;
 }
 
@@ -24,4 +25,13 @@
 .topo-container g.inner > path:hover{
 	stroke-width: 2;
 	transform: scale(1.01);
+}
+.topo-container g.searchPaths > path{
+	stroke-dasharray: 15 5;
+  animation: dashoffset 2s infinite;
+}
+@keyframes dashoffset {
+	to {
+		stroke-dashoffset: -100;
+	}
 }
