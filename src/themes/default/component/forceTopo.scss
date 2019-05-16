@@ -26,7 +26,7 @@
   @include element(text) {
     stroke: black;
     stroke-width: 1;
-
+    user-select: none;
   }
 
   @include element(path-normal) {

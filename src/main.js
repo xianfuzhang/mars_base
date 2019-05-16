@@ -46,6 +46,7 @@ import 'validInput';
 import 'loading';
 import 'deviceTooltip';
 import 'linkTooltip';
+import 'chartTooltip';
 import 'wizard';
 import 'datePicker';
 import 'marButton';
@@ -102,6 +103,7 @@ angular
     'loading',
     'deviceTooltip',
     'linkTooltip',
+    'chartTooltip',
     'wizard',
     'date-picker',
     'marButton',

@@ -132,24 +132,24 @@ export class FabricSummaryController {
     };
 
     this.di.$scope.displayLabel = {
-      hosts: {'options':[{'label': '请选择端点', 'value':null}]},
-      srcHosts: {'options':[{'label': '请选择端点', 'value':null}], 'hint':this.translate('MODULES.TOPO.PATH.START')},
-      dstHosts: {'options':[{'label': '请选择端点', 'value':null}], 'hint':this.translate('MODULES.TOPO.PATH.END')},
+      hosts: {'options':[{'label': this.translate('MODULES.SWITCHES.TOPO.DISPLAY.SELECT_ENDPOINT'), 'value':null}]},
+      srcHosts: {'options':[{'label':  this.translate('MODULES.SWITCHES.TOPO.DISPLAY.SELECT_ENDPOINT'), 'value':null}], 'hint':this.translate('MODULES.TOPO.PATH.START')},
+      dstHosts: {'options':[{'label':  this.translate('MODULES.SWITCHES.TOPO.DISPLAY.SELECT_ENDPOINT'), 'value':null}], 'hint':this.translate('MODULES.TOPO.PATH.END')},
       fluxUnits: {
         'options': [
           {'label': 'Bps', 'value': 'Bps'},
           {'label': 'KBps', 'value': 'KBps'},
           {'label': 'MBps','value': 'MBps'},
           {'label': 'GBps', 'value': 'GBps'}],
-        'hint': '单位',
+        'hint':  this.translate('MODULES.SWITCHES.TOPO.DISPLAY.UNIT'),
       },
       topoTypes: {
         'options': [
-          {'label': '力图', 'value': 'force'},
+          {'label': this.translate('MODULES.SWITCHES.TOPO.TYPE.FORCE'), 'value': 'force'},
           {'label': 'Spine Leaf', 'value': 'spine_leaf'},
           {'label': 'Donut', 'value': 'donut'}
         ],
-        'hint': '拓扑类型',
+        'hint': this.translate('MODULES.SWITCHES.TOPO.TYPE'),
       }
     };
 
@@ -509,7 +509,7 @@ export class FabricSummaryController {
       busyMetric = FLOW_UNITS_CONSTRAINT[scope.fabricModel.busyMetricUnit.value.toLowerCase()] * parseInt(scope.fabricModel.busyMetric);
       congestionMetric = FLOW_UNITS_CONSTRAINT[scope.fabricModel.congestionMetricUnit.value.toLowerCase()] * parseInt(scope.fabricModel.congestionMetric);
       if(busyMetric >= congestionMetric){
-        this.di.notificationService.renderWarning(scope,"拥堵阈值必须大于繁忙阈值!");
+        this.di.notificationService.renderWarning(scope,this.translate('MODULES.SWITCHES.TOPO.MONITOR.VALUE_VALIDATE'));
         return;
       }
 
@@ -608,7 +608,7 @@ export class FabricSummaryController {
 
 
     let _render_path_select = (hosts) =>{
-      scope.displayLabel.hosts.options = [{'label': '请选择端点', 'value':null}];
+      scope.displayLabel.hosts.options = [{'label': this.translate('MODULES.SWITCHES.TOPO.DISPLAY.SELECT_ENDPOINT'), 'value':null}];
       this.di._.forEach(hosts, (host)=>{
         scope.displayLabel.hosts.options.push({'label':host.id, 'value':host.id})
       });
@@ -781,6 +781,7 @@ export class FabricSummaryController {
       let rightStr = this.di.$scope.resize_right_plus['right'];
       let right = Number(rightStr.substr(0, rightStr.indexOf("px")));
       this.di.$scope.resize_right_plus['width'] = (win_width - right) + 'px';
+      this.di.$rootScope.$emit('resize_summary');
       this.di.$scope.$apply();
     });
 
@@ -1261,6 +1262,7 @@ export class FabricSummaryController {
       this.di._.each(unsubscribers, (unsubscribe) => {
         unsubscribe();
       });
+      angular.element(this.di.$window).off('resize');
       scope.stopMonitor();
       // this.di.$log.info('FabricSummaryController', 'Destroyed');
     });

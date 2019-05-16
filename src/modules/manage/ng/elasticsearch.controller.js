@@ -316,98 +316,8 @@ export class ElasticsearchController {
             scope.elasticsearchModel.analyzerLoading = false;
           })
           break;
-        case 'nginx-analyzer':
-          scope.nginxTimerangeAnalyzer.startTime = scope.nginxTimerangeAnalyzer.originStartTime;
-          scope.nginxTimerangeAnalyzer.endTime = scope.nginxTimerangeAnalyzer.originEndTime;
-          break;
-        case 'syslog-analyzer':
-          scope.syslogAnalyzer.startTime = scope.syslogAnalyzer.originStartTime;
-          scope.syslogAnalyzer.endTime = scope.syslogAnalyzer.originEndTime;
-          break;
-        case 'filebeat-analyzer':
-          scope.filebeatAnalyzer.startTime = scope.filebeatAnalyzer.originStartTime;
-          scope.filebeatAnalyzer.endTime = scope.filebeatAnalyzer.originEndTime;
-          break;
       }
     }
-
-    scope.chartSetting = (type) => {
-      let beginTime, endTime;
-      switch(type) {
-        case 'nginx-type-analyzer':
-          beginTime = scope.nginxTypeAnalyzer.startTime;
-          endTime = scope.nginxTypeAnalyzer.endTime;
-          break;
-        case 'nginx-analyzer':
-          beginTime = scope.nginxTimerangeAnalyzer.startTime;
-          endTime = scope.nginxTimerangeAnalyzer.endTime;
-          break;
-        case 'syslog-analyzer':
-          beginTime = scope.syslogAnalyzer.startTime;
-          endTime = scope.syslogAnalyzer.endTime;
-          break;
-        case 'filebeat-analyzer':
-          beginTime = scope.filebeatAnalyzer.startTime;
-          endTime = scope.filebeatAnalyzer.endTime;
-          break;
-      }
-
-      this.di.modalManager.open({
-        template: require('../template/chart_setting.html'),
-        controller: 'chartSettingDialogCtrl',
-        windowClass: 'show-chart-setting-modal',
-        resolve: {
-          dataModel: () => {
-            return {
-              chartType: type,
-              beginTime: beginTime,
-              endTime: endTime
-            }
-          }
-        }
-      }).result.then((res) => {
-        if (res && !res.canceled) {
-          switch(type) {
-            case 'nginx-type-analyzer':
-              scope.nginxTypeAnalyzer.originStartTime = res.data.beginTime;
-              scope.nginxTypeAnalyzer.originEndTime = res.data.endTime;
-              scope.nginxTypeAnalyzer.startTime = res.data.beginTime;
-              scope.nginxTypeAnalyzer.endTime = res.data.endTime;
-              break;
-            case 'nginx-analyzer':
-              scope.nginxTimerangeAnalyzer.originStartTime = res.data.beginTime;
-              scope.nginxTimerangeAnalyzer.originEndTime = res.data.endTime;
-              scope.nginxTimerangeAnalyzer.startTime = res.data.beginTime;
-              scope.nginxTimerangeAnalyzer.endTime = res.data.endTime;
-              break;
-            case 'syslog-analyzer':
-              scope.syslogAnalyzer.originStartTime = res.data.beginTime;
-              scope.syslogAnalyzer.originEndTime = res.data.endTime;
-              scope.syslogAnalyzer.startTime = res.data.beginTime;
-              scope.syslogAnalyzer.endTime = res.data.endTime;
-              break;
-            case 'filebeat-analyzer':
-              scope.filebeatAnalyzer.originStartTime = res.data.beginTime;
-              scope.filebeatAnalyzer.originEndTime = res.data.endTime;
-              scope.filebeatAnalyzer.startTime = res.data.beginTime;
-              scope.filebeatAnalyzer.endTime = res.data.endTime;
-              break;
-          }
-        }
-      });
-    }
-
-    scope.nginxTypeSelect = ($value) => {
-      scope.nginxTypeAnalyzer.selectedOption = $value;
-    };
-
-    scope.nginxIpSelect = ($value) => {
-      scope.nginxTimerangeAnalyzer.selectedIpOption = $value;
-    };
-
-    scope.filebeatTypeSelect = ($value) => {
-      scope.filebeatAnalyzer.selectedOption = $value;
-    };
 
     let init =() =>{
       scope.loading = true;
@@ -443,56 +353,6 @@ export class ElasticsearchController {
           scope.loading = false;
         })
       })
-
-      // get nginx analyzer by timerange
-      scope.nginxTimerangeAnalyzer.selectedIpOption = scope.nginxTimerangeAnalyzer.ipOptions[0];
-      let resolutionSecond = Math.floor((scope.nginxTimerangeAnalyzer.endTime.getTime() - scope.nginxTimerangeAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
-      this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond).then((res) => {
-        scope.nginxTimerangeAnalyzer.dataModel = res;
-        scope.nginxTimerangeAnalyzer.loading = false;
-        setNginxChartLineData(true);
-      }, () => {
-        scope.nginxTimerangeAnalyzer.dataModel = [];
-        scope.nginxTimerangeAnalyzer.loading = false;
-        setNginxChartLineData(true);
-      });
-
-      // get nginx analyzer by type
-      scope.nginxTypeAnalyzer.selectedOption = scope.nginxTypeAnalyzer.typesOptions[0];
-      this.di.manageDataManager.getNginxTypeAnalyzer(scope.nginxTypeAnalyzer.selectedOption.value, this.getISODate(scope.nginxTypeAnalyzer.startTime), this.getISODate(scope.nginxTypeAnalyzer.endTime)).then((res) => {
-        scope.nginxTypeAnalyzer.dataModel = res;
-        scope.nginxTypeAnalyzer.loading = false;
-        setNginxChartBarData();
-      }, () => {
-        scope.nginxTypeAnalyzer.dataModel = [];
-        scope.nginxTypeAnalyzer.loading = false;
-        setNginxChartBarData();
-      });
-
-      // get syslog analyzer by timerange
-      let syslogSeconds = Math.floor((scope.syslogAnalyzer.endTime.getTime() - scope.syslogAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
-      this.di.manageDataManager.getSyslogAnalyzer(this.getISODate(scope.syslogAnalyzer.startTime), this.getISODate(scope.syslogAnalyzer.endTime), syslogSeconds).then((res) => {
-        scope.syslogAnalyzer.dataModel = res;
-        scope.syslogAnalyzer.loading = false;
-        setSyslogChartLineData();
-      }, () => {
-        scope.syslogAnalyzer.dataModel = [];
-        scope.syslogAnalyzer.loading = false;
-        setSyslogChartLineData();
-      });
-
-      // get filebeat analyzer by timerange
-      scope.filebeatAnalyzer.selectedOption = scope.filebeatAnalyzer.typesOptions[0];
-      let filebeatSeconds = Math.floor((scope.filebeatAnalyzer.endTime.getTime() - scope.filebeatAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
-      this.di.manageDataManager.getFilebeatAnalyzer(scope.filebeatAnalyzer.selectedOption.value, this.getISODate(scope.filebeatAnalyzer.startTime), this.getISODate(scope.filebeatAnalyzer.endTime), filebeatSeconds).then((res) => {
-        scope.filebeatAnalyzer.dataModel = res;
-        scope.filebeatAnalyzer.loading = false;
-        setFilebeatChartLineData();
-      }, () => {
-        scope.filebeatAnalyzer.dataModel = [];
-        scope.filebeatAnalyzer.loading = false;
-        setFilebeatChartLineData();
-      });
     };
 
     let setIndiceSummaryChartData = (indices) => {
@@ -618,311 +478,6 @@ export class ElasticsearchController {
       scope.indiceAnalyzerChartConfig.series = series;
     };
 
-    let setNginxChartBarData = () => {
-      let dataList = [], labelsArr = [];
-      let dataArray = scope.nginxTypeAnalyzer.dataModel;
-      let key = scope.nginxTypeAnalyzer.selectedOption.value == 'url' ? 'url' : 'clientIp';
-      this.di._.forEach(dataArray, (statistic)=>{
-        // let urlArr = statistic[key].split('/');
-        // let label = urlArr.length > 1 ? urlArr[0] + '/.../' + urlArr[urlArr.length - 1] : urlArr[0];
-        labelsArr.push(statistic[key]);
-        dataList.push(statistic['count']);
-      });
-
-      const pad = this.pad;
-      let options = {
-        title: {
-          text: "API具体访问情况分析"
-        },
-        scales: {
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: '访问次数'
-            },
-            ticks: {
-              beginAtZero: false,
-            }
-          }],
-          xAxes: [{
-            barThickness: 40,
-            ticks: {
-              callback: (value) => {
-                let urlArr = value.split('/');
-                return urlArr.length > 3 ? urlArr[0] == '' ? urlArr[1] + '/.../' + urlArr[urlArr.length - 1] : urlArr[0] + '/.../' + urlArr[urlArr.length - 1] : value;
-              },
-            }
-          }],
-        },
-        tooltips: {
-          callbacks: {
-            title: (tooltipItem) => {
-              return labelsArr[tooltipItem[0].index];
-            },
-            label: function(tooltipItem, data) {
-              var label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-              if (label) {
-                label += ': ';
-              }
-              label += getFormattedNumber(tooltipItem.yLabel);
-              return label;
-            }
-          }
-        }
-      }
-
-      scope.nginxTypeAnalyzer.chartConfig.data = [dataList];
-      scope.nginxTypeAnalyzer.chartConfig.series = ['访问次数'];
-      scope.nginxTypeAnalyzer.chartConfig.labels = labelsArr;
-      scope.nginxTypeAnalyzer.chartConfig.options = options;
-      scope.nginxTypeAnalyzer.chartConfig.colors = [{backgroundColor: 'rgb(255,228,181)'}]
-    };
-
-    let setNginxChartLineData = (initial) => {  // initial: 初始化
-      let dataArr = [];
-      let series = ['访问次数'];
-      let labelsArr = [];
-      let clientIps = [];
-      let dataModel = scope.nginxTimerangeAnalyzer.dataModel;
-
-      labelsArr = this.getTimeSeries(dataModel);
-
-      dataModel.forEach((data) => {
-        dataArr.push(data.count);
-
-        if(initial) {
-          data.clients.forEach((client) => {
-            if(clientIps.indexOf(client.ip) === -1) {
-              clientIps.push(client.ip);
-              scope.nginxTimerangeAnalyzer.ipOptions.push({
-                label: client.ip,
-                value: client.ip
-              });
-            }
-          });
-        }
-      });
-
-      const pad = this.pad;
-
-      let title = "API访问情况统计";
-      title = scope.nginxTimerangeAnalyzer.selectedIpOption.value ? scope.nginxTimerangeAnalyzer.selectedIpOption.value + ' - ' + title : title;
-      let options = {
-        title: {
-          display: true,
-          text: title,
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: false,
-              labelString: '访问次数'
-            }
-          }],
-          xAxes: [{
-            ticks: {
-              callback: function(value, index, values) {
-                value = new Date(value);
-                return pad(value.getHours()) + ':' + pad(value.getMinutes()) + ':' + pad(value.getSeconds());
-              }
-            }
-          }],
-        },
-        tooltips: {
-          callbacks: {
-            title: (tooltipItem) => {
-              let value = new Date(labelsArr[tooltipItem[0].index]);
-              return getFormatedDateTime(value);
-            },
-            label: function(tooltipItem, data) {
-              var label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-              if (label) {
-                label += ': ';
-              }
-              label += getFormattedNumber(tooltipItem.yLabel);
-              return label;
-            }
-          }
-        },
-        // Container for zoom options
-        zoom: {
-          onZoom: lineChartOnZoom('nginx-analyzer')
-        }
-      };
-      scope.nginxTimerangeAnalyzer.chartConfig.data = [dataArr];
-      scope.nginxTimerangeAnalyzer.chartConfig.labels = labelsArr;
-      scope.nginxTimerangeAnalyzer.chartConfig.options = options;
-      scope.nginxTimerangeAnalyzer.chartConfig.series = series;
-      scope.nginxTimerangeAnalyzer.chartConfig.onClick = nginxLineChartOnClick();
-      scope.nginxTimerangeAnalyzer.chartConfig.onHover = lineChartOnHover();
-
-      // set pie chart data with first dataset and first data
-      if(dataArr.length > 0 && labelsArr.length > 0) {
-        let pieData = dataModel[0].clients ? dataModel[0].clients : [{count:dataModel[0].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}]
-        setNginxPieChartData(pieData, getFormatedDateTime(new Date(labelsArr[0])))
-      }
-    };
-
-    let setSyslogChartLineData = () => {
-      let dataArr = [];
-      let series = [];
-      let labelsArr = [];
-      let dataModel = scope.syslogAnalyzer.dataModel;
-
-      labelsArr = this.getSyslogTimeSeries(dataModel);
-
-      for(let key in dataModel){
-        let dataList = [];
-        dataModel[key].forEach((data) => {
-          dataList.push(data.count);
-        })
-
-        dataArr.push(dataList);
-        series.push(key);
-      };
-
-      const pad = this.pad;
-      let options = {
-        title: {
-          display: true,
-          text: "Syslog日志统计情况",
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: false,
-              labelString: '次数'
-            }
-          }],
-          xAxes: [{
-            ticks: {
-              callback: function(value, index, values) {
-                value = new Date(value);
-                return pad(value.getHours()) + ':' + pad(value.getMinutes()) + ':' + pad(value.getSeconds());
-              }
-            }
-          }],
-        },
-        tooltips: {
-          callbacks: {
-            title: (tooltipItem) => {
-              let value = new Date(labelsArr[tooltipItem[0].index]);
-              return getFormatedDateTime(value);
-            },
-            label: function(tooltipItem, data) {
-              var label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-              if (label) {
-                label += ': ';
-              }
-              label += getFormattedNumber(tooltipItem.yLabel);
-              return label;
-            }
-          }
-        },
-        // Container for zoom options
-        zoom: {
-          onZoom: lineChartOnZoom('syslog-analyzer')
-        }
-      };
-      scope.syslogAnalyzer.chartConfig.data = dataArr;
-      scope.syslogAnalyzer.chartConfig.labels = labelsArr;
-      scope.syslogAnalyzer.chartConfig.options = options;
-      scope.syslogAnalyzer.chartConfig.series = series;
-      scope.syslogAnalyzer.chartConfig.onClick = syslogChartOnClick();
-      scope.syslogAnalyzer.chartConfig.onHover = lineChartOnHover();
-
-      // set pie chart data with first dataset and first data
-      if(labelsArr.length > 0) {
-        let xLabel = labelsArr[0];
-        let data,title = '';
-
-        let first = false;
-        for(let key in dataModel){
-          if(!first && dataModel[key].length > 0) {
-            data = dataModel[key][0]['programs'];
-            title = key + ' - ' + getFormatedDateTime(new Date(xLabel));
-            first = true;
-          }
-        }
-
-        setSyslogPieChartData(data,title)
-      }
-    };
-
-    let setFilebeatChartLineData = () => {
-      let dataArr = [];
-      let series = [scope.filebeatAnalyzer.selectedOption.value];
-      let labelsArr = [];
-      let dataModel = scope.filebeatAnalyzer.dataModel;
-
-      labelsArr = this.getTimeSeries(dataModel);
-
-      dataModel.forEach((data) => {
-        dataArr.push(data.count);
-      })
-
-      const pad = this.pad;
-      let options = {
-        title: {
-          display: true,
-          text: "Mars系统日志统计情况",
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: false,
-              labelString: '次数'
-            }
-          }],
-          xAxes: [{
-            ticks: {
-              callback: function(value, index, values) {
-                value = new Date(value);
-                return pad(value.getHours()) + ':' + pad(value.getMinutes()) + ':' + pad(value.getSeconds());
-              }
-            }
-          }],
-        },
-        tooltips: {
-          callbacks: {
-            title: (tooltipItem) => {
-              let value = new Date(labelsArr[tooltipItem[0].index]);
-              return getFormatedDateTime(value);
-            },
-            label: function(tooltipItem, data) {
-              var label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-              if (label) {
-                label += ': ';
-              }
-              label += getFormattedNumber(tooltipItem.yLabel);
-              return label;
-            }
-          }
-        },
-        // Container for zoom options
-        zoom: {
-          onZoom: lineChartOnZoom('filebeat-analyzer')
-        }
-      };
-
-      scope.filebeatAnalyzer.chartConfig.data = [dataArr];
-      scope.filebeatAnalyzer.chartConfig.labels = labelsArr;
-      scope.filebeatAnalyzer.chartConfig.options = options;
-      scope.filebeatAnalyzer.chartConfig.series = series;
-      scope.filebeatAnalyzer.chartConfig.onClick = filebeatChartOnClick();
-      scope.filebeatAnalyzer.chartConfig.onHover = lineChartOnHover();
-
-      // set pie chart data with first dataset and first data
-      if(dataArr.length > 0 && labelsArr.length > 0) {
-        let data = scope.filebeatAnalyzer.selectedOption.value == 'thread' ? dataModel[0].threads : dataModel[0].handlers;
-        setFilebeatPieChartData(data, getFormatedDateTime(new Date(labelsArr[0])));
-      }
-    };
-
     let barChartOnClick = (analyzer) => {
       return function (evt, chart) { // point element
         // 1.element hover event
@@ -1024,195 +579,24 @@ export class ElasticsearchController {
             scope.elasticsearchModel.indice.min_time = startTime.getTime();
             scope.elasticsearchModel.indice.max_time = endTime.getTime();
             break;
-          case 'nginx-analyzer':
-            scope.nginxTimerangeAnalyzer.startTime = startTime;
-            scope.nginxTimerangeAnalyzer.endTime = endTime;
-            break;
-          case 'syslog-analyzer':
-            scope.syslogAnalyzer.startTime = startTime;
-            scope.syslogAnalyzer.endTime = endTime;
-            break;
-          case 'filebeat-analyzer':
-            scope.filebeatAnalyzer.startTime = startTime;
-            scope.filebeatAnalyzer.endTime = endTime;
-            break;
+          // case 'nginx-analyzer':
+          //   scope.nginxTimerangeAnalyzer.startTime = startTime;
+          //   scope.nginxTimerangeAnalyzer.endTime = endTime;
+          //   break;
+          // case 'syslog-analyzer':
+          //   scope.syslogAnalyzer.startTime = startTime;
+          //   scope.syslogAnalyzer.endTime = endTime;
+          //   break;
+          // case 'filebeat-analyzer':
+          //   scope.filebeatAnalyzer.startTime = startTime;
+          //   scope.filebeatAnalyzer.endTime = endTime;
+          //   break;
         }
 
         scope.$apply()
       }
     }
 
-    let nginxLineChartOnClick = function() {
-      let analyzer = scope.nginxTimerangeAnalyzer.dataModel;
-
-      return function(evt, chart) { // point element
-        // 1.element hover event
-        let element = chart.getElementAtEvent(evt);
-        if(element.length > 0)
-        {
-          let datasetIndex = element[0]._datasetIndex;
-          let index = element[0]._index;
-          let xLabel = chart.data.labels[index];
-
-          let data = analyzer[index].clients ? analyzer[index].clients : [{count: analyzer[index].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}];
-          let title = getFormatedDateTime(new Date(xLabel));
-
-          setNginxPieChartData(data, title);
-
-          scope.$apply();
-        }
-      }
-    }
-
-    let syslogChartOnClick = function() {
-      let analyzer = scope.syslogAnalyzer.dataModel;
-
-      return function(evt, chart) { // point element
-        // 1.element hover event
-        let element = chart.getElementAtEvent(evt);
-        if(element.length > 0)
-        {
-          let datasetIndex = element[0]._datasetIndex;
-          let index = element[0]._index;
-          let xLabel = chart.data.labels[index];
-
-          let data = analyzer[index].clients ? analyzer[index].clients : [{count: analyzer[index].count, ip: scope.syslogAnalyzer.selectedIpOption.value}];
-          let title = getFormatedDateTime(new Date(xLabel));
-
-          setSyslogPieChartData(data, title);
-
-          scope.$apply();
-        }
-      }
-    }
-
-    let filebeatChartOnClick = function() {
-      let analyzer = scope.filebeatAnalyzer.dataModel;
-
-      return function(evt, chart) { // point element
-        // 1.element hover event
-        let element = chart.getElementAtEvent(evt);
-        if(element.length > 0)
-        {
-          let datasetIndex = element[0]._datasetIndex;
-          let index = element[0]._index;
-          let xLabel = chart.data.labels[index];
-
-          let data = scope.filebeatAnalyzer.selectedOption.value == 'thread' ? analyzer[index].threads : analyzer[index].handlers;
-          setFilebeatPieChartData(data, getFormatedDateTime(new Date(xLabel)));
-
-          scope.$apply();
-        }
-      }
-    }
-
-    let setNginxPieChartData = (dataArr, title) => {
-      // initial
-      scope.nginxTimerangeAnalyzer.pieChartConfig.data = [];
-      scope.nginxTimerangeAnalyzer.pieChartConfig.labels = [];
-
-      if(!dataArr) return;
-
-      // set pie chart data with first dataset and first data
-      let chartData = {datasets:[], labels:[]};
-      let dataset = {data:[], backgroundColor:[], label: ''};
-
-      dataArr.forEach((data) => {
-        dataset.data.push(data.count);
-        chartData.labels.push(data.ip);
-      });
-
-      chartData.datasets.push(dataset);
-
-      let pieOptions = {
-        plugins: {
-          deferred: {
-            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-            delay: 1000      // delay of 500 ms after the canvas is considered inside the viewport
-          }
-        },
-        title: {
-          text: title,
-        }
-      }
-
-      scope.nginxTimerangeAnalyzer.pieChartConfig.data = dataset.data;
-      scope.nginxTimerangeAnalyzer.pieChartConfig.labels = chartData.labels;
-      // scope.nginxTimerangeAnalyzer.pieChartConfig.colors = dataset.backgroundColor;
-      scope.nginxTimerangeAnalyzer.pieChartConfig.options = pieOptions;
-    }
-
-    let setSyslogPieChartData = (dataArr, title) => {
-      // initial
-      scope.syslogAnalyzer.pieChartConfig.data = [];
-      scope.syslogAnalyzer.pieChartConfig.labels = [];
-
-      if(!dataArr) return;
-
-      // set pie chart data with first dataset and first data
-      let chartData = {datasets:[], labels:[]};
-      let dataset = {data:[], backgroundColor:[], label: ''};
-
-      dataArr.forEach((data) => {
-        dataset.data.push(data.count);
-        chartData.labels.push(data.key);
-      });
-
-      chartData.datasets.push(dataset);
-
-      let pieOptions = {
-        plugins: {
-          deferred: {
-            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-            delay: 1000      // delay of 500 ms after the canvas is considered inside the viewport
-          }
-        },
-        title: {
-          text: title,
-        }
-      }
-
-      scope.syslogAnalyzer.pieChartConfig.data = dataset.data;
-      scope.syslogAnalyzer.pieChartConfig.labels = chartData.labels;
-      // scope.nginxTimerangeAnalyzer.pieChartConfig.colors = dataset.backgroundColor;
-      scope.syslogAnalyzer.pieChartConfig.options = pieOptions;
-    }
-
-    let setFilebeatPieChartData = (dataArr, title) => {
-      // initial
-      scope.filebeatAnalyzer.pieChartConfig.data = [];
-      scope.filebeatAnalyzer.pieChartConfig.labels = [];
-
-      if(!dataArr) return;
-
-      // set pie chart data with first dataset and first data
-      let chartData = {datasets:[], labels:[]};
-      let dataset = {data:[], backgroundColor:[], label: ''};
-
-      dataArr.forEach((data) => {
-        dataset.data.push(data.count);
-        chartData.labels.push(data.key ? data.key : 'unknown');
-      });
-
-      chartData.datasets.push(dataset);
-
-      let pieOptions = {
-        plugins: {
-          deferred: {
-            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-            delay: 1000      // delay of 500 ms after the canvas is considered inside the viewport
-          }
-        },
-        title: {
-          text: title,
-        }
-      }
-
-      scope.filebeatAnalyzer.pieChartConfig.data = dataset.data;
-      scope.filebeatAnalyzer.pieChartConfig.labels = chartData.labels;
-      scope.filebeatAnalyzer.pieChartConfig.options = pieOptions;
-    }
-    
     let formatSize = (size, unit) => {
       if(unit.toUpperCase() == 'KB'){
         if(size >= 1024 && size < 1024 * 1024) {
@@ -1348,71 +732,71 @@ export class ElasticsearchController {
       });
     },true));
 
-    let nginxTimerangeHasChanged = false;
-    unSubscribers.push(this.di.$scope.$watchGroup(['nginxTimerangeAnalyzer.startTime', 'nginxTimerangeAnalyzer.endTime', 'nginxTimerangeAnalyzer.selectedIpOption'], () => {
-      if(!nginxTimerangeHasChanged) {
-        nginxTimerangeHasChanged = true;
-        return;
-      }
+    // let nginxTimerangeHasChanged = false;
+    // unSubscribers.push(this.di.$scope.$watchGroup(['nginxTimerangeAnalyzer.startTime', 'nginxTimerangeAnalyzer.endTime', 'nginxTimerangeAnalyzer.selectedIpOption'], () => {
+    //   if(!nginxTimerangeHasChanged) {
+    //     nginxTimerangeHasChanged = true;
+    //     return;
+    //   }
+    //
+    //   scope.nginxTimerangeAnalyzer.loading = true;
+    //
+    //   let resolutionSecond = Math.floor((scope.nginxTimerangeAnalyzer.endTime.getTime() - scope.nginxTimerangeAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+    //   resolutionSecond = resolutionSecond < 30 ? 30 : resolutionSecond > 3600 ? 3600 : resolutionSecond;
+    //   this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond, scope.nginxTimerangeAnalyzer.selectedIpOption.value).then((res) => {
+    //     scope.nginxTimerangeAnalyzer.dataModel = res;
+    //     scope.nginxTimerangeAnalyzer.loading = false;
+    //     setNginxChartLineData();
+    //   }, () => {
+    //     scope.nginxTimerangeAnalyzer.dataModel = [];
+    //     scope.nginxTimerangeAnalyzer.loading = false;
+    //     setNginxChartLineData();
+    //   });
+    // },true));
 
-      scope.nginxTimerangeAnalyzer.loading = true;
+    // let syslogTimerangeHasChanged = false;
+    // unSubscribers.push(this.di.$scope.$watchGroup(['syslogTimerangeAnalyzer.startTime', 'syslogTimerangeAnalyzer.endTime'], () => {
+    //   if(!syslogTimerangeHasChanged) {
+    //     syslogTimerangeHasChanged = true;
+    //     return;
+    //   }
+    //
+    //   scope.syslogAnalyzer.loading = true;
+    //
+    //   let resolutionSecond = Math.floor((scope.syslogAnalyzer.endTime.getTime() - scope.syslogAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+    //   resolutionSecond = resolutionSecond < 30 ? 30 : resolutionSecond > 3600 ? 3600 : resolutionSecond;
+    //   this.di.manageDataManager.getSyslogAnalyzer(this.getISODate(scope.syslogAnalyzer.startTime), this.getISODate(scope.syslogAnalyzer.endTime), resolutionSecond).then((res) => {
+    //     scope.syslogAnalyzer.dataModel = res;
+    //     scope.syslogAnalyzer.loading = false;
+    //     setSyslogChartLineData();
+    //   }, () => {
+    //     scope.syslogAnalyzer.dataModel = [];
+    //     scope.syslogAnalyzer.loading = false;
+    //     setSyslogChartLineData();
+    //   });
+    // },true));
 
-      let resolutionSecond = Math.floor((scope.nginxTimerangeAnalyzer.endTime.getTime() - scope.nginxTimerangeAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
-      resolutionSecond = resolutionSecond < 30 ? 30 : resolutionSecond > 3600 ? 3600 : resolutionSecond;
-      this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond, scope.nginxTimerangeAnalyzer.selectedIpOption.value).then((res) => {
-        scope.nginxTimerangeAnalyzer.dataModel = res;
-        scope.nginxTimerangeAnalyzer.loading = false;
-        setNginxChartLineData();
-      }, () => {
-        scope.nginxTimerangeAnalyzer.dataModel = [];
-        scope.nginxTimerangeAnalyzer.loading = false;
-        setNginxChartLineData();
-      });
-    },true));
-
-    let syslogTimerangeHasChanged = false;
-    unSubscribers.push(this.di.$scope.$watchGroup(['syslogTimerangeAnalyzer.startTime', 'syslogTimerangeAnalyzer.endTime'], () => {
-      if(!syslogTimerangeHasChanged) {
-        syslogTimerangeHasChanged = true;
-        return;
-      }
-
-      scope.syslogAnalyzer.loading = true;
-
-      let resolutionSecond = Math.floor((scope.syslogAnalyzer.endTime.getTime() - scope.syslogAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
-      resolutionSecond = resolutionSecond < 30 ? 30 : resolutionSecond > 3600 ? 3600 : resolutionSecond;
-      this.di.manageDataManager.getSyslogAnalyzer(this.getISODate(scope.syslogAnalyzer.startTime), this.getISODate(scope.syslogAnalyzer.endTime), resolutionSecond).then((res) => {
-        scope.syslogAnalyzer.dataModel = res;
-        scope.syslogAnalyzer.loading = false;
-        setSyslogChartLineData();
-      }, () => {
-        scope.syslogAnalyzer.dataModel = [];
-        scope.syslogAnalyzer.loading = false;
-        setSyslogChartLineData();
-      });
-    },true));
-
-    let filebeatTimerangeHasChanged = false;
-    unSubscribers.push(this.di.$scope.$watchGroup(['filebeatAnalyzer.startTime', 'filebeatAnalyzer.endTime', 'filebeatAnalyzer.selectedOption'], () => {
-      if(!filebeatTimerangeHasChanged) {
-        filebeatTimerangeHasChanged = true;
-        return;
-      }
-
-      scope.filebeatAnalyzer.loading = true;
-
-      let resolutionSecond = Math.floor((scope.filebeatAnalyzer.endTime.getTime() - scope.filebeatAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
-      resolutionSecond = resolutionSecond < 30 ? 30 : resolutionSecond > 3600 ? 3600 : resolutionSecond;
-      this.di.manageDataManager.getFilebeatAnalyzer(scope.filebeatAnalyzer.selectedOption.value, this.getISODate(scope.filebeatAnalyzer.startTime), this.getISODate(scope.filebeatAnalyzer.endTime), resolutionSecond).then((res) => {
-        scope.filebeatAnalyzer.dataModel = res;
-        scope.filebeatAnalyzer.loading = false;
-        setFilebeatChartLineData();
-      }, () => {
-        scope.filebeatAnalyzer.dataModel = [];
-        scope.filebeatAnalyzer.loading = false;
-        setFilebeatChartLineData();
-      });
-    },true));
+    // let filebeatTimerangeHasChanged = false;
+    // unSubscribers.push(this.di.$scope.$watchGroup(['filebeatAnalyzer.startTime', 'filebeatAnalyzer.endTime', 'filebeatAnalyzer.selectedOption'], () => {
+    //   if(!filebeatTimerangeHasChanged) {
+    //     filebeatTimerangeHasChanged = true;
+    //     return;
+    //   }
+    //
+    //   scope.filebeatAnalyzer.loading = true;
+    //
+    //   let resolutionSecond = Math.floor((scope.filebeatAnalyzer.endTime.getTime() - scope.filebeatAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
+    //   resolutionSecond = resolutionSecond < 30 ? 30 : resolutionSecond > 3600 ? 3600 : resolutionSecond;
+    //   this.di.manageDataManager.getFilebeatAnalyzer(scope.filebeatAnalyzer.selectedOption.value, this.getISODate(scope.filebeatAnalyzer.startTime), this.getISODate(scope.filebeatAnalyzer.endTime), resolutionSecond).then((res) => {
+    //     scope.filebeatAnalyzer.dataModel = res;
+    //     scope.filebeatAnalyzer.loading = false;
+    //     setFilebeatChartLineData();
+    //   }, () => {
+    //     scope.filebeatAnalyzer.dataModel = [];
+    //     scope.filebeatAnalyzer.loading = false;
+    //     setFilebeatChartLineData();
+    //   });
+    // },true));
 
     scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
