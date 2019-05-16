@@ -533,7 +533,7 @@ export class appService {
   }
 
   getClusterInterfaceAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
-    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/mgmg_ports/' + deviceId + '/' + startTime + '/' + endTime + '/' + resolutionSecond;
+    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/mgmt_ports/' + deviceId + '/' + startTime + '/' + endTime + '/' + resolutionSecond;
   }
 
   getNginxTypeAnalyzerUrl(type, startTime, endTime) {
