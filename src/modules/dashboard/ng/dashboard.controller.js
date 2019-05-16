@@ -79,7 +79,7 @@ export class DashboardController {
 	    cpu: {
 		    'begin_time': begin_time,
 		    'end_time': end_time,
-		    'step': 90,
+		    'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
 		    'origin_begin_time': begin_time,
 		    'origin_end_time': end_time,
 		    'analyzer': [],
@@ -89,7 +89,7 @@ export class DashboardController {
 	    memory: {
 		    'begin_time': begin_time,
 		    'end_time': end_time,
-		    'step': 90,
+		    'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
 		    'origin_begin_time': begin_time,
 		    'origin_end_time': end_time,
 		    'analyzer': [],
@@ -112,7 +112,7 @@ export class DashboardController {
 		    cpu: {
 			    'begin_time': begin_time,
 			    'end_time': end_time,
-			    'step': 90,
+			    'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
 			    'origin_begin_time': begin_time,
 			    'origin_end_time': end_time,
 			    'analyzer': [],
@@ -122,7 +122,7 @@ export class DashboardController {
 		    memory: {
 			    'begin_time': begin_time,
 			    'end_time': end_time,
-			    'step': 90,
+			    'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
 			    'origin_begin_time': begin_time,
 			    'origin_end_time': end_time,
 			    'analyzer': [],
@@ -132,7 +132,7 @@ export class DashboardController {
         interface: {
           'begin_time': begin_time,
           'end_time': end_time,
-          'step': 90,
+          'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
           'origin_begin_time': begin_time,
           'origin_end_time': end_time,
           'analyzer': [],
@@ -274,6 +274,11 @@ export class DashboardController {
 		    this.di.$scope.dashboardModel.controller.memory.end_time = scope.dashboardModel.controller.memory.origin_end_time;
 		    this.di.$scope.dashboardModel.controller.memory.step = Math.floor((scope.dashboardModel.controller.memory.origin_end_time.getTime() - scope.dashboardModel.controller.memory.origin_begin_time) / (GRID_NUM * 1000));
 	    }
+      else if (type === 'controller-interface') {
+        this.di.$scope.dashboardModel.controller.interface.begin_time = scope.dashboardModel.controller.interface.origin_begin_time;
+        this.di.$scope.dashboardModel.controller.interface.end_time = scope.dashboardModel.controller.interface.origin_end_time;
+        this.di.$scope.dashboardModel.controller.interface.step = Math.floor((scope.dashboardModel.controller.interface.origin_end_time.getTime() - scope.dashboardModel.controller.interface.origin_begin_time) / (GRID_NUM * 1000));
+      }
     }
 	
     this.di.$scope.chartSetting = (type) => {
@@ -298,6 +303,15 @@ export class DashboardController {
 			    endTime = this.di.$scope.dashboardModel.controller.memory.end_time;
           selectedData = this.di.$scope.dashboardModel.controller.memory.selectedData;
 			    break;
+        case 'controller-interface':
+          dataModel['cluster'].forEach((controller) => {
+            chartDataArr.push(controller.id);
+          });
+
+          beginTime = this.di.$scope.dashboardModel.controller.interface.begin_time;
+          endTime = this.di.$scope.dashboardModel.controller.interface.end_time;
+          selectedData = this.di.$scope.dashboardModel.controller.interface.selectedData;
+          break;
 		    case 'device-cpu':
           dataModel['devices'].forEach((item, index) =>{
             chartDataArr.push(item.switch_name);
@@ -370,6 +384,15 @@ export class DashboardController {
 							scope.dashboardModel.controller.memory.end_time = res.data.endTime;
 							scope.dashboardModel.controller.memory.step = Math.floor((scope.dashboardModel.controller.memory.origin_end_time.getTime() - scope.dashboardModel.controller.memory.origin_begin_time) / (GRID_NUM * 1000));
 							break;
+            case 'controller-interface':
+              scope.dashboardModel.controller.interface.selectedData = selectedData;
+
+              scope.dashboardModel.controller.interface.origin_begin_time = res.data.beginTime;
+              scope.dashboardModel.controller.interface.origin_end_time = res.data.endTime;
+              scope.dashboardModel.controller.interface.begin_time = res.data.beginTime;
+              scope.dashboardModel.controller.interface.end_time = res.data.endTime;
+              scope.dashboardModel.controller.interface.step = Math.floor((scope.dashboardModel.controller.interface.origin_end_time.getTime() - scope.dashboardModel.controller.interface.origin_begin_time) / (GRID_NUM * 1000));
+              break;
 						case 'device-cpu':
               scope.dashboardModel.cpu.selectedData = selectedData;
 							
@@ -583,24 +606,8 @@ export class DashboardController {
 		  this.di.$scope.clusterCpuChartConfig.labels = labelsArr;
 		  this.di.$scope.clusterCpuChartConfig.options = options;
 		  this.di.$scope.clusterCpuChartConfig.series = series;
-		  this.di.$scope.clusterCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.controller.cpu.analyzer, scope.clusterCpuPieChartConfig);
+		  this.di.$scope.clusterCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.controller.cpu.analyzer);
 		  this.di.$scope.clusterCpuChartConfig.onHover = lineChartOnHover();
-		
-		  // set pie chart data with first dataset and first data
-		  if(dataArr.length > 0 && labelsArr.length > 0) {
-			  let xLabel = labelsArr[0];
-        let data,title;
-
-        analyzer.forEach((controller) => {
-          if(controller.analyzer.length > 0 && !data) {
-            data = controller.analyzer[0];
-            title = controller.name + ' - ' + formatLocalTime(xLabel);
-          }
-        })
-
-			  setCpuPieChartData(data,title,this.di.$scope.clusterCpuPieChartConfig)
-		  }
-		  
 	  };
 	
 	  let setClusterMemoryChartData = () => {
@@ -673,22 +680,8 @@ export class DashboardController {
 		  this.di.$scope.clusterMemoryChartConfig.labels = labelsArr;
 		  this.di.$scope.clusterMemoryChartConfig.options = options;
 		  this.di.$scope.clusterMemoryChartConfig.series = series;
-		  this.di.$scope.clusterMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.controller.memory.analyzer, scope.clusterMemoryPieChartConfig);
+		  this.di.$scope.clusterMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.controller.memory.analyzer);
 		  this.di.$scope.clusterMemoryChartConfig.onHover = lineChartOnHover();
-		
-		  if(dataArr.length > 0 && labelsArr.length > 0) {
-			  let xLabel = labelsArr[0];
-        let data,title;
-
-        analyzer.forEach((controller) => {
-          if(controller.analyzer.length > 0 && !data) {
-            data = controller.analyzer[0];
-            title = controller.name + ' - ' + formatLocalTime(xLabel);
-          }
-        })
-			
-			  setMemoryPieChartData(data, title, this.di.$scope.clusterMemoryPieChartConfig)
-		  }
 	  };
 
     let setClusterInterfaceChartData = () => {
@@ -767,20 +760,6 @@ export class DashboardController {
       this.di.$scope.clusterInterfaceChartConfig.series = series;
       this.di.$scope.clusterInterfaceChartConfig.onClick = interfaceLineChartOnClick(scope.dashboardModel.controller.interface.analyzer, scope.clusterInterfaceBarChartConfig);
       this.di.$scope.clusterInterfaceChartConfig.onHover = lineChartOnHover();
-
-      if(dataArr.length > 0 && labelsArr.length > 0) {
-        let xLabel = labelsArr[0];
-        let data,title;
-
-        analyzer.forEach((controller) => {
-          if(controller.analyzer.length > 0 && !data) {
-            data = controller.analyzer[0];
-            title = controller.name + ' - ' + formatLocalTime(xLabel);
-          }
-        })
-
-        setInterfaceBarChartData(data, title, this.di.$scope.clusterInterfaceBarChartConfig)
-      }
     };
 
 	  let setSwitchCpuChartData = () => {
@@ -851,22 +830,8 @@ export class DashboardController {
 		  this.di.$scope.switchCpuChartConfig.labels = labelsArr;
 		  this.di.$scope.switchCpuChartConfig.options = options;
 		  this.di.$scope.switchCpuChartConfig.series = series;
-		  this.di.$scope.switchCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.cpu.analyzer, scope.switchCpuPieChartConfig);
+		  this.di.$scope.switchCpuChartConfig.onClick = cpuChartOnClick(scope.dashboardModel.cpu.analyzer);
 		  this.di.$scope.switchCpuChartConfig.onHover = lineChartOnHover();
-		
-		  if(dataArr.length > 0 && labelsArr.length > 0) {
-			  let xLabel = labelsArr[0];
-        let data,title;
-
-        analyzer.forEach((controller) => {
-          if(controller.analyzer.length > 0 && !data) {
-            data = controller.analyzer[0];
-            title = controller.name + ' - ' + formatLocalTime(xLabel);
-          }
-        })
-
-			  setCpuPieChartData(data, title, this.di.$scope.switchCpuPieChartConfig)
-		  }
 	  };
 	
 	  let setSwitchMemoryChartData = () => {
@@ -939,22 +904,8 @@ export class DashboardController {
 		  this.di.$scope.switchMemoryChartConfig.labels = labelsArr;
 		  this.di.$scope.switchMemoryChartConfig.options = options;
 		  this.di.$scope.switchMemoryChartConfig.series = series;
-		  this.di.$scope.switchMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.memory.analyzer, scope.switchMemoryPieChartConfig);
+		  this.di.$scope.switchMemoryChartConfig.onClick = memoryChartOnClick(scope.dashboardModel.memory.analyzer);
 		  this.di.$scope.switchMemoryChartConfig.onHover = lineChartOnHover();
-		
-		  if(dataArr.length > 0 && labelsArr.length > 0){
-			  let xLabel = labelsArr[0];
-        let data,title;
-
-        analyzer.forEach((controller) => {
-          if(controller.analyzer.length > 0 && !data) {
-            data = controller.analyzer[0];
-            title = controller.name + ' - ' + formatLocalTime(xLabel);
-          }
-        })
-			
-			  setMemoryPieChartData(data, title, this.di.$scope.switchMemoryPieChartConfig)
-		  }
 	  };
 
     // let setSwitchDiskChartData = () => {
@@ -1176,7 +1127,7 @@ export class DashboardController {
 		  }
 	  };
 	
-	  let cpuChartOnClick = function(analyzer, pieChartModel) {
+	  let cpuChartOnClick = function(analyzer) {
 		  return function(evt, chart) { // point element
 			  // 1.element hover event
 			  let element = chart.getElementAtEvent(evt);
@@ -1189,14 +1140,12 @@ export class DashboardController {
 				  let data = analyzer[datasetIndex].analyzer[index];
 				  let title = analyzer[datasetIndex].name + ' - ' + formatLocalTime(xLabel);
 				  
-				  setCpuPieChartData(data, title, pieChartModel)
-				  
-				  scope.$apply();
+				  setCpuPieChartData(evt, data, title)
 			  }
 		  }
 	  }
 	  
-	  let memoryChartOnClick = function(analyzer, pieChartModel) {
+	  let memoryChartOnClick = function(analyzer) {
       return function(evt, chart) { // point element
         // 1.element hover event
         let element = chart.getElementAtEvent(evt);
@@ -1209,14 +1158,12 @@ export class DashboardController {
           let data = analyzer[datasetIndex].analyzer[index];
           let title = analyzer[datasetIndex].name + ' - ' + formatLocalTime(xLabel)
 
-          setMemoryPieChartData(data, title, pieChartModel)
-
-          scope.$apply();
+          setMemoryPieChartData(evt, data, title)
         }
       }
     }
 
-    let interfaceLineChartOnClick = function(analyzer, barChartModel) {
+    let interfaceLineChartOnClick = function(analyzer) {
       return function(evt, chart) { // point element
         // 1.element hover event
         let element = chart.getElementAtEvent(evt);
@@ -1229,14 +1176,12 @@ export class DashboardController {
           let data = analyzer[datasetIndex].analyzer[index];
           let title = analyzer[datasetIndex].name + ' - ' + formatLocalTime(xLabel)
 
-          setInterfaceBarChartData(data, title, barChartModel)
-
-          scope.$apply();
+          setInterfaceBarChartData(evt, data, title)
         }
       }
     }
 
-    let diskChartOnClick = function(analyzer, pieChartModel) {
+    let diskChartOnClick = function(analyzer) {
       return function(evt, chart) { // point element
         // 1.element hover event
         let element = chart.getElementAtEvent(evt);
@@ -1249,15 +1194,14 @@ export class DashboardController {
           let data = analyzer[datasetIndex].analyzer[index];
           let title = analyzer[datasetIndex].name + ' - ' + formatLocalTime(xLabel)
 
-          setDiskPieChartData(data, title, pieChartModel)
-
-          scope.$apply();
+          setDiskPieChartData(evt, data, title)
         }
       }
     }
 
-	  let setCpuPieChartData = (data, title, pieChartConfig) => {
+	  let setCpuPieChartData = (evt, data, title) => {
 	    // initial
+      let pieChartConfig = {};
       pieChartConfig.data = [];
       pieChartConfig.labels = [];
 
@@ -1302,12 +1246,6 @@ export class DashboardController {
 		  chartData.datasets.push(dataset);
 		
 		  let pieOptions = {
-			  plugins: {
-				  deferred: {
-					  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-					  delay: 1500      // delay of 500 ms after the canvas is considered inside the viewport
-				  }
-			  },
 			  title: {
 				  text: title,
 			  },
@@ -1319,15 +1257,19 @@ export class DashboardController {
           }
         }
 		  }
-		
+
 		  pieChartConfig.data = dataset.data;
 		  pieChartConfig.labels = chartData.labels;
 		  pieChartConfig.colors = dataset.backgroundColor;
 		  pieChartConfig.options = pieOptions;
+		  pieChartConfig.type = 'pie';
+
+      DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
 	  }
 	
-	  let setMemoryPieChartData = (data, title, pieChartConfig) => {
+	  let setMemoryPieChartData = (evt, data, title) => {
       // initial
+      let pieChartConfig = {};
       pieChartConfig.data = [];
       pieChartConfig.labels = [];
 
@@ -1363,12 +1305,6 @@ export class DashboardController {
 		  chartData.datasets.push(dataset);
 		
 		  let options = {
-			  plugins: {
-				  deferred: {
-					  yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-					  delay: 1500      // delay of 500 ms after the canvas is considered inside the viewport
-				  }
-			  },
 			  title: {
 				  text: title,
 			  },
@@ -1385,10 +1321,13 @@ export class DashboardController {
 		  pieChartConfig.labels = chartData.labels;
 		  pieChartConfig.colors = dataset.backgroundColor;
 		  pieChartConfig.options = options;
+
+      DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
 	  }
 
-    let setDiskPieChartData = (data, title, pieChartConfig) => {
+    let setDiskPieChartData = (evt, data, title) => {
       // initial
+      let pieChartConfig = {};
       pieChartConfig.data = [];
       pieChartConfig.labels = [];
 
@@ -1427,9 +1366,11 @@ export class DashboardController {
       pieChartConfig.labels = chartData.labels;
       pieChartConfig.colors = dataset.backgroundColor;
       pieChartConfig.options = options;
+
+      DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
     }
 
-    let setInterfaceBarChartData = (interfaceData, title, barChartConfig) => {
+    let setInterfaceBarChartData = (evt, interfaceData, title, barChartConfig) => {
       let category= [], rxs = [], pkgRecv = [], pgkSend = [], labelsArr = [];
 
       // normal packages
@@ -2294,9 +2235,9 @@ export class DashboardController {
       deffe.resolve([]);
       return deffe.promise;
     }
-    let startTime = this.getISODate(this.di.$scope.dashboardModel.controller.memory.begin_time);
-    let endTime = this.getISODate(this.di.$scope.dashboardModel.controller.memory.end_time);
-    let solution_second = this.di.$scope.dashboardModel.controller.memory.step;//3600;//this.getResolutionSecond(startTime, endTime);
+    let startTime = this.getISODate(this.di.$scope.dashboardModel.controller.interface.begin_time);
+    let endTime = this.getISODate(this.di.$scope.dashboardModel.controller.interface.end_time);
+    let solution_second = this.di.$scope.dashboardModel.controller.interface.step;//3600;//this.getResolutionSecond(startTime, endTime);
     let deferredArr = [];
     clusters.forEach((cluster) => {
       let defer = this.di.$q.defer();

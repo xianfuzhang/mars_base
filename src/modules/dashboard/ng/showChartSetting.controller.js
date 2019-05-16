@@ -26,6 +26,9 @@ export class ShowChartSettingController {
 			case 'controller-memory':
 				chartTitle = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_MEMORY.TITLE");
 				break;
+      case 'controller-interface':
+        chartTitle = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_INTERFACE.TITLE");
+        break;
 			case 'device-cpu':
 				chartTitle = this.translate("MODULES.DASHBOARD.CHART.SWITCH_CPU.TITLE");
 				break;
