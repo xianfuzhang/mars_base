@@ -550,7 +550,7 @@ export class ElasticsearchController {
             value.borderColor = chartService.helpers.color(value.borderColor).alpha(1).rgbString();
             value.backgroundColor = chartService.helpers.color(value.backgroundColor).alpha(0.2).rgbString(),
             value.borderWidth = chartStyles.lines.borderWidth;
-            value.pointRadius = 1;
+            value.pointRadius = 2;
           })
         
           chart.update();
