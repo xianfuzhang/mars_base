@@ -63,7 +63,8 @@ export class DonutTopo {
     	g.attr("transform", `translate(${scope.topo_width/ 2},${scope.topo_height / 2})`);
     	g.selectAll('g').remove();
     	g.selectAll('path').remove();
-
+    	
+    	updatePortArcData();
     	drawOuterDonut();
     	drawInnerDonut();
     	drawPortLinks();
