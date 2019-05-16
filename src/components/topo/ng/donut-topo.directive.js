@@ -37,6 +37,7 @@ export class DonutTopo {
 		scope.monitorLinkColors =  {}; // 通过事件changeLinksColor更新
 		scope.monitorState = false; //开始监控
 		scope.searchState = false;
+		scope.searchPaths = []; //保存路径搜索时返回的路径
     scope.edgeSwitches = []; //保存路径搜索时主机连接的交换机和端口号
 		scope.switches = scope.spines.concat(scope.leafs, scope.others);
 		scope.topo_width = element[0].clientWidth;
@@ -63,12 +64,13 @@ export class DonutTopo {
     	g.attr("transform", `translate(${scope.topo_width/ 2},${scope.topo_height / 2})`);
     	g.selectAll('g').remove();
     	g.selectAll('path').remove();
-    	
+
     	updatePortArcData();
     	drawOuterDonut();
     	drawInnerDonut();
     	drawPortLinks();
     	displayOuterLabels();
+    	if (scope.searchState && scope.searchPaths.length > 0)  showPathSearchResult(scope.searchPaths);
     };
 	
 		let prepareDataHandle = () => {
@@ -647,6 +649,7 @@ export class DonutTopo {
     unsubscribers.push(this.di.$rootScope.$on('show_path',($event, param)=>{
     	scope.searchState = true;
     	clearPathSearch();
+    	scope.searchPaths = param;
     	showPathSearchResult(param);
     }));
     unsubscribers.push(this.di.$rootScope.$on('hide_path',()=>{
