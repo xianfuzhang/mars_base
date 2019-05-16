@@ -92,6 +92,9 @@ export class ForceTopo {
         return newDeviceIds[0] + ':' + ports[0] + '_' + newDeviceIds[1] + ':' + ports[1];
       };
 
+      scope.deviceLinkDict = {};
+
+      //this method only can used by device link to device !important
       let formatLinks = (links) => {
         this.formated_links = [];
         this.di._.forEach(links, (link) => {
@@ -108,6 +111,20 @@ export class ForceTopo {
               'value': 1,
               'link': link
             });
+
+            if(scope.deviceLinkDict[link.src.device]){
+              scope.deviceLinkDict[link.src.device].push(linkId);
+            } else {
+              scope.deviceLinkDict[link.src.device] = [];
+              scope.deviceLinkDict[link.src.device].push(linkId);
+            }
+
+            if(scope.deviceLinkDict[link.dst.device]){
+              scope.deviceLinkDict[link.dst.device].push(linkId);
+            } else {
+              scope.deviceLinkDict[link.dst.device] = [];
+              scope.deviceLinkDict[link.dst.device].push(linkId);
+            }
           }
         })
       };
@@ -149,7 +166,7 @@ export class ForceTopo {
         genTopo();
       };
 
-      //TODO 看来只有吧path过来的node和link都加到原来的node中，否则新开的话，会有各种各样的问题，蛋疼
+      //目前看 只要把所有节点都重新初始化一遍就可以
       this.simulation = null;
       this.linkNode = null;
       this.deviceNode = null;
@@ -225,8 +242,6 @@ export class ForceTopo {
 
       scope.curSelectedDeviceId = null;
 
-
-
       let addHostSelectEffect = (node) => {
         // this.di.d3.select(node).select('rect').attr('fill','#d5f6ff')
         this.di.d3
@@ -242,7 +257,23 @@ export class ForceTopo {
           .select(node)
           .select('rect')
           .classed('node-select', true)
-          .classed('node-unselect', false)
+          .classed('node-unselect', false);
+
+        let deviceId = node.getAttribute('deviceId');
+        let deviceLinks = scope.deviceLinkDict[deviceId];
+        console.log(scope.deviceLinkDict);
+        console.log(deviceId);
+        if(deviceLinks && Array.isArray(deviceLinks)){
+          console.log(deviceLinks);
+          let self = this;
+          deviceLinks.forEach((linkid)=>{
+            console.log('linkid==>' + linkid)
+            self.linkNode.select(function(d, i) {
+              return d.id === linkid?this:null;
+            }).attr('stroke-width', 4)
+          })
+
+        }
       };
 
       let removeSelectEffect = () => {
@@ -250,7 +281,10 @@ export class ForceTopo {
         this.deviceNode
           .select('rect')
           .classed('node-select', false)
-          .classed('node-unselect', true)
+          .classed('node-unselect', true);
+
+        this.linkNode.attr('stroke-width', 2);
+
         if(this.hostNode){
           this.hostNode
             .select('rect')
@@ -281,13 +315,8 @@ export class ForceTopo {
 
 
       function clickHandler() {
-        console.log(DI.d3.mouse(this))
         DI.d3.event.stopPropagation();
         removeSelectEffect();
-
-        // if (scope.curSelectedDeviceId !== null) {
-        //   removeSelectEffect();
-        // }
 
 
         if (scope.topoSetting.show_tooltips) {
@@ -337,19 +366,18 @@ export class ForceTopo {
           .selectAll("line")
           .data(scope._links)
           .join("line").attr('linkid', d => d.id)
-          .attr('stroke-width', 2)
-          .on('mouseover', function () {
-            let line = self.di.d3.select(this);
-            line.transition()
-              .duration(200)
-              .attr('stroke-width', '3')
-          })
-          .on('mouseout', function () {
-            let line = self.di.d3.select(this);
-            line.transition()
-              .duration(200)
-              .attr('stroke-width', '2')
-          });
+          // .on('mouseover', function () {
+          //   let line = self.di.d3.select(this);
+          //   line.transition()
+          //     .duration(200)
+          //     .attr('stroke-width', '3')
+          // })
+          // .on('mouseout', function () {
+          //   let line = self.di.d3.select(this);
+          //   line.transition()
+          //     .duration(200)
+          //     .attr('stroke-width', '2')
+          // });
       };
 
       let remove_origin_link = () =>{
@@ -758,10 +786,7 @@ export class ForceTopo {
 
 
         this.simulation = DI.d3.forceSimulation(scope._nodes)
-        // this.simulation.nodes(scope._nodes.concat(hostObjs));
           .force("link", DI.d3.forceLink(scope._links).id(d => d.id).distance(d => {
-            // console.log(' =======  show path')
-            // console.log(scope.distance)
             return scope.distance;
           }))
           .force("charge", DI.d3.forceManyBody().strength(scope.strength))
@@ -775,24 +800,6 @@ export class ForceTopo {
         add_origin_link();
         add_origin_nodes();
         simulation_origin_tick_callback();
-
-        // this.simulation.on("tick", () => {
-        //   this.linkNode
-        //     .attr("x1", d => _calcPoint_X(d.source.x))
-        //     .attr("y1", d => _calcPoint_Y(d.source.y))
-        //     .attr("x2", d => _calcPoint_X(d.target.x))
-        //     .attr("y2", d => _calcPoint_Y(d.target.y));
-        //
-        //   this.deviceNode.attr('transform', d => {
-        //     let x, y;
-        //
-        //     x = _calcPoint_X(d.x);
-        //     y = _calcPoint_Y(d.y);
-        //
-        //     return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
-        //   });
-        // });
-
 
         svg.select('#path_link').remove();
         svg.select('#path_host').remove();
@@ -863,14 +870,6 @@ export class ForceTopo {
             removeSelectEffect();
             DI.$rootScope.$emit('topo_unselect');
 
-            // if (scope.curSelectedDeviceId !== null) {
-            //   removeSelectEffect();
-            //   DI.$rootScope.$emit('topo_unselect');
-            // }
-
-            // if (scope.topoSetting.show_tooltips) {
-            //   DI.$rootScope.$emit("hide_tooltip");
-            // }
             let mac = this.getAttribute('host_mac');
 
             DI.$rootScope.$emit("host_select",{event:calc_mouse_location(this), id: mac});
@@ -940,24 +939,26 @@ export class ForceTopo {
           })
           .on('mouseover', function () {
             let line = self.di.d3.select(this);
-            line.transition()
-              .duration(200)
-              .attr('stroke-width', '3')
-
-
+            console.log(line.attr('stroke-width'));
+            if (line.attr('stroke-width') !== '4'){
+              line.transition()
+                .duration(200)
+                .attr('stroke-width', '3');
+            }
             let linkid = this.getAttribute('linkid');
             if (scope.topoSetting.show_monitor) {
-
-
               let res = _completeDeviceName4FlowInfo(links_color[linkid]);
               DI.$rootScope.$emit("show_link_tooltip", {event: calc_linkmouse_location(this), value: res});
             }
           })
           .on('mouseout', function () {
             let line = self.di.d3.select(this);
-            line.transition()
-              .duration(200)
-              .attr('stroke-width', '2')
+            if (line.attr('stroke-width') !== '4'){
+              line.transition()
+                .duration(200)
+                .attr('stroke-width', '2');
+            }
+
 
             DI.$rootScope.$emit("hide_link_tooltip");
           });
@@ -966,7 +967,6 @@ export class ForceTopo {
 
       unsubscribers.push(this.di.$rootScope.$on('clearLinksColor', ($event) => {
         this.linkNode.classed('force-topo__line-normal', true).attr('stroke-width', null).attr('stroke', null);
-        // attr('stroke', '#999').attr('stroke-width',1);
       }));
 
       unsubscribers.push(scope.$watch('topoSetting.show_tooltips', (newValue, oldValue) => {
@@ -1011,7 +1011,7 @@ export class ForceTopo {
 
       scope.$on('$destroy', () => {
 
-        // console.log('===<< forcetopo start to un bind resize');
+        console.log('===<< forcetopo start to $destroy');
         // angular.element(this.di.$window).off('resize');
         // element = null;
 
