@@ -36,6 +36,8 @@ export class DonutTopo {
 		scope.links = scope.links || [];
 		scope.monitorLinkColors =  {}; // 通过事件changeLinksColor更新
 		scope.monitorState = false; //开始监控
+		scope.searchState = false;
+    scope.edgeSwitches = []; //保存路径搜索时主机连接的交换机和端口号
 		scope.switches = scope.spines.concat(scope.leafs, scope.others);
 		scope.topo_width = element[0].clientWidth;
 		scope.topo_height = element[0].clientHeight;
@@ -78,24 +80,29 @@ export class DonutTopo {
 	      .value(function(d) {return  d.ports && d.ports.length ||1; });
 	    scope.switchArcData = pie(scope.switches);
 
-	    scope.portArcData = [];
-			let switchObject = {}, i = 0;
+	    scope.switchObject = {};
 			scope.switches.forEach(function(sw) {
-		    switchObject[sw.id] = sw;
-		    switchObject[sw.id]['linkPorts'] = [];
+		    scope.switchObject[sw.id] = sw;
+		    scope.switchObject[sw.id]['linkPorts'] = [];
 		  });
+		  let i = 0;
 		  while (i < scope.links.length) {
-		  	if (switchObject[scope.links[i]['src']['device']] && !switchObject[scope.links[i]['src']['device']]['linkPorts'].includes(scope.links[i]['src']['port'])) {
-		  		switchObject[scope.links[i]['src']['device']]['linkPorts'].push(scope.links[i]['src']['port']);
+		  	if (scope.switchObject[scope.links[i]['src']['device']] && !scope.switchObject[scope.links[i]['src']['device']]['linkPorts'].includes(scope.links[i]['src']['port'])) {
+		  		scope.switchObject[scope.links[i]['src']['device']]['linkPorts'].push(scope.links[i]['src']['port']);
 		  	}
-		    if (switchObject[scope.links[i]['dst']['device']] && !switchObject[scope.links[i]['dst']['device']]['linkPorts'].includes(scope.links[i]['dst']['port'])) {
-		    	switchObject[scope.links[i]['dst']['device']]['linkPorts'].push(scope.links[i]['dst']['port']);	
+		    if (scope.switchObject[scope.links[i]['dst']['device']] && !scope.switchObject[scope.links[i]['dst']['device']]['linkPorts'].includes(scope.links[i]['dst']['port'])) {
+		    	scope.switchObject[scope.links[i]['dst']['device']]['linkPorts'].push(scope.links[i]['dst']['port']);	
 		    }
 		    i++;
 		  }
-		  for(let key in switchObject) {
+		  updatePortArcData();
+		};
+
+		let updatePortArcData = () => {
+			scope.portArcData = [];
+			for(let key in scope.switchObject) {
 		  	let switchArc, startArc = 0, endArc = 0, t = 0, portLen = 0;
-		  	switchObject[key]['linkPorts'].sort(function(a, b){ return a - b ;});
+		  	scope.switchObject[key]['linkPorts'].sort(function(a, b){ return a - b ;});
 		  	for(let s = 0; s < scope.switchArcData.length; s++){
 		      if (key === scope.switchArcData[s]['data']['id']) {
 		        switchArc = scope.switchArcData[s];
@@ -104,11 +111,11 @@ export class DonutTopo {
 		    }
 				startArc = switchArc.startAngle + OUTER_ARC_PADDING * 3 / 4; //此处由于outer arc padding存在，需要手动微调
 		    endArc = switchArc.endAngle - OUTER_ARC_PADDING * 3 / 4;
-		    portLen = switchObject[key]['linkPorts'].length;
+		    portLen = scope.switchObject[key]['linkPorts'].length;
 		    if (portLen > 0) t = (endArc - startArc) / portLen;
-		    switchObject[key]['linkPorts'].forEach((port, i) => {
+		    scope.switchObject[key]['linkPorts'].forEach((port, i) => {
 		      let arc = {
-		        'data': {'port': port, 'device': switchObject[key]['id']},
+		        'data': {'port': port, 'device': scope.switchObject[key]['id']},
 		        'index': '' + key + i,
 		        'value': 1,
 		        'startAngle': startArc + i * t,
@@ -117,23 +124,44 @@ export class DonutTopo {
 		      scope.portArcData.push(arc);
 		    });
 		  }
+
+		  scope.portCoordinateMap = new Map();
+		  scope.portArcData.forEach((port) => {
+		  	let centerAngle = (port.startAngle + port.endAngle) / 2;
+		    scope.portCoordinateMap.set(port.data.device + port.data.port, 
+		    	{
+		    		x: (scope.outerRadius - 40) * Math.sin(centerAngle), 
+		    		y: -(scope.outerRadius - 40) * Math.cos(centerAngle), 
+		    		device: port.data.device, 
+		    		port: port.data.port
+		    	}
+		    );
+		  });
 		};
 
     let drawOuterDonut = () => {
     	let _this = this;
+    	const switchArc = this.di.d3.arc()
+	        .innerRadius(scope.outerRadius - 30)
+	        .outerRadius(scope.outerRadius);
+
 	    const outerPaths = g.append("g")
 	    	.classed('outer', true)
 	      .selectAll('path')
 	      .data(scope.switchArcData)
 	      .enter()
 	      .append('path')
-	      .attr('d', this.di.d3.arc()
-	        .innerRadius(scope.outerRadius - 30)
-	        .outerRadius(scope.outerRadius))
+	      .attr('d', switchArc)
 	      .attr('stroke', '#1B4A78') // 弧边颜色
 	      .attr('fill', '#388FB8')
 	      //each在这里主要处理arc path，arc的path会影响text沿着arc显示，通过each处理arc，截取外层arc段绘制一个新的path给text使用
 	      .each(function(d, i){
+	      	let centroid = switchArc.centroid(d);
+	      	centroid[0] = centroid[0] * 1.28;
+	        centroid[1] = centroid[1] * 1.28;
+	        d['centr_x'] = centroid[0];
+	        d['centr_y'] = centroid[1];
+
 	        const firstArcSection = /(^.+?)L/;
 	        let newArc = firstArcSection.exec(_this.di.d3.select(this).attr("d") )[1];
 	        newArc = newArc.replace(/,/g , " ");
@@ -150,11 +178,12 @@ export class DonutTopo {
     	
     let drawInnerDonut = () => {
     	let _this = this;
-    	scope.portArcArr = [];
+    	//scope.portArcArr = [];
     	const portArc = this.di.d3.arc()
         .innerRadius(scope.outerRadius - 40)
         .outerRadius(scope.outerRadius - 30);
 
+       g.select('g.inner').remove();
       const innerPaths = g.append('g')
       	.classed('inner', true)
 	      .selectAll('path')
@@ -164,7 +193,7 @@ export class DonutTopo {
 	      .attr('d', portArc)
 	      .attr('stroke', '#1B4A78')
 	      .attr('fill', '#51A7CD')
-	      .each(function(d){
+	      /*.each(function(d){
 	        //获取所有port arc中心点
 	        let centroid = portArc.centroid(d);
 	        centroid[0] = centroid[0] * 0.98;
@@ -172,22 +201,20 @@ export class DonutTopo {
 	        d.data['x'] = centroid[0];
 	        d.data['y'] = centroid[1];
 	        scope.portArcArr.push(d);
-	      })
+	      })*/
 	      .on('click', clickInnerDonut)
 	      .on('mouseover', mouseoverInnerDonut)
 	      .on('mouseout', mouseoutInnerDonut);
     };
 
     let drawPortLinks = () => {
-		  let linkMapData = [], portCoordinateMap = new Map();
-		  scope.portArcArr.forEach((port) => {
-		    portCoordinateMap.set(port.data.device + port.data.port, 
-		    	{x: port.data.x, y: port.data.y, device: port.data.device, port: port.data.port});
-		  });
+		  let linkMapData = [];
 		  scope.links.forEach((link) => {
 		    linkMapData.push({
-		      source: portCoordinateMap.get(link.src.device + link.src.port),
-		      target: portCoordinateMap.get(link.dst.device + link.dst.port)
+		      source: scope.portCoordinateMap.get(link.src.device + link.src.port)
+		      			 || {'x': 0, 'y': 0, 'device': link.src.device, 'port': link.src.port},
+		      target: scope.portCoordinateMap.get(link.dst.device + link.dst.port)
+		      			 || {'x': 0, 'y': 0, 'device': link.dst.device, 'port': link.dst.port}
 		    });
 		  });
 
@@ -198,6 +225,7 @@ export class DonutTopo {
 		    return drawing;
 		  };
 
+		  g.select('g.links').remove();
 		  const linkPaths = g.append('g')
 		  	.classed('links', true)
 		    .selectAll('path')
@@ -211,9 +239,7 @@ export class DonutTopo {
 		    })
 		    .attr('stroke-width', 2)
 		    .attr('fill', 'none')
-		    .on('click', function(d){
-	      	console.log(d);
-	      });
+		    ;
     };
 
     let displayOuterLabels = () => {
@@ -288,27 +314,27 @@ export class DonutTopo {
     };
 
     let mouseoverInnerDonut = (d) => {
-    	this.di.d3.select('g.links')
+    	let tooltips = g.append('g').attr('class', 'tooltips');
+    	g.select('g.links')
     		.selectAll('path')
     		.each((ld) => {
     			if ((ld.source.device === d.data.device && ld.source.port === d.data.port) || 
     					(ld.target.device === d.data.device && ld.target.port === d.data.port)) {
     				let locations = [ld.source, ld.target];
-    				g.append('g')
-    					.classed('tooltips', true)
+    				tooltips
     					.selectAll('text')
     					.data(locations)
     					.enter()
     					.append('text')
-    					.attr('x', d => d.x)
-    					.attr('y', d => d.y)
-    					.text(d => d.port);
+	    					.attr('x', d => d.x)
+	    					.attr('y', d => d.y)
+	    					.text(d => d.port);
     			}
     		});
     };
 
     let mouseoutInnerDonut = (d) => {
-    	g.selectAll('g.tooltips').remove();
+    	g.select('g.tooltips').remove();
     };
 
     let updateLinksByMonitorColor = () => {
@@ -332,12 +358,247 @@ export class DonutTopo {
     		});
     };
 
+    let showPathSearchResult = (paths) => {
+    	let search_g = g.append('g')
+    		.classed('searchPaths', true);
+    	
+    	let hosts = [];
+    	scope.edgeSwitches = [], scope.search = [];
+    	paths.forEach((p) =>{
+    		let srcArr = p.src.split('/'), dstArr = p.dst.split('/');
+    		if (p.type === 'EDGE') {
+    			srcArr.length === 2 ? scope.edgeSwitches.push({'device': srcArr[0], 'port': srcArr[1]})
+    													: hosts.push({'mac': srcArr[0], 'vlan': srcArr[1]});
+    			dstArr.length === 2 ? scope.edgeSwitches.push({'device': dstArr[0], 'port': dstArr[1]}) 
+    													: hosts.push({'mac': dstArr[0], 'vlan': dstArr[1]});
+    		}
+    	});
+    	if (paths.length === 2) {
+    		let srcArr = paths[0]['dst'].split('/'), dstArr = paths[1]['src'].split('/');
+    		//防止后端异常数据影响前端显示
+    		if (srcArr[0] === dstArr[0] && srcArr[1] !== dstArr[1]) {
+    			scope.search.push({
+	  				'source': {
+	  					'device': srcArr[0],
+	  					'port': srcArr[1]
+	  				},
+	  				'target': {
+	  					'device': dstArr[0],
+	  					'port': dstArr[1]
+	  				}
+	  			});
+    		}
+    	}	
+    	else if (paths.length > 2) {
+    		//根据paths返回数据结构，第一条数据是src host连接switch，最后一条数据是switch连接dst host
+    		paths.forEach((p) => {
+    			let srcArr = p.src.split('/'), dstArr = p.dst.split('/');
+	  			if (p.type === 'DIRECT') {
+	  				scope.search.push({
+		  				'source': {
+		  					'device': srcArr[0],
+		  					'port': srcArr[1]
+		  				},
+		  				'target': {
+		  					'device': dstArr[0],
+		  					'port': dstArr[1]
+		  				},
+		  				'type': 'switchLink'
+		  			});
+		  			scope.search.push({
+		  				'source': {
+		  					'device': dstArr[0],
+		  					'port': dstArr[1]
+		  				},
+		  				'type': 'trafficForwarding'
+		  			})
+	  			}
+    		});
+    		//forwarding target补缺
+    		for (let i = 0; i < scope.search.length; i++) {
+    			if (scope.search[i]['type'] === 'trafficForwarding') {
+    				for (let j = 0;  j < scope.search.length; j++) {
+    					if (scope.search[j]['type'] === 'switchLink' && scope.search[j]['source']['device'] === scope.search[i]['source']['device']) {
+    						scope.search[i]['target'] = {
+    							'device': scope.search[j]['source']['device'],
+    							'port': scope.search[j]['source']['port']
+    						};
+    						break;
+    					}
+    				}
+    			}
+    		}
+    		//src host, dst host forwarding补缺
+    		let src = paths[0]['dst'].split('/'), dst = paths[paths.length - 1]['src'].split('/');
+    		scope.search.unshift({
+    			'source': {
+    				'device': src[0],
+    				'port': src[1]
+    			},
+    			'target': {
+    				'device': scope.search[0]['source']['device'],
+    				'port': scope.search[0]['source']['port']
+    			},
+    			'type': 'trafficForwarding'
+    		});
+    		scope.search[scope.search.length - 1]['target'] = {
+    			'device': dst[0],
+    			'port': dst[1]
+    		};
+    	}
+    	//portArcData加入host port
+    	if (scope.edgeSwitches.length === 2) {
+    		for(let key in scope.switchObject) {
+    			if (key === scope.edgeSwitches[0]['device']) {
+    				scope.switchObject[key]['linkPorts'].includes(scope.edgeSwitches[0]['port']) ? null :
+    					scope.switchObject[key]['linkPorts'].push(scope.edgeSwitches[0]['port']);
+    			}
+    			else if (key === scope.edgeSwitches[1]['device']) {
+    				scope.switchObject[key]['linkPorts'].includes(scope.edgeSwitches[1]['port']) ? null :
+    					scope.switchObject[key]['linkPorts'].push(scope.edgeSwitches[1]['port']);
+    			}
+    		}
+    		updatePortArcData();
+    		drawInnerDonut();
+    		drawPortLinks();
+    	}
+    	scope.portArcData.forEach((arc) => {
+    		//src host
+    		if (arc.data.device === scope.edgeSwitches[0]['device'] && arc.data.port === scope.edgeSwitches[0]['port']) {
+    			hosts[0]['angle'] = (arc.startAngle + arc.endAngle) / 2;
+    			hosts[0]['x'] = scope.outerRadius * Math.sin(hosts[0]['angle']) * 1.2;
+    			hosts[0]['y'] = -scope.outerRadius * Math.cos(hosts[0]['angle']) * 1.2;
+    		}
+    		//dst host
+    		else if (arc.data.device === scope.edgeSwitches[1]['device'] && arc.data.port === scope.edgeSwitches[1]['port']) {
+    			hosts[1]['angle'] = (arc.startAngle + arc.endAngle) / 2;
+    			hosts[1]['x'] = scope.outerRadius * Math.sin(hosts[1]['angle']) * 1.2;
+    			hosts[1]['y'] = -scope.outerRadius * Math.cos(hosts[1]['angle']) * 1.2;
+    		}
+    	})
+
+    	search_g.selectAll('use')
+    		.data(hosts)
+    		.enter()
+    		.append('use')
+	    		.attr('class', 'host')
+	    		.attr('xlink:href', '#host')
+	    		.attr('id', (d) => d.mac)
+					.attr('width', 32)
+					.attr('height', 32)
+					.attr('transform-origin', 'right bottom')
+					.attr('transform', (d) => 'translate(' + d.x + ',' + d.y + ')');
+			
+			search_g.selectAll('text')
+				.data(hosts)
+				.enter()
+				.append('text')
+					.attr('transform-origin', 'right bottom')
+					.attr('transform', (d) => {
+						return `
+							translate(${d.angle > Math.PI ? d.x - 80 : d.x - 30}, ${d.y + 40})
+						`;
+					})
+					.text((d) => d.mac);
+
+		  let drawDPath = () => {
+		  	let drawing = '';
+		  	scope.search.forEach((link) => {
+		  		let source = scope.portCoordinateMap.get(link.source.device + link.source.port)
+		  							|| {'x': 0, 'y': 0, 'device': link.source.device, 'port': link.source.port};
+		  		let target = scope.portCoordinateMap.get(link.target.device + link.target.port)
+		  							|| {'x': 0, 'y': 0, 'device': link.target.device, 'port': link.target.port};
+		  		drawing += 'M' + source.x + ',' + source.y;
+		    	drawing += 'Q 0,0 ' + target.x + ',' + target.y;
+		  	});
+		    return drawing;
+		  }  
+			search_g.append('path')
+				.attr('class', 'link')
+		    .attr('d', drawDPath)
+		    .attr('stroke', '#1B4A78')
+		    .attr('stroke-width', 4)
+		    .attr('fill', 'none')
+		    .on('mouseover', mouseoverSearchPaths)
+	      .on('mouseout', mouseoutSearchPaths);
+
+		  updateLinksBySearchPaths();
+    };
+
+    let mouseoverSearchPaths = () => {
+    	let tooltips = g.append('g').attr('class', 'tooltips');
+    	let ports = new Map(), locations = [];
+    	scope.search.forEach((path) => {
+    		ports.set(path.source.device + path.source.port, scope.portCoordinateMap.get(path.source.device + path.source.port));
+    		ports.set(path.target.device + path.target.port, scope.portCoordinateMap.get(path.target.device + path.target.port));
+    	});
+    	for(let port of ports) {
+    		locations.push(port[1]);
+    	}
+    	tooltips
+    		.selectAll('text')
+				.data(locations)
+				.enter()
+				.append('text')
+					.attr('x', d => d.x)
+					.attr('y', d => d.y)
+					.text(d => d.port);
+    };
+
+    let mouseoutSearchPaths = () => {
+    	g.select('g.tooltips').remove();
+    };
+
+    let clearPathSearch = () => {
+    	if (scope.edgeSwitches.length === 2) {
+    		for(let key in scope.switchObject) {
+	  			if (key === scope.edgeSwitches[0]['device']) {
+	  				let index = scope.switchObject[key]['linkPorts'].indexOf(scope.edgeSwitches[0]['port']);
+	  				if (index > -1) scope.switchObject[key]['linkPorts'].splice(index, 1);
+	  			}
+	  			else if (key === scope.edgeSwitches[1]['device']) {
+	  				let index = scope.switchObject[key]['linkPorts'].indexOf(scope.edgeSwitches[1]['port']);
+	  				if (index > -1) scope.switchObject[key]['linkPorts'].splice(index, 1);
+	  			}
+	  		}
+	  		updatePortArcData();
+	  		drawInnerDonut();
+	  		drawPortLinks();
+    	}
+    	g.selectAll('g.searchPaths').remove();
+    };
+
+    let updateLinksBySearchPaths = () => {
+    	//防止port link背景色影响search path  
+		  g.selectAll('g.links path')
+			  .filter((d) => {
+			  	let status = false;
+			  	for (let i = 0; i< scope.search.length; i++) {
+			  		if (scope.search[i].type === "switchLink" && ((scope.search[i]['source']['device'] === d.source.device && 
+					  			scope.search[i]['source']['port'] === d.source.port && scope.search[i]['target']['device'] === d.target.device && 
+					  			scope.search[i]['target']['port'] === d.target.port)
+			  		 	|| (scope.search[i]['source']['device'] === d.target.device && 
+					  			scope.search[i]['source']['port'] === d.target.port && scope.search[i]['target']['device'] === d.source.device && 
+					  			scope.search[i]['target']['port'] === d.source.port))) {
+			  			status = true;
+			  			break;
+			  		}
+			  	}
+			  	return status;
+			  })
+			  .attr('stroke', 'none');
+    };
+
+    //init topo
     getDonutTopo();
 
     let clickOuterTopoHandler = (event) => {
     	if (event.target.tagName !== 'path') {
     		if (scope.topoSetting.show_monitor && scope.monitorState) {
     			updateLinksByMonitorColor();
+    		}
+    		else if (scope.topoSetting.show_path && scope.searchState) {
+    			updateLinksBySearchPaths();
     		}
     		else {
     			this.di.d3.select('g.links')
@@ -381,6 +642,15 @@ export class DonutTopo {
     		.attr('stroke', () => {
   				return scope.topoSetting.show_links === 2 ? '#51A7CD' : 'none';
   			});
+    }));
+    unsubscribers.push(this.di.$rootScope.$on('show_path',($event, param)=>{
+    	scope.searchState = true;
+    	clearPathSearch();
+    	showPathSearchResult(param);
+    }));
+    unsubscribers.push(this.di.$rootScope.$on('hide_path',()=>{
+    	scope.searchState = false;
+    	clearPathSearch();
     }));
 
 		scope.$on('$destroy', () => {
