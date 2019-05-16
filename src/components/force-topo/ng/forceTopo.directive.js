@@ -331,11 +331,25 @@ export class ForceTopo {
       }
 
       let add_origin_link = () =>{
+        let self = this;
         this.linkNode = svg.append("g").attr('id', 'origin_link')
           .classed('force-topo__line-normal', true)
           .selectAll("line")
           .data(scope._links)
-          .join("line").attr('linkid', d => d.id);
+          .join("line").attr('linkid', d => d.id)
+          .attr('stroke-width', 2)
+          .on('mouseover', function () {
+            let line = self.di.d3.select(this);
+            line.transition()
+              .duration(200)
+              .attr('stroke-width', '3')
+          })
+          .on('mouseout', function () {
+            let line = self.di.d3.select(this);
+            line.transition()
+              .duration(200)
+              .attr('stroke-width', '2')
+          });
       };
 
       let remove_origin_link = () =>{
@@ -351,6 +365,7 @@ export class ForceTopo {
       }
 
       let add_origin_nodes = () =>{
+        let self = this;
         this.deviceNode = svg.append("g").attr('id', 'origin_node')
           .classed('force-topo__node-normal', true)
           .selectAll("g")
@@ -365,10 +380,25 @@ export class ForceTopo {
           })
           .call(drag(this.simulation))
           .on('click', clickHandler)
+          .on('mouseover', function () {
+            let rect = self.di.d3.select(this).select('rect');
+            rect.transition()
+              .duration(200)
+              .attr('x', '-8')
+              .attr('y', '-8')
+              .attr('width', '40')
+              .attr('height', '40')
+          })
+          .on('mouseout', function () {
+            let rect = self.di.d3.select(this).select('rect');
+            rect.transition()
+              .duration(200)
+              .attr('x', '-6')
+              .attr('y', '-6')
+              .attr('width', '36')
+              .attr('height', '36')
+          })
           .on('contextmenu',function () {
-
-            // 255,124,9
-
             d3.event.preventDefault();
             let deviceId = this.getAttribute('deviceId');
             // console.log(this.getBoundingClientRect())
@@ -376,6 +406,15 @@ export class ForceTopo {
             // console.log(DI.d3.mouse(this))
             DI.$rootScope.$emit("switch_opt",{event: calc_mouse_location(this), id: deviceId});
            });
+
+        // this.deviceNode.append('rect')
+        //   .attr('x', '-6')
+        //   .attr('y', '-6')
+        //   .attr('rx', '3')
+        //   .attr('ry', '3')
+        //   .attr('width', '36')
+        //   .attr('height', '36')
+        //   .attr('class', 'force-topo__node-outline')
       };
 
       let simulation_origin_tick_callback = () =>{
@@ -889,7 +928,7 @@ export class ForceTopo {
 
 
       unsubscribers.push(this.di.$rootScope.$on('changeLinksColor', ($event, params) => {
-
+        let self = this;
         let links_color = params;
         this.linkNode.classed('force-topo__line-normal', false);
         this.linkNode
@@ -900,19 +939,26 @@ export class ForceTopo {
             return 'rgb(' + links_color[linkId].color + ')';
           })
           .on('mouseover', function () {
+            let line = self.di.d3.select(this);
+            line.transition()
+              .duration(200)
+              .attr('stroke-width', '3')
+
+
             let linkid = this.getAttribute('linkid');
             if (scope.topoSetting.show_monitor) {
-              let res = _completeDeviceName4FlowInfo(links_color[linkid]);
-              // let mouseEvent = DI.d3.mouse(this);
 
-              // let evt = {
-              //   'clientX': mouseEvent[0] + x.left,
-              //   'clientY': mouseEvent[1] + x.top
-              // };
+
+              let res = _completeDeviceName4FlowInfo(links_color[linkid]);
               DI.$rootScope.$emit("show_link_tooltip", {event: calc_linkmouse_location(this), value: res});
             }
           })
           .on('mouseout', function () {
+            let line = self.di.d3.select(this);
+            line.transition()
+              .duration(200)
+              .attr('stroke-width', '2')
+
             DI.$rootScope.$emit("hide_link_tooltip");
           });
       }));
@@ -998,249 +1044,6 @@ export class ForceTopo {
       initialize();
 
     }).call(this);
-
-
-    /*const data = {
-     "nodes": [
-     {
-     "group": 1,
-     "id": "Myriel"
-     },
-     {
-     "group": 1,
-     "id": "Napoleon"
-     },
-     {
-     "group": 2,
-     "id": "Labarre"
-     },
-     {
-     "group": 2,
-     "id": "Valjean"
-     },
-     {
-     "group": 3,
-     "id": "Marguerite"
-     },
-
-     {
-     "group": 3,
-     "id": "Zephine"
-     },
-     {
-     "group": 3,
-     "id": "Fantine"
-     }
-     ],
-     "links": [
-     {
-     "source": "Myriel",
-     "target": "Napoleon",
-     "value": 2
-     },
-     {
-     "source": "Myriel",
-     "target": "Zephine",
-     "value": 2
-     },
-     {
-     "source": "Marguerite",
-     "target": "Zephine",
-     "value": 5
-     },
-     {
-     "source": "Fantine",
-     "target": "Zephine",
-     "value": 2
-     },
-     {
-     "source": "Fantine",
-     "target": "Valjean",
-     "value": 5
-     },
-     {
-     "source": "Labarre",
-     "target": "Valjean",
-     "value": 5
-     }
-     ]
-     }
-
-     let d3 = DI.d3;
-     let color = (d) =>{
-     const scale = DI.d3.scaleOrdinal(DI.d3.schemeCategory10);
-     return scale(d.group);
-     };
-
-     let drag = (simulation) => {
-
-     function dragstarted(d) {
-     if (!DI.d3.event.active) simulation.alphaTarget(0.3).restart();
-     d.fx = d.x;
-     d.fy = d.y;
-     }
-
-     function dragged(d) {
-     if(d3.event.x>= 0 && d3.event.x <= 750){
-     d.fx = d3.event.x;
-     }
-     if(d3.event.y>= 0 && d3.event.y <= 700){
-     d.fy = d3.event.y;
-     }
-
-
-     }
-
-     function dragended(d) {
-     if (!d3.event.active) simulation.alphaTarget(0);
-     d.fx = null;
-     d.fy = null;
-     }
-
-     return d3.drag()
-     .on("start", dragstarted)
-     .on("drag", dragged)
-     .on("end", dragended);
-     }
-
-     let mouseover = (simulation) => {
-
-
-     return d3.drag()
-     .on("start", dragstarted)
-     .on("drag", dragged)
-     .on("end", dragended);
-     }
-
-     const links = data.links.map(d => Object.create(d));
-     const nodes = data.nodes.map(d => Object.create(d));
-
-     var simulation = DI.d3.forceSimulation(nodes)
-     .force("link", DI.d3.forceLink(links).id(d => d.id).distance(d=> 1*120))
-     .force("charge", DI.d3.forceManyBody().strength(-60))
-     .force("center", DI.d3.forceCenter(1400 / 2, 700 / 2));
-
-
-
-     const svg = DI.d3.select('svg');
-     // d3.select(document.sv.svg(width, height));
-
-     const link = svg.append("g")
-     .attr("stroke", "#999")
-     .attr("stroke-opacity", 0.6)
-     .selectAll("line")
-     .data(links)
-     .join("line")
-     .attr("stroke-width", d => Math.sqrt(d.value));
-
-     // const node = svg.append("g")
-     //   .attr("stroke", "#fff")
-     //   .attr("stroke-width", 1.5)
-     //   .selectAll("circle")
-     //   .data(nodes)
-     //   .join("circle")
-     //   .attr("r", 10)
-     //   .attr("fill", color)
-     //   .call(drag(simulation));
-
-     // <path fill="none" d="M0 0h24v24H0z"/>
-     // <circle cx="12" cy="4" r="2"/>
-     // <path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.17-.19-.38-.34-.61-.45-.01 0-.01-.01-.02-.01H13c-.35-.2-.75-.3-1.19-.26C10.76 7.11 10 8.04 10 9.09V15c0 1.1.9 2 2 2h5v5h2v-5.5c0-1.1-.9-2-2-2h-3v-3.45c1.29 1.07 3.25 1.94 5 1.95zm-6.17 5c-.41 1.16-1.52 2-2.83 2-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V12.1c-2.28.46-4 2.48-4 4.9 0 2.76 2.24 5 5 5 2.42 0 4.44-1.72 4.9-4h-2.07z"/>
-
-
-
-     var node = svg.append("g")
-     .attr("stroke", "#fff")
-     .attr("stroke-width", 1.5)
-     .selectAll("g")
-     .data(nodes)
-     .join('g').attr("width", 36).attr("height", 36).attr('fill','gray').attr('deviceId', d=>d.id)
-     .html('<rect x="-6" y="-6" width="36" height="36"/><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>')
-     .call(drag(simulation))
-     .on('mouseover', handleMouseOut);
-
-     setTimeout(function () {
-     // simulation = DI.d3.forceSimulation(nodes)
-     //   .force("link", DI.d3.forceLink(links).id(d => d.id).distance(d=> d.value*40))
-     //   .force("charge", DI.d3.forceManyBody())
-     //   .for ce("center", DI.d3.forceCenter(750 / 2, 700 / 2));
-     // node.remove();
-     node.join('g').html(d=> '<text x="-6" y="-10" fill="red" stroke="black" stroke-width="1">' + d.id + '</text> <rect x="-6" y="-6" width="36" height="36"/><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>')
-     // node = svg.append("g")
-     //   .attr("stroke", "#fff")
-     //   .attr("stroke-width", 1.5)
-     //   .selectAll("g")
-     //   .data(nodes)
-     //   .join('g').attr("width", 36).attr("height", 36).attr('fill','gray').attr('deviceId', d=>d.id)
-     //   .html(d=> '<text x="-6" y="-10" fill="red" stroke="black" stroke-width="1">' + d.id + '</text> <rect x="-6" y="-6" width="36" height="36"/><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>')
-     //   .call(drag(simulation))
-     //   .on('mouseover', handleMouseOut);
-     }, 2000);
-
-
-     setTimeout(function () {
-     // simulation = DI.d3.forceSimulation(nodes)
-     //   .force("link", DI.d3.forceLink(links).id(d => d.id).distance(d=> d.value*40))
-     //   .force("charge", DI.d3.forceManyBody())
-     //   .for ce("center", DI.d3.forceCenter(750 / 2, 700 / 2));
-     // node.remove();
-     node.join('g').html('<rect x="-6" y="-6" width="36" height="36"/><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>')
-     // node = svg.append("g")
-     //   .attr("stroke", "#fff")
-     //   .attr("stroke-width", 1.5)
-     //   .selectAll("g")
-     //   .data(nodes)
-     //   .join('g').attr("width", 36).attr("height", 36).attr('fill','gray').attr('deviceId', d=>d.id)
-     //   .html(d=> '<text x="-6" y="-10" fill="red" stroke="black" stroke-width="1">' + d.id + '</text> <rect x="-6" y="-6" width="36" height="36"/><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>')
-     //   .call(drag(simulation))
-     //   .on('mouseover', handleMouseOut);
-     }, 7000);
-
-     function handleMouseOut(d, i) {
-     // Use D3 to select element, change color back to normal
-     // alert(this.getAttribute('deviceId'));
-     // alert(this)
-     // d3.select(this).attr({
-     //   fill: "black",
-     //   r: radius
-     // });
-
-     // Select text by id and then remove
-     // d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();  // Remove text location
-     }
-     // .('path').attr('fill', 'none').attr('d',"M0 0h24v24H0z")
-     // .append('circle').attr('cx', '12').attr('cy',"4").attr('r','2')
-     // .append('path')
-     // .call(drag(simulation));
-     // .attr("width", "24")
-     // .attr("height", "24")
-     // .attr("fill","#dfafaf")
-     // .call(drag(simulation));
-     // .attr("fill","url(#image)")
-     // <defs>
-     // <pattern id="image" x="-32" y="-32" patternUnits="userSpaceOnUse" height="64" width="64">
-     //   <image x="0" y="0" height="64" width="64" xlink:href="http://0.gravatar.com/avatar/902a4faaa4de6f6aebd6fd7a9fbab46a?s=64"/>
-     //   </pattern>
-     //   </defs>
-     // node.append("title")
-     //   .text(d => d.id);
-
-     simulation.on("tick", () => {
-     link
-     .attr("x1", d => d.source.x)
-     .attr("y1", d => d.source.y)
-     .attr("x2", d => d.target.x)
-     .attr("y2", d => d.target.y);
-
-     // node
-     //   .attr("cx", d => d.x)
-     //   .attr("cy", d => d.y);
-
-     node.attr('transform', d=> 'translate('+ (d.x -12) +',' + (d.y -12) + ')');
-     });
-
-     svg.node();
-     */
 
   }
 
