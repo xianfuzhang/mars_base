@@ -180,6 +180,7 @@
   "MODULES.REGEX.FLOW_ADD.MAC": "Please input the right MAC address!",
   "MODULES.REGEX.FLOW_ADD.NOTNULL":"Input cannot be null!",
   "MODULES.REGEX.FLOW_ADD.HOST":"Please input the right host name. Example: letters and number, special charactor only can use - and.",
+  "MODULES.REGEX.FLOW_ADD.LEAFGROUP_NAME":"Please input the right leaf group name. Example: letters and number, special charactor only can use - and.",
   "MODULES.REGEX.FLOW_ADD.PORT_ARRAY":"Please input the right port array!(Example: 2,3,4 or single port number)",
   "MODULES.REGEX.PFC_ADD.PORT":"Invalid port number!",
   "MODULES.REGEX.PFC_ADD.QUEUE":"Invalid queue number!(Range: 0-7)",
