@@ -80,7 +80,7 @@ export function ChartJsProvider () {
 							value.borderColor = Chart.helpers.color(value.borderColor).alpha(1).rgbString();
 							value.backgroundColor = Chart.helpers.color(value.backgroundColor).alpha(0.5).rgbString();
 							value.borderWidth = DEFAULT_STYLES.lines.borderBoldWidth;
-							value.pointRadius = 2;
+							value.pointRadius = 3;
 						}
 					})
 					// rerender the chart
@@ -403,7 +403,7 @@ export function ChartJsFactory (ChartJs, $timeout) {
 			pointBackgroundColor: rgba(color, alpha),
 			pointHoverBackgroundColor: rgba(color, 0.8),
 			borderColor: rgba(color, alpha),
-			pointRadius: 2,
+			pointRadius: 1,
 			// pointBorderColor: '#fff',
 			pointHoverBorderColor: rgba(color, alpha),
 			// pointHoverBorderColor: '#fff',

@@ -995,7 +995,7 @@ export class ElasticsearchController {
             value.borderColor = chartService.helpers.color(value.borderColor).alpha(1).rgbString();
             value.backgroundColor = chartService.helpers.color(value.backgroundColor).alpha(0.2).rgbString(),
             value.borderWidth = chartStyles.lines.borderWidth;
-            value.pointRadius = 1;
+            value.pointRadius = 2;
           })
         
           chart.update();
@@ -1191,7 +1191,7 @@ export class ElasticsearchController {
 
       dataArr.forEach((data) => {
         dataset.data.push(data.count);
-        chartData.labels.push(data.key ? data.key : '未知');
+        chartData.labels.push(data.key ? data.key : 'unknown');
       });
 
       chartData.datasets.push(dataset);
