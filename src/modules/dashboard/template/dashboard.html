@@ -202,20 +202,19 @@
 
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
                         <canvas id="switch-disk-usage-rate" height="300"
-                                class="chart chart-line"
-                                chart-type="line"
+                                class="chart chart-bar"
+                                chart-type="bar"
                                 chart-data="switchDiskChartConfig.data"
                                 chart-labels="switchDiskChartConfig.labels"
+                                chart-colors="switchDiskChartConfig.colors"
                                 chart-series="switchDiskChartConfig.series"
                                 chart-fill="false"
-                                chart-options="switchDiskChartConfig.options"
-                                chart-click="switchDiskChartConfig.onClick"
-                                chart-hover="switchDiskChartConfig.onHover">
+                                chart-options="switchDiskChartConfig.options">
                         </canvas>
 
                         <div class="setting-group"  ng-show="!dashboardModel.disk.loading">
-                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-disk')"><i class="material-icons">settings</i></div>
-                            <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-disk')"><i class="material-icons">undo</i></div>
+                            <!--<div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-disk')"><i class="material-icons">settings</i></div>-->
+                            <!--<div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-disk')"><i class="material-icons">undo</i></div>-->
                         </div>
 
                         <div class="chart-loading" ng-show="dashboardModel.disk.loading"></div>
@@ -262,6 +261,25 @@
                     </div>
                 </div>
             </div>
+
+            <!--<div class="mars-row" ng-if="isAnalyzeEnable">-->
+                <!--<div class="mars-row-flex">-->
+                    <!--<div class="col-gutter-md left-panel mars-panel dashboard-panel">-->
+                        <!--<canvas id="cluster-test-rate" height="300"-->
+                                <!--class="chart chart-pie"-->
+                                <!--chart-type="pie"-->
+                                <!--chart-data="clusterCpuPieChartConfig.data"-->
+                                <!--chart-labels="clusterCpuPieChartConfig.labels"-->
+                                <!--chart-fill="false"-->
+                                <!--chart-options="clusterCpuPieChartConfig.options"-->
+                                <!--chart-options="clusterCpuPieChartConfig.colors">-->
+                        <!--</canvas>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+            <!--</div>-->
+
+            <chart-tooltip></chart-tooltip>
         </div>
     </div>
 </div>

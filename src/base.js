@@ -332,13 +332,16 @@ function configHttpProvider($httpProvider){
             let url = $location.path();
             let search = $location.search();
             if(url !== '/'){
-              url = window.btoa(url);
-              search = window.btoa(JSON.stringify(search));
-              $location.path('/login').search({lastp: url, lasts: search});
+              if(url.startsWith('/login')){
+                $location.path('/login');
+              } else {
+                url = window.btoa(url);
+                search = window.btoa(JSON.stringify(search));
+                $location.path('/login').search({lastp: url, lasts: search});
+              }
             } else {
               $location.path('/login');
             }
-
             return $q.reject(config);
           }
           else{

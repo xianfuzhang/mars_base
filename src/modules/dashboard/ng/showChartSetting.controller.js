@@ -26,6 +26,9 @@ export class ShowChartSettingController {
 			case 'controller-memory':
 				chartTitle = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_MEMORY.TITLE");
 				break;
+      case 'controller-interface':
+        chartTitle = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_INTERFACE.TITLE");
+        break;
 			case 'device-cpu':
 				chartTitle = this.translate("MODULES.DASHBOARD.CHART.SWITCH_CPU.TITLE");
 				break;
@@ -37,20 +40,14 @@ export class ShowChartSettingController {
         break;
 		}
 		scope.title = chartTitle;
-
 		scope.selectOptionTitle = ['controller-cpu', 'controller-memory', 'controller-interface'].indexOf(this.di.dataModel.chartType) < 0 ? this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH') : this.translate('MODULES.DASHBOARD.SETTING.SELECT_CONTROLLER')
-		scope.timeRangeOptions = [ // 时间间隔
-			{label: this.translate('MODULES.DASHBOARD.TIMERANGE.MINUTE'), value: 60},
-			{label: this.translate('MODULES.DASHBOARD.TIMERANGE.HOUR'), value: 120},
-			{label: this.translate('MODULES.DASHBOARD.TIMERANGE.DAY'), value: 24 * 60 * 2},
-		];
-		
 		scope.dataOptions = { options: [{label: this.translate('MODULES.DASHBOARD.SETTING.SELECT_ALL'), value:''}]};
 		
     // TODO: array handle
 		let selectedData = this.di.dataModel.selectedData[0];
     
     scope.chartModel = {
+      type: this.di.dataModel.chartType,
       beginTime: this.di.dataModel.beginTime,
       endTime: this.di.dataModel.endTime,
       selectedData: scope.dataOptions[0]
@@ -100,7 +97,7 @@ export class ShowChartSettingController {
         scope.invalid = false;
 	    }
     }
-    
+
     scope.cancel = (event) => {
       this.di.$modalInstance.dismiss({
         canceled: true

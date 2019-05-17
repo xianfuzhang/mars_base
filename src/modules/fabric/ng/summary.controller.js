@@ -259,6 +259,8 @@ export class FabricSummaryController {
     };
 
     let init = () => {
+      this.di.$scope.fabricModel.isShowTopo = false;
+
       let hide_div = this.di.localStoreService.getSyncStorage(fabric_storage_ns).get('hide_right_div');
       if(hide_div === true){
         _hide_div(true);

@@ -107,7 +107,7 @@
     <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">
         <div class="stepForm__input__label">Leaf Group</div>
         <!--<input class="stepForm__input__text" ng-model="switch.leaf_group.name"/>-->
-        <valid-input v-require="true"  ng-model="switch.leaf_group.name"  v-rpcid="page_device_1" ></valid-input>
+        <valid-input v-require="true"  ng-model="switch.leaf_group.name"  v-rpcid="page_device_1" v-regex="leaf_group_regex"  v-message="{{ 'MODULES.REGEX.FLOW_ADD.LEAFGROUP_NAME' | translate}}" ></valid-input>
     </div>
     <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">
         <div class="stepForm__input__label">Switch Port</div>
