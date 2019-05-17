@@ -62,8 +62,8 @@ export class mdlTable {
       rowCheckboxSupport: false,
       //rowActions: [],
       data: [],
-      inlineFilterData: [],
-      filteredData: [],
+      inlineFilterData: [], //负责从data过滤数据
+      filteredData: [], //保存分页后的数据，前台分页从inlineFilterData拿数据，然后通知tbody渲染
 
       index_name: null,
       selectedRowId: null,
@@ -545,13 +545,18 @@ export class mdlTable {
       return scope._extractProperties(scope.tableModel.columns, 'field', '$value');
     };
 
+    scope._apiInlineFilter = () => {
+      scope.inlineFilter();
+      scope.tableModel.filteredData = scope._clientDataPagination();
+    };
+
     (function () {
       scope.tableModel.api = {
         //在controller中通知table render body
         update: scope._apiUpdate,
         //在controller中设置column显示/隐藏func(column_field, true/false)
         setColumnVisibility: scope._apiSetColumnVisibility,
-        inlineFilter : scope.inlineFilter,
+        inlineFilter : scope._apiInlineFilter,
         //在controller中更新table data
         queryUpdate: scope._apiQueryUpdate,
         //在controller中返回table所有columns的visible值{column_field: true/false, ...}
