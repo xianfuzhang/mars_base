@@ -10,12 +10,19 @@
 	user-select: none;
 	fill: #333;
 	pointer-events: none;
+	text-anchor: middle;
 }
 .topo-container g.outer, .topo-container g.inner, .topo-container g.links, .topo-container g.searchPaths > path{
 	cursor: pointer;
 }
-
-.topo-container g.outer > path, .topo-container g.inner > path{
+.topo-container g.outer > path {
+	stroke: #1B4A78;
+	fill: #388FB8;
+	transition: transform 0.3s ease-out;
+}
+.topo-container g.inner > path{
+	stroke: none;
+	fill: #51A7CD;
 	transition: transform 0.3s ease-out;
 }
 .topo-container g.outer > path:hover{

@@ -34,6 +34,29 @@ export class DonutTopo {
 		scope.leafs = scope.leafs || [];
 		scope.others = scope.others || [];
 		scope.links = scope.links || [];
+		/*  //大批量数据测试 8spine + 60 leaf
+			scope.spines = this.di._.times(8, (index) => {
+				let ip = 220 + index;
+				return {'id': 'rest:192.168.40.' + ip + ':80', 'name': 'spine' + index, type: "spine"}
+			});
+			 
+			scope.leafs = this.di._.times(60, (index) => {
+				let ip = 100 + index;
+				return {'id': 'rest:192.168.40.' + ip + ':80', 'name': 'leaf' + index, type: "leaf"}
+			});
+			
+			scope.links = this.di._.times(239, (index) => {
+				let src_device, src_port, dst_device, dst_port;
+				const i = index + 1, s_i = parseInt(i / 30), p_i = i % 30;
+				let l_i = index > 119 ? p_i - 1 + 30 : p_i -1;
+				if (l_i < 0) l_i = 0;
+				src_device = scope.spines[s_i]['id'];
+				src_port = p_i;
+				dst_device = scope.leafs[l_i]['id'];
+				dst_port = s_i + 1;
+				return {'src': {'device': src_device, 'port': src_port}, 'dst': {'device': dst_device, 'port': dst_port}};	
+			});
+		*/
 		scope.monitorLinkColors =  {}; // 通过事件changeLinksColor更新
 		scope.monitorState = false; //开始监控
 		scope.searchState = false;
@@ -43,7 +66,7 @@ export class DonutTopo {
 		scope.topo_width = element[0].clientWidth;
 		scope.topo_height = element[0].clientHeight;
 		scope.outerRadius = Math.min(scope.topo_width, scope.topo_height) * 0.35;
-		const OUTER_ARC_PADDING = 0.02;
+		const OUTER_ARC_PADDING = scope.switches.length < 15 ? 0.02 : 0.005;
 		const svg = this.di.d3.select('svg.topo_area')
 			.attr("width", scope.topo_width)
       .attr("height", scope.topo_height);
@@ -147,7 +170,9 @@ export class DonutTopo {
     	const switchArc = this.di.d3.arc()
 	        .innerRadius(scope.outerRadius - 30)
 	        .outerRadius(scope.outerRadius);
-
+	    g.select('g.outer').remove();
+	    g.select('g.labelPaths').remove();
+	    let label_g = g.append('g').classed('labelPaths', true);
 	    const outerPaths = g.append("g")
 	    	.classed('outer', true)
 	      .selectAll('path')
@@ -155,10 +180,9 @@ export class DonutTopo {
 	      .enter()
 	      .append('path')
 	      .attr('d', switchArc)
-	      .attr('stroke', '#1B4A78') // 弧边颜色
-	      .attr('fill', '#388FB8')
 	      //each在这里主要处理arc path，arc的path会影响text沿着arc显示，通过each处理arc，截取外层arc段绘制一个新的path给text使用
 	      .each(function(d, i){
+	      	if (scope.switches.length > 15) return;
 	      	let centroid = switchArc.centroid(d);
 	      	centroid[0] = centroid[0] * 1.28;
 	        centroid[1] = centroid[1] * 1.28;
@@ -168,7 +192,7 @@ export class DonutTopo {
 	        const firstArcSection = /(^.+?)L/;
 	        let newArc = firstArcSection.exec(_this.di.d3.select(this).attr("d") )[1];
 	        newArc = newArc.replace(/,/g , " ");
-	        g.append("path")
+	        label_g.append("path")
 	          .attr("class", "hiddenArc")
 	          .attr("id", d.data.id)
 	          .attr("d", newArc)
@@ -194,8 +218,6 @@ export class DonutTopo {
 	      .enter()
 	      .append('path')
 	      .attr('d', portArc)
-	      .attr('stroke', '#1B4A78')
-	      .attr('fill', '#51A7CD')
 	      /*.each(function(d){
 	        //获取所有port arc中心点
 	        let centroid = portArc.centroid(d);
@@ -246,19 +268,36 @@ export class DonutTopo {
     };
 
     let displayOuterLabels = () => {
+    	g.select('g.outerLabels').remove();
     	const texts = g.append('g')
     		.classed('outerLabels', true)
 	      .selectAll("text")
-	      .data(scope.switchArcData)
-	      .enter()
+	      .data(scope.switchArcData);
+
+	    if (scope.switches.length > 15) {
+	    	texts.enter()
+	    		.append('text')
+	    			.attr('dx', (d) =>{
+	    				return (d.startAngle + d.endAngle) / 2 * 180 / Math.PI < 180 ? '2em' : '-2em';
+	    			})
+	    			.attr("transform", (d) => {
+	    				let x = (d.startAngle + d.endAngle) / 2 * 180 / Math.PI,
+	    						  x0 = scope.outerRadius * Math.sin((d.startAngle + d.endAngle) / 2),
+	    							y0 = -scope.outerRadius * Math.cos((d.startAngle + d.endAngle) / 2);
+	    				return `rotate(${x - 90}, ${x0}, ${y0}) translate(${x0}, ${y0}) rotate(${x < 180 ? 0 : 180})`;
+	    			})
+	    			.text(function(d) { return d.data.name;});
+	    }
+	    else {
+	    	texts.enter()
 	      .append('text')
 	        .attr('dy', '-10')
 	        .append("textPath")
             .attr("xlink:href",function(d){return '#' + d.data.id;}) //link的地址就是arc的唯一id
             //在上面each回调函数中定义了新的path，text绑定到path，通过text-anchor,startOffset实现居中展示
-            .style("text-anchor","middle")
             .attr('startOffset', '50%')
             .text(function(d) { return d.data.name;});
+	    }  
     };
 
     let clickOuterDonut = (d) => {
