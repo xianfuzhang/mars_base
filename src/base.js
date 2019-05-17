@@ -378,7 +378,7 @@ function mainCtrl($scope, $rootScope) {
   if(theme === 'theme_default' || theme === 'theme_dark' ){
     $scope.theme = theme;
   }else {
-    $scope.theme = 'theme_default';
+    $scope.theme = 'theme_dark';
     window.localStorage.setItem(CONST_LOCAL_STORAGE_KEY + CONST_THEME, $scope.theme);
   }
   

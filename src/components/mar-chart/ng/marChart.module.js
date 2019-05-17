@@ -543,7 +543,7 @@ function getTheme() {
 	const CONST_THEME = 'theme';
 	let theme =  window.localStorage.getItem(CONST_LOCAL_STORAGE_KEY + CONST_THEME);
 	
-	return theme || 'theme_default';
+	return theme || 'theme_dark';
 }
 
 function _randomColorFactor() {
