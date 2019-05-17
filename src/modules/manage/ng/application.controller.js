@@ -158,8 +158,8 @@ export class ApplicationController {
             app['_state'] = res.data['state'];
           }
         });
-        scope.applicationModel.api.update();
         scope.applicationModel.api.inlineFilter();
+        scope.applicationModel.api.update();
       },(err)=>{
         console.log("Error occur when getApplication in _update_single_item " + JSON.stringify(err))
       });

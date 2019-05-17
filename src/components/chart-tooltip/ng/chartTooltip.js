@@ -38,6 +38,7 @@ export class chartTooltip {
 
 
       scope.chartModel = {
+        type: 'pie',
         data: [],
         labels: [],
         options: {},
@@ -61,12 +62,12 @@ export class chartTooltip {
           canvas.height = 300;
         }
 
-        // scope.chartModel = param['data'];
+        scope.chartModel = param['data'];
         // scope.chartModel['type'] = 'pie';
 
-        var ctx = canvas.getContext('2d');
+        // var ctx = canvas.getContext('2d');
 
-        var chart = new Chart(ctx, param['data']);
+        // var chart = new Chart(ctx, param['data']);
 
         let win_width = this.di.$window.innerWidth;
         let win_height = this.di.$window.innerHeight;
@@ -109,16 +110,8 @@ export class chartTooltip {
           scope.$apply();
       }));
 
-      scope.hide = () =>{
-        scope.chartModel = {
-          data: [],
-          labels: [],
-          options: {},
-          colors: [],
-        }
-
-        scope.tooltipStyle = {'visibility': 'hidden'};
-        scope.tooltipAllPageStyle = {'visibility': 'hidden'};
+      scope.click = () =>{
+        hide();
         // if(scope.isNeedRefresh)
         //   scope.$apply();
       }
@@ -142,12 +135,29 @@ export class chartTooltip {
       //     scope.$apply();
       // }));
 
+      angular.element(this.di.$window).bind('resize', function(){
+        hide();
+        scope.$apply();
+      });
 
       scope.$on('$destroy', () => {
         unsubscribers.forEach((unsubscribe) => {
           unsubscribe();
         });
       });
+
+      let hide = () =>{
+        scope.chartModel = {
+          type: 'pie',
+          data: [],
+          labels: [],
+          options: {},
+          colors: [],
+        }
+
+        scope.tooltipStyle = {'visibility': 'hidden'};
+        scope.tooltipAllPageStyle = {'visibility': 'hidden'};
+      }
 
     }).call(this);
   }

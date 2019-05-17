@@ -63,7 +63,6 @@
             <th ng-repeat="$col in tableModel.columns track by $index"
                 ng-click="_onHeaderClick($col, $event)"
                 ng-show="_isColumnDisplayable($col)"
-                ng-style="_getColumnWidth($col)"
                 ng-class="{
                   'sortable': $col.sortable,
                   'sort-asc': $col.sortable && (_getColumnSortMode($col) === tableModel.CONST_SORT_ASC),
