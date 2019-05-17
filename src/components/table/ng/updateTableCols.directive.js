@@ -44,9 +44,9 @@ export class updateTableCols {
       if (!cols.length) {
         let thElms = headerElm.find('th');
         for(let i=0; i< thElms.length; i++) {
-          let obj = {};
+          let obj = {}, width = thElms.eq(i)[0].clientWidth - 2; //table的padding默认是2px
           obj['resize-col-' + i] = thElms.eq(i)[0];
-          obj['width'] = thElms.eq(i)[0].clientWidth - 2; //table的padding默认是2px
+          obj['width'] = Math.max(width, CONST_MIN_WIDTH);
           obj['hide'] = thElms.eq(i).hasClass('ng-hide');
           cols.push(obj);
         }
@@ -171,7 +171,7 @@ export class updateTableCols {
     let updateColsWidth = () => {
       let thElms = headerElm.find('th');
       for(let i=0; i< thElms.length; i++) {
-        if (!thElms.eq(i).hasClass('ng-hide') && !thElms.eq(i).hasClass('x-sroll-patch')) {
+        if (!thElms.eq(i).hasClass('x-sroll-patch')) {
           //let width = cols[i].width < CONST_MIN_WIDTH ? CONST_MIN_WIDTH : cols[i].width;
           thElms.eq(i)[0].style.width = cols[i].width + 'px';
         }
@@ -183,14 +183,14 @@ export class updateTableCols {
             tdElms = trElms.eq(0).find('td');
       if (tdElms.length > 1) {
         for(let i=0; i< tdElms.length; i++) {
-          if (!cols[i].hide) {
+          //if (!cols[i].hide) {
             if (i === tdElms.length -1 && body_y_scroll_width > 0) {
               tdElms.eq(i)[0].style.width = (cols[i].width - body_y_scroll_width) + 'px';
             }
             else {
               tdElms.eq(i)[0].style.width = cols[i].width + 'px';   
             }
-          }
+          //}
         }
       }
     };
@@ -220,6 +220,7 @@ export class updateTableCols {
     //显示隐藏columns时调整table的tds width
     unsubscribers.push(this.di.$rootScope.$on('table-show-hide-columns', (event) => {
       getColsWidth();
+      updateColsWidth();
       updateBodyColsWidth();
     }));
     //tbody渲染以后调整td宽度（scroll宽度影响tds）
