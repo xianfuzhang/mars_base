@@ -4,24 +4,6 @@
             ng-bind="title"></span>
     </div>
     <div class="content">
-				<div class="input_item" ng-show="false">
-						<div class="label" ng-bind="selectOptionTitle"></div>
-						<mdl-select ng-model="chartModel.selectedData" display-label="dataOptions">
-						</mdl-select>
-				</div>
-
-                <div class="input_item" ng-show="type == 'controller-interface'">
-                    <div class="label" ng-bind="unitTypeOptionTitle"></div>
-                    <mdl-select ng-model="chartModel.unitTypeOption" display-label="{options: interfaceUnitTypes}">
-                    </mdl-select>
-                </div>
-
-                <div class="input_item" ng-show="type == 'controller-interface'">
-                    <div class="label" ng-bind="stateTypeOptionTitle"></div>
-                    <mdl-select ng-model="chartModel.stateTypeOption" display-label="{options: interfaceStateTypes}" disable="chartModel.unitTypeOption.value == 'bytes_tx' || chartModel.unitTypeOption.value == 'bytes_rx'">
-                    </mdl-select>
-                </div>
-
 				<div class="input_item">
 					<div class="label" ng-bind="'MODULES.DASHBOARD.SETTING.TIME_RANGE'|translate"></div>
 					<div><input type="datetime-local" ng-model="chartModel.beginTime" ng-change="timeChange()" value="{{beginTime}}"/></div>

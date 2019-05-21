@@ -148,7 +148,8 @@
                         <div class="setting-group" ng-show="!dashboardModel.controller.interface.loading">
                             <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('controller-interface')"><i class="material-icons">settings</i></div>
                             <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('controller-interface')"><i class="material-icons">undo</i></div>
-                            <div class="item" title="{{clusterInterfaceChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-interface')"><i class="material-icons">swap_horiz</i></div>
+                            <!--<div class="item" title="{{clusterInterfaceChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-interface')"><i class="material-icons">swap_horiz</i></div>-->
+
                         </div>
 
                         <div class="chart-loading" ng-show="dashboardModel.controller.interface.loading"></div>
@@ -224,40 +225,48 @@
                 <div class="mars-row-flex">
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
                         <canvas id="interface-rxtx-packages" height="300"
-                                class="chart chart-bar"
-                                chart-type="bar"
-                                chart-data="interfaceRxTxPackagesChartConfig.data"
-                                chart-labels="interfaceRxTxPackagesChartConfig.labels"
-                                chart-colors="interfaceRxTxPackagesChartConfig.colors"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-data="switchInterfaceRxTxChartConfig.data"
+                                chart-labels="switchInterfaceRxTxChartConfig.labels"
                                 chart-fill="false"
-                                chart-series="interfaceRxTxPackagesChartConfig.series"
-                                chart-options="interfaceRxTxPackagesChartConfig.options">
+                                chart-series="switchInterfaceRxTxChartConfig.series"
+                                chart-options="switchInterfaceRxTxChartConfig.options"
+                                chart-click="switchInterfaceRxTxChartConfig.onClick"
+                                chart-hover="switchInterfaceRxTxChartConfig.onHover">
                         </canvas>
 
-                        <div class="setting-group" ng-show="!dashboardModel.disk.loading">
+                        <div class="setting-group" ng-show="!dashboardModel.interface.loading">
+                            <mdl-select ng-model="dashboardModel.interface.typeOption" display-label="{options: interfaceTypes}">
+                            </mdl-select>
                             <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}"><i class="material-icons">settings</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-interface')"><i class="material-icons">undo</i></div>
                         </div>
 
-                        <div class="chart-loading" ng-show="dashboardModel.disk.loading"></div>
+                        <div class="chart-loading" ng-show="dashboardModel.interface.loading"></div>
                     </div>
 
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
-                        <canvas id="interface-rxtx-drops" height="300"
-                                class="chart chart-bar"
-                                chart-type="bar"
-                                chart-data="interfaceDropPackagesChartConfig.data"
-                                chart-labels="interfaceDropPackagesChartConfig.labels"
-                                chart-colors="interfaceDropPackagesChartConfig.colors"
+                        <canvas id="interface-rxtx-drop-error" height="300"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-data="switchInterfaceDropErrorChartConfig.data"
+                                chart-labels="switchInterfaceDropErrorChartConfig.labels"
                                 chart-fill="false"
-                                chart-series="interfaceDropPackagesChartConfig.series"
-                                chart-options="interfaceDropPackagesChartConfig.options">
+                                chart-series="switchInterfaceDropErrorChartConfig.series"
+                                chart-options="switchInterfaceDropErrorChartConfig.options"
+                                chart-click="switchInterfaceDropErrorChartConfig.onClick"
+                                chart-hover="switchInterfaceDropErrorChartConfig.onHover">
                         </canvas>
 
-                        <div class="setting-group">
+                        <div class="setting-group" ng-show="!dashboardModel.dropErrorInterface.loading">
+                            <mdl-select ng-model="dashboardModel.dropErrorInterface.typeOption" display-label="{options: interfaceTypes.slice(0,2)}">
+                            </mdl-select>
                             <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}"><i class="material-icons">settings</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-interface-drop-error')"><i class="material-icons">undo</i></div>
                         </div>
 
-                        <div class="chart-loading" ng-show="dashboardModel.disk.loading"></div>
+                        <div class="chart-loading" ng-show="dashboardModel.dropErrorInterface.loading"></div>
                     </div>
                 </div>
             </div>

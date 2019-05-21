@@ -18,30 +18,62 @@ export class ShowChartSettingController {
 
 		this.translate = this.di.$filter('translate');
 		
-		let chartTitle = '';
 		switch(this.di.dataModel.chartType) {
 			case 'controller-cpu':
-				chartTitle = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_CPU.TITLE");
+        scope.title = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_CPU.TITLE");
+        scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_CONTROLLER');
 				break;
 			case 'controller-memory':
-				chartTitle = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_MEMORY.TITLE");
+        scope.title = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_MEMORY.TITLE");
+        scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_CONTROLLER');
 				break;
       case 'controller-interface':
-        chartTitle = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_INTERFACE.TITLE");
+        scope.title = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_INTERFACE.TITLE");
+        scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_CONTROLLER');
+        scope.unitTypeOptionTitle = '流量类型:';
+        scope.stateTypeOptionTitle = '流量状态:';
         break;
 			case 'device-cpu':
-				chartTitle = this.translate("MODULES.DASHBOARD.CHART.SWITCH_CPU.TITLE");
+        scope.title = this.translate("MODULES.DASHBOARD.CHART.SWITCH_CPU.TITLE");
+        scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
 				break;
 			case 'device-memory':
-				chartTitle = this.translate("MODULES.DASHBOARD.CHART.SWITCH_MEMORY.TITLE");
+        scope.title = this.translate("MODULES.DASHBOARD.CHART.SWITCH_MEMORY.TITLE");
+        scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
 				break;
       case 'device-disk':
-        chartTitle = this.translate("MODULES.DASHBOARD.CHART.SWITCH_DISK.TITLE");
+        scope.title = this.translate("MODULES.DASHBOARD.CHART.SWITCH_DISK.TITLE");
+        scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
         break;
 		}
-		scope.title = chartTitle;
-		scope.selectOptionTitle = ['controller-cpu', 'controller-memory', 'controller-interface'].indexOf(this.di.dataModel.chartType) < 0 ? this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH') : this.translate('MODULES.DASHBOARD.SETTING.SELECT_CONTROLLER')
+
+		scope.type = this.di.dataModel.chartType;
 		scope.dataOptions = { options: [{label: this.translate('MODULES.DASHBOARD.SETTING.SELECT_ALL'), value:''}]};
+
+    scope.interfaceUnitTypes = [{
+      label: 'Packets_TX',
+      value: 'packets_tx'
+    },{
+      label: 'Packets_RX',
+      value: 'packets_rx'
+    },{
+      label: 'Bytes_TX',
+      value: 'bytes_tx'
+    },{
+      label: 'Bytes_RX',
+      value: 'bytes_rx'
+    }];
+
+    scope.interfaceStateTypes = [{
+      label: 'Normal',
+      value: 'normal'
+    },{
+      label: 'Dropped',
+      value: 'dropped'
+    },{
+      label: 'Error',
+      value: 'error'
+    }];
 		
     // TODO: array handle
 		let selectedData = this.di.dataModel.selectedData[0];
@@ -50,7 +82,9 @@ export class ShowChartSettingController {
       type: this.di.dataModel.chartType,
       beginTime: this.di.dataModel.beginTime,
       endTime: this.di.dataModel.endTime,
-      selectedData: scope.dataOptions[0]
+      selectedData: scope.dataOptions[0],
+      unitTypeOption: this.di.dataModel.unitTypeOption,
+      stateTypeOption: this.di.dataModel.stateTypeOption,
     };
     
 		this.di.dataModel.chartDataArr.forEach((data) => {
@@ -106,13 +140,27 @@ export class ShowChartSettingController {
     };
 
     scope.save = (event) => {
+      let data;
+      switch (this.di.dataModel.chartType) {
+        case 'controller-interface':
+          data = {
+            unitTypeOption: scope.chartModel.unitTypeOption,
+            stateTypeOption: scope.chartModel.stateTypeOption,
+            beginTime: scope.chartModel.beginTime,
+            endTime: scope.chartModel.endTime,
+          }
+          break;
+        default:
+          data = {
+            selectedData: scope.chartModel.selectedData.value ? [scope.chartModel.selectedData.value] : [],
+            beginTime: scope.chartModel.beginTime,
+            endTime: scope.chartModel.endTime,
+          }
+      }
+
       this.di.$modalInstance.close({
         canceled: false,
-        data: {
-          selectedData: scope.chartModel.selectedData.value ? [scope.chartModel.selectedData.value] : [],
-	        beginTime: scope.chartModel.beginTime,
-	        endTime: scope.chartModel.endTime,
-        }
+        data
       });
       
       event.stopPropagation();
