@@ -13,6 +13,8 @@ import {DeviceDetailService} from './service/deviceDetail.service';
 import {FabricSummaryController} from './ng/summary.controller';
 import {StormService} from './service/storm.service';
 import {IntentService} from './service/intent.service';
+import {DeviceChartSettingController} from './ng/deviceChartSetting.controller';
+
 import { DeviceWizardController } from './components/deviceWizard/ng/DeviceWizard.controller'
 import { FlowEstablishController } from './components/flow_establish/ng/FlowEstablish.controller';
 import {CreateIntentController} from './components/createIntent/ng/createIntent.controller';
@@ -40,6 +42,7 @@ export default angular
   .module('fabric', [])
   .controller('deviceController', DeviceController)
   .controller('deviceDetailController', DeviceDetailController)
+  .controller('deviceChartSettingCtrl', DeviceChartSettingController)
   .controller('interfaceGroupController', InterfaceGroupController)
   .controller('endPointController', EndPointController)
   .controller('hostController', HostController)

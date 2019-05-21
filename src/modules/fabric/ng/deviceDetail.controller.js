@@ -20,7 +20,9 @@ export class DeviceDetailController {
       'tableProviderFactory',
       'modalManager',
       'applicationService',
-      'logicalDataManager'
+      'logicalDataManager',
+      'chartService',
+      'dateService'
     ];
   }
   constructor(...args){
@@ -29,6 +31,7 @@ export class DeviceDetailController {
       this.di[value] = args[index];
     });
     this.scope = this.di.$scope;
+    const scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
     this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE');
     this.scope.deviceId = this.di.$routeParams['deviceId'];
@@ -47,6 +50,104 @@ export class DeviceDetailController {
       entities: [],
       total: null
     };
+
+    let date = this.di.dateService.getTodayObject();
+    let before = this.di.dateService.getBeforeDateObject(30*60*1000); // 前30分钟
+    let one_minute_before = this.di.dateService.getBeforeDateObject(60 * 1000); // 前1分钟
+    const GRID_NUM = 24; // chart grid number
+    let begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
+    let one_minute_before_time = new Date(one_minute_before.year, one_minute_before.month, one_minute_before.day, one_minute_before.hour, one_minute_before.minute, 0);
+    let end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
+
+    scope.interfaceTypes = [{
+      label: 'Packets_TX',
+      value: 'packets_tx'
+    },{
+      label: 'Packets_RX',
+      value: 'packets_rx'
+    },{
+      label: 'Bytes_TX',
+      value: 'bytes_tx'
+    },{
+      label: 'Bytes_RX',
+      value: 'bytes_rx'
+    }];
+
+    this.di.$scope.chartModel = {
+      cpu: {
+        'begin_time': begin_time,
+        'end_time': end_time,
+        'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
+        'origin_begin_time': begin_time,
+        'origin_end_time': end_time,
+        'analyzer': [],
+        loading: true
+      },
+      memory: {
+        'begin_time': begin_time,
+        'end_time': end_time,
+        'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
+        'origin_begin_time': begin_time,
+        'origin_end_time': end_time,
+        'analyzer': [],
+        loading: true
+
+      },
+      disk: {
+        'begin_time': one_minute_before_time,
+        'end_time': end_time,
+        'step': 60,
+        'origin_begin_time': one_minute_before_time,
+        'origin_end_time': end_time,
+        'analyzer': [],
+        loading: true
+      },
+      port: {
+        'begin_time': begin_time,
+        'end_time': end_time,
+        'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
+        'origin_begin_time': begin_time,
+        'origin_end_time': end_time,
+        'analyzer': [],
+        loading: true,
+        unitTypeOption: {label: 'Packets_TX', value: 'packets_tx'},
+        stateTypeOption: {label: 'Normal',value: 'normal'}
+      }
+    };
+
+    this.di.$scope.deviceCpuChartConfig = {
+      data: [],
+      labels: [],
+      options: {},
+      series: [],
+      onClick: () => {},
+      isRealtime: false
+    }
+    this.di.$scope.deviceMemoryChartConfig = {
+      data: [],
+      labels: [],
+      options: {},
+      series: [],
+      onClick: () => {},
+      isRealtime: false
+    }
+    this.di.$scope.deviceDiskChartConfig = {
+      data: [],
+      labels: [],
+      options: {},
+      series: [],
+      onClick: () => {},
+      isRealtime: false
+    }
+
+    this.di.$scope.devicePortChartConfig = {
+      data: [],
+      labels: [],
+      options: {},
+      series: [],
+      onClick: () => {},
+      isRealtime: false,
+    }
 
     this.scope.isOpenflowEnable= false;
     this.scope.isQosEnable= false;
@@ -82,6 +183,73 @@ export class DeviceDetailController {
       });
     });
 
+    this.scope.resetTimeScale = (type) => {
+      if (type === 'device-cpu') {
+        this.di.$scope.chartModel.cpu.begin_time = scope.chartModel.cpu.origin_begin_time;
+        this.di.$scope.chartModel.cpu.end_time = scope.chartModel.cpu.origin_end_time;
+        this.di.$scope.chartModel.cpu.step = Math.floor((scope.chartModel.cpu.origin_end_time.getTime() - scope.chartModel.cpu.origin_begin_time) / (GRID_NUM * 1000));
+      }
+      else if (type === 'device-memory') {
+        this.di.$scope.chartModel.memory.begin_time = scope.chartModel.memory.origin_begin_time;
+        this.di.$scope.chartModel.memory.end_time = scope.chartModel.memory.origin_end_time;
+        this.di.$scope.chartModel.memory.step = Math.floor((scope.chartModel.memory.origin_end_time.getTime() - scope.chartModel.memory.origin_begin_time) / (GRID_NUM * 1000));
+      }
+    }
+
+    this.scope.chartSetting = (type) => {
+      let chartDataArr = [], selectedData = [];
+      let beginTime, endTime, unitTypeOption, stateTypeOption;
+      switch(type) {
+        case 'device-cpu':
+          beginTime = this.di.$scope.chartModel.cpu.begin_time;
+          endTime = this.di.$scope.chartModel.cpu.end_time;
+          break;
+        case 'device-memory':
+          beginTime = this.di.$scope.chartModel.memory.begin_time;
+          endTime = this.di.$scope.chartModel.memory.end_time;
+          selectedData = this.di.$scope.chartModel.memory.selectedData;
+          break;
+      }
+
+      this.di.modalManager.open({
+        template: require('../template/chart_setting.html'),
+        controller: 'deviceChartSettingCtrl',
+        windowClass: 'show-chart-setting-modal',
+        resolve: {
+          dataModel: () => {
+            let model = {
+              chartType: type,
+              beginTime: beginTime,
+              endTime: endTime
+            };
+
+            return model;
+          }
+        }
+      }).result.then((res) => {
+        if (res && !res.canceled) {
+          switch(type) {
+            case 'device-cpu':
+              scope.chartModel.cpu.selectedData = selectedData;
+
+              scope.chartModel.cpu.origin_begin_time = res.data.beginTime;
+              scope.chartModel.cpu.origin_end_time = res.data.endTime;
+              scope.chartModel.cpu.begin_time = res.data.beginTime;
+              scope.chartModel.cpu.end_time = res.data.endTime;
+              scope.chartModel.cpu.step = Math.floor((scope.chartModel.cpu.origin_end_time.getTime() - scope.chartModel.cpu.origin_begin_time) / (GRID_NUM * 1000));
+              break;
+            case 'device-memory':
+              scope.chartModel.memory.origin_begin_time = res.data.beginTime;
+              scope.chartModel.memory.origin_end_time = res.data.endTime;
+              scope.chartModel.memory.begin_time = res.data.beginTime;
+              scope.chartModel.memory.end_time = res.data.endTime;
+              scope.chartModel.memory.step = Math.floor((scope.chartModel.memory.origin_end_time.getTime() - scope.chartModel.memory.origin_begin_time) / (GRID_NUM * 1000));
+              break;
+          }
+        }
+      });
+    }
+
     let unSubscribers = [];
     unSubscribers.push(this.di.$rootScope.$on('device-flow-refresh',()=>{
       this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.FLOW.CREATE.SUCCESS'));
@@ -97,7 +265,57 @@ export class DeviceDetailController {
       this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.PFC.CREATE.SUCCESS'));
       this.scope.detailModel.api.queryUpdate();
     }));
-    
+
+    let cpuTimeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['chartModel.cpu.begin_time', 'chartModel.cpu.end_time'], () => {
+      if(!cpuTimeHasChanged) {
+        cpuTimeHasChanged = true;
+        return;
+      }
+
+      this.getDeviceCPUAnalyzer().then(() => {
+        // cpu analyzer
+        this.setDeviceCpuChartData();
+      });
+    },true));
+
+    let memoryTimeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['chartModel.memory.begin_time', 'chartModel.memory.end_time'], () => {
+      if(!memoryTimeHasChanged) {
+        memoryTimeHasChanged = true;
+        return;
+      }
+
+      this.getDeviceMemoryAnalyzer().then(() => {
+        //memory analyzer
+        this.setDeviceMemoryChartData();
+      });
+    },true));
+
+    let portTimeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['chartModel.port.begin_time', 'chartModel.port.interface.end_time'], () => {
+      if(!portTimeHasChanged) {
+        portTimeHasChanged = true;
+        return;
+      }
+
+      this.getClustersInterfaceAnalyzer().then(() => {
+        // interface analyzer
+        setClusterInterfaceChartData();
+      });
+    },true));
+
+    let portTypeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['chartModel.port.interface.unitTypeOption', 'chartModel.port.interface.stateTypeOption'], () => {
+      if(!portTypeHasChanged) {
+        portTypeHasChanged = true;
+        return;
+      }
+
+      setClusterInterfaceChartData();
+    },true));
+
+
     this.scope.$on('$destroy', () => {
       unSubscribers.forEach((unSubscribe) => {
         unSubscribe();
@@ -140,6 +358,9 @@ export class DeviceDetailController {
               else if (!event.data.isEnabled && action.value === 'enable') {
                 filterActions.push(action);
               }
+              else if (action.value === 'analyzer') {
+                filterActions.push(action);
+              }
             });
             break;
           case 'flow':
@@ -156,18 +377,27 @@ export class DeviceDetailController {
       if (event.data) {
         switch (this.scope.tabSelected.type){
           case 'port':
-            let enabled = event.action.value === 'enable' ?  true : false;
-            this.di.deviceDataManager.changePortState(event.data.element, event.data.port_id, {'enabled': enabled})
-              .then((res) => {
-                event.data.isEnabled = !event.data.isEnabled;
-                this.scope.detailModel.entities.forEach((item) => {
-                  if (item.element === event.data.element && item.port_id === event.data.port_id) {
-                    item.port_status = event.data.isEnabled === true ? 'Up' : 'Down';
-                    //item.link_status = event.data.isEnabled === true ? "available" : "unavailable";
-                    this.scope.detailModel.api.update();
-                  }
+            if (event.action.value === 'analyzer') {
+              this.scope.port_id = event.data.port_id;
+              this.getDevicePortAnalyzer(event.data.port_id)
+                .then(() => {
+                  this.setDevicePortChartData();
                 });
-              });
+            } else {
+              let enabled = event.action.value === 'enable' ?  true : false;
+              this.di.deviceDataManager.changePortState(event.data.element, event.data.port_id, {'enabled': enabled})
+                .then((res) => {
+                  event.data.isEnabled = !event.data.isEnabled;
+                  this.scope.detailModel.entities.forEach((item) => {
+                    if (item.element === event.data.element && item.port_id === event.data.port_id) {
+                      item.port_status = event.data.isEnabled === true ? 'Up' : 'Down';
+                      //item.link_status = event.data.isEnabled === true ? "available" : "unavailable";
+                      this.scope.detailModel.api.update();
+                    }
+                  });
+                });
+            }
+
             break;
           case 'flow':
             if (event.action.value === 'detail'){
@@ -476,6 +706,33 @@ export class DeviceDetailController {
           defer.resolve({'data': resArr});
         });
         break;
+      case 'analyzer':
+        this.getDeviceCPUAnalyzer().then(() => {
+          this.setDeviceCpuChartData();
+          this.scope.chartModel.cpu.loading = false;
+        }, (err) => {
+          console.error("Can't get device cpu analyzer data.");
+          this.scope.chartModel.cpu.loading = false;
+        });
+
+        this.getDeviceMemoryAnalyzer().then(() => {
+          this.setDeviceMemoryChartData();
+          this.scope.chartModel.memory.loading = false;
+        }, (err) => {
+          console.error("Can't get device memory analyzer data.");
+          this.scope.chartModel.memory.loading = false;
+        });
+
+        this.getDeviceDiskAnalyzer().then(() => {
+          this.setDeviceDiskChartData();
+          this.scope.chartModel.disk.loading = false;
+        }, (err) => {
+          console.error("Can't get device memory analyzer data.");
+          this.scope.chartModel.disk.loading = false;
+        });
+
+        defer.resolve({data: []});
+        break;
       case 'port':
         let deferArr = [];
         let portsDefer = this.di.$q.defer();
@@ -593,6 +850,628 @@ export class DeviceDetailController {
       });
   
     return defer.promise;
+  }
+
+  getDeviceCPUAnalyzer() {
+    let defer = this.di.$q.defer();
+    let startTime = this.getISODate(this.di.$scope.chartModel.cpu.begin_time);
+    let endTime = this.getISODate(this.di.$scope.chartModel.cpu.end_time);
+    let solution_second = this.di.$scope.chartModel.cpu.step;
+
+    this.di.deviceDataManager.getDeviceCPUAnalyzer(this.scope.detailValue.name, startTime, endTime, solution_second)
+      .then((data) => {
+        this.di.$scope.chartModel.cpu.analyzer = [{'id': this.scope.deviceId, 'name': this.scope.detailValue.name, 'analyzer': data}];
+        defer.resolve();
+      });
+
+    return defer.promise;
+  }
+
+  getDeviceMemoryAnalyzer() {
+    let defer = this.di.$q.defer();
+
+    let startTime = this.getISODate(this.di.$scope.chartModel.memory.begin_time);
+    let endTime = this.getISODate(this.di.$scope.chartModel.memory.end_time);
+    let solution_second = this.di.$scope.chartModel.memory.step;
+
+    this.di.deviceDataManager.getDeviceMemoryAnalyzer(this.scope.detailValue.name, startTime, endTime, solution_second)
+      .then((data) => {
+        this.di.$scope.chartModel.memory.analyzer = [{'id': this.scope.deviceId, 'name': this.scope.detailValue.name, 'analyzer': data}]
+          defer.resolve();
+      });
+
+    return defer.promise;
+  }
+
+  getDeviceDiskAnalyzer(devices) {
+    let defer = this.di.$q.defer();
+    let startTime = this.getISODate(this.di.$scope.chartModel.disk.begin_time);
+    let endTime = this.getISODate(this.di.$scope.chartModel.disk.end_time);
+    let solution_second = this.di.$scope.chartModel.disk.step;
+
+    this.di.deviceDataManager.getDeviceDiskAnalyzer(this.scope.detailValue.name, startTime, endTime, solution_second)
+      .then((data) => {
+        let analyzer = {'id': this.scope.deviceId, 'name': this.scope.detailValue.name};
+        if (data.length > 0) {
+          let analyzerArr = this.di._.orderBy(data, 'timepoint', 'desc');
+          Object.assign(analyzer, analyzerArr[0])
+        } else {
+          analyzer.timepoint = this.getISODate(new Date());
+          analyzer.used_percent = 0;
+          analyzer.free_percent = 0;
+          analyzer.reserved_percent = 0;
+        }
+
+        this.di.$scope.chartModel.disk.analyzer = [analyzer];
+        defer.resolve();
+      });
+
+    return defer.promise;
+  }
+
+  getDevicePortAnalyzer(port) {
+    let defer = this.di.$q.defer();
+
+    let startTime = this.getISODate(this.di.$scope.chartModel.port.begin_time);
+    let endTime = this.getISODate(this.di.$scope.chartModel.port.end_time);
+    let solution_second = this.di.$scope.chartModel.port.step;
+
+    this.di.deviceDataManager.getDevicePortAnalyzer(this.scope.detailValue.name, port, startTime, endTime, solution_second)
+      .then((data) => {
+        data = {'id': this.scope.deviceId, 'name': this.scope.detailValue.name, port_id: this.scope.port_id, 'analyzer': data}
+
+        let analyzer = this.calcInterfaceTxRxRate([data]);
+        this.di.$scope.chartModel.port.analyzer = analyzer
+        defer.resolve();
+      });
+
+    return defer.promise;
+  }
+
+  setDeviceCpuChartData() {
+    //cpu analyzer
+    let dataArr = [];
+    let series = [];
+    let analyzer = this.di.$scope.chartModel.cpu.analyzer;
+    let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+    let labelsArr = analyzer.length > 0 ?
+      this.getCPUMemoryTimeSeries(x_times) : [];
+
+    if(analyzer.length) {
+      analyzer.forEach((item, index) =>{
+        let data = [];
+        item.analyzer.forEach((record) => {
+          data.push((record.system_percent + record.user_percent).toFixed(2))
+        })
+        dataArr.push(data);
+        series.push(item.name);
+      });
+    }
+
+    const scope = this.scope;
+    const pad = this.pad;
+    const lineChartOnZoom = this.lineChartOnZoom;
+    const lineChartOnClick = this.lineChartOnClick;
+    const lineChartOnHover = this.lineChartOnHover;
+    const getFormatedDateTime = this.getFormatedDateTime;
+
+    let options = {
+      title: {
+        display: true,
+        text: this.translate('MODULES.SWITCH.DETAIL.CPU_USAGE'),
+      },
+      legend: {
+        display: false
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: false,
+            callback: function(value, index, values) {
+              return value.toFixed(2) + '%';
+            }
+          }
+        }],
+        xAxes: [{
+          ticks: {
+            callback: function(value, index, values) {
+              value = new Date(value);
+              return pad(value.getHours()) + ':' + pad(value.getMinutes()) + ':' + pad(value.getSeconds());
+            }
+          }
+        }],
+      },
+      tooltips: {
+        callbacks: {
+          title: (tooltipItem) => {
+            let value = new Date(labelsArr[tooltipItem[0].index]);
+            return getFormatedDateTime(value);
+          },
+          label: function(tooltipItem, data) {
+            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+            if (label) {
+              label += ': ';
+            }
+            label += (tooltipItem.yLabel + '%');
+            return label;
+          }
+        }
+      },
+      // Container for zoom options
+      zoom: {
+        // Useful for dynamic data loading
+        onZoom: lineChartOnZoom('device-cpu-chart', scope)
+      }
+    }
+
+    this.di.$scope.deviceCpuChartConfig.data = dataArr;
+    this.di.$scope.deviceCpuChartConfig.labels = labelsArr;
+    this.di.$scope.deviceCpuChartConfig.options = options;
+    this.di.$scope.deviceCpuChartConfig.series = series;
+    this.di.$scope.deviceCpuChartConfig.onClick = lineChartOnClick(this.scope.chartModel.cpu.analyzer);
+    // this.di.$scope.deviceCpuChartConfig.onHover = lineChartOnHover();
+  };
+
+  setDeviceMemoryChartData() {
+    //memory analyzer
+    let dataArr = [];
+    let series = [];
+    let analyzer = this.di.$scope.chartModel.memory.analyzer;
+    let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+    let labelsArr = analyzer.length > 0 ?
+      this.getCPUMemoryTimeSeries(x_times) : [];
+
+    let index = 0;
+    if(analyzer.length) {
+      analyzer.forEach((item, index) =>{
+        let data = [];
+        item.analyzer.forEach((record) => {
+          data.push(record.used_percent.toFixed(2))
+        })
+        dataArr.push(data);
+        series.push(item.name)
+      })
+    }
+
+    const pad = this.pad;
+    const scope = this.di.$scope;
+    const lineChartOnZoom = this.lineChartOnZoom;
+    const lineChartOnClick = this.lineChartOnClick;
+    const lineChartOnHover = this.lineChartOnHover;
+    const getFormatedDateTime = this.getFormatedDateTime;
+
+    let options = {
+      title: {
+        display: true,
+        text: this.translate('MODULES.SWITCH.DETAIL.MEMORY_USAGE"'),
+      },
+      legend: {
+        display: false
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: false,
+            callback: function(value, index, values) {
+              return value.toFixed(2) + '%';
+            }
+          }
+        }],
+        xAxes: [{
+          ticks: {
+            callback: function(value, index, values) {
+              value = new Date(value);
+              return pad(value.getHours()) + ':' + pad(value.getMinutes())+ ':' + pad(value.getSeconds());
+            }
+          }
+        }],
+      },
+      tooltips: {
+        callbacks: {
+          title: (tooltipItem) => {
+            let value = new Date(labelsArr[tooltipItem[0].index]);
+            return getFormatedDateTime(value);
+          },
+          label: function(tooltipItem, data) {
+            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+            if (label) {
+              label += ': ';
+            }
+            label += (tooltipItem.yLabel + '%');
+            return label;
+          }
+        }
+      },
+      zoom: {
+        // Useful for dynamic data loading
+        onZoom: lineChartOnZoom('device-memory-chart', scope)
+      }
+    };
+
+    this.di.$scope.deviceMemoryChartConfig.data = dataArr;
+    this.di.$scope.deviceMemoryChartConfig.labels = labelsArr;
+    this.di.$scope.deviceMemoryChartConfig.options = options;
+    this.di.$scope.deviceMemoryChartConfig.series = series;
+    this.di.$scope.deviceMemoryChartConfig.onClick = lineChartOnClick(analyzer);
+    // this.di.$scope.deviceMemoryChartConfig.onHover = lineChartOnHover();
+  };
+
+  setDeviceDiskChartData() {
+    let labelsArr = [];
+
+    let usedArr = [], freeArr = [], reservedArr = [];
+    let analyzer = this.di.$scope.chartModel.disk.analyzer;
+    this.di._.forEach(analyzer, (device)=>{
+      labelsArr.push(device.name);
+      usedArr.push(device.used_percent);
+      freeArr.push(device.free_percent);
+      reservedArr.push(device.reserved_percent);
+    });
+
+    const pad = this.pad;
+    let options = {
+      title: {
+        text: this.translate('MODULES.SWITCH.DETAIL.DISK_USAGE')
+      },
+      legend: {
+        display: true,
+        position: 'right'
+      },
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: 'percent'
+          },
+          ticks: {
+            beginAtZero: false,
+            callback: function(value, index, values) {
+              return value.toFixed(2) + '%';
+            }
+          },
+        }],
+        xAxes: [{
+          barThickness: 40,
+        }],
+      },
+      tooltips: {
+        callbacks: {
+          label: function(tooltipItem) {
+            return tooltipItem.yLabel.toFixed(2) + '%';
+          }
+        }
+      }
+    }
+
+    this.scope.deviceDiskChartConfig.data = [usedArr, freeArr, reservedArr];
+    this.scope.deviceDiskChartConfig.labels = labelsArr;
+    this.scope.deviceDiskChartConfig.series = ['used_percent', 'free_percent', 'reserved_percent'];
+    this.scope.deviceDiskChartConfig.colors = [{backgroundColor: 'rgb(250,128,114)'}, {backgroundColor: 'rgb(144,238,144)'}, {backgroundColor: 'rgb(244,164,96)'}];
+    this.scope.deviceDiskChartConfig.options = options;
+  };
+
+  setDevicePortChartData() {
+    let dataArr = [], series = [],labelsArr = [] , yAxesTitle, onClickType;
+    let analyzer = this.di.$scope.chartModel.port.analyzer;
+    let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+    labelsArr = analyzer.length > 0 ?
+      this.getCPUMemoryTimeSeries(x_times) : [];
+
+    const scope = this.scope;
+    analyzer.forEach((device) => {
+      let data = [];
+      device.analyzer.forEach((item) => {
+        switch (scope.chartModel.port.unitTypeOption.value) {
+          case 'packets_tx':
+            switch (scope.chartModel.port.stateTypeOption.value) {
+              case 'normal':
+                data.push(item.packets_tx);
+                break;
+              case 'dropped':
+                data.push(item.dropped_tx);
+                break;
+              case 'error':
+                data.push(item.error_tx);
+                break;
+            }
+            yAxesTitle = 'packets';
+            break;
+          case 'packets_rx':
+            switch (scope.chartModel.port.stateTypeOption.value) {
+              case 'normal':
+                data.push(item.packets_rx);
+                break;
+              case 'dropped':
+                data.push(item.dropped_rx);
+                break;
+              case 'error':
+                data.push(item.error_rx);
+                break;
+            }
+            yAxesTitle = 'packets';
+            break;
+          case 'bytes_tx':
+            data.push(item.bytes_tx);
+            yAxesTitle = 'bytes';
+            break;
+          case 'bytes_rx':
+            data.push(item.bytes_rx);
+            yAxesTitle = 'bytes';
+            break;
+        }
+      });
+
+      dataArr.push(data);
+      series.push(device.name)
+    });
+
+    const pad = this.pad;
+    const getFormattedNumber = this.getFormattedNumber;
+    const getFormatedDateTime = this.getFormatedDateTime;
+    const lineChartOnZoom = this.lineChartOnZoom;
+
+    let options = {
+      title: {
+        display: true,
+        text: this.translate('MODULES.DASHBOARD.CONTROLLER_INTERFACE_PACKETS'),
+      },
+      legend: {
+        display: false,
+      },
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: true,
+            labelString: yAxesTitle
+          },
+          ticks: {
+            beginAtZero: false,
+            callback: function(value, index, values) {
+              return getFormattedNumber(value);
+            }
+          }
+        }],
+        xAxes: [{
+          ticks: {
+            callback: function(value, index, values) {
+              value = new Date(value);
+              return pad(value.getHours()) + ':' + pad(value.getMinutes())+ ':' + pad(value.getSeconds());;
+            }
+          }
+        }],
+      },
+      tooltips: {
+        callbacks: {
+          title: (tooltipItem) => {
+            let value = new Date(labelsArr[tooltipItem[0].index]);
+            return getFormatedDateTime(value);
+          },
+          label: function(tooltipItem, data) {
+            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+            if (label) {
+              label += ': ';
+            }
+            label += getFormattedNumber(tooltipItem.yLabel);
+            return label;
+          }
+        }
+      },
+      // Container for zoom options
+      zoom: {
+        // Useful for dynamic data loading
+        onZoom: lineChartOnZoom('device-port-chart')
+      }
+    };
+
+    this.di.$scope.devicePortChartConfig.data = dataArr;
+    this.di.$scope.devicePortChartConfig.labels = labelsArr;
+    this.di.$scope.devicePortChartConfig.options = options;
+    this.di.$scope.devicePortChartConfig.series = series;
+    // this.di.$scope.clusterInterfaceChartConfig.onClick = interfaceLineChartOnClick(scope.dashboardModel.controller.interface.analyzer, yAxesTitle);
+    // this.di.$scope.clusterInterfaceChartConfig.onHover = lineChartOnHover();
+  };
+
+  getCPUMemoryTimeSeries(device) {
+    let timeseries = [];
+    device.analyzer.forEach((record) => {
+      timeseries.push(record.timepoint);
+    });
+    return timeseries;
+  }
+
+  lineChartOnZoom(chartType, scope) {
+
+    return function(chart, xRange) {
+      let ticks = chart.data.labels;
+      let startIndex = xRange.start;
+      let endIndex = xRange.end;
+      if(startIndex === endIndex) {
+        if(endIndex == ticks.length - 1) {
+          startIndex = endIndex - 1;
+        } else {
+          endIndex = startIndex + 1;
+        }
+      }
+
+      let start = new Date(ticks[startIndex]);
+      let startTime = start.getTime();
+      let end = new Date(ticks[endIndex]);
+      let endTime =  end.getTime();
+      let step = Math.floor((endTime - startTime) / ((ticks.length - 1) * 1000));
+      step = step < 30 ? 30 : step > 3600 ? 3600 : step;
+
+      switch(chartType) {
+        case 'device-cpu-chart':
+          scope.chartModel.cpu.begin_time = start;
+          scope.chartModel.cpu.end_time = end;
+          scope.chartModel.cpu.step = step;
+          break;
+        case 'device-memory-chart':
+          scope.chartModel.memory.begin_time = start;
+          scope.chartModel.memory.end_time = end;
+          scope.chartModel.memory.step = step;
+          break;
+      }
+
+      scope.$apply()
+    }
+  }
+
+  lineChartOnClick(analyzer, type) {
+    // const getFormatedDateTime = this.getFormatedDateTime;
+
+    return function(evt, chart) { // point element
+      // 1.element hover event
+      let element = chart.getElementAtEvent(evt);
+      if(element.length > 0)
+      {
+        let datasetIndex = element[0]._datasetIndex;
+        let index = element[0]._index;
+        let xLabel = chart.data.labels[index];
+
+        let data = analyzer[datasetIndex].analyzer[index];
+        let title = analyzer[datasetIndex].name + ' - ' + getFormatedDateTime(xLabel);
+
+        setCpuPieChartData(evt, data, title)
+      }
+    }
+  }
+
+  lineChartOnHover() {
+    return function(event, chart) {
+      // 1.element hover event
+      let element = chart.getElementAtEvent(event);
+      if(element.length > 0) return;
+
+      // 2.recover line style when click the grid area
+      const box = chart.boxes[0];
+      let minTop = 0;
+      if(box.position == 'bottom') {
+        box.legendHitBoxes.forEach((item, key) => {
+          if(key == 0 || minTop > item.top) {
+            minTop = item.top;
+          }
+        })
+      }
+      if((box.position === "top" && event.layerY >= box.height) || (box.position === "bottom" && event.layerY < minTop) || (box.position === "right" && event.layerX <= box.left)) {
+        chart.data.datasets.forEach((value, key) => {
+          value.borderColor = chartService.helpers.color(value.borderColor).alpha(1).rgbString();
+          value.backgroundColor = chartService.helpers.color(value.backgroundColor).alpha(0.2).rgbString(),
+            value.borderWidth = chartStyles.lines.borderWidth;
+          value.pointRadius = 1;
+        })
+
+        chart.update();
+      }
+    }
+  }
+
+  calcInterfaceTxRxRate(dataArr) {
+    let resArr = [];
+    dataArr.forEach((data) => {
+      let newData = {};
+      newData.id = data.id;
+      newData.name = data.name;
+      newData.port_id = data.port_id;
+      newData.analyzer = [];
+
+      data.analyzer.forEach((analyzer, index) => {
+        if(index > 0) {
+          let newAnalyzer = {}
+
+          let diffSeconds = ((new Date(analyzer.timepoint)).getTime() - (new Date(data.analyzer[index - 1].timepoint)).getTime()) / 1000;
+
+          newAnalyzer.timepoint = analyzer.timepoint;
+          newAnalyzer.packets_rx = Math.ceil((analyzer.packetsReceived - data.analyzer[index - 1].packetsReceived) / diffSeconds);
+          newAnalyzer.packets_tx = Math.ceil((analyzer.packetsSent - data.analyzer[index - 1].packetsSent) / diffSeconds);
+          newAnalyzer.dropped_rx = Math.ceil((analyzer.packetsRxDropped - data.analyzer[index - 1].packetsRxDropped) / diffSeconds);
+          newAnalyzer.dropped_tx = Math.ceil((analyzer.packetsTxDropped - data.analyzer[index - 1].packetsTxDropped) / diffSeconds);
+          newAnalyzer.error_rx = Math.ceil((analyzer.packetsRxErrors - data.analyzer[index - 1].packetsRxErrors) / diffSeconds);
+          newAnalyzer.error_tx = Math.ceil((analyzer.packetsTxErrors - data.analyzer[index - 1].packetsTxErrors) / diffSeconds);
+          newAnalyzer.bytes_tx = Math.ceil((analyzer.bytesSent - data.analyzer[index - 1].bytesSent) / diffSeconds);
+          newAnalyzer.bytes_rx = Math.ceil((analyzer.bytesReceived - data.analyzer[index - 1].bytesReceived) / diffSeconds);
+
+          newData.analyzer.push(newAnalyzer);
+        }
+      })
+
+      resArr.push(newData);
+    })
+
+    return resArr
+  };
+
+  getFormatedDateTime(date) {
+    let _fillInt = (num, count) => {
+      if(!count){
+        count = 2;
+      }
+      let numStr = num + '';
+      if(numStr.length !== count) {
+        return '0'.repeat(count - numStr.length) + numStr
+      } else
+        return num
+    };
+
+    let res = date.getFullYear() +
+      '-' + _fillInt(date.getMonth() + 1) +
+      '-' + _fillInt(date.getDate()) +
+      ' ' + _fillInt(date.getHours()) +
+      ':' + _fillInt(date.getMinutes()) +
+      ':' + _fillInt(date.getSeconds());
+
+    return res
+  }
+
+  getFormattedNumber(num) {
+    let numArr = num.toString().split('');
+    let formattedNum = '';
+
+    if(num >= 0) {
+      let numLength = numArr.length;
+      let diffCount = numLength % 3;
+      for(let i = 1; i <= numLength; i++) {
+        formattedNum += numArr[i-1];
+
+        if((i - diffCount) % 3 == 0 && i < numLength) {
+          formattedNum += ','
+        }
+      }
+    } else {
+      let numLength = numArr.length - 1;
+      let diffCount = numLength % 3;
+      for(let i = 2; i <= numLength; i++) {
+        formattedNum += numArr[i-1];
+
+        if((i - diffCount) % 3 == 0 && i < numLength) {
+          formattedNum += ','
+        }
+      }
+
+      formattedNum = parseInt(formattedNum) * -1;
+    }
+
+
+    return formattedNum;
+  }
+
+  getISODate(date) {
+    return date.getUTCFullYear() +
+      '-' + this.pad( date.getUTCMonth() + 1 ) +
+      '-' + this.pad( date.getUTCDate() ) +
+      'T' + this.pad( date.getUTCHours() ) +
+      ':' + this.pad( date.getUTCMinutes() ) +
+      'Z';
+  }
+
+  pad(number) {
+    if ( number < 10 ) {
+      return '0' + number;
+    }
+    return number;
   }
 
   entityStandardization(entities) {

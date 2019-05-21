@@ -60,6 +60,20 @@ export class DashboardController {
 	    selectedSwitchCpu: [],
 	    selectedSwitchMemory: [],
     };
+    scope.interfaceTypes = [{
+      label: 'Packets_TX',
+      value: 'packets_tx'
+    },{
+      label: 'Packets_RX',
+      value: 'packets_rx'
+    },{
+      label: 'Bytes_TX',
+      value: 'bytes_tx'
+    },{
+      label: 'Bytes_RX',
+      value: 'bytes_rx'
+    }];
+
     let date = this.di.dateService.getTodayObject();
     let before = this.di.dateService.getBeforeDateObject(30*60*1000); // 前30分钟
     let one_minute_before = this.di.dateService.getBeforeDateObject(60 * 1000); // 前1分钟
@@ -108,6 +122,28 @@ export class DashboardController {
         loading: true
 
       },
+      interface: {
+        'begin_time': begin_time,
+        'end_time': end_time,
+        'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
+        'origin_begin_time': begin_time,
+        'origin_end_time': end_time,
+        'analyzer': [],
+        selectedData: [],
+        loading: true,
+        typeOption: scope.interfaceTypes[0],
+      },
+      dropErrorInterface: {
+        'begin_time': begin_time,
+        'end_time': end_time,
+        'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
+        'origin_begin_time': begin_time,
+        'origin_end_time': end_time,
+        'analyzer': [],
+        selectedData: [],
+        loading: true,
+        typeOption: scope.interfaceTypes[0],
+      },
 	    controller: {
 		    cpu: {
 			    'begin_time': begin_time,
@@ -137,7 +173,9 @@ export class DashboardController {
           'origin_end_time': end_time,
           'analyzer': [],
           selectedData: [],
-          loading: true
+          loading: true,
+          unitTypeOption: {label: 'Packets_TX', value: 'packets_tx'},
+          stateTypeOption: {label: 'Normal',value: 'normal'}
         }
 	    },
 	    clusterCpuPieChart: {},
@@ -168,7 +206,7 @@ export class DashboardController {
       options: {},
       series: [],
       onClick: () => {},
-      isRealtime: false
+      isRealtime: false,
     }
 	  this.di.$scope.switchCpuChartConfig = {
 		  data: [],
@@ -230,19 +268,19 @@ export class DashboardController {
       options: {},
       colors: [],
     }
-	  this.di.$scope.interfaceRxTxPackagesChartConfig = {
+	  this.di.$scope.switchInterfaceRxTxChartConfig = {
 		  data: [],
 		  labels: [],
 		  options: {},
 		  colors: []
 	  }
-	  this.di.$scope.interfaceDropPackagesChartConfig = {
+	  this.di.$scope.switchInterfaceDropErrorChartConfig = {
 		  data: [],
 		  labels: [],
 		  options: {},
 		  colors: []
 	  }
-	
+
     this.di.$scope.panelRefresh = {
       controller : false,
       swt : false,
@@ -264,6 +302,16 @@ export class DashboardController {
 		    this.di.$scope.dashboardModel.memory.end_time = scope.dashboardModel.memory.origin_end_time;
 		    this.di.$scope.dashboardModel.memory.step = Math.floor((scope.dashboardModel.memory.origin_end_time.getTime() - scope.dashboardModel.memory.origin_begin_time) / (GRID_NUM * 1000));
 	    }
+      else if (type === 'device-interface') {
+        this.di.$scope.dashboardModel.interface.begin_time = scope.dashboardModel.interface.origin_begin_time;
+        this.di.$scope.dashboardModel.interface.end_time = scope.dashboardModel.interface.origin_end_time;
+        this.di.$scope.dashboardModel.interface.step = Math.floor((scope.dashboardModel.interface.origin_end_time.getTime() - scope.dashboardModel.interface.origin_begin_time) / (GRID_NUM * 1000));
+      }
+      else if (type === 'device-interface-drop-error') {
+        this.di.$scope.dashboardModel.dropErrorInterface.begin_time = scope.dashboardModel.dropErrorInterface.origin_begin_time;
+        this.di.$scope.dashboardModel.dropErrorInterface.end_time = scope.dashboardModel.dropErrorInterface.origin_end_time;
+        this.di.$scope.dashboardModel.dropErrorInterface.step = Math.floor((scope.dashboardModel.dropErrorInterface.origin_end_time.getTime() - scope.dashboardModel.dropErrorInterface.origin_begin_time) / (GRID_NUM * 1000));
+      }
 	    else if (type === 'controller-cpu') {
 		    this.di.$scope.dashboardModel.controller.cpu.begin_time = scope.dashboardModel.controller.cpu.origin_begin_time;
 		    this.di.$scope.dashboardModel.controller.cpu.end_time = scope.dashboardModel.controller.cpu.origin_end_time;
@@ -283,7 +331,7 @@ export class DashboardController {
 	
     this.di.$scope.chartSetting = (type) => {
     	let chartDataArr = [], selectedData = [];
-	    let beginTime, endTime;
+	    let beginTime, endTime, unitTypeOption, stateTypeOption;
 	    switch(type) {
 		    case 'controller-cpu':
           dataModel['cluster'].forEach((controller) => {
@@ -311,6 +359,8 @@ export class DashboardController {
           beginTime = this.di.$scope.dashboardModel.controller.interface.begin_time;
           endTime = this.di.$scope.dashboardModel.controller.interface.end_time;
           selectedData = this.di.$scope.dashboardModel.controller.interface.selectedData;
+          unitTypeOption = this.di.$scope.dashboardModel.controller.interface.unitTypeOption;
+          stateTypeOption = this.di.$scope.dashboardModel.controller.interface.stateTypeOption;
           break;
 		    case 'device-cpu':
           dataModel['devices'].forEach((item, index) =>{
@@ -348,13 +398,21 @@ export class DashboardController {
 		    windowClass: 'show-chart-setting-modal',
 		    resolve: {
 			    dataModel: () => {
-			    	return {
-			    		chartType: type,
-					    chartDataArr: chartDataArr,
+			      let model = {
+              chartType: type,
+              chartDataArr: chartDataArr,
               selectedData: selectedData,
-					    beginTime: beginTime,
-					    endTime: endTime
-				    }
+              beginTime: beginTime,
+              endTime: endTime
+            };
+			      switch (type) {
+              case 'controller-interface':
+                model.unitTypeOption = unitTypeOption;
+                model.stateTypeOption = stateTypeOption;
+                break;
+            }
+
+				    return model;
 			    }
 		    }
 	    }).result.then((res) => {
@@ -385,8 +443,8 @@ export class DashboardController {
 							scope.dashboardModel.controller.memory.step = Math.floor((scope.dashboardModel.controller.memory.origin_end_time.getTime() - scope.dashboardModel.controller.memory.origin_begin_time) / (GRID_NUM * 1000));
 							break;
             case 'controller-interface':
-              scope.dashboardModel.controller.interface.selectedData = selectedData;
-
+              scope.dashboardModel.controller.interface.unitTypeOption = res.data.unitTypeOption;
+              scope.dashboardModel.controller.interface.stateTypeOption = res.data.stateTypeOption;
               scope.dashboardModel.controller.interface.origin_begin_time = res.data.beginTime;
               scope.dashboardModel.controller.interface.origin_end_time = res.data.endTime;
               scope.dashboardModel.controller.interface.begin_time = res.data.beginTime;
@@ -425,8 +483,6 @@ export class DashboardController {
 		    }
 	    });
     }
-    
-    const di = this.di;
 
     let init =() =>{
       let promises = [];
@@ -443,25 +499,25 @@ export class DashboardController {
         if(this.di.$scope.isAnalyzeEnable){
           this.getClustersCPUAnalyzer(res).then(() => {
             setClusterCPUChartData();
-            di.$scope.dashboardModel.controller.cpu.loading = false;
+            DI.$scope.dashboardModel.controller.cpu.loading = false;
           }, () => {
-            di.$scope.dashboardModel.controller.cpu.loading = false;
+            DI.$scope.dashboardModel.controller.cpu.loading = false;
             console.error("Can't get controller cpu analyzer data.");
           })
           
           this.getClustersMemoryAnalyzer(res).then(() => {
             setClusterMemoryChartData();
-            di.$scope.dashboardModel.controller.memory.loading = false;
+            DI.$scope.dashboardModel.controller.memory.loading = false;
           }, () => {
-            di.$scope.dashboardModel.controller.memory.loading = false;
+            DI.$scope.dashboardModel.controller.memory.loading = false;
             console.error("Can't get controller memory analyzer data.");
           })
 
           this.getClustersInterfaceAnalyzer(res).then(() => {
             setClusterInterfaceChartData();
-            di.$scope.dashboardModel.controller.interface.loading = false;
+            DI.$scope.dashboardModel.controller.interface.loading = false;
           }, () => {
-            di.$scope.dashboardModel.controller.interface.loading = false;
+            DI.$scope.dashboardModel.controller.interface.loading = false;
             console.error("Can't get controller interface analyzer data.");
           })
         }
@@ -483,34 +539,42 @@ export class DashboardController {
           if(this.di.$scope.isAnalyzeEnable){
             this.getDevicesCPUAnalyzer(configs).then(() => {
               setSwitchCpuChartData();
-              di.$scope.dashboardModel.cpu.loading = false;
+              DI.$scope.dashboardModel.cpu.loading = false;
             }, (err) => {
               console.error("Can't get device cpu analyzer data.");
+              DI.$scope.dashboardModel.cpu.loading = false;
             });
             
             this.getDevicesMemoryAnalyzer(configs).then(() => {
               setSwitchMemoryChartData();
-              di.$scope.dashboardModel.memory.loading = false;
+              DI.$scope.dashboardModel.memory.loading = false;
             }, (err) => {
               console.error("Can't get device memory analyzer data.");
+              DI.$scope.dashboardModel.memory.loading = false;
             });
 
             this.getDevicesDiskAnalyzer(configs).then(() => {
               setSwitchDiskChartData();
-              di.$scope.dashboardModel.disk.loading = false;
+              DI.$scope.dashboardModel.disk.loading = false;
             }, (err) => {
               console.error("Can't get device memory analyzer data.");
+              DI.$scope.dashboardModel.disk.loading = false;
+            });
+
+            this.getDevicesInterfaceAnalyzer(configs).then((res)=>{
+              DI.$scope.dashboardModel.interface.loading = false;
+              DI.$scope.dashboardModel.dropErrorInterface.loading = false;
+              setDeviceInterfaceRxTxChartData();
+              setDeviceInterfaceDropErrorChartData();
+            }, (err) => {
+              console.error("Can't get device interface analyzer data.");
+              DI.$scope.dashboardModel.interface.loading = false;
+              DI.$scope.dashboardModel.dropErrorInterface.loading = false;
             });
           }
         });
       });
       promises.push(devicesDefer.promise);
-
-      this.di.deviceDataManager.getDevicePortsStatistics().then((res)=>{
-        dataModel['swtStatistics'] = res.data['statistics'];
-        swtStaticsDefer.resolve();
-      });
-      promises.push(swtStaticsDefer.promise);
 
       this.di.deviceDataManager.getPorts().then((res)=>{
         dataModel['ports'] = res.data.ports;
@@ -526,7 +590,7 @@ export class DashboardController {
         let DI = this.di;
         convertControllerData();
         convertSwitchData();
-        convertSwitchInterface2Chart();
+        // convertSwitchInterface2Chart();
         
         DI.$scope.$apply();
         // DI.$rootScope.$emit('stop_loading');
@@ -685,9 +749,7 @@ export class DashboardController {
 	  };
 
     let setClusterInterfaceChartData = () => {
-      let dataArr = [];
-      let series = [];
-      let labelsArr = [];
+      let dataArr = [], series = [],labelsArr = [] , yAxesTitle, onClickType;
       let analyzer = this.di.$scope.dashboardModel.controller.interface.analyzer;
       let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
       labelsArr = analyzer.length > 0 ?
@@ -696,8 +758,46 @@ export class DashboardController {
       analyzer.forEach((controller) => {
         let data = [];
         controller.analyzer.forEach((item) => {
-          data.push(Math.floor(item.tx + item.rx));
+          switch (scope.dashboardModel.controller.interface.unitTypeOption.value) {
+            case 'packets_tx':
+              switch (scope.dashboardModel.controller.interface.stateTypeOption.value) {
+                case 'normal':
+                  data.push(item.packets_tx);
+                  break;
+                case 'dropped':
+                  data.push(item.dropped_tx);
+                  break;
+                case 'error':
+                  data.push(item.error_tx);
+                  break;
+              }
+              yAxesTitle = 'packets';
+              break;
+            case 'packets_rx':
+              switch (scope.dashboardModel.controller.interface.stateTypeOption.value) {
+                case 'normal':
+                  data.push(item.packets_rx);
+                  break;
+                case 'dropped':
+                  data.push(item.dropped_rx);
+                  break;
+                case 'error':
+                  data.push(item.error_rx);
+                  break;
+              }
+              yAxesTitle = 'packets';
+              break;
+            case 'bytes_tx':
+              data.push(item.bytes_tx);
+              yAxesTitle = 'bytes';
+              break;
+            case 'bytes_rx':
+              data.push(item.bytes_rx);
+              yAxesTitle = 'bytes';
+              break;
+          }
         });
+
         dataArr.push(data);
         series.push(controller.name)
       });
@@ -712,7 +812,7 @@ export class DashboardController {
           yAxes: [{
             scaleLabel: {
               display: true,
-              labelString: 'packages'
+              labelString: yAxesTitle
             },
             ticks: {
               beginAtZero: false,
@@ -758,7 +858,7 @@ export class DashboardController {
       this.di.$scope.clusterInterfaceChartConfig.labels = labelsArr;
       this.di.$scope.clusterInterfaceChartConfig.options = options;
       this.di.$scope.clusterInterfaceChartConfig.series = series;
-      this.di.$scope.clusterInterfaceChartConfig.onClick = interfaceLineChartOnClick(scope.dashboardModel.controller.interface.analyzer, scope.clusterInterfaceBarChartConfig);
+      this.di.$scope.clusterInterfaceChartConfig.onClick = interfaceLineChartOnClick(scope.dashboardModel.controller.interface.analyzer, yAxesTitle);
       this.di.$scope.clusterInterfaceChartConfig.onHover = lineChartOnHover();
     };
 
@@ -1046,7 +1146,233 @@ export class DashboardController {
       scope.switchDiskChartConfig.options = options;
     };
 
-	  let setInterfaceRxTxChartData = (dataArr, chartId, y_label, drop) => {
+    let setDeviceInterfaceRxTxChartData = () => {
+      let dataArr = [], series = [],labelsArr = [] , yAxesTitle, analyzerLength;
+      let tmpAnalyzer = this.di.$scope.dashboardModel.interface.analyzer;
+      switch (scope.dashboardModel.interface.typeOption.value) {
+        case 'packets_tx':
+          tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+            analyzerLength  = device.analyzer.length;
+            return device.analyzer[analyzerLength - 1].packetsSent - device.analyzer[0].packetsSent;
+          }, 'desc');
+          break;
+        case 'packets_rx':
+          tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+            analyzerLength  = device.analyzer.length;
+            return device.analyzer[analyzerLength - 1].packetsReceived - device.analyzer[0].packetsReceived;
+          }, 'desc');
+          break;
+        case 'bytes_tx':
+          tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+            analyzerLength  = device.analyzer.length;
+            return device.analyzer[analyzerLength - 1].bytesSent - device.analyzer[0].bytesSent;
+          }, 'desc');
+          break;
+        case 'bytes_rx':
+          tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+            analyzerLength  = device.analyzer.length;
+            return device.analyzer[analyzerLength - 1].bytesReceived - device.analyzer[0].bytesReceived;
+          }, 'desc');
+          break;
+      }
+
+      // get top5 analyzer
+      let analyzer = this.calcInterfaceTxRxRate(tmpAnalyzer.slice(0, 5));
+      let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+      labelsArr = analyzer.length > 0 ?
+        this.getCPUMemoryTimeSeries(x_times) : [];
+
+      analyzer.forEach((device) => {
+        let data = [];
+        device.analyzer.forEach((item) => {
+          switch (scope.dashboardModel.interface.typeOption.value) {
+            case 'packets_tx':
+              data.push(item.packets_tx);
+              yAxesTitle = 'packets';
+              break;
+            case 'packets_rx':
+              data.push(item.packets_rx);
+              yAxesTitle = 'packets';
+              break;
+            case 'bytes_tx':
+              data.push(item.bytes_tx);
+              yAxesTitle = 'bytes';
+              break;
+            case 'bytes_rx':
+              data.push(item.bytes_rx);
+              yAxesTitle = 'bytes';
+              break;
+          }
+        });
+
+        dataArr.push(data);
+        series.push(device.name)
+      });
+
+      const pad = this.pad;
+      let options = {
+        title: {
+          display: true,
+          text: this.translate('MODULES.DASHBOARD.SWITCH_INTERFACE_PACKETS'),
+        },
+        scales: {
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: yAxesTitle
+            },
+            ticks: {
+              beginAtZero: false,
+              callback: function(value, index, values) {
+                return getFormattedNumber(value);
+              }
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              callback: function(value, index, values) {
+                value = new Date(value);
+                return pad(value.getHours()) + ':' + pad(value.getMinutes())+ ':' + pad(value.getSeconds());;
+              }
+            }
+          }],
+        },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += getFormattedNumber(tooltipItem.yLabel);
+              return label;
+            }
+          }
+        },
+        // Container for zoom options
+        zoom: {
+          // Useful for dynamic data loading
+          onZoom: lineChartOnZoom('switch-interface-chart')
+        }
+      };
+
+      this.di.$scope.switchInterfaceRxTxChartConfig.data = dataArr;
+      this.di.$scope.switchInterfaceRxTxChartConfig.labels = labelsArr;
+      this.di.$scope.switchInterfaceRxTxChartConfig.options = options;
+      this.di.$scope.switchInterfaceRxTxChartConfig.series = series;
+      this.di.$scope.switchInterfaceRxTxChartConfig.onClick = interfaceLineChartOnClick(analyzer, yAxesTitle);
+      this.di.$scope.switchInterfaceRxTxChartConfig.onHover = lineChartOnHover();
+    };
+
+    let setDeviceInterfaceDropErrorChartData = () => {
+      let dataArr = [], series = [],labelsArr = [] , yAxesTitle, analyzerLength;
+      let tmpAnalyzer = this.di.$scope.dashboardModel.dropErrorInterface.analyzer;
+      switch (scope.dashboardModel.dropErrorInterface.typeOption.value) {
+        case 'packets_tx':
+          tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+            analyzerLength = device.analyzer.length;
+            return (device.analyzer[analyzerLength - 1].packetsTxDropped - device.analyzer[0].packetsTxDropped) + (device.analyzer[analyzerLength - 1].packetsTxErrors - device.analyzer[0].packetsTxErrors);
+          }, 'desc');
+          break;
+        case 'packets_rx':
+          tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+            analyzerLength = device.analyzer.length;
+            return (device.analyzer[analyzerLength - 1].packetsRxDropped - device.analyzer[0].packetsRxDropped) + (device.analyzer[analyzerLength - 1].packetsRxErrors - device.analyzer[0].packetsRxErrors);
+          }, 'desc');
+          break;
+      }
+
+      // get top5 analyzer
+      let analyzer = this.calcInterfaceTxRxRate(tmpAnalyzer.slice(0, 5));
+      let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+      labelsArr = analyzer.length > 0 ?
+        this.getCPUMemoryTimeSeries(x_times) : [];
+
+      analyzer.forEach((device) => {
+        let data = [];
+        device.analyzer.forEach((item) => {
+          switch (scope.dashboardModel.dropErrorInterface.typeOption.value) {
+            case 'packets_tx':
+              data.push(item.dropped_tx + item.error_tx);
+              yAxesTitle = 'packets';
+              break;
+            case 'packets_rx':
+              data.push(item.dropped_rx + item.error_rx);
+              yAxesTitle = 'packets';
+              break;
+          }
+        });
+
+        dataArr.push(data);
+        series.push(device.name)
+      });
+
+      const pad = this.pad;
+      let options = {
+        title: {
+          display: true,
+          text: this.translate('MODULES.DASHBOARD.SWITCH_INTERFACE_DROP_ERROR_PACKETS'),
+        },
+        scales: {
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: yAxesTitle
+            },
+            ticks: {
+              beginAtZero: false,
+              callback: function(value, index, values) {
+                return getFormattedNumber(value);
+              }
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              callback: function(value, index, values) {
+                value = new Date(value);
+                return pad(value.getHours()) + ':' + pad(value.getMinutes())+ ':' + pad(value.getSeconds());;
+              }
+            }
+          }],
+        },
+        tooltips: {
+          callbacks: {
+            title: (tooltipItem) => {
+              let value = new Date(labelsArr[tooltipItem[0].index]);
+              return getFormatedDateTime(value);
+            },
+            label: function(tooltipItem, data) {
+              var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+              if (label) {
+                label += ': ';
+              }
+              label += getFormattedNumber(tooltipItem.yLabel);
+              return label;
+            }
+          }
+        },
+        // Container for zoom options
+        zoom: {
+          // Useful for dynamic data loading
+          onZoom: lineChartOnZoom('switch-interface-drop-error-chart')
+        }
+      };
+
+      this.di.$scope.switchInterfaceDropErrorChartConfig.data = dataArr;
+      this.di.$scope.switchInterfaceDropErrorChartConfig.labels = labelsArr;
+      this.di.$scope.switchInterfaceDropErrorChartConfig.options = options;
+      this.di.$scope.switchInterfaceDropErrorChartConfig.series = series;
+      this.di.$scope.switchInterfaceDropErrorChartConfig.onClick = interfaceLineChartOnClick(analyzer, yAxesTitle);
+      this.di.$scope.switchInterfaceDropErrorChartConfig.onHover = lineChartOnHover();
+    };
+
+	  let setInterfaceErrorRxTxChartData = (dataArr, chartId, y_label, drop) => {
 		  let category= [], rxs = [], pkgRecv = [], pgkSend = [], title, labelsArr = [];
 		  this.di._.forEach(dataArr, (statistic)=>{
 			  let name = getSwtAndPortName(statistic['device'], statistic['port']);
@@ -1163,7 +1489,7 @@ export class DashboardController {
       }
     }
 
-    let interfaceLineChartOnClick = function(analyzer) {
+    let interfaceLineChartOnClick = function(analyzer, type) {
       return function(evt, chart) { // point element
         // 1.element hover event
         let element = chart.getElementAtEvent(evt);
@@ -1176,7 +1502,7 @@ export class DashboardController {
           let data = analyzer[datasetIndex].analyzer[index];
           let title = analyzer[datasetIndex].name + ' - ' + formatLocalTime(xLabel)
 
-          setInterfaceBarChartData(evt, data, title)
+          setInterfacePieChartData(evt, data, type, title)
         }
       }
     }
@@ -1351,12 +1677,6 @@ export class DashboardController {
       chartData.datasets.push(dataset);
 
       let options = {
-        plugins: {
-          deferred: {
-            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-            delay: 1500      // delay of 500 ms after the canvas is considered inside the viewport
-          }
-        },
         title: {
           text: title,
         }
@@ -1370,68 +1690,75 @@ export class DashboardController {
       DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
     }
 
-    let setInterfaceBarChartData = (evt, interfaceData, title, barChartConfig) => {
-      let category= [], rxs = [], pkgRecv = [], pgkSend = [], labelsArr = [];
+    let setInterfacePieChartData = (evt, data, type, title) => {
+      // initial
+      let pieChartConfig = {};
+      pieChartConfig.data = [];
+      pieChartConfig.labels = [];
 
-      // normal packages
-      pkgRecv.push(interfaceData.rx);
-      pgkSend.push(interfaceData.tx);
-      labelsArr.push("Normal");
+      if(!data) return;
 
-      // dropped packages
-      pkgRecv.push(interfaceData.rx_dropped);
-      pgkSend.push(interfaceData.tx_dropped);
-      labelsArr.push("Dropped");
+      let chartData = {datasets:[], labels:[]};
+      let dataset = {data:[], backgroundColor:[], label: ''};
 
-      // error packages
-      pkgRecv.push(interfaceData.rx_error);
-      pgkSend.push(interfaceData.tx_error);
-      labelsArr.push("Error");
+      switch (type) {
+        case 'packets':
+          dataset.data.push(data['packets_rx']);
+          dataset.backgroundColor.push('rgb(244,164,96)');
+          chartData.labels.push('packets_rx');
 
-      const pad = this.pad;
+          dataset.data.push(data['packets_tx']);
+          dataset.backgroundColor.push('rgb(255,228,196)');
+          chartData.labels.push('packets_tx');
+
+          dataset.data.push(data['dropped_rx']);
+          dataset.backgroundColor.push('rgb(144,238,144)');
+          chartData.labels.push('dropped_rx');
+
+          dataset.data.push(data['dropped_tx']);
+          dataset.backgroundColor.push('rgb(128,0,128)');
+          chartData.labels.push('dropped_tx');
+
+          dataset.data.push(data['error_rx']);
+          dataset.backgroundColor.push('rgb(210,105,30)');
+          chartData.labels.push('error_rx');
+
+          dataset.data.push(data['error_tx']);
+          dataset.backgroundColor.push('rgb(255,0,0)');
+          chartData.labels.push('error_tx');
+          break;
+        case 'bytes':
+          dataset.data.push(data['bytes_rx']);
+          dataset.backgroundColor.push('rgb(244,164,96)');
+          chartData.labels.push('bytes_rx');
+
+          dataset.data.push(data['bytes_tx']);
+          dataset.backgroundColor.push('rgb(255,228,196)');
+          chartData.labels.push('bytes_tx');
+          break;
+      }
+
+      chartData.datasets.push(dataset);
+
       let options = {
         title: {
-          text: title
-        },
-        scales: {
-          yAxes: [{
-            stacked: true,
-            scaleLabel: {
-              display: true,
-              labelString: 'packages'
-            },
-            ticks: {
-              beginAtZero: false,
-              // callback: function(value, index, values) {
-              //   return value.toFixed(2) + '%';
-              // }
-            }
-          }],
-          xAxes: [{
-            stacked: true,
-            barThickness: 30,
-          }],
+          text: title,
         },
         tooltips: {
           callbacks: {
             label: function(tooltipItem, data) {
-              var label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-              if (label) {
-                label += ': ';
-              }
-              label += getFormattedNumber(tooltipItem.yLabel);
-              return label;
+              return data.labels[tooltipItem.index] + ':' + getFormattedNumber(data.datasets[0].data[tooltipItem.index]);
             }
           }
-        },
+        }
       }
 
-      barChartConfig.data = [pkgRecv, pgkSend];
-      barChartConfig.labels = labelsArr;
-      barChartConfig.series = ['接收', '发送'];
-      barChartConfig.colors = [{backgroundColor: 'rgb(144,238,144)'}, {backgroundColor: 'rgb(250,128,114)'}];
-      barChartConfig.options = options;
+      pieChartConfig.data = dataset.data;
+      pieChartConfig.labels = chartData.labels;
+      pieChartConfig.colors = dataset.backgroundColor;
+      pieChartConfig.options = options;
+
+      DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
     }
 	  
 	  let lineChartOnHover = function() {
@@ -1509,6 +1836,16 @@ export class DashboardController {
 					  scope.dashboardModel.memory.end_time = end;
 					  scope.dashboardModel.memory.step = step;
 				  	break;
+          case 'switch-interface-chart':
+            scope.dashboardModel.interface.begin_time = start;
+            scope.dashboardModel.interface.end_time = end;
+            scope.dashboardModel.interface.step = step;
+            break;
+          case 'switch-interface-drop-error-chart':
+            scope.dashboardModel.dropErrorInterface.begin_time = start;
+            scope.dashboardModel.dropErrorInterface.end_time = end;
+            scope.dashboardModel.dropErrorInterface.step = step;
+            break;
 			  }
 			  
 			  scope.$apply()
@@ -1706,6 +2043,8 @@ export class DashboardController {
             dataArr = dataModel.configDevices;
           }
           break;
+        default:
+          dataArr = dataModel.configDevices;
 		  }
 		
 		  return dataArr;
@@ -1807,6 +2146,16 @@ export class DashboardController {
         setClusterInterfaceChartData();
       });
     },true));
+
+    let clusterInterfaceTypeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.controller.interface.unitTypeOption', 'dashboardModel.controller.interface.stateTypeOption'], () => {
+      if(!clusterInterfaceTypeHasChanged) {
+        clusterInterfaceTypeHasChanged = true;
+        return;
+      }
+
+      setClusterInterfaceChartData();
+    },true));
 	
 	  let cpuTimeHasChanged = false;
 	  unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.cpu.begin_time', 'dashboardModel.cpu.end_time', 'dashboardModel.cpu.selectedData'], () => {
@@ -1846,7 +2195,58 @@ export class DashboardController {
         setSwitchDiskChartData();
       });
     },true));
-	
+
+    let interfaceTimeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.interface.begin_time', 'dashboardModel.interface.end_time'], () => {
+      if(!interfaceTimeHasChanged) {
+        interfaceTimeHasChanged = true;
+        return;
+      }
+
+      DI.$scope.dashboardModel.interface.loading = true;
+      this.getDevicesInterfaceAnalyzer(getFilteredDataModel(), true).then(() => {
+        // device interface analyzer
+        DI.$scope.dashboardModel.interface.loading = false;
+        setDeviceInterfaceRxTxChartData();
+      });
+    },true));
+
+    let dropErrorInterfaceTimeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.dropErrorInterface.begin_time', 'dashboardModel.dropErrorInterface.end_time'], () => {
+      if(!dropErrorInterfaceTimeHasChanged) {
+        dropErrorInterfaceTimeHasChanged = true;
+        return;
+      }
+
+      DI.$scope.dashboardModel.dropErrorInterface.loading = true;
+      this.getDevicesInterfaceAnalyzer(getFilteredDataModel(), false, true).then(() => {
+        // device interface analyzer
+        DI.$scope.dashboardModel.dropErrorInterface.loading = false;
+        setDeviceInterfaceDropErrorChartData();
+      });
+    },true));
+
+    let deviceInterfaceTypeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.interface.typeOption'], () => {
+      if(!deviceInterfaceTypeHasChanged) {
+        deviceInterfaceTypeHasChanged = true;
+        return;
+      }
+
+      setDeviceInterfaceRxTxChartData();
+    },true));
+
+    let deviceDropErrorInterfaceTypeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.dropErrorInterface.interface.typeOption'], () => {
+      if(!deviceDropErrorInterfaceTypeHasChanged) {
+        deviceDropErrorInterfaceTypeHasChanged = true;
+        return;
+      }
+
+      setDeviceInterfaceDropErrorChartData();
+    },true));
+
+
     this.di.$scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
         unSubscribe();
@@ -1914,7 +2314,7 @@ export class DashboardController {
     if (!devices.length){
       deffe.resolve([]);
       return deffe.promise;
-    } 
+    }
 
     let startTime = this.getISODate(this.di.$scope.dashboardModel.cpu.begin_time);
     let endTime = this.getISODate(this.di.$scope.dashboardModel.cpu.end_time);
@@ -1927,7 +2327,7 @@ export class DashboardController {
         .then((data) => {
           defer.resolve({'id': device.id, 'name': device.name, 'analyzer': data});
         });
-      deferredArr.push(defer.promise);  
+      deferredArr.push(defer.promise);
     });
 
     this.di.$q.all(deferredArr).then((arr) => {
@@ -2109,16 +2509,32 @@ export class DashboardController {
 
   getFormattedNumber(num) {
     let numArr = num.toString().split('');
-    let numLength = numArr.length;
     let formattedNum = '';
-    let diffCount = numLength % 3;
-    for(let i = 1; i <= numLength; i++) {
-      formattedNum += numArr[i-1];
 
-      if((i - diffCount) % 3 == 0 && i < numLength) {
-        formattedNum += ','
+    if(num >= 0) {
+      let numLength = numArr.length;
+      let diffCount = numLength % 3;
+      for(let i = 1; i <= numLength; i++) {
+        formattedNum += numArr[i-1];
+
+        if((i - diffCount) % 3 == 0 && i < numLength) {
+          formattedNum += ','
+        }
       }
+    } else {
+      let numLength = numArr.length - 1;
+      let diffCount = numLength % 3;
+      for(let i = 2; i <= numLength; i++) {
+        formattedNum += numArr[i-1];
+
+        if((i - diffCount) % 3 == 0 && i < numLength) {
+          formattedNum += ','
+        }
+      }
+
+      formattedNum = parseInt(formattedNum) * -1;
     }
+
 
     return formattedNum;
   }
@@ -2255,6 +2671,39 @@ export class DashboardController {
     return deffe.promise;
   }
 
+  getDevicesInterfaceAnalyzer(devices, isNormal, isDropError) {
+    let deffe = this.di.$q.defer();
+    if (!devices.length){
+      deffe.resolve([]);
+      return deffe.promise;
+    }
+    let startTime = this.getISODate(this.di.$scope.dashboardModel.interface.begin_time);
+    let endTime = this.getISODate(this.di.$scope.dashboardModel.interface.end_time);
+    let solution_second = this.di.$scope.dashboardModel.interface.step;//3600;//this.getResolutionSecond(startTime, endTime);
+    let deferredArr = [];
+    devices.forEach((device) => {
+      let defer = this.di.$q.defer();
+      this.di.deviceDataManager.getDeviceInteraceAnalyzer(device.name, startTime, endTime, solution_second)
+        .then((data) => {
+          defer.resolve({'id': device.id, 'name': device.name, 'analyzer': data});
+        });
+      deferredArr.push(defer.promise);
+    });
+
+    this.di.$q.all(deferredArr).then((arr) => {
+      if(isNormal || !isDropError) {
+        this.di.$scope.dashboardModel.interface.analyzer = arr;
+      }
+
+      if (isDropError || !isNormal) {
+        this.di.$scope.dashboardModel.dropErrorInterface.analyzer = arr;
+      }
+
+      deffe.resolve();
+    });
+    return deffe.promise;
+  }
+
   calcInterfaceTxRxRate(dataArr) {
     let resArr = [];
     dataArr.forEach((data) => {
@@ -2270,12 +2719,14 @@ export class DashboardController {
           let diffSeconds = ((new Date(analyzer.timepoint)).getTime() - (new Date(data.analyzer[index - 1].timepoint)).getTime()) / 1000;
 
           newAnalyzer.timepoint = analyzer.timepoint;
-          newAnalyzer.rx = Math.ceil((analyzer.rx - data.analyzer[index - 1].rx) / diffSeconds);
-          newAnalyzer.tx = Math.ceil((analyzer.tx - data.analyzer[index - 1].tx) / diffSeconds);
-          newAnalyzer.rx_dropped = Math.ceil((analyzer.rx_dropped - data.analyzer[index - 1].rx_dropped) / diffSeconds);
-          newAnalyzer.tx_dropped = Math.ceil((analyzer.rx_dropped - data.analyzer[index - 1].tx_dropped) / diffSeconds);
-          newAnalyzer.rx_error = Math.ceil((analyzer.rx_dropped - data.analyzer[index - 1].rx_error) / diffSeconds);
-          newAnalyzer.tx_error = Math.ceil((analyzer.rx_dropped - data.analyzer[index - 1].tx_error) / diffSeconds);
+          newAnalyzer.packets_rx = Math.ceil((analyzer.packetsReceived - data.analyzer[index - 1].packetsReceived) / diffSeconds);
+          newAnalyzer.packets_tx = Math.ceil((analyzer.packetsSent - data.analyzer[index - 1].packetsSent) / diffSeconds);
+          newAnalyzer.dropped_rx = Math.ceil((analyzer.packetsRxDropped - data.analyzer[index - 1].packetsRxDropped) / diffSeconds);
+          newAnalyzer.dropped_tx = Math.ceil((analyzer.packetsTxDropped - data.analyzer[index - 1].packetsTxDropped) / diffSeconds);
+          newAnalyzer.error_rx = Math.ceil((analyzer.packetsRxErrors - data.analyzer[index - 1].packetsRxErrors) / diffSeconds);
+          newAnalyzer.error_tx = Math.ceil((analyzer.packetsTxErrors - data.analyzer[index - 1].packetsTxErrors) / diffSeconds);
+          newAnalyzer.bytes_tx = Math.ceil((analyzer.bytesSent - data.analyzer[index - 1].bytesSent) / diffSeconds);
+          newAnalyzer.bytes_rx = Math.ceil((analyzer.bytesReceived - data.analyzer[index - 1].bytesReceived) / diffSeconds);
 
           newData.analyzer.push(newAnalyzer);
         }
