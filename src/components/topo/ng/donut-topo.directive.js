@@ -86,7 +86,6 @@ export class DonutTopo {
     		 .attr("height", scope.topo_height);
     	g.attr("transform", `translate(${scope.topo_width/ 2},${scope.topo_height / 2})`);
     	g.selectAll('g').remove();
-    	g.selectAll('path').remove();
 
     	updatePortArcData();
     	drawOuterDonut();
@@ -97,6 +96,11 @@ export class DonutTopo {
     };
 	
 		let prepareDataHandle = () => {
+			if (scope.switches.length === 0) {
+				g.append('text')
+					.classed('center', true)
+					.text('当前环境暂无交换机信息');
+			}
 			const pie = this.di.d3.pie()
 	      .padAngle(OUTER_ARC_PADDING)
 	      //默认根据pie value大小排序，可通过null取消排序,默认降序排列

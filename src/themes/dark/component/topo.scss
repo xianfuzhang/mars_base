@@ -6,6 +6,9 @@
   //background-image: url("../../assets/images/graphback.png") ;
   //background-repeat: repeat-y;
 }
+.topo-container text.center{
+	fill: #d8d9da;
+}
 .topo-container .outerLabels > text, .topo-container .tooltips > text{
 	user-select: none;
 	fill: #d8d9da;
