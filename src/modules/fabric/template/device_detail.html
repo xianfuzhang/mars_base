@@ -138,6 +138,73 @@
           </div>
         </div>
       </section>
+      <section class="tab-content" ng-if="tabSelected.type == 'analyzer'" style="overflow-y: auto;">
+          <div class="hide">
+              <mdl-table provider="detailModel.provider"></mdl-table>
+          </div>
+          <div class="mars-row-flex" style="margin-left: 5px;margin-top: 5px;">
+              <div class="col-gutter-md left-panel mars-panel">
+                  <canvas id="switch-cpu-usage-rate" height="250"
+                          class="chart chart-line"
+                          chart-type="line"
+                          chart-data="deviceCpuChartConfig.data"
+                          chart-labels="deviceCpuChartConfig.labels"
+                          chart-series="deviceCpuChartConfig.series"
+                          chart-fill="false"
+                          chart-options="deviceCpuChartConfig.options"
+                          chart-click="deviceCpuChartConfig.onClick"
+                          chart-hover="deviceCpuChartConfig.onHover">
+                  </canvas>
+
+                  <div class="setting-group"  ng-show="!chartModel.cpu.loading">
+                      <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
+                      <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
+                      <!--<div class="item" title="{{deviceCpuChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>-->
+                  </div>
+
+                  <div class="chart-loading" ng-show="chartModel.cpu.loading"></div>
+              </div>
+          </div>
+          <div class="mars-row-flex" style="margin-left: 5px;">
+              <div class="col-gutter-md left-panel mars-panel">
+                  <canvas id="switch-memory-usage-rate" height="250"
+                          class="chart chart-line"
+                          chart-type="line"
+                          chart-data="deviceMemoryChartConfig.data"
+                          chart-labels="deviceMemoryChartConfig.labels"
+                          chart-series="deviceMemoryChartConfig.series"
+                          chart-fill="false"
+                          chart-options="deviceMemoryChartConfig.options"
+                          chart-click="deviceMemoryChartConfig.onClick"
+                          chart-hover="deviceMemoryChartConfig.onHover">
+                  </canvas>
+
+                  <div class="setting-group"  ng-show="!chartModel.memory.loading">
+                      <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-memory')"><i class="material-icons">settings</i></div>
+                      <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
+                      <!--<div class="item" title="{{deviceMemoryChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>-->
+                  </div>
+
+                  <div class="chart-loading" ng-show="chartModel.memory.loading"></div>
+              </div>
+          </div>
+          <div class="mars-row-flex" style="margin-left: 5px;">
+              <div class="col-gutter-md left-panel mars-panel">
+                  <canvas id="switch-disk-usage-rate" height="250"
+                          class="chart chart-bar"
+                          chart-type="bar"
+                          chart-data="deviceDiskChartConfig.data"
+                          chart-labels="deviceDiskChartConfig.labels"
+                          chart-colors="deviceDiskChartConfig.colors"
+                          chart-series="deviceDiskChartConfig.series"
+                          chart-fill="false"
+                          chart-options="deviceDiskChartConfig.options">
+                  </canvas>
+
+                  <div class="chart-loading" ng-show="chartModel.disk.loading"></div>
+              </div>
+          </div>
+      </section>
       <section class="tab-content" ng-if="tabSelected.type == 'port'">
         <mdl-table actions-show="detailModel.actionsShow"
                    actions="detailModel.rowActions"

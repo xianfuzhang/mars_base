@@ -536,6 +536,14 @@ export class appService {
     return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/mgmt_ports/' + deviceId + '/' + startTime + '/' + endTime + '/' + resolutionSecond;
   }
 
+  getDeviceInterfaceAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/portstats/' + deviceId + '/' + startTime + '/' + endTime + '/' + resolutionSecond;
+  }
+
+  getDevicePortAnalyzerUrl(deviceId, port, startTime, endTime, resolutionSecond) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/portstats/' + deviceId + '/' + port + '/' + startTime + '/' + endTime + '/' + resolutionSecond;
+  }
+
   getNginxTypeAnalyzerUrl(type, startTime, endTime) {
     return this.getZoneEndpoint(true) + '/analyzer/v1/nginx/' + startTime + '/' + endTime +  '/type/' + type.toLowerCase();
   }

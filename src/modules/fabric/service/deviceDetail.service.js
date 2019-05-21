@@ -23,6 +23,11 @@ export class DeviceDetailService {
         'type': 'summary'
       },
       {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.ANALYZER'),
+        'value': 'analyzer',
+        'type': 'analyzer'
+      },
+      {
         'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.PORT'),
         'value': 'port',
         'type': 'port'
@@ -197,6 +202,11 @@ export class DeviceDetailService {
         'label': this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE'),
         'role': 2,
         'value': 'disable'
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ANALYZER'),
+        'role': 2,
+        'value': 'analyzer'
       }
     ];
   }
