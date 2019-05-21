@@ -494,6 +494,9 @@ export class DonutTopo {
     	}
     	//portArcData加入host port
     	if (scope.edgeSwitches.length === 2) {
+    		//源、目的交换机、端口都一致表明路径搜索的主机有问题，不作处理
+    		if (scope.edgeSwitches[0]['device'] === scope.edgeSwitches[1]['device'] 
+    				&& scope.edgeSwitches[0]['port'] === scope.edgeSwitches[1]['port']) return;
     		for(let key in scope.switchObject) {
     			if (key === scope.edgeSwitches[0]['device']) {
     				scope.switchObject[key]['linkPorts'].includes(scope.edgeSwitches[0]['port']) ? null :
