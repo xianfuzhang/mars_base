@@ -107,7 +107,7 @@ export class DonutTopo {
 	     //sort仅影响arc显示顺序，arcData顺序不变
 	      .sort(null)
 	      //value值须为数字
-	      .value(function(d) {return  d.ports && d.ports.length ||1; });
+	      .value(function(d) {return  d.ports && d.ports.length ||10; });
 	    scope.switchArcData = pie(scope.switches);
 
 	    scope.switchObject = {};
