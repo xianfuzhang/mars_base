@@ -499,7 +499,7 @@ export class DonutTopo {
     				scope.switchObject[key]['linkPorts'].includes(scope.edgeSwitches[0]['port']) ? null :
     					scope.switchObject[key]['linkPorts'].push(scope.edgeSwitches[0]['port']);
     			}
-    			else if (key === scope.edgeSwitches[1]['device']) {
+    			if (key === scope.edgeSwitches[1]['device']) {
     				scope.switchObject[key]['linkPorts'].includes(scope.edgeSwitches[1]['port']) ? null :
     					scope.switchObject[key]['linkPorts'].push(scope.edgeSwitches[1]['port']);
     			}
