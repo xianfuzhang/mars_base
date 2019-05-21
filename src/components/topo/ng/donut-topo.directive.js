@@ -86,7 +86,6 @@ export class DonutTopo {
     		 .attr("height", scope.topo_height);
     	g.attr("transform", `translate(${scope.topo_width/ 2},${scope.topo_height / 2})`);
     	g.selectAll('g').remove();
-    	g.selectAll('path').remove();
 
     	updatePortArcData();
     	drawOuterDonut();
@@ -97,13 +96,18 @@ export class DonutTopo {
     };
 	
 		let prepareDataHandle = () => {
+			if (scope.switches.length === 0) {
+				g.append('text')
+					.classed('center', true)
+					.text('当前环境暂无交换机信息');
+			}
 			const pie = this.di.d3.pie()
 	      .padAngle(OUTER_ARC_PADDING)
 	      //默认根据pie value大小排序，可通过null取消排序,默认降序排列
 	     //sort仅影响arc显示顺序，arcData顺序不变
 	      .sort(null)
 	      //value值须为数字
-	      .value(function(d) {return  d.ports && d.ports.length ||1; });
+	      .value(function(d) {return  d.ports && d.ports.length ||10; });
 	    scope.switchArcData = pie(scope.switches);
 
 	    scope.switchObject = {};
@@ -490,12 +494,15 @@ export class DonutTopo {
     	}
     	//portArcData加入host port
     	if (scope.edgeSwitches.length === 2) {
+    		//源、目的交换机、端口都一致表明路径搜索的主机有问题，不作处理
+    		if (scope.edgeSwitches[0]['device'] === scope.edgeSwitches[1]['device'] 
+    				&& scope.edgeSwitches[0]['port'] === scope.edgeSwitches[1]['port']) return;
     		for(let key in scope.switchObject) {
     			if (key === scope.edgeSwitches[0]['device']) {
     				scope.switchObject[key]['linkPorts'].includes(scope.edgeSwitches[0]['port']) ? null :
     					scope.switchObject[key]['linkPorts'].push(scope.edgeSwitches[0]['port']);
     			}
-    			else if (key === scope.edgeSwitches[1]['device']) {
+    			if (key === scope.edgeSwitches[1]['device']) {
     				scope.switchObject[key]['linkPorts'].includes(scope.edgeSwitches[1]['port']) ? null :
     					scope.switchObject[key]['linkPorts'].push(scope.edgeSwitches[1]['port']);
     			}

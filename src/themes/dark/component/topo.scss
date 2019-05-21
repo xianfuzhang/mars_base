@@ -6,13 +6,24 @@
   //background-image: url("../../assets/images/graphback.png") ;
   //background-repeat: repeat-y;
 }
-.topo-container .outerLabels > text, .topo-container .tooltips > text{
+.topo-container text.center,
+.topo-container g.searchPaths{
+	fill: #d8d9da;
+}
+.topo-container use.host{
+	fill: #d8d9da;
+}
+.topo-container .outerLabels > text, 
+.topo-container .tooltips > text{
 	user-select: none;
 	fill: #d8d9da;
 	pointer-events: none;
 	text-anchor: middle;
 }
-.topo-container g.outer, .topo-container g.inner, .topo-container g.links, .topo-container g.searchPaths > path{
+.topo-container g.outer, 
+.topo-container g.inner, 
+.topo-container g.links, 
+.topo-container g.searchPaths > path{
 	cursor: pointer;
 }
 .topo-container g.outer > path {

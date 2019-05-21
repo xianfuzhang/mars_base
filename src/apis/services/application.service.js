@@ -12,34 +12,25 @@ export class applicationService {
     applicationService.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
+    this.defer = this.di.$q.defer();
     this.nocsysApps = [];
     this.appsState = {};
+
+    this.di.manageDataManager.getAllApplications().then((res) => {
+      this.nocsysApps = res.data.applications;
+      this.nocsysApps.forEach((app) => {
+        this.appsState[app.name] = app.state;
+      });
+      this.defer.resolve();
+    }, () => {
+      this.nocsysApps = [];
+      this.appsState = {};
+      this.defer.resolve();
+    });
   }
 
   getNocsysAppsState() {
-    let defer = this.di.$q.defer();
-    if (this.nocsysApps.length) {
-      defer.resolve();
-    }
-    else {
-      this.di.manageDataManager.getAllApplications().then((res) => {
-        let apps = res.data.applications;
-        let reg = new RegExp(this.di.appService.CONST.NOCSYS_APP, 'i');
-        // this.nocsysApps = apps.filter((app) => {
-        //   return reg.test(app.name);
-        // });
-        this.nocsysApps = apps;
-        this.nocsysApps.forEach((app) => {
-          this.appsState[app.name] = app.state;
-        });
-        defer.resolve();
-      }, () => {
-        this.nocsysApps = [];
-        this.appsState = {};
-        defer.resolve();
-      });  
-    }
-    return defer.promise;
+    return this.defer.promise;
   }
 
   getNocsysApps() {
