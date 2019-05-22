@@ -1278,7 +1278,7 @@ export class Topo {
 
             scope._links = formatLinks(scope.links);
 
-            console.log('genLinks======>')
+            // console.log('genLinks======>')
             let self = this;
             this.linkNode = this.svg.append("g").attr('id', 'origin_link')
               .selectAll('g')
@@ -2426,7 +2426,6 @@ export class Topo {
 
       unsubscribers.push(this.di.$rootScope.$on('show_links',()=>{
         if(scope.topoSetting.show_links === 2){
-          console.log('11111====>');
           genLinks()
         } else if(scope.topoSetting.show_links === 0) {
           crushLinks();
@@ -2455,7 +2454,7 @@ export class Topo {
           .attr('stroke', d => {
             let _link = d;
             let linkId = getLinkId([_link.src.device, _link.dst.device], [_link.src.port, _link.dst.port]);
-            console.log(linkId)
+            // console.log(linkId)
 
             return 'rgb(' + links_color[linkId].color + ')';
           })
