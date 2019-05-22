@@ -37,7 +37,9 @@ export class DeviceWizardController {
     scope.mfrDisplayLabel = {
       options: [
         {label: 'Nocsys', value: 'Nocsys'},
-        {label: 'Mellanox', value: 'Mellanox'}
+        {label: 'Mellanox', value: 'Mellanox'},
+        {label: 'Pica8', value: 'Pica8'},
+        {label: 'H3C', value: 'H3C'}
       ]
     }
 
