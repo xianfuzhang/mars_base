@@ -702,6 +702,9 @@ export class DonutTopo {
     	scope.searchState = false;
     	clearPathSearch();
     }));
+    unsubscribers.push(this.di.$rootScope.$on('resize_canvas',()=>{
+    	onResize();
+    }));
 
 		scope.$on('$destroy', () => {
 			document.removeEventListener('click', clickOuterTopoHandler);

@@ -8,6 +8,7 @@ export class Topo {
       'localStoreService',
       '$document',
       '_',
+      'd3',
       'easingService',
       'switchService'
     ];
@@ -54,20 +55,20 @@ export class Topo {
 
       this.height = 0;
       this.width = 0;
-      this.spineContainer = null;
-      this.leafContainer = null;
-      this.otherContainer = null;
-      this.spineContainerLeftNode = null;
-      this.spineContainerRightNode = null;
-      this.spineContainerText = null;
-
-      this.leafContainerLeftNode = null;
-      this.leafContainerRightNode = null;
-      this.leafContainerText = null;
-
-      this.otherContainerLeftNode = null;
-      this.otherContainerRightNode = null;
-      this.otherContainerText = null;
+      // this.spineContainer = null;
+      // this.leafContainer = null;
+      // this.otherContainer = null;
+      // this.spineContainerLeftNode = null;
+      // this.spineContainerRightNode = null;
+      // this.spineContainerText = null;
+      //
+      // this.leafContainerLeftNode = null;
+      // this.leafContainerRightNode = null;
+      // this.leafContainerText = null;
+      //
+      // this.otherContainerLeftNode = null;
+      // this.otherContainerRightNode = null;
+      // this.otherContainerText = null;
 
       this.paths = [];
       this.pathNodes = {};
@@ -92,6 +93,7 @@ export class Topo {
 
       this.links = {};
       this.switchLocation = {};
+      this.hostLocation = {};
 
       this.switch_width = 16;
       this.switch_height = 108;
@@ -106,7 +108,7 @@ export class Topo {
       this.LINE_ERROR = "255,0,0";
       this.oldWidth = null;
 
-
+      this.arrowDistance = 10;
       this.host_width = 48;
       this.host_height = 48;
       this.host_min_interval = 10;
@@ -121,52 +123,855 @@ export class Topo {
       let easingService = this.di.easingService;
       let switchLocation = this.switchLocation;
 
+
+      // TEST Code START  ======= 此处代码是用来测试distance算法是否合理
+      /*let devices = [{
+        "available": true,
+        "community": null,
+        "id": "rest:192.168.40.225:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:08:C0",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.225",
+        "name": "spine0",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "spine"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.168.40.228:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0F:FA",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.228",
+        "name": "leaf1",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "grpc:192.168.40.224:5001",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "CC:37:AB:E0:AC:88",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.224",
+        "name": "leaf4",
+        "port": 5001,
+        "protocol": "grpc",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.168.40.227:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:09:E8",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.227",
+        "name": "leaf0",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.168.40.230:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0F:B0",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.230",
+        "name": "leaf3",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.168.40.229:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:11:39:50",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.229",
+        "name": "leaf2",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.168.40.226:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0D:AA",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.226",
+        "name": "spine1",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "spine"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.168.40.225:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:08:C0",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.225",
+        "name": "spine0",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "spine"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.168.40.228:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0F:FA",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.228",
+        "name": "leaf1",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "grpc:292.168.40.224:5001",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "CC:37:AB:E0:AC:88",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.224",
+        "name": "leaf4",
+        "port": 5001,
+        "protocol": "grpc",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.168.40.227:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:09:E8",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.227",
+        "name": "leaf0",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.168.40.230:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0F:B0",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.230",
+        "name": "leaf3",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.168.40.229:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:11:39:50",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.229",
+        "name": "leaf2",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.168.40.226:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0D:AA",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.226",
+        "name": "spine1",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "spine"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.169.40.225:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:08:C0",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.169.40.225",
+        "name": "spine0",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "spine"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.169.40.228:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0F:FA",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.228",
+        "name": "leaf1",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "grpc:192.169.40.224:5001",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "CC:37:AB:E0:AC:88",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.224",
+        "name": "leaf4",
+        "port": 5001,
+        "protocol": "grpc",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.169.40.227:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:09:E8",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.227",
+        "name": "leaf0",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.169.40.230:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0F:B0",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.230",
+        "name": "leaf3",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.169.40.229:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:11:39:50",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.229",
+        "name": "leaf2",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:192.169.40.226:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0D:AA",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.226",
+        "name": "spine1",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "spine"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.169.40.225:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:08:C0",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.225",
+        "name": "spine0",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "spine"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.169.40.228:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0F:FA",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.228",
+        "name": "leaf1",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "grpc:292.169.40.224:5001",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "CC:37:AB:E0:AC:88",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.224",
+        "name": "leaf4",
+        "port": 5001,
+        "protocol": "grpc",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.169.40.227:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:09:E8",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.227",
+        "name": "leaf0",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.169.40.230:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0F:B0",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.230",
+        "name": "leaf3",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.169.40.229:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:11:39:50",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "192.168.40.229",
+        "name": "leaf2",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "leaf"
+      }, {
+        "available": true,
+        "community": null,
+        "id": "rest:292.169.40.226:80",
+        "leafGroup": {"name": null, "switch_port": 0},
+        "mac": "8C:EA:1B:8D:0D:AA",
+        "mfr": "Nocsys",
+        "mgmtIpAddress": "292.168.40.226",
+        "name": "spine1",
+        "port": 80,
+        "protocol": "rest",
+        "rack_id": "1",
+        "type": "spine"
+      }];
+      let links = [{
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.225:80", "port": "49"},
+        "src": {"device": "rest:192.168.40.227:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.230:80", "port": "50"},
+        "src": {"device": "rest:192.168.40.226:80", "port": "52"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.229:80", "port": "50"},
+        "src": {"device": "rest:192.168.40.226:80", "port": "51"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.227:80", "port": "50"},
+        "src": {"device": "rest:192.168.40.226:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.226:80", "port": "51"},
+        "src": {"device": "rest:192.168.40.229:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.226:80", "port": "52"},
+        "src": {"device": "rest:192.168.40.230:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.229:80", "port": "49"},
+        "src": {"device": "rest:192.168.40.225:80", "port": "51"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.226:80", "port": "49"},
+        "src": {"device": "rest:192.168.40.227:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.227:80", "port": "49"},
+        "src": {"device": "rest:192.168.40.225:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.225:80", "port": "51"},
+        "src": {"device": "rest:192.168.40.229:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.225:80", "port": "52"},
+        "src": {"device": "rest:192.168.40.230:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.168.40.230:80", "port": "49"},
+        "src": {"device": "rest:192.168.40.225:80", "port": "52"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.225:80", "port": "49"},
+        "src": {"device": "rest:292.168.40.227:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.230:80", "port": "50"},
+        "src": {"device": "rest:192.168.40.226:80", "port": "52"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.229:80", "port": "50"},
+        "src": {"device": "rest:292.168.40.226:80", "port": "51"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.227:80", "port": "50"},
+        "src": {"device": "rest:192.168.40.226:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.226:80", "port": "51"},
+        "src": {"device": "rest:292.168.40.229:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.226:80", "port": "52"},
+        "src": {"device": "rest:192.168.40.230:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.229:80", "port": "49"},
+        "src": {"device": "rest:292.168.40.225:80", "port": "51"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.226:80", "port": "49"},
+        "src": {"device": "rest:292.168.40.227:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.227:80", "port": "49"},
+        "src": {"device": "rest:292.168.40.225:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.225:80", "port": "51"},
+        "src": {"device": "rest:292.168.40.229:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.225:80", "port": "52"},
+        "src": {"device": "rest:292.168.40.230:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.230:80", "port": "49"},
+        "src": {"device": "rest:292.168.40.225:80", "port": "52"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.225:80", "port": "49"},
+        "src": {"device": "rest:192.169.40.227:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.230:80", "port": "50"},
+        "src": {"device": "rest:192.169.40.226:80", "port": "52"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.229:80", "port": "50"},
+        "src": {"device": "rest:192.169.40.226:80", "port": "51"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.227:80", "port": "50"},
+        "src": {"device": "rest:192.169.40.226:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.226:80", "port": "51"},
+        "src": {"device": "rest:192.169.40.229:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.226:80", "port": "52"},
+        "src": {"device": "rest:192.169.40.230:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.229:80", "port": "49"},
+        "src": {"device": "rest:192.169.40.225:80", "port": "51"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.226:80", "port": "49"},
+        "src": {"device": "rest:192.169.40.227:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.227:80", "port": "49"},
+        "src": {"device": "rest:192.169.40.225:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.225:80", "port": "51"},
+        "src": {"device": "rest:192.169.40.229:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.225:80", "port": "52"},
+        "src": {"device": "rest:192.168.40.230:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:192.169.40.230:80", "port": "49"},
+        "src": {"device": "rest:192.168.40.225:80", "port": "52"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.169.40.225:80", "port": "49"},
+        "src": {"device": "rest:292.169.40.227:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.169.40.230:80", "port": "50"},
+        "src": {"device": "rest:192.169.40.226:80", "port": "52"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.169.40.229:80", "port": "50"},
+        "src": {"device": "rest:292.168.40.226:80", "port": "51"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.169.40.227:80", "port": "50"},
+        "src": {"device": "rest:192.168.40.226:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.226:80", "port": "51"},
+        "src": {"device": "rest:292.169.40.229:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.169.40.226:80", "port": "52"},
+        "src": {"device": "rest:192.168.40.230:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.169.40.229:80", "port": "49"},
+        "src": {"device": "rest:292.168.40.225:80", "port": "51"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.169.40.226:80", "port": "49"},
+        "src": {"device": "rest:292.169.40.227:80", "port": "50"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.227:80", "port": "49"},
+        "src": {"device": "rest:292.169.40.225:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.168.40.225:80", "port": "51"},
+        "src": {"device": "rest:292.168.40.229:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.169.40.225:80", "port": "52"},
+        "src": {"device": "rest:292.168.40.230:80", "port": "49"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }, {
+        "annotations": {"Key": "Value", "protocol": "LINKDISCOVERY"},
+        "dst": {"device": "rest:292.169.40.230:80", "port": "49"},
+        "src": {"device": "rest:292.168.40.225:80", "port": "52"},
+        "state": "ACTIVE",
+        "type": "DIRECT"
+      }];
+
+      let len = 5;
+      scope.devices = [];
+      scope.links = links.slice(0, len);
+
+      this.di._.forEach(scope.links, (link) => {
+        let device1 = this.di._.find(devices, {"id": link.src.device});
+        let device2 = this.di._.find(devices, {"id": link.dst.device});
+        if (!this.di._.find(scope.devices, {"id": device1.id})) {
+          scope.devices.push(device1)
+        }
+
+        if (!this.di._.find(scope.devices, {"id": device2.id})) {
+          scope.devices.push(device2)
+        }
+      });*/
+      // TEST Code END ======
+      let BOUNDARY_SIZE = 36;
+      let NODE_SIZE = 36;
+      let ICON_SIZE = 24;
+      let SVG_LINE_LENGTH = 120;
+
+      this.source_devices = scope.devices;
+      this.formated_devices = scope.devices;
+
+
+      this.source_links = scope.links;
+      this.formated_links = [];
+      this.linkIds = [];
+
+
+      // let getLinkId = (deviceIds, ports) => {
+      //   let newDeviceIds = this.di._.sortBy(deviceIds);
+      //   if (newDeviceIds[0] !== deviceIds[0]) {
+      //     let tmp = ports[0];
+      //     ports[0] = ports[1];
+      //     ports[1] = tmp;
+      //   }
+      //   return newDeviceIds[0] + ':' + ports[0] + '_' + newDeviceIds[1] + ':' + ports[1];
+      // };
+
+      scope.deviceLinkDict = {};
+      let formatLinks = (links) => {
+        let formatted_links = [];
+        scope.deviceLinkDict = {};
+        this.di._.forEach(links, (link) => {
+          // let newDeviceIds = this.di._.sortBy([link.src.device, link.dst.device]);
+          // let linkId = newDeviceIds.join('-');
+
+          let linkId = getLinkId([link.src.device, link.dst.device], [link.src.port, link.dst.port]);
+          if (this.di._.findIndex(formatted_links, linkId) === -1 && isDeviceLink(link.src.device, link.dst.device)){
+            let _link = angular.copy(link);
+            _link['id'] = linkId;
+            formatted_links.push(_link);
+
+            if(scope.deviceLinkDict[link.src.device]){
+              scope.deviceLinkDict[link.src.device].push(linkId);
+            } else {
+              scope.deviceLinkDict[link.src.device] = [];
+              scope.deviceLinkDict[link.src.device].push(linkId);
+            }
+
+            if(scope.deviceLinkDict[link.dst.device]){
+              scope.deviceLinkDict[link.dst.device].push(linkId);
+            } else {
+              scope.deviceLinkDict[link.dst.device] = [];
+              scope.deviceLinkDict[link.dst.device].push(linkId);
+            }
+          }
+        });
+        return formatted_links;
+      };
+
+      let drag = () => {
+        let self = this;
+        let d3 = this.di.d3;
+        let originMouseX = null;
+        let originMouseY = null;
+
+        function dragstarted(d) {
+          // d3.select(this).style('transition', null);
+          originMouseX = d3.event.x;
+          originMouseY = d3.event.y;
+        }
+
+
+        function dragged(d) {
+          // console.log(d3.event)
+          let pos = self.switchLocation[d.id];
+          d3.select(this).attr('transform', 'translate(' + (pos[0] + d3.event.x - originMouseX) + ', ' +  (pos[1] + d3.event.y - originMouseY) + ')');
+
+          // let swtThis = this;
+          // let linkIds = scope.deviceLinkDict[d.id];
+          // console.log('================')
+          // console.log(linkIds)
+          // self.linkNode.attr('d', link => {
+          //   let pos1 = self.switchLocation[link.src.device];
+          //   let pos2 = self.switchLocation[link.dst.device];
+          //
+          //   console.log(link.id);
+          //   console.log(linkIds)
+          //   if(linkIds.indexOf(link.id) !== -1){
+          //     console.log('=-=-=-=-=--=-')
+          //     if(d.id === link.src.device){
+          //       pos1 = [pos[0] + d3.event.x - originMouseX, pos[1] + d3.event.y - originMouseY];
+          //     } else {
+          //       pos2 = [pos[0] + d3.event.x - originMouseX, pos[1] + d3.event.y - originMouseY];
+          //     }
+          //   }
+          //   let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];
+          //   if( Math.abs(pos2[0] - pos1[0]) < 20){
+          //     return 'M ' + pos1[0] + ' ' + pos1[1] +  ' ' + pos2[0] + ' ' + pos2[1];
+          //   }
+          //   return 'M ' + pos1[0] + ' ' + pos1[1] + ' Q ' + middleP[0] + ' ' +  middleP[1] + ' ' + pos2[0] + ' ' + pos2[1];
+          //
+          // });
+        }
+
+        function dragended(d) {
+          // d3.select(this).style('transition', '0.3s cubic-bezier(0.215, 0.61, 0.355, 1) transform');
+          let pos = self.switchLocation[d.id];
+          d3.select(this).attr('transform', 'translate(' +  pos[0] + ', ' +  pos[1] + ')');
+
+          originMouseX = null;
+          originMouseY = null;
+
+          // self.linkNode.attr('d',null);
+          //
+          // self.di.$timeout(()=>{
+          //   self.linkNode.attr('d', link => {
+          //     let pos1 = self.switchLocation[link.src.device];
+          //     let pos2 = self.switchLocation[link.dst.device];
+          //     let middleP = [(pos1[0] + pos2[0]) / 2, pos2[1] > pos1[1] ? pos2[1] + 170 : pos1[1] + 170];
+          //     if (Math.abs(pos2[0] - pos1[0]) < 50) {
+          //       return 'M ' + pos1[0] + ' ' + pos1[1] + ' ' + pos2[0] + ' ' + pos2[1];
+          //     }
+          //     return 'M ' + pos1[0] + ' ' + pos1[1] + ' Q ' + middleP[0] + ' ' + middleP[1] + ' ' + pos2[0] + ' ' + pos2[1];
+          //   });
+          // }, 300)
+
+        }
+
+        return d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended);
+      };
+
       let initialize = () => {
-        let canvas = document.getElementById('canvas');
 
-        this.stage = new JTopo.Stage(canvas); // 创建一个舞台对象
-        this.scene = new JTopo.Scene(this.stage);
+        this.svg = this.di.d3.select('.topo > svg')
+          .on('click', function () {
+            DI.$rootScope.$emit('topo_unselect');
+            scope.curSelectedDeviceId = null;
+            removeSelectEffect();
 
-        this.spineContainer = new JTopo.Container();
-        this.leafContainer = new JTopo.Container();
-        this.otherContainer = new JTopo.Container();
-        //无法阻止事件不冒泡，所以不能通过点击scene事件来取消显示右侧的内容
-        // this.scene.click(function (e) {
-        //   console.log("scene click");
-        // })
 
-        this.spineContainer.click(function (e) {
-          unSelectNode();
-        });
+          })
+          .on('contextmenu',function () {
+            DI.d3.event.preventDefault();
+            // DI.$rootScope.$emit('topo_unselect');
+          });
 
-        this.leafContainer.click(function (e) {
-          unSelectNode();
-        });
+        this.defs = this.svg.append('defs');
+        // 3.1 添加箭头
 
-        this.otherContainer.click(function (e) {
-          unSelectNode();
-        });
+        this.marker = this.defs
+          .append("marker")
+          .attr('id', "marker")
+          .attr("markerWidth", 20)    //marker视窗的宽
+          .attr("markerHeight", 20)   //marker视窗的高
+          .attr("refX", this.arrowDistance)
+          .attr("refY", 8)
+          .attr("orient", "auto")     //orient="auto"设置箭头的方向为自动适应线条的方向
+          .attr("markerUnits", "userSpaceOnUse")  //marker是否进行缩放 ,默认值是strokeWidth,会缩放
+          .append("path")
+          .attr("d", "M 0 0 16 8 0 16Z")    //箭头的路径 从 （0,0） 到 （8,4） 到（0,8）
+          .attr("fill", "rgb(255,124,9)");
+        // .attr("refX", scope.distance/3)            //refX和refY，指的是图形元素和marker连接的位置坐标
 
-        this.spineContainer.fillColor = this.getColor()['CONTAINER_FILL'];
-        // this.leafContainer.fillColor = '239,239,239';
-        this.leafContainer.fillColor = this.getColor()['CONTAINER_FILL'];
-        this.otherContainer.fillColor = this.getColor()['CONTAINER_FILL'];
 
-        this.spineContainer.alpha = 1;
-        this.leafContainer.alpha = 1;
-        this.otherContainer.alpha = 1;
-
-        this.spineContainer.dragable = false;
-        this.leafContainer.dragable = false;
-        this.otherContainer.dragable = false;
-
-        this.spineContainer.showSelected = false;
-        this.leafContainer.showSelected = false;
-        this.otherContainer.showSelected = false;
-
-        this.scene.add(this.spineContainer);
-        this.scene.add(this.leafContainer);
-        this.scene.add(this.otherContainer);
+        this.start_marker = this.defs
+          .append("marker")
+          .attr('id', "start_marker")
+          .attr("markerWidth", 20)    //marker视窗的宽
+          .attr("markerHeight", 20)   //marker视窗的高
+          .attr("refX",  -this.arrowDistance)            //refX和refY，指的是图形元素和marker连接的位置坐标
+          .attr("refY", 8)
+          .attr("orient", "auto")     //orient="auto"设置箭头的方向为自动适应线条的方向
+          .attr("markerUnits", "userSpaceOnUse")  //marker是否进行缩放 ,默认值是strokeWidth,会缩放
+          .append("path")
+          .attr("d", "M 0 0 16 8 0 16Z")    //箭头的路径 从 （0,0） 到 （8,4） 到（0,8）
+          .attr("fill", "rgb(255,124,9)");
 
         setTimeout(delayInit,200);
       };
@@ -176,77 +981,269 @@ export class Topo {
         genLeaf();
         genOther();
 
-        // if(scope.topoSetting.show_links){
+        // if(scope.topoSetting.show_links === 2){
         //   genLinks()
         // }
         resize(true);
       };
 
-      let genSpine = () =>{
-        this.spineContainerLeftNode = genAnchorNode();
-        this.spineContainerRightNode = genAnchorNode();
-        this.spineContainerText = genTextNode("Spine Switch");
 
-        this.spineContainer.add(this.spineContainerLeftNode);
-        this.spineContainer.add(this.spineContainerRightNode);
-
-        this.di._.forEach(scope.spines, (spine, key) => {
-          this.spines[spine.id] = genNormalNode(spine.id, DeviceType.spine, spine.ports, spine.available);
-        });
-
+      let addHostSelectEffect = (node) => {
+        // this.di.d3.select(node).select('rect').attr('fill','#d5f6ff')
+        this.di.d3
+          .select(node)
+          .select('rect')
+          .classed('host-select', true)
       };
 
-      let genLeaf = () =>{
-        this.leafContainerLeftNode = genAnchorNode();
-        this.leafContainerRightNode = genAnchorNode();
-        this.leafContainerText = genTextNode("Leaf Switch");
+      let addSelectEffect = (node, deviceId) => {
+        this.di.d3.select(node).select('rect').classed('node_select', true);
 
-        this.leafContainer.add(this.leafContainerLeftNode);
-        this.leafContainer.add(this.leafContainerRightNode);
+        if(scope.topoSetting.show_links === 1){
 
-
-        this.di._.forEach(scope.leafs, (leaf, key) => {
-          this.leafs[leaf.id] = genNormalNode(leaf.id, DeviceType.leaf, leaf.ports, leaf.available);
-        });
-
-
-      };
-
-      let genOther = () => {
-        this.otherContainerLeftNode = genAnchorNode();
-        this.otherContainerRightNode = genAnchorNode();
-        this.otherContainerText = genTextNode("Other Switch");
-
-        this.otherContainer.add(this.otherContainerLeftNode);
-        this.otherContainer.add(this.otherContainerRightNode);
-
-
-        this.di._.forEach(scope.others, (other, key) => {
-          this.others[other.id] = genNormalNode(other.id, DeviceType.other, other.ports, other.available);
-        });
-
-      };
-
-      let genLinks = () => {
-          if(scope.topoSetting.show_links === 2){
-            crushLinks();
-
-            this.di._.forEach(scope.links, (link, key) => {
-              let deviceIds = [link.src.device, link.dst.device];
+          showDeviceLinks(deviceId);
+          /*crushLinks();
+          let _links = [];
+          this.di._.forEach(scope.links, (link, key) => {
+            if(deviceId == link.src.device){
+              _links.push(link)
+              /!*let deviceIds = [link.src.device, link.dst.device];
               let ports = [link.src.port, link.dst.port];
               let linkId = getLinkId(deviceIds, ports);
               if(this.links[linkId]){
                 return;
               }
               this.links[linkId] = genLinkNode(deviceIds, linkId);
+              this.links[linkId].strokeColor = this.LINE_SELECTED;
               if(link.state != this.active_status){
                 this.links[linkId].strokeColor = this.LINE_ERROR;
+              }*!/
+            }
+          });
+
+          scope._links = formatLinks(_links);
+          this.linkNode = this.svg.append("g").attr('id', 'origin_link')
+            .selectAll('g')
+            .data(scope._links)
+            .join("path")
+            .attr('fill','none')
+            .attr('stroke','green');
+          relocatePath();*/
+        } else if(scope.topoSetting.show_links === 2) {
+          let linkIds = scope.deviceLinkDict[deviceId];
+          self.linkNode
+            .classed('line_unselect', link => {
+              if(!linkIds || linkIds.indexOf(link.id) !== -1){
+                return false;
+              } else {
+                return true;
+              }
+            })
+            .classed('line_select', link => {
+              if(linkIds && linkIds.indexOf(link.id) !== -1){
+                return true;
+              } else {
+                return false;
               }
             });
+        }
+      };
 
-            // console.log(scope.links)
+      let removeSelectEffect = () => {
 
-            genPeerLinks();
+        this.spinesNode.select('rect').classed('node_select', false);
+        this.leafsNode.select('rect').classed('node_select', false);
+        this.othersNode.select('rect').classed('node_select', false);
+
+        if(scope.topoSetting.show_links === 1){
+          crushLinks();
+        } else if(scope.topoSetting.show_links === 2) {
+          this.linkNode
+            .classed('line_unselect', false)
+            .classed('line_select', false);
+        }
+
+        if(this.hostsNode){
+          this.hostsNode
+            .select('rect')
+            .classed('host-select', false)
+        }
+        // this.deviceNode
+        //   .select('rect')
+        //   .classed('node-select', false)
+        //   .classed('node-unselect', true);
+
+
+      };
+
+      let self = this;
+      function switchClick(d) {
+
+        DI.d3.event.stopPropagation();
+        removeSelectEffect();
+
+        let swtThis = this;
+
+        addSelectEffect(this, d.id);
+
+        let deviceId =  d.id;
+        let deviceType = d.type;
+        let showArray= [];
+        scope.selectedDeviceId  = deviceId;
+        // showDeviceLinks(deviceId);
+
+
+        if(scope.topoSetting.show_tooltips){
+          DI.$rootScope.$emit("hide_tooltip");
+        }
+
+
+        if(deviceType == DeviceType.spine){
+          let sw = DI._.find(scope.spines,{'id':deviceId});
+          showArray = DI.switchService.getSpineShowInfo(sw);
+        } else if(deviceType == DeviceType.leaf){
+          let sw = DI._.find(scope.leafs,{'id':deviceId});
+          showArray = DI.switchService.getLeafShowInfo(sw);
+        } else {
+          let sw = DI._.find(scope.others,{'id':deviceId});
+          showArray = DI.switchService.getOtherShowInfo(sw);
+        }
+        DI.$rootScope.$emit("switch_select",{event: DI.d3.event, id: deviceId, type: deviceType, value: showArray});
+
+      }
+
+      function switchMouseOver(d){
+        DI.d3.event.stopPropagation();
+        let deviceId =  d.id;
+        let deviceType = d.type;
+
+        let showArray= [];
+
+        if(deviceType == DeviceType.spine){
+          let sw = DI._.find(scope.spines,{'id':deviceId});
+          showArray = DI.switchService.getSpineShowInfo(sw);
+        } else if(deviceType == DeviceType.leaf){
+          let sw = DI._.find(scope.leafs,{'id':deviceId});
+          showArray = DI.switchService.getLeafShowInfo(sw);
+        } else {
+          let sw = DI._.find(scope.others,{'id':deviceId});
+          showArray = DI.switchService.getOtherShowInfo(sw);
+        }
+
+        if(scope.topoSetting.show_tooltips){
+          DI.$rootScope.$emit("show_tooltip",{event: calc_mouse_location(this), value: showArray});
+        }
+      }
+
+      function switchMouseOut() {
+        DI.d3.event.stopPropagation();
+        if(scope.topoSetting.show_tooltips){
+          DI.$rootScope.$emit("hide_tooltip");
+        }
+      }
+
+      let genSpine = () =>{
+        this.spinesNode = this.svg.append("g").attr('id', 'spine_node')
+          .selectAll("g")
+          .data(scope.spines)
+          .join('g')
+          .attr("width", ICON_SIZE)
+          .attr("height", ICON_SIZE)
+          .attr('deviceId', d => d.id)
+          .style('cursor','pointer')
+          .html(d => {
+            let device_status_class = 'topo__node-normal';
+            if (!d.available) {
+              device_status_class = 'topo__node-error';
+            }
+            return '<rect x="-8" y="-54" rx="3" ry="3" width="16" height="108" class="topo__node-outline ' + device_status_class +  '" />'
+          })
+          .on('click', switchClick)
+          .on('mouseover', switchMouseOver)
+          .on('mouseout', switchMouseOut)
+          .on('contextmenu',function (d) {
+            DI.d3.event.preventDefault();
+            DI.d3.select(this).select('rect').classed('node_select', true);
+            DI.$rootScope.$emit("switch_opt",{event: calc_mouse_location(this), id: d.id});
+          });;
+
+        // .call(drag())
+      };
+
+      let genLeaf = () =>{
+        this.leafsNode = this.svg.append("g").attr('id', 'leaf_node')
+          .selectAll("g")
+          .data(scope.leafs)
+          .join('g')
+          .attr("width", ICON_SIZE)
+          .attr("height", ICON_SIZE)
+          .attr('deviceId', d => d.id)
+          .style('cursor','pointer')
+          .html(d => {
+            let device_status_class = 'topo__node-normal';
+            if (!d.available) {
+              device_status_class = 'topo__node-error';
+            }
+            return '<rect x="-8" y="-54" rx="3" ry="3" width="16" height="108" class="topo__node-outline ' + device_status_class +  '" />'
+          })
+          .on('click', switchClick)
+          .on('mouseover', switchMouseOver)
+          .on('mouseout', switchMouseOut)
+          .on('contextmenu',function (d) {
+            DI.d3.event.preventDefault();
+            DI.d3.select(this).select('rect').classed('node_select', true);
+            DI.$rootScope.$emit("switch_opt",{event: calc_mouse_location(this), id: d.id});
+          });;
+        // .call(drag())
+
+
+      };
+
+      let genOther = () => {
+
+        this.othersNode = this.svg.append("g").attr('id', 'other_node')
+          .selectAll("g")
+          .data(scope.others)
+          .join('g')
+          .attr("width", ICON_SIZE)
+          .attr("height", ICON_SIZE)
+          .attr('deviceId', d => d.id)
+          .style('cursor','pointer')
+          .html(d => {
+            let device_status_class = 'topo__node-error';
+            if (!d.available) {
+              device_status_class = 'topo__node-error';
+            }
+            return '<rect x="-8" y="-54" rx="3" ry="3" width="16" height="108" class="topo__node-outline ' + device_status_class +  '" />'
+          })
+          .on('click', switchClick)
+          .on('mouseover', switchMouseOver)
+          .on('mouseout', switchMouseOut)
+          .on('contextmenu',function (d) {
+            DI.d3.event.preventDefault();
+            DI.d3.select(this).select('rect').classed('node_select', true);
+            DI.$rootScope.$emit("switch_opt",{event: calc_mouse_location(this), id: d.id});
+          });;
+        // .call(drag())
+      };
+
+      let genLinks = () => {
+          if(scope.topoSetting.show_links === 2){
+            crushLinks();
+
+            scope._links = formatLinks(scope.links);
+
+            console.log('genLinks======>')
+            let self = this;
+            this.linkNode = this.svg.append("g").attr('id', 'origin_link')
+              .selectAll('g')
+              .data(scope._links)
+              .join("path")
+              .attr('fill','none')
+              .attr('stroke','green');
+
+            // genPeerLinks();
+            relocatePath();
           }
       };
 
@@ -272,12 +1269,14 @@ export class Topo {
       };
 
       let crushLinks =()=>{
-        this.di._.forEach(this.links, (link, key) => {
-          this.scene.remove(link);
-        });
-
-        delete this.links;
-        this.links = {};
+        this.svg.select('#origin_link').remove();
+        this.linkNode = null;
+        // this.di._.forEach(this.links, (link, key) => {
+        //   this.scene.remove(link);
+        // });
+        //
+        // delete this.links;
+        // this.links = {};
       };
 
       let getLinkId = (deviceIds, ports) =>{
@@ -341,24 +1340,35 @@ export class Topo {
 
 
       let genLinkNode = (devices, linkId) => {
-        let nodeA = this.leafs[devices[0]] || this.spines[devices[0]] || this.others[devices[0]];
-        let nodeB = this.leafs[devices[1]] || this.spines[devices[1]] || this.others[devices[1]];
-
-        let link = new JTopo.Link(nodeA, nodeB);
-        link.zIndex = 20;
-        link.linkId = linkId;
-        link.lineWidth = this.LINE_WIDTH;
-        link.strokeColor = this.LINE_SELECTED;
-        link.dragable = false;
-
-        link.mouseover(linkMouseOverHandler);
-        link.mouseout(linkMouseOutHandler);
-
-        this.scene.add(link);
-        return link;
+        // let nodeA = this.leafs[devices[0]] || this.spines[devices[0]] || this.others[devices[0]];
+        // let nodeB = this.leafs[devices[1]] || this.spines[devices[1]] || this.others[devices[1]];
+        //
+        // let link = new JTopo.Link(nodeA, nodeB);
+        // link.zIndex = 20;
+        // link.linkId = linkId;
+        // link.lineWidth = this.LINE_WIDTH;
+        // link.strokeColor = this.LINE_SELECTED;
+        // link.dragable = false;
+        //
+        // link.mouseover(linkMouseOverHandler);
+        // link.mouseout(linkMouseOutHandler);
+        //
+        // this.scene.add(link);
+        // return link;
+        return null;
       };
 
+      let selectTransform = (originSelect) => {
+        let targetSelect = originSelect;
+        targetSelect = targetSelect.replace(/\./g, '\\\.');
+        targetSelect = targetSelect.replace(/:/g, '\\\:');
+        // console.log(targetSelect)
+        return targetSelect;
+      }
+
       let draw = (width) =>{
+
+        let rect = element[0].getBoundingClientRect();
 
         let avgHeight = this.height/3;
         let spineInterval = calcInterval(scope.spines, width);
@@ -366,17 +1376,12 @@ export class Topo {
         let leafInterval = calcLeafInterval(scope.leafs, width);
         let otherInterval = calcInterval(scope.others, width);
 
-        let spineKeys = this.di._.keys(this.spines);
-        spineKeys = this.di._.sortBy(spineKeys);
-        for(let i = 0; i< spineKeys.length; i++){
-          let key = spineKeys[i];
-          let node = this.spines[key];
+        this.spinesNode.attr('transform', (d,i) =>{
           let x = (i + 1) * spineInterval + i * this.switch_width;
-          let y =  (avgHeight - this.switch_height)/2;
-          node.setLocation(x, y);
-          this.switchLocation[key] = [x, y];
-        }
-        this.spineContainerText.setLocation(10, 10);
+          let y =  avgHeight/2;
+          this.switchLocation[d.id] = [x, y];
+          return 'translate(' + x + ',' + y + ')';
+        });
 
 
         let leaf_group_str = this.leaf_group_str;
@@ -395,46 +1400,79 @@ export class Topo {
           let key = orderKeys[i];
           let leaf_group = leaf_groups[key]; //arr
           for(let j = 0; j < leaf_group.length; j ++){
-            let node = this.leafs[leaf_group[j].id];
-            let y = (avgHeight - this.switch_height)/2 + avgHeight;
+            let y = avgHeight/2 + avgHeight;
             let x = last_x + leafInterval + j * (this.switch_width + this.leaf_group_interval);
-            node.setLocation(x, y);
-
             this.switchLocation[leaf_group[j].id] = [x, y];
 
           }
-          // last_x = last_x + leafInterval +(this.switch_width + this.leaf_group_interval)* leaf_group.length;
           last_x = last_x + leafInterval + this.switch_width* leaf_group.length + this.leaf_group_interval * (leaf_group.length-1) ;
         }
         if(non_leafs instanceof Array){
           for(let j = 0; j< non_leafs.length; j ++){
-            let node = this.leafs[non_leafs[j].id];
-            let y = (avgHeight - this.switch_height)/2 + avgHeight;
+            let y = avgHeight/2 + avgHeight;
             let x = last_x + leafInterval;
-            node.setLocation(x, y);
             this.switchLocation[non_leafs[j].id] = [x, y];
-
-
             last_x = last_x + leafInterval + this.switch_width*1;
           }
         }
+        // this.leafContainerText.setLocation(10, 10 + avgHeight);
+        this.leafsNode.attr('transform', (d,i )=> {
+          let pos = this.switchLocation[d.id];
+          return 'translate(' + pos[0] + ',' + pos[1] + ')';
+        });
 
-        this.leafContainerText.setLocation(10, 10 + avgHeight);
-
-        let otherKeys = this.di._.keys(this.others);
-        otherKeys = this.di._.sortBy(otherKeys);
-        for(let i = 0; i< otherKeys.length; i++){
-          let key = otherKeys[i];
-          let node = this.others[key];
+        this.othersNode.attr('transform', (d,i )=> {
           let x = (i + 1) * otherInterval + i * this.switch_width;
-          let y =  (avgHeight - this.switch_height)/2 + avgHeight * 2;
-          node.setLocation(x, y);
-          this.switchLocation[key] = [x, y];
-        }
-        this.otherContainerText.setLocation(10, 10 + avgHeight*2);
+          let y =  avgHeight/2 + avgHeight * 2 ;
 
-        relocateHost();
+          this.switchLocation[d.id] = [x, y];
+
+          return 'translate(' + x + ',' + y + ')';
+        });
+
+        // let otherKeys = this.di._.keys(this.others);
+        // otherKeys = this.di._.sortBy(otherKeys);
+        // for(let i = 0; i< otherKeys.length; i++){
+        //   let key = otherKeys[i];
+        //   let node = this.others[key];
+        //   let x = (i + 1) * otherInterval + i * this.switch_width;
+        //   let y =  (avgHeight - this.switch_height)/2 + avgHeight * 2;
+        //   node.setLocation(x, y);
+        //   this.switchLocation[key] = [x, y];
+        // }
+        // this.otherContainerText.setLocation(10, 10 + avgHeight*2);
+
+
+
+        relocatePath();
+        if(this.paths){
+          clearPath();
+          showPath()
+        }
+
       };
+
+      let relocatePath = () =>{
+        if(scope.topoSetting.show_links === 2 || scope.topoSetting.show_links === 1) {
+          if(this.linkNode){
+            this.linkNode.attr('d', d=>{
+              let deviceIds = [d.src.device, d.dst.device];
+              let ports = [d.src.port, d.dst.port];
+              let linkId = getLinkId(deviceIds, ports);
+              let pos1 = this.switchLocation[d.src.device];
+              let pos2 = this.switchLocation[d.dst.device];
+              let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];
+              if( Math.abs(pos2[0] - pos1[0]) < 20){
+                return 'M ' + pos1[0] + ' ' + pos1[1] +  ' ' + pos2[0] + ' ' + pos2[1];
+              }
+              return 'M ' + pos1[0] + ' ' + pos1[1] + ' Q ' + middleP[0] + ' ' +  middleP[1] + ' ' + pos2[0] + ' ' + pos2[1];
+              // if(d.state != this.active_status){
+              //   this.links[linkId].strokeColor = this.LINE_ERROR;
+              // }
+            });
+          }
+        }
+      }
 
       let calcInterval = (nodes, width) =>{
         return (width - this.switch_width * nodes.length)/(nodes.length + 1)
@@ -579,62 +1617,63 @@ export class Topo {
         return node;
       };
 
-      let genHostSwitchLink = (hostId, deviceId,devicePort, isActive,isAgainst) =>{
-        let swt = this.leafs[deviceId] || this.spines[deviceId] || this.others[deviceId];
-        let host = this.hostNodes[hostId];
-        let link;
-        if(isAgainst){
-          link = new JTopo.Link(swt, host);
-          link.src_port = devicePort;
-        } else {
-          link = new JTopo.Link(host, swt);
-          link.dst_port = devicePort;
-        }
-        link.arrowsRadius = 15;
+      // let genHostSwitchLink = (hostId, deviceId,devicePort, isActive,isAgainst) =>{
+      //   let swt = this.leafs[deviceId] || this.spines[deviceId] || this.others[deviceId];
+      //   let host = this.hostNodes[hostId];
+      //   let link;
+      //   if(isAgainst){
+      //     link = new JTopo.Link(swt, host);
+      //     link.src_port = devicePort;
+      //   } else {
+      //     link = new JTopo.Link(host, swt);
+      //     link.dst_port = devicePort;
+      //   }
+      //   link.arrowsRadius = 15;
+      //
+      //   link.zIndex = 100;
+      //   link.lineWidth = this.PATH_LINE_WIDTH;
+      //
+      //   if(isActive)
+      //     link.strokeColor = this.PATH_LINE_SELECTED;
+      //   else
+      //     link.strokeColor = this.LINE_ERROR;
+      //
+      //   // link.strokeColor = this.PATH_LINE_SELECTED;
+      //   link.dragable = false;
+      //
+      //   // node.mouseover(pathMouseOverHandler);
+      //   // node.mouseout(pathMouseOverHandler);
+      //   link.click(pathClickHandler);
+      //
+      //
+      //   this.scene.add(link);
+      //   return link;
+      // };
 
-        link.zIndex = 100;
-        link.lineWidth = this.PATH_LINE_WIDTH;
-
-        if(isActive)
-          link.strokeColor = this.PATH_LINE_SELECTED;
-        else
-          link.strokeColor = this.LINE_ERROR;
-
-        // link.strokeColor = this.PATH_LINE_SELECTED;
-        link.dragable = false;
-
-        // node.mouseover(pathMouseOverHandler);
-        // node.mouseout(pathMouseOverHandler);
-        link.click(pathClickHandler);
-
-        this.scene.add(link);
-        return link;
-      };
-
-      function pathClickHandler(evt) {
-        let startNode = this.nodeA;
-        let endNode = this.nodeZ;
-        let param = {'start':{}, 'end':{}};
-        if(startNode.hostId){
-          param.start['type'] = 'HOST';
-          param.start['id'] = startNode.hostId;
-        } else {
-          param.start['type'] = 'SWITCH';
-          param.start['id'] = startNode.deviceId;
-          param.start['port'] = this.src_port;
-        }
-
-        if(endNode.hostId){
-          param.end['type'] = 'HOST';
-          param.end['id'] = endNode.hostId;
-        } else {
-          param.end['type'] = 'SWITCH';
-          param.end['id'] = endNode.deviceId;
-          param.end['port'] = this.dst_port;
-        }
-
-        DI.$rootScope.$emit("path_select",{event:evt, value: param});
-      }
+      // function pathClickHandler(evt) {
+      //   let startNode = this.nodeA;
+      //   let endNode = this.nodeZ;
+      //   let param = {'start':{}, 'end':{}};
+      //   if(startNode.hostId){
+      //     param.start['type'] = 'HOST';
+      //     param.start['id'] = startNode.hostId;
+      //   } else {
+      //     param.start['type'] = 'SWITCH';
+      //     param.start['id'] = startNode.deviceId;
+      //     param.start['port'] = this.src_port;
+      //   }
+      //
+      //   if(endNode.hostId){
+      //     param.end['type'] = 'HOST';
+      //     param.end['id'] = endNode.hostId;
+      //   } else {
+      //     param.end['type'] = 'SWITCH';
+      //     param.end['id'] = endNode.deviceId;
+      //     param.end['port'] = this.dst_port;
+      //   }
+      //
+      //   DI.$rootScope.$emit("path_select",{event:evt, value: param});
+      // }
 
       // let pathMouseOutHandler = (evt) => {
       //   // console.log('node mouse out');
@@ -642,30 +1681,67 @@ export class Topo {
       // };
 
       let relocateHost = () =>{
-        let y = (this.height/3 - this.host_height)/2 + this.height/3 * 2;
+        let avgHeight = this.height/3;
+        let y = avgHeight/2 + avgHeight * 2;
         let lastX = -1;
-        this.di._.forEach(this.hosts, (hostDict)=>{
-          let hostNode = this.hostNodes[hostDict['id']];
-          let swtId = hostNode.connect_swt;
-          let swtX = this.switchLocation[swtId][0];
-          if(lastX !== -1){
-            if(swtX - lastX < this.host_width + this.host_min_interval){
-              lastX = lastX + this.host_width + this.host_min_interval;
+
+
+        if(this.hostsNode){
+          this.hostsNode.attr('transform', (d,i)=>{
+            let swtX = this.switchLocation[d.connect_swt][0];
+            if(i%2 === 0){
+              this.hostLocation[d.id] = [swtX - this.host_width, y];
+              return 'translate(' + (swtX - this.host_width) + ',' + y + ')';
             } else {
-              lastX = swtX + this.host_width;
+              this.hostLocation[d.id] = [swtX + this.host_width, y];
+              return 'translate(' + (swtX + this.host_width) + ',' + y + ')';
             }
-          } else {
-            lastX = swtX - this.host_width;
-          }
-          hostNode.setLocation(lastX, y);
-        })
+          });
+        }
+
+        // this.di._.forEach(this.hosts, (hostDict)=>{
+        //   let hostNode = this.hostNodes[hostDict['id']];
+        //   let swtId = hostNode.connect_swt;
+        //   let swtX = this.switchLocation[swtId][0];
+        //   if(lastX !== -1){
+        //     if(swtX - lastX < this.host_width + this.host_min_interval){
+        //       lastX = lastX + this.host_width + this.host_min_interval;
+        //     } else {
+        //       lastX = swtX + this.host_width;
+        //     }
+        //   } else {
+        //     lastX = swtX - this.host_width;
+        //   }
+        //   hostNode.setLocation(lastX, y);
+        // })
       };
 
       let genAllHosts = () =>{
 
-        this.di._.forEach(this.hosts, (host)=>{
-          this.hostNodes[host['id']] = genHostNode(host);
-        });
+        this.hostsNode = this.svg.append("g").attr('id', 'host_node')
+          .selectAll("g")
+          .data(this.hosts)
+          .join('g')
+          .attr("width", ICON_SIZE)
+          .attr("height", ICON_SIZE)
+          .style('cursor','pointer')
+          .html(d => {
+            return '<rect x="-12" y="-12" rx="3" ry="3" width="48" height="48" class="topo__node-outline" /><path class="topo__host" style="pointer-events: none" xmlns="http://www.w3.org/2000/svg" d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>'
+          })
+          .on('click', function clickHandler(d, i) {
+            DI.d3.event.stopPropagation();
+
+            removeSelectEffect();
+            DI.$rootScope.$emit('topo_unselect');
+
+            let mac = d.id;
+
+            DI.$rootScope.$emit("host_select",{event:calc_mouse_location(this), id: mac});
+            // DI.$rootScope.$emit("switch_select", {event: null, id: deviceId, type: null, value: showArray});
+
+            scope.curSelectedDeviceId = null;
+            addHostSelectEffect(this);
+          });
       };
 
       let genPathLinkNode = (devices, ports, isActive) => {
@@ -693,32 +1769,144 @@ export class Topo {
       };
 
       let genAllPathLinks = () =>{
-        this.di._.forEach(this.paths, (path)=>{
+        this.pathNode = this.svg.append("g").attr('id', 'path_link')
+          .style('marker-end','url(#marker)')
+          .selectAll('g')
+          .data(this.paths)
+          .join("path")
+          .attr('fill','none')
+          .attr('stroke-width','3px')
+          .attr('stroke','orange')
+          .style('cursor','pointer')
+          .on('click', pathClickHandler);
+
+        this.pathNode.append('animate')
+          .attr('attributeName', 'd')
+          .attr('dur', '2s')
+          .attr('repeatCount', 'indefinite')
+          .attr('values', (path, i)=>{
+            let src_arr = path['src'].split('/');
+            let dst_arr = path['dst'].split('/');
+            // let pos1 = this.switchLocation[deviceIds[0]];
+            // let pos2 = this.switchLocation[deviceIds[1]];
+            if(src_arr.length === 2 && dst_arr.length === 2){
+              let deviceIds = [src_arr[0], dst_arr[0]];
+              let pos1 = this.switchLocation[deviceIds[0]];
+              let pos2 = this.switchLocation[deviceIds[1]];
+              // let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];
+              return 'M ' + pos1[0] + ' ' + pos1[1] + ' ' + pos2[0] + ' ' + pos2[1] + ' ' + pos1[0] + ' ' + pos1[1] + ' ' + pos1[0] + ' ' + pos1[1] +
+                ';M ' + pos1[0] + ' ' + pos1[1] + ' ' + pos2[0] + ' ' + pos2[1] + ' ' + pos1[0] + ' ' + pos1[1] + ' ' + pos2[0] + ' ' + pos2[1];
+            } else {
+
+              let hostId = null, deviceId = null, devicePort = null;
+              if(src_arr.length === 3){
+                hostId = src_arr[0] + '/' +src_arr[1];
+                deviceId = dst_arr[0];
+                devicePort = dst_arr[1];
+                let pos1 = this.hostLocation[hostId];
+                let pos2 = this.switchLocation[deviceId];
+                // let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];
+                return 'M ' + (pos1[0] + 12) + ',' + (pos1[1] + 12) + ' ' + pos2[0] + ' ' + pos2[1] + ' ' + (pos1[0] + 12) + ',' + (pos1[1] + 12)  + ' ' + (pos1[0] + 12) + ',' + (pos1[1] + 12) +
+                  ';M ' + (pos1[0] + 12) + ' ' + (pos1[1] + 12) + ' ' + pos2[0] + ' ' + pos2[1] + ' ' + (pos1[0] + 12) + ',' + (pos1[1] + 12)  + ' ' +  pos2[0] + ' ' + pos2[1];
+              }
+              if(dst_arr.length === 3){
+                hostId = dst_arr[0] + '/' +dst_arr[1];
+                deviceId = src_arr[0];
+                devicePort = src_arr[1];
+
+                let pos1 = this.switchLocation[deviceId];
+                let pos2 = this.hostLocation[hostId];
+                return 'M ' + pos1[0] + ',' + pos1[1] + ' ' + (pos2[0] + 12) + ',' + (pos2[1]+ 12) + ' ' + pos1[0] + ',' + pos1[1] + ' ' + pos1[0] + ',' + pos1[1] +
+                  ';M ' + pos1[0] + ',' + pos1[1]  + ' ' + (pos2[0] + 12) + ',' + (pos2[1]+ 12) + ' ' + pos1[0] + ',' + pos1[1] + ' ' +(pos2[0] + 12) + ',' + (pos2[1]+ 12);
+              }
+            }
+          });
+
+        //无动画的时候用如下代码//不可删除噢~~~~~~
+        /*this.pathNode.attr('d', (path, i)=>{
           let src_arr = path['src'].split('/');
           let dst_arr = path['dst'].split('/');
+          // let pos1 = this.switchLocation[deviceIds[0]];
+          // let pos2 = this.switchLocation[deviceIds[1]];
           if(src_arr.length === 2 && dst_arr.length === 2){
             let deviceIds = [src_arr[0], dst_arr[0]];
-            let ports = [src_arr[1], dst_arr[1]];
-            let linkId = getLinkId(deviceIds, ports);
-            this.pathNodes[linkId] = genPathLinkNode(deviceIds, ports, path['state'] === LINK_ACTIVE_STATE);
+            let pos1 = this.switchLocation[deviceIds[0]];
+            let pos2 = this.switchLocation[deviceIds[1]];
+            // let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];
+            return 'M ' + pos1[0] + ' ' + pos1[1] + ' ' + pos2[0] + ' ' + pos2[1];
           } else {
+
             let hostId = null, deviceId = null, devicePort = null;
-            let isAgainst = false;
             if(src_arr.length === 3){
               hostId = src_arr[0] + '/' +src_arr[1];
               deviceId = dst_arr[0];
               devicePort = dst_arr[1];
+              let pos1 = this.hostLocation[hostId];
+              let pos2 = this.switchLocation[deviceId];
+              // let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];
+              return 'M ' + (pos1[0] + 12) + ' ' + (pos1[1] + 12) + ' ' + pos2[0] + ' ' + pos2[1];
             }
             if(dst_arr.length === 3){
-              isAgainst = true;
               hostId = dst_arr[0] + '/' +dst_arr[1];
               deviceId = src_arr[0];
               devicePort = src_arr[1];
+
+              let pos1 = this.switchLocation[deviceId];
+              let pos2 = this.hostLocation[hostId];
+              // let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];
+              return 'M ' + pos1[0] + ' ' + pos1[1]  + ' ' + (pos2[0] + 12) + ' ' + (pos2[1]+ 12);
             }
-            this.pathNodes[hostId+'_'+deviceId] = genHostSwitchLink(hostId, deviceId,devicePort, path.state === LINK_ACTIVE_STATE, isAgainst)
+            // this.pathNodes[hostId+'_'+deviceId] = genHostSwitchLink(hostId, deviceId,devicePort, path.state === LINK_ACTIVE_STATE)
           }
-        });
+        });*/
+
+
       };
+
+
+      function pathClickHandler(d) {
+        DI.d3.event.stopPropagation();
+        // console.log(d)
+        let param = { 'start':{}, 'end':{}};
+        // dst: "8C:EA:1B:8D:0F:B0/10/0"
+        // isExpected: "false"
+        // src: "rest:192.168.40.230:80/0"
+        // state: "ACTIVE"
+        // type: "EDGE"
+        if(d.type === EDGE_TYPE){
+          let src_arr = d['src'].split('/');
+          let dst_arr = d['dst'].split('/');
+          if(src_arr.length === 3){
+            param.start['type'] = 'HOST';
+            param.start['port'] = null;
+            param.start['id'] = src_arr[0] + '/' +src_arr[1];
+
+            param.end['type'] = 'SWITCH';
+            param.end['port'] = dst_arr[1];
+            param.end['id'] = dst_arr[0];
+
+          }
+          if(dst_arr.length === 3){
+
+            param.start['type'] = 'SWITCH';
+            param.start['port'] = src_arr[1];
+            param.start['id'] = src_arr[0];
+
+            param.end['type'] = 'HOST';
+            param.end['port'] = null;
+            param.end['id'] = dst_arr[0] + '/' +dst_arr[1];
+          }
+        } else {
+          param.start['type'] = 'SWITCH';
+          param.start['port'] = d.src.split('/')[1];
+          param.start['id'] = d.src.split('/')[0];
+
+          param.end['type'] = 'SWITCH';
+          param.end['port'] = d.dst.split('/')[1];
+          param.end['id'] = d.dst.split('/')[0];
+        }
+        DI.$rootScope.$emit("path_select", {event: calc_mouse_location(this), value: param});
+      }
 
       let showPath = () =>{
         let hosts = [];
@@ -742,25 +1930,19 @@ export class Topo {
         });
         this.hosts = this.di._.sortBy(hosts, ['swt_x']);
         genAllHosts();
+        relocateHost();
+
         genAllPathLinks();
 
-        relocateHost()
+
       };
 
       let clearPath= ()=>{
-        this.di._.forEach(this.hostNodes, (node, key)=>{
-          this.scene.remove(node);
-        });
+        this.svg.select('#host_node').remove();
+        this.svg.select('#path_link').remove();
 
-        this.di._.forEach(this.pathNodes, (node, key)=>{
-          this.scene.remove(node);
-        });
-        this.paths = [];
-        this.pathNodes = {};
-
-        this.hosts = [];
-        this.hostNodes = {};
-
+        this.pathNode = null;
+        this.hostsNode = null;
       };
 
 
@@ -865,6 +2047,16 @@ export class Topo {
         return res;
       };
 
+      let isDeviceLink = (src, dst) =>{
+        let src_sw = DI._.find(scope.spines,{'id':src}) || DI._.find(scope.leafs,{'id':src})||DI._.find(scope.others,{'id':src});
+        let dst_sw = DI._.find(scope.spines,{'id':dst}) || DI._.find(scope.leafs,{'id':dst})||DI._.find(scope.others,{'id':dst});
+        if(dst_sw && src_sw){
+          return true;
+        } else {
+          return false;
+        }
+      }
+
       function linkMouseOverHandler(evt) {
         if(scope.topoSetting.show_monitor){
           if(this._flow_detail){
@@ -912,25 +2104,41 @@ export class Topo {
       let showDeviceLinks = (deviceId) =>{
         if(scope.topoSetting.show_links === 1){
           crushLinks();
+          let _links = [];
           this.di._.forEach(scope.links, (link, key) => {
             if(deviceId == link.src.device){
-              let deviceIds = [link.src.device, link.dst.device];
-              let ports = [link.src.port, link.dst.port];
-              let linkId = getLinkId(deviceIds, ports);
-              if(this.links[linkId]){
-                return;
-              }
-              this.links[linkId] = genLinkNode(deviceIds, linkId);
-              // this.links[linkId].lineWidth = 3;
-              this.links[linkId].strokeColor = this.LINE_SELECTED;
-              if(link.state != this.active_status){
-                this.links[linkId].strokeColor = this.LINE_ERROR;
-              }
+              _links.push(link)
             }
           });
+          scope._links = formatLinks(_links);
+          this.linkNode = this.svg.append("g").attr('id', 'origin_link')
+            .selectAll('g')
+            .data(scope._links)
+            .join("path")
+            .attr('fill','none')
+            .attr('stroke','green');
+          relocatePath();
         }
       };
 
+      let calc_linkmouse_location = (self) =>{
+        let mouseEvent = DI.d3.mouse(self);
+        let x = element[0].getBoundingClientRect();
+        let evt = {
+          'clientX': mouseEvent[0] + x.left,
+          'clientY': mouseEvent[1] + x.top
+        };
+        return evt
+      };
+
+      let calc_mouse_location = (self) =>{
+        let x = self.getBoundingClientRect();
+        let evt = {
+          'clientX': 16/2 + x.left,
+          'clientY': 108/2 + x.top
+        };
+        return evt
+      };
 
       /*
       负责给container加上两个隐藏的node，用来固定整个容器
@@ -938,23 +2146,23 @@ export class Topo {
       let layout = () =>{
         let avgHeight = this.height/3;
 
-        this.spineContainerLeftNode.setLocation(0,0);
-        this.spineContainerRightNode.setLocation(this.width,0);
-
-        this.spineContainerLeftNode.height = avgHeight;
-        this.spineContainerRightNode.height = avgHeight;
-
-        this.leafContainerLeftNode.setLocation(0, avgHeight);
-        this.leafContainerRightNode.setLocation(this.width, avgHeight);
-
-        this.leafContainerLeftNode.height = avgHeight;
-        this.leafContainerRightNode.height = avgHeight;
-
-        this.otherContainerLeftNode.setLocation(0, avgHeight*2);
-        this.otherContainerRightNode.setLocation(this.width, avgHeight*2);
-
-        this.otherContainerLeftNode.height = avgHeight;
-        this.otherContainerRightNode.height = avgHeight;
+        // this.spineContainerLeftNode.setLocation(0,0);
+        // this.spineContainerRightNode.setLocation(this.width,0);
+        //
+        // this.spineContainerLeftNode.height = avgHeight;
+        // this.spineContainerRightNode.height = avgHeight;
+        //
+        // this.leafContainerLeftNode.setLocation(0, avgHeight);
+        // this.leafContainerRightNode.setLocation(this.width, avgHeight);
+        //
+        // this.leafContainerLeftNode.height = avgHeight;
+        // this.leafContainerRightNode.height = avgHeight;
+        //
+        // this.otherContainerLeftNode.setLocation(0, avgHeight*2);
+        // this.otherContainerRightNode.setLocation(this.width, avgHeight*2);
+        //
+        // this.otherContainerLeftNode.height = avgHeight;
+        // this.otherContainerRightNode.height = avgHeight;
       };
 
       let resize = (isInit) => {
@@ -963,20 +2171,20 @@ export class Topo {
         this.width = parentNode.offsetWidth;
         this.height = parentNode.offsetHeight;
 
-        let canvas = document.getElementById('canvas');
+        // let canvas = document.getElementById('canvas');
+        //
+        // if(this.oldWidth === null ||  this.oldWidth === undefined){
+        //   this.oldWidth = canvas.width;
+        // }
 
-        if(this.oldWidth === null ||  this.oldWidth === undefined){
-          this.oldWidth = canvas.width;
-        }
+        // canvas.width = this.width;
+        // canvas.height = this.height;
 
-        canvas.width = this.width;
-        canvas.height = this.height;
-
-        let context = canvas.getContext('2d');
-        context.shadowColor = 'rgba(0, 0, 0, 0.2)';
-        context.shadowOffsetX = 2;
-        context.shadowOffsetY = 5;
-        context.shadowBlur = 5;
+        // let context = canvas.getContext('2d');
+        // context.shadowColor = 'rgba(0, 0, 0, 0.2)';
+        // context.shadowOffsetX = 2;
+        // context.shadowOffsetY = 5;
+        // context.shadowBlur = 5;
         layout();
         let starttime = (new Date()).getTime();
         if(this.resizeTimeout){
@@ -995,9 +2203,7 @@ export class Topo {
       let delayDraw =()=> {
         let oldWidth = this.oldWidth;
         this.oldWidth =  null;
-        // console.log(oldWidth);
         let starttime = (new Date()).getTime();
-        // console.log(":==" + oldWidth);
         dynamicDraw(starttime, oldWidth);
       };
 
@@ -1007,6 +2213,7 @@ export class Topo {
         if(time > 1000) {
           draw(this.width);
           this.di.$rootScope.$emit('show_links');
+          this.oldWidth = this.width;
           return;
         }
         let percentage = time/1000;
@@ -1174,6 +2381,7 @@ export class Topo {
 
       unsubscribers.push(this.di.$rootScope.$on('show_links',()=>{
         if(scope.topoSetting.show_links === 2){
+          console.log('11111====>');
           genLinks()
         } else if(scope.topoSetting.show_links === 0) {
           crushLinks();
@@ -1194,14 +2402,43 @@ export class Topo {
       }));
 
       unsubscribers.push(this.di.$rootScope.$on('changeLinksColor',($event, params)=>{
+        let self = this;
         let links_color = params;
-        let keys = this.di._.keys(links_color);
-        this.di._.forEach(keys, (key)=>{
-          if(this.links[key]){
-            this.links[key].strokeColor =  links_color[key].color;
-            this.links[key]._flow_detail = links_color[key];
-          }
-        });
+        this.linkNode.classed('force-topo__line-normal', false);
+        this.linkNode
+          .attr('stroke-width', 2)
+          .attr('stroke', d => {
+            let _link = d;
+            let linkId = getLinkId([_link.src.device, _link.dst.device], [_link.src.port, _link.dst.port]);
+            console.log(linkId)
+
+            return 'rgb(' + links_color[linkId].color + ')';
+          })
+          .on('mouseover', function (d) {
+            let line = self.di.d3.select(this);
+            // console.log(line.attr('stroke-width'));
+            if (line.attr('stroke-width') !== '4'){
+              line.transition()
+                .duration(200)
+                .attr('stroke-width', '3');
+            }
+            let linkId = getLinkId([d.src.device, d.dst.device], [d.src.port, d.dst.port]);
+            if (scope.topoSetting.show_monitor) {
+              let res = _completeDeviceName4FlowInfo(links_color[linkId]);
+              DI.$rootScope.$emit("show_link_tooltip", {event: calc_linkmouse_location(this), value: res});
+            }
+          })
+          .on('mouseout', function () {
+            let line = self.di.d3.select(this);
+            if (line.attr('stroke-width') !== '4'){
+              line.transition()
+                .duration(200)
+                .attr('stroke-width', '2');
+            }
+
+
+            DI.$rootScope.$emit("hide_link_tooltip");
+          });
       }));
 
       unsubscribers.push(this.di.$rootScope.$on('clearLinksColor',($event)=>{
@@ -1215,6 +2452,7 @@ export class Topo {
 
       unsubscribers.push(this.di.$rootScope.$on('hide_path',()=>{
         clearPath();
+        this.paths = null;
       }));
 
       unsubscribers.push(this.di.$rootScope.$on('show_ports',()=>{
