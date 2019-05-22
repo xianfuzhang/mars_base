@@ -213,6 +213,36 @@
                    row-click="onTableRowClick($event)"
                    provider="detailModel.provider" api-ready="onApiReady($api)">
         </mdl-table>
+
+        <div ng-show="chartModel.port.display" style="position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(0,0,0,0.5);">
+            <div class="mars-row-flex" style="justify-content: center;margin-top: 400px;">
+                <div class="col-gutter-md left-panel mars-panel">
+                    <canvas id="device-port-packages" height="300"
+                            class="chart chart-line"
+                            chart-type="line"
+                            chart-data="devicePortChartConfig.data"
+                            chart-labels="devicePortChartConfig.labels"
+                            chart-series="devicePortChartConfig.series"
+                            chart-fill="false"
+                            chart-options="devicePortChartConfig.options">
+                    </canvas>
+
+                    <div class="setting-group" ng-show="!chartModel.port.loading">
+                        <mdl-select ng-model="chartModel.port.unitTypeOption" display-label="{options: portUnitTypes}"></mdl-select>
+
+                        <mdl-select ng-model="chartModel.port.stateTypeOption" display-label="{options: portStateTypes}" disable="chartModel.port.unitTypeOption.value.startsWith('bytes')"></mdl-select>
+
+                        <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="closePortAnalyzerChart()"><i class="material-icons">close</i></div>
+                        <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-port')"><i class="material-icons">settings</i></div>
+                        <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-port')"><i class="material-icons">undo</i></div>
+                        <!--<div class="item" title="{{clusterInterfaceChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-interface')"><i class="material-icons">swap_horiz</i></div>-->
+
+                    </div>
+
+                    <div class="chart-loading" ng-show="chartModel.port.loading"></div>
+                </div>
+            </div>
+        </div>
       </section>
       <section class="tab-content" ng-if="tabSelected.type == 'link'">
         <mdl-table actions-show="detailModel.actionsShow"
