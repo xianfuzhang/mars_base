@@ -976,6 +976,54 @@ export class Topo {
         setTimeout(delayInit,200);
       };
 
+      function addPort(d) {
+        let len = 2.5;
+        let port_width = 3;
+        let padding_x = 4;
+        let height = self.switch_height;
+        let width = self.switch_width;
+        let status_normal = '#81FF1A';
+        let status_error = 'rgb(255,0,0)';
+        let top = 8;
+        let bottom = 4;
+
+        let x_left = - width/2 + padding_x;
+        let x_right = width/2 - padding_x - port_width;
+
+        let ports = d.ports;
+        if(Array.isArray(ports) && ports.length > 0){
+          let curNode = DI.d3.select(this);
+          let port_height = (height - top - bottom) / (parseInt(ports.length / 2)) - 1;
+
+          ports.forEach((port, i)=>{
+            let x = i % 2 === 0? x_left: x_right;
+            let y = parseInt(i/2) * (port_height + 1) - (height/2 - top);
+            if(ports.length > 60){
+              len = 1.8;
+            }
+
+            let colorClass = port.isEnabled?'status_normal':'status_error';
+            curNode.append('rect')
+              .attr('x', x)
+              .attr('y', y)
+              .attr('width', port_width)
+              .attr('height', port_height)
+              .classed(colorClass, true)
+          })
+        }
+      }
+
+      let addAllPorts = () =>{
+        this.spinesNode.each(addPort);
+        this.leafsNode.each(addPort);
+      }
+
+
+      let crushAllPorts = () =>{
+        this.spinesNode.selectAll('rect:not(.topo__node-outline)').remove();
+        this.leafsNode.selectAll('rect:not(.topo__node-outline)').remove();
+      }
+
       let delayInit = () =>{
         genSpine();
         genLeaf();
@@ -984,6 +1032,10 @@ export class Topo {
         // if(scope.topoSetting.show_links === 2){
         //   genLinks()
         // }
+
+        if(scope.topoSetting.show_ports){
+          addAllPorts();
+        }
         resize(true);
       };
 
@@ -1147,16 +1199,14 @@ export class Topo {
           .selectAll("g")
           .data(scope.spines)
           .join('g')
-          .attr("width", ICON_SIZE)
-          .attr("height", ICON_SIZE)
-          .attr('deviceId', d => d.id)
           .style('cursor','pointer')
           .html(d => {
             let device_status_class = 'topo__node-normal';
             if (!d.available) {
               device_status_class = 'topo__node-error';
             }
-            return '<rect x="-8" y="-54" rx="3" ry="3" width="16" height="108" class="topo__node-outline ' + device_status_class +  '" />'
+            // return '<rect x="-8" y="-54" rx="3" ry="3" width="16" height="108" class="topo__node-outline ' + device_status_class +  '"/>'
+            return '<rect x="' + (- this.switch_width/2 )+ '" y="' + (-this.switch_height/2)+'" rx="3" ry="3" width="' + this.switch_width + '" height="' + this.switch_height +'" class="topo__node-outline ' + device_status_class +  '" />'
           })
           .on('click', switchClick)
           .on('mouseover', switchMouseOver)
@@ -1175,16 +1225,13 @@ export class Topo {
           .selectAll("g")
           .data(scope.leafs)
           .join('g')
-          .attr("width", ICON_SIZE)
-          .attr("height", ICON_SIZE)
-          .attr('deviceId', d => d.id)
           .style('cursor','pointer')
           .html(d => {
             let device_status_class = 'topo__node-normal';
             if (!d.available) {
               device_status_class = 'topo__node-error';
             }
-            return '<rect x="-8" y="-54" rx="3" ry="3" width="16" height="108" class="topo__node-outline ' + device_status_class +  '" />'
+            return '<rect x="' + (- this.switch_width/2 )+ '" y="' + (-this.switch_height/2)+'" rx="3" ry="3" width="' + this.switch_width + '" height="' + this.switch_height +'" class="topo__node-outline ' + device_status_class +  '" />'
           })
           .on('click', switchClick)
           .on('mouseover', switchMouseOver)
@@ -1205,16 +1252,14 @@ export class Topo {
           .selectAll("g")
           .data(scope.others)
           .join('g')
-          .attr("width", ICON_SIZE)
-          .attr("height", ICON_SIZE)
-          .attr('deviceId', d => d.id)
           .style('cursor','pointer')
           .html(d => {
             let device_status_class = 'topo__node-error';
             if (!d.available) {
               device_status_class = 'topo__node-error';
             }
-            return '<rect x="-8" y="-54" rx="3" ry="3" width="16" height="108" class="topo__node-outline ' + device_status_class +  '" />'
+            return '<rect x="' + (- this.switch_width/2 )+ '" y="' + (-this.switch_height/2)+'" rx="3" ry="3" width="' + this.switch_width + '" height="' + this.switch_height +'" class="topo__node-outline ' + device_status_class +  '" />'
+            // return '<rect x="-8" y="-54" rx="3" ry="3" width="16" height="108" class="topo__node-outline ' + device_status_class +  '" />'
           })
           .on('click', switchClick)
           .on('mouseover', switchMouseOver)
@@ -2134,8 +2179,8 @@ export class Topo {
       let calc_mouse_location = (self) =>{
         let x = self.getBoundingClientRect();
         let evt = {
-          'clientX': 16/2 + x.left,
-          'clientY': 108/2 + x.top
+          'clientX': this.switch_width/2 + x.left,
+          'clientY': this.switch_height/2 + x.top
         };
         return evt
       };
@@ -2248,106 +2293,106 @@ export class Topo {
         }
       };
 
-      let crushAllPorts = () =>{
-        this.di._.forEach(scope.spines, (spine, key) => {
-          crushPorts(this.spines[spine.id])
-        });
+      // let crushAllPorts = () =>{
+      //   this.di._.forEach(scope.spines, (spine, key) => {
+      //     crushPorts(this.spines[spine.id])
+      //   });
+      //
+      //   this.di._.forEach(scope.leafs, (leaf, key) => {
+      //     crushPorts(this.leafs[leaf.id])
+      //   });
+      //
+      //   this.di._.forEach(scope.others, (other, key) => {
+      //     crushPorts(this.others[other.id])
+      //   });
+      // };
 
-        this.di._.forEach(scope.leafs, (leaf, key) => {
-          crushPorts(this.leafs[leaf.id])
-        });
+      // let genAllPorts = () =>{
+      //   this.di._.forEach(scope.spines, (spine, key) => {
+      //     genPorts(this.spines[spine.id], spine.ports)
+      //   });
+      //
+      //   this.di._.forEach(scope.leafs, (leaf, key) => {
+      //     genPorts(this.leafs[leaf.id], leaf.ports)
+      //   });
+      //
+      //   this.di._.forEach(scope.others, (other, key) => {
+      //     genPorts(this.others[other.id], other.ports)
+      //   });
+      // };
 
-        this.di._.forEach(scope.others, (other, key) => {
-          crushPorts(this.others[other.id])
-        });
-      };
-
-      let genAllPorts = () =>{
-        this.di._.forEach(scope.spines, (spine, key) => {
-          genPorts(this.spines[spine.id], spine.ports)
-        });
-
-        this.di._.forEach(scope.leafs, (leaf, key) => {
-          genPorts(this.leafs[leaf.id], leaf.ports)
-        });
-
-        this.di._.forEach(scope.others, (other, key) => {
-          genPorts(this.others[other.id], other.ports)
-        });
-      };
-
-      let crushPorts = (node) =>{
-        let height = this.switch_height;
-        let width = this.switch_width;
-
-        let self = this;
-        node.paint = function(g) {
-          g.beginPath();
-          g.rect(-width / 2, -height / 2, width, height);
-          if(node.status === false){
-            g.fillStyle ='rgb(255,0,0)';
-          } else {
-            g.fillStyle = self.getNodeColor();
-          }
-          g.fill();
-          g.closePath();
-          this.paintText(g);
-        }
-      };
+      // let crushPorts = (node) =>{
+      //   let height = this.switch_height;
+      //   let width = this.switch_width;
+      //
+      //   let self = this;
+      //   node.paint = function(g) {
+      //     g.beginPath();
+      //     g.rect(-width / 2, -height / 2, width, height);
+      //     if(node.status === false){
+      //       g.fillStyle ='rgb(255,0,0)';
+      //     } else {
+      //       g.fillStyle = self.getNodeColor();
+      //     }
+      //     g.fill();
+      //     g.closePath();
+      //     this.paintText(g);
+      //   }
+      // };
 
 
-      let genPorts = (node, ports) => {
-        //根据实际的端口数来
-        //超过48个端口len为2，根据实际情况来
-        let len = 2.5;
-        let height = this.switch_height;
-        let width = this.switch_width;
-        let status_normal = '#81FF1A';
-        let status_error = 'rgb(255,0,0)';
-        let top = 4;
-
-        let self = this;
-        node.paint = function(g){
-          g.beginPath();
-          g.rect(-width/2, -height/2, width, height);
-          if(node.status === false){
-            g.fillStyle ='rgb(255,0,0)';
-          } else {
-            g.fillStyle = self.getNodeColor();
-          }
-          g.fill();
-          g.closePath();
-
-          if(scope.topoSetting.show_ports && ports && ports instanceof Array && ports.length > 0) {
-            if(ports.length > 60){
-              len = 1.8;
-            }
-
-            let padding = (width - len * 2) / 3;
-            let left = -width / 2 + padding;
-            let right = width / 2 - padding - len;
-            // top = 8;
-            for (let i = 0; i < ports.length; i++) {
-              let port = ports[i];
-              g.beginPath();
-              if (i % 2 === 0) {
-                g.rect(left, -height / 2 + top + parseInt(i / 2) * (len + 1), len, len);
-              } else {
-                g.rect(right, -height / 2 + top + parseInt(i / 2) * (len + 1), len, len);
-              }
-              g.fillStyle = status_normal;
-              if (!port.isEnabled) {
-                g.fillStyle = status_error;
-              }
-              g.fill();
-              g.closePath();
-            }
-          }
-          this.paintText(g);
-          // g.save();
-          // g.restore();
-        }
-      };
+      // let genPorts = (node, ports) => {
+      //   //根据实际的端口数来
+      //   //超过48个端口len为2，根据实际情况来
+      //   let len = 2.5;
+      //   let height = this.switch_height;
+      //   let width = this.switch_width;
+      //   let status_normal = '#81FF1A';
+      //   let status_error = 'rgb(255,0,0)';
+      //   let top = 4;
+      //
+      //   let self = this;
+      //   node.paint = function(g){
+      //     g.beginPath();
+      //     g.rect(-width/2, -height/2, width, height);
+      //     if(node.status === false){
+      //       g.fillStyle ='rgb(255,0,0)';
+      //     } else {
+      //       g.fillStyle = self.getNodeColor();
+      //     }
+      //     g.fill();
+      //     g.closePath();
+      //
+      //     if(scope.topoSetting.show_ports && ports && ports instanceof Array && ports.length > 0) {
+      //       if(ports.length > 60){
+      //         len = 1.8;
+      //       }
+      //
+      //       let padding = (width - len * 2) / 3;
+      //       let left = -width / 2 + padding;
+      //       let right = width / 2 - padding - len;
+      //       // top = 8;
+      //       for (let i = 0; i < ports.length; i++) {
+      //         let port = ports[i];
+      //         g.beginPath();
+      //         if (i % 2 === 0) {
+      //           g.rect(left, -height / 2 + top + parseInt(i / 2) * (len + 1), len, len);
+      //         } else {
+      //           g.rect(right, -height / 2 + top + parseInt(i / 2) * (len + 1), len, len);
+      //         }
+      //         g.fillStyle = status_normal;
+      //         if (!port.isEnabled) {
+      //           g.fillStyle = status_error;
+      //         }
+      //         g.fill();
+      //         g.closePath();
+      //       }
+      //     }
+      //     this.paintText(g);
+      //     // g.save();
+      //     // g.restore();
+      //   }
+      // };
 
 
       // this.di.$timeout(()=>{
@@ -2457,7 +2502,8 @@ export class Topo {
 
       unsubscribers.push(this.di.$rootScope.$on('show_ports',()=>{
         if(scope.topoSetting.show_ports){
-          genAllPorts()
+          // genAllPorts()
+          addAllPorts()
         } else {
           crushAllPorts()
         }
