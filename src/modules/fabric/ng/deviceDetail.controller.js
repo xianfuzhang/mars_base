@@ -314,8 +314,10 @@ export class DeviceDetailController {
         return;
       }
 
+      this.scope.chartModel.cpu.loading = true;
       this.getDeviceCPUAnalyzer().then(() => {
         // cpu analyzer
+        this.scope.chartModel.cpu.loading = false;
         this.setDeviceCpuChartData();
       });
     },true));
@@ -327,9 +329,26 @@ export class DeviceDetailController {
         return;
       }
 
+      this.scope.chartModel.memory.loading = true;
       this.getDeviceMemoryAnalyzer().then(() => {
         //memory analyzer
+        this.scope.chartModel.memory.loading = false;
         this.setDeviceMemoryChartData();
+      });
+    },true));
+
+    let diskTimeHasChanged = false;
+    unSubscribers.push(this.di.$scope.$watchGroup(['chartModel.disk.begin_time', 'chartModel.disk.end_time'], () => {
+      if(!diskTimeHasChanged) {
+        diskTimeHasChanged = true;
+        return;
+      }
+
+      this.scope.chartModel.disk.loading = true;
+      this.getDeviceDiskAnalyzer().then(() => {
+        //disk analyzer
+        this.scope.chartModel.disk.loading = false;
+        this.setDeviceDiskChartData();
       });
     },true));
 
@@ -340,8 +359,10 @@ export class DeviceDetailController {
         return;
       }
 
+      this.scope.chartModel.port.loading = true;
       this.getDevicePortAnalyzer(this.scope.port_id).then(() => {
         // interface analyzer
+        this.scope.chartModel.port.loading = false;
         this.setDevicePortChartData();
       });
     },true));
@@ -750,29 +771,45 @@ export class DeviceDetailController {
         });
         break;
       case 'analyzer':
-        this.getDeviceCPUAnalyzer().then(() => {
-          this.setDeviceCpuChartData();
-          this.scope.chartModel.cpu.loading = false;
-        }, (err) => {
-          console.error("Can't get device cpu analyzer data.");
-          this.scope.chartModel.cpu.loading = false;
-        });
+        // update time
+        let date = this.di.dateService.getTodayObject();
+        let before = this.di.dateService.getBeforeDateObject(30*60*1000); // 前30分钟
+        let one_minute_before = this.di.dateService.getBeforeDateObject(60 * 1000); // 前1分钟
+        let begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
+        let one_minute_before_time = new Date(one_minute_before.year, one_minute_before.month, one_minute_before.day, one_minute_before.hour, one_minute_before.minute, 0);
+        let end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
 
-        this.getDeviceMemoryAnalyzer().then(() => {
-          this.setDeviceMemoryChartData();
-          this.scope.chartModel.memory.loading = false;
-        }, (err) => {
-          console.error("Can't get device memory analyzer data.");
-          this.scope.chartModel.memory.loading = false;
-        });
+        this.scope.chartModel.cpu.begin_time = begin_time;
+        this.scope.chartModel.cpu.end_time = end_time;
 
-        this.getDeviceDiskAnalyzer().then(() => {
-          this.setDeviceDiskChartData();
-          this.scope.chartModel.disk.loading = false;
-        }, (err) => {
-          console.error("Can't get device memory analyzer data.");
-          this.scope.chartModel.disk.loading = false;
-        });
+        this.scope.chartModel.memory.begin_time = begin_time;
+        this.scope.chartModel.memory.end_time = end_time;
+
+        this.scope.chartModel.disk.begin_time = one_minute_before_time;
+        this.scope.chartModel.disk.end_time = end_time;
+        // this.getDeviceCPUAnalyzer().then(() => {
+        //   this.setDeviceCpuChartData();
+        //   this.scope.chartModel.cpu.loading = false;
+        // }, (err) => {
+        //   console.error("Can't get device cpu analyzer data.");
+        //   this.scope.chartModel.cpu.loading = false;
+        // });
+        //
+        // this.getDeviceMemoryAnalyzer().then(() => {
+        //   this.setDeviceMemoryChartData();
+        //   this.scope.chartModel.memory.loading = false;
+        // }, (err) => {
+        //   console.error("Can't get device memory analyzer data.");
+        //   this.scope.chartModel.memory.loading = false;
+        // });
+        //
+        // this.getDeviceDiskAnalyzer().then(() => {
+        //   this.setDeviceDiskChartData();
+        //   this.scope.chartModel.disk.loading = false;
+        // }, (err) => {
+        //   console.error("Can't get device memory analyzer data.");
+        //   this.scope.chartModel.disk.loading = false;
+        // });
 
         defer.resolve({data: []});
         break;
@@ -1045,7 +1082,8 @@ export class DeviceDetailController {
       zoom: {
         // Useful for dynamic data loading
         onZoom: lineChartOnZoom('device-cpu-chart', scope)
-      }
+      },
+      timepoint: (new Date()).getTime()
     }
 
     this.di.$scope.deviceCpuChartConfig.data = dataArr;
@@ -1130,7 +1168,8 @@ export class DeviceDetailController {
       zoom: {
         // Useful for dynamic data loading
         onZoom: lineChartOnZoom('device-memory-chart', scope)
-      }
+      },
+      timepoint: (new Date()).getTime()
     };
 
     this.di.$scope.deviceMemoryChartConfig.data = dataArr;
@@ -1185,7 +1224,8 @@ export class DeviceDetailController {
             return tooltipItem.yLabel.toFixed(2) + '%';
           }
         }
-      }
+      },
+      timepoint: (new Date()).getTime()
     }
 
     this.scope.deviceDiskChartConfig.data = [usedArr, freeArr, reservedArr];
