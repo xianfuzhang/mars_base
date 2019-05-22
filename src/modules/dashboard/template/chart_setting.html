@@ -18,7 +18,7 @@
 
                 <div class="input_item" ng-show="type == 'controller-interface'">
                     <div class="label" ng-bind="stateTypeOptionTitle"></div>
-                    <mdl-select ng-model="chartModel.stateTypeOption" display-label="{options: interfaceStateTypes}" disable="chartModel.unitTypeOption.value == 'bytes_tx' || chartModel.unitTypeOption.value == 'bytes_rx'">
+                    <mdl-select ng-model="chartModel.stateTypeOption" display-label="{options: interfaceStateTypes}" disable="chartModel.unitTypeOption.value.startsWith('bytes')">
                     </mdl-select>
                 </div>
 

@@ -1153,25 +1153,25 @@ export class DashboardController {
         case 'packets_tx':
           tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
             analyzerLength  = device.analyzer.length;
-            return device.analyzer[analyzerLength - 1].packetsSent - device.analyzer[0].packetsSent;
+            return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].packetsSent - device.analyzer[0].packetsSent : 0;
           }, 'desc');
           break;
         case 'packets_rx':
           tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
             analyzerLength  = device.analyzer.length;
-            return device.analyzer[analyzerLength - 1].packetsReceived - device.analyzer[0].packetsReceived;
+            return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].packetsReceived - device.analyzer[0].packetsReceived : 0;
           }, 'desc');
           break;
         case 'bytes_tx':
           tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
             analyzerLength  = device.analyzer.length;
-            return device.analyzer[analyzerLength - 1].bytesSent - device.analyzer[0].bytesSent;
+            return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].bytesSent - device.analyzer[0].bytesSent : 0;
           }, 'desc');
           break;
         case 'bytes_rx':
           tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
             analyzerLength  = device.analyzer.length;
-            return device.analyzer[analyzerLength - 1].bytesReceived - device.analyzer[0].bytesReceived;
+            return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].bytesReceived - device.analyzer[0].bytesReceived : 0;
           }, 'desc');
           break;
       }
@@ -1276,13 +1276,15 @@ export class DashboardController {
         case 'packets_tx':
           tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
             analyzerLength = device.analyzer.length;
-            return (device.analyzer[analyzerLength - 1].packetsTxDropped - device.analyzer[0].packetsTxDropped) + (device.analyzer[analyzerLength - 1].packetsTxErrors - device.analyzer[0].packetsTxErrors);
+            return analyzerLength > 0 ? (device.analyzer[analyzerLength - 1].packetsTxDropped - device.analyzer[0].packetsTxDropped)
+              + (device.analyzer[analyzerLength - 1].packetsTxErrors - device.analyzer[0].packetsTxErrors) : 0;
           }, 'desc');
           break;
         case 'packets_rx':
           tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
             analyzerLength = device.analyzer.length;
-            return (device.analyzer[analyzerLength - 1].packetsRxDropped - device.analyzer[0].packetsRxDropped) + (device.analyzer[analyzerLength - 1].packetsRxErrors - device.analyzer[0].packetsRxErrors);
+            return analyzerLength > 0 ? (device.analyzer[analyzerLength - 1].packetsRxDropped - device.analyzer[0].packetsRxDropped)
+              + (device.analyzer[analyzerLength - 1].packetsRxErrors - device.analyzer[0].packetsRxErrors) : 0;
           }, 'desc');
           break;
       }

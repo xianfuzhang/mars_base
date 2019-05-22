@@ -59,7 +59,7 @@ export class DeviceDetailController {
     let one_minute_before_time = new Date(one_minute_before.year, one_minute_before.month, one_minute_before.day, one_minute_before.hour, one_minute_before.minute, 0);
     let end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
 
-    scope.interfaceTypes = [{
+    scope.portUnitTypes = [{
       label: 'Packets_TX',
       value: 'packets_tx'
     },{
@@ -71,6 +71,17 @@ export class DeviceDetailController {
     },{
       label: 'Bytes_RX',
       value: 'bytes_rx'
+    }];
+
+    scope.portStateTypes = [{
+      label: 'Normal',
+      value: 'normal'
+    },{
+      label: 'Dropped',
+      value: 'dropped'
+    },{
+      label: 'Error',
+      value: 'error'
     }];
 
     this.di.$scope.chartModel = {
@@ -111,7 +122,8 @@ export class DeviceDetailController {
         'analyzer': [],
         loading: true,
         unitTypeOption: {label: 'Packets_TX', value: 'packets_tx'},
-        stateTypeOption: {label: 'Normal',value: 'normal'}
+        stateTypeOption: {label: 'Normal',value: 'normal'},
+        display: false
       }
     };
 
@@ -194,6 +206,11 @@ export class DeviceDetailController {
         this.di.$scope.chartModel.memory.end_time = scope.chartModel.memory.origin_end_time;
         this.di.$scope.chartModel.memory.step = Math.floor((scope.chartModel.memory.origin_end_time.getTime() - scope.chartModel.memory.origin_begin_time) / (GRID_NUM * 1000));
       }
+      else if (type === 'device-port') {
+        this.di.$scope.chartModel.port.begin_time = scope.chartModel.port.origin_begin_time;
+        this.di.$scope.chartModel.port.end_time = scope.chartModel.port.origin_end_time;
+        this.di.$scope.chartModel.port.step = Math.floor((scope.chartModel.port.origin_end_time.getTime() - scope.chartModel.port.origin_begin_time) / (GRID_NUM * 1000));
+      }
     }
 
     this.scope.chartSetting = (type) => {
@@ -207,7 +224,10 @@ export class DeviceDetailController {
         case 'device-memory':
           beginTime = this.di.$scope.chartModel.memory.begin_time;
           endTime = this.di.$scope.chartModel.memory.end_time;
-          selectedData = this.di.$scope.chartModel.memory.selectedData;
+          break;
+        case 'device-port':
+          beginTime = this.di.$scope.chartModel.port.begin_time;
+          endTime = this.di.$scope.chartModel.port.end_time;
           break;
       }
 
@@ -230,8 +250,6 @@ export class DeviceDetailController {
         if (res && !res.canceled) {
           switch(type) {
             case 'device-cpu':
-              scope.chartModel.cpu.selectedData = selectedData;
-
               scope.chartModel.cpu.origin_begin_time = res.data.beginTime;
               scope.chartModel.cpu.origin_end_time = res.data.endTime;
               scope.chartModel.cpu.begin_time = res.data.beginTime;
@@ -245,9 +263,20 @@ export class DeviceDetailController {
               scope.chartModel.memory.end_time = res.data.endTime;
               scope.chartModel.memory.step = Math.floor((scope.chartModel.memory.origin_end_time.getTime() - scope.chartModel.memory.origin_begin_time) / (GRID_NUM * 1000));
               break;
+            case 'device-port':
+              scope.chartModel.port.origin_begin_time = res.data.beginTime;
+              scope.chartModel.port.origin_end_time = res.data.endTime;
+              scope.chartModel.port.begin_time = res.data.beginTime;
+              scope.chartModel.port.end_time = res.data.endTime;
+              scope.chartModel.port.step = Math.floor((scope.chartModel.port.origin_end_time.getTime() - scope.chartModel.port.origin_begin_time) / (GRID_NUM * 1000));
+              break;
           }
         }
       });
+    }
+
+    this.scope.closePortAnalyzerChart = () => {
+      this.scope.chartModel.port.display = false;
     }
 
     let unSubscribers = [];
@@ -293,26 +322,26 @@ export class DeviceDetailController {
     },true));
 
     let portTimeHasChanged = false;
-    unSubscribers.push(this.di.$scope.$watchGroup(['chartModel.port.begin_time', 'chartModel.port.interface.end_time'], () => {
+    unSubscribers.push(this.di.$scope.$watchGroup(['chartModel.port.begin_time', 'chartModel.port.end_time'], () => {
       if(!portTimeHasChanged) {
         portTimeHasChanged = true;
         return;
       }
 
-      this.getClustersInterfaceAnalyzer().then(() => {
+      this.getDevicePortAnalyzer(this.scope.port_id).then(() => {
         // interface analyzer
-        setClusterInterfaceChartData();
+        this.setDevicePortChartData();
       });
     },true));
 
     let portTypeHasChanged = false;
-    unSubscribers.push(this.di.$scope.$watchGroup(['chartModel.port.interface.unitTypeOption', 'chartModel.port.interface.stateTypeOption'], () => {
+    unSubscribers.push(this.di.$scope.$watchGroup(['chartModel.port.unitTypeOption', 'chartModel.port.stateTypeOption'], () => {
       if(!portTypeHasChanged) {
         portTypeHasChanged = true;
         return;
       }
 
-      setClusterInterfaceChartData();
+      this.setDevicePortChartData();
     },true));
 
 
@@ -381,7 +410,9 @@ export class DeviceDetailController {
               this.scope.port_id = event.data.port_id;
               this.getDevicePortAnalyzer(event.data.port_id)
                 .then(() => {
+                  this.scope.chartModel.port.loading = false;
                   this.setDevicePortChartData();
+                  this.scope.chartModel.port.display = true;
                 });
             } else {
               let enabled = event.action.value === 'enable' ?  true : false;
@@ -1215,7 +1246,7 @@ export class DeviceDetailController {
     let options = {
       title: {
         display: true,
-        text: this.translate('MODULES.DASHBOARD.CONTROLLER_INTERFACE_PACKETS'),
+        text: '端口:' + this.scope.port_id + ' 流量情况',
       },
       legend: {
         display: false,
@@ -1262,7 +1293,7 @@ export class DeviceDetailController {
       // Container for zoom options
       zoom: {
         // Useful for dynamic data loading
-        onZoom: lineChartOnZoom('device-port-chart')
+        onZoom: lineChartOnZoom('device-port-chart', scope)
       }
     };
 
@@ -1313,6 +1344,11 @@ export class DeviceDetailController {
           scope.chartModel.memory.begin_time = start;
           scope.chartModel.memory.end_time = end;
           scope.chartModel.memory.step = step;
+          break;
+        case 'device-port-chart':
+          scope.chartModel.port.begin_time = start;
+          scope.chartModel.port.end_time = end;
+          scope.chartModel.port.step = step;
           break;
       }
 
