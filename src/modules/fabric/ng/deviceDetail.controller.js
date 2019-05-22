@@ -124,6 +124,18 @@ export class DeviceDetailController {
         unitTypeOption: {label: 'Packets_TX', value: 'packets_tx'},
         stateTypeOption: {label: 'Normal',value: 'normal'},
         display: false
+      },
+      top10ports: {
+        'begin_time': begin_time,
+        'end_time': end_time,
+        'step': (end_time.getTime() - begin_time.getTime()) / (GRID_NUM * 1000),
+        'origin_begin_time': begin_time,
+        'origin_end_time': end_time,
+        'analyzer': [],
+        loading: true,
+        unitTypeOption: {label: 'Packets_TX', value: 'packets_tx'},
+        stateTypeOption: {label: 'Normal',value: 'normal'},
+        display: false
       }
     };
 
@@ -1075,7 +1087,7 @@ export class DeviceDetailController {
     let options = {
       title: {
         display: true,
-        text: this.translate('MODULES.SWITCH.DETAIL.MEMORY_USAGE"'),
+        text: this.translate('MODULES.SWITCH.DETAIL.MEMORY_USAGE'),
       },
       legend: {
         display: false
