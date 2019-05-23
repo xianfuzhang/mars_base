@@ -157,8 +157,8 @@
                   </canvas>
 
                   <div class="setting-group"  ng-show="!chartModel.cpu.loading">
-                      <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
                       <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
+                      <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
                       <!--<div class="item" title="{{deviceCpuChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>-->
                   </div>
 
@@ -180,8 +180,8 @@
                   </canvas>
 
                   <div class="setting-group"  ng-show="!chartModel.memory.loading">
-                      <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-memory')"><i class="material-icons">settings</i></div>
                       <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
+                      <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-memory')"><i class="material-icons">settings</i></div>
                       <!--<div class="item" title="{{deviceMemoryChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>-->
                   </div>
 
@@ -232,9 +232,9 @@
 
                         <mdl-select ng-model="chartModel.port.stateTypeOption" display-label="{options: portStateTypes}" disable="chartModel.port.unitTypeOption.value.startsWith('bytes')"></mdl-select>
 
-                        <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="closePortAnalyzerChart()"><i class="material-icons">close</i></div>
-                        <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-port')"><i class="material-icons">settings</i></div>
                         <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-port')"><i class="material-icons">undo</i></div>
+                        <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-port')"><i class="material-icons">settings</i></div>
+                        <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="closePortAnalyzerChart()"><i class="material-icons">close</i></div>
                         <!--<div class="item" title="{{clusterInterfaceChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-interface')"><i class="material-icons">swap_horiz</i></div>-->
 
                     </div>
