@@ -239,12 +239,14 @@ export class DonutTopo {
     let drawPortLinks = () => {
 		  let linkMapData = [];
 		  scope.links.forEach((link) => {
-		    linkMapData.push({
-		      source: scope.portCoordinateMap.get(link.src.device + link.src.port)
-		      			 || {'x': 0, 'y': 0, 'device': link.src.device, 'port': link.src.port},
-		      target: scope.portCoordinateMap.get(link.dst.device + link.dst.port)
-		      			 || {'x': 0, 'y': 0, 'device': link.dst.device, 'port': link.dst.port}
-		    });
+		  	if (link.type === "DIRECT") {
+		  		linkMapData.push({
+			      source: scope.portCoordinateMap.get(link.src.device + link.src.port)
+			      			 || {'x': 0, 'y': 0, 'device': link.src.device, 'port': link.src.port},
+			      target: scope.portCoordinateMap.get(link.dst.device + link.dst.port)
+			      			 || {'x': 0, 'y': 0, 'device': link.dst.device, 'port': link.dst.port}
+			    });	
+		  	}
 		  });
 
 		  function drawDPath(d) {
