@@ -29,8 +29,8 @@
                                         display-label="{options: nginxTimerangeAnalyzer.ipOptions}"
                                         ng-change="nginxIpSelect($value)">
                             </mdl-select>
-                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('nginx-analyzer')"><i class="material-icons">settings</i></div>
                             <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('nginx-analyzer')"><i class="material-icons">undo</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('nginx-analyzer')"><i class="material-icons">settings</i></div>
                         </div>
 
                         <div class="chart-loading" ng-show="nginxTimerangeAnalyzer.loading"></div>
@@ -86,8 +86,8 @@
                         </canvas>
 
                         <div class="setting-group" ng-show="!syslogAnalyzer.loading">
-                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('syslog-analyzer')"><i class="material-icons">settings</i></div>
                             <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('syslog-analyzer')"><i class="material-icons">undo</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('syslog-analyzer')"><i class="material-icons">settings</i></div>
                         </div>
 
                         <div class="chart-loading" ng-show="syslogAnalyzer.loading"></div>
@@ -122,8 +122,8 @@
                                         display-label="{options: filebeatAnalyzer.typesOptions}"
                                         ng-change="filebeatTypeSelect($value)">
                             </mdl-select>
-                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('filebeat-analyzer')"><i class="material-icons">settings</i></div>
                             <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('filebeat-analyzer')"><i class="material-icons">undo</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('filebeat-analyzer')"><i class="material-icons">settings</i></div>
                         </div>
 
                         <div class="chart-loading" ng-show="filebeatAnalyzer.loading"></div>
