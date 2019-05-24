@@ -89,7 +89,7 @@ export function ChartJsProvider () {
 			},
 			tooltips: {
 				mode: 'index',
-				intersect: false
+				intersect: true
 			},
 			scales: {
 				yAxes: [{

@@ -148,7 +148,7 @@
                             <mdl-select ng-model="dashboardModel.interface.typeOption" display-label="{options: interfaceTypes}">
                             </mdl-select>
                             <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-interface')"><i class="material-icons">undo</i></div>
-                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}"><i class="material-icons">settings</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-interface')"><i class="material-icons">settings</i></div>
                         </div>
 
                         <div class="chart-loading" ng-show="dashboardModel.interface.loading"></div>
@@ -171,7 +171,7 @@
                             <mdl-select ng-model="dashboardModel.dropErrorInterface.typeOption" display-label="{options: interfaceTypes.slice(0,2)}">
                             </mdl-select>
                             <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-interface-drop-error')"><i class="material-icons">undo</i></div>
-                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}"><i class="material-icons">settings</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-interface-drop-error')"><i class="material-icons">settings</i></div>
                         </div>
 
                         <div class="chart-loading" ng-show="dashboardModel.dropErrorInterface.loading"></div>

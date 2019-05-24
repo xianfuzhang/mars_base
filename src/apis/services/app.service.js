@@ -537,6 +537,10 @@ export class appService {
   }
 
   getDeviceInterfaceAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/portstats/' + deviceId + '/summary/' + startTime + '/' + endTime + '/' + resolutionSecond;
+  }
+
+  getDevicePortsAnalyzerUrl(deviceId, startTime, endTime, resolutionSecond) {
     return this.getZoneEndpoint(true) + '/analyzer/v1/timerangebar/portstats/' + deviceId + '/' + startTime + '/' + endTime + '/' + resolutionSecond;
   }
 
