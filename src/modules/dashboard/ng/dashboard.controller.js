@@ -390,6 +390,26 @@ export class DashboardController {
           // endTime = this.di.$scope.dashboardModel.disk.end_time;
           // selectedData = this.di.$scope.dashboardModel.disk.selectedData;
           break;
+
+        case 'device-interface':
+          dataModel['devices'].forEach((item, index) =>{
+            chartDataArr.push(item.switch_name);
+          });
+
+          beginTime = this.di.$scope.dashboardModel.interface.begin_time;
+          endTime = this.di.$scope.dashboardModel.interface.end_time;
+          selectedData = this.di.$scope.dashboardModel.interface.selectedData;
+          break;
+
+        case 'device-interface-drop-error':
+          dataModel['devices'].forEach((item, index) =>{
+            chartDataArr.push(item.switch_name);
+          });
+
+          beginTime = this.di.$scope.dashboardModel.dropErrorInterface.begin_time;
+          endTime = this.di.$scope.dashboardModel.dropErrorInterface.end_time;
+          selectedData = this.di.$scope.dashboardModel.dropErrorInterface.selectedData;
+          break;
 	    }
 	    
 	    this.di.modalManager.open({
@@ -478,6 +498,24 @@ export class DashboardController {
               // scope.dashboardModel.disk.begin_time = one_minute_before;
               // scope.dashboardModel.disk.end_time = res.data.endTime;
               // scope.dashboardModel.disk.step = 60;
+              break;
+            case 'device-interface':
+              scope.dashboardModel.interface.selectedData = selectedData;
+
+              scope.dashboardModel.interface.origin_begin_time = res.data.beginTime;
+              scope.dashboardModel.interface.origin_end_time = res.data.endTime;
+              scope.dashboardModel.interface.begin_time = res.data.beginTime;
+              scope.dashboardModel.interface.end_time = res.data.endTime;
+              scope.dashboardModel.interface.step = Math.floor((scope.dashboardModel.interface.origin_end_time.getTime() - scope.dashboardModel.interface.origin_begin_time) / (GRID_NUM * 1000));
+              break;
+            case 'device-interface-drop-error':
+              scope.dashboardModel.dropErrorInterface.selectedData = selectedData;
+
+              scope.dashboardModel.dropErrorInterface.origin_begin_time = res.data.beginTime;
+              scope.dashboardModel.dropErrorInterface.origin_end_time = res.data.endTime;
+              scope.dashboardModel.dropErrorInterface.begin_time = res.data.beginTime;
+              scope.dashboardModel.dropErrorInterface.end_time = res.data.endTime;
+              scope.dashboardModel.dropErrorInterface.step = Math.floor((scope.dashboardModel.dropErrorInterface.origin_end_time.getTime() - scope.dashboardModel.dropErrorInterface.origin_begin_time) / (GRID_NUM * 1000));
               break;
 					}
 		    }

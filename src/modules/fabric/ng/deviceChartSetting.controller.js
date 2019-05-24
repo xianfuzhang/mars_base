@@ -26,6 +26,10 @@ export class DeviceChartSettingController {
         scope.title = '交换机内存设置';
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
 				break;
+      case 'device-ports':
+        scope.title = '交换机流量Top10设置';
+        scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
+        break;
       case 'device-port':
         scope.title = '端口流量设置';
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');

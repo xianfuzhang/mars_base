@@ -45,6 +45,14 @@ export class ShowChartSettingController {
         scope.title = this.translate("MODULES.DASHBOARD.CHART.SWITCH_DISK.TITLE");
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
         break;
+      case 'device-interface':
+        scope.title = "交换机流量设置";
+        scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
+        break;
+      case 'device-interface-drop-error':
+        scope.title = "交换机异常流量设置";
+        scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
+        break;
 		}
 
 		scope.type = this.di.dataModel.chartType;
