@@ -253,8 +253,8 @@ export class FlowEstablishController {
       this.di.deviceDataManager.getDeviceConfig(deviceId).then((res) => {
         if (res) {
           let mfr = res.mfr;
-          // let mfr = 'pica8'; // Test code
-          if(mfr.toLowerCase() === 'pica8' || mfr.toLowerCase() === 'h3c'){
+          // mfr = 'pica8'; // Test code
+          if(mfr.toLowerCase() === 'pica8' || mfr.toLowerCase() === 'h3c' || mfr.toLowerCase() === 'centec'){
             scope.showTableId = false;
             reset4table0();
             scope.showWizard = true;
