@@ -192,7 +192,12 @@
   margin-left: 20px;
   height:24px;
   border-radius: 50%;
-  //padding: 5px;
+  padding: 3px;
+
+  @include state(disable) {
+    cursor: default;
+    background-color: black;
+  }
 }
 .dashboard__body .left-panel .setting-group .item:hover {
   //color: #a1a1a1;
