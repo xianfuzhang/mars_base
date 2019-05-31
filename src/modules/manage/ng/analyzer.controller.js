@@ -493,8 +493,8 @@ export class AnalyzerController {
         },
         tooltips: {
           callbacks: {
-            title: (tooltipItem) => {
-              let value = new Date(labelsArr[tooltipItem[0].index]);
+            title: (tooltipItem, data) => {
+              let value = new Date(data.labels[tooltipItem[0].index]);
               return getFormatedDateTime(value);
             },
             label: function(tooltipItem, data) {
@@ -561,8 +561,8 @@ export class AnalyzerController {
 
       // set pie chart data with first dataset and first data
       if(dataArr.length > 0 && labelsArr.length > 0) {
-        let pieData = dataModel[0].clients ? dataModel[0].clients : [{count:dataModel[0].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}]
-        setNginxPieChartData(pieData, getFormatedDateTime(new Date(labelsArr[0])))
+        let pieData = dataModel[dataModel.length - 1].clients ? dataModel[dataModel.length - 1].clients : [{count:dataModel[dataModel.length - 1].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}]
+        setNginxPieChartData(pieData, getFormatedDateTime(new Date(labelsArr[dataModel.length - 1])))
       }
     };
 
