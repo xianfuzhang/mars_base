@@ -122,6 +122,8 @@ export class AnalyzerController {
         value: ''
       }],
       loading: true,
+      isRealtime: false,
+      intervalFlag: null,
       chartConfig: {
         data: [],
         labels: [],
@@ -187,8 +189,6 @@ export class AnalyzerController {
       }
     };
 
-
-
     scope.resetTimeScale = (chartType) => {
       switch(chartType) {
         case 'nginx-analyzer':
@@ -203,6 +203,48 @@ export class AnalyzerController {
           scope.filebeatAnalyzer.startTime = scope.filebeatAnalyzer.originStartTime;
           scope.filebeatAnalyzer.endTime = scope.filebeatAnalyzer.originEndTime;
           break;
+      }
+    }
+
+    this.di.$scope.realtime = (type) => {
+      let date, before, begin_time, end_time, isController = false, typeKey, model;
+
+      function setRealtime() {
+        date = DI.dateService.getTodayObject();
+        before = DI.dateService.getBeforeDateObject(30 * CHART_GRID_NUM * 1000);
+        begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
+        end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
+      }
+
+      function setHistoricalTime() {
+        date = DI.dateService.getTodayObject();
+        before = DI.dateService.getBeforeDateObject(30 * 60 * 1000);
+        begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
+        end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
+      }
+
+      scope.nginxTimerangeAnalyzer.isRealtime = !scope.nginxTimerangeAnalyzer.isRealtime;
+      if (!scope.nginxTimerangeAnalyzer.isRealtime) {
+        setHistoricalTime();
+        scope.nginxTimerangeAnalyzer.originBeginTime = begin_time;;
+        scope.nginxTimerangeAnalyzer.originEndTime = end_time;
+        scope.nginxTimerangeAnalyzer.startTime = begin_time;
+        scope.nginxTimerangeAnalyzer.endTime = end_time;
+
+        clearInterval(scope.nginxTimerangeAnalyzer.intervalFlag);
+        scope.nginxTimerangeAnalyzer.intervalFlag = null;
+      } else {
+        setRealtime();
+        scope.nginxTimerangeAnalyzer.startTime = begin_time;
+        scope.nginxTimerangeAnalyzer.endTime = end_time;
+
+        scope.nginxTimerangeAnalyzer.intervalFlag = setInterval(() => {
+          setRealtime();
+          scope.nginxTimerangeAnalyzer.startTime = begin_time;
+          scope.nginxTimerangeAnalyzer.endTime = end_time;
+
+          scope.$apply();
+        }, 30 * 1000)
       }
     }
 
@@ -337,7 +379,6 @@ export class AnalyzerController {
         setFilebeatChartLineData();
       });
     };
-
 
     let setNginxChartBarData = () => {
       let dataList = [], labelsArr = [];
@@ -478,6 +519,45 @@ export class AnalyzerController {
       scope.nginxTimerangeAnalyzer.chartConfig.series = series;
       scope.nginxTimerangeAnalyzer.chartConfig.onClick = nginxLineChartOnClick();
       scope.nginxTimerangeAnalyzer.chartConfig.onHover = lineChartOnHover();
+
+      // set pie chart data with first dataset and first data
+      if(dataArr.length > 0 && labelsArr.length > 0) {
+        let pieData = dataModel[0].clients ? dataModel[0].clients : [{count:dataModel[0].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}]
+        setNginxPieChartData(pieData, getFormatedDateTime(new Date(labelsArr[0])))
+      }
+    };
+
+    let setRealtimeNginxChartLineData = (initial) => {  // initial: 初始化
+      let dataArr = [];
+      let series = ['访问次数'];
+      let labelsArr = [];
+      let clientIps = [];
+      let dataModel = scope.nginxTimerangeAnalyzer.dataModel;
+
+      labelsArr = this.getTimeSeries(dataModel);
+
+      dataModel.forEach((data) => {
+        dataArr.push(data.count);
+
+        if(initial) {
+          data.clients.forEach((client) => {
+            if(clientIps.indexOf(client.ip) === -1) {
+              clientIps.push(client.ip);
+              scope.nginxTimerangeAnalyzer.ipOptions.push({
+                label: client.ip,
+                value: client.ip
+              });
+            }
+          });
+        }
+      });
+
+      scope.nginxTimerangeAnalyzer.chartConfig.options.animation = { duration: 0 };
+      scope.nginxTimerangeAnalyzer.chartConfig.options.zoom.enabled = false;
+      scope.nginxTimerangeAnalyzer.chartConfig.data = [dataArr];
+      scope.nginxTimerangeAnalyzer.chartConfig.labels = labelsArr;
+      scope.nginxTimerangeAnalyzer.chartConfig.series = series;
+      scope.nginxTimerangeAnalyzer.chartConfig.onClick = nginxLineChartOnClick(scope.nginxTimerangeAnalyzer.dataModel);
 
       // set pie chart data with first dataset and first data
       if(dataArr.length > 0 && labelsArr.length > 0) {
@@ -759,9 +839,7 @@ export class AnalyzerController {
       }
     }
 
-    let nginxLineChartOnClick = function() {
-      let analyzer = scope.nginxTimerangeAnalyzer.dataModel;
-
+    let nginxLineChartOnClick = function(analyzer) {
       return function(evt, chart) { // point element
         // 1.element hover event
         let element = chart.getElementAtEvent(evt);
@@ -1008,7 +1086,12 @@ export class AnalyzerController {
       this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond, scope.nginxTimerangeAnalyzer.selectedIpOption.value).then((res) => {
         scope.nginxTimerangeAnalyzer.dataModel = res;
         scope.nginxTimerangeAnalyzer.loading = false;
-        setNginxChartLineData();
+
+        if(scope.nginxTimerangeAnalyzer.isRealtime) {
+          setRealtimeNginxChartLineData();
+        } else {
+          setNginxChartLineData();
+        }
       }, () => {
         scope.nginxTimerangeAnalyzer.dataModel = [];
         scope.nginxTimerangeAnalyzer.loading = false;
@@ -1206,6 +1289,7 @@ export class AnalyzerController {
       '-' + this.pad( date.getUTCDate() ) +
       'T' + this.pad( date.getUTCHours() ) +
       ':' + this.pad( date.getUTCMinutes() ) +
+      ':' + this.pad( date.getUTCSeconds() ) +
       'Z';
   }
 

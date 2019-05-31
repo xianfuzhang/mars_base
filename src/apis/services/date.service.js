@@ -17,7 +17,8 @@ export class DateService{
 			month: month,
 			day: day,
 			hour: date.getHours(),
-			minute: date.getMinutes()
+			minute: date.getMinutes(),
+            second: date.getSeconds()
 		};
 	}
 
@@ -32,7 +33,8 @@ export class DateService{
 			month: month,
 			day: day,
 			hour: before.getHours(),
-			minute: before.getMinutes()
+			minute: before.getMinutes(),
+            second: before.getSeconds()
 		};
 	}
 

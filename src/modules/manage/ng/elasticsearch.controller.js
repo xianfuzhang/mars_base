@@ -990,6 +990,7 @@ export class ElasticsearchController {
       '-' + this.pad( date.getUTCDate() ) +
       'T' + this.pad( date.getUTCHours() ) +
       ':' + this.pad( date.getUTCMinutes() ) +
+      ':' + this.pad( date.getUTCSeconds() ) +
       'Z';
   }
 

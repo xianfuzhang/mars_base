@@ -31,6 +31,7 @@ export class DeviceDetailController {
       this.di[value] = args[index];
     });
     this.scope = this.di.$scope;
+    const DI = this.di;
     const scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
     this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE');
@@ -55,6 +56,7 @@ export class DeviceDetailController {
     let before = this.di.dateService.getBeforeDateObject(30*60*1000); // 前30分钟
     let one_minute_before = this.di.dateService.getBeforeDateObject(60 * 1000); // 前1分钟
     const GRID_NUM = 24; // chart grid number
+    const REALTIME_GRID_NUM = 16; // chart grid number
     let begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
     let one_minute_before_time = new Date(one_minute_before.year, one_minute_before.month, one_minute_before.day, one_minute_before.hour, one_minute_before.minute, 0);
     let end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
@@ -92,7 +94,9 @@ export class DeviceDetailController {
         'origin_begin_time': begin_time,
         'origin_end_time': end_time,
         'analyzer': [],
-        loading: true
+        loading: true,
+        isRealtime: false,
+        intervalFlag: null
       },
       memory: {
         'begin_time': begin_time,
@@ -101,8 +105,9 @@ export class DeviceDetailController {
         'origin_begin_time': begin_time,
         'origin_end_time': end_time,
         'analyzer': [],
-        loading: true
-
+        loading: true,
+        isRealtime: false,
+        intervalFlag: null
       },
       disk: {
         'begin_time': one_minute_before_time,
@@ -123,7 +128,9 @@ export class DeviceDetailController {
         loading: true,
         unitTypeOption: {label: 'Packets_TX', value: 'packets_tx'},
         stateTypeOption: {label: 'Normal',value: 'normal'},
-        display: false
+        display: false,
+        isRealtime: false,
+        intervalFlag: null
       },
       ports: {  // get top10 ports
         'begin_time': begin_time,
@@ -135,7 +142,9 @@ export class DeviceDetailController {
         loading: true,
         unitTypeOption: {label: 'Packets_TX', value: 'packets_tx'},
         stateTypeOption: {label: 'Normal',value: 'normal'},
-        display: false
+        display: false,
+        isRealtime: false,
+        intervalFlag: null
       }
     };
 
@@ -144,8 +153,7 @@ export class DeviceDetailController {
       labels: [],
       options: {},
       series: [],
-      onClick: () => {},
-      isRealtime: false
+      onClick: () => {}
     }
     this.di.$scope.deviceMemoryChartConfig = {
       data: [],
@@ -163,7 +171,6 @@ export class DeviceDetailController {
       onClick: () => {},
       isRealtime: false
     }
-
     this.di.$scope.devicePortsChartConfig = {
       data: [],
       labels: [],
@@ -172,7 +179,6 @@ export class DeviceDetailController {
       onClick: () => {},
       isRealtime: false,
     }
-
     this.di.$scope.devicePortChartConfig = {
       data: [],
       labels: [],
@@ -215,6 +221,66 @@ export class DeviceDetailController {
         this.init();
       });
     });
+
+    this.di.$scope.realtime = (type) => {
+      let date, before, begin_time, end_time, isController = false, typeKey, model;
+
+      function setRealtime() {
+        date = DI.dateService.getTodayObject();
+        before = DI.dateService.getBeforeDateObject(30 * REALTIME_GRID_NUM * 1000);
+        begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
+        end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
+      }
+
+      function setHistoricalTime() {
+        date = DI.dateService.getTodayObject();
+        before = DI.dateService.getBeforeDateObject(30 * 60 * 1000);
+        begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
+        end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
+      }
+
+      switch(type) {
+        case 'device-cpu':
+          typeKey = 'cpu';
+          break;
+        case 'device-memory':
+          typeKey = 'memory';
+          break;
+        case 'device-ports':
+          typeKey = 'ports';
+          break;
+        case 'device-port':
+          typeKey = 'port';
+          break;
+      }
+
+      model = scope.chartModel[typeKey];
+      model.isRealtime = !model.isRealtime;
+      if (!model.isRealtime) {
+        setHistoricalTime();
+        model.origin_begin_time = begin_time;;
+        model.origin_end_time = end_time;
+        model.begin_time = begin_time;
+        model.end_time = end_time;
+        model.step = Math.floor((model.origin_end_time.getTime() - model.origin_begin_time) / (GRID_NUM * 1000));
+
+        clearInterval(model.intervalFlag);
+        model.intervalFlag = null;
+      } else {
+        setRealtime();
+        model.begin_time = begin_time;
+        model.end_time = end_time;
+        model.step = 30;
+
+        model.intervalFlag = setInterval(() => {
+          setRealtime();
+          model.begin_time = begin_time;
+          model.end_time = end_time;
+
+          scope.$apply();
+        }, 30 * 1000)
+      }
+    }
 
     this.scope.resetTimeScale = (type) => {
       if (type === 'device-cpu') {
@@ -314,6 +380,10 @@ export class DeviceDetailController {
 
     this.scope.closePortAnalyzerChart = () => {
       this.scope.chartModel.port.display = false;
+
+      this.scope.chartModel.port.isRealtime = false;
+      clearInterval(this.scope.chartModel.port.intervalFlag);
+      this.scope.chartModel.port.intervalFlag = null;
     }
 
     let unSubscribers = [];
@@ -343,7 +413,11 @@ export class DeviceDetailController {
       this.getDeviceCPUAnalyzer().then(() => {
         // cpu analyzer
         this.scope.chartModel.cpu.loading = false;
-        this.setDeviceCpuChartData();
+        if(this.scope.chartModel.cpu.isRealtime) {
+          this.setRealtimeDeviceCpuChartData()
+        } else {
+          this.setDeviceCpuChartData();
+        }
       });
     },true));
 
@@ -358,7 +432,11 @@ export class DeviceDetailController {
       this.getDeviceMemoryAnalyzer().then(() => {
         //memory analyzer
         this.scope.chartModel.memory.loading = false;
-        this.setDeviceMemoryChartData();
+        if(this.scope.chartModel.memory.isRealtime) {
+          this.setRealtimeDeviceMemoryChartData();
+        } else {
+          this.setDeviceMemoryChartData();
+        }
       });
     },true));
 
@@ -388,7 +466,11 @@ export class DeviceDetailController {
       this.getDevicePortsAnalyzer().then(() => {
         // interface analyzer
         this.scope.chartModel.ports.loading = false;
-        this.setDevicePortsChartData();
+        if(this.scope.chartModel.ports.isRealtime) {
+          this.setRealtimeDevicePortsChartData();
+        } else {
+          this.setDevicePortsChartData();
+        }
       });
     },true));
 
@@ -413,7 +495,11 @@ export class DeviceDetailController {
       this.getDevicePortAnalyzer(this.scope.port_id).then(() => {
         // interface analyzer
         this.scope.chartModel.port.loading = false;
-        this.setDevicePortChartData();
+        if(this.scope.chartModel.port.isRealtime) {
+          this.setRealtimeDevicePortChartData();
+        } else {
+          this.setDevicePortChartData();
+        }
       });
     },true));
 
@@ -1116,8 +1202,8 @@ export class DeviceDetailController {
       },
       tooltips: {
         callbacks: {
-          title: (tooltipItem) => {
-            let value = new Date(labelsArr[tooltipItem[0].index]);
+          title: (tooltipItem, data) => {
+            let value = new Date(data.labels[tooltipItem[0].index]);
             return getFormatedDateTime(value);
           },
           label: function(tooltipItem, data) {
@@ -1143,8 +1229,41 @@ export class DeviceDetailController {
     this.di.$scope.deviceCpuChartConfig.labels = labelsArr;
     this.di.$scope.deviceCpuChartConfig.options = options;
     this.di.$scope.deviceCpuChartConfig.series = series;
-    this.di.$scope.deviceCpuChartConfig.onClick = lineChartOnClick(this.scope.chartModel.cpu.analyzer);
+    // this.di.$scope.deviceCpuChartConfig.onClick = lineChartOnClick(this.scope.chartModel.cpu.analyzer);
     this.di.$scope.deviceCpuChartConfig.onHover = lineChartOnHover;
+  };
+
+  setRealtimeDeviceCpuChartData() {
+    //cpu analyzer
+    let dataArr = [];
+    let series = [];
+    let analyzer = this.di.$scope.chartModel.cpu.analyzer;
+    let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+    let labelsArr = analyzer.length > 0 ?
+      this.getCPUMemoryTimeSeries(x_times) : [];
+
+    if(analyzer.length) {
+      analyzer.forEach((item, index) =>{
+        let data = [];
+        item.analyzer.forEach((record) => {
+          data.push((record.system_percent + record.user_percent).toFixed(2))
+        })
+        dataArr.push(data);
+        series.push(item.name);
+      });
+    }
+
+    const scope = this.scope;
+    const pad = this.pad;
+
+    const lineChartOnClick = this.lineChartOnClick;
+
+    scope.deviceCpuChartConfig.options.animation = { duration: 0 };
+    scope.deviceCpuChartConfig.options.zoom.enabled = false;
+    scope.deviceCpuChartConfig.data = dataArr;
+    scope.deviceCpuChartConfig.labels = labelsArr;
+    scope.deviceCpuChartConfig.series = series;
+    // scope.deviceCpuChartConfig.onClick = lineChartOnClick(this.scope.chartModel.cpu.analyzer);
   };
 
   setDeviceMemoryChartData() {
@@ -1203,8 +1322,8 @@ export class DeviceDetailController {
       },
       tooltips: {
         callbacks: {
-          title: (tooltipItem) => {
-            let value = new Date(labelsArr[tooltipItem[0].index]);
+          title: (tooltipItem, data) => {
+            let value = new Date(data.labels[tooltipItem[0].index]);
             return getFormatedDateTime(value);
           },
           label: function(tooltipItem, data) {
@@ -1229,8 +1348,39 @@ export class DeviceDetailController {
     this.di.$scope.deviceMemoryChartConfig.labels = labelsArr;
     this.di.$scope.deviceMemoryChartConfig.options = options;
     this.di.$scope.deviceMemoryChartConfig.series = series;
-    this.di.$scope.deviceMemoryChartConfig.onClick = lineChartOnClick(analyzer);
+    // this.di.$scope.deviceMemoryChartConfig.onClick = lineChartOnClick(analyzer);
     this.di.$scope.deviceMemoryChartConfig.onHover = lineChartOnHover;
+  };
+
+  setRealtimeDeviceMemoryChartData() {
+    //memory analyzer
+    let dataArr = [];
+    let series = [];
+    let analyzer = this.di.$scope.chartModel.memory.analyzer;
+    let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+    let labelsArr = analyzer.length > 0 ?
+      this.getCPUMemoryTimeSeries(x_times) : [];
+
+    let index = 0;
+    if(analyzer.length) {
+      analyzer.forEach((item, index) =>{
+        let data = [];
+        item.analyzer.forEach((record) => {
+          data.push(record.used_percent.toFixed(2))
+        })
+        dataArr.push(data);
+        series.push(item.name)
+      })
+    }
+
+    const lineChartOnClick = this.lineChartOnClick;
+
+    this.di.$scope.deviceMemoryChartConfig.options.animation = { duration: 0 };
+    this.di.$scope.deviceMemoryChartConfig.options.zoom.enabled = false;
+    this.di.$scope.deviceMemoryChartConfig.data = dataArr;
+    this.di.$scope.deviceMemoryChartConfig.labels = labelsArr;
+    this.di.$scope.deviceMemoryChartConfig.series = series;
+    // this.di.$scope.deviceMemoryChartConfig.onClick = lineChartOnClick(analyzer);
   };
 
   setDeviceDiskChartData() {
@@ -1440,8 +1590,8 @@ export class DeviceDetailController {
       },
       tooltips: {
         callbacks: {
-          title: (tooltipItem) => {
-            let value = new Date(labelsArr[tooltipItem[0].index]);
+          title: (tooltipItem, data) => {
+            let value = new Date(data.labels[tooltipItem[0].index]);
             return getFormatedDateTime(value);
           },
           label: function(tooltipItem, data) {
@@ -1469,6 +1619,130 @@ export class DeviceDetailController {
     this.di.$scope.devicePortsChartConfig.series = series;
     // this.di.$scope.devicePortsChartConfig.onClick = interfaceLineChartOnClick(scope.dashboardModel.controller.interface.analyzer, yAxesTitle);
     this.di.$scope.devicePortsChartConfig.onHover = lineChartOnHover;
+  };
+
+  setRealtimeDevicePortsChartData() {
+    let dataArr = [], series = [],labelsArr = [] , yAxesTitle, analyzerLength;
+    let tmpAnalyzer = this.di.$scope.chartModel.ports.analyzer;
+    const scope = this.scope;
+
+    switch (scope.chartModel.ports.unitTypeOption.value) {
+      case 'packets_tx':
+        switch (scope.chartModel.ports.stateTypeOption.value) {
+          case 'normal':
+            tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+              analyzerLength  = device.analyzer.length;
+              return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].packetsSent - device.analyzer[0].packetsSent : 0;
+            }, 'desc');
+            break;
+          case 'dropped':
+            tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+              analyzerLength  = device.analyzer.length;
+              return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].packetsTxDropped - device.analyzer[0].packetsTxDropped : 0;
+            }, 'desc');
+            break;
+          case 'error':
+            tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+              analyzerLength  = device.analyzer.length;
+              return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].packetsTxErrors - device.analyzer[0].packetsTxErrors : 0;
+            }, 'desc');
+            break;
+        }
+        break;
+      case 'packets_rx':
+        switch (scope.chartModel.ports.stateTypeOption.value) {
+          case 'normal':
+            tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+              analyzerLength  = device.analyzer.length;
+              return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].packetsReceived - device.analyzer[0].packetsReceived : 0;
+            }, 'desc');
+            break;
+          case 'dropped':
+            tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+              analyzerLength  = device.analyzer.length;
+              return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].packetsRxDropped - device.analyzer[0].packetsRxDropped : 0;
+            }, 'desc');
+            break;
+          case 'error':
+            tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+              analyzerLength  = device.analyzer.length;
+              return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].packetsRxErrors - device.analyzer[0].packetsRxErrors : 0;
+            }, 'desc');
+            break;
+        }
+        break;
+      case 'bytes_tx':
+        tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+          analyzerLength  = device.analyzer.length;
+          return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].bytesSent - device.analyzer[0].bytesSent : 0;
+        }, 'desc');
+        break;
+      case 'bytes_rx':
+        tmpAnalyzer = this.di._.orderBy(tmpAnalyzer, (device) => {
+          analyzerLength  = device.analyzer.length;
+          return analyzerLength > 0 ? device.analyzer[analyzerLength - 1].bytesReceived - device.analyzer[0].bytesReceived : 0;
+        }, 'desc');
+        break;
+    }
+
+    // get top10 analyzer
+    let analyzer = this.calcInterfaceTxRxRate(tmpAnalyzer.slice(0, 10));
+    let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+    labelsArr = analyzer.length > 0 ?
+      this.getCPUMemoryTimeSeries(x_times) : [];
+
+    analyzer.forEach((device) => {
+      let data = [];
+      device.analyzer.forEach((item) => {
+        switch (scope.chartModel.ports.unitTypeOption.value) {
+          case 'packets_tx':
+            switch (scope.chartModel.ports.stateTypeOption.value) {
+              case 'normal':
+                data.push(item.packets_tx);
+                break;
+              case 'dropped':
+                data.push(item.dropped_tx);
+                break;
+              case 'error':
+                data.push(item.error_tx);
+                break;
+            }
+            yAxesTitle = 'packets';
+            break;
+          case 'packets_rx':
+            switch (scope.chartModel.ports.stateTypeOption.value) {
+              case 'normal':
+                data.push(item.packets_rx);
+                break;
+              case 'dropped':
+                data.push(item.dropped_rx);
+                break;
+              case 'error':
+                data.push(item.error_rx);
+                break;
+            }
+            yAxesTitle = 'packets';
+            break;
+          case 'bytes_tx':
+            data.push(item.bytes_tx);
+            yAxesTitle = 'bytes';
+            break;
+          case 'bytes_rx':
+            data.push(item.bytes_rx);
+            yAxesTitle = 'bytes';
+            break;
+        }
+      });
+
+      dataArr.push(data);
+      series.push(device.name)
+    });
+
+    this.di.$scope.devicePortsChartConfig.options.animation = { duration: 0 };
+    this.di.$scope.devicePortsChartConfig.options.zoom.enabled = false;
+    this.di.$scope.devicePortsChartConfig.data = dataArr;
+    this.di.$scope.devicePortsChartConfig.labels = labelsArr;
+    this.di.$scope.devicePortsChartConfig.series = series;
   };
 
   setDevicePortChartData() {
@@ -1563,8 +1837,8 @@ export class DeviceDetailController {
       },
       tooltips: {
         callbacks: {
-          title: (tooltipItem) => {
-            let value = new Date(labelsArr[tooltipItem[0].index]);
+          title: (tooltipItem, data) => {
+            let value = new Date(data.labels[tooltipItem[0].index]);
             return getFormatedDateTime(value);
           },
           label: function(tooltipItem, data) {
@@ -1591,6 +1865,68 @@ export class DeviceDetailController {
     this.di.$scope.devicePortChartConfig.series = series;
     // this.di.$scope.clusterInterfaceChartConfig.onClick = interfaceLineChartOnClick(scope.dashboardModel.controller.interface.analyzer, yAxesTitle);
     // this.di.$scope.clusterInterfaceChartConfig.onHover = lineChartOnHover();
+  };
+
+  setRealtimeDevicePortChartData() {
+    let dataArr = [], series = [],labelsArr = [] , yAxesTitle, onClickType;
+    let analyzer = this.di.$scope.chartModel.port.analyzer;
+    let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+    labelsArr = analyzer.length > 0 ?
+      this.getCPUMemoryTimeSeries(x_times) : [];
+
+    const scope = this.scope;
+    analyzer.forEach((device) => {
+      let data = [];
+      device.analyzer.forEach((item) => {
+        switch (scope.chartModel.port.unitTypeOption.value) {
+          case 'packets_tx':
+            switch (scope.chartModel.port.stateTypeOption.value) {
+              case 'normal':
+                data.push(item.packets_tx);
+                break;
+              case 'dropped':
+                data.push(item.dropped_tx);
+                break;
+              case 'error':
+                data.push(item.error_tx);
+                break;
+            }
+            yAxesTitle = 'packets';
+            break;
+          case 'packets_rx':
+            switch (scope.chartModel.port.stateTypeOption.value) {
+              case 'normal':
+                data.push(item.packets_rx);
+                break;
+              case 'dropped':
+                data.push(item.dropped_rx);
+                break;
+              case 'error':
+                data.push(item.error_rx);
+                break;
+            }
+            yAxesTitle = 'packets';
+            break;
+          case 'bytes_tx':
+            data.push(item.bytes_tx);
+            yAxesTitle = 'bytes';
+            break;
+          case 'bytes_rx':
+            data.push(item.bytes_rx);
+            yAxesTitle = 'bytes';
+            break;
+        }
+      });
+
+      dataArr.push(data);
+      series.push(device.name)
+    });
+
+    this.di.$scope.devicePortChartConfig.options.animation = { duration: 0 };
+    this.di.$scope.devicePortChartConfig.options.zoom.enabled = false;
+    this.di.$scope.devicePortChartConfig.data = dataArr;
+    this.di.$scope.devicePortChartConfig.labels = labelsArr;
+    this.di.$scope.devicePortChartConfig.series = series;
   };
 
   getCPUMemoryTimeSeries(device) {
@@ -1796,6 +2132,7 @@ export class DeviceDetailController {
       '-' + this.pad( date.getUTCDate() ) +
       'T' + this.pad( date.getUTCHours() ) +
       ':' + this.pad( date.getUTCMinutes() ) +
+      ':' + this.pad( date.getUTCSeconds() ) +
       'Z';
   }
 

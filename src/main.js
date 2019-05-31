@@ -18,6 +18,7 @@ import 'localStore';
 import 'ngTable';
 import 'eventEmitter'
 import 'uuid'
+import 'moment'
 
 import 'login';
 import 'dashboard';
@@ -75,6 +76,7 @@ angular
     'crypto',
     // ngTableModule.name,
     'easing',
+    'moment',
     'apis',
     'localStore',
     'dashboard',

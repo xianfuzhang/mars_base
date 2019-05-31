@@ -3,6 +3,7 @@ const Chart = require('chart.js');
 
 Chart.plugins.register(require('./range-select-plugin'));
 Chart.plugins.register(require('chartjs-plugin-deferred'));
+// Chart.plugins.register(require('chartjs-plugin-streaming'));
 
 const theme = getTheme();
 const DEFAULT_STYLES = {
@@ -30,6 +31,7 @@ Chart.defaults.global.title.fontSize = 15;
 Chart.defaults.global.elements.line.borderWidth = DEFAULT_STYLES.lines.borderWidth;
 Chart.defaults.global.colors = DEFAULT_STYLES.colors.colorPool;
 Chart.defaults.global.multiTooltipTemplate = '<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>';
+// Chart.defaults.global.animation.easing = 'linear';
 
 export function ChartJsService () {
 	this.styles = DEFAULT_STYLES;
@@ -97,10 +99,10 @@ export function ChartJsProvider () {
 						color: DEFAULT_STYLES.colors.gridLinesColor,
 						lineWidth: DEFAULT_STYLES.lines.gridWidth
 					},
-          ticks: {
-            suggestedMin: 0,
-            suggestedMax: 10,
-          }
+                    ticks: {
+                      suggestedMin: 0,
+                      suggestedMax: 10,
+                    }
 				}],
 				xAxes: [{
 					scaleLabel: DEFAULT_STYLES.colors.fontColor,
@@ -163,10 +165,10 @@ export function ChartJsProvider () {
 						color: DEFAULT_STYLES.colors.gridLinesColor,
 						lineWidth: DEFAULT_STYLES.lines.gridWidth
 					},
-          ticks: {
-            suggestedMin: 0,
-            suggestedMax: 10,
-          }
+                    ticks: {
+                      suggestedMin: 0,
+                      suggestedMax: 10,
+                    }
 				}],
 				xAxes: [{
 					scaleLabel: DEFAULT_STYLES.colors.fontColor,
@@ -372,11 +374,11 @@ export function ChartJsFactory (ChartJs, $timeout) {
 		
 		let res = []
 		colors.forEach((color) => {
-      res.push(convertColor(color, scope))
+          res.push(convertColor(color, scope))
 		});
     
-    return res;
-  }
+        return res;
+    }
 	
 	function convertColor (color, scope) {
 		// Allows RGB and RGBA colors to be input as a string: e.g.: "rgb(159,204,0)", "rgba(159,204,0, 0.5)"

@@ -217,6 +217,11 @@
   cursor: pointer;
   margin-left: 20px;
   margin-top: 10px;
+
+  @include state(disable) {
+    cursor: default;
+    background-color: #a1a1a1;
+  }
 }
 .elasticsearch .setting-group .item:hover {
   color: #a1a1a1;

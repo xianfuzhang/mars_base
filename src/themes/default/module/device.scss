@@ -309,11 +309,16 @@
   margin-left: 20px;
   height:24px;
   border-radius: 50%;
-  //padding: 5px;
+  padding: 3px;
+
+  @include state(disable) {
+    cursor: default;
+    background-color: lightgray;
+  }
 }
 .tab-content .left-panel .setting-group .item:hover {
   //color: #a1a1a1;
-  background-color: black;
+  background-color: lightgray;
 }
 .tab-content .right-panel{
   flex-grow:1;
