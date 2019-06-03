@@ -246,7 +246,7 @@ export class updateTableCols {
           }
         }
       });
-      if(!isLast){
+      if(!isLast && curIndex > -1){
         document.addEventListener('mousemove', mousemoveEvent, false);
       }
     });
