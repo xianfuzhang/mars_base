@@ -180,13 +180,12 @@ mdc设置组件颜色
   overflow: hidden;
   text-align: center;
   user-select: none;
-  //border-bottom: 1px solid rgba(255,255,255,0.5);
+  border-left: 1px solid #797171;
 }
-/* .mdl-table-header__row th:first-child{
-  border-left: 1px solid rgba(255,255,255,0.5);
-  border-top-left-radius: 8px;
+.mdl-table-header__row th:first-child{
+  border-left: 0;
 }
-.mdl-table-header__row th:last-child{
+/* .mdl-table-header__row th:last-child{
   border-top-right-radius: 8px;
 } */
 .mdl-table-header__row th.sortable {
