@@ -44,9 +44,9 @@ export class updateTableCols {
       if (!cols.length) {
         let thElms = headerElm.find('th');
         for(let i=0; i< thElms.length; i++) {
-          let obj = {}, width = thElms.eq(i)[0].clientWidth - 2; //table的padding默认是2px
+          let obj = {}, width = thElms.eq(i)[0].clientWidth > 0 ? thElms.eq(i)[0].clientWidth - 2 : 0; //table的padding默认是2px
           obj['resize-col-' + i] = thElms.eq(i)[0];
-          obj['width'] = Math.max(width, CONST_MIN_WIDTH);
+          obj['width'] = width;//Math.max(width, CONST_MIN_WIDTH);
           obj['hide'] = thElms.eq(i).hasClass('ng-hide');
           cols.push(obj);
         }
@@ -168,6 +168,40 @@ export class updateTableCols {
       }
     };
 
+    let modifyColsByShowHideColumns = () => {
+      //不改变原来table宽度情况下，新增的列宽通过把原有总宽度/可见列宽
+      let count =0, total = 0;
+      for(let i = 0; i < cols.length; i++) {
+        if (!cols[i]['resize-col-' + i]) continue; //剔除patch
+        //剔除checkbox,menu
+        if (cols[i]['resize-col-' + i].classList.contains('control-th')) {
+          cols[i]['width'] = CONST_MIN_WIDTH;
+          continue;
+        }
+        else {
+          total += cols[i]['width'];
+        }
+        //根据最新的class设置hide值
+        cols[i]['hide'] = cols[i]['resize-col-' + i].classList.contains('ng-hide') 
+          || (cols[i]['resize-col-' + i].classList.contains('ng-hide-animate') 
+              && cols[i]['resize-col-' + i].classList.contains('ng-hide-add'))
+          || false;
+        if (!cols[i]['hide']) count++;
+      }
+      let average = Math.floor(total / count);
+      //console.log('total=' + total + ',count=' + count + ',average=' + average);
+      for(let i = 0; i < cols.length; i++) {
+        if (!cols[i]['resize-col-' + i]) continue;
+        if (cols[i]['resize-col-' + i].classList.contains('control-th')) {
+          cols[i]['width'] = CONST_MIN_WIDTH;
+        }
+        else {
+          cols[i]['width'] = cols[i]['hide'] === true ? 0 : average;
+        }
+      }
+      //console.log(cols);
+    };
+
     let updateColsWidth = () => {
       let thElms = headerElm.find('th');
       for(let i=0; i< thElms.length; i++) {
@@ -219,9 +253,12 @@ export class updateTableCols {
 
     //显示隐藏columns时调整table的tds width
     unsubscribers.push(this.di.$rootScope.$on('table-show-hide-columns', (event) => {
-      getColsWidth();
-      updateColsWidth();
-      updateBodyColsWidth();
+      this.di.$timeout(() => {
+        getColsWidth();
+        modifyColsByShowHideColumns();
+        updateColsWidth();
+        updateBodyColsWidth();  
+      }, 500);
     }));
     //tbody渲染以后调整td宽度（scroll宽度影响tds）
     unsubscribers.push(this.di.$rootScope.$on('table-render-ready', (event) => {
