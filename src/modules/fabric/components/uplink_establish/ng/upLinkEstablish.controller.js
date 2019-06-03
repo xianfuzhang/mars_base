@@ -118,7 +118,7 @@ export class UpLinkEstablishController {
     };
 
 
-    scope.submit = function() {
+    scope.submit = () => {
       let inValidJson_Copy = angular.copy(inValidJson);
 
       let params = {};
