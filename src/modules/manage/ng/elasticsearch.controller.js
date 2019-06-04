@@ -530,10 +530,7 @@ export class ElasticsearchController {
       return function(event, chart) {
         // 1.element hover event
         let element = chart.getElementAtEvent(event);
-        if(element.length > 0)
-        {
-          let index = element[0]._index;
-        }
+        if(element.length > 0) return;
       
         // 2.recover line style when click the grid area
         const box = chart.boxes[0];

@@ -517,7 +517,7 @@ export class AnalyzerController {
       scope.nginxTimerangeAnalyzer.chartConfig.labels = labelsArr;
       scope.nginxTimerangeAnalyzer.chartConfig.options = options;
       scope.nginxTimerangeAnalyzer.chartConfig.series = series;
-      scope.nginxTimerangeAnalyzer.chartConfig.onClick = nginxLineChartOnClick();
+      scope.nginxTimerangeAnalyzer.chartConfig.onClick = nginxLineChartOnClick(scope.nginxTimerangeAnalyzer.dataModel);
       scope.nginxTimerangeAnalyzer.chartConfig.onHover = lineChartOnHover();
 
       // set pie chart data with first dataset and first data
@@ -776,10 +776,7 @@ export class AnalyzerController {
       return function(event, chart) {
         // 1.element hover event
         let element = chart.getElementAtEvent(event);
-        if(element.length > 0)
-        {
-          let index = element[0]._index;
-        }
+        if(element.length > 0) return;
       
         // 2.recover line style when click the grid area
         const box = chart.boxes[0];
