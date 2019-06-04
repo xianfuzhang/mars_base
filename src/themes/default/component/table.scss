@@ -179,6 +179,8 @@ mdc设置组件颜色
   overflow: hidden;
   text-align: center;
   user-select: none;
+}
+.mdl-table-header__row th.border-left{
   border-left: 1px solid #9dacac;
 }
 .mdl-table-header__row th:first-child{

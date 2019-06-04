@@ -14,7 +14,8 @@ export class thDragEvent {
   }
 
   _link(scope, element, attrs, ctrl) {
-    let allowResize = false,  //允许调整col，在col右侧10px以内
+    let thNodes = element[0].parentNode.children,
+        allowResize = false,  //允许调整col，在col右侧10px以内
         startResize = false,  //开始计算调整，mousedown开始，mouseup结束
         startX = 0;
     let mousedownEvent = (event) => {
@@ -40,13 +41,33 @@ export class thDragEvent {
       element.css('cursor', (allowResize ? 'col-resize' : 'pointer'));
       return false;
     };
+    let mouseleaveEvent = (event) => {
+      for (let i = 0; i < thNodes.length; i++) {
+        let regResult = /\d+/.exec(thNodes[i].style.width),
+            width = regResult ? parseInt(regResult[0]) : 0;
+        thNodes[i].classList.remove('border-left');
+        if (i > 0) thNodes[i].style.width = (width > 0 ? width + 1 : 0) + 'px';
+      }
+    };
+    let mouseenterEvent = (event) => {
+      for (let i = 0; i < thNodes.length; i++) {
+        let regResult = /\d+/.exec(thNodes[i].style.width),
+            width = regResult ? parseInt(regResult[0]) : 0;
+        if (i > 0) thNodes[i].style.width = (width > 0 ? width - 1 : 0) + 'px';
+        thNodes[i].classList.add('border-left');
+      }
+    };
 
     element[0].addEventListener('mousedown', mousedownEvent, false);
     element[0].addEventListener('mousemove', mousemoveEvent, false);
+    element[0].addEventListener('mouseleave', mouseleaveEvent, false);
+    element[0].addEventListener('mouseenter', mouseenterEvent, false);
 
     scope.$on('$destroy', ()=> {
       element[0].removeEventListener('mousedown', mousedownEvent);
       element[0].removeEventListener('mousemove', mousemoveEvent);
+      element[0].removeEventListener('mouseleave', mouseleaveEvent);
+      element[0].removeEventListener('mouseenter', mouseenterEvent);
     });
   }
 }
