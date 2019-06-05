@@ -192,19 +192,24 @@
           </div>
           <div class="mars-row-flex" style="margin-left: 5px;">
               <div class="col-gutter-md left-panel mars-panel">
-                  <canvas id="switch-ports-usage-rate" height="250"
-                          class="chart chart-line"
-                          chart-type="line"
-                          chart-data="devicePortsChartConfig.data"
-                          chart-labels="devicePortsChartConfig.labels"
-                          chart-series="devicePortsChartConfig.series"
-                          chart-fill="false"
-                          chart-options="devicePortsChartConfig.options"
-                          chart-click="devicePortsChartConfig.onClick"
-                          chart-hover="devicePortsChartConfig.onHover">
-                  </canvas>
+                  <div class="chart_title">
+                      <span>{{'MODULES.SWITCH.DETAIL.ANALYZER.PORT.TOP10'|translate}}</span>
+                  </div>
+                  <div>
+                      <canvas id="switch-ports-usage-rate" height="250"
+                              class="chart chart-line"
+                              chart-type="line"
+                              chart-data="devicePortsChartConfig.data"
+                              chart-labels="devicePortsChartConfig.labels"
+                              chart-series="devicePortsChartConfig.series"
+                              chart-fill="false"
+                              chart-options="devicePortsChartConfig.options"
+                              chart-click="devicePortsChartConfig.onClick"
+                              chart-hover="devicePortsChartConfig.onHover">
+                      </canvas>
+                  </div>
 
-                  <div class="setting-group"  ng-show="!chartModel.ports.loading">
+                  <div class="setting-group out_title"  ng-show="!chartModel.ports.loading">
                       <mdl-select ng-model="chartModel.ports.unitTypeOption" display-label="{options: portUnitTypes}" disable="chartModel.ports.isRealtime"></mdl-select>
                       <mdl-select ng-model="chartModel.ports.stateTypeOption" display-label="{options: portStateTypes}" disable="chartModel.ports.isRealtime || chartModel.ports.unitTypeOption.value.startsWith('bytes')"></mdl-select>
                       <div class="item" title="{{chartModel.ports.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-ports')"><i class="material-icons">{{chartModel.ports.isRealtime ? 'pause' : 'play_arrow'}}</i></div>

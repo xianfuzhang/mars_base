@@ -1564,7 +1564,7 @@ export class DeviceDetailController {
     let options = {
       title: {
         display: true,
-        text: '端口流量Top10',
+        text: '',
       },
       scales: {
         yAxes: [{
