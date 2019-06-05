@@ -86,7 +86,7 @@
             <div class="mars-row" ng-if="isAnalyzeEnable">
                 <div class="mars-row-flex">
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
-                        <canvas id="switch-cpu-usage-rate" height="300"
+                            <canvas id="switch-cpu-usage-rate" height="300"
                                 class="chart chart-line"
                                 chart-type="line"
                                 chart-data="switchCpuChartConfig.data"
@@ -108,17 +108,19 @@
                     </div>
 
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
-                        <canvas id="switch-memory-usage-rate" height="300"
-                                class="chart chart-line"
-                                chart-type="line"
-                                chart-data="switchMemoryChartConfig.data"
-                                chart-labels="switchMemoryChartConfig.labels"
-                                chart-series="switchMemoryChartConfig.series"
-                                chart-fill="false"
-                                chart-options="switchMemoryChartConfig.options"
-                                chart-click="switchMemoryChartConfig.onClick"
-                                chart-hover="switchMemoryChartConfig.onHover">
-                        </canvas>
+
+                            <canvas id="switch-memory-usage-rate" height="300"
+                                    class="chart chart-line"
+                                    chart-type="line"
+                                    chart-data="switchMemoryChartConfig.data"
+                                    chart-labels="switchMemoryChartConfig.labels"
+                                    chart-series="switchMemoryChartConfig.series"
+                                    chart-fill="false"
+                                    chart-options="switchMemoryChartConfig.options"
+                                    chart-click="switchMemoryChartConfig.onClick"
+                                    chart-hover="switchMemoryChartConfig.onHover">
+                            </canvas>
+
 
                         <div class="setting-group"  ng-show="!dashboardModel.memory.loading">
                             <div class="item" title="{{dashboardModel.memory.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-memory')"><i class="material-icons">{{dashboardModel.memory.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
@@ -132,19 +134,24 @@
 
                 <div class="mars-row-flex">
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
-                        <canvas id="interface-rxtx-packages" height="300"
-                                class="chart chart-line"
-                                chart-type="line"
-                                chart-data="switchInterfaceRxTxChartConfig.data"
-                                chart-labels="switchInterfaceRxTxChartConfig.labels"
-                                chart-fill="false"
-                                chart-series="switchInterfaceRxTxChartConfig.series"
-                                chart-options="switchInterfaceRxTxChartConfig.options"
-                                chart-click="switchInterfaceRxTxChartConfig.onClick"
-                                chart-hover="switchInterfaceRxTxChartConfig.onHover">
-                        </canvas>
+                        <div class="chart_title">
+                            <span>{{'MODULES.DASHBOARD.SWITCH_INTERFACE_PACKETS'|translate}}</span>
+                        </div>
+                        <div>
+                            <canvas id="interface-rxtx-packages" height="300"
+                                    class="chart chart-line"
+                                    chart-type="line"
+                                    chart-data="switchInterfaceRxTxChartConfig.data"
+                                    chart-labels="switchInterfaceRxTxChartConfig.labels"
+                                    chart-fill="false"
+                                    chart-series="switchInterfaceRxTxChartConfig.series"
+                                    chart-options="switchInterfaceRxTxChartConfig.options"
+                                    chart-click="switchInterfaceRxTxChartConfig.onClick"
+                                    chart-hover="switchInterfaceRxTxChartConfig.onHover">
+                            </canvas>
+                        </div>
 
-                        <div class="setting-group" ng-show="!dashboardModel.interface.loading">
+                        <div class="setting-group out_title" ng-show="!dashboardModel.interface.loading">
                             <mdl-select ng-model="dashboardModel.interface.typeOption" display-label="{options: interfaceTypes}" disable="dashboardModel.interface.isRealtime"></mdl-select>
                             <div class="item" title="{{dashboardModel.interface.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-interface')"><i class="material-icons">{{dashboardModel.interface.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.interface.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.interface.isRealtime || resetTimeScale('device-interface')"><i class="material-icons">undo</i></div>
@@ -155,19 +162,24 @@
                     </div>
 
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
-                        <canvas id="interface-rxtx-drop-error" height="300"
-                                class="chart chart-line"
-                                chart-type="line"
-                                chart-data="switchInterfaceDropErrorChartConfig.data"
-                                chart-labels="switchInterfaceDropErrorChartConfig.labels"
-                                chart-fill="false"
-                                chart-series="switchInterfaceDropErrorChartConfig.series"
-                                chart-options="switchInterfaceDropErrorChartConfig.options"
-                                chart-click="switchInterfaceDropErrorChartConfig.onClick"
-                                chart-hover="switchInterfaceDropErrorChartConfig.onHover">
-                        </canvas>
+                        <div class="chart_title">
+                            <span>{{'MODULES.DASHBOARD.SWITCH_INTERFACE_DROP_ERROR_PACKETS'|translate}}</span>
+                        </div>
+                        <div>
+                            <canvas id="interface-rxtx-drop-error" height="300"
+                                    class="chart chart-line"
+                                    chart-type="line"
+                                    chart-data="switchInterfaceDropErrorChartConfig.data"
+                                    chart-labels="switchInterfaceDropErrorChartConfig.labels"
+                                    chart-fill="false"
+                                    chart-series="switchInterfaceDropErrorChartConfig.series"
+                                    chart-options="switchInterfaceDropErrorChartConfig.options"
+                                    chart-click="switchInterfaceDropErrorChartConfig.onClick"
+                                    chart-hover="switchInterfaceDropErrorChartConfig.onHover">
+                            </canvas>
+                        </div>
 
-                        <div class="setting-group" ng-show="!dashboardModel.dropErrorInterface.loading">
+                        <div class="setting-group out_title" ng-show="!dashboardModel.dropErrorInterface.loading">
                             <mdl-select ng-model="dashboardModel.dropErrorInterface.typeOption" display-label="{options: interfaceTypes.slice(0,2)}">
                             </mdl-select>
                             <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-interface-drop-error')" disable="false"><i class="material-icons">undo</i></div>

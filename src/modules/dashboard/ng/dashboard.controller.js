@@ -1503,7 +1503,8 @@ export class DashboardController {
       let options = {
         title: {
           display: true,
-          text: this.translate('MODULES.DASHBOARD.SWITCH_INTERFACE_PACKETS'),
+          // text: this.translate('MODULES.DASHBOARD.SWITCH_INTERFACE_PACKETS'),
+          text: '',
         },
         scales: {
           yAxes: [{
@@ -1679,7 +1680,8 @@ export class DashboardController {
       let options = {
         title: {
           display: true,
-          text: this.translate('MODULES.DASHBOARD.SWITCH_INTERFACE_DROP_ERROR_PACKETS'),
+          // text: this.translate('MODULES.DASHBOARD.SWITCH_INTERFACE_DROP_ERROR_PACKETS'),
+          text: '',
         },
         scales: {
           yAxes: [{
