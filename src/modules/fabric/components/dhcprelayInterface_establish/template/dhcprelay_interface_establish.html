@@ -15,7 +15,7 @@
         <!--<valid-input style="width:90%;display:inline-block;" ng-model="dhcpRelayModel.server_ip" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>-->
         <div style="display: flex">
             <valid-input style="width:20%;display:inline-block;margin-right: 16px;" v-require="true" ng-model="dhcpRelayModel.vlan" v-type="int" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}"  v-rpcid="page_dhcprelay_interface_es"></valid-input>
-            <mdl-select  ng-model="dhcpRelayModel.vlan_type" display-label="displayLabel.tag" >
+            <mdl-select style="margin-top: 4px;"  ng-model="dhcpRelayModel.vlan_type" display-label="displayLabel.tag" >
             </mdl-select>
         </div>
     </div>
