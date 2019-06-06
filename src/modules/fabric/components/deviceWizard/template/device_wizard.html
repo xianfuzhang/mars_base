@@ -20,6 +20,14 @@
         </mdl-select>
 
     </div>
+
+    <div class="stepForm__input" ng-if="switch.protocol.value == 'snmp' || switch.protocol.value == 'rest'">
+        <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MGMT_PORT' | translate}}</div>
+        <!--<input class="stepForm__input__text" name="community" type="text" ng-model="switch.community"/>-->
+        <valid-input ng-model="switch.mgmt_port" v-name="mgmt_port" v-type="port" v-rpcid="page_device_1" ></valid-input>
+        <!--<valid-input ng-model="switch.community" v-rpcid="page_device_1" ></valid-input>-->
+    </div>
+
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MAC' | translate}}<span class="stepForm__input__required">*</span></div>
         <!--<mdl-select ng-model="mac_address" name="mac_address"-->

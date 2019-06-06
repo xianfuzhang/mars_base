@@ -55,6 +55,7 @@ export class DeviceWizardController {
       managementAddress: '',
       port: '',
       protocol: scope.protocolDisplayLabel.options[0],
+      mgmt_port: '',
       description: ''
     };
 
@@ -195,6 +196,7 @@ export class DeviceWizardController {
         managementAddress: scope.switch.managementAddress,
         port: scope.switch.port,
         protocol: scope.switch.protocol.value,
+        mgmagemntPort: (scope.switch.mgmt_port === ''|| scope.switch.mgmt_port === null)?0:parseInt(scope.switch.mgmt_port),
       };
       
       if(params.type == 'spine') {
