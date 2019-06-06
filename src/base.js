@@ -131,6 +131,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/dhcp_relay', {
+      template: require('./modules/fabric/template/dhcp_relay.html'),
+      controller: 'dhcpRelayController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/intents', {
       template: require('./modules/fabric/template/intents.html'),
       controller: 'intentsController',
