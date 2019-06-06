@@ -36,15 +36,15 @@
 
                         <div class="chart-loading" ng-show="nginxTimerangeAnalyzer.loading"></div>
                     </div>
-                    <div class="col-gutter-md right-panel">
-                        <canvas id="nginx-analyzer-piechart" height="250"
-                                class="chart chart-pie"
-                                chart-type="pie"
-                                chart-data="nginxTimerangeAnalyzer.pieChartConfig.data"
-                                chart-labels="nginxTimerangeAnalyzer.pieChartConfig.labels"
-                                chart-options="nginxTimerangeAnalyzer.pieChartConfig.options">
-                        </canvas>
-                    </div>
+                    <!--<div class="col-gutter-md right-panel">-->
+                        <!--<canvas id="nginx-analyzer-piechart" height="250"-->
+                                <!--class="chart chart-pie"-->
+                                <!--chart-type="pie"-->
+                                <!--chart-data="nginxTimerangeAnalyzer.pieChartConfig.data"-->
+                                <!--chart-labels="nginxTimerangeAnalyzer.pieChartConfig.labels"-->
+                                <!--chart-options="nginxTimerangeAnalyzer.pieChartConfig.options">-->
+                        <!--</canvas>-->
+                    <!--</div>-->
                 </div>
 
                 <div class="mars-row-flex mars-panel">
@@ -93,15 +93,15 @@
 
                         <div class="chart-loading" ng-show="syslogAnalyzer.loading"></div>
                     </div>
-                    <div class="col-gutter-md right-panel">
-                        <canvas id="syslog-analyzer-piechart" height="250"
-                                class="chart chart-pie"
-                                chart-type="pie"
-                                chart-data="syslogAnalyzer.pieChartConfig.data"
-                                chart-labels="syslogAnalyzer.pieChartConfig.labels"
-                                chart-options="syslogAnalyzer.pieChartConfig.options">
-                        </canvas>
-                    </div>
+                    <!--<div class="col-gutter-md right-panel">-->
+                        <!--<canvas id="syslog-analyzer-piechart" height="250"-->
+                                <!--class="chart chart-pie"-->
+                                <!--chart-type="pie"-->
+                                <!--chart-data="syslogAnalyzer.pieChartConfig.data"-->
+                                <!--chart-labels="syslogAnalyzer.pieChartConfig.labels"-->
+                                <!--chart-options="syslogAnalyzer.pieChartConfig.options">-->
+                        <!--</canvas>-->
+                    <!--</div>-->
                 </div>
 
                 <div class="mars-row-flex mars-panel">
@@ -129,17 +129,19 @@
 
                         <div class="chart-loading" ng-show="filebeatAnalyzer.loading"></div>
                     </div>
-                    <div class="col-gutter-md right-panel">
-                        <canvas id="filebeat-analyzer-piechart" height="250"
-                                class="chart chart-pie"
-                                chart-type="pie"
-                                chart-data="filebeatAnalyzer.pieChartConfig.data"
-                                chart-labels="filebeatAnalyzer.pieChartConfig.labels"
-                                chart-options="filebeatAnalyzer.pieChartConfig.options">
-                        </canvas>
-                    </div>
+                    <!--<div class="col-gutter-md right-panel">-->
+                        <!--<canvas id="filebeat-analyzer-piechart" height="250"-->
+                                <!--class="chart chart-pie"-->
+                                <!--chart-type="pie"-->
+                                <!--chart-data="filebeatAnalyzer.pieChartConfig.data"-->
+                                <!--chart-labels="filebeatAnalyzer.pieChartConfig.labels"-->
+                                <!--chart-options="filebeatAnalyzer.pieChartConfig.options">-->
+                        <!--</canvas>-->
+                    <!--</div>-->
                 </div>
             </div>
         </div>
+
+        <chart-tooltip></chart-tooltip>
     </div>
 </div>
