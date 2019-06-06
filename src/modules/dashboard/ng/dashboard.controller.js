@@ -1890,70 +1890,70 @@ export class DashboardController {
 
     let setCpuPieChartData = (evt, data, title) => {
       // initial
-    let pieChartConfig = {};
-    pieChartConfig.data = [];
-    pieChartConfig.labels = [];
+      let pieChartConfig = {};
+      pieChartConfig.data = [];
+      pieChartConfig.labels = [];
 
-    if(!data) return;
+      if(!data) return;
 
-        // set pie chart data with first dataset and first data
-        let chartData = {datasets:[], labels:[]};
-        let dataset = {data:[], backgroundColor:[], label: ''};
+      // set pie chart data with first dataset and first data
+      let chartData = {datasets:[], labels:[]};
+      let dataset = {data:[], backgroundColor:[], label: ''};
 
-        dataset.data.push(data['wait_percent'].toFixed(2));
-        dataset.backgroundColor.push('rgb(255,255,255)');
-        chartData.labels.push('wait');
+      dataset.data.push(data['wait_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(255,255,255)');
+      chartData.labels.push('wait');
 
-        dataset.data.push(data['softirq_percent'].toFixed(2));
-        dataset.backgroundColor.push('rgb(255,228,196)');
-        chartData.labels.push('softirq');
+      dataset.data.push(data['softirq_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(255,228,196)');
+      chartData.labels.push('softirq');
 
-        dataset.data.push(data['idle_percent'].toFixed(2));
-        dataset.backgroundColor.push('rgb(144,238,144)');
-        chartData.labels.push('idle');
+      dataset.data.push(data['idle_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(144,238,144)');
+      chartData.labels.push('idle');
 
-        dataset.data.push(data['system_percent'].toFixed(2));
-        dataset.backgroundColor.push('rgb(128,0,128)');
-        chartData.labels.push('system');
+      dataset.data.push(data['system_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(128,0,128)');
+      chartData.labels.push('system');
 
-        dataset.data.push(data['steal_percent'].toFixed(2));
-        dataset.backgroundColor.push('rgb(210,105,30)');
-        chartData.labels.push('steal');
+      dataset.data.push(data['steal_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(210,105,30)');
+      chartData.labels.push('steal');
 
-        dataset.data.push(data['user_percent'].toFixed(2));
-        dataset.backgroundColor.push('rgb(255,0,0)');
-        chartData.labels.push('user');
+      dataset.data.push(data['user_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(255,0,0)');
+      chartData.labels.push('user');
 
-        dataset.data.push(data['nice_percent'].toFixed(2));
-        dataset.backgroundColor.push('rgb(244,164,96)');
-        chartData.labels.push('nice');
+      dataset.data.push(data['nice_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(244,164,96)');
+      chartData.labels.push('nice');
 
-        dataset.data.push(data['interrupt_percent'].toFixed(2));
-        dataset.backgroundColor.push('rgb(0,128,128)');
-        chartData.labels.push('interrupt');
+      dataset.data.push(data['interrupt_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(0,128,128)');
+      chartData.labels.push('interrupt');
 
-        chartData.datasets.push(dataset);
+      chartData.datasets.push(dataset);
 
-        let pieOptions = {
-            title: {
-                text: title,
-            },
-      tooltips: {
-        callbacks: {
-          label: function(tooltipItem, data) {
-            return data.labels[tooltipItem.index] + ':' + data.datasets[0].data[tooltipItem.index] + '%';
+      let pieOptions = {
+        title: {
+            text: title,
+        },
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              return data.labels[tooltipItem.index] + ':' + data.datasets[0].data[tooltipItem.index] + '%';
+            }
           }
         }
       }
-        }
 
-        pieChartConfig.data = dataset.data;
-        pieChartConfig.labels = chartData.labels;
-        pieChartConfig.colors = dataset.backgroundColor;
-        pieChartConfig.options = pieOptions;
-        pieChartConfig.type = 'pie';
+      pieChartConfig.data = dataset.data;
+      pieChartConfig.labels = chartData.labels;
+      pieChartConfig.colors = dataset.backgroundColor;
+      pieChartConfig.options = pieOptions;
+      pieChartConfig.type = 'pie';
 
-    DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
+      DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
     }
 
     let setMemoryPieChartData = (evt, data, title) => {

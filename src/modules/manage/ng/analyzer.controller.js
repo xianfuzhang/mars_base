@@ -410,8 +410,13 @@ export class AnalyzerController {
             barThickness: 40,
             ticks: {
               callback: (value) => {
-                let urlArr = value.split('/');
-                return urlArr.length > 3 ? urlArr[0] == '' ? urlArr[1] + '/.../' + urlArr[urlArr.length - 1] : urlArr[0] + '/.../' + urlArr[urlArr.length - 1] : value;
+                // let urlArr = value.split('/');
+                // return urlArr.length > 3 ? urlArr[0] == '' ? urlArr[1] + '/.../' + urlArr[urlArr.length - 1] : urlArr[0] + '/.../' + urlArr[urlArr.length - 1] : value;
+                if(value.length > 30) {
+                  return value.slice(0, 10) + '...' + value.slice(-10);
+                } else {
+                  return value;
+                }
               },
             }
           }],
@@ -519,12 +524,6 @@ export class AnalyzerController {
       scope.nginxTimerangeAnalyzer.chartConfig.series = series;
       scope.nginxTimerangeAnalyzer.chartConfig.onClick = nginxLineChartOnClick(scope.nginxTimerangeAnalyzer.dataModel);
       scope.nginxTimerangeAnalyzer.chartConfig.onHover = lineChartOnHover();
-
-      // set pie chart data with first dataset and first data
-      if(dataArr.length > 0 && labelsArr.length > 0) {
-        let pieData = dataModel[0].clients ? dataModel[0].clients : [{count:dataModel[0].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}]
-        setNginxPieChartData(pieData, getFormatedDateTime(new Date(labelsArr[0])))
-      }
     };
 
     let setRealtimeNginxChartLineData = (initial) => {  // initial: 初始化
@@ -558,12 +557,6 @@ export class AnalyzerController {
       scope.nginxTimerangeAnalyzer.chartConfig.labels = labelsArr;
       scope.nginxTimerangeAnalyzer.chartConfig.series = series;
       scope.nginxTimerangeAnalyzer.chartConfig.onClick = nginxLineChartOnClick(scope.nginxTimerangeAnalyzer.dataModel);
-
-      // set pie chart data with first dataset and first data
-      if(dataArr.length > 0 && labelsArr.length > 0) {
-        let pieData = dataModel[dataModel.length - 1].clients ? dataModel[dataModel.length - 1].clients : [{count:dataModel[dataModel.length - 1].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}]
-        setNginxPieChartData(pieData, getFormatedDateTime(new Date(labelsArr[dataModel.length - 1])))
-      }
     };
 
     let setSyslogChartLineData = () => {
@@ -716,12 +709,6 @@ export class AnalyzerController {
       scope.filebeatAnalyzer.chartConfig.series = series;
       scope.filebeatAnalyzer.chartConfig.onClick = filebeatChartOnClick();
       scope.filebeatAnalyzer.chartConfig.onHover = lineChartOnHover();
-
-      // set pie chart data with first dataset and first data
-      if(dataArr.length > 0 && labelsArr.length > 0) {
-        let data = scope.filebeatAnalyzer.selectedOption.value == 'thread' ? dataModel[0].threads : dataModel[0].handlers;
-        setFilebeatPieChartData(data, getFormatedDateTime(new Date(labelsArr[0])));
-      }
     };
 
     let barChartOnClick = (analyzer) => {
@@ -849,9 +836,9 @@ export class AnalyzerController {
           let data = analyzer[index].clients ? analyzer[index].clients : [{count: analyzer[index].count, ip: scope.nginxTimerangeAnalyzer.selectedIpOption.value}];
           let title = getFormatedDateTime(new Date(xLabel));
 
-          setNginxPieChartData(data, title);
+          setNginxPieChartData(evt, data, title);
 
-          scope.$apply();
+          // scope.$apply();
         }
       }
     }
@@ -871,9 +858,9 @@ export class AnalyzerController {
           let data = analyzer[index].clients ? analyzer[index].clients : [{count: analyzer[index].count, ip: scope.syslogAnalyzer.selectedIpOption.value}];
           let title = getFormatedDateTime(new Date(xLabel));
 
-          setSyslogPieChartData(data, title);
+          setSyslogPieChartData(evt, data, title);
 
-          scope.$apply();
+          // scope.$apply();
         }
       }
     }
@@ -891,17 +878,16 @@ export class AnalyzerController {
           let xLabel = chart.data.labels[index];
 
           let data = scope.filebeatAnalyzer.selectedOption.value == 'thread' ? analyzer[index].threads : analyzer[index].handlers;
-          setFilebeatPieChartData(data, getFormatedDateTime(new Date(xLabel)));
+          setFilebeatPieChartData(evt, data, getFormatedDateTime(new Date(xLabel)));
 
-          scope.$apply();
+          // scope.$apply();
         }
       }
     }
 
-    let setNginxPieChartData = (dataArr, title) => {
+    let setNginxPieChartData = (evt, dataArr, title) => {
       // initial
-      scope.nginxTimerangeAnalyzer.pieChartConfig.data = [];
-      scope.nginxTimerangeAnalyzer.pieChartConfig.labels = [];
+      let pieChartConfig = {};
 
       if(!dataArr) return;
 
@@ -917,27 +903,22 @@ export class AnalyzerController {
       chartData.datasets.push(dataset);
 
       let pieOptions = {
-        plugins: {
-          deferred: {
-            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-            delay: 1000      // delay of 500 ms after the canvas is considered inside the viewport
-          }
-        },
         title: {
           text: title,
         }
       }
 
-      scope.nginxTimerangeAnalyzer.pieChartConfig.data = dataset.data;
-      scope.nginxTimerangeAnalyzer.pieChartConfig.labels = chartData.labels;
-      // scope.nginxTimerangeAnalyzer.pieChartConfig.colors = dataset.backgroundColor;
-      scope.nginxTimerangeAnalyzer.pieChartConfig.options = pieOptions;
+      pieChartConfig.data = dataset.data;
+      pieChartConfig.labels = chartData.labels;
+      pieChartConfig.options = pieOptions;
+      pieChartConfig.type = 'pie';
+
+      DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
     }
 
-    let setSyslogPieChartData = (dataArr, title) => {
+    let setSyslogPieChartData = (evt, dataArr, title) => {
       // initial
-      scope.syslogAnalyzer.pieChartConfig.data = [];
-      scope.syslogAnalyzer.pieChartConfig.labels = [];
+      let pieChartConfig = {}
 
       if(!dataArr) return;
 
@@ -953,27 +934,23 @@ export class AnalyzerController {
       chartData.datasets.push(dataset);
 
       let pieOptions = {
-        plugins: {
-          deferred: {
-            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-            delay: 1000      // delay of 500 ms after the canvas is considered inside the viewport
-          }
-        },
         title: {
           text: title,
         }
       }
 
-      scope.syslogAnalyzer.pieChartConfig.data = dataset.data;
-      scope.syslogAnalyzer.pieChartConfig.labels = chartData.labels;
-      // scope.nginxTimerangeAnalyzer.pieChartConfig.colors = dataset.backgroundColor;
-      scope.syslogAnalyzer.pieChartConfig.options = pieOptions;
+      pieChartConfig.data = dataset.data;
+      pieChartConfig.labels = chartData.labels;
+      pieChartConfig.options = pieOptions;
+
+      DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
     }
 
-    let setFilebeatPieChartData = (dataArr, title) => {
+    let setFilebeatPieChartData = (evt, dataArr, title) => {
       // initial
-      scope.filebeatAnalyzer.pieChartConfig.data = [];
-      scope.filebeatAnalyzer.pieChartConfig.labels = [];
+      let pieChartConfig = {}
+      pieChartConfig.data = [];
+      pieChartConfig.labels = [];
 
       if(!dataArr) return;
 
@@ -989,20 +966,16 @@ export class AnalyzerController {
       chartData.datasets.push(dataset);
 
       let pieOptions = {
-        plugins: {
-          deferred: {
-            yOffset: '50%', // defer until 50% of the canvas height are inside the viewport
-            delay: 1000      // delay of 500 ms after the canvas is considered inside the viewport
-          }
-        },
         title: {
           text: title,
         }
       }
 
-      scope.filebeatAnalyzer.pieChartConfig.data = dataset.data;
-      scope.filebeatAnalyzer.pieChartConfig.labels = chartData.labels;
-      scope.filebeatAnalyzer.pieChartConfig.options = pieOptions;
+      pieChartConfig.data = dataset.data;
+      pieChartConfig.labels = chartData.labels;
+      pieChartConfig.options = pieOptions;
+
+      DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
     }
     
     let formatSize = (size, unit) => {
