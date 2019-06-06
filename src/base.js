@@ -124,6 +124,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/host_segment', {
+      template: require('./modules/fabric/template/host_segment.html'),
+      controller: 'hostSegmentController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/intents', {
       template: require('./modules/fabric/template/intents.html'),
       controller: 'intentsController',
