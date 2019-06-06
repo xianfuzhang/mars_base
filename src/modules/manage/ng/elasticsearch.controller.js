@@ -382,6 +382,9 @@ export class ElasticsearchController {
             },
             ticks: {
               beginAtZero: false,
+              callback: function(value, index, values) {
+                return getFormattedNumber(value);
+              }
             }
           }],
           xAxes: [{
@@ -437,6 +440,9 @@ export class ElasticsearchController {
             },
             ticks: {
               beginAtZero: false,
+              callback: function(value, index, values) {
+                return getFormattedNumber(value);
+              }
             }
           }],
           xAxes: [{

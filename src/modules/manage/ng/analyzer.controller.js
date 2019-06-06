@@ -404,6 +404,9 @@ export class AnalyzerController {
             },
             ticks: {
               beginAtZero: false,
+              callback: function(value, index, values) {
+                return getFormattedNumber(value);
+              }
             }
           }],
           xAxes: [{
@@ -484,7 +487,10 @@ export class AnalyzerController {
           yAxes: [{
             ticks: {
               beginAtZero: false,
-              labelString: '访问次数'
+              labelString: '访问次数',
+              callback: function(value, index, values) {
+                return getFormattedNumber(value);
+              }
             }
           }],
           xAxes: [{
@@ -587,7 +593,10 @@ export class AnalyzerController {
           yAxes: [{
             ticks: {
               beginAtZero: false,
-              labelString: '次数'
+              labelString: '次数',
+              callback: function(value, index, values) {
+                return getFormattedNumber(value);
+              }
             }
           }],
           xAxes: [{
@@ -668,7 +677,10 @@ export class AnalyzerController {
           yAxes: [{
             ticks: {
               beginAtZero: false,
-              labelString: '次数'
+              labelString: '次数',
+              callback: function(value, index, values) {
+                return getFormattedNumber(value);
+              }
             }
           }],
           xAxes: [{
