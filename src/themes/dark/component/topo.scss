@@ -96,6 +96,10 @@
 	stroke-width: 1;
 }
 
+.topo__node-outline:hover{
+	stroke-width: 3;
+}
+
 .topo__node-outline.node_select{
 	stroke-width: 4;
 	stroke: rgb(255,124,9);
