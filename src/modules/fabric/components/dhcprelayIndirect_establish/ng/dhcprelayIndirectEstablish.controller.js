@@ -204,7 +204,7 @@ export class DHCPRelayIndirectEstablishController {
             rootScope.$emit('relay-indirect-list-refresh');
             resolve({valid: true, errorMessage: ''});
           }, (err) => {
-            resolve({valid: false, errorMessage: err.data});
+            resolve({valid: false, errorMessage: err.message});
           });
       });
     };

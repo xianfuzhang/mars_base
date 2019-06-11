@@ -203,7 +203,7 @@ export class DHCPRelayDefaultEstablishController {
             rootScope.$emit('relay-default-list-refresh');
             resolve({valid: true, errorMessage: ''});
           }, (err) => {
-            resolve({valid: false, errorMessage: err.data});
+            resolve({valid: false, errorMessage: err.message});
           });
       });
     };
