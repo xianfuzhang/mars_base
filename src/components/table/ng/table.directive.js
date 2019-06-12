@@ -222,7 +222,8 @@ export class mdlTable {
 
     scope._isSelectedAll = () => {
       if (scope.tableModel.data.length === 0) return false;
-      return scope.tableModel.filteredData.length === scope.tableModel.removeItems.length ? true : false;
+      return scope.tableModel.filteredData.length > 0 ?
+      scope.tableModel.filteredData.length === scope.tableModel.removeItems.length ? true : false : false;
       /*if (scope.tableModel.data.length === 0) return false;
       for(var i=0; i < scope.tableModel.filteredData.length;  i++) {
         if (scope.tableModel.removeItems.indexOf(scope.tableModel.data[i]) === -1) {
