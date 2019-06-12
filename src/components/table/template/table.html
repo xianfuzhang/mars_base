@@ -28,6 +28,9 @@
         </div>
         <mdl-button ng-click="_clearSearch($event)" size="tableSize"
                     ng-show="tableModel.searchResult" icon-name="close"></mdl-button>
+        <column-filter ng-model="tableModel.searchColumn" columns="tableModel.columnsByField"
+                        on-filter-action="_search()"
+                       table-size="tableSize"></column-filter>            
       </div>
     </div>
 

@@ -1,3 +1,13 @@
 <div class="column-filter-field">
+	<mdl-button ng-click="_showHideDetail($event)" size="tableSize" 
+					icon-name="filter_list"></mdl-button>
 
+	<script type="text/ng-template" id="columns-filter-list.html">
+	  <div class="columns-field" ng-show="show">
+	  	<mdl-radio ng-model="selectedColumn" ng-repeat="item in columnFields track by $index"
+	  					on-click="_changeSelectedColumn($value)"
+	            display-label="{id: $index, label: item.label, name: 'radio_1', value: item.value}">
+			</mdl-radio>
+	 </div>
+	</script>					
 </div>

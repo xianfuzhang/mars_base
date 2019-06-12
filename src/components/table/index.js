@@ -20,7 +20,7 @@ import {PopupTextRenderer} from './service/renderers/popupTextRenderer';
 import {PopupTextRendererFactory} from './service/renderers/popupTextRendererFactory';
 import {iconRenderer} from './service/renderers/iconRenderer';
 import {tableConsts} from './service/table.consts';
-
+import {columnFilter} from './ng/columnFilter.directive';
 import {rowCheckbox} from './ng/rowCheckbox.directive';
 import {rowActions} from './ng/rowActions.directive';
 import {tablePagination} from './ng/pagination.directive';
@@ -41,6 +41,7 @@ export default angular
   .directive('thDragEvent', thDragEvent)
   .directive('updateTableCols', updateTableCols)
   .directive('tableRenderReady', tableRenderReady)
+  .directive('columnFilter', columnFilter)
   .service('tableProvider', tableProvider)
   .service('tableProviderFactory', tableProviderFactory)
   .service('fastListenerService', fastListenerService)

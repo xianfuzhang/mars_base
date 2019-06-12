@@ -71,6 +71,7 @@ export class mdlTable {
 
       columns: [],
       columnsByField: {},
+      searchColumn: 'all', //默认对所有列搜索
 
       loading: true,
 
@@ -302,11 +303,21 @@ export class mdlTable {
         let tmpData = angular.copy(scope.tableModel.data);
         scope.tableModel.inlineFilterData = tmpData.filter((item) => {
           let match = false;
-          for(let key in item) {
-            if (scope.tableModel.columnsByField[key] && 'string' === typeof item[key] && reg.test(item[key])) {
+          //针对所有列过滤
+          if (scope.tableModel.searchColumn === 'all') {
+            for(let key in item) {
+              if (scope.tableModel.columnsByField[key] && 'string' === typeof item[key] && reg.test(item[key])) {
+                match = true;
+                item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
+              }  
+            }
+          }
+          else {
+            if (scope.tableModel.columnsByField[scope.tableModel.searchColumn] 
+                && 'string' === typeof item[scope.tableModel.searchColumn] && reg.test(item[scope.tableModel.searchColumn])) {
               match = true;
-              item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
-            }  
+              item[scope.tableModel.searchColumn] = item[scope.tableModel.searchColumn].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
+            }
           }
           return match;
         });
