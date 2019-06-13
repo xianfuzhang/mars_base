@@ -29,6 +29,7 @@
   float: right;
   margin-right: 5px;
   margin-bottom: 5px;
+  align-items: center;
   
   @include element(action) {
     display: inline-block;
@@ -157,4 +158,8 @@
 .configuration__content div.jsoneditor-menu {
   background-color: #010101;
   border-bottom: 1px solid #282828;
+}
+
+.configuration__content div.jsoneditor .jsoneditor-search input {
+  color: #1a1a1a !important;
 }
