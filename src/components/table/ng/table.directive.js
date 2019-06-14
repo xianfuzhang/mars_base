@@ -309,7 +309,7 @@ export class mdlTable {
             for(let key in item) {
               if (scope.tableModel.columnsByField[key] && 'string' === typeof item[key] && reg.test(item[key])) {
                 match = true;
-                item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
+                //item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
               }  
             }
           }
@@ -317,7 +317,7 @@ export class mdlTable {
             if (scope.tableModel.columnsByField[scope.tableModel.searchColumn] 
                 && 'string' === typeof item[scope.tableModel.searchColumn] && reg.test(item[scope.tableModel.searchColumn])) {
               match = true;
-              item[scope.tableModel.searchColumn] = item[scope.tableModel.searchColumn].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
+              //item[scope.tableModel.searchColumn] = item[scope.tableModel.searchColumn].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
             }
           }
           return match;
