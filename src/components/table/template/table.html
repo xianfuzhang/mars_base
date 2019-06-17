@@ -23,13 +23,13 @@
         <div class="mdl-table-action__search-body">
           <input type="text" placeholder="{{placeholder}}"
                  ng-model="tableModel.searchResult" ng-model-options="{debounce: 1000}"
-                 ng-change="_search()"
+                 ng-change="_search(true)" ng-readonly="!tableModel.globalSearch"
                  class="mdc-text-field__input mdl-table-action__search-body__input">
         </div>
         <mdl-button ng-click="_clearSearch($event)" size="tableSize"
                     ng-show="tableModel.searchResult" icon-name="close"></mdl-button>
-        <column-filter ng-model="tableModel.searchColumn" columns="tableModel.columnsByField"
-                        on-filter-action="_search()"
+        <column-filter  columns="tableModel.columnsByField"
+                        on-filter-action="_search(false, $value)"
                        table-size="tableSize"></column-filter>            
       </div>
     </div>

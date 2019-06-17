@@ -71,7 +71,6 @@ export class mdlTable {
 
       columns: [],
       columnsByField: {},
-      searchColumn: 'all', //默认对所有列搜索
 
       loading: true,
 
@@ -88,6 +87,7 @@ export class mdlTable {
       sort: {},
       search: {},
       searchResult: '',
+      globalSearch: true,
       api: {}
     };
     /*****************************************************************************
@@ -263,11 +263,18 @@ export class mdlTable {
       scope._queryUpdate();
       event && event.stopPropagation();
     };
-    scope._search = () => {
+    scope._search = (globalSearch, columns) => {
       scope.tableModel.pagination.start = 0;
+      scope.tableModel.globalSearch = globalSearch;
+      if (globalSearch) {
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
+      }
+      else {
+        scope.tableModel.searchResult = columns && columns.display || '';
+        scope.tableModel.search['value'] = columns && columns.display || '';
+      }
       if (scope._isNeedPagination === false ||  scope._isNeedPagination === 'false') {
-        scope.inlineFilter();
+        scope.inlineFilter(columns && columns.result);
         scope._orderInlineFilterData();
         scope.tableModel.filteredData = scope._clientDataPagination();
         scope.clearRowCheck();
@@ -278,6 +285,7 @@ export class mdlTable {
       }
     };
     scope._clearSearch = (event) => {
+      scope.tableModel.globalSearch = true;
       scope.tableModel.pagination.start = 0;
       scope.tableModel.searchResult = '';
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
@@ -294,7 +302,7 @@ export class mdlTable {
       event && event.stopPropagation();
     };
 
-    scope.inlineFilter = () => {
+    scope.inlineFilter = (columns) => {
       scope.tableModel.inlineFilterData = [];
       if (!scope.tableModel.search['value']) {
         scope.tableModel.inlineFilterData = scope.tableModel.data;
@@ -304,8 +312,8 @@ export class mdlTable {
         let tmpData = angular.copy(scope.tableModel.data);
         scope.tableModel.inlineFilterData = tmpData.filter((item) => {
           let match = false;
+          if (!columns) {
           //针对所有列过滤
-          if (scope.tableModel.searchColumn === 'all') {
             for(let key in item) {
               if (scope.tableModel.columnsByField[key] && 'string' === typeof item[key] && reg.test(item[key])) {
                 match = true;
@@ -314,11 +322,13 @@ export class mdlTable {
             }
           }
           else {
-            if (scope.tableModel.columnsByField[scope.tableModel.searchColumn] 
-                && 'string' === typeof item[scope.tableModel.searchColumn] && reg.test(item[scope.tableModel.searchColumn])) {
-              match = true;
-              //item[scope.tableModel.searchColumn] = item[scope.tableModel.searchColumn].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
+            let match2 = true;
+            for(let i = 0; i< columns.length; i++) {
+              let match1 = columns[i][1] === 'contains' ? item[columns[i][0]].includes(columns[i][2])
+                      : item[columns[i][0]] == columns[i][2]; 
+              match2 = match2 && match1;
             }
+            match = match2;
           }
           return match;
         });

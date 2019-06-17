@@ -29,19 +29,48 @@ mdc设置组件颜色
   width: 100%;
 }
 .columns-field{
-  width: 200px;
+  width: 400px;
   border-radius: 4px;
-  padding: 10px;
   background: #bbbfc3;
 }
 .columns-field .mdc-form-field{
   width: 100px;
 }
+.columns-field__title{
+  font-weight: 700;
+  padding: 10px;
+}
+.columns-field__content{
+  height: 185px;
+  border-top: 1px solid #8e9ba0;
+}
+.columns-field__footer{
+  height: 35px;
+  float: right;
+  padding: 5px 10px;
+}
+.filter-item{
+  display: flex;
+  border-bottom: 1px solid #8e9ba0;
+  padding: 10px 10px 0 10px;
+}
+.filter-item .mdc-select {
+  width:  100px;
+}
+.filter-item > div{
+  margin-right: 15px;
+}
+.filter-item .mdc-text-field{
+  width:  80px;
+}
+.filter-item .mdc-text-field__input{
+  height: 33px;
+}
 .mdc-text-field__input.mdl-table-action__search-body__input{
   color: #FFF;
   padding-top: 0;
   border: none;
-  width: 200px;
+  width: 300px;
 }
 .mdl-table{
   table-layout: fixed;

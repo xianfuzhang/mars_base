@@ -14,11 +14,11 @@ export class columnFilter {
       this.di[value] = args[index];
     });
     this.replace = true;
-    this.require = 'ngModel';
+    //this.require = 'ngModel';
     this.restrict = 'E';
     this.template = require('../template/columnFilter.html');
     this.scope = {
-    	selectedColumn: '=ngModel',
+    	//selectedColumn: '=ngModel',
     	tableSize: '=',
     	columns: '=',
     	onFilterAction: '&'
@@ -26,14 +26,24 @@ export class columnFilter {
     this.link = (...args) => this._link.apply(this, args);
 	}
 	_link(scope, element, attrs, ngModel) {
+		scope.collections = [];
+		scope.compareFields = [
+			{
+				'label': this.di.$filter('translate')('MODULES.TABLE.COLUMN.CONTAIN'),
+				'value': 'contains'
+			},
+			{
+				'label': this.di.$filter('translate')('MODULES.TABLE.COLUMN.EQUAL'),
+				'value': 'equals'
+			}
+		];
 		scope.show = false;
-		const buttonElm = element[0].querySelector('button');
+		const MAX_COLLECTIONS = 3;
 		let created = false;
 		let updateColumnFields = () => {
-			const allObj = {'label':this.di.$filter('translate')('MODULES.TABLE.COLUMN.ALL'), 'value': 'all'};
+			//const allObj = {'label':this.di.$filter('translate')('MODULES.TABLE.COLUMN.ALL'), 'value': 'all'};
 			scope.columnFields = [];
-
-			scope.columnFields.push(allObj);
+			//scope.columnFields.push(allObj);
 			for (let key in scope.columns) {
 				if (scope.columns[key]['visible']	&& !scope.columns[key]['hidden']) {
 					scope.columnFields.push({
@@ -42,8 +52,23 @@ export class columnFilter {
 					});
 				}
 			}
-			scope.selectedColumn = scope.columnFields[0]['value'];
+			//scope.selectedColumn = scope.columnFields[0]['value'];
 		};
+		/*let onClickHideDetail = (event) => {
+			const fieldElm = document.body.querySelector('.columns-field');
+			if (event.target === fieldElm) {
+				return;
+			}
+			scope.show = false;
+			event.stopPropagation();
+		};
+		let preventHideDetail = (event) => {
+			const fieldElm = document.body.querySelector('.columns-field');
+			if (event.currentTarget === fieldElm) {
+				return;
+			}
+			event.stopPropagation();
+		};*/
 
 		scope._showHideDetail = (event) => {
 			if (!created) {
@@ -59,42 +84,68 @@ export class columnFilter {
 			}
 			created = true;
 			scope.show = !scope.show;
+			//document.body.querySelector('.columns-field').addEventListener('click', preventHideDetail);
+			event.stopPropagation();
 		};
 
-		scope._changeSelectedColumn = (value) => {
+		/*scope._changeSelectedColumn = (value) => {
 			scope.selectedColumn = value;
 			this.di.$timeout(() => {
 				scope.onFilterAction = scope.onFilterAction || angular.noop;
 				scope.onFilterAction(); 	
 			});
+		};*/
+
+		scope._addCollection = (event) => {
+			if (scope.collections.length < MAX_COLLECTIONS) {
+				scope.collections.push({
+					column: scope.columnFields[0],
+					compare: scope.compareFields[0],
+					value: ''
+				});
+			}
+		};
+
+		scope._removeCollection = (index) => {
+			scope.collections.splice(index, 1);
+		};
+
+		scope._cancel = (event) => {
+			scope.collections = [];
+			scope.show = false;
+		};
+
+		scope._result = (event) => {
+			scope.show = false;
+			if (scope.collections.length > 0) {
+				let result = [], display = '';
+				scope.collections.forEach((item) => {
+					display += ' ' +  item.column.label + ':' + (item.compare.value === 'contains' ? ' ' : '=') + item.value;
+					result.push([item.column.value, item.compare.value, item.value]);
+				});
+				this.di.$timeout(() => {
+					scope.onFilterAction = scope.onFilterAction || angular.noop;
+					scope.onFilterAction({'$value': {display: display,result: result}});
+					scope.collections = [];
+				});
+			}
 		};
 
 		updateColumnFields();
-
-		let onClickHideDetail = (event) => {
-			if (event.target === buttonElm) {
-				return;
-			}
-			scope.show = false;
-		};
+		
 		let unsubscribers = [];
 		unsubscribers.push(this.di.$rootScope.$on('table-show-hide-columns', (event) => {
 			//columns显示发生变更，数据需要同步更新
 			updateColumnFields();
-
 			let columnsElm = document.body.querySelector('.columns-field');
 			if (columnsElm) {
 				columnsElm.remove();
 				created = false;
 			}
 		}));
-		document.body.addEventListener('click', onClickHideDetail, true);
-
-		/*scope.$watch('selectedColumn', (newVal) => {
-			 ngModel.$setViewValue(newVal);
-		});*/
+		//document.body.addEventListener('click', onClickHideDetail);
 		scope.$on('$destroy', () => {
-			document.body.removeEventListener('click', onClickHideDetail);
+			//document.body.removeEventListener('click', onClickHideDetail);
 			unsubscribers.forEach(cb => cb());
 		});
 	}
