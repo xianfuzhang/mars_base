@@ -12,7 +12,8 @@ export class mdlTable {
       'textRendererFactory',
       'clickableTextRendererFactory',
       'popupTextRendererFactory',
-      'iconRendererFactory'
+      'iconRendererFactory',
+      'selectRendererFactory'
     ];
   }
 
@@ -358,6 +359,7 @@ export class mdlTable {
       scope.renderService.register('clickabletext', this.di.clickableTextRendererFactory);
       scope.renderService.register('popuptext', this.di.popupTextRendererFactory);
       scope.renderService.register('icon', this.di.iconRendererFactory);
+      scope.renderService.register('select', this.di.selectRendererFactory);
     };
 
     scope._onDataSuccess = (response) => {
