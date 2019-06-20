@@ -20,6 +20,7 @@ import {PopupTextRenderer} from './service/renderers/popupTextRenderer';
 import {PopupTextRendererFactory} from './service/renderers/popupTextRendererFactory';
 import {iconRenderer} from './service/renderers/iconRenderer';
 import {SelectRenderer} from './service/renderers/selectRenderer';
+import {CheckboxRenderer} from './service/renderers/checkboxRenderer';
 import {tableConsts} from './service/table.consts';
 import {columnFilter} from './ng/columnFilter.directive';
 import {rowCheckbox} from './ng/rowCheckbox.directive';
@@ -59,4 +60,5 @@ export default angular
   .service('popupTextRendererFactory', PopupTextRendererFactory)
   .service('iconRendererFactory', iconRenderer)
   .service('selectRendererFactory', SelectRenderer)
+  .service('checkboxRendererFactory', CheckboxRenderer)
   .name;
