@@ -1700,6 +1700,20 @@ export class DeviceService {
     ]
   }
 
+  getVlanTabSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.VLAN.TAB.SCHEMA.DEFAULT'),
+        'value': 'default',
+        'type': 'default'
+      },
+      {
+        'label': this.translate('MODULES.VLAN.TAB.SCHEMA.EDIT'),
+        'value': 'edit',
+        'type': 'edit'
+      }
+    ];
+  }
 
   getLogicalPortActionsShow() {
     return {

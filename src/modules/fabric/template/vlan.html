@@ -1,0 +1,35 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{'MODULE.HEADER.FABRIC.VLAN' | translate}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span>{{'MODULE.HEADER.FABRIC.VLAN' | translate}}</span>
+  </content-header>
+  <section class="app-body dhcp_relay" style="flex-direction: column">
+    <div class="main__content">
+        <div>
+          <mdl-tabs ng-model="tabSelected" options="tabs"
+                    class-list="main__content__device-detail-tabs"
+                    on-select="onTabChange($value)">
+          </mdl-tabs>
+        </div>
+        <div style="display:flex;height:100%">
+            <section class="tab-content" ng-if="tabSelected.type == 'default'">
+
+            </section>
+            <section class="tab-content" ng-if="tabSelected.type == 'edit'">
+                <div style="width:66%; display: inline-block;vertical-align: top;;height:100%">
+                    <div class="mdl-table-field" >
+                        <div style="margin-bottom: 10px;">
+                            <ports-group ports-list="portsList"></ports-group>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <ports-group ports-list="portsList"></ports-group>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+  </section>
+</div>
