@@ -48,6 +48,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
               // {'label': this.translate('MODULE.HEADER.FABRIC.HOSTS'), 'url': '/hosts', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
+              {'label': this.translate('MODULE.HEADER.FABRIC.VLAN'), 'url': '/vlan', 'role': 2},
               {'label': 'Intents', 'url': '/intents', 'role': 2},
               {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
               {'label': 'sFlow', 'url': '/sflow', 'role': 2},

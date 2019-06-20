@@ -1,0 +1,40 @@
+/**
+ *  ports group scss
+ */
+.mars-ports-group {
+  min-width: 1000px;
+  padding: 3px 5px;
+}
+
+.mars-ports-group table {
+  padding: 3px 7px;
+  border: 3px solid #3a3a3a;
+  background-color: #6e6e6e;
+  box-shadow: 5px 5px 5px #888;
+}
+
+.mars-ports-group tr {
+  margin: 2px 0;
+}
+
+.mars-ports-group td {
+  border: 2px solid #8f8f8f;
+  padding: 3px;
+}
+
+.mars-ports-group td .port{
+  width: 19px;
+  height: 15px;
+  background-image: url('../../assets/images/port_top_status1.gif');
+  cursor: pointer;
+}
+
+.mars-ports-group td .port.disabled {
+  background-color: inherit;
+  background-image: none;
+  cursor: default !important;
+}
+
+.mars-ports-group td .port.selected {
+  background-image: url('../../assets/images/port_top_status2.gif') !important;
+}
