@@ -41,7 +41,7 @@ export class mdlCheckbox {
       scope.data = !scope.data;
       ngModel.$setViewValue(scope.data);
 
-      scope.onClick();
+      scope.onClick({'$value': scope.data});
       event.stopPropagation();
     };
   }
