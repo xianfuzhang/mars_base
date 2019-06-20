@@ -21,6 +21,7 @@ import {PopupTextRendererFactory} from './service/renderers/popupTextRendererFac
 import {iconRenderer} from './service/renderers/iconRenderer';
 import {SelectRenderer} from './service/renderers/selectRenderer';
 import {CheckboxRenderer} from './service/renderers/checkboxRenderer';
+import {RadioRenderer} from './service/renderers/radioRenderer';
 import {tableConsts} from './service/table.consts';
 import {columnFilter} from './ng/columnFilter.directive';
 import {rowCheckbox} from './ng/rowCheckbox.directive';
@@ -61,4 +62,5 @@ export default angular
   .service('iconRendererFactory', iconRenderer)
   .service('selectRendererFactory', SelectRenderer)
   .service('checkboxRendererFactory', CheckboxRenderer)
+  .service('radioRendererFactory', RadioRenderer)
   .name;

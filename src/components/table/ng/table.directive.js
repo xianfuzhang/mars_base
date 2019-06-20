@@ -15,6 +15,7 @@ export class mdlTable {
       'iconRendererFactory',
       'selectRendererFactory',
       'checkboxRendererFactory',
+      'radioRendererFactory'
     ];
   }
 
@@ -362,6 +363,7 @@ export class mdlTable {
       scope.renderService.register('icon', this.di.iconRendererFactory);
       scope.renderService.register('select', this.di.selectRendererFactory);
       scope.renderService.register('checkbox', this.di.checkboxRendererFactory);
+      scope.renderService.register('radio', this.di.radioRendererFactory);
     };
 
     scope._onDataSuccess = (response) => {
