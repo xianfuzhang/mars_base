@@ -853,9 +853,28 @@ export class Topo {
               let deviceIds = [d.src.device, d.dst.device];
               let ports = [d.src.port, d.dst.port];
               let linkId = getLinkId(deviceIds, ports);
-              let pos1 = this.switchLocation[d.src.device];
-              let pos2 = this.switchLocation[d.dst.device];
-              let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];
+              // let pos1 = angular.copy(this.switchLocation[d.src.device]);
+              // let pos2 = angular.copy(this.switchLocation[d.dst.device]);
+              // let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];
+              //新的布局方式 START
+              let pos1 = angular.copy(this.switchLocation[d.src.device]);
+              if(DI._.find(scope.spines,{'id':d.src.device})){
+                pos1[1] = pos1[1] + this.switch_height/2;
+              } else if(DI._.find(scope.leafs,{'id':d.src.device})){
+                pos1[1] = pos1[1] - this.switch_height/2;
+              } else {
+                return '';
+              }
+              let pos2 = angular.copy(this.switchLocation[d.dst.device]);
+              if(DI._.find(scope.spines,{'id':d.dst.device})){
+                pos2[1] = pos2[1] + this.switch_height/2;
+              } else if(DI._.find(scope.leafs,{'id':d.dst.device})){
+                pos2[1] = pos2[1] - this.switch_height/2;
+              } else {
+                return '';
+              }
+              let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] :pos1[1]];
+              //新的布局方式 END
               if( Math.abs(pos2[0] - pos1[0]) < 20){
                 return 'M ' + pos1[0] + ' ' + pos1[1] +  ' ' + pos2[0] + ' ' + pos2[1];
               }

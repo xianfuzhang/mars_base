@@ -41,6 +41,7 @@ import 'contentPanel';
 import 'footer';
 import 'topo';
 import 'forceTopo';
+import 'vlanTopo';
 import 'validInput';
 import 'loading';
 import 'deviceTooltip';
@@ -97,6 +98,7 @@ angular
     'footer',
     'topo',
     'forceTopo',
+    'vlanTopo',
     'validInput',
     'loading',
     'deviceTooltip',

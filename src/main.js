@@ -12,6 +12,7 @@ import 'crypto';
 import 'c3Service';
 import 'd3Service';
 import 'd3ForceService';
+import 'd3ZoomService';
 import 'easing';
 import 'apis';
 import 'localStore';
@@ -43,6 +44,7 @@ import 'contentPanel';
 import 'footer';
 import 'topo';
 import 'forceTopo';
+import 'vlanTopo';
 import 'validInput';
 import 'loading';
 import 'deviceTooltip';
@@ -70,6 +72,7 @@ angular
     'c3',
     'd3',
     'd3-force',
+    'd3-zoom',
     'uuid',
     'eventEmitter',
     'ngTable',
@@ -101,6 +104,7 @@ angular
     'footer',
     'topo',
     'forceTopo',
+    'vlanTopo',
     'validInput',
     'loading',
     'deviceTooltip',

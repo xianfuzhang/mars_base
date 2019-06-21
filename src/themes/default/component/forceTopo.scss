@@ -24,6 +24,7 @@
   }
 
   @include element(text) {
+    fill: black;
     stroke: black;
     stroke-width: 1;
     user-select: none;
@@ -48,22 +49,43 @@
   }
 
   @include element(line-normal) {
-    stroke: #999;
+    stroke: #639c4f;
     stroke-width: 2;
   }
 
 }
+
 .force-topo__node-outline.node-select {
-  fill: #3D9CBD;
+  //fill: #3D9CBD;
+  stroke: rgb(255, 124, 9)
 
 }
+
 .force-topo__node-outline.node-unselect {
   fill: rgb(255, 255, 255);
 }
 
 .force-topo__node-outline.host-select {
-  fill: rgb(255,124,9)
+  fill: rgb(255, 124, 9)
 }
+
 .force-topo__node-outline.host-unselect {
   fill: rgb(255, 255, 255);
+}
+
+.svg_revert {
+  z-index: 1000;
+  background-color: white;
+  position: absolute;
+  //left: 16px;
+  //top: 16px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  padding: 8px;
+  user-select: none;
+}
+
+.no_vlan_port {
+  fill: #a7a7a7;
+  stroke: #a7a7a7;
 }

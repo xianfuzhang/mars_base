@@ -21,6 +21,7 @@
 
   @include element(text) {
     stroke: whitesmoke;
+    fill: whitesmoke;
     stroke-width: 1;
     user-select: none;
   }
@@ -67,4 +68,24 @@
 }
 .force-topo__node-outline.host-unselect {
   fill: rgb(255, 255, 255);
+}
+
+.svg_revert {
+  z-index: 1000;
+  background-color: #a7a7a7;
+  position: absolute;
+  //left: 16px;
+  //top: 16px;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  padding: 8px;
+  user-select: none;
+}
+
+.svg_revert i{
+  color: black;
+}
+.no_vlan_port {
+  fill: #a7a7a7;
+  stroke: #a7a7a7;
 }
