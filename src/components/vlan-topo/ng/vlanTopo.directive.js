@@ -828,7 +828,42 @@ export class VlanTopo {
           })
           .call(scope.zoom.scaleExtent([1, 4]).translateExtent([[-2000, -2000],[4000, 4000]])
             .on("zoom", zoomed))
-          // .on("dblclick.zoom", null);
+          .on("dblclick.zoom", function (param) {
+            let clientX = DI.d3.event.clientX;
+            let clientY = DI.d3.event.clientY;
+            let clientRect = element[0].getBoundingClientRect();
+            let xDistance = clientX - clientRect.left - clientRect.width/2;
+            let yDistance = clientY - clientRect.top - clientRect.height/2;
+
+
+            let _svg = DI.d3.select('.forceTopo > svg');
+            let transform = DI.d3.zoomTransform(_svg.node());
+
+            let proportion = transform.k + 0.2/transform.k;
+            transform.k = transform.k + 0.2;
+
+            transform.x = (transform.x  - xDistance) * proportion;
+            transform.y = (transform.y  - yDistance)* proportion;
+
+            _svg.transition().duration(100).attr('transform','translate('+ transform.x +',' + transform.y +') scale('+ transform.k +')');
+
+
+            return transform;
+            // bottom: 710
+            // height: 595
+            // left: 0
+            // right: 1920
+            // top: 115
+            // width: 1920
+            // x: 0
+            // y: 115
+            // let calcCenterPoint =
+            // console.log('=======')
+            // console.log(DI.d3.event);
+            // let _svg = DI.d3.select('.forceTopo > svg');
+            // let transform = DI.d3.zoomTransform(_svg.node());
+            // console.log(transform)
+          });
 
 
         scope.portText1 = svg.append('text');

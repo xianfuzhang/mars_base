@@ -77,9 +77,11 @@
   z-index: 1000;
   background-color: white;
   position: absolute;
+  box-shadow: 1px 2px 3px gray;
+  border:0;
   //left: 16px;
   //top: 16px;
-  border: 1px solid lightgray;
+  //border: 1px solid lightgray;
   border-radius: 4px;
   padding: 8px;
   user-select: none;
