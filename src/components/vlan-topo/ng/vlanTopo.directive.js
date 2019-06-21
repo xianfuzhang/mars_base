@@ -205,7 +205,8 @@ export class VlanTopo {
           // let linkId = newDeviceIds.join('-');
 
           let linkId = getLinkId([link.src.device, link.dst.device], [link.src.port, link.dst.port]);
-          if (this.di._.findIndex(this.linkIds, linkId) === -1 && isDeviceLink(link.src.device, link.dst.device)) {
+          // if (this.di._.findIndex(this.linkIds, linkId) === -1 && isDeviceLink(link.src.device, link.dst.device)) {
+          if (this.linkIds.findIndex(function (ele) {return ele == linkId}) === -1 && isDeviceLink(link.src.device, link.dst.device)) {
             this.linkIds.push(linkId);
             this.formated_links.push({
               'source': link.src.device,
@@ -804,10 +805,20 @@ export class VlanTopo {
 
         this.simulation = DI.d3.forceSimulation(scope._nodes)
           .force("link", DI.d3.forceLink(scope._links).id(d => d.id).distance(d => {
-            return scope.distance
+            let sourceLinkCount = scope.deviceLinkDict[d.__proto__.source].length;
+            let targetLinkCount = scope.deviceLinkDict[d.__proto__.target].length;
+
+            // console.log('===========' + d.__proto__.source + ' ++++'+ d.__proto__.target);
+            // console.log(sourceLinkCount)
+            // console.log(sourceLinkCount)
+            if(sourceLinkCount > 1 && targetLinkCount >1 ){
+              return scope.distance;
+            } else {
+              return scope.distance/1.4;
+            }
           }))
           .force("charge", DI.d3.forceManyBody().strength(scope.strength))
-          .force("collide", DI.d3.forceCollide(40).strength(0.2).iterations(5));
+          .force("collide", DI.d3.forceCollide(60).strength(0.2).iterations(5));
 
 
         reCenter();
