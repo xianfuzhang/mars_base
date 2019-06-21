@@ -21,6 +21,7 @@ export class VlanController {
     });
     this.scope = this.di.$scope;
     let scope = this.di.$scope;
+    const DI = this.di;
     this.translate = this.di.$filter('translate');
     let unsubscribers = [];
     scope.role = this.di.roleService.getRole();
@@ -48,6 +49,159 @@ export class VlanController {
       }
     };
 
+    scope.addDevice = (deviceId) => {
+      let portsList = [
+        {
+          id: 1,
+          title: 1,
+          selected: false
+        }, {
+          id: 2,
+          title: 2,
+          selected: false
+        }, {
+          id: 3,
+          title: 3,
+          selected: false
+        }, {
+          id: 4,
+          title: 4,
+          selected: false
+        }, {
+          id: 5,
+          title: 5,
+          selected: false
+        }, {
+          id: 6,
+          title: 6,
+          selected: false
+        }, {
+          id: 7,
+          title: 7,
+          selected: false
+        }, {
+          id: 8,
+          title: 8,
+          selected: false
+        }, {
+          id: 9,
+          title: 9,
+          selected: false
+        }, {
+          id: 10,
+          title: 10,
+          selected: false
+        }, {
+          id: 11,
+          title: 11,
+          selected: false
+        }, {
+          id: 12,
+          title: 12,
+          selected: false
+        }, {
+          id: 13,
+          title: 13,
+          selected: false
+        }, {
+          id: 14,
+          title: 14,
+          selected: false
+        }, {
+          id: 15,
+          title: 15,
+          selected: false
+        }, {
+          id: 16,
+          title: 16,
+          selected: false
+        }, {
+          id: 17,
+          title: 17,
+          selected: false
+        }, {
+          id: 18,
+          title: 18,
+          selected: false
+        }, {
+          id: 19,
+          title: 19,
+          selected: false
+        }, {
+          id: 20,
+          title: 20,
+          selected: false
+        }, {
+          id: 21,
+          title: 21,
+          selected: false
+        }, {
+          id: 22,
+          title: 22,
+          selected: false
+        }, {
+          id: 23,
+          title: 23,
+          selected: false
+        }, {
+          id: 24,
+          title: 24,
+          selected: false
+        }, {
+          id: 25,
+          title: 25,
+          selected: false
+        }, {
+          id: 26,
+          title: 26,
+          selected: false
+        }, {
+          id: 27,
+          title: 27,
+          selected: false
+        }, {
+          id: 28,
+          title: 28,
+          selected: false
+        }];
+
+      let index = DI._.findIndex(scope.vlanModel.devices, (device) => {
+        return device.id == deviceId;
+      })
+
+      if (index == -1) { // the new device does not exist
+        scope.vlanModel.devices.push({
+          id: deviceId,
+          name:'test',
+          ports: portsList
+        })
+      }
+    }
+
+    scope.removeDevice = (deviceId) => {
+      let index = DI._.findIndex(scope.vlanModel.devices, (device) => {
+        return device.id == deviceId;
+      })
+
+      if (index > -1) { // remove device
+        scope.vlanModel.devices.splice(index, 1);
+      }
+    }
+
+    scope.batchChangePorts = (index, portsStr) => {
+      let regex = new RegExp(scope.portsBatchRegex)
+      if(portsStr || portsStr.match(regex)) {
+        let portsArr = this.getPortsArrayFromStr(portsStr);
+        scope.vlanModel.devices[index].ports.forEach((port) => {
+          if(portsArr.indexOf(port.id) > -1) {
+            port.selected = true;
+          } else {
+            port.selected = false;
+          }
+        })
+      }
+    }
+
     scope.$on('$destroy', () => {
       unsubscribers.forEach((cb) => {
         cb();
@@ -64,8 +218,9 @@ export class VlanController {
 
   prepareTableData() {
 
-    // TODO: ports group test
-    this.scope.portsList = [
+    // TODO: add vlan settings
+
+    let portsList1 = [
       {
         id: 1,
         title: 1,
@@ -179,10 +334,147 @@ export class VlanController {
         title: 28,
         selected: false
       }];
+    let portsList2 = [
+      {
+        id: 1,
+        title: 1,
+        selected: false
+      }, {
+        id: 2,
+        title: 2,
+        selected: true
+      }, {
+        id: 3,
+        title: 3,
+        selected: true
+      }, {
+        id: 4,
+        title: 4,
+        selected: false
+      }, {
+        id: 5,
+        title: 5,
+        selected: true
+      }, {
+        id: 6,
+        title: 6,
+        selected: false
+      }, {
+        id: 7,
+        title: 7,
+        selected: false
+      }, {
+        id: 8,
+        title: 8,
+        selected: true
+      }, {
+        id: 9,
+        title: 9,
+        selected: false
+      }, {
+        id: 10,
+        title: 10,
+        selected: false
+      }, {
+        id: 11,
+        title: 11,
+        selected: false
+      }, {
+        id: 12,
+        title: 12,
+        selected: true
+      }, {
+        id: 13,
+        title: 13,
+        selected: false
+      }, {
+        id: 14,
+        title: 14,
+        selected: false
+      }, {
+        id: 15,
+        title: 15,
+        selected: true
+      }, {
+        id: 16,
+        title: 16,
+        selected: false
+      }, {
+        id: 17,
+        title: 17,
+        selected: false
+      }, {
+        id: 18,
+        title: 18,
+        selected: true
+      }, {
+        id: 19,
+        title: 19,
+        selected: false
+      }, {
+        id: 20,
+        title: 20,
+        selected: false
+      }, {
+        id: 21,
+        title: 21,
+        selected: true
+      }, {
+        id: 22,
+        title: 22,
+        selected: false
+      }, {
+        id: 23,
+        title: 23,
+        selected: true
+      }, {
+        id: 24,
+        title: 24,
+        selected: false
+      }];
 
-      setTimeout(() => {
-        this.di.$rootScope.$emit('ports-selected', '1,3-25')
-      }, 20 * 1000);
+    let devicesList = ['of:00000001', 'of:00000002', 'of:00000003', 'of:00000004', 'of:00000005', 'of:00000006', 'of:00000007', 'of:00000008'];
+    let deviceOptions = [{label:'--请选择交换机--', value:''}];
+    for(let device of devicesList) {
+      deviceOptions.push({
+        label: device,
+        value: device
+      })
+    }
+    this.scope.deviceOptions = deviceOptions;
+
+    this.scope.vlanModel = {
+      selectedDevice: deviceOptions[0],
+      devices: [{id: 'of:00000001', name:'leaf0', ports:portsList1}, {id: 'of:00000002', name:'leaf2', ports:portsList2}]
+    }
+
+    this.scope.portsBatchRegex = '^([1-9]+[0-9]*)([-]{1}[1-9]+[0-9]*)*(,([1-9]+[0-9]*)([-]{1}[1-9]+[0-9]*)*)*$';
+  }
+
+  getPortsArrayFromStr(ports) {
+    let portsArr = [];
+    if(Array.isArray(ports)) {
+      portsArr = ports
+    } else if (typeof ports == 'string') {
+      let tmpArr = ports.split(',');
+      for(let portStr of tmpArr) {
+        portStr = portStr.trim();
+        if(portStr) {
+          if(parseInt(portStr) != portStr) {
+            let portStrArr = portStr.split('-');
+            if(portStrArr.length == 2 && !isNaN(parseInt(portStrArr[0])) && !isNaN(parseInt(portStrArr[1]))) {
+              for(let num = parseInt(portStrArr[0]); num <= parseInt(portStrArr[1]); num++) {
+                portsArr.push(num);
+              }
+            }
+          } else {
+            portsArr.push(parseInt(portStr));
+          }
+        }
+      }
+    }
+
+    return portsArr;
   }
 
   getEntities(params) {

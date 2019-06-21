@@ -3,7 +3,7 @@
         <tbody>
             <tr ng-repeat="($index, ports) in portsGroups" ng-init="outerIndex = $index">
                 <td ng-repeat="($key, port) in ports">
-                    <div class="port {{port.selected ? 'selected' : ''}}" title="{{port.title}}" ng-click="click(outerIndex, $key)"></div>
+                    <div class="port {{port.selected ? 'selected' : ''}} {{port.disabled ? 'disabled' : ''}}" title="{{port.title}}" ng-click="click(outerIndex, $key)"></div>
                 </td>
             </tr>
         </tbody>

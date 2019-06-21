@@ -19,7 +19,10 @@ export class PortsGroup {
     this.template = require('../template/ports_group.html');
 
     this.scope = {
-      portsList : '=',
+      groupId: '@',
+      portsList: '@',
+      portsNumPerRow: '@',
+      portsModel: '='
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -27,19 +30,29 @@ export class PortsGroup {
 
   _link (scope, element) {
     let unSubscribes = []
-    const PORTS_NUM_PER_ROW = 24;
+    const PORTS_NUM_PER_ROW = 24;  // the default num per row
 
-    scope.portsNumPerRow = PORTS_NUM_PER_ROW;
+    scope.portsNumPerRow = scope.portsNumPerRow || PORTS_NUM_PER_ROW;
     scope.portsGroups = [];
     let newGroup = [];
+
     for (let i=0; i < scope.portsList.length; i++) {
       newGroup.push(scope.portsList[i]);
-      if (newGroup.length == 24) {
+      if (newGroup.length == scope.portsNumPerRow) {
         scope.portsGroups.push(newGroup);
         newGroup = [];
       }
 
       if(i == scope.portsList.length - 1 && newGroup.length) {
+        let diffCount = scope.portsNumPerRow - newGroup.length;
+        for(let count = 0; count < diffCount; count++) {
+          newGroup.push({
+            id: '',
+            title: '',
+            selected: false,
+            disabled: true
+          })
+        }
         scope.portsGroups.push(newGroup);
       }
     }
@@ -70,29 +83,10 @@ export class PortsGroup {
         }
       },true));
 
-      unSubscribes.push(this.di.$rootScope.$on('ports-selected', (evt, portsObj) => {
-        // portsObj: [1,2,3] or "1,3-7"
-        let portsArr = [];
-        if(Array.isArray(portsObj)) {
-          portsArr = portsObj
-        } else if (typeof portsObj == 'string') {
-          let tmpArr = portsObj.split(',');
-          for(let portStr of tmpArr) {
-            portStr = portStr.trim();
-            if(portStr) {
-              if(parseInt(portStr) != portStr) {
-                let portStrArr = portStr.split('-');
-                if(portStrArr.length == 2 && !isNaN(parseInt(portStrArr[0])) && !isNaN(parseInt(portStrArr[1]))) {
-                  for(let num = parseInt(portStrArr[0]); num <= parseInt(portStrArr[1]); num++) {
-                    portsArr.push(num);
-                  }
-                }
-              } else {
-                portsArr.push(parseInt(portStr));
-              }
-            }
-          }
-        }
+      unSubscribes.push(this.di.$rootScope.$on('ports-selected', (evt, msgObj) => {
+        if(msgObj.groupId != scope.groupId) return
+
+        let portsArr = this.getPortsArrayFromStr(msgObj.ports); // portsObj: [1,2,3] or "1,3-7"
 
         for(let port of scope.portsList) {
           if(portsArr.indexOf(port.id) > -1) {
@@ -111,6 +105,32 @@ export class PortsGroup {
         });
       });
     }).call(this);
+  }
+
+  getPortsArrayFromStr(ports) {
+    let portsArr = [];
+    if(Array.isArray(ports)) {
+      portsArr = ports
+    } else if (typeof ports == 'string') {
+      let tmpArr = ports.split(',');
+      for(let portStr of tmpArr) {
+        portStr = portStr.trim();
+        if(portStr) {
+          if(parseInt(portStr) != portStr) {
+            let portStrArr = portStr.split('-');
+            if(portStrArr.length == 2 && !isNaN(parseInt(portStrArr[0])) && !isNaN(parseInt(portStrArr[1]))) {
+              for(let num = parseInt(portStrArr[0]); num <= parseInt(portStrArr[1]); num++) {
+                portsArr.push(num);
+              }
+            }
+          } else {
+            portsArr.push(parseInt(portStr));
+          }
+        }
+      }
+    }
+
+    return portsArr;
   }
 }
 
