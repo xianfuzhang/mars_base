@@ -329,6 +329,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/vlan', {
+      template: require('./modules/fabric/template/vlan.html'),
+      controller: 'vlanController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .otherwise({ redirectTo: '/' });
 }
 

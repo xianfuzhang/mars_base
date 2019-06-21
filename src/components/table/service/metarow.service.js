@@ -31,7 +31,7 @@ export class metarowService {
         col_title: $scope.$data[col.field + '_title'],
         params: col.render.params,
         col: col,
-        //getContext: col.render.getContext
+        getContext: $scope //col.render.getContext
       };
     };
 

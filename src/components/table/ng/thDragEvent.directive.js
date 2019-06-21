@@ -43,17 +43,14 @@ export class thDragEvent {
     };
     let mouseleaveEvent = (event) => {
       for (let i = 0; i < thNodes.length; i++) {
-        let regResult = /\d+/.exec(thNodes[i].style.width),
-            width = regResult ? parseInt(regResult[0]) : 0;
         thNodes[i].classList.remove('border-left');
-        if (i > 0) thNodes[i].style.width = (width > 0 ? width + 1 : 0) + 'px';
       }
     };
     let mouseenterEvent = (event) => {
       for (let i = 0; i < thNodes.length; i++) {
-        let regResult = /\d+/.exec(thNodes[i].style.width),
+        let regResult = /\d+/.exec(thNodes[i].clientWidth),
             width = regResult ? parseInt(regResult[0]) : 0;
-        if (i > 0) thNodes[i].style.width = (width > 0 ? width - 1 : 0) + 'px';
+        if (i > 0) thNodes[i].style.width = (width > 0 ? width - 2 : 0) + 'px';
         thNodes[i].classList.add('border-left');
       }
     };

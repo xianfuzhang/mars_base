@@ -73,7 +73,10 @@ export class AnalyzerController {
     // };
 
     scope.nginxTypeAnalyzer = {
-      selectedOption: {},
+      selectedOption: {
+        label: "URL",
+        value: "url"
+      },
       typesOptions: [
         {
           label: "URL",
@@ -99,7 +102,10 @@ export class AnalyzerController {
     };
 
     scope.nginxTimerangeAnalyzer = {
-      selectedOption: {},
+      selectedOption: {
+        label: "URL",
+        value: "url"
+      },
       typesOptions: [
         {
           label: "URL",
@@ -116,7 +122,10 @@ export class AnalyzerController {
       endTime: nginx_end_time,
       originStartTime: nginx_begin_time,
       originEndTime: nginx_end_time,
-      selectedIpOption: null,
+      selectedIpOption: {
+        label: '--全部IP--',
+        value: ''
+      },
       ipOptions: [{
         label: '--全部IP--',
         value: ''
@@ -156,7 +165,11 @@ export class AnalyzerController {
     };
 
     scope.filebeatAnalyzer = {
-      selectedOption: {},
+      selectedOption: {
+        label: "handler",
+        value: "handler",
+
+      },
       typesOptions: [
         {
           label: "handler",
@@ -330,7 +343,6 @@ export class AnalyzerController {
       scope.loading = true;
 
       // get nginx analyzer by timerange
-      scope.nginxTimerangeAnalyzer.selectedIpOption = scope.nginxTimerangeAnalyzer.ipOptions[0];
       let resolutionSecond = Math.floor((scope.nginxTimerangeAnalyzer.endTime.getTime() - scope.nginxTimerangeAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
       this.di.manageDataManager.getNginxTimerangeAnalyzer(this.getISODate(scope.nginxTimerangeAnalyzer.startTime), this.getISODate(scope.nginxTimerangeAnalyzer.endTime), resolutionSecond).then((res) => {
         scope.nginxTimerangeAnalyzer.dataModel = res;
@@ -343,7 +355,6 @@ export class AnalyzerController {
       });
 
       // get nginx analyzer by type
-      scope.nginxTypeAnalyzer.selectedOption = scope.nginxTypeAnalyzer.typesOptions[0];
       this.di.manageDataManager.getNginxTypeAnalyzer(scope.nginxTypeAnalyzer.selectedOption.value, this.getISODate(scope.nginxTypeAnalyzer.startTime), this.getISODate(scope.nginxTypeAnalyzer.endTime)).then((res) => {
         scope.nginxTypeAnalyzer.dataModel = res;
         scope.nginxTypeAnalyzer.loading = false;
@@ -367,7 +378,6 @@ export class AnalyzerController {
       });
 
       // get filebeat analyzer by timerange
-      scope.filebeatAnalyzer.selectedOption = scope.filebeatAnalyzer.typesOptions[0];
       let filebeatSeconds = Math.floor((scope.filebeatAnalyzer.endTime.getTime() - scope.filebeatAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
       this.di.manageDataManager.getFilebeatAnalyzer(scope.filebeatAnalyzer.selectedOption.value, this.getISODate(scope.filebeatAnalyzer.startTime), this.getISODate(scope.filebeatAnalyzer.endTime), filebeatSeconds).then((res) => {
         scope.filebeatAnalyzer.dataModel = res;

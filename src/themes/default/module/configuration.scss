@@ -29,6 +29,7 @@
   float: right;
   margin-right: 5px;
   margin-bottom: 5px;
+  align-items: center;
   
   @include element(action) {
     display: inline-block;

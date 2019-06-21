@@ -27,10 +27,48 @@ mdc设置组件颜色
 .mdl-table-action__search-body{
   width: 100%;
 }
+.columns-field{
+  width: 400px;
+  border-radius: 4px;
+  background: #bdcedc;
+}
+.columns-field .mdc-form-field{
+  width: 100px;
+}
+.columns-field__title{
+  font-weight: 700;
+  padding: 10px;
+}
+.columns-field__content{
+  height: 185px;
+  border-top: 1px solid #8e9ba0;
+}
+.columns-field__footer{
+  height: 35px;
+  float: right;
+  padding: 5px 10px;
+}
+.filter-item{
+  display: flex;
+  border-bottom: 1px solid #8e9ba0;
+  padding: 10px 10px 0 10px;
+}
+.filter-item .mdc-select {
+  width:  100px;
+}
+.filter-item > div{
+  margin-right: 15px;
+}
+.filter-item .mdc-text-field{
+  width:  80px;
+}
+.filter-item .mdc-text-field__input{
+  height: 33px;
+}
 .mdc-text-field__input.mdl-table-action__search-body__input{
   padding-top: 0;
   border: none;
-  width: 200px;
+  width: 300px;
 }
 .mdl-table{
   table-layout: fixed;
@@ -40,8 +78,10 @@ mdc设置组件颜色
 }
 .mdl-table-field__actions {
   display: flex;
-  opacity: 0.6;
   padding: 6px 0;
+}
+.mdl-table-field__actions button {
+  opacity: 0.6;
 }
 .search-filter-list ul{
   height: 200px;
@@ -179,9 +219,10 @@ mdc设置组件颜色
   overflow: hidden;
   text-align: center;
   user-select: none;
+  border-left: 1px solid transparent;
 }
 .mdl-table-header__row th.border-left{
-  border-left: 1px solid #9dacac;
+  border-left-color: #9dacac;
 }
 .mdl-table-header__row th:first-child{
   border-left: 0;

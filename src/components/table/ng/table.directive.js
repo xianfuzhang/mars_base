@@ -12,7 +12,10 @@ export class mdlTable {
       'textRendererFactory',
       'clickableTextRendererFactory',
       'popupTextRendererFactory',
-      'iconRendererFactory'
+      'iconRendererFactory',
+      'selectRendererFactory',
+      'checkboxRendererFactory',
+      'radioRendererFactory'
     ];
   }
 
@@ -87,6 +90,7 @@ export class mdlTable {
       sort: {},
       search: {},
       searchResult: '',
+      globalSearch: true,
       api: {}
     };
     /*****************************************************************************
@@ -221,7 +225,8 @@ export class mdlTable {
 
     scope._isSelectedAll = () => {
       if (scope.tableModel.data.length === 0) return false;
-      return scope.tableModel.filteredData.length === scope.tableModel.removeItems.length ? true : false;
+      return scope.tableModel.filteredData.length > 0 ?
+      scope.tableModel.filteredData.length === scope.tableModel.removeItems.length ? true : false : false;
       /*if (scope.tableModel.data.length === 0) return false;
       for(var i=0; i < scope.tableModel.filteredData.length;  i++) {
         if (scope.tableModel.removeItems.indexOf(scope.tableModel.data[i]) === -1) {
@@ -261,11 +266,18 @@ export class mdlTable {
       scope._queryUpdate();
       event && event.stopPropagation();
     };
-    scope._search = () => {
+    scope._search = (globalSearch, columns) => {
       scope.tableModel.pagination.start = 0;
+      scope.tableModel.globalSearch = globalSearch;
+      if (globalSearch) {
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
+      }
+      else {
+        scope.tableModel.searchResult = columns && columns.display || '';
+        scope.tableModel.search['value'] = columns && columns.display || '';
+      }
       if (scope._isNeedPagination === false ||  scope._isNeedPagination === 'false') {
-        scope.inlineFilter();
+        scope.inlineFilter(columns && columns.result);
         scope._orderInlineFilterData();
         scope.tableModel.filteredData = scope._clientDataPagination();
         scope.clearRowCheck();
@@ -276,6 +288,7 @@ export class mdlTable {
       }
     };
     scope._clearSearch = (event) => {
+      scope.tableModel.globalSearch = true;
       scope.tableModel.pagination.start = 0;
       scope.tableModel.searchResult = '';
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
@@ -292,7 +305,7 @@ export class mdlTable {
       event && event.stopPropagation();
     };
 
-    scope.inlineFilter = () => {
+    scope.inlineFilter = (columns) => {
       scope.tableModel.inlineFilterData = [];
       if (!scope.tableModel.search['value']) {
         scope.tableModel.inlineFilterData = scope.tableModel.data;
@@ -302,11 +315,23 @@ export class mdlTable {
         let tmpData = angular.copy(scope.tableModel.data);
         scope.tableModel.inlineFilterData = tmpData.filter((item) => {
           let match = false;
-          for(let key in item) {
-            if (scope.tableModel.columnsByField[key] && 'string' === typeof item[key] && reg.test(item[key])) {
-              match = true;
-              item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
-            }  
+          if (!columns) {
+          //针对所有列过滤
+            for(let key in item) {
+              if (scope.tableModel.columnsByField[key] && 'string' === typeof item[key] && reg.test(item[key])) {
+                match = true;
+                //item[key] = item[key].replace(scope.tableModel.search['value'], '<font color="red">' +scope.tableModel.search['value'] + '</font>');
+              }  
+            }
+          }
+          else {
+            let match2 = true;
+            for(let i = 0; i< columns.length; i++) {
+              let match1 = columns[i][1] === 'contains' ? item[columns[i][0]].includes(columns[i][2])
+                      : item[columns[i][0]] == columns[i][2]; 
+              match2 = match2 && match1;
+            }
+            match = match2;
           }
           return match;
         });
@@ -336,6 +361,9 @@ export class mdlTable {
       scope.renderService.register('clickabletext', this.di.clickableTextRendererFactory);
       scope.renderService.register('popuptext', this.di.popupTextRendererFactory);
       scope.renderService.register('icon', this.di.iconRendererFactory);
+      scope.renderService.register('select', this.di.selectRendererFactory);
+      scope.renderService.register('checkbox', this.di.checkboxRendererFactory);
+      scope.renderService.register('radio', this.di.radioRendererFactory);
     };
 
     scope._onDataSuccess = (response) => {

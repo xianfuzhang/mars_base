@@ -46,7 +46,7 @@ export class mdlRadio {
     scope.clicked = (event) => {
       scope.onClick = scope.onClick || angular.noop;
       ngModel.$setViewValue(scope.value);
-      scope.onClick();
+      scope.onClick({'$value': scope.value});
       event.stopPropagation();
     };
   
