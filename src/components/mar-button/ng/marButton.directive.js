@@ -1,6 +1,7 @@
 /**
  * Created by wls on 2018/6/7.
  */
+import {MDCRipple} from '@material/ripple';
 
 export class MarButton {
   static getDI () {
@@ -34,11 +35,14 @@ export class MarButton {
     this.link = (...args) => this._link.apply(this, args);
   }
 
-  _link (scope) {
+  _link (scope, element) {
     let unsubscribers = [];
     
     scope.disabled = scope.btnDisabled === true ? true : false;
     (function init () {
+
+
+      new MDCRipple(element[0]);
 
       unsubscribers.push(scope.$watch('btnDisabled',(newValue)=>{
         if(newValue === true){
