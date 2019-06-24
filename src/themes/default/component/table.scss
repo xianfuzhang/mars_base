@@ -27,10 +27,17 @@ mdc设置组件颜色
 .mdl-table-action__search-body{
   width: 100%;
 }
+.column-filter-field .mdc-icon-button.show:before{
+  opacity: 0.15;
+}
+.column-filter-field .material-icons.mdc-icon-button:not(.mdc-ripple-upgraded):focus:before{
+  opacity: 0.15;
+}
 .columns-field{
   width: 400px;
   border-radius: 4px;
   background: #bdcedc;
+  box-shadow: 2px 2px 7px 2px rgb(106, 108, 109), -2px -2px 9px 1px rgb(169, 178, 185);
 }
 .columns-field .mdc-form-field{
   width: 100px;
@@ -38,15 +45,18 @@ mdc设置组件颜色
 .columns-field__title{
   font-weight: 700;
   padding: 10px;
+  border-bottom: 1px solid #474f53;
 }
 .columns-field__content{
   height: 185px;
-  border-top: 1px solid #8e9ba0;
 }
 .columns-field__footer{
   height: 35px;
   float: right;
   padding: 5px 10px;
+}
+.columns-field__footer > .mar-button.btn-sm{
+  background-color: #f1f1f1;
 }
 .filter-item{
   display: flex;
@@ -58,6 +68,10 @@ mdc设置组件颜色
 }
 .filter-item > div{
   margin-right: 15px;
+}
+.filter-item > .material-icons{
+  font-size: 20px;
+  top: -4px;
 }
 .filter-item .mdc-text-field{
   width:  80px;

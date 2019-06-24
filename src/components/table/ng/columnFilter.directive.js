@@ -146,6 +146,11 @@ export class columnFilter {
 		//document.body.addEventListener('click', onClickHideDetail);
 		scope.$on('$destroy', () => {
 			//document.body.removeEventListener('click', onClickHideDetail);
+			let columnsElm = document.body.querySelector('.columns-field');
+			if (columnsElm) {
+				columnsElm.remove();
+				created = false;
+			}
 			unsubscribers.forEach(cb => cb());
 		});
 	}
