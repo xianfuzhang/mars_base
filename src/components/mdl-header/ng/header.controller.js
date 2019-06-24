@@ -1,3 +1,4 @@
+import {MDCRipple} from '@material/ripple';
 export class headerController{
   static getDI() {
     return [
@@ -304,6 +305,12 @@ export class headerController{
           if (logicalIndex > -1) origins.splice(logicalIndex , 1);
         }
         this.scope.menues = origins;
+        setTimeout(function () {
+          let aList = document.querySelectorAll('.header_ripple');
+          console.log('aList.length')
+          console.log(aList.length)
+          aList.forEach(surface=>new MDCRipple(surface))
+        },100)
       }
     });
   }

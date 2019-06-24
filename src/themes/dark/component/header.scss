@@ -228,3 +228,12 @@
 .header_menu {
   min-width:1000px;
 }
+
+
+.header_ripple.mdc-ripple-surface::before{
+  background-color: white;
+}
+
+.header_ripple.mdc-ripple-surface::after{
+  background-color: white;
+}
