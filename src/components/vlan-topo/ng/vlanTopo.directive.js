@@ -28,6 +28,7 @@ export class VlanTopo {
     this.scope = {
       links: '=',
       devices: '=',
+      vlanConfig: '=',
       topoSetting: '='
     };
 
@@ -76,6 +77,37 @@ export class VlanTopo {
 
       this.source_devices = scope.devices;
       this.formated_devices = scope.devices;
+
+
+      let _formatVlan = (config) =>{
+        let res = {};
+        config['devices'].forEach(deviceInfo=>{
+          let deviceId = deviceInfo['device-id'];
+          // if(!res[deviceInfo['device-id']]){
+          //   res[deviceInfo['device-id']] = {};
+          // }
+          deviceInfo.ports.forEach(port => {
+            // {"port":1,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag,1/tag,2/tag"]}
+            port.vlans.forEach(vlanStr=>{
+             let combinedArray = vlanStr.split('/');
+             let vlanId = combinedArray[0];
+             let vlanType = combinedArray[1];
+              if(!res[vlanId]){
+                res[vlanId] = {};
+              }
+              if(!res[vlanId][deviceId]){
+                res[vlanId][deviceId] = {};
+              }
+              res[vlanId][deviceId][port['port']] = vlanType;
+            })
+          });
+        });
+        return res;
+      };
+
+      this.vlanConfig = scope.vlanConfig?_formatVlan(scope.vlanConfig):{};
+      //TEST
+      // this.vlanConfig = _formatVlan({"devices":[{"device-id":"rest:192.168.40.225:80","ports":[{"port":1,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":2,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":3,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/untag"]},{"port":4,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/untag"]},{"port":5,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":6,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":7,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":8,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":9,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":13,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":14,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":15,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":16,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":17,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]}]},{"device-id":"rest:192.168.40.228:80","ports":[{"port":1,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":2,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":3,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":4,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":5,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":6,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":7,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":8,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":9,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":13,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":14,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/untag"]},{"port":15,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":16,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":17,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]}]},{"device-id":"rest:192.168.40.224:80","ports":[{"port":1,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":2,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":3,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":4,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":5,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":6,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":7,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":8,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":9,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/untag"]},{"port":13,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":14,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":15,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/untag"]},{"port":16,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":17,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]}]},{"device-id":"rest:192.168.40.230:80","ports":[{"port":1,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":2,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":3,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/untag"]},{"port":4,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":5,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":6,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":7,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":8,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":9,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":13,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":14,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":15,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/untag","2/untag"]},{"port":16,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":17,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]}]}]})
 
 
       this.source_links = scope.links;
@@ -636,6 +668,7 @@ export class VlanTopo {
               .attr('y', y + 12)
               .attr('width', port_width)
               .attr('height', port_height)
+              .attr('port_no', i+1)
               .classed('no_vlan_port', true)
               .on('mouseover', function () {
                 let rect = self.di.d3.select(this);
@@ -1001,6 +1034,44 @@ export class VlanTopo {
       //     this.simulation.restart();
       //   });
       // });
+
+
+      let highlightPortVlan = (vlanId) =>{
+        let curVlanConfig = this.vlanConfig[vlanId];
+        this.deviceNode.each(function (d) {
+          let swtNode = DI.d3.select(this);
+          let deviceId = swtNode.attr('deviceId');
+          if(curVlanConfig[deviceId]){
+            swtNode.selectAll('rect').each(function (d1) {
+              // console.log(DI.d3.select(this).attr('port_no'))
+              let portNode = DI.d3.select(this);
+              let port_no = portNode.attr('port_no');
+              let port_type = curVlanConfig[deviceId][port_no];
+              if(port_type === 'untag'){
+                portNode.classed('port_vlan_untag', true);
+              } else if (port_type === 'tag'){
+                portNode.classed('port_vlan_tag', true);
+              }
+            });
+          }
+        })
+      }
+
+      // this.di.$timeout(()=> {
+      //   highlightPortVlan(2);
+      // },1000)
+      //
+      // unsubscribers.push(this.di.$rootScope.$on('selectVlan',($event, params)=>{
+      //
+      // }));
+
+
+
+
+
+
+
+
 
       unsubscribers.push(this.di.$rootScope.$on('resize_summary', () => {
         console.log('receive resize_summary');
