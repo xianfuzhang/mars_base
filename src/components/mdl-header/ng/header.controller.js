@@ -247,7 +247,7 @@ export class headerController{
                 break;
               case 'com.nocsys.qos':
                 if (tenantState === 'ACTIVE') {
-                  let index6 = this.di._.findIndex(origins, {'group': 'Logical'});
+                  let index6 = this.di._.findIndex(origins, {'group': "Fabric"});
                   if (index6 > -1) {
                     let qosIndex = this.di._.findIndex(origins[index6]['items'], {'url': '/qos'});
                     if (qosIndex > -1) origins[index6]['items'].splice(qosIndex, 1);
