@@ -48,7 +48,6 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
               // {'label': this.translate('MODULE.HEADER.FABRIC.HOSTS'), 'url': '/hosts', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.FABRIC.VLAN'), 'url': '/vlan', 'role': 2},
               {'label': 'Intents', 'url': '/intents', 'role': 2},
               {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
               {'label': 'sFlow', 'url': '/sflow', 'role': 2},
@@ -57,6 +56,7 @@ export class appService {
               {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
               {'label': 'QoS', 'url': '/qos', 'role': 3},
+              {'label': this.translate('MODULE.HEADER.FABRIC.VLAN'), 'url': '/vlan', 'role': 2},
               //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
@@ -169,6 +169,8 @@ export class appService {
     this.CONST.HEADER.menu[0].items[3].label = this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT');
     this.CONST.HEADER.menu[0].items[7].label = this.translate('MODULE.HEADER.FABRIC.STORM');
     this.CONST.HEADER.menu[0].items[8].label = this.translate('MODULE.HEADER.FABRIC.MONITOR');
+    this.CONST.HEADER.menu[0].items[10].label = this.translate('MODULE.HEADER.FABRIC.DHCPRELAY');
+    this.CONST.HEADER.menu[0].items[12].label = this.translate('MODULE.HEADER.FABRIC.VLAN');
     this.CONST.HEADER.menu[1].label = this.translate('MODULE.HEADER.LOGICAL');
     this.CONST.HEADER.menu[2].label = this.translate('MODULE.HEADER.ALERT');
     this.CONST.HEADER.menu[2].items[0].label = this.translate('MODULE.HEADER.ALERT.ALERT');
