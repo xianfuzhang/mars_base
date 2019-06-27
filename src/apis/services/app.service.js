@@ -56,6 +56,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.MONITOR'), 'url': '/monitor', 'role': 2},
               {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
+              {'label': 'QoS', 'url': '/qos', 'role': 3},
               //  {'label': 'Storm Profile', 'url': '/storm_control'},
             ]
           },
@@ -66,7 +67,6 @@ export class appService {
             'items':[
               {'label': 'Tenant', 'url': '/tenant', 'role': 3},
               {'label': 'Segment', 'url': '/segment', 'role': 3},
-              {'label': 'QoS', 'url': '/qos', 'role': 3},
               {'label': 'EGP', 'url': '/egp', 'role': 3}
             ]
            },
