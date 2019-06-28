@@ -292,10 +292,13 @@ export class headerController{
                   // let ntpIndex = this.di._.findIndex(origins[index4]['items'], {'url': '/ntp'});
                   // if (ntpIndex > -1) origins[index4]['items'].splice(ntpIndex, 1);
                 }
-
-
                 break;
-
+              case 'com.nocsys.topologyl3':
+                if (fabricIndex > -1) {
+                  let hostsegmentIndex = this.di._.findIndex(origins[fabricIndex]['items'], {'url': '/host_segment'});
+                  if (hostsegmentIndex > -1) origins[fabricIndex]['items'].splice(hostsegmentIndex, 1);
+                }
+                break;
                 
             }
           }
