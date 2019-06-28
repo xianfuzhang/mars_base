@@ -705,7 +705,7 @@ export class Topo {
           let device = this.di._.find(scope.leafs,{'id':key});
           if(device){
             // TODO 目前用的是交换机 leafgroup中的port， 后面如果switch port 不起作用，那么要用memberDict中的port
-            isOk = _checkPortState(device, device.leafGroup.switch_port);
+            isOk = _checkPortState(device, device.leaf_group.switch_port);
             if(isOk === false){
               return false;
             }

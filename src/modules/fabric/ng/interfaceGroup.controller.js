@@ -314,13 +314,13 @@ export class InterfaceGroupController {
     this.di.$q.all([deviceDefer.promise, portDefer.promise, mappingDefer.promise]).then((arr) => {
       logicalMapping = arr[2];
       arr[0].forEach((device) => {
-        if (device['leafGroup']['name']) {
-          if (!leafGroups.hasOwnProperty(device['leafGroup']['name'])) {
-            leafGroups[device.leafGroup.name] = [];
+        if (device['leaf_group']['name']) {
+          if (!leafGroups.hasOwnProperty(device['leaf_group']['name'])) {
+            leafGroups[device.leaf_group.name] = [];
           }  
-          leafGroups[device.leafGroup.name].push({
+          leafGroups[device.leaf_group.name].push({
             'device_id': device.id,
-            'port': device.leafGroup.switch_port
+            'port': device.leaf_group.switch_port
           });
         }
         let ports = [];
