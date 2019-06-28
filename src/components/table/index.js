@@ -3,7 +3,6 @@
 import {TableController} from './ng/table.controller';
 import {showHideColumnCtrl} from './ng/showHideColumn.controller';
 import {mdlTable} from './ng/table.directive';
-import {TableAction} from './ng/tableActions.directive';
 import {tableProvider} from './service/tableProvider';
 import {tableProviderFactory} from './service/tableProviderFactory';
 import {fastListenerService} from './service/fastListener.service';
@@ -36,7 +35,6 @@ export default angular
   .controller('TableController', TableController)
   .controller('showHideColumnCtrl', showHideColumnCtrl)
   .directive('mdlTable', mdlTable)
-  .directive('tableAction', TableAction)
   .directive('metarow', metarow)
   .directive('rowCheckbox', rowCheckbox)
   .directive('rowActions', rowActions)

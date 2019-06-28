@@ -4,7 +4,7 @@
 
 	<script type="text/ng-template" id="columns-filter-list.html">
 	  <div class="columns-field" ng-show="show">
-	  	<div class="columns-field__title"><span>高级过滤</span></div>
+	  	<div class="columns-field__title"><span ng-bind="'MODULES.TABLE.FILTER.ADVANCED'|translate"></span></div>
 	  	<div class="columns-field__content">
 				<div class="filter-item" ng-repeat="item in collections track by $index">
 					<mdl-select ng-model="item.column" display-label="{options: columnFields}"></mdl-select>
@@ -15,10 +15,10 @@
 				</div>
 	  	</div>
 	  	<div class="columns-field__footer">
-	  		<mar-button btn-text="'添加过滤条件'" btn-class="'btn-sm'"
+	  		<mar-button btn-text="'MODULES.TABLE.FILTER.ADD_CONDITION'|translate" btn-class="'btn-sm'"
 	  								btn-disabled="collections.length > 2" btn-click="_addCollection($event)"></mar-button>
-	  		<mar-button btn-text="'取消过滤'" btn-class="'btn-sm'" btn-click="_cancel($event)"></mar-button>						
-	  		<mar-button btn-text="'过滤'" btn-class="'btn-sm'" btn-click="_result($event)"></mar-button>
+	  		<mar-button btn-text="'MODULES.TABLE.FILTER.CANCEL'|translate" btn-class="'btn-sm'" btn-click="_cancel($event)"></mar-button>						
+	  		<mar-button btn-text="'MODULES.TABLE.FILTER.SUBMIT'|translate" btn-class="'btn-sm'" btn-click="_result($event)"></mar-button>
 	  	</div>
 	  	<!-- <mdl-radio ng-model="selectedColumn" ng-repeat="item in columnFields track by $index"
 	  					on-click="_changeSelectedColumn($value)"
