@@ -56,8 +56,7 @@ export class appService {
               {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
               {'label': 'QoS', 'url': '/qos', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.FABRIC.VLAN'), 'url': '/vlan', 'role': 2},
-              //  {'label': 'Storm Profile', 'url': '/storm_control'},
+              // {'label': this.translate('MODULE.HEADER.FABRIC.VLAN'), 'url': '/vlan', 'role': 2},
             ]
           },
           {
