@@ -663,3 +663,16 @@
 .monitor_establish .mdc-select{
   margin-top:-1px;
 }
+.vlan-container .type-container{
+  margin-top: 20px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  right: 5%;
+}
+.vlan-container .filter-container{
+  margin-bottom: 50px;
+}
+.vlan-container .ports-container{
+  margin-top: 20px; 
+}

@@ -37,7 +37,49 @@ export class appService {
       SUPER_GROUP: 'admingroup',
       //权限管理 {supergroup: 3, admingroup: 2, guestgroup: 1}
       HEADER: {
-        'menu': [
+        'menu': this.getHeaderMenus()
+      },
+      //type对应google icon name，不能随意更改
+      ENDPOINT_TYPE: [
+        {'label': this.translate('MODULES.COMMON.HOST'), 'value': 1, 'type': 'devices'}, 
+        {'label': this.translate('MODULES.COMMON.PRINT'), 'value': 2, 'type': 'print'}
+      ],
+      NOCSYS_APP: 'com.nocsys',
+      CRYPTO_STRING: 'secret',
+      DEFAULT_FILENAME: 'startup_netcfg.cfg',// default configuration file name
+	    MAX_MESSAGES_NUMBER: 100
+    };
+    this.loginRole = 1;
+    this.roleFilterMenu = [];
+  }
+
+  setLoginRole(num) {
+    this.loginRole = num;
+  }
+
+  filterMenuByLoginRole() {
+    let menu = [];
+    this.CONST.HEADER.menu.forEach((group) => {
+      if (this.loginRole >= group.role) {
+        let tmp = {
+          'group': group.group,
+          'label': group.label,
+          'role': group.role,
+          'items': []
+        };
+        group.items.forEach((item) => {
+          if (this.loginRole >= item.role) {
+            tmp.items.push(item);  
+          }
+        });
+        menu.push(tmp);
+      }
+    });
+    this.roleFilterMenu = menu;
+  }
+
+  getHeaderMenus() {
+    return [
           {
             'group': 'Fabric',
             'label': this.translate('MODULE.HEADER.FABRIC'),
@@ -48,6 +90,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
               // {'label': this.translate('MODULE.HEADER.FABRIC.HOSTS'), 'url': '/hosts', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
+              {'label': this.translate('MODULE.HEADER.FABRIC.VLAN'), 'url': '/vlan', 'role': 2},
               {'label': 'Intents', 'url': '/intents', 'role': 2},
               {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
               {'label': 'sFlow', 'url': '/sflow', 'role': 2},
@@ -56,6 +99,7 @@ export class appService {
               {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
               {'label': 'QoS', 'url': '/qos', 'role': 3},
+              //  {'label': 'Storm Profile', 'url': '/storm_control'},
               // {'label': this.translate('MODULE.HEADER.FABRIC.VLAN'), 'url': '/vlan', 'role': 2},
             ]
           },
@@ -120,47 +164,9 @@ export class appService {
           }
 
         ]
-      },
-      //type对应google icon name，不能随意更改
-      ENDPOINT_TYPE: [
-        {'label': this.translate('MODULES.COMMON.HOST'), 'value': 1, 'type': 'devices'}, 
-        {'label': this.translate('MODULES.COMMON.PRINT'), 'value': 2, 'type': 'print'}
-      ],
-      NOCSYS_APP: 'com.nocsys',
-      CRYPTO_STRING: 'secret',
-      DEFAULT_FILENAME: 'startup_netcfg.cfg',// default configuration file name
-	    MAX_MESSAGES_NUMBER: 100
-    };
-    this.loginRole = 1;
-    this.roleFilterMenu = [];
   }
 
-  setLoginRole(num) {
-    this.loginRole = num;
-  }
-
-  filterMenuByLoginRole() {
-    let menu = [];
-    this.CONST.HEADER.menu.forEach((group) => {
-      if (this.loginRole >= group.role) {
-        let tmp = {
-          'group': group.group,
-          'label': group.label,
-          'role': group.role,
-          'items': []
-        };
-        group.items.forEach((item) => {
-          if (this.loginRole >= item.role) {
-            tmp.items.push(item);  
-          }
-        });
-        menu.push(tmp);
-      }
-    });
-    this.roleFilterMenu = menu;
-  }
-
-  updateMenuTranslation() {
+ /* updateMenuTranslation() {
     this.CONST.HEADER.menu[0].label = this.translate('MODULE.HEADER.FABRIC');
     this.CONST.HEADER.menu[0].items[0].label = this.translate('MODULE.HEADER.FABRIC.SUMMARY');
     this.CONST.HEADER.menu[0].items[1].label = this.translate('MODULE.HEADER.FABRIC.DEVICE');
@@ -168,8 +174,6 @@ export class appService {
     this.CONST.HEADER.menu[0].items[3].label = this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT');
     this.CONST.HEADER.menu[0].items[7].label = this.translate('MODULE.HEADER.FABRIC.STORM');
     this.CONST.HEADER.menu[0].items[8].label = this.translate('MODULE.HEADER.FABRIC.MONITOR');
-    this.CONST.HEADER.menu[0].items[10].label = this.translate('MODULE.HEADER.FABRIC.DHCPRELAY');
-    this.CONST.HEADER.menu[0].items[12].label = this.translate('MODULE.HEADER.FABRIC.VLAN');
     this.CONST.HEADER.menu[1].label = this.translate('MODULE.HEADER.LOGICAL');
     this.CONST.HEADER.menu[2].label = this.translate('MODULE.HEADER.ALERT');
     this.CONST.HEADER.menu[2].items[0].label = this.translate('MODULE.HEADER.ALERT.ALERT');
@@ -190,7 +194,7 @@ export class appService {
     this.CONST.HEADER.menu[6].items[4].label = this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO');
     this.CONST.HEADER.menu[6].items[5].label = this.translate('MODULE.HEADER.MANAGE.APPLICATION');
     this.CONST.HEADER.menu[6].items[6].label = this.translate('MODULE.HEADER.MANAGE.LICENSE');
-  }
+  }*/
 
   getZoneEndpoint(isComponent, isAuth) {
     let endpoint;
@@ -932,6 +936,10 @@ export class appService {
 
   getUpLinkDeleteUrl(name){
     return this.getZoneEndpoint() + '/topology/v1/uplink-segments/' + name;
+  }
+
+  getVlanConfigUrl(){
+    return this.getZoneEndpoint() + '/vlan/v1/vlan-config';  
   }
 
 }

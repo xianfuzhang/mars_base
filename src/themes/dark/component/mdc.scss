@@ -63,6 +63,9 @@
 .mdc-text-field .mdc-floating-label{
   white-space: nowrap;
 }
+.mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input{
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}
 .mdc-checkbox.mdc-checkbox__normal{
   padding: 0;
 }
