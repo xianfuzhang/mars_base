@@ -139,7 +139,8 @@ export class LoginController {
       this.scope.loginModel.passwordDisplayLabel.hint = this.translate('MODULE.LOGIN.FORM.PASSWORD.HINT');
       this.scope.loginModel.passwordHelper.content = this.translate('MODULE.LOGIN.FORM.PASSWORD.HELP');
       this.scope.loginModel.buttomText = this.translate('MODULE.LOGIN.FORM.SIGN_IN');
-      this.di.appService.updateMenuTranslation();
+      //this.di.appService.updateMenuTranslation();
+      this.di.appService.CONST.HEADER.menu = this.di.appService.getHeaderMenus();
     }));
     this.scope.$on('$destroy', () => {
       unsubscribers.forEach((cb) => {
