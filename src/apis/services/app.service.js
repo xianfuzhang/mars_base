@@ -937,6 +937,10 @@ export class appService {
     return this.getZoneEndpoint() + '/topology/v1/uplink-segments/' + name;
   }
 
+  getVlanConfigUrl(){
+    return this.getZoneEndpoint() + '/vlan/v1/vlan-config';  
+  }
+
 }
 
 appService.$inject = appService.getDI();

@@ -7,10 +7,12 @@ export class VlanController {
       '$q',
       '_',
       'deviceService',
+      'vlanService',
       'roleService',
       'notificationService',
       'dialogService',
       'deviceDataManager',
+      'vlanDataManager',
       'tableProviderFactory'
     ];
   };
@@ -34,6 +36,26 @@ export class VlanController {
       actionsShow: null,
       rowActions: null,
       entities: [],
+      typeMode: 'port',
+      portDisplayLabel:{
+        "id": "port-display",
+        "name": "display-type", 
+        "label": this.translate("MODULES.VLAN.TAB.DEFAULT.TYPE.PORT"),
+        "value": "port"
+      },
+      tableDisplayLabel:{
+        "id": "table-display",
+        "name": "display-type", 
+        "label": this.translate("MODULES.VLAN.TAB.DEFAULT.TYPE.TABLE"),
+        "value": "table"
+      },
+      filterTypes: [],
+      selectedFilterType: null,
+      subFilterItems: [],
+      selectedSubFilter: null,
+      devicesMap: {},
+      devicesMapArr: [],
+      vlansMapArr: []
     };
 
     scope.onTabChange = (tab) => {
@@ -47,6 +69,10 @@ export class VlanController {
         this.scope.tabSelected = tab;
         this.prepareTableData();
       }
+    };
+
+    scope.onApiReady = ($api) => {
+      scope.model.API = $api;
     };
 
     scope.addDevice = (deviceId) => {
@@ -202,6 +228,25 @@ export class VlanController {
       }
     }
 
+    scope.changeDisplayType = (value) => {
+      console.log(value);
+      if (value === 'table') {
+        
+      }
+    };
+
+    scope.changeFilterType = (value) => {
+      if (scope.model.selectedFilterType == value) return;
+      scope.model.subFilterItems = scope.model.selectedFilterType.value === 'device'
+            ? this.scope.model.devicesMapArr : this.scope.model.vlansMapArr;
+      console.log(value);
+    };
+
+    scope.changeDisplayPorts = (value) => {
+      if (scope.model.selectedSubFilter == value) return;
+      console.log(value);
+    };
+
     scope.$on('$destroy', () => {
       unsubscribers.forEach((cb) => {
         cb();
@@ -212,8 +257,80 @@ export class VlanController {
   }
 
   init() {
-    //TODO:
-    this.scope.onTabChange(this.scope.tabs[0]);
+    let promises = [],
+        deviceDefer = this.di.$q.defer(),
+        deviceConfigsDefer = this.di.$q.defer(),
+        linkDefer = this.di.$q.defer(),
+        vlanDefer = this.di.$q.defer();
+    this.di.deviceDataManager.getDevices().then((res)=>{
+      deviceDefer.resolve(res.data.devices);
+    });
+    promises.push(deviceDefer.promise);
+    this.di.deviceDataManager.getDeviceConfigs().then((res)=>{
+      deviceConfigsDefer.resolve(res);
+    });
+    promises.push(deviceConfigsDefer.promise);
+    this.di.deviceDataManager.getLinks().then((res)=>{
+      linkDefer.resolve(res.data.links);
+    });
+    promises.push(linkDefer.promise);
+    this.di.vlanDataManager.getVlanConfig().then((res)=>{
+      vlanDefer.resolve(res.data.devices);
+    });
+    promises.push(vlanDefer.promise);
+    Promise.all(promises).then((resultArr)=>{
+      this.scope.model.filterTypes = [];
+      if (resultArr[1].length > 0) {
+        let devices = [];
+        resultArr[1].forEach((item) => {
+          this.scope.model.devicesMap[item.id] = item.name;
+          devices.push({
+            'label': item.name,
+            'value': item.id
+          });
+        });
+        this.scope.model.devicesMapArr = devices;
+        this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.DEVICE'), 'value': 'device'});
+      }
+      if (resultArr[3].length > 0) {
+        this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.VLAN'), 'value': 'vlan'});
+      }
+      if (this.scope.model.filterTypes.length > 0) {
+        this.scope.model.selectedFilterType = this.scope.model.filterTypes[0];
+        this.scope.model.subFilterItems = this.scope.model.selectedFilterType.value === 'device'
+            ? this.scope.model.devicesMapArr : this.scope.model.vlansMapArr;
+      }
+      console.log(resultArr);
+      this.scope.onTabChange(this.scope.tabs[0]);
+      this.scope.model.actionsShow = this.getActionsShow();
+    });
+
+    //init table
+    this.scope.model.provider = this.di.tableProviderFactory.createProvider({
+      query: (params) => {
+        let defer = this.di.$q.defer();
+        this.di.vlanDataManager.getVlanConfig().then((res)=>{
+          this.scope.model.vlansMapArr = res.data.devices;
+          this.entityStandardization(res.data.devices);
+          defer.resolve({
+            data: this.scope.model.entities
+          });
+        });
+        return defer.promise;
+      },
+      getSchema: () => {
+        return {
+          schema: this.di.vlanService.getDevicesPortsVlanInfoSchema(),
+          index_name: 'id',
+          rowCheckboxSupport: false,
+          rowActionsSupport: false,
+          authManage: {
+            support: true,
+            currentRole: this.scope.role
+          }
+        };
+      }
+    });
   }
 
   prepareTableData() {
@@ -525,151 +642,34 @@ export class VlanController {
     this.scope.model.entities = [];
     switch (this.scope.tabSelected.type) {
       case 'default':
-        entities.forEach((entity) => {
-          let obj = {};
-          obj['id'] = entity.dhcpServerConnectPoint;
-          let pointArr = entity.dhcpServerConnectPoint.split('/');
-          obj['point_device'] = pointArr[0];
-          obj['point_port'] = pointArr[1];
-          obj['dhcpServerConnectPoint'] = this.getDeviceName(pointArr[0]) + '/' + pointArr[1] ;
-          obj['serverIps'] = Array.isArray(entity.serverIps)?entity.serverIps.join(', '):"";
-          obj['gatewayIps'] = Array.isArray(entity.gatewayIps)?entity.gatewayIps.join(', '):"";
-          obj['relayAgentIps'] = entity.relayAgentIps;
-          this.scope.model.entities.push(obj);
-        });
-        break;
-      case 'indirect':
-        entities.forEach((entity) => {
-          let obj = {};
-          obj['id'] = entity.dhcpServerConnectPoint;
-          let pointArr = entity.dhcpServerConnectPoint.split('/');
-          obj['point_device'] = pointArr[0];
-          obj['point_port'] = pointArr[1];
-          obj['dhcpServerConnectPoint'] = this.getDeviceName(pointArr[0]) + '/' + pointArr[1] ;
-          obj['serverIps'] = Array.isArray(entity.serverIps)?entity.serverIps.join(', '):"";
-          obj['gatewayIps'] = Array.isArray(entity.gatewayIps)?entity.gatewayIps.join(', '):"";
-          obj['relayAgentIps'] = entity.relayAgentIps;
-          this.scope.model.entities.push(obj);
-        });
-        break;
-      case 'interface':
-        entities.forEach((entity) => {
-          let obj = {};
-          obj['id'] = entity.connectPoint;
-          let pointArr = entity.connectPoint.split('/');
-          obj['point_device'] = pointArr[0];
-          obj['point_port'] = pointArr[1];
-          obj['connectPoint'] = this.getDeviceName(pointArr[0]) + '/' + pointArr[1] ;
-          obj['ip'] = entity.ip;
-          obj['mac'] = entity.mac;
-          let vlanArr = entity.vlan.split('/');
-          obj['vlan_id'] = vlanArr[0];
-          obj['vlan_type'] = vlanArr[1];
-          obj['vlan'] = entity.vlan
-          this.scope.model.entities.push(obj);
-        });
-        break;
-      case 'counter':
-        if(entities){
-          entities.forEach((entity)=>{
+        entities.forEach((device) => {
+          device.ports.forEach((port) => {
             let obj = {};
-
-            obj['host'] = entity.host;
-            obj['location'] = this.getDeviceName(entity.location.deviceId) + '/' + entity.location.port;
-            obj['id'] = obj['host'] + obj['location'];
-            obj['solicit'] = entity.solicit;
-            obj['request'] = entity.request;
-            obj['advertise'] = entity.advertise;
-            obj['renew'] = entity.renew;
-            obj['reply'] = entity.reply;
+            obj['id'] = device.id + '_' + port.id;
+            obj['deivce'] = this.scope.model.devicesMap[device.id] || device.id;
+            obj['port'] = port.id;
+            obj['type'] = port.mode;
+            obj['vlan'] = port.vlans.toString();
+            obj['pvid'] = port.native;
             this.scope.model.entities.push(obj);
           });
-        }
-
-    }
-  }
-
-  getSchema() {
-    let schema;
-    switch(this.scope.tabSelected.type) {
-      case 'default':
-        schema = this.di.deviceService.getDHCPRelayDefaultTableSchema();
-        break;
-      case 'indirect':
-        schema = this.di.deviceService.getDHCPRelayDefaultTableSchema();
-        break;
-      case 'interface':
-        schema = this.di.deviceService.getDHCPRelayInterfaceTableSchema();
-        break;
-      case 'counter':
-        schema = this.di.deviceService.getDHCPRelayCounterTableSubSchema();
+        });
         break;
     }
-    return schema;
   }
 
   getActionsShow() {
     let actions;
     switch (this.scope.tabSelected.type) {
       case 'default':
-        actions = this.di.deviceService.getDHCPRelayActionsShow();
+        actions = this.di.vlanService.getDevicesVlanTableActionsShow();
         break;
       case 'indirect':
         actions = this.di.deviceService.getDHCPRelayActionsShow();
         break;
-      case 'interface':
-        actions = this.di.deviceService.getDHCPRelayActionsShow();
-        break;
-      case 'counter':
-        actions = this.di.deviceService.getDHCPRelayCounterActionsShow();
-        break;
     }
 
     return actions;
-  }
-
-  getRowActions() {
-    let actions;
-    switch (this.scope.tabSelected.type) {
-      case 'default':
-        actions = this.di.deviceService.getDHCPRelayTableRowActions();
-        break;
-      case 'indirect':
-        actions = this.di.deviceService.getDHCPRelayTableRowActions();
-        break;
-      case 'interface':
-        actions = this.di.deviceService.getDHCPRelayTableRowActions();
-        break;
-      case 'counter':
-        actions = [];
-        break;
-    }
-
-    return actions;
-  }
-
-  getDataType() {
-    let schema = {};
-    schema['authManage'] = {
-      support: true,
-      currentRole: this.scope.role
-    };
-    schema['index_name'] = 'id';
-    if(this.scope.tabSelected.type === 'counter'){
-      schema['rowActionsSupport'] = false;
-      schema['rowCheckboxSupport'] = false;
-    } else {
-      schema['rowActionsSupport'] = true;
-      schema['rowCheckboxSupport'] = true;
-    }
-
-    return schema;
-  }
-
-  getDeviceName(deviceId){
-    let device =  this.di._.find(this.di.$scope.devices,{"id": deviceId});
-    if(device) return device['name'];
-    else return deviceId;
   }
 }
 

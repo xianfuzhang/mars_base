@@ -1,0 +1,181 @@
+export class VlanService {
+  static getDI() {
+    return ['$filter'];
+  }
+
+  constructor(...args) {
+    this.di = {};
+    VlanService.getDI().forEach((value, index) => {
+      this.di[value] = args[index];
+    });
+    this.translate = this.di.$filter('translate');
+  }
+
+  getVlanTabSchema() {
+  	return [
+      {
+        'label': this.translate('MODULES.VLAN.TAB.SCHEMA.DETAIL'),
+        'value': 'detail',
+        'type': 'detail'
+      },
+      {
+      	'label': this.translate('MODULES.VLAN.TAB.SCHEMA.CREATE'),
+      	'value': 'create',
+      	'type': 'create'
+      }
+    ];
+  }
+
+  getVlanListSchema() {
+  	return [
+      {
+        'label': 'Port',
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': 'Mode',
+        'field': 'mode',
+        'type': 'select',
+        'layout': {
+          'visible': true,
+          'sortable': true, 
+          'render': {'params': {'options': [
+            {'label': 'Accesss', 'value': 'access'},
+            {'label': 'Trunk', 'value': 'trunk'},
+            {'label': 'Hybrid', 'value': 'hybrid'},
+          ]}}
+        }
+      },
+      {
+        'label': 'Pvid',
+        'field': 'pvid',
+        'type': 'select',
+        'layout': {
+          'visible': true,
+          'sortable': true,
+          'render': {
+            'params': {'options': [
+              {'label': 10, 'value': 10},
+              {'label': 20, 'value': 20},
+              {'label': 30, 'value': 30}
+            ]}
+          }
+        }
+      },
+      {
+        'label': 'Ingress Filtering',
+        'field': 'ingress_filter',
+        'type': 'checkbox',
+        'layout': {
+          'visible': true,
+          'sortable': true,
+          'render': {
+            'params': {
+              'displayLabel': {
+                'identify': 'ingress_filter_enable',
+                'label': 'Enable'
+              }
+            }
+          }
+        }
+      },
+      {
+        'label': 'Membership Type(Tagged)',
+        'field': 'membership_type',
+        'type': 'radio',
+        'layout': {
+          'visible': true,
+          'sortable': true,
+          'render': {
+            'params': {
+              'displayLabel': {
+                'group_name': 'membership_type',
+                'label': 'Tagged',
+                'value': 'tagged'
+              }
+            }
+          }
+        }
+      },
+      {
+        'label': 'Membership Type(Untagged)',
+        'field': 'membership_type',
+        'type': 'radio',
+        'layout': {
+          'visible': true,
+          'sortable': true,
+          'render': {
+            'params': {
+              'displayLabel': {
+                'group_name': 'membership_type',
+                'label': 'Untagged',
+                'value': 'untagged'
+              }
+            }
+          }
+        }
+      },
+      {
+        'label': 'Membership Type(None)',
+        'field': 'membership_type',
+        'type': 'radio',
+        'layout': {
+          'visible': true,
+          'sortable': true,
+          'render': {
+            'params': {
+              'displayLabel': {
+                'group_name': 'membership_type',
+                'label': 'None',
+                'value': 'none'
+              }
+            }
+          }
+        }
+      }
+    ];  
+  }
+
+  getDevicesPortsVlanInfoSchema() {
+    return [
+      {
+        'label':  this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.DEVICE'),
+        'field': 'device',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  this.translate('MODULES.SWITCH.DETAIL.FLOW.COLUMN.PORT'),
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  this.translate('MODULES.SWITCHES.SWITCH.COLUMN.TYPE'),
+        'field': 'type',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  'VLAN',
+        'field': 'vlan',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  'PVID',
+        'field': 'pvid',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
+
+  getDevicesVlanTableActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': false, 'role': 2},
+      'remove': {'enable': false, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': true, 'role': 2}
+    };
+  }
+}
+VlanService.$inject = VlanService.getDI();
+VlanService.$$ngIsClass = true;

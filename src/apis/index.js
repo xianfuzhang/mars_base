@@ -23,6 +23,7 @@ import {DashboardDataManager} from './datamanagers/dashboard.dataManager';
 import {IntentDataManager} from './datamanagers/intent.dataManager';
 import {ManageDataManager} from './datamanagers/manage.dataManager';
 import {LogicalDataManager} from './datamanagers/logical.dataManager';
+import {VlanDataManager} from './datamanagers/vlan.dataManager';
 import {WebsocketService} from './services/ws.service';
 import {applicationService} from './services/application.service';
 import {flowCacheService} from './services/flowCache.service';
@@ -61,4 +62,5 @@ export default angular
   .service('logicalDataManager', LogicalDataManager)
 	.service('messageService', MessageWebsocketService)
   .service('regexService', regexService)
+  .service('vlanDataManager', VlanDataManager)
   .name;

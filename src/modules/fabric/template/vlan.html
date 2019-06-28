@@ -5,21 +5,47 @@
     <span>•</span>
     <span>{{'MODULE.HEADER.FABRIC.VLAN' | translate}}</span>
   </content-header>
-  <section class="app-body dhcp_relay" style="flex-direction: column">
+  <section class="app-body vlan-container" style="flex-direction: column">
     <div class="main__content">
-        <div>
-          <mdl-tabs ng-model="tabSelected" options="tabs"
-                    class-list="main__content__device-detail-tabs"
-                    on-select="onTabChange($value)">
-          </mdl-tabs>
+      <mdl-tabs ng-model="tabSelected" options="tabs"
+                class-list="main__content__device-detail-tabs"
+                on-select="onTabChange($value)">
+      </mdl-tabs>
+      <section class="tab-content" ng-if="tabSelected.type == 'default'" style="display: flex;">
+        <div class="mars-col-16 relative">
+          <div style="position: relative; display: flex;">
+            <div class="type-container">
+              <mdl-radio ng-model="model.typeMode" 
+                        display-label='model.portDisplayLabel' 
+                        on-click="changeDisplayType($value)"></mdl-radio> 
+              <mdl-radio ng-model="model.typeMode" 
+                        display-label='model.tableDisplayLabel' 
+                        on-click="changeDisplayType($value)"></mdl-radio> 
+            </div>
+            <div class="ports-container" ng-if="model.typeMode === 'port'">
+              <div class="filter-container">
+                <mdl-select ng-if="model.filterTypes.length > 0" ng-model="model.selectedFilterType" 
+                            display-label="{options: model.filterTypes}" ng-change="changeFilterType($value)">
+                </mdl-select>
+                <mdl-select ng-if="model.filterTypes.length > 0" ng-model="model.selectedSubFilter"
+                            display-label="{options: model.subFilterItems}" ng-change="changeDisplayPorts($value)"></mdl-select>
+              </div>
+              <div class="deivce-list">
+              </div>
+            </div>
+            <div ng-if="model.typeMode === 'table'" style="margin-top: 100px;">
+              <mdl-table actions-show="model.actionsShow"
+                     row-click="onTableRowClick($event)"
+                     provider="model.provider" api-ready="onApiReady($api)">
+              </mdl-table>
+            </div>
+          </div>  
         </div>
-        <div style="display:flex;height:100%">
-            <section class="tab-content" ng-if="tabSelected.type == 'default'">
-
-            </section>
-            <section class="tab-content" ng-if="tabSelected.type == 'edit'">
-                <div style="width:66%; display: inline-block;vertical-align: top;;height:100%">
-                    <div class="mdl-table-field" >
+        
+      </section>
+      <section class="tab-content" ng-if="tabSelected.type == 'edit'">
+          <div style="width:66%; display: inline-block;vertical-align: top;;height:100%">
+              <div class="mdl-table-field" >
                         <div style="margin: 15px 0;display: flex;align-items: center;">
                             <mdl-select ng-model="vlanModel.selectedDevice" display-label="{options: deviceOptions}"></mdl-select>
                             <mdl-button ng-click="addDevice(vlanModel.selectedDevice.value)" icon-name="add" disabled="!vlanModel.selectedDevice.value"></mdl-button>
@@ -36,7 +62,6 @@
                     </div>
                 </div>
             </section>
-        </div>
     </div>
   </section>
 </div>

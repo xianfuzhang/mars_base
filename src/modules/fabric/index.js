@@ -13,6 +13,7 @@ import {DeviceDetailService} from './service/deviceDetail.service';
 import {FabricSummaryController} from './ng/summary.controller';
 import {StormService} from './service/storm.service';
 import {IntentService} from './service/intent.service';
+import {VlanService} from './service/vlan.service';
 import {DeviceChartSettingController} from './ng/deviceChartSetting.controller';
 
 import { DeviceWizardController } from './components/deviceWizard/ng/DeviceWizard.controller'
@@ -88,4 +89,5 @@ export default angular
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)
   .service('intentService', IntentService)
+  .service('vlanService', VlanService)
   .name;
