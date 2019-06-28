@@ -193,10 +193,10 @@ export class DeviceWizardController {
         rack_id: scope.switch.rack_id,
         mfr: scope.switch.mfr.value,
         // community: scope.switch.community,
-        managementAddress: scope.switch.managementAddress,
+        mgmtIpAddress: scope.switch.managementAddress,
         port: scope.switch.port,
         protocol: scope.switch.protocol.value,
-        mgmagemntPort: (scope.switch.mgmt_port === ''|| scope.switch.mgmt_port === null)?0:parseInt(scope.switch.mgmt_port),
+        mgmtPort: (scope.switch.mgmt_port === ''|| scope.switch.mgmt_port === null)?0:parseInt(scope.switch.mgmt_port),
       };
       
       if(params.type == 'spine') {
@@ -218,16 +218,16 @@ export class DeviceWizardController {
           let deviceId = '';
           switch (params.protocol.toLowerCase()) {
             case 'rest':
-              params.id = `rest:${params.managementAddress}:${params.port}`;
+              params.id = `rest:${params.mgmtIpAddress}:${params.port}`;
               break;
               
             case 'snmp':
-              params.id = `snmp:${params.managementAddress}:${params.port}`;
+              params.id = `snmp:${params.mgmtIpAddress}:${params.port}`;
               params.community = scope.switch.community;
               break;
 
             case 'grpc':
-              params.id = `grpc:${params.managementAddress}:${params.port}`;
+              params.id = `grpc:${params.mgmtIpAddress}:${params.port}`;
               break;
               
             case 'of':

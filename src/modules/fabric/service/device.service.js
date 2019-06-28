@@ -129,6 +129,11 @@ export class DeviceService {
         'layout': {'visible': true, 'sortable': true}
       },
       {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.MGMT_PORT'),
+        'field': 'mgmtPort',
+        'layout': {'visible': false, 'sortable': true}
+      },
+      {
         'label': this.translate('MODULES.SWITCHES.SWITCH.COLUMN.LEAF_GROUP_NAME'),
         'field': 'leaf_group',
         'layout': {'visible': false, 'sortable': true}
@@ -1315,6 +1320,7 @@ export class DeviceService {
       obj.ip = item.mgmtIpAddress;
       obj.mac = item.mac;
       obj.type = item.type;
+      obj.mgmtPort = item.mgmtPort;
       obj.leaf_group = (item.type === 'leaf' && item.leaf_group.name)? item.leaf_group.name: '-';
       obj.role = origin && origin.role || '-';
       obj.rack_id = origin && origin.rackId || '-';
