@@ -37,7 +37,7 @@ export class LoginDataManager {
       .then((result) => {
         if(result.status === 200){
           let expireDate = new Date();
-          expireDate.setTime(expireDate.getTime() + 20*60*1000); //cookies20分钟过期
+          expireDate.setTime(expireDate.getTime() + 20*60*1000); //cookies20 timeout
           this.di.$cookies.put('useraccount', this.di.crypto.AES.encrypt(JSON.stringify({
             'user_name': username, 
             'password': password

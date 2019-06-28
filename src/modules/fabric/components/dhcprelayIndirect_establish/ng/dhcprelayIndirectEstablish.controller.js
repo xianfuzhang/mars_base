@@ -59,7 +59,7 @@ export class DHCPRelayIndirectEstablishController {
       device: {'options': [], hint: this.translate('MODULES.SWITCHES.TAB.SCHEMA.SWITCH')},
       device4add: {'options': []},
       // port: {'options': [], hint: this.translate('MODULES.SWITCHES.SWITCH.COLUMN.PORT')},
-      port: {'options': [], hint:'端口'},
+      port: {'options': [], hint: this.translate('MODULES.TOPO.INFO.PORT')},
       tag: {
         'options': [
           {'label': 'Tag', 'value': 'tag'},
@@ -176,6 +176,7 @@ export class DHCPRelayIndirectEstablishController {
       return res;
     }
 
+    let translate = this.translate;
     scope.submit = function () {
       let inValidJson_Copy = angular.copy(inValidJson);
       let params = {};
@@ -192,7 +193,7 @@ export class DHCPRelayIndirectEstablishController {
       }
 
       if (params['serverIps'].length === 0) {
-        inValidJson_Copy['errorMessage'] = "请至少添加一个服务IP地址!";
+        inValidJson_Copy['errorMessage'] = translate('MODULES.FABRIC.DHCPRELAY.MSG.SELECT_ONE_IP');
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
@@ -232,14 +233,14 @@ export class DHCPRelayIndirectEstablishController {
 
       scope.serverIPDisplayLabel= {
         id: 'serverIP',
-          hint: "IPv4或IPv6",
+          hint: this.translate('MODULES.FABRIC.DHCPRELAY.MSG.IPV4_OR_IPV6'),
           type: 'text',
           required: 'true'
       };
 
       scope.gatewayIPDisplayLabel= {
         id: 'gatewayIP',
-        hint: "IPv4或IPv6",
+        hint: this.translate('MODULES.FABRIC.DHCPRELAY.MSG.IPV4_OR_IPV6'),
         type: 'text',
         required: 'true'
       };

@@ -33,7 +33,7 @@ export class IpmacEstablishController {
     let di = this.di;
 
     this.di.$scope.showWizard = false;
-    this.di.$scope.title = '添加IP/MAC映射';
+    this.di.$scope.title = this.translate('MODULES.MANAGE.DHCP.IPMAC_MAP');
     this.di.$scope.steps = [
       {
         id: 'step1',

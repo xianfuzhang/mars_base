@@ -551,7 +551,7 @@ export class VlanController {
       }];
 
     let devicesList = ['of:00000001', 'of:00000002', 'of:00000003', 'of:00000004', 'of:00000005', 'of:00000006', 'of:00000007', 'of:00000008'];
-    let deviceOptions = [{label:'--请选择交换机--', value:''}];
+    let deviceOptions = [{label:'--' + this.translate('MODULES.VLAN.PLEASE_SELECT_DEVICE') +'--', value:''}];
     for(let device of devicesList) {
       deviceOptions.push({
         label: device,

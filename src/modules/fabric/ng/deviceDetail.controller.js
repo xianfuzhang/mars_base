@@ -1808,7 +1808,7 @@ export class DeviceDetailController {
     let options = {
       title: {
         display: true,
-        text: '端口:' + this.scope.port_id + ' 流量情况',
+        text: this.translate('MODULES.TOPO.INFO.PORT') + ':' + this.scope.port_id + ' ' + this.translate('MODULES.SWITCH.DETAIL.FLOW_DETAIL'),
       },
       legend: {
         display: false,

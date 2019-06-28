@@ -76,7 +76,7 @@ export class FlowEstablishController {
 
     this.di.$scope.showWizard = false;
     this.di.$scope.showTableId = true;
-    this.di.$scope.title = '添加Flow';
+    this.di.$scope.title = this.translate('MODULES.SWITCH.FLOW_ES.TITLE');
     this.di.$scope.steps = [
       {
         id: 'step1',
@@ -141,9 +141,9 @@ export class FlowEstablishController {
     scope.criteriaSchemaList = convertList2DisLabel(this.di._.keys(this.di.$scope.criteriaSchema));
     scope.tableIdSchemaList = convertList2DisLabel(this.di._.values(this.di.$scope.tableIdSchema));
     scope.table60SchemaList = convertList2DisLabel(this.di._.keys(scope.table60Schema));
-    scope.table60SchemaList['hint'] = '类型';
+    scope.table60SchemaList['hint'] = this.translate('MODULES.SWITCH.FLOW_ES.TEXT.TYPE');
     scope.table0SchemaList = convertList2DisLabel(this.di._.keys(scope.table0Schema));;
-    scope.table0SchemaList['hint'] = '类型';
+    scope.table0SchemaList['hint'] = this.translate('MODULES.SWITCH.FLOW_ES.TEXT.TYPE');
 
     scope.flowEstablishModel = {
       instructionType: angular.copy(scope.instructionSchemaList.options[0]),
@@ -325,7 +325,7 @@ export class FlowEstablishController {
 
 
     let _initGroupIdsDisplayLabel = () =>{
-      scope.treatmentPageGroup.groupIdDisplayLabel = {'options':[{'label': '请选择Group', 'value':-1}]};
+      scope.treatmentPageGroup.groupIdDisplayLabel = {'options':[{'label': this.translate('MODULES.SWITCH.FLOW_ES.LABEL.SELECT_GROUP'), 'value':-1}]};
       if(scope.treatmentPageGroup.groupTypeSelected){
         if(scope.deviceGroupsMapper){
           let groups = scope.deviceGroupsMapper[this.di.deviceService.getGroupTypeId(scope.treatmentPageGroup.groupTypeSelected.value)];
@@ -376,7 +376,7 @@ export class FlowEstablishController {
       if(!_ifTable60SchemaListContain('vlan_pcp')){
         if(_ifTable60SchemaListContain('vlan_id')){
           status = false;
-          message = "VLAN PCP需要设置VLAN ID"
+          message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.VLAN_PCP_NEED_VLAN_ID');
         }
       }
 
@@ -385,7 +385,7 @@ export class FlowEstablishController {
           let res = _getValueFromSecondInputs('ether_type');
           if(res !== null && res.toLowerCase() !== '0x0800'){
             status = false;
-            message = "SOURCE_IPV4/DESTINATION_IPV4 对应的 ETH_TYPE 不正确!";
+            message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.ERROR_ETH_TYPE_FOR_IPV4');
           }
         }
       }
@@ -395,7 +395,8 @@ export class FlowEstablishController {
           let res = _getValueFromSecondInputs('ether_type');
           if(res !== null && res.toLowerCase() !== '0x86dd'){
             status = false;
-            message = "SOURCE_IPV6/DESTINATION_IPV6/IPV6_FLOW_LABEL 对应的 ETH_TYPE 为 0x86dd!";
+            // message = "SOURCE_IPV6/DESTINATION_IPV6/IPV6_FLOW_LABEL 对应的 ETH_TYPE 为 0x86dd!";
+            message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.ETHTYPE_IS_86DD');
           }
         }
       }
@@ -404,7 +405,8 @@ export class FlowEstablishController {
           let res = _getValueFromSecondInputs('ether_type');
           if(res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800'){
             status = false;
-            message = "IP_DSCP/IP_PROTO/IP_ECN 对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+            // message = "IP_DSCP/IP_PROTO/IP_ECN 对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+            message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.ETHTYPE_IS_86DD_OR_0800');
           }
       }
 
@@ -412,13 +414,15 @@ export class FlowEstablishController {
         let res = _getValueFromSecondInputs('ip_proto');
         if(res !== null && res !== '6'){
           status = false;
-          message = "TCP设置需要 IP_PROTO 为 6!";
+          // message = "TCP设置需要 IP_PROTO 为 6!";
+          message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.IP_PROTO_IS_6');
         }
 
         res = _getValueFromSecondInputs('ether_type');
         if(typeof res === 'string' && res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800' || res === null){
           status = false;
-          message = "TCP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+          // message = "TCP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+          message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.TCP_ETHTYPE_DD_OR_00');
         }
       }
 
@@ -426,13 +430,15 @@ export class FlowEstablishController {
         let res = _getValueFromSecondInputs('ip_proto');
         if(res !== null && res !== '17'){
           status = false;
-          message = "UDP设置需要 IP_PROTO 为 17!";
+          // message = "UDP设置需要 IP_PROTO 为 17!";
+          message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.UDP_IP_PROTO_IS_17');
         }
 
         res = _getValueFromSecondInputs('ether_type');
         if(typeof res === 'string' && res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800' || res === null){
           status = false;
-          message = "UDP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+          // message = "UDP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+          message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.UDP_ETHTYPE_DD_OR_00')
         }
       }
 
@@ -440,13 +446,15 @@ export class FlowEstablishController {
         let res = _getValueFromSecondInputs('ip_proto');
         if(res !== null && res !== '132'){
           res = false;
-          message = "SCTP设置需要 IP_PROTO 为 132!";
+          message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.SCTP_IP_PROTO_IS_132');
+          // message = "SCTP设置需要 IP_PROTO 为 132!";
         }
 
         res = _getValueFromSecondInputs('ether_type');
         if(typeof res === 'string' && res.toLowerCase() !== '0x86dd' && res.toLowerCase() !== '0x0800' || res === null){
           status = false;
-          message = "SCTP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+          // message = "SCTP对应的 ETH_TYPE 为 0x86dd 或者 0x0800!";
+          message =  this.translate('MODULES.SWITCH.FLOW_ES.MSG.SCTP_ETHTYPE_DD_OR_00');
         }
       }
 
@@ -454,13 +462,15 @@ export class FlowEstablishController {
         let res = _getValueFromSecondInputs('ip_proto');
         if(res !== null && res !== '1'){
           status = false;
-          message = "ICMPV4设置需要 IP_PROTO 为 1!";
+          // message = "ICMPV4设置需要 IP_PROTO 为 1!";
+          message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.ICMP_IP_PROTO_IS_1');
         }
 
         res = _getValueFromSecondInputs('ether_type');
         if(res !== null && res.toLowerCase() !== '0x0800'){
           status = false;
-          message = "ICMPV4 对应的 ETH_TYPE 为 0x0800!";
+          // message = "ICMPV4 对应的 ETH_TYPE 为 0x0800!";
+          message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.ICMP_ETHTYPE_00');
         }
       }
 
@@ -468,13 +478,15 @@ export class FlowEstablishController {
         let res = _getValueFromSecondInputs('ip_proto');
         if(res !== null && res !== '58'){
           status = false;
-          message = "ICMPV6设置需要 IP_PROTO 为 58!";
+          // message = "ICMPV6设置需要 IP_PROTO 为 58!";
+          message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.ICMP6_IP_PROTO_IS_58')
         }
 
         res = _getValueFromSecondInputs('ether_type');
         if(res !== null && res.toLowerCase() !== '0x86dd'){
           status = false;
-          message = "ICMPV6 对应的 ETH_TYPE 为 0x86dd!";
+          // message = "ICMPV6 对应的 ETH_TYPE 为 0x86dd!";
+          message = this.translate('MODULES.SWITCH.FLOW_ES.MSG.ICMP6_ETHTYPE_DD');
         }
       }
 
@@ -509,12 +521,12 @@ export class FlowEstablishController {
         }
 
         if(scope.flowEstablishModel.tableIdType.value ==='60' && scope.criteriaPageSecondInputs.length === 0){
-          inValidJson_Copy['errorMessage'] = "请至少添加一个选择器!";
+          inValidJson_Copy['errorMessage'] = translate('MODULES.SWITCH.FLOW_ES.MSG.SELECT_ONE_SELECTOR');
           return inValidJson_Copy;
         }
 
         if(scope.flowEstablishModel.tableIdType.value ==='0' && scope.criteriaPageSecondInputs.length === 0){
-          inValidJson_Copy['errorMessage'] = "请至少添加一个选择器!";
+          inValidJson_Copy['errorMessage'] = translate('MODULES.SWITCH.FLOW_ES.MSG.SELECT_ONE_SELECTOR');
           return inValidJson_Copy;
         }
 
@@ -548,7 +560,7 @@ export class FlowEstablishController {
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['source_mac_masked'] || input['source_mac']){
-            let errorMessage = "不可以同时指定2个源MAC!";
+            let errorMessage = this.translate('MODULES.SWITCH.FLOW_ES.MSG.CANNOT_SPECIFY_TWO_SOURCE_MAC');
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -557,7 +569,8 @@ export class FlowEstablishController {
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['destination_mac_masked'] || input['destination_mac']){
-            let errorMessage = "不可以同时指定2个目的MAC!";
+            let errorMessage = this.translate('MODULES.SWITCH.FLOW_ES.MSG.CANNOT_SPECIFY_TWO_TARGET_MAC');
+            // let errorMessage = "不可以同时指定2个目的MAC!";
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -566,11 +579,11 @@ export class FlowEstablishController {
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['source_ipv6'] || input['destination_ipv6'] || input['ipv6_flow_label']){
-            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            let errorMessage =  this.translate('MODULES.SWITCH.FLOW_ES.MSG.IPV4_IPV6_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['icmpv6_type']|| input['icmpv6_code']){
-            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            let errorMessage = this.translate('MODULES.SWITCH.FLOW_ES.MSG.IPV4_IPV6_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -580,11 +593,11 @@ export class FlowEstablishController {
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['source_ipv4'] || input['destination_ipv4']){
-            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            let errorMessage = this.translate('MODULES.SWITCH.FLOW_ES.MSG.IPV4_IPV6_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['icmpv4_type']|| input['icmpv4_code']){
-            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            let errorMessage = this.translate('MODULES.SWITCH.FLOW_ES.MSG.IPV4_IPV6_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -597,19 +610,20 @@ export class FlowEstablishController {
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['udp_sport'] || input['udp_dport'] ){
-            let errorMessage = "TCP和UDP不可以同时设置!";
+            let errorMessage = this.translate('MODULES.SWITCH.FLOW_ES.MSG.TCP_UDP_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['icmpv4_type']|| input['icmpv4_code']){
-            let errorMessage = "UDP和ICMPV4不可以同时设置!";
+            let errorMessage = this.translate('MODULES.SWITCH.FLOW_ES.MSG.ICMPV4_UDP_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['sctp_sport'] || input['sctp_dport'] ){
-            let errorMessage = "UDP和SCTP不可以同时设置!";
+            let errorMessage = this.translate('MODULES.SWITCH.FLOW_ES.MSG.SCTP_UDP_SAME_TIME');
+
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['icmpv6_type'] || input['icmpv6_code'] ){
-            let errorMessage = "TCP和ICMPV6不可以同时设置!";
+            let errorMessage = this.translate('MODULES.SWITCH.FLOW_ES.MSG.TCP_ICMPV6_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -627,19 +641,19 @@ export class FlowEstablishController {
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['tcp_sport'] || input['tcp_dport'] ){
-            let errorMessage = "UDP和TCP不可以同时设置!";
+            let errorMessage = "UDP " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " TCP" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['icmpv4_type']|| input['icmpv4_code']){
-            let errorMessage = "UDP和ICMPV4不可以同时设置!";
+            let errorMessage = "UDP " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " ICMPV4" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['sctp_sport'] || input['sctp_dport'] ){
-            let errorMessage = "UDP和SCTP不可以同时设置!";
+            let errorMessage = "UDP " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " SCTP" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['icmpv6_type'] || input['icmpv6_code'] ){
-            let errorMessage = "TCP和ICMPV6不可以同时设置!";
+            let errorMessage = "TCP " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " ICMPV6" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -656,23 +670,23 @@ export class FlowEstablishController {
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['tcp_sport'] || input['tcp_dport'] ) {
-            let errorMessage = "ICMPV4和TCP不可以同时设置!";
+            let errorMessage = "ICMPV4 " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " TCP" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           }else if(input['udp_sport'] || input['udp_dport'] ){
-            let errorMessage = "ICMPV4和UDP不可以同时设置!";
+            let errorMessage = "ICMPV4 " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " UDP" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['sctp_sport'] || input['sctp_dport'] ){
-            let errorMessage = "ICMPV4和SCTP不可以同时设置!";
+            let errorMessage = "ICMPV4 " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " SCTP" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['icmpv6_type'] || input['icmpv6_code'] ){
-            let errorMessage = "ICMPV4和ICMPV6不可以同时设置!";
+            let errorMessage = "ICMPV4 " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " ICMPV6" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['source_ipv6'] || input['destination_ipv6'] || input['ipv6_flow_label']){
-            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            let errorMessage = "IPv4 " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " IPv6" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -682,19 +696,19 @@ export class FlowEstablishController {
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['tcp_sport'] || input['tcp_dport'] ) {
-            let errorMessage = "SCTP和TCP不可以同时设置!";
+            let errorMessage = "SCTP " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " TCP" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           }else if(input['udp_sport'] || input['udp_dport'] ){
-            let errorMessage = "SCTP和UDP不可以同时设置!";
+            let errorMessage = "SCTP " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " UDP" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['icmpv4_type']|| input['icmpv4_code']){
-            let errorMessage = "SCTP和ICMPV4不可以同时设置!";
+            let errorMessage = "SCTP " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " ICMPV4" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['icmpv6_type'] || input['icmpv6_code'] ){
-            let errorMessage = "SCTP和ICMPV6不可以同时设置!";
+            let errorMessage = "SCTP " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " ICMPV6" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -708,23 +722,23 @@ export class FlowEstablishController {
         for(let i = 0 ; i< scope.criteriaPageSecondInputs.length; i++){
           let input = scope.criteriaPageSecondInputs[i];
           if(input['tcp_sport'] || input['tcp_dport'] ) {
-            let errorMessage = "ICMPV6和TCP不可以同时设置!";
+            let errorMessage = "ICMPV6 " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " TCP" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           }else if(input['udp_sport'] || input['udp_dport'] ){
-            let errorMessage = "ICMPV6和UDP不可以同时设置!";
+            let errorMessage = "ICMPV6 " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " UDP" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['sctp_sport'] || input['sctp_dport'] ){
-            let errorMessage = "ICMPV6和SCTP不可以同时设置!";
+            let errorMessage = "ICMPV6 " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " SCTP" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['icmpv4_type']|| input['icmpv4_code']){
-            let errorMessage = "ICMPV6和ICMPV4不可以同时设置!";
+            let errorMessage = "ICMPV6 " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " ICMPV4" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');
             scope.errorMessage = errorMessage;
             return false;
           } else if(input['source_ipv4'] || input['destination_ipv4']){
-            let errorMessage = "IPv4和IPv6不可以同时设置!";
+            let errorMessage = "IPv4 " + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.AND') + " IPv6" + this.translate('MODULES.SWITCH.FLOW_ES.TEXT.NOT_SET_SAME_TIME');;
             scope.errorMessage = errorMessage;
             return false;
           }
@@ -895,7 +909,7 @@ export class FlowEstablishController {
       scope.criteriaPageSecondInputs = [];
       if(item.value === '60'){
         scope.table60SchemaList = convertList2DisLabel(this.di._.keys(scope.table60Schema));
-        scope.table60SchemaList['hint'] = '类型';
+        scope.table60SchemaList['hint'] = this.translate('MODULES.SWITCH.FLOW_ES.TEXT.TYPE');
         scope.flowTypeJson = {'res': true, 'tableId':'60', 'type':null};
       } else {
         scope.flowTypeJson = null;
@@ -1307,6 +1321,7 @@ export class FlowEstablishController {
 
     };
 
+    let translate = this.translate;
     this.di.$scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
       // if(di.$scope.criteriasModel && di.$scope.criteriasModel.length === 0){
@@ -1329,7 +1344,7 @@ export class FlowEstablishController {
       if(scope.flowEstablishModel.tableIdType.value !== '0'
         && scope.flowTypeJson['tableId'] === '50'
         && (scope.treatmentPageGroup.groups === null || scope.treatmentPageGroup.groupSelected.value === -1)){
-        inValidJson_Copy['errorMessage'] = "Table 50的flow需要指定group!";
+        inValidJson_Copy['errorMessage'] = translate('MODULES.SWITCH.FLOW_ES.MSG.TABLE_50_NEED_GROUP');
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
@@ -1348,7 +1363,7 @@ export class FlowEstablishController {
       }
 
       if(instructions.length === 0){
-        inValidJson_Copy['errorMessage'] = "请配置Flow的处理方式!";
+        inValidJson_Copy['errorMessage'] = translate('MODULES.SWITCH.FLOW_ES.MSG.SET_FLOW_DEAL');
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
@@ -1412,9 +1427,9 @@ export class FlowEstablishController {
       {"label":"0x8892", "value":  "PROFINET Protocol"},
       {"label":"0x889A", "value":  "HyperSCSI (SCSI over Ethernet)"},
       {"label":"0x88A8", "value":  "Provider Bridging (IEEE 802.1ad) & Shortest Path Bridging IEEE 802.1aq[5]"},
-      {"label":"0x88AB", "value":  "Ethernet Powerlink[来源请求]"},
-      {"label":"0x88CC", "value":  "链路层发现协议 (LLDP)"},
-      {"label":"0x88E1", "value":  "HomePlug AV MME[来源请求]"},
+      {"label":"0x88AB", "value":  "Ethernet Powerlink[Source Request]"},
+      {"label":"0x88CC", "value":  "Link Layer Discovery Protocol (LLDP)"},
+      {"label":"0x88E1", "value":  "HomePlug AV MME[Source Request]"},
       {"label":"0x88E3", "value":  "Media Redundancy Protocol (IEC62439-2)"},
       {"label":"0x88E5", "value":  "MAC security (IEEE 802.1AE)"},
       {"label":"0x88E7", "value":  "Provider Backbone Bridges (PBB) (IEEE 802.1ah)"},

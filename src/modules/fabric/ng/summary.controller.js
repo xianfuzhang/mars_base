@@ -461,7 +461,7 @@ export class FabricSummaryController {
       if(this.di.$scope.fabricModel.topoSetting.show_path){
         this.di.deviceDataManager.getEndpoints().then((res)=>{
           if(res.data.hosts.length === 0){
-            this.di.notificationService.renderWarning(scope, "没有可用的host!");
+            this.di.notificationService.renderWarning(scope, this.translate('MODULES.TOPO.NO_VALID_HOST'));
             return;
           } else {
             this.endpoints = res.data.hosts;

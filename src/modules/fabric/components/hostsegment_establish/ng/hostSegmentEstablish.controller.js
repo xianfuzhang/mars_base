@@ -114,6 +114,7 @@ export class HostSegmentEstablishController {
     };
 
 
+    let translate = this.translate;
     scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
       let ip_arr = scope.hostSegmentModel.ip_address.split('/');
@@ -135,14 +136,14 @@ export class HostSegmentEstablishController {
       }
 
       if(params['ports'].length === 0){
-        inValidJson_Copy['errorMessage'] = "请至少添加一个端口!";
+        inValidJson_Copy['errorMessage'] = translate('MODULES.FABRIC.HOSTSEGMENT.MSG.SELECT_ONE_PORT');
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
       }
 
       if(params['device_id'] === ""){
-        inValidJson_Copy['errorMessage'] = "请选择一个交换机!";
+        inValidJson_Copy['errorMessage'] =  translate('MODULES.FABRIC.HOSTSEGMENT.MSG.SELECT_ONE_SWT');
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });

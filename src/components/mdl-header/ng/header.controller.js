@@ -28,6 +28,7 @@ export class headerController{
       this.di[value] = args[index];
     });
     this.scope = this.di.$scope;
+    this.translate = this.di.$filter('translate');
     this.CONST_ADMIN_GROUP = this.di.appService.CONST.ADMIN_GROUP;
     this.scope.groups = angular.copy(this.di.appService.CONST.HEADER);
     this.scope.username = null;
@@ -343,9 +344,9 @@ export class headerController{
 		switch(message.event) {
 			case 'portState':
 				if(message.payload.link == 'up') {
-					msg.title += '端口启动 - ';
+					msg.title += this.translate('MODULE.HEADER_INFO.PORT_START') + ' - ';
 				} else {
-					msg.title += '端口关闭 - ';
+					msg.title += this.translate('MODULE.HEADER_INFO.PORT_CLOSE') + ' - ';
 				}
 				
 				msg.title += getDeviceName(message.payload.device) + ':' + message.payload.port;
@@ -362,7 +363,7 @@ export class headerController{
 				dstArr = message.payload.dst.split(':');
 				dstPort = dstArr[dstArr.length - 1];
 				dstDevice = message.payload.dst.slice(0, message.payload.dst.length - dstPort.length - 1);
-				msg.title += '新增link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
+				msg.title += this.translate('MODULE.HEADER_INFO.ADD') + 'link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
 				msg.path = {
 					url: '/devices/' + srcDevice,
 					query: {link_port: srcPort}
@@ -376,42 +377,42 @@ export class headerController{
 				dstArr = message.payload.dst.split(':');
 				dstPort = dstArr[dstArr.length - 1];
 				dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
-				msg.title += '删除link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
+				msg.title += this.translate('MODULE.HEADER_INFO.REMOVE') + 'link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
 				msg.path = {
 					url: false,
 					query: {}
 				};
 				break;
 			case 'overThreshold':
-				msg.title += '告警 - ' + message.payload.rule_name + ':' + message.payload.msg;
+				msg.title += this.translate('MODULE.HEADER_INFO.ALERT') + ' - ' + message.payload.rule_name + ':' + message.payload.msg;
 				msg.path = {
 					url: '/alert',
 					query: {uuid: message.payload.uuid}
 				};
 				break;
 			case 'deviceAdded':
-				msg.title += '新增设备 - ' + getDeviceName(message.payload.device);
+				msg.title += this.translate('MODULE.HEADER_INFO.ADD_DEVICE') + ' - ' + getDeviceName(message.payload.device);
 				msg.path = {
 					url: '/devices/' + message.payload.device,
 					query: {}
 				};
 				break;
 			case 'deviceUpdated':
-				msg.title += '更新设备 - ' + getDeviceName(message.payload.device);
+				msg.title += this.translate('MODULE.HEADER_INFO.UPDATE_DEVICE') +' - ' + getDeviceName(message.payload.device);
 				msg.path = {
 					url: '/devices/' + message.payload.device,
 					query: {}
 				};
 				break;
 			case 'deviceRemoved':
-				msg.title += '删除设备 - ' + getDeviceName(message.payload.device);
+				msg.title += this.translate('MODULE.HEADER_INFO.RM_DEVICE') +' - ' + getDeviceName(message.payload.device);
 				msg.path = {
 					url: false,
 					query: {}
 				};
 				break;
 			default:
-				msg.title += '未知通知';
+				msg.title += this.translate('MODULE.HEADER_INFO.UNKNOWN_MSG');
 				msg.path = {
 					url: false,
 					query: {}

@@ -93,7 +93,7 @@ export class sFlowController {
   initActions() {
     this.scope.open = ()  => {
       if(this.scope.showWizard) return;
-      this.scope.title = '创建sFlow';
+      this.scope.title = this.translate('MODULES.SWITCH.SFLOW.CREATE.TITLE');
       this.initSelectOptions();
       this.scope.showWizard = true;
     };

@@ -118,7 +118,7 @@ export class ElasticsearchController {
       originEndTime: nginx_end_time,
       selectedIpOption: null,
       ipOptions: [{
-        label: '--全部IP--',
+        label: '--' + this.translate('MODULES.MANAGE.ELASTICSEARCH.SELECT_ALL_IP') +'--',
         value: ''
       }],
       loading: true,

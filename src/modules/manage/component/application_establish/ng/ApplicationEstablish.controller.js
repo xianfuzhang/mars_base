@@ -32,7 +32,7 @@ export class ApplicationEstablishController {
     scope.wizardHeight = {"height":'200px'};
 
     this.di.$scope.showWizard = false;
-    this.di.$scope.title = '添加应用';
+    this.di.$scope.title = this.translate('MODULES.MANAGE.APPLICATION.ADD.TITLE');
     this.di.$scope.steps = [
       {
         id: 'step1',

@@ -54,11 +54,6 @@ module.exports = function (config) {
       //   }
       // }),
       //new webpack.HotModuleReplacementPlugin(),
-      new CopyWebpackPlugin([{
-        from: path.resolve('src/libs/jtopo/jtopo-0.4.8-min.js'),
-        to: path.resolve('public/jtopo-0.4.8-min.js'),
-        toType: 'file'
-      }])
     ],
     devtool: 'inline-source-map',
     devServer: {

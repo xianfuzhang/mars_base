@@ -34,7 +34,7 @@ export class NtpEstablishController {
     let di = this.di;
 
     this.di.$scope.showWizard = false;
-    this.di.$scope.title = '添加NTP Server';
+    this.di.$scope.title = this.translate('MODULES.MANAGE.NTP.TITLE');
     this.di.$scope.steps = [
       {
         id: 'step1',

@@ -5,6 +5,7 @@ export class DonutTopo {
 			'$window',
 			'$templateCache',
 			'$timeout',
+      '$filter',
 			'_',
 			'd3',
 			'switchService'
@@ -18,7 +19,7 @@ export class DonutTopo {
 		this.replace = true;
     this.restrict = 'E';
     this.template = require('../template/donut-topo');
-
+    this.translate = this.di.$filter('translate');
     this.scope = {
       spines: '=',
       leafs: '=',
@@ -99,7 +100,7 @@ export class DonutTopo {
 			if (scope.switches.length === 0) {
 				g.append('text')
 					.classed('center', true)
-					.text('当前环境暂无交换机信息');
+					.text(this.translate('MODULES.TOPO.INFO.NO_DEVICE'));
 			}
 			const pie = this.di.d3.pie()
 	      .padAngle(OUTER_ARC_PADDING)

@@ -236,8 +236,9 @@ export class DHCPController {
 
     scope.displayLabel = {
       v6enable : {
-        options: [{'label': '是', 'value': '1'}, {'label': '否', 'value': '0'}]
-      }
+        options: [{'label': this.translate('MODULES.MANAGE.DHCP.YES'), 'value': '1'}, {'label': this.translate('MODULES.MANAGE.DHCP.NO'), 'value': '0'}]
+      },
+      v6enable_radio: {on: this.translate('MODULES.MANAGE.DHCP.YES'), off: this.translate('MODULES.MANAGE.DHCP.NO'), id: 'ntp_enable'}
     };
 
     scope.addIPMac = () =>{

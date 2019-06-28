@@ -285,8 +285,20 @@ export class alertService {
   }
 
 
-  getHcObjectDisLabel(){
-    return {options: [{label: '交换机', value: 'switch'}, {label: '控制器', value: 'controller'}],'hint': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.OBJECT')}
+  getHcObjectDisLabel() {
+    return {
+      options: [
+        {
+          label: this.translate('MODULES.ALERT.HEALTHY_CHECK.OBJECT.SWITCH'),
+          value: 'switch'
+        },
+        {
+          label: this.translate('MODULES.ALERT.HEALTHY_CHECK.OBJECT.CONTROLLER'),
+          value: 'controller'
+        }
+      ],
+      'hint': this.translate('MODULES.ALERT.HEALTHY_CHECK.TABLE.OBJECT')
+    }
   }
 
   getHcTypeSwtDisLabel(){

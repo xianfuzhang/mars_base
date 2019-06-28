@@ -7,6 +7,7 @@ export class VlanTopo {
       '$timeout',
       'localStoreService',
       '$document',
+      '$filter',
       '_',
       'd3',
       'd3-force',
@@ -24,6 +25,7 @@ export class VlanTopo {
     this.replace = true;
     this.restrict = 'E';
     this.template = require('../template/vlanTopo');
+    this.translate = this.di.$filter('translate');
 
     this.scope = {
       links: '=',
@@ -535,13 +537,13 @@ export class VlanTopo {
 
             let device1Ele = self.di.d3.select('g[deviceId=\'' + res[0]['deviceId']+'\']');
             device1Ele.select('text').text(d1=>{
-              return getDeviceName(d1.id) + ': 端口 ' + res[0]['port']
+              return getDeviceName(d1.id) + ': '+ self.translate('MODULES.TOPO.INFO.PORT')+' ' + res[0]['port']
             });
             device1Ele.select('.force-topo__node-outline').style('stroke', '#ff7c09')
 
             let device2Ele = self.di.d3.select('g[deviceId=\'' + res[1]['deviceId']+'\']');
             device2Ele.select('text').text(d1=>{
-              return getDeviceName(d1.id) + ': 端口 ' + res[1]['port']
+              return getDeviceName(d1.id) + ': '+ self.translate('MODULES.TOPO.INFO.PORT')+' ' + res[1]['port']
             });
             device2Ele.select('.force-topo__node-outline').style('stroke', '#ff7c09')
 
@@ -675,7 +677,7 @@ export class VlanTopo {
                 rect.style('stroke','#ff7c09').style('fill', '#ff7c09');
 
                 curNode.select('text').text(d1=>{
-                  return getDeviceName(d1.id) + ': 端口 ' + String(i + 1)
+                  return getDeviceName(d1.id) + ': '+ self.translate('MODULES.TOPO.INFO.PORT')+' '  + String(i + 1)
                 });
               })
               .on('mouseout', function () {
@@ -1004,7 +1006,7 @@ export class VlanTopo {
               return false;
             }
           } else {
-            console.log('[topo.js > _checkPeerLinksState()] Device ' + key + ' 找不到');
+            console.log('[topo.js > _checkPeerLinksState()] Device ' + key + ' cannot find');
           }
 
         });

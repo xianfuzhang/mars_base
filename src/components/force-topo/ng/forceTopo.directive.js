@@ -656,7 +656,7 @@ export class ForceTopo {
               return false;
             }
           } else {
-            console.log('[topo.js > _checkPeerLinksState()] Device ' + key + ' 找不到');
+            console.log('[topo.js > _checkPeerLinksState()] Device ' + key + ' cannot find');
           }
 
         });

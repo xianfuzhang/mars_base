@@ -123,11 +123,11 @@ export class AnalyzerController {
       originStartTime: nginx_begin_time,
       originEndTime: nginx_end_time,
       selectedIpOption: {
-        label: '--全部IP--',
+        label: '--' + this.translate('MODULES.MANAGE.ELASTICSEARCH.SELECT_ALL_IP') +'--',
         value: ''
       },
       ipOptions: [{
-        label: '--全部IP--',
+        label: '--' + this.translate('MODULES.MANAGE.ELASTICSEARCH.SELECT_ALL_IP') +'--',
         value: ''
       }],
       loading: true,
@@ -404,13 +404,13 @@ export class AnalyzerController {
       const pad = this.pad;
       let options = {
         title: {
-          text: "API具体访问情况分析"
+          text: this.translate('MODULES.MANAGE.ELASTICSEARCH.API_DETAIL_ANY')
         },
         scales: {
           yAxes: [{
             scaleLabel: {
               display: true,
-              labelString: '访问次数'
+              labelString: this.translate('MODULES.MANAGE.ELASTICSEARCH.VISIT_COUNT')
             },
             ticks: {
               beginAtZero: false,
@@ -453,7 +453,7 @@ export class AnalyzerController {
       }
 
       scope.nginxTypeAnalyzer.chartConfig.data = [dataList];
-      scope.nginxTypeAnalyzer.chartConfig.series = ['访问次数'];
+      scope.nginxTypeAnalyzer.chartConfig.series = [this.translate('MODULES.MANAGE.ELASTICSEARCH.VISIT_COUNT')];
       scope.nginxTypeAnalyzer.chartConfig.labels = labelsArr;
       scope.nginxTypeAnalyzer.chartConfig.options = options;
       scope.nginxTypeAnalyzer.chartConfig.colors = [{backgroundColor: 'rgb(255,228,181)'}]
@@ -461,7 +461,7 @@ export class AnalyzerController {
 
     let setNginxChartLineData = (initial) => {  // initial: 初始化
       let dataArr = [];
-      let series = ['访问次数'];
+      let series = [this.translate('MODULES.MANAGE.ELASTICSEARCH.VISIT_COUNT')];
       let labelsArr = [];
       let clientIps = [];
       let dataModel = scope.nginxTimerangeAnalyzer.dataModel;
@@ -486,7 +486,7 @@ export class AnalyzerController {
 
       const pad = this.pad;
 
-      let title = "API访问情况统计";
+      let title = this.translate('MODULES.MANAGE.ELASTICSEARCH.API_DETAIL_COUNT_ANY');
       title = scope.nginxTimerangeAnalyzer.selectedIpOption.value ? scope.nginxTimerangeAnalyzer.selectedIpOption.value + ' - ' + title : title;
       let options = {
         title: {
@@ -497,7 +497,7 @@ export class AnalyzerController {
           yAxes: [{
             ticks: {
               beginAtZero: false,
-              labelString: '访问次数',
+              labelString: this.translate('MODULES.MANAGE.ELASTICSEARCH.VISIT_COUNT'),
               callback: function(value, index, values) {
                 return getFormattedNumber(value);
               }
@@ -544,7 +544,7 @@ export class AnalyzerController {
 
     let setRealtimeNginxChartLineData = (initial) => {  // initial: 初始化
       let dataArr = [];
-      let series = ['访问次数'];
+      let series = [this.translate('MODULES.MANAGE.ELASTICSEARCH.VISIT_COUNT')];
       let labelsArr = [];
       let clientIps = [];
       let dataModel = scope.nginxTimerangeAnalyzer.dataModel;
@@ -597,13 +597,13 @@ export class AnalyzerController {
       let options = {
         title: {
           display: true,
-          text: "Syslog日志统计情况",
+          text: this.translate('MODULES.MANAGE.ELASTICSEARCH.SYSLOG_DETAIL_ANY'),
         },
         scales: {
           yAxes: [{
             ticks: {
               beginAtZero: false,
-              labelString: '次数',
+              labelString: this.translate('MODULES.MANAGE.ELASTICSEARCH.TIMES'),
               callback: function(value, index, values) {
                 return getFormattedNumber(value);
               }
@@ -681,13 +681,13 @@ export class AnalyzerController {
       let options = {
         title: {
           display: true,
-          text: "Mars系统日志统计情况",
+          text: this.translate('MODULES.MANAGE.ELASTICSEARCH.SYSTEM_DETAIL_ANY'),
         },
         scales: {
           yAxes: [{
             ticks: {
               beginAtZero: false,
-              labelString: '次数',
+              labelString: this.translate('MODULES.MANAGE.ELASTICSEARCH.TIMES'),
               callback: function(value, index, values) {
                 return getFormattedNumber(value);
               }
@@ -982,7 +982,7 @@ export class AnalyzerController {
 
       dataArr.forEach((data) => {
         dataset.data.push(data.count);
-        chartData.labels.push(data.key ? data.key : '未知');
+        chartData.labels.push(data.key ? data.key : this.translate('MODULES.MANAGE.ELASTICSEARCH.UNKNOWN'));
       });
 
       chartData.datasets.push(dataset);

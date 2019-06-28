@@ -710,7 +710,7 @@ export class Topo {
               return false;
             }
           } else {
-            console.log('[topo.js > _checkPeerLinksState()] Device '+ key + ' 找不到');
+            console.log('[topo.js > _checkPeerLinksState()] Device '+ key + ' cannot find');
           }
 
         });
@@ -927,7 +927,7 @@ export class Topo {
         let node = new JTopo.Node(text);
         node.dragable = false ;
         node.showSelected =false;
-        node.font = '16px 微软雅黑';
+        node.font = '16px';
         node.fontColor = "255,255,255";
         node.fillColor = "rgba(0,0,0,.2)";
         node.textPosition = 'Middle_Center';

@@ -359,7 +359,7 @@ export class SegmentDetailController {
         }else if($event.action.value === 'edit'){
           let param = {'tenantName': scope.tenantName, 'segmentName':scope.segmentName, 'type':scope.detailModel.type, 'data':$event.data};
           if($event.data.ports && $event.data.logical_ports && $event.data.mac_based_vlans){
-            this.di.notificationService.renderWarning(scope, $event.data.device_id + "已经设置完毕，如果需要修改，请删除后重新设置");
+            this.di.notificationService.renderWarning(scope, $event.data.device_id + this.translate('MODULES.LOGICAL.SEGMENT_DETAIL.SETT_NEED_REMOVE'));
           } else {
             this.di.$rootScope.$emit('segmentmember-wizard-show', param);
           }

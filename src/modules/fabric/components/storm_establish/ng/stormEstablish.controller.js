@@ -106,6 +106,7 @@ export class StormEstablishController {
     };
 
 
+    let translate = this.translate;
     scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
 
@@ -130,7 +131,7 @@ export class StormEstablishController {
       }
 
       if(scope.stormModel.device_id === ""){
-        inValidJson_Copy['errorMessage'] = "请选择交换机!";
+        inValidJson_Copy['errorMessage'] = translate('MODULES.FABRIC.STORM.MSG.SELECT_DEVICE');
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
