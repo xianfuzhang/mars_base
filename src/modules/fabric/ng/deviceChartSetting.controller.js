@@ -19,19 +19,19 @@ export class DeviceChartSettingController {
 		
 		switch(this.di.dataModel.chartType) {
 			case 'device-cpu':
-        scope.title = '交换机CPU设置';
+        scope.title = this.translate('MODULES.DASHBOARD.CHART.SWITCH_CPU.TITLE');
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
 				break;
 			case 'device-memory':
-        scope.title = '交换机内存设置';
+        scope.title = this.translate('MODULES.DASHBOARD.CHART.SWITCH_MEMORY.TITLE');
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
 				break;
       case 'device-ports':
-        scope.title = '交换机流量Top10设置';
+        scope.title = this.translate('MODULES.DASHBOARD.CHART.NETWORK_TOP_10.TITLE');
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
         break;
       case 'device-port':
-        scope.title = '端口流量设置';
+        scope.title = this.translate('MODULES.DASHBOARD.CHART.SWITCH_PORT_NETWORK_SETTING.TITLE');
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
         break;
 		}

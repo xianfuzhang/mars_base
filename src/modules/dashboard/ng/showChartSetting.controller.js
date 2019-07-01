@@ -46,11 +46,11 @@ export class ShowChartSettingController {
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
         break;
       case 'device-interface':
-        scope.title = "交换机流量设置";
+        scope.title = this.translate('MODULES.DASHBOARD.SETTING.NORMAL_FLOW');
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
         break;
       case 'device-interface-drop-error':
-        scope.title = "交换机异常流量设置";
+        scope.title = this.translate("MODULES.DASHBOARD.SETTING.ANORMAL_FLOW");
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
         break;
 		}
