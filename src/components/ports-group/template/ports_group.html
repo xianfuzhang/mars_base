@@ -1,9 +1,9 @@
 <div class="mars-ports-group">
     <table>
         <tbody>
-            <tr ng-repeat="($index, ports) in portsGroups" ng-init="outerIndex = $index">
-                <td ng-repeat="($key, port) in ports">
-                    <div class="port {{port.selected ? 'selected' : ''}} {{port.disabled ? 'disabled' : ''}}" title="{{port.title}}" ng-click="click(outerIndex, $key)"></div>
+            <tr ng-repeat="ports in portsGroups track by $index" ng-init="outerIndex = $index">
+                <td ng-repeat="port in ports track by $index" ng-init="innerIndex = $index">
+                    <div class="port {{port.disabled ? 'disabled' : port.selected ? 'selected' : ''}}" title="{{port.title}}" ng-click="selectPort(port.id)"></div>
                 </td>
             </tr>
         </tbody>

@@ -214,17 +214,74 @@ export class VlanController {
       }
     }
 
-    scope.batchChangePorts = (index, portsStr) => {
-      let regex = new RegExp(scope.portsBatchRegex)
-      if(portsStr || portsStr.match(regex)) {
-        let portsArr = this.getPortsArrayFromStr(portsStr);
-        scope.vlanModel.devices[index].ports.forEach((port) => {
-          if(portsArr.indexOf(port.id) > -1) {
-            port.selected = true;
+    scope.formatPortsToStr = (ports) => {
+      // get formatted port string
+      let formattedArr = [];
+
+      let sortedPorts = DI._.sortBy(ports, () => {
+        return ports.id
+      })
+
+      let startId, currentId, preId;
+      for (let i = 0; i < sortedPorts.length; i++) {
+        currentId = parseInt(sortedPorts[i].id);
+        if(sortedPorts[i].selected && startId == undefined) {
+          startId = parseInt(sortedPorts[i].id);
+          preId = parseInt(sortedPorts[i].id);
+          continue;
+        }
+
+        if(sortedPorts[i].selected && currentId - preId == 1) {
+          preId = currentId;
+        } else if(sortedPorts[i].selected) {
+          if(startId == preId) {
+            formattedArr.push(preId);
           } else {
-            port.selected = false;
+            formattedArr.push(startId + '-' + preId);
           }
-        })
+
+          startId = currentId;
+          preId = currentId;
+        }
+      }
+
+      if(startId == preId && startId !== undefined) {
+        formattedArr.push(preId);
+      } else if(startId !== undefined){
+        formattedArr.push(startId + '-' + preId);
+      }
+
+      return formattedArr.join(',');
+    }
+
+    let batchChangePortsInterval = null;
+    scope.batchChangePorts = (index, portsStr) => {
+      const getPortsArrayFromStr = this.getPortsArrayFromStr;
+      function handleBatch() {
+        let regex = new RegExp(scope.portsBatchRegex)
+        if(portsStr && portsStr.match(regex)) {
+          let portsArr = getPortsArrayFromStr(portsStr);
+          scope.vlanModel.devices[index].ports.forEach((port) => {
+            if(portsArr.indexOf(port.id) > -1) {
+              port.selected = true;
+            } else {
+              port.selected = false;
+            }
+          })
+        } else if(portsStr && portsStr.trim() == '') {
+          scope.vlanModel.devices[index].ports.forEach((port) => {
+            port.selected = false;
+          })
+        }
+
+        scope.$apply();
+      }
+
+      if(batchChangePortsInterval) {
+        clearTimeout(batchChangePortsInterval);
+        batchChangePortsInterval = setTimeout(handleBatch, 2 * 1000)
+      } else {
+        batchChangePortsInterval = setTimeout(handleBatch, 2 * 1000)
       }
     }
 
@@ -246,6 +303,26 @@ export class VlanController {
       if (scope.model.selectedSubFilter == value) return;
       console.log(value);
     };
+
+    unsubscribers.push(scope.$watch('vlanModel.selectedDevice', () => {
+      if (scope.vlanModel.selectedDevice.value == '') {
+        scope.addDeviceDisabled = true;
+        scope.removeDeviceDisabled = true;
+        return;
+      }
+
+      let index = DI._.findIndex(scope.vlanModel.devices, (device) => {
+        return device.id == scope.vlanModel.selectedDevice.value;
+      })
+
+      if (index == -1) { // the device does not exist
+        scope.addDeviceDisabled = false;
+        scope.removeDeviceDisabled = true;
+      } else {
+        scope.addDeviceDisabled = true;
+        scope.removeDeviceDisabled = false;
+      }
+    }, true));
 
     scope.$on('$destroy', () => {
       unsubscribers.forEach((cb) => {
@@ -361,7 +438,7 @@ export class VlanController {
       }, {
         id: 6,
         title: 6,
-        selected: false
+        selected: true
       }, {
         id: 7,
         title: 7,
@@ -393,7 +470,7 @@ export class VlanController {
       }, {
         id: 14,
         title: 14,
-        selected: false
+        selected: true
       }, {
         id: 15,
         title: 15,
