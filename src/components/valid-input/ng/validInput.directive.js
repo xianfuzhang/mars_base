@@ -37,6 +37,7 @@ export class validInput {
       vHelper: '@',
       vFixedHeight: '@',
       vRequire: '@',
+      vValue: '=ngValue',
       vModel: '=ngModel',
       ngChange: '&',
       vRegex: '=',
@@ -290,7 +291,15 @@ export class validInput {
         // scope.$apply();
       }));
 
+      let vModelHasChanged = false;
       unsubscribers.push(scope.$watch('vModel', () => {
+        if (!vModelHasChanged) { // bugfix by yazhou.miao
+          vModelHasChanged = true;
+          // use ngValue instead of ngModel when init value
+          scope.textFieldModel.value = scope.vValue ? scope.vValue: '';
+          return;
+        }
+
         scope.textFieldModel.value = scope.vModel?scope.vModel:'';
         scope.ngChange();
       }));

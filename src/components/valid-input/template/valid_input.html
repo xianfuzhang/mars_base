@@ -26,6 +26,7 @@
                ng-class="{'afterBlur': validModel.change, 'mouseover':validModel.mouseOver, 'focus':validModel.focus}"
                ng-blur="blur($event)"  type="text" ng-model="vModel"
                ng-required="validModel.require"
+               ng-value="vValue"
                ng-model-options="{allowInvalid:true}"
                autocomplete="off"/>
         <label class="mdc-floating-label" for="{{id}}" ng-show="validModel.floatLabel != null" >{{validModel.floatLabel}}</label>
