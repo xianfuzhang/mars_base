@@ -24,6 +24,7 @@ export class CheckboxRenderer {
     		console.log('checkboxRender current value =' + val);
     		spec.object[spec.col.field] = val;
     		spec.value = val;
+        scope.$emit('td-checkbox-change', {'column': spec.col.field, 'newValue': val, 'trObject': spec.object});
     		console.log('checkboxRender spec object =' + JSON.stringify(spec.object));
     	};
 
