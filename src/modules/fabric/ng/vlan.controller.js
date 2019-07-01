@@ -370,6 +370,7 @@ export class VlanController {
         this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.DEVICE'), 'value': 'device'});
       }
       if (resultArr[3].length > 0) {
+      	this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(resultArr[3]);
         this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.VLAN'), 'value': 'vlan'});
       }
       if (this.scope.model.filterTypes.length > 0) {
@@ -377,6 +378,7 @@ export class VlanController {
         this.scope.model.subFilterItems = this.scope.model.selectedFilterType.value === 'device'
             ? this.scope.model.devicesMapArr : this.scope.model.vlansMapArr;
       }
+
       console.log(resultArr);
       this.scope.onTabChange(this.scope.tabs[0]);
       this.scope.model.actionsShow = this.getActionsShow();
@@ -387,7 +389,7 @@ export class VlanController {
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.vlanDataManager.getVlanConfig().then((res)=>{
-          this.scope.model.vlansMapArr = res.data.devices;
+          this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(res.data.devices);
           this.entityStandardization(res.data.devices);
           defer.resolve({
             data: this.scope.model.entities
@@ -722,9 +724,9 @@ export class VlanController {
         entities.forEach((device) => {
           device.ports.forEach((port) => {
             let obj = {};
-            obj['id'] = device.id + '_' + port.id;
-            obj['deivce'] = this.scope.model.devicesMap[device.id] || device.id;
-            obj['port'] = port.id;
+            obj['id'] = device['device-id'] + '_' + port.port;
+            obj['device'] = this.scope.model.devicesMap[device['device-id']] || device['device-id'];
+            obj['port'] = port.port;
             obj['type'] = port.mode;
             obj['vlan'] = port.vlans.toString();
             obj['pvid'] = port.native;
@@ -747,6 +749,22 @@ export class VlanController {
     }
 
     return actions;
+  }
+
+  getVlanOptionsFromConfig(config) {
+  	let vlanObject = new Map(), result = [];
+  	config.forEach((device) => {
+  		device.vlans.forEach((vlan) => {
+  			vlanObject.set(vlan, vlan);
+  		});
+  	});
+  	vlanObject.forEach((val, key) => {
+  		result.push({
+  			'label': key,
+  			'value': val
+  		});
+  	});
+  	return result;
   }
 }
 

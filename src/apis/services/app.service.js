@@ -939,7 +939,7 @@ export class appService {
   }
 
   getVlanConfigUrl(){
-    return this.getZoneEndpoint() + '/vlan/v1/vlan-config';  
+    return this.getZoneEndpoint(true) + '/vlan/v1/vlan-config';  
   }
 
 }
