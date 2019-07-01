@@ -5,6 +5,7 @@ export class PortsGroup {
   static getDI () {
     return [
       '$rootScope',
+      '_'
     ];
   }
 
@@ -20,9 +21,8 @@ export class PortsGroup {
 
     this.scope = {
       groupId: '@',
-      portsList: '@',
       portsNumPerRow: '@',
-      portsModel: '='
+      portsList: '='
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -32,56 +32,47 @@ export class PortsGroup {
     let unSubscribes = []
     const PORTS_NUM_PER_ROW = 24;  // the default num per row
 
-    scope.portsNumPerRow = scope.portsNumPerRow || PORTS_NUM_PER_ROW;
+    const PortsNumPerRow = parseInt(scope.portsNumPerRow) || PORTS_NUM_PER_ROW;
     scope.portsGroups = [];
     let newGroup = [];
+    let blankPort = {
+      id: '',
+      title: '',
+      selected: false,
+      disabled: true
+    }
 
-    for (let i=0; i < scope.portsList.length; i++) {
-      newGroup.push(scope.portsList[i]);
-      if (newGroup.length == scope.portsNumPerRow) {
-        scope.portsGroups.push(newGroup);
-        newGroup = [];
+    let halfLength = Math.ceil(scope.portsList.length / 2);
+    for (let i=0; i < PortsNumPerRow * 2; i++) {
+      if (i < halfLength) {
+        newGroup.push(scope.portsList[i]);
+      } else if (i < PortsNumPerRow) {
+        newGroup.push(blankPort);
+      } else if (i < PortsNumPerRow + halfLength) {
+        newGroup.push(scope.portsList[i - PortsNumPerRow + halfLength]);
+      } else if (i < PortsNumPerRow * 2) {
+        newGroup.push(blankPort);
       }
 
-      if(i == scope.portsList.length - 1 && newGroup.length) {
-        let diffCount = scope.portsNumPerRow - newGroup.length;
-        for(let count = 0; count < diffCount; count++) {
-          newGroup.push({
-            id: '',
-            title: '',
-            selected: false,
-            disabled: true
-          })
-        }
+      if (newGroup.length == PortsNumPerRow) {
         scope.portsGroups.push(newGroup);
+        newGroup = [];
       }
     }
 
     (function init () {
-      scope.click = (index_one, index_two) => {
+      scope.selectPort = (portId) => {
         // let index_one = Math.floor($index / PORTS_NUM_PER_ROW);
         // let index_two = $index % PORTS_NUM_PER_ROW;
 
-        if(!scope.portsGroups[index_one][index_two].disabled) {
-          scope.portsGroups[index_one][index_two].selected = !scope.portsGroups[index_one][index_two].selected;
+        let index = this.di._.findIndex(scope.portsList, (port) => {
+          return port.id == portId
+        });
+
+        if(index > -1) {
+          scope.portsList[index].selected = !scope.portsList[index].selected;
         }
       }
-
-      let portsListChanged = false;
-      unSubscribes.push(scope.$watch("portsList", (newList, oldList) => {
-        if(portsListChanged == false) { // initial state
-          portsListChanged == true;
-          return;
-        }
-
-        for (let i=0; i < scope.portsList.length; i++) {
-          newGroup.push(scope.portsList[i]);
-          if (newGroup.length == 24) {
-            scope.portsGroups.push(newGroup);
-            newGroup = [];
-          }
-        }
-      },true));
 
       unSubscribes.push(this.di.$rootScope.$on('ports-selected', (evt, msgObj) => {
         if(msgObj.groupId != scope.groupId) return
