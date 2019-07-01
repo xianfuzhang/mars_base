@@ -50,7 +50,7 @@
                 <mdl-button ng-click="addDevice(vlanModel.selectedDevice.value)" icon-name="add" disabled="addDeviceDisabled"></mdl-button>
                 <mdl-button ng-click="removeDevice(vlanModel.selectedDevice.value)" icon-name="remove" disabled="removeDeviceDisabled"></mdl-button>
                 <div style="margin:0 auto;">
-                    <mar-button btn-text="'创建Vlan'" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="createVlan()" btn-disabled="!vlanModel.devices.length"/>
+                    <mar-button btn-text="'MODULES.VLAN.TAB.EDIT.CREATE_VLAN' | translate" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="createVlan()" btn-disabled="!vlanModel.devices.length"/>
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
                     <div class="name">{{device.name}}:</div>
                     <ports-group group-id="{{'group-id-' + $index}}" ports-list="device.ports" ports-num-per-row="27"></ports-group>
                     <div class="batch-ports">
-                        <span>批量输入端口：</span><valid-input ng-model="batchPorts" ng-value="formatPortsToStr(device.ports)" v-regex="portsBatchRegex" v-name="ports" v-rpcid="device-ports-input" ng-change="batchChangePorts($index, batchPorts)"></valid-input>
+                        <span ng-bind="'MODULES.VLAN.TAB.EDIT.BATCH_INPUT' | translate"></span><valid-input ng-model="batchPorts" ng-value="formatPortsToStr(device.ports)" v-regex="portsBatchRegex" v-name="ports" v-rpcid="device-ports-input" ng-change="batchChangePorts($index, batchPorts)"></valid-input>
                     </div>
                 </div>
             </div>

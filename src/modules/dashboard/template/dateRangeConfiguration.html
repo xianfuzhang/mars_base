@@ -6,7 +6,7 @@
  	<form class="dateRange__form" name="switchRangeModel.configForm" autocomplete="off" novalidate>
  		<div class="column-manipulation-field__content column-manipulation-field__content__date-range-modifier">
 	 		<div class="column-manipulation-field__item column-manipulation-field__item__date-range-modifier">
-		 		<label ng-class="{'date-warning-label': switchRangeModel.configForm.$invalid=== true}">开始时间：</label>
+		 		<label ng-class="{'date-warning-label': switchRangeModel.configForm.$invalid=== true}">{{'MODULES.DASHBOARD.SETTING.START_TIME'|translate}}</label>
 	 			<div class="calendar-container" ng-class="{'date-picker-warning': switchRangeModel.configForm.$invalid=== true}">
 					<date-picker ng-model="switchRangeModel.calendar.begin_date" options="switchRangeModel.datePickerOptions">
 					</date-picker>
@@ -14,15 +14,14 @@
 	 			</div>
 	 		</div>
 	 		<div class="column-manipulation-field__item column-manipulation-field__item__date-range-modifier">
-	 			<label>结束时间：</label>
+	 			<label>{{'MODULES.DASHBOARD.SETTING.END_TIME'|translate}}</label>
 	 			<div class="calendar-container">
 					<date-picker ng-model="switchRangeModel.calendar.end_date" options="switchRangeModel.datePickerOptions"></date-picker>
 			 		 <div class="calendar-time-field" uib-timepicker ng-model="switchRangeModel.calendar.end_time" hour-step="1" minute-step="30" show-meridian="false"></div>
 	 			</div>
 	 		</div>
 	 		<div class="column-manipulation-field__item column-manipulation-field__item__date-range-modifier">
-	 			<p class="date-range-warning" ng-class="{'show': switchRangeModel.configForm.$invalid=== true}">
-	 				开始时间需小于结束时间!</p>
+	 			<p class="date-range-warning" ng-class="{'show': switchRangeModel.configForm.$invalid=== true}" ng-bind="'MODULES.DASHBOARD.SETTING.TIME_ERROR_MESSAGE'|translate"></p>
 	 		</div>
  		</div>
 	 	<div class="column-manipulation-field__footer">

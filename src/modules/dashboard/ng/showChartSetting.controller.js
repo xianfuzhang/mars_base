@@ -30,8 +30,8 @@ export class ShowChartSettingController {
       case 'controller-interface':
         scope.title = this.translate("MODULES.DASHBOARD.CHART.CONTROLLER_INTERFACE.TITLE");
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_CONTROLLER');
-        scope.unitTypeOptionTitle = '流量类型:';
-        scope.stateTypeOptionTitle = '流量状态:';
+        scope.unitTypeOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.FLOW_STATE');
+        scope.stateTypeOptionTitle = this.translate("MODULES.DASHBOARD.SETTING.FLOW_TYPE");
         break;
 			case 'device-cpu':
         scope.title = this.translate("MODULES.DASHBOARD.CHART.SWITCH_CPU.TITLE");
