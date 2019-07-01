@@ -1321,7 +1321,7 @@ export class FlowEstablishController {
 
     };
 
-    let translate = this.translate;
+    // let translate = this.translate;
     this.di.$scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
       // if(di.$scope.criteriasModel && di.$scope.criteriasModel.length === 0){
