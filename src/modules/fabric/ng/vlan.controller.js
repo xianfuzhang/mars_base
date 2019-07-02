@@ -201,6 +201,9 @@ export class VlanController {
           name:'test',
           ports: portsList
         })
+
+        scope.addDeviceDisabled = true;
+        scope.removeDeviceDisabled = false;
       }
     }
 
@@ -211,6 +214,8 @@ export class VlanController {
 
       if (index > -1) { // remove device
         scope.vlanModel.devices.splice(index, 1);
+        scope.removeDeviceDisabled = true;
+        scope.addDeviceDisabled = false;
       }
     }
 
@@ -305,7 +310,7 @@ export class VlanController {
     };
 
     unsubscribers.push(scope.$watch('vlanModel.selectedDevice', () => {
-      if (scope.vlanModel.selectedDevice.value == '') {
+      if (scope.vlanModel.selectedDevice && scope.vlanModel.selectedDevice.value == '') {
         scope.addDeviceDisabled = true;
         scope.removeDeviceDisabled = true;
         return;
@@ -747,7 +752,6 @@ export class VlanController {
         actions = this.di.deviceService.getDHCPRelayActionsShow();
         break;
     }
-
     return actions;
   }
 

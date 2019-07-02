@@ -46,16 +46,54 @@
       <section class="tab-content" ng-if="tabSelected.type == 'edit'">
         <div class="vlan-table-field" >
             <div class="header">
-                <mdl-select ng-model="vlanModel.selectedDevice" display-label="{options: deviceOptions}"></mdl-select>
-                <mdl-button ng-click="addDevice(vlanModel.selectedDevice.value)" icon-name="add" disabled="addDeviceDisabled"></mdl-button>
-                <mdl-button ng-click="removeDevice(vlanModel.selectedDevice.value)" icon-name="remove" disabled="removeDeviceDisabled"></mdl-button>
-                <div style="margin:0 auto;">
-                    <mar-button btn-text="'MODULES.VLAN.TAB.EDIT.CREATE_VLAN' | translate" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="createVlan()" btn-disabled="!vlanModel.devices.length"/>
+                <div class="mode_type">
+                    <mdl-radio ng-model="vlanModel.editType" name="editType" value="table_edit"
+                               display-label="{id: 'check_1', label: '修改', name: 'editType', value: 'edit_vlan'}">
+                    </mdl-radio>
+                    <mdl-radio ng-model="vlanModel.editType" name="role" value="batch_add"
+                               display-label="{id: 'check_2', label: '添加', name: 'editType', value: 'add_vlan'}">
+                    </mdl-radio>
+                </div>
+
+                <div class="operation_group" ng-if="vlanModel.editType == 'edit_vlan'">
+                    <mdl-select ng-model="vlanModel.selectedDevice" display-label="{options: deviceOptions}"></mdl-select>
+                    <div style="display: flex;">
+                        <mdl-radio ng-model="vlanModel.editType" name="editType" value="table_edit"
+                                   display-label="{id: 'check_1', label: 'VLAN', name: 'editType', value: 'edit_vlan'}">
+                        </mdl-radio>
+                        <mdl-radio ng-model="vlanModel.editType" name="role" value="batch_add"
+                                   display-label="{id: 'check_2', label: 'Port', name: 'editType', value: 'add_vlan'}">
+                        </mdl-radio>
+                        <mdl-select style="margin-left:20px;" ng-model="vlanModel.selectedDevice" display-label="{options: deviceOptions}"></mdl-select>
+                    </div>
+                    <div>
+                        <mar-button btn-text="'MODULES.VLAN.TAB.EDIT.EDIT_VLAN' | translate" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="createVlan()" btn-disabled="!vlanModel.devices.length"/>
+                    </div>
+                </div>
+
+                <div class="operation_group" ng-if="vlanModel.editType == 'add_vlan'">
+                    <div style="display: flex;align-items: center;">
+                        <mdl-select ng-model="vlanModel.selectedDevice" display-label="{options: deviceOptions}"></mdl-select>
+                        <mdl-button ng-click="addDevice(vlanModel.selectedDevice.value)" icon-name="add" disabled="addDeviceDisabled"></mdl-button>
+                        <mdl-button ng-click="removeDevice(vlanModel.selectedDevice.value)" icon-name="remove" disabled="removeDeviceDisabled"></mdl-button>
+                    </div>
+                    <div>
+                        <mar-button btn-text="'MODULES.VLAN.TAB.EDIT.CREATE_VLAN' | translate" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="createVlan()" btn-disabled="!vlanModel.devices.length"/>
+                    </div>
                 </div>
             </div>
 
+            <div class="content" ng-if="vlanModel.editType == 'edit_vlan'">
+                <div class="device" ng-repeat="device in vlanModel.devices track by $index">
+                    <div class="name">{{device.name}}:</div>
+                    <ports-group group-id="{{'group-id-' + $index}}" ports-list="device.ports" ports-num-per-row="27"></ports-group>
+                    <div class="batch-ports">
+                        <span ng-bind="'MODULES.VLAN.TAB.EDIT.BATCH_INPUT' | translate"></span><valid-input ng-model="batchPorts" ng-value="formatPortsToStr(device.ports)" v-regex="portsBatchRegex" v-name="ports" v-rpcid="device-ports-input" ng-change="batchChangePorts($index, batchPorts)"></valid-input>
+                    </div>
+                </div>
+            </div>
 
-            <div class="content">
+            <div class="content" ng-if="vlanModel.editType == 'add_vlan'">
                 <div class="device" ng-repeat="device in vlanModel.devices track by $index">
                     <div class="name">{{device.name}}:</div>
                     <ports-group group-id="{{'group-id-' + $index}}" ports-list="device.ports" ports-num-per-row="27"></ports-group>
