@@ -55,7 +55,10 @@ export class VlanController {
       selectedSubFilter: null,
       devicesMap: {},
       devicesMapArr: [],
-      vlansMapArr: []
+      vlanConfig: [],
+      vlansMapArr: [],
+      ports: [],
+      vlanPortsList: []
     };
 
     scope.onTabChange = (tab) => {
@@ -297,11 +300,14 @@ export class VlanController {
       scope.model.subFilterItems = scope.model.selectedFilterType.value === 'device'
             ? this.scope.model.devicesMapArr : this.scope.model.vlansMapArr;
       console.log(value);
+      scope.model.selectedSubFilter = this.scope.model.subFilterItems[0];
+      scope.changeDisplayPorts();
     };
 
     scope.changeDisplayPorts = (value) => {
       if (scope.model.selectedSubFilter == value) return;
       console.log(value);
+      scope.model.vlanPortsList = this.getPortListFromConfig();
     };
 
     unsubscribers.push(scope.$watch('vlanModel.selectedDevice', () => {
@@ -338,7 +344,8 @@ export class VlanController {
         deviceDefer = this.di.$q.defer(),
         deviceConfigsDefer = this.di.$q.defer(),
         linkDefer = this.di.$q.defer(),
-        vlanDefer = this.di.$q.defer();
+        vlanDefer = this.di.$q.defer(),
+        portDefer = this.di.$q.defer();
     this.di.deviceDataManager.getDevices().then((res)=>{
       deviceDefer.resolve(res.data.devices);
     });
@@ -355,6 +362,10 @@ export class VlanController {
       vlanDefer.resolve(res.data.devices);
     });
     promises.push(vlanDefer.promise);
+    this.di.deviceDataManager.getPorts().then((res) => {
+    	portDefer.resolve(res.data.ports);
+    });
+    promises.push(portDefer.promise);
     Promise.all(promises).then((resultArr)=>{
       this.scope.model.filterTypes = [];
       if (resultArr[1].length > 0) {
@@ -370,18 +381,23 @@ export class VlanController {
         this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.DEVICE'), 'value': 'device'});
       }
       if (resultArr[3].length > 0) {
+      	this.scope.model.vlanConfig = resultArr[3];
       	this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(resultArr[3]);
-        this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.VLAN'), 'value': 'vlan'});
+      	if (this.scope.model.vlansMapArr.length > 0) {
+      		this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.VLAN'), 'value': 'vlan'});
+      	}
       }
       if (this.scope.model.filterTypes.length > 0) {
         this.scope.model.selectedFilterType = this.scope.model.filterTypes[0];
         this.scope.model.subFilterItems = this.scope.model.selectedFilterType.value === 'device'
             ? this.scope.model.devicesMapArr : this.scope.model.vlansMapArr;
+        this.scope.model.selectedSubFilter = this.scope.model.subFilterItems[0];
       }
-
+      this.scope.model.ports = resultArr[4];
       console.log(resultArr);
       this.scope.onTabChange(this.scope.tabs[0]);
       this.scope.model.actionsShow = this.getActionsShow();
+      this.scope.model.vlanPortsList = this.getPortListFromConfig();
     });
 
     //init table
@@ -765,6 +781,43 @@ export class VlanController {
   		});
   	});
   	return result;
+  }
+
+  getPortListFromConfig() {
+  	let result = [];
+  	if (this.scope.model.selectedFilterType.value === 'device') {
+  		this.scope.model.vlanConfig.forEach((device => {
+  			if (device['device-id'] === this.scope.model.selectedSubFilter.value) {
+  				let ports = this.getPortsFromDevice(device['device-id']);
+  				device.vlans.forEach((vlan) => {
+  					result.push({
+  						id: device['device-id'] + '_' + vlan.vlan,
+  						port: this.di._.cloneDeep(ports)
+  					}); 
+  				});
+  			}
+  		}));
+  	}
+  	else {
+  		//vlan
+  		
+  	}
+  	return result;
+  }
+
+  getPortsFromDevice(device_id){
+  	let ports = [];
+  	this.scope.model.ports.forEach((port) => {
+  		if (port.element === device_id) {
+  			let num = parseInt(port.port);
+  			ports.push({
+  				id: num,
+          title: num,
+          selected: false
+  			});
+  		}
+  	});
+  	return ports;
   }
 }
 
