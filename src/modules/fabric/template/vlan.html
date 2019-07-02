@@ -15,14 +15,15 @@
         <div class="mars-col-16 relative">
           <div style="position: relative; display: flex; height: 100%;">
             <div class="type-container">
-              <mdl-radio ng-model="model.typeMode" 
+              <mdl-radio style="display: none" ng-model="model.typeMode"
                         display-label='model.portDisplayLabel' 
                         on-click="changeDisplayType($value)"></mdl-radio> 
-              <mdl-radio ng-model="model.typeMode" 
+              <mdl-radio  style="display: none" ng-model="model.typeMode"
                         display-label='model.tableDisplayLabel' 
-                        on-click="changeDisplayType($value)"></mdl-radio> 
+                        on-click="changeDisplayType($value)"></mdl-radio>
+                <view-select type-model="model.typeMode"></view-select>
             </div>
-            <div class="ports-container" ng-if="model.typeMode === 'port'">
+            <div class="ports-container" ng-if="model.typeMode.label === 'port'">
               <div class="filter-container">
                 <mdl-select ng-if="model.filterTypes.length > 0" ng-model="model.selectedFilterType" 
                             display-label="{options: model.filterTypes}" ng-change="changeFilterType($value)">
@@ -41,7 +42,7 @@
                 </div>
               </div>
             </div>
-            <div ng-if="model.typeMode === 'table'" style="margin-top: 100px;">
+            <div ng-if="model.typeMode.label === 'table'" style="margin-top: 56px;">
               <mdl-table actions-show="model.actionsShow"
                      row-click="onTableRowClick($event)"
                      provider="model.provider" api-ready="onApiReady($api)">

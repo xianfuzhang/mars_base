@@ -615,11 +615,12 @@
   margin-top:-1px;
 }
 .vlan-container .type-container{
-  margin-top: 20px;
+  //margin-top: 20px;
   position: absolute;
   display: flex;
   flex-direction: column;
-  right: 5%;
+  left: 0px;
+  //right: 5%;
 }
 .vlan-container .type-container label{
   color: rgba(255, 255, 255, 0.87);
@@ -628,11 +629,12 @@
   border-color: rgba(255, 255, 255, 0.6);
 }
 .vlan-container .filter-container{
-  margin-bottom: 50px;
+  margin-bottom: 16px;
+  margin-left: 160px;
 }
 .vlan-container .ports-container{
   width: 100%;
-  margin-top: 20px; 
+  //margin-top: 20px;
 }
 .ports-container > .deivce-list {
   display: flex;
