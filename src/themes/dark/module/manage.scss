@@ -199,16 +199,24 @@
   display: flex;
   position: absolute;
   right: 0;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  //background: #aadeaa;
+  border: 1px solid #777777;
+  border-radius: 4px;
+  margin: 8px;
   //top: -20px;
 }
 .license .license__upload .save {
   margin-left: 0;
-  margin-top: 10px;
+  //margin-top: 10px;
 }
 .license .license__upload .label {
   font-weight: 700;
   opacity: .6;
-  margin-top: 25px;
+  //margin-top: 25px;
+  font-size:16px;
   display: inline;
 }
 .license .license__app__label {
