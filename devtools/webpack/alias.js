@@ -24,6 +24,7 @@ class AliasProvider {
       'login': path.resolve('src/modules/login/'),
       'dashboard': path.resolve('src/modules/dashboard/'),
       'fabric': path.resolve('src/modules/fabric/'),
+      'vlan': path.resolve('src/modules/vlan/'),
       'logical': path.resolve('src/modules/logical/'),
       'configuration': path.resolve('src/modules/configuration/'),
       'alert': path.resolve('src/modules/alert/'),

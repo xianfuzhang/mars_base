@@ -254,7 +254,6 @@ export class FabricSummaryController {
         let rightLen = Number(rightLenStr.substr(0, rightLenStr.length - 2 ));
         this.di.$scope.resize_length = {'width':data['resize_length']['width'], 'right': '-' + data['resize_length']['width']};
       }
-
       this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("hide_right_div", true);
     };
 

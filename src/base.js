@@ -336,6 +336,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/vlan_ip', {
+    template: require('./modules/vlan/template/ipsubnet.html'),
+    controller: 'vlanIpSubnetController',
+    resolve: {
+      loggedin: checkLoggedIn
+    }
+  })
     .otherwise({ redirectTo: '/' });
 }
 

@@ -176,6 +176,32 @@ export class VlanService {
       'search': {'enable': true, 'role': 2}
     };
   }
+
+
+  getVlanIpsSchema(){
+    return [
+      {
+        'label':  this.translate('MODULES.VLAN.IP.TABLE.COLUMN.DEVICE'),
+        'field': 'device_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.IP.TABLE.COLUMN.VLAN'),
+        'field': 'vlan',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.IP.TABLE.COLUMN.IP'),
+        'field': 'ip',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.IP.TABLE.COLUMN.MASK'),
+        'field': 'mask',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
 }
 VlanService.$inject = VlanService.getDI();
 VlanService.$$ngIsClass = true;

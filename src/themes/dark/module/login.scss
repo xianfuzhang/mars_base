@@ -20,8 +20,8 @@
   transition: box-shadow .2s linear, transform .2s linear;
 }
 .login-fields:hover{
-  box-shadow: 0 0 15px white;
-  transform: translateY(-5px);
+  box-shadow: 0 0 5px #211919;
+  //transform: translateY(-5px);
 }
 .login-fields__logo{
   background: url('../../assets/images/mars_logo.png') no-repeat center center;
