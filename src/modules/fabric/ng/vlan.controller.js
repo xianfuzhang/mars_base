@@ -36,7 +36,7 @@ export class VlanController {
       actionsShow: null,
       rowActions: null,
       entities: [],
-      typeMode: 'port',
+      typeMode: {'label':'port'},
       portDisplayLabel:{
         "id": "port-display",
         "name": "display-type", 

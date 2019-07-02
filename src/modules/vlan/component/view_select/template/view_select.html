@@ -1,0 +1,17 @@
+<div class="view_select">
+    <div class="view_select__anchor select_ripple mdc-ripple-surface mdc-ripple-upgraded"  ng-click="anchorClick()">
+        <i class="material-icons">visibility</i>
+        <div style="font-size:16px;display: inline-block">显示方式</div>
+    </div>
+    <div class="view_select__container">
+        <div ng-click="setViewType('table')" title="表格" ng-class="{'show': typeModel.label=='table' || model.isShow, 'select': typeModel.label=='table'}" class="view_select__container__item select_ripple mdc-ripple-surface mdc-ripple-upgraded">
+            <i class="material-icons">view_module</i>
+        </div>
+        <div ng-click="setViewType('port')" title="列表" ng-class="{'show': typeModel.label=='port'|| model.isShow, 'select': typeModel.label=='port'}" class="view_select__container__item select_ripple mdc-ripple-surface mdc-ripple-upgraded">
+            <i class="material-icons">list</i>
+        </div>
+        <div ng-click="setViewType('topo')" title="拓扑图" ng-class="{'show': typeModel.label=='topo'|| model.isShow, 'select': typeModel.label=='topo'}" class="view_select__container__item last select_ripple mdc-ripple-surface mdc-ripple-upgraded">
+            <i class="material-icons">timeline</i>
+        </div>
+    </div>
+</div>

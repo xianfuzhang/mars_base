@@ -1,0 +1,100 @@
+@include block(view_select) {
+  display: flex;
+  //box-shadow: 0 0 5px #bbbbbb;
+  z-index: 5;
+  cursor: pointer;
+
+  @include element(anchor) {
+    display: flex;
+    padding: 8px;
+    background-color: black;
+    border-right: 1px solid #282828;
+
+    z-index: 10;
+  }
+
+  @include element(container) {
+    display: flex;
+
+
+
+    @include element(item) {
+      padding: 8px;
+      border-right: 1px solid #282828;
+      transition: opacity .2s linear,margin-left .2s linear;
+      opacity: 0;
+      margin-left: -43px;
+      background-color: gray;
+
+      &.last{
+        border-right: none;
+      }
+
+      &.select{
+        background-color: black;
+        //border-right: none;
+      }
+
+      &.select.show{
+        z-index: 9;
+      }
+
+      &.show {
+        opacity: 1;
+        margin-left: 0px;
+        z-index: 5;
+      }
+    }
+
+
+  }
+}
+
+//
+//@-webkit-keyframes fly_into {
+//  0% {
+//    margin-left: -100%;
+//  }
+//
+//  100% {
+//    margin-left: 0%;
+//  }
+//}
+//
+//@-moz-keyframes fly_into {
+//  0% {
+//    margin-left: -100%;
+//  }
+//
+//  100% {
+//    margin-left: 0%;
+//  }
+//}
+//
+//@-ms-keyframes fly_into {
+//  0% {
+//    margin-left: -100%;
+//  }
+//
+//  100% {
+//    margin-left: 0%;
+//  }
+//}
+//
+//@keyframes fly_into {
+//  0% {
+//    margin-left: -100%;
+//  }
+//
+//  100% {
+//    margin-left: 0%;
+//  }
+//}
+//
+//.inform .mdc-card{
+//  box-shadow: none;
+//}
+//
+//.inform .mar_section__body{
+//  background: #fbfbfb;
+//}
