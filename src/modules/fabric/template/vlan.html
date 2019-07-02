@@ -13,7 +13,7 @@
       </mdl-tabs>
       <section class="tab-content" ng-if="tabSelected.type == 'default'" style="display: flex;">
         <div class="mars-col-16 relative">
-          <div style="position: relative; display: flex;">
+          <div style="position: relative; display: flex; height: 100%;">
             <div class="type-container">
               <mdl-radio ng-model="model.typeMode" 
                         display-label='model.portDisplayLabel' 
@@ -31,6 +31,14 @@
                             display-label="{options: model.subFilterItems}" ng-change="changeDisplayPorts($value)"></mdl-select>
               </div>
               <div class="deivce-list">
+                <div class="no-result" ng-if="model.vlanPortsList.length === 0" 
+                    ng-bind="'MODULES.VLAN.TAB.DEFAULT.NO_DATA' | translate">
+                </div>
+                <div ng-if="model.vlanPortsList.length > 0">
+                  <div class="vlan-segment" ng-repeat="vlan in model.vlanPortsList track by $index">
+                     <ports-group group-id="{{'group-id-' + $index}}" ports-list="vlan.ports"></ports-group>
+                  </div>
+                </div>
               </div>
             </div>
             <div ng-if="model.typeMode === 'table'" style="margin-top: 100px;">

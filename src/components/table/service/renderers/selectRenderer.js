@@ -22,6 +22,7 @@ export class SelectRenderer {
     		console.log('selectRender current select =' + JSON.stringify(val));
     		spec.object[spec.col.field] = val.value;
     		spec.value = val.value;
+        scope.$emit('td-select-change', {'column': spec.col.field, 'newValue': val, 'trObject': spec.object});
     		console.log('selectRender spec object =' + JSON.stringify(spec.object));
     	};
 

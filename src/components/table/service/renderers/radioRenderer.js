@@ -25,6 +25,7 @@ export class RadioRenderer {
         console.log('radioRender current value =' + val);
         spec.object[spec.col.field] = val;
         spec.value = val;
+        scope.$emit('td-radio-change', {'column': spec.col.field, 'newValue': val, 'trObject': spec.object});
         console.log('radioRender spec object =' + JSON.stringify(spec.object));
       };
 
