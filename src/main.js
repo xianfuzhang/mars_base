@@ -29,6 +29,7 @@ import 'configuration';
 import 'alert';
 import 'log';
 import 'manage';
+import 'vlan';
 
 import 'mdc';
 import 'mdlHeader';
@@ -90,6 +91,7 @@ angular
     'configuration',
     'alert',
     'log',
+    'vlan',
     'manage',
     'mdc',
     'mdlHeader',

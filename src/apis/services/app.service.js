@@ -90,7 +90,6 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
               // {'label': this.translate('MODULE.HEADER.FABRIC.HOSTS'), 'url': '/hosts', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.FABRIC.VLAN'), 'url': '/vlan', 'role': 2},
               {'label': 'Intents', 'url': '/intents', 'role': 2},
               {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
               {'label': 'sFlow', 'url': '/sflow', 'role': 2},
@@ -101,6 +100,15 @@ export class appService {
               {'label': 'QoS', 'url': '/qos', 'role': 3},
               //  {'label': 'Storm Profile', 'url': '/storm_control'},
               // {'label': this.translate('MODULE.HEADER.FABRIC.VLAN'), 'url': '/vlan', 'role': 2},
+            ]
+          },
+          {
+            'group':'Vlan',
+            'label': this.translate('MODULE.HEADER.VLAN'),
+            'role': 3,
+            'items':[
+              {'label': this.translate('MODULE.HEADER.VLAN.NORMAL'), 'url': '/vlan', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.VLAN.NORMAL'), 'url': '/vlan_ip', 'role': 2},
             ]
           },
           {
@@ -939,7 +947,7 @@ export class appService {
   }
 
   getVlanConfigUrl(){
-    return this.getZoneEndpoint() + '/vlan/v1/vlan-config';  
+    return this.getZoneEndpoint() + '/vlan/v1/vlan-config';
   }
 
 }
