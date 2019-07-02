@@ -155,7 +155,8 @@ export class VlanIpSubnetController {
       let vlans = deviceCfg['vlans'].filter(vlan => (vlan['ip'] !== '' && vlan['ip'] !== null));
 
       vlans.map(vlan => {
-          vlan['device_name'] = this._getDeviceName(deviceId);
+          let deviceName =  this._getDeviceName(deviceId);
+          vlan['device_name'] = deviceName === null? deviceId: deviceName;
           vlan['device_id'] = deviceId;
           vlan['uuid'] = deviceId + vlan['vlan'];
         }
