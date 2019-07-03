@@ -300,6 +300,10 @@ export class headerController{
                   if (hostsegmentIndex > -1) origins[fabricIndex]['items'].splice(hostsegmentIndex, 1);
                 }
                 break;
+              case 'com.nocsys.vlanmgmt':
+                let vlanMgmtIndex = this.di._.findIndex(origins, {'group': 'Vlan'});
+                if (vlanMgmtIndex > -1) origins.splice(vlanMgmtIndex , 1);
+                break;
                 
             }
           }
