@@ -31,15 +31,20 @@ export class VlanIpSubnetController {
 
     scope.ipSubnetModel = {
       actionsShow: {
-        'menu': {'enable': true, 'role': 2},
-        'add': {'enable': false, 'role': 2},
+        'menu': {'enable': false, 'role': 2},
+        'add': {'enable': true, 'role': 2},
         'remove': {'enable': false, 'role': 2},
         'refresh': {'enable': true, 'role': 2},
         'search': {'enable': false, 'role': 2}
       },
       rowActions: [
         {
-          'label': this.translate('MODULES.ALERT.HISTORY.DELETE'),
+          'label': this.translate('MODULES.VLAN.IP.MENU.EDIT'),
+          'role': 2,
+          'value': 'edit'
+        },
+        {
+          'label': this.translate('MODULES.VLAN.IP.MENU.DELETE'),
           'role': 2,
           'value': 'delete'
         }
@@ -61,13 +66,17 @@ export class VlanIpSubnetController {
 
     this.init();
 
+    scope.addVlanIp = () =>{
+      this.di.$rootScope.$emit('vlan-ip-wizard-show');
+    };
+
 
     scope.onTableRowSelectAction = (event) => {
       if (event.data && event.action) {
         if (event.action.value === 'delete') {
           this.di.dialogService.createDialog('warning', this.translate('MODULES.VLAN.IP.DIALOG.MESSAGE.REMOVE_VLAN_IP'))
             .then((data) => {
-              this.di.vlanDataManager.deleteVlanIpSetting(event.data.uuid)
+              this.di.vlanDataManager.removeVlanIp(event.data.device_id, event.data.vlan)
                 .then((res) => {
                   this.di.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.IP.DIALOG.MESSAGE.REMOVE_VLAN_IP_SUCCESS'));
                   scope.ipSubnetModel.api.queryUpdate();
@@ -77,6 +86,9 @@ export class VlanIpSubnetController {
             }, (res) => {
               this.di.$log.debug('delete vlan ip mask dialog cancel');
             });
+        }
+        if (event.action.value === 'edit') {
+          this.di.$rootScope.$emit('vlan-ip-wizard-show', event.data);
         }
       }
     };
@@ -93,6 +105,17 @@ export class VlanIpSubnetController {
     //       });
     //   }
     // };
+
+    unSubscribers.push(this.di.$rootScope.$on('vlan-ip-list-refresh', ($event, isAdd) => {
+      if(isAdd){
+
+        this.di.notificationService.renderSuccess(scope,this.translate('MODULES.VLAN.IP.DIALOG.MESSAGE.ADD_VLAN_IP_SUCCESS'));
+      } else {
+        this.di.notificationService.renderSuccess(scope,this.translate('MODULES.VLAN.IP.DIALOG.MESSAGE.EDIT_VLAN_IP_SUCCESS'));
+      }
+      scope.ipSubnetModel.api.queryUpdate();
+    }));
+
 
     scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {

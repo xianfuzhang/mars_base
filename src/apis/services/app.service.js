@@ -108,6 +108,7 @@ export class appService {
             'role': 3,
             'items':[
               {'label': this.translate('MODULE.HEADER.VLAN.NORMAL'), 'url': '/vlan', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.VLAN.DYNAMIC'), 'url': '/vlan_dynamic', 'role': 2},
               {'label': this.translate('MODULE.HEADER.VLAN.IP_SUBTNET'), 'url': '/vlan_ip', 'role': 2},
             ]
           },
@@ -948,6 +949,10 @@ export class appService {
 
   getVlanConfigUrl(){
     return this.getZoneEndpoint(true) + '/vlan/v1/vlan-config';
+  }
+
+  getVlanIpDeleteUrl(device_id, vlan_id){
+    return this.getZoneEndpoint(true) + `/vlan/v1/vlan-config/${device_id}/vlan/${vlan_id}`;
   }
 
 }

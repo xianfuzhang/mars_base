@@ -13,8 +13,9 @@ export class DynamicVlanController {
       'appService',
       'notificationService',
       'tableProviderFactory',
-      'alertDataManager',
-      'alertService'
+      'vlanDataManager',
+      'deviceDataManager',
+      'vlanService'
     ];
   }
 
@@ -27,81 +28,151 @@ export class DynamicVlanController {
     let scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
     scope.role = this.di.roleService.getRole();
+    this.CONST = {};
+    this.CONST.ENABLE = 'enable';
+    this.CONST.DISABLE = 'disable';
 
-    scope.configurationModel = {
-      subjectList: [],
-      subjectListDisable: 'true',
-      currentSubjectClass: '',
-      currentSubject: '',
-      configurationShow: '',
-      isEditable: false
-    };
 
-    scope.alertModel = {
+    scope.dynamicModel = {
       actionsShow: {
-        'menu': {'enable': true, 'role': 2},
+        'menu': {'enable': false, 'role': 2},
         'add': {'enable': false, 'role': 2},
-        'remove': {'enable': true, 'role': 2},
+        'remove': {'enable': false, 'role': 2},
         'refresh': {'enable': true, 'role': 2},
-        'search': {'enable': false, 'role': 2}
+        'search': {'enable': true, 'role': 2}
       },
       rowActions: [
         {
-          'label': this.translate('MODULES.ALERT.HISTORY.DELETE'),
+          'label': this.translate('MODULES.VLAN.DYNAMIC.MENU.ACTIVE'),
           'role': 2,
-          'value': 'delete'
+          'value': 'active'
+        },
+        {
+          'label': this.translate('MODULES.VLAN.DYNAMIC.MENU.DEACTIVE'),
+          'role': 2,
+          'value': 'deactive'
         }
       ],
-      alertTableProvider: null,
-      alertAPI: null
+      tableProvider: null,
+      api: null
     };
 
     scope.onTableRowClick = (event) => {
-      if (event.$data){
-        scope.alertModel.alertAPI.setSelectedRow(event.$data.uuid);
+      if (event.$data) {
+        scope.dynamicModel.api.setSelectedRow(event.$data.uuid);
       }
     };
 
 
-    scope.onAlertAPIReady = ($api) => {
-      scope.alertModel.alertAPI = $api;
+    scope.onAPIReady = ($api) => {
+      scope.dynamicModel.api = $api;
     };
 
     this.init();
 
+    scope.addVlanIp = () => {
+      this.di.$rootScope.$emit('vlan-ip-wizard-show');
+    };
+
 
     scope.onTableRowSelectAction = (event) => {
       if (event.data && event.action) {
-        if (event.action.value === 'delete') {
-          this.di.dialogService.createDialog('warning', this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORY'))
-          //this.confirmDialog(this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORY'))
-            .then((data) =>{
-              this.di.alertDataManager.deleteAlertHistory(event.data.uuid)
-                .then((res) =>{
-                  this.di.notificationService.renderSuccess(scope, this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORY.SUCCESS'));
-                  scope.alertModel.alertAPI.queryUpdate();
-                },(error)=>{
+        if (event.action.value === 'deactive') {
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.DEACTIVE_CONFIRM'))
+            .then((data) => {
+              const param = {
+                'devices':[
+                  {
+                    'device-id': event.data.device_id,
+                    'dynamicvlans': [
+                      {
+                        'port': parseInt(event.data.port),
+                        'dynamicVlan': this.CONST.DISABLE
+                      }
+                    ]
+                  }
+                ]
+              }
+              this.di.vlanDataManager.postVlanDynamic(param)
+                .then((res) => {
+                  this.di.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.DEACTIVE_CONFIRM_SUCCESS'));
+                  scope.dynamicModel.api.queryUpdate();
+                }, (error) => {
                   this.di.notificationService.renderWarning(scope, error)
                 });
-            }, (res) =>{
-              this.di.$log.debug('delete alert history dialog cancel');
+            }, (res) => {
+              this.di.$log.debug('delete vlan ip mask dialog cancel');
+            });
+        }
+        if (event.action.value === 'active') {
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.ACTIVE_CONFIRM'))
+            .then((data) => {
+              const param = {
+                'devices':[
+                  {
+                    'device-id': event.data.device_id,
+                    'dynamicvlans': [
+                      {
+                        'port': parseInt(event.data.port),
+                        'dynamicVlan': this.CONST.ENABLE
+                      }
+                    ]
+                  }
+                ]
+              }
+              this.di.vlanDataManager.postVlanDynamic(param)
+                .then((res) => {
+                  this.di.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.ACTIVE_CONFIRM_SUCCESS'));
+                  scope.dynamicModel.api.queryUpdate();
+                }, (error) => {
+                  this.di.notificationService.renderWarning(scope, error)
+                });
+            }, (res) => {
+              this.di.$log.debug('delete vlan ip mask dialog cancel');
             });
         }
       }
     };
 
 
-    scope.batchRemove = ($value) => {
-      if ($value.length) {
-        this.di.dialogService.createDialog('warning', this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES'))
-        //this.confirmDialog(this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES'))
-          .then((data) =>{
-            this.batchDeleteAlertHistory($value);
-          }, (res) =>{
-            this.di.$log.debug('delete user account dialog cancel');
-          });
+    scope.onTableRowActionsFilter = (event) =>{
+      let filterActions = [];
+      if (event.data) {
+        event.actions.forEach((action) =>{
+          if (event.data.dynamic === this.CONST.ENABLE && action.value !== 'active') {
+            filterActions.push(action);
+          }
+
+          if (event.data.dynamic !== this.CONST.ENABLE && action.value!== 'deactive') {
+            filterActions.push(action);
+          }
+        });
       }
+      return filterActions;
     };
+
+    // scope.batchRemove = ($value) => {
+    //   if ($value.length) {
+    //     this.di.dialogService.createDialog('warning', this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES'))
+    //     //this.confirmDialog(this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES'))
+    //       .then((data) => {
+    //         this.batchDeleteAlertHistory($value);
+    //       }, (res) => {
+    //         this.di.$log.debug('delete user account dialog cancel');
+    //       });
+    //   }
+    // };
+
+    unSubscribers.push(this.di.$rootScope.$on('vlan-ip-list-refresh', ($event, isAdd) => {
+      if (isAdd) {
+
+        this.di.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.IP.DIALOG.MESSAGE.ADD_VLAN_IP_SUCCESS'));
+      } else {
+        this.di.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.IP.DIALOG.MESSAGE.EDIT_VLAN_IP_SUCCESS'));
+      }
+      scope.dynamicModel.api.queryUpdate();
+    }));
+
 
     scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
@@ -110,27 +181,73 @@ export class DynamicVlanController {
     });
   }
 
-  init(){
+  init() {
     let m = this.di.alertDataManager;
-    this.di.$scope.alertModel.alertTableProvider = this.di.tableProviderFactory.createProvider({
+    this.di.$scope.dynamicModel.tableProvider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
-        this.di.alertDataManager.getAlertHistories(params).then((res) => {
+
+
+        let deviceDefer = this.di.$q.defer();
+        let portsDefer = this.di.$q.defer();
+        let vlanDefer = this.di.$q.defer();
+        let promises = [];
+
+        this.di.deviceDataManager.getPorts().then((res) => {
+          this.di.$scope.ports = res.data.ports;
+          //   scope.ports = this.di._.groupBy(res.data.ports , "element");
+          // }
+          portsDefer.resolve();
+        }, (err) => {
+          portsDefer.reject(err);
+        });
+        promises.push(portsDefer.promise);
+
+        this.di.deviceDataManager.getDeviceConfigs().then((configs) => {
+          this.di.$scope.devices = configs;
+          deviceDefer.resolve();
+        }, (err) => {
+          deviceDefer.reject(err);
+        });
+        promises.push(deviceDefer.promise);
+
+        this.di.vlanDataManager.getVlanConfig().then((res) => {
+          this.di.$scope.vlansConfig = res.data.devices;
+          vlanDefer.resolve();
+        }, (err) => {
+          vlanDefer.reject(err);
+        });
+        promises.push(vlanDefer.promise);
+
+        Promise.all(promises).then(() => {
+
           defer.resolve({
-            data: res.data.history,
-            count: 100
+            data: this._formatVlanDynamics(this.di.$scope.ports, this.di.$scope.vlansConfig),
           });
+        }, (err) => {
+
         });
 
-        let query = this.di.$location.search();
-        if(query.uuid) {
-          this.scope.alertModel.alertAPI.setSelectedRow(qeury.uuid);
-        }
+        // this.di.deviceDataManager.getDeviceConfigs().then((configs)=> {
+        //   this.di.$scope.devices = configs;
+        //   this.di.vlanDataManager.getVlanConfig().then((res) => {
+        //     let devicesConfig = res.data.devices;
+        //     defer.resolve({
+        //       data: this._formatVlanIps(devicesConfig),
+        //     });
+        //   });
+        // })
+
+
+        // let query = this.di.$location.search();
+        // if (query.uuid) {
+        //   this.di.$scope.ipSubnetModel.api.setSelectedRow(qeury.uuid);
+        // }
         return defer.promise;
       },
       getSchema: () => {
         return {
-          schema: this.di.alertService.getAlertTableSchema(),
+          schema: this.di.vlanService.getVlanDynamicSchema(),
           index_name: 'uuid',
           rowCheckboxSupport: true,
           rowActionsSupport: true,
@@ -142,54 +259,45 @@ export class DynamicVlanController {
       }
     });
   }
-  /**
-   confirmDialog(content) {
-    let defer = this.di.$q.defer();
-    this.di.$uibModal
-      .open({
-        template: require('../../../components/mdc/templates/dialog.html'),
-        controller: 'dialogCtrl',
-        backdrop: true,
-        resolve: {
-          dataModel: () => {
-            return {
-              type: 'warning',
-              headerText: this.translate('MODULES.ALERT.DIALOG.HEADER'),
-              contentText: content,
-            };
-          }
-        }
-      })
-      .result.then((data) => {
-      if(data) {
-        defer.resolve(data);
-      }
-      else {
-        defer.reject(null);
-      }
-    });
 
-    return defer.promise;
+  _getDeviceName(deviceId) {
+    let device = this.di.$scope.devices.find(device => device.id === deviceId);
+    if (device) {
+      return device.name;
+    } else {
+      return deviceId;
+    }
   }
-   **/
 
-  batchDeleteAlertHistory(arr) {
-    let uuids = [];
-    arr.forEach((item) => {
-      uuids.push(item.uuid)
-    });
-    let scope = this.di.$scope;
-    let defer = this.di.$q.defer();
-    this.di.alertDataManager.deleteAlertHistoriesSelected(uuids)
-      .then(() => {
-        this.di.notificationService.renderSuccess(scope, this.translate('MODULES.ALERT.DIALOG.CONTENT.REMOVE_ALERT_HISTORIES.SUCCESS'));
-        scope.alertModel.alertAPI.queryUpdate();
-        defer.resolve();
-      }, (error) => {
-        this.di.notificationService.renderWarning(scope, error);
-        scope.alertModel.alertAPI.queryUpdate();
-        defer.resolve();
+
+  _formatVlanDynamics(ports, vlansConfig) {
+    let dynamics = [];
+
+    let dynamicDict = {};
+    vlansConfig.forEach(deviceCfg => {
+      let deviceId = deviceCfg['device-id'];
+      let vlan_ports = deviceCfg['ports'];
+      vlan_ports.forEach(vlan_port => {
+        dynamicDict[deviceId+ '__' + vlan_port.port] = vlan_port['dynamicVlan']?vlan_port['dynamicVlan']:this.CONST.ENABLE;
       });
+    });
+
+
+    ports.forEach(port => {
+      const d = dynamicDict[port.element + '__' + port.port]?dynamicDict[port.element + '__' + port.port]:this.CONST.ENABLE;
+      if(port.element.toLocaleLowerCase().indexOf('rest') !== -1){
+        dynamics.push({
+          'device_id': port.element,
+          'device_name': this._getDeviceName(port.element),
+          'port': port.port,
+          'dynamic': d,
+          'status':d === 'enable'?'done':'not_interested'
+        })
+      }
+
+
+    });
+    return dynamics;
   }
 }
 

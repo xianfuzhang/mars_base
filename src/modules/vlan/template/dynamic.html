@@ -6,20 +6,21 @@
     <content-header big-title="{{'MODULE.HEADER.VLAN.DYNAMIC' | translate}}">
       <a href="/">Mars Cloud</a>
       <span>•</span>
-      <span>{{'MODULE.HEADER.ALERT.ALERT' | translate}}</span>
+      <span>{{'MODULE.HEADER.VLAN.DYNAMIC' | translate}}</span>
     </content-header>
     <div class="alert-list flex_entirety__body__body" style="display:flex;flex-direction: row">
       <div >
         <div class="main__content">
-          <mdl-table actions-show="alertModel.actionsShow"
-                     actions="alertModel.rowActions"
+          <mdl-table actions-show="dynamicModel.actionsShow"
+                     actions="dynamicModel.rowActions"
                      row-click="onTableRowClick($event)"
                      row-select-action="onTableRowSelectAction($event)"
-                     provider="alertModel.alertTableProvider" api-ready="onAlertAPIReady($api)"
-                     on-remove="batchRemove($value)">
+                     row-actions-filter="onTableRowActionsFilter($event)"
+                     provider="dynamicModel.tableProvider" api-ready="onAPIReady($api)"
+                     on-add="addDynamic()">
           </mdl-table>
         </div>
-       </div> 
+      </div>
     </div>
   </div>
 </div>

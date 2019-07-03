@@ -50,6 +50,14 @@
   }
 }
 
+.dynamic__body .status_icon.material_icon.not_interested{
+  color:red;
+}
+
+.dynamic__body .status_icon.material_icon.done{
+  color:green;
+}
+
 //
 //@-webkit-keyframes fly_into {
 //  0% {

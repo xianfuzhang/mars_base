@@ -202,6 +202,32 @@ export class VlanService {
       }
     ];
   }
+
+  getVlanDynamicSchema(){
+    return [
+      {
+        'label':  this.translate('MODULES.VLAN.DYNAMIC.TABLE.COLUMN.DEVICE'),
+        'field': 'device_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.DYNAMIC.TABLE.COLUMN.PORT'),
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      // {
+      //   'label':  this.translate('MODULES.VLAN.DYNAMIC.TABLE.COLUMN.DYNAMIC'),
+      //   'field': 'dynamic',
+      //   'layout': {'visible': true, 'sortable': true}
+      // },
+      {
+        'label': this.translate('MODULES.VLAN.DYNAMIC.TABLE.COLUMN.DYNAMIC'),
+        'field': 'status',
+        'type': 'icon',
+        'layout': {'visible': true, 'sortable': false}
+      }
+    ];
+  }
 }
 VlanService.$inject = VlanService.getDI();
 VlanService.$$ngIsClass = true;
