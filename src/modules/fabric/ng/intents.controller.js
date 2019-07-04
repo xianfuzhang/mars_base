@@ -42,16 +42,22 @@ export class IntentsController {
 
     this.scope.addIntent = () => {
       let deviceDefer = this.di.$q.defer(),
-          endpointDefer = this.di.$q.defer();
+          endpointDefer = this.di.$q.defer(),
+          hostDefer = this.di.$q.defer();
       this.di.deviceDataManager.getDeviceConfigs().then((devices)=> {
         deviceDefer.resolve(devices);
       });
       this.di.deviceDataManager.getEndpoints().then((res)=> {
         endpointDefer.resolve(res.data.hosts);
       });
-      this.di.$q.all([deviceDefer.promise, endpointDefer.promise]).then(
+      this.di.deviceDataManager.getEndpoints(null, 'host').then((res)=> {
+        hostDefer.resolve(res.data.hosts);
+      });
+      this.di.$q.all([deviceDefer.promise, endpointDefer.promise, hostDefer.promise]).then(
         (arr) => {
-          if (arr[0].length === 0 && arr[1].length === 0) {
+          //host 与endpoint只会存在一种情况
+          let hosts = arr[1].concat(arr[2]);
+          if (arr[0].length === 0 && hosts.length === 0) {
             this.scope.alert = {
               type: 'warning',
               msg: this.translate('MODULES.INTENT.CREATE.RESOURCE.INVALID')
@@ -67,7 +73,7 @@ export class IntentsController {
               dataModel: () => {
                 return {
                   devices: arr[0],
-                  endpoints: arr[1],
+                  endpoints: hosts,
                   from: 'intent'
                 };
               }
