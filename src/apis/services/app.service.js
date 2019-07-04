@@ -578,8 +578,8 @@ export class appService {
     }
   }
 
-  getSyslogAnalyzerUrl(startTime, endTime, resolutionSecond) {
-    return this.getZoneEndpoint(true) + '/analyzer/v1/syslog/' + startTime + '/' + endTime +  '/' + resolutionSecond;
+  getSyslogAnalyzerUrl(host, startTime, endTime, resolutionSecond) {
+    return this.getZoneEndpoint(true) + '/analyzer/v1/syslog/' + host + '/' + startTime + '/' + endTime +  '/' + resolutionSecond;
   }
 
   getFilebeatAnalyzerUrl(type, startTime, endTime, resolutionSecond) {

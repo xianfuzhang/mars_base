@@ -46,7 +46,7 @@ export class ShowChartSettingController {
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
         break;
       case 'device-interface':
-        scope.title = this.translate('MODULES.DASHBOARD.SETTING.NORMAL_FLOW');
+        scope.title = this.translate("MODULES.DASHBOARD.SETTING.NORMAL_FLOW");
         scope.selectOptionTitle = this.translate('MODULES.DASHBOARD.SETTING.SELECT_SWITCH');
         break;
       case 'device-interface-drop-error':
