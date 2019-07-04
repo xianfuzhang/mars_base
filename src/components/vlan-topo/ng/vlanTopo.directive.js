@@ -95,7 +95,7 @@ export class VlanTopo {
 
       let _formatVlan = (config) =>{
         let res = {};
-        config['devices'].forEach(deviceInfo=>{
+        config.forEach(deviceInfo=>{
           let deviceId = deviceInfo['device-id'];
           // if(!res[deviceInfo['device-id']]){
           //   res[deviceInfo['device-id']] = {};
@@ -999,9 +999,26 @@ export class VlanTopo {
       };
 
 
+      let cancelHighLight = () => {
+        this.deviceNode.each(function (d) {
+          let swtNode = DI.d3.select(this);
+          swtNode.selectAll('rect').each(function (d1) {
+            let portNode = DI.d3.select(this);
+            portNode.classed('port_vlan_untag', false);
+            portNode.classed('port_vlan_tag', false);
+          });
+        })
+      }
 
       let highlightPortVlan = (vlanId) =>{
+        if(vlanId == null ){
+          console.log('highlightPortVlan with null value');
+          return;
+        }
         let curVlanConfig = this.vlanConfig[vlanId];
+        if(!curVlanConfig){
+          return;
+        }
         this.deviceNode.each(function (d) {
           let swtNode = DI.d3.select(this);
           let deviceId = swtNode.attr('deviceId');
@@ -1021,13 +1038,10 @@ export class VlanTopo {
         })
       }
 
-
-
-
-
-
-
-
+      unsubscribers.push(this.di.$rootScope.$on('vlan_topo_highlight', (event, vlanid) => {
+        cancelHighLight()
+        highlightPortVlan(vlanid)
+      }));
 
       unsubscribers.push(this.di.$rootScope.$on('resize_summary', () => {
         console.log('receive resize_summary');
