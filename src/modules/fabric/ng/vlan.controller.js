@@ -55,6 +55,7 @@ export class VlanController {
       selectedSubFilter: null,
       devicesMap: {},
       devicesMapArr: [],
+      vlanMembers: [],
       vlanConfig: [],
       vlansMapArr: [],
       ports: [],
@@ -344,7 +345,8 @@ export class VlanController {
         deviceDefer = this.di.$q.defer(),
         deviceConfigsDefer = this.di.$q.defer(),
         linkDefer = this.di.$q.defer(),
-        vlanDefer = this.di.$q.defer(),
+        vlanConfigDefer = this.di.$q.defer(),
+        vlanMemberDefer = this.di.$q.defer(),
         portDefer = this.di.$q.defer();
     this.di.deviceDataManager.getDevices().then((res)=>{
       deviceDefer.resolve(res.data.devices);
@@ -359,9 +361,13 @@ export class VlanController {
     });
     promises.push(linkDefer.promise);
     this.di.vlanDataManager.getVlanConfig().then((res)=>{
-      vlanDefer.resolve(res.data.devices);
+      vlanConfigDefer.resolve(res.data.devices);
     });
-    promises.push(vlanDefer.promise);
+    promises.push(vlanConfigDefer.promise);
+    this.di.vlanDataManager.getVlanMembers().then((res)=>{
+      vlanMemberDefer.resolve(res.data.devices);
+    });
+    promises.push(vlanMemberDefer.promise);
     this.di.deviceDataManager.getPorts().then((res) => {
     	portDefer.resolve(res.data.ports);
     });
@@ -372,28 +378,32 @@ export class VlanController {
         let devices = [];
         resultArr[1].forEach((item) => {
           this.scope.model.devicesMap[item.id] = item.name;
-          devices.push({
-            'label': item.name,
-            'value': item.id
-          });
+          if (item.protocol === 'rest') {
+            devices.push({
+              'label': item.name,
+              'value': item.id
+            });  
+          }
         });
-        this.scope.model.devicesMapArr = devices;
-        this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.DEVICE'), 'value': 'device'});
+        if (devices.length > 0) {
+          this.scope.model.devicesMapArr = devices;
+          this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.DEVICE'), 'value': 'device'});
+        }
       }
-      if (resultArr[3].length > 0) {
-      	this.scope.model.vlanConfig = resultArr[3];
-      	this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(resultArr[3]);
-      	if (this.scope.model.vlansMapArr.length > 0) {
-      		this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.VLAN'), 'value': 'vlan'});
-      	}
-      }
+      this.scope.model.vlanConfig = resultArr[3];
+      this.scope.model.vlanMembers = resultArr[4];
+    	this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(resultArr[4]);
+    	if (this.scope.model.vlansMapArr.length > 0) {
+    		this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.VLAN'), 'value': 'vlan'});
+    	}
       if (this.scope.model.filterTypes.length > 0) {
         this.scope.model.selectedFilterType = this.scope.model.filterTypes[0];
         this.scope.model.subFilterItems = this.scope.model.selectedFilterType.value === 'device'
             ? this.scope.model.devicesMapArr : this.scope.model.vlansMapArr;
         this.scope.model.selectedSubFilter = this.scope.model.subFilterItems[0];
       }
-      this.scope.model.ports = resultArr[4];
+      
+      this.scope.model.ports = resultArr[5];
       console.log(resultArr);
       this.scope.onTabChange(this.scope.tabs[0]);
       this.scope.model.actionsShow = this.getActionsShow();
