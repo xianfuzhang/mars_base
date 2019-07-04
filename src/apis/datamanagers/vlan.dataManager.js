@@ -66,7 +66,19 @@ export class VlanDataManager {
     );
     return defer.promise;
   }
-
+  
+  getVlanMembers() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getVlanMembersUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'devices': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
 }
 VlanDataManager.$inject = VlanDataManager.getDI();
 VlanDataManager.$$ngIsClass = true;

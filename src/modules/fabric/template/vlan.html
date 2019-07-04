@@ -15,12 +15,12 @@
         <div class="relative" ng-class="{'mars-col-16': model.typeMode.label != 'topo', 'mars-col-24': model.typeMode.label == 'topo'}">
           <div style="position: relative; display: flex; height: 100%;">
             <div class="type-container">
-              <mdl-radio style="display: none" ng-model="model.typeMode"
+              <!-- <mdl-radio style="display: none" ng-model="model.typeMode"
                         display-label='model.portDisplayLabel' 
                         on-click="changeDisplayType($value)"></mdl-radio> 
               <mdl-radio  style="display: none" ng-model="model.typeMode"
                         display-label='model.tableDisplayLabel' 
-                        on-click="changeDisplayType($value)"></mdl-radio>
+                        on-click="changeDisplayType($value)"></mdl-radio> -->
                 <view-select type-model="model.typeMode"></view-select>
             </div>
             <div class="ports-container" ng-if="model.typeMode.label === 'port'">
