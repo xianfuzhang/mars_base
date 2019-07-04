@@ -18,7 +18,7 @@
 
     <div class="stepForm__input">
         <div class="stepForm__input__label">{{'MODULES.VLAN.IP.TABLE.COLUMN.MASK'|translate}}<span class="stepForm__input__required">*</span></div>
-        <valid-input v-name="mask" v-require="true" v-type="ipv4" v-message="掩码格式不正确" ng-model="vlanIpModel.mask" v-rpcid="page_vlanIp_es" ></valid-input>
+        <valid-input v-name="mask" v-require="true" v-type="ipv4" v-message="{{'MODULES.VLAN.IP.ES.MESSAGE.MASK_NOT_CORRECT'|translate}}" ng-model="vlanIpModel.mask" v-rpcid="page_vlanIp_es" ></valid-input>
     </div>
 
 
