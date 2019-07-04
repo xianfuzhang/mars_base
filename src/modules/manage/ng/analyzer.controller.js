@@ -16,6 +16,7 @@ export class AnalyzerController {
       'dateService',
       'chartService',
       'dashboardDataManager',
+      'deviceDataManager',
       'manageDataManager',
       'modalManager',
     ];
@@ -51,6 +52,7 @@ export class AnalyzerController {
     
     let unSubscribers = [];
     let dataModel = {};
+    let devicesArr = [];
     const INTERVAL_COUNT = 30;
     let date = DI.dateService.getTodayObject();
     let before = DI.dateService.getBeforeDateObject(20*60*1000);
@@ -367,14 +369,16 @@ export class AnalyzerController {
 
       // get syslog analyzer by timerange
       let syslogSeconds = Math.floor((scope.syslogAnalyzer.endTime.getTime() - scope.syslogAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
-      this.di.manageDataManager.getSyslogAnalyzer(this.getISODate(scope.syslogAnalyzer.startTime), this.getISODate(scope.syslogAnalyzer.endTime), syslogSeconds).then((res) => {
-        scope.syslogAnalyzer.dataModel = res;
-        scope.syslogAnalyzer.loading = false;
-        setSyslogChartLineData();
-      }, () => {
-        scope.syslogAnalyzer.dataModel = [];
-        scope.syslogAnalyzer.loading = false;
-        setSyslogChartLineData();
+      this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
+        devicesArr = configs;
+        this.getDevicesSyslogAnalyzer(configs, scope.syslogAnalyzer.startTime, scope.syslogAnalyzer.endTime, syslogSeconds).then(() => {
+          scope.syslogAnalyzer.loading = false;
+          setSyslogChartLineData();
+        }, (err) => {
+          scope.syslogAnalyzer.dataModel = [];
+          scope.syslogAnalyzer.loading = false;
+          setSyslogChartLineData();
+        });
       });
 
       // get filebeat analyzer by timerange
@@ -579,19 +583,21 @@ export class AnalyzerController {
       let dataArr = [];
       let series = [];
       let labelsArr = [];
-      let dataModel = scope.syslogAnalyzer.dataModel;
+      let analyzer = scope.syslogAnalyzer.dataModel;
 
-      labelsArr = this.getSyslogTimeSeries(dataModel);
+      // labelsArr = this.getSyslogTimeSeries(analyzer);
+      let x_times = this.di._.maxBy(analyzer, function(item){return item.analyzer.length;});
+      labelsArr = analyzer.length > 0 ?
+        this.getTimeSeries(x_times.analyzer) : [];
 
-      for(let key in dataModel){
-        let dataList = [];
-        dataModel[key].forEach((data) => {
-          dataList.push(data.count);
-        })
-
-        dataArr.push(dataList);
-        series.push(key);
-      };
+      analyzer.forEach((device) => {
+        let data = [];
+        device.analyzer.forEach((item) => {
+          data.push(item.count)
+        });
+        dataArr.push(data);
+        series.push(device.name)
+      });
 
       const pad = this.pad;
       let options = {
@@ -1092,7 +1098,7 @@ export class AnalyzerController {
     },true));
 
     let syslogTimerangeHasChanged = false;
-    unSubscribers.push(this.di.$scope.$watchGroup(['syslogTimerangeAnalyzer.startTime', 'syslogTimerangeAnalyzer.endTime'], () => {
+    unSubscribers.push(this.di.$scope.$watchGroup(['syslogAnalyzer.startTime', 'syslogAnalyzer.endTime'], () => {
       if(!syslogTimerangeHasChanged) {
         syslogTimerangeHasChanged = true;
         return;
@@ -1102,15 +1108,25 @@ export class AnalyzerController {
 
       let resolutionSecond = Math.floor((scope.syslogAnalyzer.endTime.getTime() - scope.syslogAnalyzer.startTime.getTime()) / 1000 / CHART_GRID_NUM);
       resolutionSecond = resolutionSecond < 30 ? 30 : resolutionSecond > 3600 ? 3600 : resolutionSecond;
-      this.di.manageDataManager.getSyslogAnalyzer(this.getISODate(scope.syslogAnalyzer.startTime), this.getISODate(scope.syslogAnalyzer.endTime), resolutionSecond).then((res) => {
-        scope.syslogAnalyzer.dataModel = res;
+
+      this.getDevicesSyslogAnalyzer(devicesArr, scope.syslogAnalyzer.startTime, scope.syslogAnalyzer.endTime, resolutionSecond).then(() => {
         scope.syslogAnalyzer.loading = false;
         setSyslogChartLineData();
-      }, () => {
+      }, (err) => {
         scope.syslogAnalyzer.dataModel = [];
         scope.syslogAnalyzer.loading = false;
         setSyslogChartLineData();
       });
+      //
+      // this.di.manageDataManager.getSyslogAnalyzer(this.getISODate(scope.syslogAnalyzer.startTime), this.getISODate(scope.syslogAnalyzer.endTime), resolutionSecond).then((res) => {
+      //   scope.syslogAnalyzer.dataModel = res;
+      //   scope.syslogAnalyzer.loading = false;
+      //   setSyslogChartLineData();
+      // }, () => {
+      //   scope.syslogAnalyzer.dataModel = [];
+      //   scope.syslogAnalyzer.loading = false;
+      //   setSyslogChartLineData();
+      // });
     },true));
 
     let filebeatTimerangeHasChanged = false;
@@ -1257,6 +1273,32 @@ export class AnalyzerController {
     
     return defer.promise;
   }
+
+  getDevicesSyslogAnalyzer(devices, startTime, endTime, period) {
+    let deffer = this.di.$q.defer();
+    if (!devices.length){
+      deffer.resolve([]);
+      return deffer.promise;
+    }
+
+    let deferredArr = [];
+
+    devices.forEach((device) => {
+      let defer = this.di.$q.defer();
+      this.di.manageDataManager.getSyslogAnalyzer(device.name, this.getISODate(startTime), this.getISODate(endTime), period).then((data) => {
+        defer.resolve({'id': device.id, 'name': device.name, 'analyzer': data});
+      });
+
+      deferredArr.push(defer.promise);
+    });
+
+    this.di.$q.all(deferredArr).then((arr) => {
+      // get top5 cpu used rate
+      this.di.$scope.syslogAnalyzer.dataModel = arr;
+      deffer.resolve();
+    });
+    return deffer.promise;
+  }
   
   timeSegmentation(min, max) {
     const INTERVAL_COUNT = 24;
@@ -1312,24 +1354,6 @@ export class AnalyzerController {
     dataArr.forEach((data) => {
       timeseries.push(data.timepoint);
     });
-
-    return timeseries;
-  }
-
-  getSyslogTimeSeries(dataArr) {
-    let timeseries = [];
-
-    if(!dataArr.length) return timeseries;
-
-    let first = false;
-    for(let key in dataArr) {
-      if(first) continue;
-
-      first = true;
-      dataArr[key].forEach((data) => {
-        timeseries.push(data.timepoint);
-      })
-    }
 
     return timeseries;
   }

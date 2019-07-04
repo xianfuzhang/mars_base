@@ -2331,86 +2331,86 @@ export class DashboardController {
     };
     
     let getFilteredDataModel = (type) => {
-		  let dataArr = [];
-		
-		  let selectedData = [];
-		  switch(type) {
-			  case 'controller-cpu':
-          selectedData = scope.dashboardModel.controller.cpu.selectedData;
-				  if(Array.isArray(selectedData) && selectedData.length > 0) {
-					  dataModel.cluster.forEach((data) => {
-						  if(selectedData.indexOf(data.name) > -1) {
-							  dataArr.push(data)
-						  }
-					  })
-				  } else {
-					  dataArr = dataModel.cluster;
-				  }
-				
-				  break;
-			  case 'controller-memory':
-          selectedData = scope.dashboardModel.controller.memory.selectedData;
-          if(Array.isArray(selectedData) && selectedData.length > 0) {
-					  dataModel.cluster.forEach((data) => {
-						  if(selectedData.indexOf(data.name) > -1) {
-							  dataArr.push(data)
-						  }
-					  })
-				  } else {
-					  dataArr = dataModel.cluster;
-				  }
-				  break;
-        case 'controller-interface':
-          selectedData = scope.dashboardModel.controller.interface.selectedData;
-          if(Array.isArray(selectedData) && selectedData.length > 0) {
-            dataModel.cluster.forEach((data) => {
-              if(selectedData.indexOf(data.name) > -1) {
-                dataArr.push(data)
-              }
-            })
-          } else {
-            dataArr = dataModel.cluster;
-          }
-          break;
-			  case 'device-cpu':
-          selectedData = scope.dashboardModel.cpu.selectedData;
-          if(Array.isArray(selectedData) && selectedData.length > 0) {
-					  dataModel.configDevices.forEach((data) => {
-						  if(selectedData.indexOf(data.name) > -1) {
-							  dataArr.push(data)
-						  }
-					  })
-				  } else {
-					  dataArr = dataModel.configDevices;
-				  }
-				  break;
-			  case 'device-memory':
-          selectedData = scope.dashboardModel.memory.selectedData;
-          if(Array.isArray(selectedData) && selectedData.length > 0) {
-					  dataModel.configDevices.forEach((data) => {
-						  if(selectedData.indexOf(data.name) > -1) {
-							  dataArr.push(data)
-						  }
-					  })
-				  } else {
-					  dataArr = dataModel.configDevices;
-				  }
-				  break;
-        case 'device-disk':
-          selectedData = scope.dashboardModel.disk.selectedData;
-          if(Array.isArray(selectedData) && selectedData.length > 0) {
-            dataModel.configDevices.forEach((data) => {
-              if(selectedData.indexOf(data.name) > -1) {
-                dataArr.push(data)
-              }
-            })
-          } else {
+        let dataArr = [];
+
+        let selectedData = [];
+        switch(type) {
+          case 'controller-cpu':
+            selectedData = scope.dashboardModel.controller.cpu.selectedData;
+            if(Array.isArray(selectedData) && selectedData.length > 0) {
+              dataModel.cluster.forEach((data) => {
+                  if(selectedData.indexOf(data.name) > -1) {
+                      dataArr.push(data)
+                  }
+              })
+            } else {
+              dataArr = dataModel.cluster;
+            }
+
+            break;
+          case 'controller-memory':
+            selectedData = scope.dashboardModel.controller.memory.selectedData;
+            if(Array.isArray(selectedData) && selectedData.length > 0) {
+              dataModel.cluster.forEach((data) => {
+                  if(selectedData.indexOf(data.name) > -1) {
+                      dataArr.push(data)
+                  }
+              })
+            } else {
+              dataArr = dataModel.cluster;
+            }
+            break;
+          case 'controller-interface':
+            selectedData = scope.dashboardModel.controller.interface.selectedData;
+            if(Array.isArray(selectedData) && selectedData.length > 0) {
+              dataModel.cluster.forEach((data) => {
+                if(selectedData.indexOf(data.name) > -1) {
+                  dataArr.push(data)
+                }
+              })
+            } else {
+              dataArr = dataModel.cluster;
+            }
+            break;
+          case 'device-cpu':
+            selectedData = scope.dashboardModel.cpu.selectedData;
+            if(Array.isArray(selectedData) && selectedData.length > 0) {
+              dataModel.configDevices.forEach((data) => {
+                if(selectedData.indexOf(data.name) > -1) {
+                    dataArr.push(data)
+                }
+              })
+            } else {
+              dataArr = dataModel.configDevices;
+            }
+            break;
+          case 'device-memory':
+            selectedData = scope.dashboardModel.memory.selectedData;
+            if(Array.isArray(selectedData) && selectedData.length > 0) {
+              dataModel.configDevices.forEach((data) => {
+                if(selectedData.indexOf(data.name) > -1) {
+                  dataArr.push(data)
+                }
+              })
+            } else {
+              dataArr = dataModel.configDevices;
+            }
+            break;
+          case 'device-disk':
+            selectedData = scope.dashboardModel.disk.selectedData;
+            if(Array.isArray(selectedData) && selectedData.length > 0) {
+              dataModel.configDevices.forEach((data) => {
+                if(selectedData.indexOf(data.name) > -1) {
+                  dataArr.push(data)
+                }
+              })
+            } else {
+              dataArr = dataModel.configDevices;
+            }
+            break;
+          default:
             dataArr = dataModel.configDevices;
-          }
-          break;
-        default:
-          dataArr = dataModel.configDevices;
-		  }
+        }
 		
 		  return dataArr;
 	  }

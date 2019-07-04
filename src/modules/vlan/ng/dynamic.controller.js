@@ -74,6 +74,69 @@ export class DynamicVlanController {
       this.di.$rootScope.$emit('vlan-ip-wizard-show');
     };
 
+    scope.batchEnable = () => {
+      let selectedRows = scope.dynamicModel.api.getSelectedRows();
+      if (selectedRows.length === 0) {
+        return;
+      }
+      let postData = [];
+      selectedRows.forEach(row => {
+        let deviceData = postData.find(d=>{return d['device-id'] === row.device_id});
+        if(!deviceData){
+          postData.push({'device-id': row.device_id, 'dynamicvlans':[]})
+          deviceData = postData.find(d=>{return d['device-id'] === row.device_id});
+        };
+        deviceData['dynamicvlans'].push({
+          'port': parseInt(row.port),
+          'dynamicVlan': this.CONST.ENABLE
+        })
+      });
+      this.di.dialogService.createDialog('warning', this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.BATCH_ACTIVE_CONFIRM'))
+        .then((data) => {
+          this.di.vlanDataManager.postVlanDynamic({'devices': postData})
+            .then((res) => {
+              this.di.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.BATCH_ACTIVE_CONFIRM_SUCCESS'));
+              scope.dynamicModel.api.resetSelectedRows();
+              scope.dynamicModel.api.queryUpdate();
+            }, (error) => {
+              this.di.notificationService.renderWarning(scope, error)
+            });
+        }, (res) => {
+          this.di.$log.debug('delete vlan ip mask dialog cancel');
+        });
+    }
+
+    scope.batchDisable = () => {
+      let selectedRows = scope.dynamicModel.api.getSelectedRows();
+      if (selectedRows.length === 0) {
+        return;
+      }
+      let postData = [];
+      selectedRows.forEach(row => {
+        let deviceData = postData.find(d=>{return d['device-id'] === row.device_id});
+        if(!deviceData){
+          postData.push({'device-id': row.device_id, 'dynamicvlans':[]})
+          deviceData = postData.find(d=>{return d['device-id'] === row.device_id});
+        };
+        deviceData['dynamicvlans'].push({
+          'port': parseInt(row.port),
+          'dynamicVlan': this.CONST.DISABLE
+        })
+      });
+      this.di.dialogService.createDialog('warning', this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.BATCH_DEACTIVE_CONFIRM'))
+        .then((data) => {
+          this.di.vlanDataManager.postVlanDynamic({'devices': postData})
+            .then((res) => {
+              this.di.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.BATCH_DEACTIVE_CONFIRM_SUCCESS'));
+              scope.dynamicModel.api.resetSelectedRows();
+              scope.dynamicModel.api.queryUpdate();
+            }, (error) => {
+              this.di.notificationService.renderWarning(scope, error)
+            });
+        }, (res) => {
+          this.di.$log.debug('delete vlan ip mask dialog cancel');
+        });
+    }
 
     scope.onTableRowSelectAction = (event) => {
       if (event.data && event.action) {
@@ -81,7 +144,7 @@ export class DynamicVlanController {
           this.di.dialogService.createDialog('warning', this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.DEACTIVE_CONFIRM'))
             .then((data) => {
               const param = {
-                'devices':[
+                'devices': [
                   {
                     'device-id': event.data.device_id,
                     'dynamicvlans': [
@@ -92,7 +155,7 @@ export class DynamicVlanController {
                     ]
                   }
                 ]
-              }
+              };
               this.di.vlanDataManager.postVlanDynamic(param)
                 .then((res) => {
                   this.di.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.DEACTIVE_CONFIRM_SUCCESS'));
@@ -108,7 +171,7 @@ export class DynamicVlanController {
           this.di.dialogService.createDialog('warning', this.translate('MODULES.VLAN.DYNAMIC.DIALOG.MESSAGE.ACTIVE_CONFIRM'))
             .then((data) => {
               const param = {
-                'devices':[
+                'devices': [
                   {
                     'device-id': event.data.device_id,
                     'dynamicvlans': [
@@ -135,15 +198,15 @@ export class DynamicVlanController {
     };
 
 
-    scope.onTableRowActionsFilter = (event) =>{
+    scope.onTableRowActionsFilter = (event) => {
       let filterActions = [];
       if (event.data) {
-        event.actions.forEach((action) =>{
+        event.actions.forEach((action) => {
           if (event.data.dynamic === this.CONST.ENABLE && action.value !== 'active') {
             filterActions.push(action);
           }
 
-          if (event.data.dynamic !== this.CONST.ENABLE && action.value!== 'deactive') {
+          if (event.data.dynamic !== this.CONST.ENABLE && action.value !== 'deactive') {
             filterActions.push(action);
           }
         });
@@ -278,20 +341,20 @@ export class DynamicVlanController {
       let deviceId = deviceCfg['device-id'];
       let vlan_ports = deviceCfg['ports'];
       vlan_ports.forEach(vlan_port => {
-        dynamicDict[deviceId+ '__' + vlan_port.port] = vlan_port['dynamicVlan']?vlan_port['dynamicVlan']:this.CONST.ENABLE;
+        dynamicDict[deviceId + '__' + vlan_port.port] = vlan_port['dynamicVlan'] ? vlan_port['dynamicVlan'] : this.CONST.ENABLE;
       });
     });
 
 
     ports.forEach(port => {
-      const d = dynamicDict[port.element + '__' + port.port]?dynamicDict[port.element + '__' + port.port]:this.CONST.ENABLE;
-      if(port.element.toLocaleLowerCase().indexOf('rest') !== -1){
+      const d = dynamicDict[port.element + '__' + port.port] ? dynamicDict[port.element + '__' + port.port] : this.CONST.ENABLE;
+      if (port.element.toLocaleLowerCase().indexOf('rest') !== -1) {
         dynamics.push({
           'device_id': port.element,
           'device_name': this._getDeviceName(port.element),
           'port': port.port,
           'dynamic': d,
-          'status':d === 'enable'?'done':'not_interested'
+          'status': d === 'enable' ? 'done' : 'not_interested'
         })
       }
 
