@@ -436,7 +436,7 @@ export class VlanController {
       this.scope.model.topoLinks = angular.copy(resultArr[2]);
       let devices = angular.copy(resultArr[1]);
       let realtimeDevices = angular.copy(resultArr[0]);
-      let portGroups = this.di._.groupBy(angular.copy(resultArr[4]), "element");
+      let portGroups = this.di._.groupBy(angular.copy(resultArr[5]), "element");
       formatLeafGroupData(devices, realtimeDevices);
       this.di._.forEach(realtimeDevices, (device) => {
         device.ports = portGroups[device.id];
