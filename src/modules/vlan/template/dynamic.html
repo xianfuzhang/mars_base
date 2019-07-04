@@ -10,7 +10,11 @@
     </content-header>
     <div class="alert-list flex_entirety__body__body" style="display:flex;flex-direction: row">
       <div >
-        <div class="main__content">
+        <div class="main__content" style="position: relative">
+          <div style="position: absolute;right: 70px;top:36px;">
+            <mar-button btn-text="::'MODULES.VLAN.DYNAMIC.MENU.BATCH_ACTIVE' | translate" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="batchEnable()"></mar-button>
+            <mar-button btn-text="::'MODULES.VLAN.DYNAMIC.MENU.BATCH_DEACTIVE' | translate" btn-icon="'not_interested'" btn-class="'btn-black btn-sm'" btn-click="batchDisable()"></mar-button>
+          </div>
           <mdl-table actions-show="dynamicModel.actionsShow"
                      actions="dynamicModel.rowActions"
                      row-click="onTableRowClick($event)"
