@@ -1,6 +1,7 @@
 export class textRendererFactory {
   static getDI () {
     return [
+      '$filter',
       'renderService',
       'tableConsts',
       'textRenderer'
@@ -15,7 +16,7 @@ export class textRendererFactory {
   }
 
   createFactory () {
-    return this.di.textRenderer.getTextRenderer(this.di.renderService, this.di.tableConsts);
+    return this.di.textRenderer.getTextRenderer(this.di.$filter, this.di.renderService, this.di.tableConsts);
   }
 }
 

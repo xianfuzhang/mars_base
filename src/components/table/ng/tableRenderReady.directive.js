@@ -1,7 +1,7 @@
 export class tableRenderReady {
 	static getDI() {
 		return [
-			'$timeout',
+			'$timeout'
 		];
 	}
 	constructor(...args) {

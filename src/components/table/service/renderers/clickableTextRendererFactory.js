@@ -1,6 +1,7 @@
 export class ClickableTextRendererFactory {
   static getDI () {
     return [
+      '$filter',
       'renderService',
       'tableConsts',
       '$rootScope',
@@ -16,8 +17,8 @@ export class ClickableTextRendererFactory {
   }
 
   createFactory () {
-    return this.di.clickableTextRenderer.getClickableTextRenderer(this.di.renderService,
-      this.di.tableConsts, this.di.$rootScope);
+    return this.di.clickableTextRenderer.getClickableTextRenderer(this.di.$filter,
+      this.di.renderService, this.di.tableConsts, this.di.$rootScope);
   }
 }
 

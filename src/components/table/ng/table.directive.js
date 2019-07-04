@@ -2,7 +2,7 @@ export class mdlTable {
   static getDI() {
     return [
       '$log',
-      //'$window',
+      '$rootScope',
       '$filter',
       '$timeout',
       '_',
@@ -641,7 +641,13 @@ export class mdlTable {
     };
     document.body.addEventListener('scroll', onScrollRemoveMenu, true);
 
+    let subscribes = [];
+    subscribes.push(this.di.$rootScope.$on('td-filter-event', (event, params) => {
+      scope._search(false, params);
+    }));
+    
     scope.$on('$destroy', ()=> {
+      subscribes.forEach((cb) => cb());
       document.body.removeEventListener('scroll', onScrollRemoveMenu);
     });
   }

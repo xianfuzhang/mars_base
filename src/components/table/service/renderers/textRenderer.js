@@ -1,6 +1,7 @@
 export class textRenderer {
   static getDI () {
     return [
+      '$filter',
       'renderService',
       'tableConsts'
     ];
@@ -12,15 +13,42 @@ export class textRenderer {
       this.di[value] = args[index];
     }, this);
 
-    this.initialize = (spec) =>{
-      this.spec = spec;
-    };
-
     this.render = (spec) => {
-      spec.element.innerHTML = (spec.value === null || spec.value === undefined ? '-' : String(spec.value));
-      if (spec.col.def.tooltip) {
-        spec.element.title = spec.col_title || spec.value;
+      let scope = spec.getContext.$new(),
+          tdElm = spec.element;
+
+      let clickFilterHandler = () => {
+        scope.$emit('td-filter-event', {
+          'display': spec.col.def.label + ':=' + spec.value,
+          'result': [[spec.col.field, 'equals', spec.value]]
+        });
+      };
+
+      let tdEnterFunc = (event) => {
+        let filterElm = this.getFilterFragment();
+        tdElm.appendChild(filterElm);
+        filterElm.addEventListener('click', clickFilterHandler);
+      };
+
+      let tdLeaveFunc = (event) => {
+        let filterElm =tdElm.querySelector('.td_filter');
+        if (filterElm) {
+          filterElm.removeEventListener('click', clickFilterHandler);
+          tdElm.removeChild(filterElm);
+        }
+      };
+      
+      if (tdElm) {
+        tdElm.removeEventListener('mouseenter', tdEnterFunc);
+        tdElm.removeEventListener('mouseleave', tdLeaveFunc);
       }
+
+      tdElm.innerHTML = (spec.value === null || spec.value === undefined ? '-' : String(spec.value));
+      if (spec.col.def.tooltip) {
+        tdElm.title = spec.col_title || spec.value;
+      }
+      tdElm.addEventListener('mouseenter', tdEnterFunc);
+      tdElm.addEventListener('mouseleave', tdLeaveFunc);
     };
 
     this.getType = () => {
@@ -40,10 +68,17 @@ export class textRenderer {
         }
       }
     };
+
+    this.getFilterFragment = () => {
+      let filterElm = document.createElement('div');
+      filterElm.className = 'td_filter';
+      filterElm.title = this.di.$filter('translate')('MODULES.TABLE.FILTER.TITLE');
+      return filterElm;
+    };
   }
 
-  getTextRenderer (renderService, tableConsts) {
-    return new textRenderer(renderService, tableConsts);
+  getTextRenderer (filterService, renderService, tableConsts) {
+    return new textRenderer(filterService, renderService, tableConsts);
   }
 }
 
