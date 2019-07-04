@@ -12,7 +12,7 @@
                 on-select="onTabChange($value)">
       </mdl-tabs>
       <section class="tab-content" ng-if="tabSelected.type == 'default'" style="display: flex;">
-        <div class="mars-col-16 relative">
+        <div class="relative" ng-class="{'mars-col-16': model.typeMode.label != 'topo', 'mars-col-24': model.typeMode.label == 'topo'}">
           <div style="position: relative; display: flex; height: 100%;">
             <div class="type-container">
               <mdl-radio style="display: none" ng-model="model.typeMode"
@@ -47,6 +47,12 @@
                      row-click="onTableRowClick($event)"
                      provider="model.provider" api-ready="onApiReady($api)">
               </mdl-table>
+            </div>
+
+            <div ng-if="model.typeMode.label === 'topo'" style="width:100%;border:1px solid lightgray;overflow:hidden;">
+                <vlan-topo devices="model.topoDevices"
+                           links="model.topoLinks">
+                </vlan-topo>
             </div>
           </div>  
         </div>

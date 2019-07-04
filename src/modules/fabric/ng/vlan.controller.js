@@ -58,7 +58,9 @@ export class VlanController {
       vlanConfig: [],
       vlansMapArr: [],
       ports: [],
-      vlanPortsList: []
+      vlanPortsList: [],
+      topoDevices:[],
+      topoLinks:[]
     };
 
     scope.onTabChange = (tab) => {
@@ -403,6 +405,33 @@ export class VlanController {
       this.scope.onTabChange(this.scope.tabs[0]);
       this.scope.model.actionsShow = this.getActionsShow();
       this.scope.model.vlanPortsList = this.getPortListFromConfig();
+
+
+      let formatLeafGroupData = (devices, realtimeDevices) => {
+
+        realtimeDevices.forEach(realtimeD => {
+          let device = devices.find(d=> d.id === realtimeD.id);
+          if(device){
+            realtimeD['name'] = device['name']? device['name']: null;
+          }
+        });
+        let curTime = new Date().getTime();
+        this.di._.forEach(devices, (device) => {
+          if (device.type.toLowerCase() === 'leaf') {
+            device['leaf_group_name'] = device.leaf_group.name ? device.leaf_group.name : null;
+            device['leaf_group_port'] = device.leaf_group.switch_port ? device.leaf_group.switch_port : null;
+          }
+        })
+      };
+      this.scope.model.topoLinks = angular.copy(resultArr[2]);
+      let devices = angular.copy(resultArr[1]);
+      let realtimeDevices = angular.copy(resultArr[0]);
+      let portGroups = this.di._.groupBy(angular.copy(resultArr[4]), "element");
+      formatLeafGroupData(devices, realtimeDevices);
+      this.di._.forEach(realtimeDevices, (device) => {
+        device.ports = portGroups[device.id];
+      });
+      this.scope.model.topoDevices = realtimeDevices;
     });
 
     //init table
