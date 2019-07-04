@@ -598,6 +598,12 @@ export class mdlTable {
             }
             // NOTE: set the ID anyway - the developer is responsible of having this valid for now
             scope.tableModel.selectedRowId = itemId;
+        },
+        getSelectedRows: ()=>{
+          return scope.tableModel.removeItems;
+        },
+        resetSelectedRows: ()=>{
+          scope.clearRowCheck();
         }
       };
 
