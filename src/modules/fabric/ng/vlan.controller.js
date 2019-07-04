@@ -460,7 +460,7 @@ export class VlanController {
         vlanIds = vlanIds.concat(v.vlans);
       })
       vlanIds = Array.from(new Set(vlanIds));
-      this.scope.model.topoVlanIdSelect = [{label:'请选择VLAN ID', 'value': null}];
+      this.scope.model.topoVlanIdSelect = [{label: this.translate('MODULES.VLAN.STATIC.TOPO.VLAN_ID_SELECT'), 'value': null}];
       vlanIds.forEach(id => {this.scope.model.topoVlanIdSelect.push({'label' : id+'', 'value' : id})});
     });
 
