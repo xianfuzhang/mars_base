@@ -30,8 +30,7 @@ export class VlanTopo {
     this.scope = {
       links: '=',
       devices: '=',
-      vlanConfig: '=',
-      topoSetting: '='
+      vlanConfig: '='
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -39,6 +38,19 @@ export class VlanTopo {
 
 
   _link(scope, element) {
+
+    // scope.vlanTopoModel = {
+    //   vlan: null,
+    //   vlan_list_display: {
+    //     'options': [
+    //       {'label': 'TestVlan', 'value': 'vlan'},
+    //       {'label': "Force", 'value': 'force'},
+    //       {'label': 'Spine Leaf', 'value': 'spine_leaf'},
+    //       {'label': 'Donut', 'value': 'donut'}
+    //     ],
+    //     'hint': 'MODULES.SWITCHES.TOPO.TYPE',
+    //   }
+    // }
     (function init() {
       let unsubscribers = [];
 
@@ -53,10 +65,11 @@ export class VlanTopo {
 
       this.hosts = [];
       this.hostNodes = {};
+      scope.hasBound = false;
       // scope.selectedDeviceId = null;
 
       // TEST Code START  ======= 此处代码是用来测试distance算法是否合理
-      /*let devices = [{"available":true,"community":null,"id":"rest:192.168.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"192.168.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:192.168.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:192.168.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"192.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"192.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"192.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.168.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.168.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:292.168.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"292.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"292.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:192.169.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"192.169.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:192.169.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:192.169.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"192.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"192.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"192.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.169.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.169.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:292.169.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"292.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"292.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"}];
+      let devices = [{"available":true,"community":null,"id":"rest:192.168.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"192.168.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:192.168.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:192.168.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"192.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"192.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"192.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.168.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.168.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.168.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:292.168.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"292.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"292.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.168.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:192.169.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"192.169.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:192.169.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:192.169.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"192.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"192.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"192.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:192.169.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"192.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.169.40.225:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:08:C0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.225","name":"spine0","port":80,"protocol":"rest","rack_id":"1","type":"spine"},{"available":true,"community":null,"id":"rest:292.169.40.228:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:FA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.228","name":"leaf1","port":80,"protocol":"rest","rack_id":"","type":"leaf"},{"available":true,"community":null,"id":"grpc:292.169.40.224:5001","leafGroup":{"name":null,"switch_port":0},"mac":"CC:37:AB:E0:AC:88","mfr":"Nocsys","mgmtIpAddress":"292.168.40.224","name":"leaf4","port":5001,"protocol":"grpc","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.227:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:09:E8","mfr":"Nocsys","mgmtIpAddress":"292.168.40.227","name":"leaf0","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.230:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0F:B0","mfr":"Nocsys","mgmtIpAddress":"292.168.40.230","name":"leaf3","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.229:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:11:39:50","mfr":"Nocsys","mgmtIpAddress":"192.168.40.229","name":"leaf2","port":80,"protocol":"rest","rack_id":"1","type":"leaf"},{"available":true,"community":null,"id":"rest:292.169.40.226:80","leafGroup":{"name":null,"switch_port":0},"mac":"8C:EA:1B:8D:0D:AA","mfr":"Nocsys","mgmtIpAddress":"292.168.40.226","name":"spine1","port":80,"protocol":"rest","rack_id":"1","type":"spine"}];
       let links =[{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.225:80","port":"49"},"src":{"device":"rest:192.168.40.227:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.230:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.229:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.227:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.226:80","port":"51"},"src":{"device":"rest:192.168.40.229:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.226:80","port":"52"},"src":{"device":"rest:192.168.40.230:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.229:80","port":"49"},"src":{"device":"rest:192.168.40.225:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.226:80","port":"49"},"src":{"device":"rest:192.168.40.227:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.227:80","port":"49"},"src":{"device":"rest:192.168.40.225:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.225:80","port":"51"},"src":{"device":"rest:192.168.40.229:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.225:80","port":"52"},"src":{"device":"rest:192.168.40.230:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.168.40.230:80","port":"49"},"src":{"device":"rest:192.168.40.225:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.225:80","port":"49"},"src":{"device":"rest:292.168.40.227:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.230:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.229:80","port":"50"},"src":{"device":"rest:292.168.40.226:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.227:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.226:80","port":"51"},"src":{"device":"rest:292.168.40.229:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.226:80","port":"52"},"src":{"device":"rest:192.168.40.230:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.229:80","port":"49"},"src":{"device":"rest:292.168.40.225:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.226:80","port":"49"},"src":{"device":"rest:292.168.40.227:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.227:80","port":"49"},"src":{"device":"rest:292.168.40.225:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.225:80","port":"51"},"src":{"device":"rest:292.168.40.229:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.225:80","port":"52"},"src":{"device":"rest:292.168.40.230:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.230:80","port":"49"},"src":{"device":"rest:292.168.40.225:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.225:80","port":"49"},"src":{"device":"rest:192.169.40.227:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.230:80","port":"50"},"src":{"device":"rest:192.169.40.226:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.229:80","port":"50"},"src":{"device":"rest:192.169.40.226:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.227:80","port":"50"},"src":{"device":"rest:192.169.40.226:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.226:80","port":"51"},"src":{"device":"rest:192.169.40.229:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.226:80","port":"52"},"src":{"device":"rest:192.169.40.230:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.229:80","port":"49"},"src":{"device":"rest:192.169.40.225:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.226:80","port":"49"},"src":{"device":"rest:192.169.40.227:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.227:80","port":"49"},"src":{"device":"rest:192.169.40.225:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.225:80","port":"51"},"src":{"device":"rest:192.169.40.229:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.225:80","port":"52"},"src":{"device":"rest:192.168.40.230:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:192.169.40.230:80","port":"49"},"src":{"device":"rest:192.168.40.225:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.225:80","port":"49"},"src":{"device":"rest:292.169.40.227:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.230:80","port":"50"},"src":{"device":"rest:192.169.40.226:80","port":"52"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.229:80","port":"50"},"src":{"device":"rest:292.168.40.226:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.227:80","port":"50"},"src":{"device":"rest:192.168.40.226:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.226:80","port":"51"},"src":{"device":"rest:292.169.40.229:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.226:80","port":"52"},"src":{"device":"rest:192.168.40.230:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.229:80","port":"49"},"src":{"device":"rest:292.168.40.225:80","port":"51"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.226:80","port":"49"},"src":{"device":"rest:292.169.40.227:80","port":"50"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.227:80","port":"49"},"src":{"device":"rest:292.169.40.225:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.168.40.225:80","port":"51"},"src":{"device":"rest:292.168.40.229:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.225:80","port":"52"},"src":{"device":"rest:292.168.40.230:80","port":"49"},"state":"ACTIVE","type":"DIRECT"},{"annotations":{"Key":"Value","protocol":"LINKDISCOVERY"},"dst":{"device":"rest:292.169.40.230:80","port":"49"},"src":{"device":"rest:292.168.40.225:80","port":"52"},"state":"ACTIVE","type":"DIRECT"}];
 
       let len = 30;
@@ -73,7 +86,7 @@ export class VlanTopo {
         if (!this.di._.find(scope.devices, {"id": device2.id})) {
           scope.devices.push(device2)
         }
-      });*/
+      });
       // TEST Code END ======
 
 
@@ -108,6 +121,8 @@ export class VlanTopo {
       };
 
       this.vlanConfig = scope.vlanConfig?_formatVlan(scope.vlanConfig):{};
+
+      // scope.vlan_list_arr =
       //TEST
       // this.vlanConfig = _formatVlan({"devices":[{"device-id":"rest:192.168.40.225:80","ports":[{"port":1,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":2,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":3,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/untag"]},{"port":4,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/untag"]},{"port":5,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":6,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":7,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":8,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":9,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":13,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":14,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":15,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":16,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":17,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]}]},{"device-id":"rest:192.168.40.228:80","ports":[{"port":1,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":2,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":3,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":4,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":5,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":6,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":7,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":8,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":9,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":13,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":14,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/untag"]},{"port":15,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":16,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":17,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]}]},{"device-id":"rest:192.168.40.224:80","ports":[{"port":1,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":2,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":3,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":4,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":5,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":6,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":7,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":8,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":9,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/untag"]},{"port":13,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":14,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":15,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/untag"]},{"port":16,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":17,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]}]},{"device-id":"rest:192.168.40.230:80","ports":[{"port":1,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":2,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":3,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/untag"]},{"port":4,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":5,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/tag","2/tag"]},{"port":6,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":7,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":8,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","1/tag","2/tag"]},{"port":9,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":13,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":14,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","3/tag","2/tag"]},{"port":15,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag","9/untag","2/untag"]},{"port":16,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]},{"port":17,"native":5,"mode":"access","dynamicVlan":"enable","guestVlan":25,"vlans":["5/untag"]}]}]})
 
@@ -146,6 +161,12 @@ export class VlanTopo {
         _svg.transition().duration(200).attr('transform','translate(0,0) scale(1)');
         this.di.$timeout(()=>{
           scope.zoom.transform(_svg, transform);
+          // // this.simulation.restart();
+          // _svg.select('#origin_node').remove();
+          // delete this.deviceNode;
+          // this.deviceNode = null;
+          //
+          // add_origin_nodes()
         }, 200);
 
         event.preventDefault();
@@ -157,7 +178,7 @@ export class VlanTopo {
         let _svg = this.di.d3.select('.forceTopo > svg');
         let transform = this.di.d3.zoomTransform(_svg.node());
 
-        let k = change === 0?-0.5:0.5;
+        let k = change === 0?-0.1:0.1;
         console.log('resizeSvg:' + String(change))
         console.log(transform)
         let propertion = (transform.k + k)/transform.k;
@@ -169,8 +190,8 @@ export class VlanTopo {
           return;
         }
 
-        if(transform.k + k < 1){
-          transform.k = 1;
+        if(transform.k + k < 0.5){
+          transform.k = 0.5;
           _svg.transition().duration(100).attr('transform','translate('+ transform.x +',' + transform.y +') scale('+ transform.k +')');
           // this.di.$timeout(()=>{
           //   scope.zoom.transform(_svg, transform);
@@ -237,9 +258,10 @@ export class VlanTopo {
         this.di._.forEach(links, (link) => {
           // let newDeviceIds = this.di._.sortBy([link.src.device, link.dst.device]);
           // let linkId = newDeviceIds.join('-');
-
+          if(link.src.device.indexOf('rest') === -1 || link.dst.device.indexOf('rest') === -1){
+            return;
+          }
           let linkId = getLinkId([link.src.device, link.dst.device], [link.src.port, link.dst.port]);
-          // if (this.di._.findIndex(this.linkIds, linkId) === -1 && isDeviceLink(link.src.device, link.dst.device)) {
           if (this.linkIds.findIndex(function (ele) {return ele == linkId}) === -1 && isDeviceLink(link.src.device, link.dst.device)) {
             this.linkIds.push(linkId);
             this.formated_links.push({
@@ -267,14 +289,15 @@ export class VlanTopo {
         })
       };
 
-      let formatDevice = (devices) => {
-
+      let formatDevice = () => {
+        //只显示rest类型的交换机
+        this.formated_devices =  this.formated_devices.filter(device => device.id.toLocaleLowerCase().indexOf('rest') !== -1);
       }
 
       let getDeviceName = (deviceId) => {
         let device = this.di._.find(scope.devices, {"id": deviceId});
         if (device) return device['name'];
-        else return '';
+        else return deviceId;
       };
 
 
@@ -299,8 +322,8 @@ export class VlanTopo {
       let switchLocation = this.switchLocation;
 
       let initialize = () => {
+        formatDevice();
         formatLinks(this.source_links);
-        formatDevice(this.source_devices);
         genTopo();
       };
 
@@ -321,9 +344,9 @@ export class VlanTopo {
 
         function dragstarted(d) {
           isDrag = true;
-          if (scope.topoSetting.show_tooltips) {
+          // if (scope.topoSetting.show_tooltips) {
             DI.$rootScope.$emit("hide_tooltip");
-          }
+          // }
 
           if (!DI.d3.event.active) simulation.alphaTarget(0.3).restart();
           d.fx = d.x;
@@ -437,22 +460,28 @@ export class VlanTopo {
       };
 
       let _calcPoint_X = (point) => {
-        // if (point < BOUNDARY_SIZE) {
-        //   return BOUNDARY_SIZE
-        // }
-        // if (point > this.width - BOUNDARY_SIZE) {
-        //   return this.width - BOUNDARY_SIZE
-        // }
+
+        if(scope.hasBound){
+          if (point < BOUNDARY_SIZE) {
+            return BOUNDARY_SIZE
+          }
+          if (point > this.width - BOUNDARY_SIZE) {
+            return this.width - BOUNDARY_SIZE
+          }
+        }
+
         return point;
       }
 
       let _calcPoint_Y = (point) => {
-        // if (point < BOUNDARY_SIZE) {
-        //   return BOUNDARY_SIZE
-        // }
-        // if (point > this.height - BOUNDARY_SIZE) {
-        //   return this.height - BOUNDARY_SIZE
-        // }
+        if(scope.hasBound) {
+          if (point < BOUNDARY_SIZE) {
+            return BOUNDARY_SIZE
+          }
+          if (point > this.height - BOUNDARY_SIZE) {
+            return this.height - BOUNDARY_SIZE
+          }
+        }
         return point;
       };
 
@@ -462,9 +491,9 @@ export class VlanTopo {
         removeSelectEffect();
 
 
-        if (scope.topoSetting.show_tooltips) {
+        // if (scope.topoSetting.show_tooltips) {
           DI.$rootScope.$emit("hide_tooltip");
-        }
+        // }
         let deviceId = this.getAttribute('deviceId');
         let sw = DI._.find(scope.devices, {'id': deviceId});
         let showArray = DI.switchService.getNormalShowInfo(sw);
@@ -478,9 +507,9 @@ export class VlanTopo {
 
 
       let mouseOutHandler = (evt) => {
-        if (scope.topoSetting.show_tooltips) {
+        // if (scope.topoSetting.show_tooltips) {
           this.di.$rootScope.$emit("hide_tooltip");
-        }
+        // }
       };
 
 
@@ -493,13 +522,13 @@ export class VlanTopo {
         let sw = DI._.find(scope.devices, {'id': deviceId});
         let showArray = DI.switchService.getNormalShowInfo(sw);
 
-        if (scope.topoSetting.show_tooltips) {
+        // if (scope.topoSetting.show_tooltips) {
           let evt = {
             'clientX': this.getBoundingClientRect().left + NODE_SIZE / 2,
             'clientY': this.getBoundingClientRect().top + NODE_SIZE / 2
           };
           DI.$rootScope.$emit("show_tooltip", {event: evt, value: showArray});
-        }
+        // }
       }
 
       let parseLinkId = (linkId) =>{
@@ -726,38 +755,38 @@ export class VlanTopo {
       }
 
 
-      let simulation_all_tick_callback = () =>{
-        this.simulation.on("tick", () => {
-          this.linkNode
-            .attr("x1", d => _calcPoint_X(d.source.x))
-            .attr("y1", d => _calcPoint_Y(d.source.y))
-            .attr("x2", d => _calcPoint_X(d.target.x))
-            .attr("y2", d => _calcPoint_Y(d.target.y));
-
-
-          this.pathLinks
-            .attr("x1", d => _calcPoint_X(d.source.x))
-            .attr("y1", d => _calcPoint_Y(d.source.y))
-            .attr("x2", d => _calcPoint_X(d.target.x))
-            .attr("y2", d => _calcPoint_Y(d.target.y));
-
-          this.hostNode.attr('transform', d => {
-            let x, y;
-            x = _calcPoint_X(d.x);
-            y = _calcPoint_Y(d.y);
-            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
-          });
-
-          this.deviceNode.attr('transform', d => {
-            let x, y;
-
-            x = _calcPoint_X(d.x);
-            y = _calcPoint_Y(d.y);
-
-            return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
-          });
-        });
-      };
+      // let simulation_all_tick_callback = () =>{
+      //   this.simulation.on("tick", () => {
+      //     this.linkNode
+      //       .attr("x1", d => _calcPoint_X(d.source.x))
+      //       .attr("y1", d => _calcPoint_Y(d.source.y))
+      //       .attr("x2", d => _calcPoint_X(d.target.x))
+      //       .attr("y2", d => _calcPoint_Y(d.target.y));
+      //
+      //
+      //     this.pathLinks
+      //       .attr("x1", d => _calcPoint_X(d.source.x))
+      //       .attr("y1", d => _calcPoint_Y(d.source.y))
+      //       .attr("x2", d => _calcPoint_X(d.target.x))
+      //       .attr("y2", d => _calcPoint_Y(d.target.y));
+      //
+      //     this.hostNode.attr('transform', d => {
+      //       let x, y;
+      //       x = _calcPoint_X(d.x);
+      //       y = _calcPoint_Y(d.y);
+      //       return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
+      //     });
+      //
+      //     this.deviceNode.attr('transform', d => {
+      //       let x, y;
+      //
+      //       x = _calcPoint_X(d.x);
+      //       y = _calcPoint_Y(d.y);
+      //
+      //       return 'translate(' + (x - ICON_SIZE / 2) + ',' + (y - ICON_SIZE / 2) + ')'
+      //     });
+      //   });
+      // };
 
       function hostClickHandler(evt){
         let hostId = this.hostId;
@@ -856,7 +885,10 @@ export class VlanTopo {
           .force("collide", DI.d3.forceCollide(60).strength(0.2).iterations(5));
 
 
-        reCenter();
+        setTimeout(function(){
+          reCenter();
+
+        });
 
 
         scope.zoom = this.di.d3.zoom();
@@ -872,7 +904,7 @@ export class VlanTopo {
             DI.d3.event.preventDefault();
             // DI.$rootScope.$emit('topo_unselect');
           })
-          .call(scope.zoom.scaleExtent([1, 4]).translateExtent([[-2000, -2000],[4000, 4000]])
+          .call(scope.zoom.scaleExtent([0.5, 4]).translateExtent([[-500, -500],[4000, 4000]])
             .on("zoom", zoomed))
           .on("dblclick.zoom", function (param) {
             let clientX = DI.d3.event.clientX;
@@ -895,20 +927,6 @@ export class VlanTopo {
 
 
             return transform;
-            // bottom: 710
-            // height: 595
-            // left: 0
-            // right: 1920
-            // top: 115
-            // width: 1920
-            // x: 0
-            // y: 115
-            // let calcCenterPoint =
-            // console.log('=======')
-            // console.log(DI.d3.event);
-            // let _svg = DI.d3.select('.forceTopo > svg');
-            // let transform = DI.d3.zoomTransform(_svg.node());
-            // console.log(transform)
           });
 
 
@@ -945,33 +963,32 @@ export class VlanTopo {
         this.defs = svg.append('defs');
         // 3.1 添加箭头
 
-        this.marker = this.defs
-          .append("marker")
-          .attr('id', "marker")
-          .attr("markerWidth", 20)    //marker视窗的宽
-          .attr("markerHeight", 20)   //marker视窗的高
-          .attr("refX", scope.distance/3)            //refX和refY，指的是图形元素和marker连接的位置坐标
-          .attr("refY", 8)
-          .attr("orient", "auto")     //orient="auto"设置箭头的方向为自动适应线条的方向
-          .attr("markerUnits", "userSpaceOnUse")  //marker是否进行缩放 ,默认值是strokeWidth,会缩放
-          .append("path")
-          .attr("d", "M 0 0 16 8 0 16Z")    //箭头的路径 从 （0,0） 到 （8,4） 到（0,8）
-          .attr("fill", "rgb(255,124,9)");
-
-
-        this.start_marker = this.defs
-          .append("marker")
-          .attr('id', "start_marker")
-          .attr("markerWidth", 20)    //marker视窗的宽
-          .attr("markerHeight", 20)   //marker视窗的高
-          .attr("refX", -scope.distance/3)            //refX和refY，指的是图形元素和marker连接的位置坐标
-          .attr("refY", 8)
-          .attr("orient", "auto")     //orient="auto"设置箭头的方向为自动适应线条的方向
-          .attr("markerUnits", "userSpaceOnUse")  //marker是否进行缩放 ,默认值是strokeWidth,会缩放
-          .append("path")
-          .attr("d", "M 0 0 16 8 0 16Z")    //箭头的路径 从 （0,0） 到 （8,4） 到（0,8）
-          .attr("fill", "rgb(255,124,9)");
-        // .on('resize',reCenter);
+        // this.marker = this.defs
+        //   .append("marker")
+        //   .attr('id', "marker")
+        //   .attr("markerWidth", 20)    //marker视窗的宽
+        //   .attr("markerHeight", 20)   //marker视窗的高
+        //   .attr("refX", scope.distance/3)            //refX和refY，指的是图形元素和marker连接的位置坐标
+        //   .attr("refY", 8)
+        //   .attr("orient", "auto")     //orient="auto"设置箭头的方向为自动适应线条的方向
+        //   .attr("markerUnits", "userSpaceOnUse")  //marker是否进行缩放 ,默认值是strokeWidth,会缩放
+        //   .append("path")
+        //   .attr("d", "M 0 0 16 8 0 16Z")    //箭头的路径 从 （0,0） 到 （8,4） 到（0,8）
+        //   .attr("fill", "rgb(255,124,9)");
+        //
+        //
+        // this.start_marker = this.defs
+        //   .append("marker")
+        //   .attr('id', "start_marker")
+        //   .attr("markerWidth", 20)    //marker视窗的宽
+        //   .attr("markerHeight", 20)   //marker视窗的高
+        //   .attr("refX", -scope.distance/3)            //refX和refY，指的是图形元素和marker连接的位置坐标
+        //   .attr("refY", 8)
+        //   .attr("orient", "auto")     //orient="auto"设置箭头的方向为自动适应线条的方向
+        //   .attr("markerUnits", "userSpaceOnUse")  //marker是否进行缩放 ,默认值是strokeWidth,会缩放
+        //   .append("path")
+        //   .attr("d", "M 0 0 16 8 0 16Z")    //箭头的路径 从 （0,0） 到 （8,4） 到（0,8）
+        //   .attr("fill", "rgb(255,124,9)");
 
         add_origin_link();
         add_origin_nodes();
@@ -982,60 +999,6 @@ export class VlanTopo {
         simulation_origin_tick_callback();
       };
 
-      // let getLinkId = (deviceIds, ports) => {
-      //   let newDeviceIds = this.di._.sortBy(deviceIds);
-      //   if (newDeviceIds[0] !== deviceIds[0]) {
-      //     let tmp = ports[0];
-      //     ports[0] = ports[1];
-      //     ports[1] = tmp;
-      //   }
-      //   return newDeviceIds[0] + ':' + ports[0] + '_' + newDeviceIds[1] + ':' + ports[1];
-      // };
-
-
-      let _checkPeerLinksState = (memberDict) => {
-        let keys = this.di._.keys(memberDict);
-        let isOk = true;
-        this.di._.forEach(keys, (key) => {
-          // let device = this.leafs[key] || this.spines[key] || this.others[key];
-          let device = this.di._.find(scope.leafs, {'id': key});
-          if (device) {
-            // TODO 目前用的是交换机 leafgroup中的port， 后面如果switch port 不起作用，那么要用memberDict中的port
-            isOk = _checkPortState(device, device.leafGroup.switch_port);
-            if (isOk === false) {
-              return false;
-            }
-          } else {
-            console.log('[topo.js > _checkPeerLinksState()] Device ' + key + ' cannot find');
-          }
-
-        });
-        return isOk;
-      };
-
-      let genPeerLinks = () => {
-        this.di._.forEach(scope.logicalPorts, (logicalPort) => {
-          if (logicalPort.is_mlag) {
-            let memberDict = this.di._.groupBy(logicalPort.members, 'device_id');
-            let isPeerLinkOk = _checkPeerLinksState(memberDict);
-
-            let keys = this.di._.keys(memberDict);
-            let newKeys = this.di._.sortBy(keys);
-            let linkId = newKeys[0] + '__' + newKeys[1];
-            // console.log('genPeerLinks  ====== >' + linkId);
-            this.links[linkId] = genPeerLink(newKeys, linkId, isPeerLinkOk)
-          }
-        })
-      };
-
-      // this.di.$timeout(()=> {
-      //   console.log('===> FORCETOPO start to bind resize');
-      //   angular.element(this.di.$window).bind('resize', () => {
-      //     console.log('exec resize in force topo');
-      //     reCenter();
-      //     this.simulation.restart();
-      //   });
-      // });
 
 
       let highlightPortVlan = (vlanId) =>{
@@ -1059,14 +1022,6 @@ export class VlanTopo {
         })
       }
 
-      // this.di.$timeout(()=> {
-      //   highlightPortVlan(2);
-      // },1000)
-      //
-      // unsubscribers.push(this.di.$rootScope.$on('selectVlan',($event, params)=>{
-      //
-      // }));
-
 
 
 
@@ -1087,58 +1042,11 @@ export class VlanTopo {
         this.simulation.restart();
       }));
 
-      // unsubscribers.push(this.di.$rootScope.$on('show_links', () => {
-      //   if (scope.topoSetting.show_links === 2) {
-      //     genLinks()
-      //   } else if (scope.topoSetting.show_links === 0) {
-      //     crushLinks();
-      //   } else {
-      //     crushLinks();
-      //     if (scope.selectedDeviceId) {
-      //       showDeviceLinks(scope.selectedDeviceId);
-      //     }
-      //   }
-      //
-      // }));
-
-      let showPath = (paths) => {
-        svg.select('#path_link').remove();
-
-        let switchLinks = [];
-        this.di._.forEach(paths, path=>{
-          if(path.type !== 'EDGE'){
-            switchLinks.push({
-              source: path.src.split('/')[0],
-              target: path.dst.split('/')[0],
-              id: path.src.split('/')[0] + '-' + path.dst.split('/')[0],
-              host:null,
-              source_port: path.src.split('/')[1],
-              target_port:  path.dst.split('/')[1]})
-          }
-          if(path.type === 'EDGE'){
-            let host = {};
-            let src_arr = path['src'].split('/');
-            let dst_arr = path['dst'].split('/');
-            if(src_arr.length === 3){
-              let host_id = src_arr[0] + '/' + src_arr[1];
-              switchLinks.push({source: host_id, target: path.dst.split('/')[0], id: host_id + '-' + path.dst.split('/')[0], host: 'source', source_port: null, target_port:  path.dst.split('/')[1]})
-            }
-            if(dst_arr.length === 3){
-              let host_id = dst_arr[0] + '/' + dst_arr[1];
-              switchLinks.push({source: path.src.split('/')[0], target: host_id, id: path.src.split('/')[0] + '-' + host_id, host: 'target', source_port: path.src.split('/')[1], target_port:  null})
-            }
-          }
-        })
-        let _p_links = switchLinks.map(d => Object.create(d));
-
-        return _p_links
-
-      };
 
 
 
       let showName = () => {
-        if(scope.topoSetting.show_tooltips){
+        // if(scope.topoSetting.show_tooltips){
           this.deviceNode
             .append('text')
             .attr('x', '-6')
@@ -1156,15 +1064,15 @@ export class VlanTopo {
               .classed('force-topo__text', true)
               .text(d => d.id)
           }
-        } else {
-          this.deviceNode
-            .select('text').remove();
-
-          if(this.hostNode){
-            this.hostNode
-              .select('text').remove();
-          }
-        }
+        // } else {
+        //   this.deviceNode
+        //     .select('text').remove();
+        //
+        //   if(this.hostNode){
+        //     this.hostNode
+        //       .select('text').remove();
+        //   }
+        // }
       };
 
 
@@ -1178,46 +1086,6 @@ export class VlanTopo {
           return false;
         }
       }
-
-      unsubscribers.push(scope.$watch('topoSetting.show_tooltips', (newValue, oldValue) => {
-
-        // if (newValue === true) {
-        //   this.deviceNode
-        //     .append('text')
-        //     .attr('x', '-6')
-        //     .attr('y', '-10')
-        //     .classed('force-topo__text', true)
-        //     .text(d => {
-        //       return getDeviceName(d.id)
-        //     })
-        //
-        //
-        //   if(this.hostNode){
-        //     this.hostNode
-        //       .append('text')
-        //       .attr('x', '-6')
-        //       .attr('y', '-10')
-        //       .classed('force-topo__text', true)
-        //       .text(d => d.id)
-        //   }
-        //
-        //   // .attr('stroke','black')
-        //   // .attr('stroke-width','1')
-        // } else {
-        //   this.deviceNode
-        //     .select('text').remove();
-        //
-        //   if(this.hostNode){
-        //     this.hostNode
-        //       .select('text').remove();
-        //   }
-        // }
-      }));
-
-
-      unsubscribers.push(this.di.$rootScope.$on('hide_path', () => {
-        clearPathAll();
-      }));
 
 
       scope.$on('$destroy', () => {
