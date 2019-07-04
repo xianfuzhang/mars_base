@@ -950,11 +950,13 @@ export class appService {
   getVlanConfigUrl(){
     return this.getZoneEndpoint(true) + '/vlan/v1/vlan-config';
   }
+  getVlanMembersUrl() {
+    return this.getZoneEndpoint(true) + '/vlan/v1/vlan-config/vlanmembers';
+  }
 
   getVlanIpDeleteUrl(device_id, vlan_id){
     return this.getZoneEndpoint(true) + `/vlan/v1/vlan-config/${device_id}/vlan/${vlan_id}`;
   }
-
 }
 
 appService.$inject = appService.getDI();
