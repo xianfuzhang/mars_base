@@ -14,6 +14,19 @@ export class VlanDataManager {
     });
   }
 
+  postVlanConfig(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getVlanConfigUrl(), params).then(
+      () => {
+        deferred.resolve();
+      },
+      () => {
+        deferred.reject();
+      }
+    );
+    return defer.promise;
+  }
+
   getVlanConfig() {
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getVlanConfigUrl()).then(
