@@ -225,9 +225,9 @@ export class ManageDataManager{
     return defer.promise;
   }
 
-  getSyslogAnalyzer(startTime, endTime, resolutionSecond) {
+  getSyslogAnalyzer(host, startTime, endTime, resolutionSecond) {
     let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getSyslogAnalyzerUrl(startTime, endTime, resolutionSecond)).then(
+    this.di.$http.get(this.di.appService.getSyslogAnalyzerUrl(host, startTime, endTime, resolutionSecond)).then(
       (res) => {
         defer.resolve(res.data.syslog);
       },

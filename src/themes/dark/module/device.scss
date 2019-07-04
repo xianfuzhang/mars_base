@@ -700,14 +700,38 @@
 .vlan-table-field .content {
   height: calc(100% - 60px);
   margin-top: 60px;
-  padding: 5px 30px;
+  padding: 5px 50px;
   overflow: auto;
+}
+
+.vlan-table-field .content .options {
+  display: flex;
+  align-items:center;
+  justify-content: center;
+  margin-top: 10px;
+  height: 65px;
+}
+
+.vlan-table-field .content .options .title {
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+.vlan-table-field .content .options .input-item {
+  width:120px;
+  margin-right:10px;
+}
+
+.vlan-table-field .content .options label {
+  color: #d8d9da;
 }
 
 .vlan-table-field .content .device {
   display:flex;
-  align-items:center;
   margin: 10px 0;
+  align-items:center;
+  justify-content: center;
+  height: 80px;
 }
 
 .vlan-table-field .content .device .name {
@@ -720,5 +744,5 @@
 
 .vlan-table-field .content .device .batch-ports {
   width: 150px;
-  margin-left: 50px;
+  margin-left: 30px;
 }
