@@ -6,7 +6,8 @@ export class VlanDataManager {
       'appService'
     ];
   }
-  constructor(...args){
+
+  constructor(...args) {
     this.di = {};
     VlanDataManager.getDI().forEach((value, index) => {
       this.di[value] = args[index];
@@ -25,6 +26,47 @@ export class VlanDataManager {
     );
     return defer.promise;
   }
+
+  removeVlanIp(device_id, vlan_id) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getVlanIpDeleteUrl(device_id, vlan_id)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  createVlanIp(param) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getVlanConfigUrl(), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
+
+  postVlanDynamic(param) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getVlanConfigUrl(), param).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error.data.message);
+      }
+    );
+    return defer.promise;
+  }
+
 }
 VlanDataManager.$inject = VlanDataManager.getDI();
 VlanDataManager.$$ngIsClass = true;

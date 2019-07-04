@@ -337,12 +337,19 @@ function configRouterfunction ($routeProvider,
       }
     })
     .when('/vlan_ip', {
-    template: require('./modules/vlan/template/ipsubnet.html'),
-    controller: 'vlanIpSubnetController',
-    resolve: {
-      loggedin: checkLoggedIn
-    }
-  })
+      template: require('./modules/vlan/template/ipsubnet.html'),
+      controller: 'vlanIpSubnetController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
+    .when('/vlan_dynamic', {
+      template: require('./modules/vlan/template/dynamic.html'),
+      controller: 'dynamicVlanController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .otherwise({ redirectTo: '/' });
 }
 

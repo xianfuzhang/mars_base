@@ -226,6 +226,12 @@ input:-webkit-autofill:active {
 .ntp .mdl-table-field__content{
   width: 600px;
 }
+
+.dynamic__body .mdl-table-field__content{
+  width: 800px;
+}
+
+
 input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active{
  -webkit-text-fill-color: inherit; 
 }
