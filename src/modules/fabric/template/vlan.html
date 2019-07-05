@@ -37,7 +37,13 @@
                 </div>
                 <div ng-if="model.vlanPortsList.length > 0">
                   <div class="vlan-segment" ng-repeat="vlan in model.vlanPortsList track by $index">
-                    <div class="name">{{vlan.deviceName +'/'+ vlan.vlanId}}</div>
+                    <div class="name">
+                      <span ng-bind="'MODULES.VLAN.TAB.DEFAULT.DEVICE_NAME'|translate"></span>
+                      {{vlan.deviceName}}
+                      <span>/</span>
+                      <span ng-bind="'MODULES.VLAN.TAB.DEFAULT.VLAN_ID'|translate"></span>
+                      {{vlan.vlanId}}
+                    </div>
                     <ports-group group-id="{{'group-id-' + $index}}" ports-list="vlan.ports"></ports-group>
                   </div>
                 </div>

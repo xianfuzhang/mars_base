@@ -237,7 +237,6 @@ export class VlanController {
       scope.model.topoVlanIdFilter = null;
     }
 
-
     scope.changeFilterType = (value) => {
       if (scope.model.selectedFilterType == value) return;
       scope.model.selectedFilterType = value;
@@ -437,7 +436,7 @@ export class VlanController {
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.vlanDataManager.getVlanConfig().then((res)=>{
-          this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(res.data.devices);
+          //this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(res.data.devices);
           this.entityStandardization(res.data.devices);
           defer.resolve({
             data: this.scope.model.entities
@@ -616,7 +615,6 @@ export class VlanController {
 
   entityStandardization(entities) {
     this.scope.model.entities = [];
-    this.scope.vlanModel.entities = [];
     switch (this.scope.tabSelected.type) {
       case 'default':
         entities.forEach((device) => {
@@ -633,6 +631,7 @@ export class VlanController {
         });
         break;
       case 'edit':
+        this.scope.vlanModel.entities = [];
         if(this.scope.vlanModel.editSelectedType == 'vlan') {
           entities.forEach((device) => {
             if(device['device-id'] == this.scope.vlanModel.selectedDevice.value) {
@@ -717,7 +716,7 @@ export class VlanController {
       let deviceVlans = new Set(),
           deviceVlanPorts = null,
           portsList = this.getPortsFromDevice(this.scope.model.selectedSubFilter.value);
-      //rest交换机默认包含vlan1
+      //rest浜ゆ崲鏈洪粯璁ゅ寘鍚玽lan1
       deviceVlans.add(1);      
   		this.scope.model.vlanConfig.forEach((device => {
   			if (device['device-id'] === this.scope.model.selectedSubFilter.value) {
