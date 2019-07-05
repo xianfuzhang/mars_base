@@ -392,7 +392,7 @@ export class FabricSummaryController {
       let curTime = new Date().getTime();
       this.di._.forEach(devices, (device)=>{
         if(device.type.toLowerCase() === 'leaf' && device.leaf_group){
-          device['leaf_group_name'] = device.leaf_group.name?device.leaf_group.name:null;
+          device['leaf_group_name'] = (device.leaf_group.name === '' ||device.leaf_group.name === null) ? null: device.leaf_group.name;
           device['leaf_group_port'] = device.leaf_group.switch_port?device.leaf_group.switch_port:null;
         }
 

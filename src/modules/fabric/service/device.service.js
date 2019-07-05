@@ -1321,7 +1321,7 @@ export class DeviceService {
       obj.mac = item.mac;
       obj.type = item.type;
       obj.mgmtPort = item.mgmtPort;
-      obj.leaf_group = (item.type === 'leaf' && item.leaf_group.name)? item.leaf_group.name: '-';
+      obj.leaf_group = (item.type === 'leaf' && item.leaf_group.name !== null && item.leaf_group.name !== '' )? item.leaf_group.name: '-';
       obj.role = origin && origin.role || '-';
       obj.rack_id = origin && origin.rackId || '-';
       obj.available = item.available === true ? 'available' : 'unavailable';
