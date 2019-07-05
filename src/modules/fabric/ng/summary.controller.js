@@ -302,7 +302,7 @@ export class FabricSummaryController {
       promises.push(deviceConfigsDefer.promise);
 
 
-      this.di.deviceDataManager.getEndpoints().then((res) => {
+      this.di.deviceDataManager.getEndpoints(null, 'host').then((res) => {
         this.endpoints = res.data.hosts;
 
         endpointsDefer.resolve();
@@ -391,7 +391,7 @@ export class FabricSummaryController {
     let formatLeafGroupData=(devices, realtimeDevices)=> {
       let curTime = new Date().getTime();
       this.di._.forEach(devices, (device)=>{
-        if(device.type.toLowerCase() === 'leaf'){
+        if(device.type.toLowerCase() === 'leaf' && device.leaf_group){
           device['leaf_group_name'] = device.leaf_group.name?device.leaf_group.name:null;
           device['leaf_group_port'] = device.leaf_group.switch_port?device.leaf_group.switch_port:null;
         }
@@ -458,7 +458,7 @@ export class FabricSummaryController {
       this.di.localStoreService.getSyncStorage(fabric_storage_ns).set("topo_set", this.di.$scope.fabricModel.topoSetting);
 
       if(this.di.$scope.fabricModel.topoSetting.show_path){
-        this.di.deviceDataManager.getEndpoints().then((res)=>{
+        this.di.deviceDataManager.getEndpoints(null, 'host').then((res)=>{
           if(res.data.hosts.length === 0){
             this.di.notificationService.renderWarning(scope, this.translate('MODULES.TOPO.NO_VALID_HOST'));
             return;
@@ -834,7 +834,7 @@ export class FabricSummaryController {
       pathHost_detail.append(tr);
 
       firstTdContent = '<div>' + this.translate('MODULES.SWITCHES.ENDPOINT.COLUMN.IP') + '</div>';
-      secondTdContent = '<div>'+ host.ip_addresses.join(',') +'</div>';
+      secondTdContent = '<div>'+ host.ipAddresses.join(',') +'</div>';
       tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
       pathHost_detail.append(tr);
 
@@ -1331,7 +1331,7 @@ export class FabricSummaryController {
       obj.id = endpoint.id;
       obj.mac = endpoint.mac;
       obj.segment_name = endpoint.segment || endpoint.vlan;
-      obj.ip = (endpoint.ip_addresses && endpoint.ip_addresses.join(" | "))
+      obj.ip = (endpoint.ipAddresses && endpoint.ipAddresses.join(" | "))
         || (endpoint.ipAddresses && endpoint.ipAddresses.join(" | "));
       let locals = [];
       endpoint.locations.forEach((location) => {
