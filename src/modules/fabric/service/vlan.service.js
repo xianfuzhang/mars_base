@@ -90,6 +90,10 @@ export class VlanService {
           'sortable': true,
           'render': {
             'params': {
+              'disabled':{
+                'key':'mode',
+                'value':'access'
+              },
               'displayLabel': {
                 'group_name': 'membership_type',
                 'label': '',
@@ -108,6 +112,10 @@ export class VlanService {
           'sortable': true,
           'render': {
             'params': {
+              'disabled':{
+                'key':'mode',
+                'value':'access'
+              },
               'displayLabel': {
                 'group_name': 'membership_type',
                 'label': '',
