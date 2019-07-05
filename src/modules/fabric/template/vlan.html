@@ -85,7 +85,7 @@
 
                 <div class="operation_group" ng-if="vlanModel.editType == 'add_vlan'">
                     <div style="display: flex;align-items: center;width:270px;">
-                        <mdl-select ng-model="vlanModel.selectedDevice" display-label="{options: model.devicesMapArr}"></mdl-select>
+                        <mdl-select ng-model="vlanModel.addSelectedDevice" display-label="{options: model.devicesMapArr}"></mdl-select>
                         <mdl-button ng-click="addDevice(vlanModel.selectedDevice.value)" icon-name="add" disabled="addDeviceDisabled"></mdl-button>
                         <mdl-button ng-click="removeDevice(vlanModel.selectedDevice.value)" icon-name="remove" disabled="removeDeviceDisabled"></mdl-button>
                     </div>
@@ -117,12 +117,12 @@
             <div class="content" ng-if="vlanModel.editType == 'add_vlan'">
                 <div class="options">
                     <span class="title">VLAN:</span><valid-input class="item-input" ng-model="vlanModel.vlanInput" v-require="true" v-regex="vlanInputRegex"></valid-input>
-                    <span class="title">本征VLAN:</span><valid-input class="item-input" ng-model="vlanModel.nativeVlan" v-require="true" v-regex="nativeVlanRegex"></valid-input>
                     <span class="title">Mode:</span><mdl-select ng-model="vlanModel.selectedMode" display-label="{options: vlanModel.modeOptions}"></mdl-select>
-                    <mdl-radio ng-model="vlanModel.tagType" name="tagType" value="edit_vlan"
+                    <span class="title">本征VLAN:</span><valid-input class="item-input" ng-model="vlanModel.nativeVlan" v-require="true" v-regex="nativeVlanRegex" disable="vlanModel.selectedMode.value == 'access'"></valid-input>
+                    <mdl-radio ng-model="vlanModel.tagType" name="tagType" value="edit_vlan" disable="vlanModel.selectedMode.value == 'access'"
                                display-label="{id: 'check_1', label: 'tag', name: 'tagType', value: 'tag'}">
                     </mdl-radio>
-                    <mdl-radio ng-model="vlanModel.tagType" name="tagType" value="add_vlan"
+                    <mdl-radio ng-model="vlanModel.tagType" name="tagType" value="add_vlan" disable="vlanModel.selectedMode.value == 'access'"
                                display-label="{id: 'check_2', label: 'untag', name: 'tagType', value: 'untag'}">
                     </mdl-radio>
                 </div>
