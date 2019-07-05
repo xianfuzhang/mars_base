@@ -48,20 +48,21 @@ export class VlanService {
         }
       },
       {
-        'label': 'Pvid',
+        'label': 'PVID',
         'field': 'pvid',
-        'type': 'select',
-        'layout': {
-          'visible': true,
-          'sortable': true,
-          'render': {
-            'params': {'options': [
-              {'label': 10, 'value': 10},
-              {'label': 20, 'value': 20},
-              {'label': 30, 'value': 30}
-            ]}
-          }
-        }
+        'layout': {'visible': true, 'sortable': true}
+        // 'type': 'select',
+        // 'layout': {
+        //   'visible': true,
+        //   'sortable': true,
+        //   'render': {
+        //     'params': {'options': [
+        //       {'label': 10, 'value': 10},
+        //       {'label': 20, 'value': 20},
+        //       {'label': 30, 'value': 30}
+        //     ]}
+        //   }
+        // }
       },
       // {
       //   'label': 'Ingress Filtering',
@@ -127,40 +128,9 @@ export class VlanService {
         'layout': {'visible': true, 'sortable': true}
       },
       {
-        'label': 'tag',
+        'label': 'tag/untag',
         'field': 'membership_type',
-        'type': 'radio',
-        'layout': {
-          'visible': true,
-          'sortable': true,
-          'render': {
-            'params': {
-              'displayLabel': {
-                'group_name': 'membership_type',
-                'label': '',
-                'value': 'tag'
-              }
-            }
-          }
-        }
-      },
-      {
-        'label': 'untag',
-        'field': 'membership_type',
-        'type': 'radio',
-        'layout': {
-          'visible': true,
-          'sortable': true,
-          'render': {
-            'params': {
-              'displayLabel': {
-                'group_name': 'membership_type',
-                'label': '',
-                'value': 'untag'
-              }
-            }
-          }
-        }
+        'layout': {'visible': true, 'sortable': true}
       }
     ];
   }
