@@ -2160,8 +2160,8 @@ export class DeviceDetailController {
           obj['port_mac'] = entity.annotations.portMac;
           obj['port_id'] = parseInt(entity.port);
           obj['isEnabled'] = entity.isEnabled;
-          obj['port_status'] = entity.isEnabled === true ? 'Up' : 'Down';
-          obj['link_status'] = entity.annotations.linkStatus.toLowerCase() === 'up' ? 'available' : 'unavailable';
+          obj['port_status'] = entity.annotations.adminState ? entity.annotations.adminState : '-';//entity.isEnabled === true ? 'Up' : 'Down';
+          obj['link_status'] = entity.annotations.linkStatus ? entity.annotations.linkStatus.toLowerCase() === 'up' ? 'available' : 'unavailable' : '-';
           obj['type'] = entity.type;
           obj['speed'] = entity.portSpeed;
           if(this.scope.role > 2 && this.scope.isTenantEnable) {
