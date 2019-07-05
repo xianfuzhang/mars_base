@@ -61,7 +61,9 @@ export class VlanController {
       ports: [],
       vlanPortsList: [],
       topoDevices:[],
-      topoLinks:[]
+      topoLinks:[],
+      topoVlanIdSelect:[],
+      topoVlanIdFilter:null
     };
 
     scope.onTabChange = (tab) => {
@@ -222,6 +224,16 @@ export class VlanController {
       }
     };
 
+    scope.changeVlanTopoId = (value) =>{
+      // console.log('==> changeVlanTopoId: '+ value);
+      this.di.$rootScope.$emit('vlan_topo_highlight', value.value)
+    }
+
+    scope.viewChanged = () =>{
+      scope.model.topoVlanIdFilter = null;
+    }
+
+
     scope.changeFilterType = (value) => {
       if (scope.model.selectedFilterType == value) return;
       scope.model.subFilterItems = scope.model.selectedFilterType.value === 'device'
@@ -361,6 +373,14 @@ export class VlanController {
         device.ports = portGroups[device.id];
       });
       this.scope.model.topoDevices = realtimeDevices;
+
+      let vlanIds = [];
+      this.scope.model.vlanMembers.forEach( v => {
+        vlanIds = vlanIds.concat(v.vlans);
+      })
+      vlanIds = Array.from(new Set(vlanIds));
+      this.scope.model.topoVlanIdSelect = [{label: this.translate('MODULES.VLAN.STATIC.TOPO.VLAN_ID_SELECT'), 'value': null}];
+      vlanIds.forEach(id => {this.scope.model.topoVlanIdSelect.push({'label' : id+'', 'value' : id})});
     });
 
     //init table

@@ -19,7 +19,8 @@ export class ViewSelectDirective {
     this.restrict = 'E';
     this.template = require('../template/view_select');
     this.scope = {
-      typeModel: '='
+      typeModel: '=',
+      viewChange: '&',
     };
 
     this.link = (...args) => this._link.apply(this, args);
@@ -47,7 +48,12 @@ export class ViewSelectDirective {
       // }));
 
       scope.setViewType = (type) =>{
-        scope.typeModel.label = type;
+        if(scope.typeModel.label !== type){
+          scope.typeModel.label = type;
+          scope.viewChange = scope.viewChange || angular.noop;
+          scope.viewChange();
+        }
+
         scope.model.isShow = !scope.model.isShow;
         // if(scope.model.isShow){
         //   scope.model.isShow = false;

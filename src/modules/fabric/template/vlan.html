@@ -21,7 +21,7 @@
               <mdl-radio  style="display: none" ng-model="model.typeMode"
                         display-label='model.tableDisplayLabel' 
                         on-click="changeDisplayType($value)"></mdl-radio> -->
-                <view-select type-model="model.typeMode"></view-select>
+                <view-select type-model="model.typeMode" view-change="viewChanged()" ></view-select>
             </div>
             <div class="ports-container" ng-if="model.typeMode.label === 'port'">
               <div class="filter-container">
@@ -49,8 +49,13 @@
               </mdl-table>
             </div>
 
-            <div ng-if="model.typeMode.label === 'topo'" style="width:100%;border:1px solid lightgray;overflow:hidden;">
+            <div ng-if="model.typeMode.label === 'topo'" style="width:100%;border:1px solid lightgray;overflow:hidden;position: relative">
+                <div style="position: absolute;left: 160px;z-index:4">
+                    <mdl-select display-label="{options: model.topoVlanIdSelect}" ng-model="model.topoVlanIdFilter" ng-change="changeVlanTopoId($value)">
+                    </mdl-select>
+                </div>
                 <vlan-topo devices="model.topoDevices"
+                           vlan-config="model.vlanConfig"
                            links="model.topoLinks">
                 </vlan-topo>
             </div>

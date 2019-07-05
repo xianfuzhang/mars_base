@@ -853,9 +853,11 @@ export class Topo {
               let deviceIds = [d.src.device, d.dst.device];
               let ports = [d.src.port, d.dst.port];
               let linkId = getLinkId(deviceIds, ports);
-              // let pos1 = angular.copy(this.switchLocation[d.src.device]);
-              // let pos2 = angular.copy(this.switchLocation[d.dst.device]);
-              // let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];
+              //旧的布局方式 START
+              /*let pos1 = angular.copy(this.switchLocation[d.src.device]);
+              let pos2 = angular.copy(this.switchLocation[d.dst.device]);
+              let middleP = [(pos1[0] + pos2[0])/2, pos2[1] > pos1[1]?pos2[1] + 170:pos1[1] + 170];*/
+              //旧的布局方式 END
               //新的布局方式 START
               let pos1 = angular.copy(this.switchLocation[d.src.device]);
               if(DI._.find(scope.spines,{'id':d.src.device})){
