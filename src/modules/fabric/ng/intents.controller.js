@@ -55,7 +55,7 @@ export class IntentsController {
       });
       this.di.$q.all([deviceDefer.promise, endpointDefer.promise, hostDefer.promise]).then(
         (arr) => {
-          //host ÓëendpointÖ»»á´æÔÚÒ»ÖÖÇé¿ö
+          //host ä¸endpointåªä¼šå­˜åœ¨ä¸€ç§æƒ…å†µ
           let hosts = arr[1].concat(arr[2]);
           if (arr[0].length === 0 && hosts.length === 0) {
             this.scope.alert = {
