@@ -240,16 +240,17 @@ export class VlanController {
 
     scope.changeFilterType = (value) => {
       if (scope.model.selectedFilterType == value) return;
-      scope.model.subFilterItems = scope.model.selectedFilterType.value === 'device'
-            ? this.scope.model.devicesMapArr : this.scope.model.vlansMapArr;
+      scope.model.selectedFilterType = value;
+      scope.model.subFilterItems = scope.model.selectedFilterType.value === 'vlan'
+            ? this.scope.model.vlansMapArr : this.scope.model.devicesMapArr;
       console.log(value);
       scope.model.selectedSubFilter = this.scope.model.subFilterItems[0];
-      scope.changeDisplayPorts();
+      scope.changeDisplayPorts(scope.model.selectedSubFilter);
     };
 
     scope.changeDisplayPorts = (value) => {
-      if (scope.model.selectedSubFilter == value) return;
-      console.log(value);
+      //if (scope.model.selectedSubFilter == value) return;
+      scope.model.selectedSubFilter = value;
       scope.model.vlanPortsList = this.getPortListFromConfig();
     };
 
@@ -439,7 +440,7 @@ export class VlanController {
           this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(res.data.devices);
           this.entityStandardization(res.data.devices);
           defer.resolve({
-            data: this.scope.vlanModel.entities
+            data: this.scope.model.entities
           });
         });
         return defer.promise;
@@ -713,21 +714,75 @@ export class VlanController {
   getPortListFromConfig() {
   	let result = [];
   	if (this.scope.model.selectedFilterType.value === 'device') {
+      let deviceVlans = new Set(),
+          deviceVlanPorts = null,
+          portsList = this.getPortsFromDevice(this.scope.model.selectedSubFilter.value);
+      //rest交换机默认包含vlan1
+      deviceVlans.add(1);      
   		this.scope.model.vlanConfig.forEach((device => {
   			if (device['device-id'] === this.scope.model.selectedSubFilter.value) {
-  				let ports = this.getPortsFromDevice(device['device-id']);
-  				device.vlans.forEach((vlan) => {
-  					result.push({
-  						id: device['device-id'] + '_' + vlan.vlan,
-  						port: this.di._.cloneDeep(ports)
-  					}); 
-  				});
+          deviceVlanPorts = device.ports;
+          device.ports.forEach((port) => {
+            port.vlans.forEach((vlan) => {
+              deviceVlans.add(parseInt(vlan.split('/')[0]));
+            });
+          });
   			}
   		}));
+      deviceVlans.forEach((value, key) => {
+        result.push({
+          id: this.scope.model.selectedSubFilter.value + '_' + value,
+          deviceName: this.scope.model.selectedSubFilter.label,
+          vlanId: value,
+          ports: this.updatePortsListByDevice(value, deviceVlanPorts, this.di._.cloneDeep(portsList))
+        }); 
+      });
   	}
   	else {
   		//vlan
-  		
+  		let devicePortsMap = {};
+      this.scope.model.vlanConfig.forEach((device) => {
+        if (this.scope.model.selectedSubFilter.value == 1) {
+          devicePortsMap[device['device-id']] = [];
+        }
+        else {
+          device.ports.forEach((port) => {
+            if (port.vlans.length > 0) {
+              for (let i = 0 ; i < port.vlans.length; i++) {
+                if (port.vlans[i].split('/')[0] == this.scope.model.selectedSubFilter.value) {
+                  if(!devicePortsMap.hasOwnProperty(device['device-id'])) {
+                    devicePortsMap[device['device-id']] = [];
+                  }
+                  else {
+                    devicePortsMap[device['device-id']].push(port.port);
+                  }
+                  break;
+                }
+              }
+            }
+          });
+        }
+      });
+      for(let key in devicePortsMap) {
+        let portsList = this.getPortsFromDevice(key);
+        if (this.scope.model.selectedSubFilter.value == 1) {
+          portsList = portsList.map((port) => {
+            port.selected = true;
+            return port;
+          })
+        }
+        else {
+          portsList = this.updatePortListByVlan(devicePortsMap[key], portsList);
+        }
+        if (portsList.length > 0) {
+          result.push({
+            id: key + '_' + this.scope.model.selectedSubFilter.value,
+            deviceName: this.scope.model.devicesMap[key] || key,
+            vlanId: this.scope.model.selectedSubFilter.value,
+            ports: portsList
+          });  
+        }
+      }
   	}
   	return result;
   }
@@ -745,6 +800,45 @@ export class VlanController {
   		}
   	});
   	return ports;
+  }
+
+  updatePortsListByDevice(vlanId, vlanPorts, portsList) {
+    if (vlanId === 1) {
+      portsList = portsList.map((port) => {
+        port.selected = true;
+        return port;
+      });
+    }
+    else {
+      vlanPorts.forEach((vlanPort) => {
+        if (vlanPort.vlans.length > 0) {
+          portsList.forEach((port) => {
+            if (vlanPort.port === port.id) {
+              let isEqual = false;
+              for (let i = 0 ; i < vlanPort.vlans.length; i++) {
+                if (vlanPort.vlans[i].split('/')[0] == vlanId) {
+                  isEqual = true;
+                  break;
+                }
+              }
+              if (isEqual) port.selected = true;
+            }
+          });
+        }
+      });
+    }
+    return portsList;
+  }
+
+  updatePortListByVlan(vlanPorts, portsList) {
+    vlanPorts.forEach((vlanPort) => {
+      portsList.forEach((port) => {
+        if (vlanPort == port.id) {
+          port.selected = true;
+        }
+      });
+    });
+    return portsList;
   }
 }
 

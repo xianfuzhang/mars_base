@@ -11,8 +11,8 @@
                 class-list="main__content__device-detail-tabs"
                 on-select="onTabChange($value)">
       </mdl-tabs>
-      <section class="tab-content" ng-if="tabSelected.type == 'default'" style="display: flex;">
-        <div class="relative" ng-class="{'mars-col-16': model.typeMode.label != 'topo', 'mars-col-24': model.typeMode.label == 'topo'}">
+      <section class="tab-content vlan-list" ng-if="tabSelected.type == 'default'" style="display: flex;">
+        <div style="width:100%;">
           <div style="position: relative; display: flex; height: 100%;">
             <div class="type-container">
               <!-- <mdl-radio style="display: none" ng-model="model.typeMode"
@@ -31,13 +31,14 @@
                 <mdl-select ng-if="model.filterTypes.length > 0" ng-model="model.selectedSubFilter"
                             display-label="{options: model.subFilterItems}" ng-change="changeDisplayPorts($value)"></mdl-select>
               </div>
-              <div class="deivce-list">
+              <div class="device-list">
                 <div class="no-result" ng-if="model.vlanPortsList.length === 0" 
                     ng-bind="'MODULES.VLAN.TAB.DEFAULT.NO_DATA' | translate">
                 </div>
                 <div ng-if="model.vlanPortsList.length > 0">
                   <div class="vlan-segment" ng-repeat="vlan in model.vlanPortsList track by $index">
-                     <ports-group group-id="{{'group-id-' + $index}}" ports-list="vlan.ports"></ports-group>
+                    <div class="name">{{vlan.deviceName +'/'+ vlan.vlanId}}</div>
+                    <ports-group group-id="{{'group-id-' + $index}}" ports-list="vlan.ports"></ports-group>
                   </div>
                 </div>
               </div>
