@@ -16,11 +16,24 @@ export class RadioRenderer {
     this.render = (spec) => {
       let tdElm = spec.element,
           scope = spec.getContext.$new();
-      if (!spec.object['id']) spec.object['id'] = this.di.uuid();    
+      if (!spec.object['id']) spec.object['id'] = this.di.uuid();
+      let disableConfig = spec.params.disabled;
+      scope._object = spec.object;
+
+      let unsubscribes = [];
+      unsubscribes.push(scope.$watch('_object.' + disableConfig['key'], function () {
+        if (scope._object[disableConfig['key']] === disableConfig['value']){
+          scope.radioDisable = true;
+        } else {
+          scope.radioDisable = false;
+        }
+      }));
+
       scope.displayLabel = spec.params.displayLabel;
       scope.displayLabel['id'] = spec.object['id'] + '+' + scope.displayLabel['value'];
       scope.displayLabel['name'] = spec.object['id'] + '+' + scope.displayLabel['group_name'];
       scope.radioModel = spec.value;
+      scope.radioDisable = false;
       scope.onClick = (val) => {
         console.log('radioRender current value =' + val);
         spec.object[spec.col.field] = val;
@@ -29,10 +42,17 @@ export class RadioRenderer {
         console.log('radioRender spec object =' + JSON.stringify(spec.object));
       };
 
-      const innerHtml = '<mdl-radio ng-model="radioModel" display-label="displayLabel"'
+      const innerHtml = '<mdl-radio ng-model="radioModel" disable="radioDisable"  display-label="displayLabel"'
                       + 'on-click="onClick($value)"></mdl-radio>';
       const elm = this.di.$compile(innerHtml)(scope);
       angular.element(tdElm).empty().append(elm);
+
+
+      scope.$on('$destroy', () => {
+        unsubscribes.forEach((cb) => {
+          cb();
+        })
+      });
     }
 
     this.getType = () => {
