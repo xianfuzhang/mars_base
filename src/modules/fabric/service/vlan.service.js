@@ -39,7 +39,7 @@ export class VlanService {
         'type': 'select',
         'layout': {
           'visible': true,
-          'sortable': true, 
+          'sortable': true,
           'render': {'params': {'options': [
             {'label': 'access', 'value': 'access'},
             {'label': 'trunk', 'value': 'trunk'},
@@ -64,23 +64,6 @@ export class VlanService {
         //   }
         // }
       },
-      // {
-      //   'label': 'Ingress Filtering',
-      //   'field': 'ingress_filter',
-      //   'type': 'checkbox',
-      //   'layout': {
-      //     'visible': true,
-      //     'sortable': true,
-      //     'render': {
-      //       'params': {
-      //         'displayLabel': {
-      //           'identify': 'ingress_filter_enable',
-      //           'label': 'Enable'
-      //         }
-      //       }
-      //     }
-      //   }
-      // },
       {
         'label': 'tag',
         'field': 'membership_type',

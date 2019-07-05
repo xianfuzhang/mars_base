@@ -86,7 +86,7 @@
                         <mdl-select ng-model="vlanModel.selectedDevice" display-label="{options: vlanModel.devicesOptions}"></mdl-select>
                     </div>
                     <div>
-                        <mar-button btn-text="'MODULES.VLAN.TAB.EDIT.EDIT_VLAN' | translate" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="createVlan()" btn-disabled="!vlanModel.addedDevices.length"/>
+                        <mar-button btn-text="'MODULES.VLAN.TAB.EDIT.EDIT_VLAN' | translate" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="updateVlan()" btn-disabled="vlanModel.changedPorts.count == 0"/>
                     </div>
                 </div>
 
@@ -97,20 +97,20 @@
                         <mdl-button ng-click="removeDevice(vlanModel.selectedDevice.value)" icon-name="remove" disabled="removeDeviceDisabled"></mdl-button>
                     </div>
                     <div style="display: flex;align-items: center;">
-                        <mar-button btn-text="'MODULES.VLAN.TAB.EDIT.CREATE_VLAN' | translate" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="createVlan()" btn-disabled="!vlanModel.addedDevices.length || !vlanModel.vlanInput || !vlanModel.nativeVlan"/>
+                        <mar-button btn-text="'MODULES.VLAN.TAB.EDIT.CREATE_VLAN' | translate" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="createVlan()" btn-disabled="!vlanModel.addedDevices.length || !vlanModel.vlanInput"/>
                     </div>
                 </div>
             </div>
 
             <div class="content" ng-if="vlanModel.editType == 'edit_vlan'">
-                <div class="options">
+                <div class="edit-options">
                     <mdl-radio ng-model="vlanModel.editSelectedType" name="editSelectedType" value="vlan"
-                               display-label="{id: 'check_1', label: '指定VLAN', name: 'editSelectedType', value: 'vlan'}">
+                               display-label="{id: 'check_1', label: 'VLAN:', name: 'editSelectedType', value: 'vlan'}">
                     </mdl-radio>
                     <mdl-select style="margin-left:10px;" disable="vlanModel.editSelectedType == 'port'" ng-model="vlanModel.selectedVlan" display-label="{options: vlanModel.vlanOptions}"></mdl-select>
 
                     <mdl-radio style="margin-left:30px;" ng-model="vlanModel.editSelectedType" name="editSelectedType" value="port"
-                               display-label="{id: 'check_2', label: '指定端口', name: 'editSelectedType', value: 'port'}">
+                               display-label="{id: 'check_2', label: 'Port:', name: 'editSelectedType', value: 'port'}">
                     </mdl-radio>
                     <mdl-select style="margin-left:10px;" disable="vlanModel.editSelectedType == 'vlan'" ng-model="vlanModel.selectedPort" display-label="{options: vlanModel.portsOptions}"></mdl-select>
                 </div>
@@ -122,10 +122,12 @@
             </div>
 
             <div class="content" ng-if="vlanModel.editType == 'add_vlan'">
-                <div class="options">
-                    <span class="title">VLAN:</span><valid-input class="item-input" ng-model="vlanModel.vlanInput" v-require="true" v-regex="vlanInputRegex"></valid-input>
+                <div class="add-options">
                     <span class="title">Mode:</span><mdl-select ng-model="vlanModel.selectedMode" display-label="{options: vlanModel.modeOptions}"></mdl-select>
-                    <span class="title">本征VLAN:</span><valid-input class="item-input" ng-model="vlanModel.nativeVlan" v-require="true" v-regex="nativeVlanRegex" disable="vlanModel.selectedMode.value == 'access'"></valid-input>
+                    <span class="title">VLAN:</span>
+                    <valid-input class="item-input" ng-if="vlanModel.selectedMode.value == 'access'" ng-model="vlanModel.vlanInput" v-require="true" v-regex="nativeVlanRegex"></valid-input>
+                    <valid-input class="item-input" ng-if="vlanModel.selectedMode.value != 'access'" ng-model="vlanModel.vlanInput" v-require="true" v-regex="vlanInputRegex"></valid-input>
+                    <span class="title" ng-bind="'MODULES.VLAN.TAB.ADD.COLUMN.NATIVE' | translate"></span><valid-input class="item-input" ng-model="vlanModel.nativeVlan" v-regex="nativeVlanRegex" v-disabled="vlanModel.selectedMode.value == 'access'"></valid-input>
                     <mdl-radio ng-model="vlanModel.tagType" name="tagType" value="edit_vlan" disable="vlanModel.selectedMode.value == 'access'"
                                display-label="{id: 'check_1', label: 'tag', name: 'tagType', value: 'tag'}">
                     </mdl-radio>

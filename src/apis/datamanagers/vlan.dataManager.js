@@ -18,10 +18,10 @@ export class VlanDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getVlanConfigUrl(), params).then(
       () => {
-        deferred.resolve();
+        defer.resolve();
       },
       () => {
-        deferred.reject();
+        defer.reject();
       }
     );
     return defer.promise;
