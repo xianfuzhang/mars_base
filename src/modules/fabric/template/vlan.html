@@ -11,7 +11,7 @@
                 class-list="main__content__device-detail-tabs"
                 on-select="onTabChange($value)">
       </mdl-tabs>
-      <section class="tab-content vlan-list" ng-if="tabSelected.type == 'default'" style="display: flex;">
+      <section class="tab-content vlan-list" ng-class="{'mars-col-24': model.typeMode.label == 'topo'}" ng-if="tabSelected.type == 'default'" style="display: flex;">
         <div style="width:100%;">
           <div style="position: relative; display: flex; height: 100%;">
             <div class="type-container">
