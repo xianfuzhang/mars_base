@@ -335,6 +335,8 @@ export class FabricSummaryController {
         DI.$scope.fabricModel['deLeafs'] =dstSwt.leaf;
         DI.$scope.fabricModel['deOthers'] = unknownSwt.concat(dstSwt.other);
         DI.$scope.fabricModel['deLogicalPorts'] = angular.copy(this.logicalPorts);
+        DI.$scope.fabricModel['deHosts'] = angular.copy(this.endpoints);
+
         DI.$scope.fabricModel.isShowTopo = true;
 
         DI.$scope.fabricModel.devices = angular.copy(devices);
@@ -842,6 +844,11 @@ export class FabricSummaryController {
       secondTdContent = '<div>'+ host.locations.map(x=>this.di.switchService.getSwitchName( x.elementId, this.devices) + '/' + x.port).join(',') +'</div>';
       tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
       pathHost_detail.append(tr)
+
+      firstTdContent = '<div>'+ this.translate('MODULES.ENDPOINT.CREATE.DESC') +'</div>';
+      secondTdContent = '<div>'+ host.description +'</div>';
+      tr = trStart + tdStart + firstTdContent + tdEnd + tdStart + secondTdContent + tdEnd + trEnd;
+      pathHost_detail.append(tr);
     };
 
 
