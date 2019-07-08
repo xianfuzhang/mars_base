@@ -470,6 +470,8 @@
   "MODULES.VLAN.TAB.DEFAULT.VLAN_ID": "VLAN ID: ",
   "MODULES.VLAN.TAB.ADD_BATCH_VLAN_FAILED": "Failed to add vlans in bulk!",
   "MODULES.VLAN.TAB.ADD_BATCH_VLAN_SUCCESS": "Success to add vlans in bulk!",
+  "MODULES.VLAN.TAB.UPDATE_VLAN_SUCCESS": "Success to update vlan!",
+  "MODULES.VLAN.TAB.UPDATE_VLAN_FAILED": "Failed to update vlan!",
   "MODULES.VLAN.TAB.ADD.COLUMN.NATIVE": "Native VLAN:",
   "MODULES.FABRIC.DHCPRELAY.DEFAULT.DIALOG.DELETE.WARNING":"Sure to delete the default DHCP relay?",
   "MODULES.FABRIC.DHCPRELAY.INDIRECT.DIALOG.DELETE.WARNING":"Sure to delete the indirect DHCP relay",
