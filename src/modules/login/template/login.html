@@ -5,7 +5,25 @@
   <div class="login-fields">
 
     <form class="login__form" name="loginForm" autocomplete="off" novalidate>
-      <div class="login-fields__logo"></div>
+      <div class="login-fields__logo" style="display: none;"></div>
+      <div class="logo_svg_outer" style="width:300px;height: 120px;">
+        <svg class="logo_svg" style="width:300px;height: 120px;" version="1.1" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
+
+          <symbol id="text">
+            <text class="text" y="86px">MARS</text>
+          </symbol>
+
+          <g>
+            <use xlink:href="#text" class="use-text"></use>
+            <use xlink:href="#text" class="use-text"></use>
+            <use xlink:href="#text" class="use-text"></use>
+            <use xlink:href="#text" class="use-text"></use>
+            <use xlink:href="#text" class="use-text"></use>
+          </g>
+
+        </svg>
+      </div>
+
       <div class="login-fields__username login-fields__element">
         <mdl-text ng-model="loginModel.username"
                   helper="loginModel.nameHelper"
