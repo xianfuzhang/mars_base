@@ -633,7 +633,7 @@
   margin-left: 160px;
 }
 .vlan-container .vlan-list{
-  width: 930px;
+  min-width: 930px;
 }
 .vlan-container .ports-container{
   width: 100%;
@@ -704,30 +704,40 @@
 }
 
 .vlan-table-field .content {
+  position: relative;
   height: calc(100% - 60px);
   margin-top: 60px;
   padding: 5px 50px;
   overflow: auto;
 }
 
-.vlan-table-field .content .options {
+.vlan-table-field .content .edit-options {
+  position: absolute;
+  left: 300px;
+  top: 15px;
+  display: flex;
+  align-items:center;
+  justify-content: center;
+}
+
+.vlan-table-field .content .add-options {
   display: flex;
   align-items:center;
   justify-content: center;
   height: 65px;
 }
 
-.vlan-table-field .content .options .title {
+.vlan-table-field .content .add-options .title {
   font-weight: bold;
   padding: 0 10px;
 }
 
-.vlan-table-field .content .options .input-item {
+.vlan-table-field .content .add-options .input-item {
   width:120px;
   margin-right:10px;
 }
 
-.vlan-table-field .content .options label {
+.vlan-table-field .content label {
   color: #d8d9da;
 }
 

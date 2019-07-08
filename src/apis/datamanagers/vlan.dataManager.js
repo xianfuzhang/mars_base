@@ -18,10 +18,49 @@ export class VlanDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getVlanConfigUrl(), params).then(
       () => {
-        deferred.resolve();
+        defer.resolve();
       },
       () => {
-        deferred.reject();
+        defer.reject();
+      }
+    );
+    return defer.promise;
+  }
+
+  postVlanConfigByDeviceId(deviceId, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getVlanConfigUrl(deviceId), params).then(
+      () => {
+        defer.resolve();
+      },
+      () => {
+        defer.reject();
+      }
+    );
+    return defer.promise;
+  }
+
+  putVlanConfig(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.put(this.di.appService.getVlanConfigUrl(), params).then(
+      () => {
+        defer.resolve();
+      },
+      () => {
+        defer.reject();
+      }
+    );
+    return defer.promise;
+  }
+
+  putVlanConfigByDeviceId(deviceId, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.put(this.di.appService.getVlanConfigUrl(deviceId), params).then(
+      () => {
+        defer.resolve();
+      },
+      () => {
+        defer.reject();
       }
     );
     return defer.promise;
