@@ -17,7 +17,7 @@ export class metarowService {
     this.compileCache = {};
     this.service = {};
 
-    this.getSpec = ($scope, col) => {
+    this.getSpec = ($scope, $attrs, col) => {
       let value = $scope.$data[col.field];
       if (col.field.indexOf('.') > 0) {
         let props = col.field.split('.');
@@ -31,15 +31,16 @@ export class metarowService {
         col_title: $scope.$data[col.field + '_title'],
         params: col.render.params,
         col: col,
-        getContext: $scope //col.render.getContext
+        getContext: $scope, //col.render.getContext,
+        tableParams: $attrs
       };
     };
 
     this.renderColumn = ($scope, $elem, $attrs, col, colElement) => {
-      this.di._.noop($elem, $attrs);
+      //this.di._.noop($elem, $attrs);
       let render = col.render.spec;
       let type = render ? render.getType() : '';
-      let content; let scope; let renderVal; let spec = this.getSpec($scope, col);
+      let content; let scope; let renderVal; let spec = this.getSpec($scope, $attrs, col);
       let classes; let clazz; let i; let len;
 
       if (!col.visible || col.hidden) {

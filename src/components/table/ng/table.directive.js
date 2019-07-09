@@ -472,7 +472,7 @@ export class mdlTable {
 
     scope._render = () => {
       this.di.$timeout(() =>{
-        scope.tableModel.listeners.notify('table.update');
+        scope.tableModel.listeners.notify('table.update', {'searchSwitch': scope.actionsShow.search.enable});
       }, 0);
     };
 
@@ -518,7 +518,7 @@ export class mdlTable {
     };
 
     scope._requestUpdate = () => {
-        scope.tableModel.listeners.notify('table.update');
+        scope.tableModel.listeners.notify('table.update', {'searchSwitch': scope.actionsShow.search.enable});
     };
 
     scope._queryUpdate = () => {
