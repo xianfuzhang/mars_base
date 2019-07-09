@@ -73,15 +73,17 @@
         <div class="vlan-table-field" >
             <div class="header">
                 <div class="mode_type">
-                    <mdl-radio ng-model="vlanModel.editType" name="editType" value="edit_vlan"
-                               display-label="{id: 'check_1', label: '修改', name: 'editType', value: 'edit_vlan'}">
-                    </mdl-radio>
-                    <mdl-radio ng-model="vlanModel.editType" name="editType" value="add_vlan"
-                               display-label="{id: 'check_2', label: '添加', name: 'editType', value: 'add_vlan'}">
-                    </mdl-radio>
+                    <!--<mdl-radio ng-model="vlanModel.editType" name="editType" value="edit_vlan"-->
+                               <!--display-label="{id: 'check_1', label: '修改', name: 'editType', value: 'edit_vlan'}">-->
+                    <!--</mdl-radio>-->
+                    <!--<mdl-radio ng-model="vlanModel.editType" name="editType" value="add_vlan"-->
+                               <!--display-label="{id: 'check_2', label: '添加', name: 'editType', value: 'add_vlan'}">-->
+                    <!--</mdl-radio>-->
+
+                    <edit-view-select type-model="vlanModel.editType" ></edit-view-select>
                 </div>
 
-                <div class="operation_group" ng-if="vlanModel.editType == 'edit_vlan'">
+                <div class="operation_group" ng-if="vlanModel.editType.label == 'edit_vlan'">
                     <div style="display: flex;align-items: center;width:270px;">
                         <mdl-select ng-model="vlanModel.selectedDevice" display-label="{options: vlanModel.devicesOptions}"></mdl-select>
                     </div>
@@ -90,7 +92,7 @@
                     </div>
                 </div>
 
-                <div class="operation_group" ng-if="vlanModel.editType == 'add_vlan'">
+                <div class="operation_group" ng-if="vlanModel.editType.label == 'add_vlan'">
                     <div style="display: flex;align-items: center;width:270px;">
                         <mdl-select ng-model="vlanModel.addSelectedDevice" display-label="{options: model.devicesMapArr}"></mdl-select>
                         <mdl-button ng-click="addDevice(vlanModel.selectedDevice.value)" icon-name="add" disabled="addDeviceDisabled"></mdl-button>
@@ -102,7 +104,7 @@
                 </div>
             </div>
 
-            <div class="content" ng-if="vlanModel.editType == 'edit_vlan'">
+            <div class="content" ng-if="vlanModel.editType.label  == 'edit_vlan'">
                 <div class="edit-options">
                     <mdl-radio ng-model="vlanModel.editSelectedType" name="editSelectedType" value="vlan"
                                display-label="{id: 'check_1', label: 'VLAN:', name: 'editSelectedType', value: 'vlan'}">
@@ -121,7 +123,7 @@
                 </mdl-table>
             </div>
 
-            <div class="content" ng-if="vlanModel.editType == 'add_vlan'">
+            <div class="content" ng-if="vlanModel.editType.label  == 'add_vlan'">
                 <div class="add-options">
                     <span class="title">Mode:</span><mdl-select ng-model="vlanModel.selectedMode" display-label="{options: vlanModel.modeOptions}"></mdl-select>
                     <span class="title">VLAN:</span>

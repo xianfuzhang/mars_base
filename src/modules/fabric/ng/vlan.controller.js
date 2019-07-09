@@ -68,7 +68,8 @@ export class VlanController {
 
     // scope value for editing tab
     scope.vlanModel = {
-      editType: 'edit_vlan',
+
+      editType: {'label': 'edit_vlan'},
       editSelectedType: 'vlan',
       devicesOptions: [],
       vlanOptions: [],
