@@ -30,7 +30,7 @@ export class PortsGroup {
 
   _link (scope, element) {
     let unSubscribes = []
-    const PORTS_NUM_PER_ROW = 24;  // the default num per row
+    const PORTS_NUM_PER_ROW = 27;  // the default num per row
 
     const PortsNumPerRow = parseInt(scope.portsNumPerRow) || PORTS_NUM_PER_ROW;
     scope.portsGroups = [];

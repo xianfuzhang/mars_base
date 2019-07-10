@@ -948,8 +948,8 @@ export class appService {
     return this.getZoneEndpoint() + '/topology/v1/uplink-segments/' + name;
   }
 
-  getVlanConfigUrl(){
-    return this.getZoneEndpoint(true) + '/vlan/v1/vlan-config';
+  getVlanConfigUrl(device_id){
+    return this.getZoneEndpoint(true) + '/vlan/v1/vlan-config' + (device_id ? '/' + device_id : '');
   }
   getVlanMembersUrl() {
     return this.getZoneEndpoint(true) + '/vlan/v1/vlan-config/vlanmembers';

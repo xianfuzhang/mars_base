@@ -31,7 +31,7 @@ export class VlanService {
       {
         'label': 'Port',
         'field': 'port',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': false}
       },
       {
         'label': 'Mode',
@@ -39,7 +39,7 @@ export class VlanService {
         'type': 'select',
         'layout': {
           'visible': true,
-          'sortable': true, 
+          'sortable': false,
           'render': {'params': {'options': [
             {'label': 'access', 'value': 'access'},
             {'label': 'trunk', 'value': 'trunk'},
@@ -50,50 +50,24 @@ export class VlanService {
       {
         'label': 'PVID',
         'field': 'pvid',
-        'layout': {'visible': true, 'sortable': true}
-        // 'type': 'select',
-        // 'layout': {
-        //   'visible': true,
-        //   'sortable': true,
-        //   'render': {
-        //     'params': {'options': [
-        //       {'label': 10, 'value': 10},
-        //       {'label': 20, 'value': 20},
-        //       {'label': 30, 'value': 30}
-        //     ]}
-        //   }
-        // }
+        'layout': {'visible': true, 'sortable': false}
       },
-      // {
-      //   'label': 'Ingress Filtering',
-      //   'field': 'ingress_filter',
-      //   'type': 'checkbox',
-      //   'layout': {
-      //     'visible': true,
-      //     'sortable': true,
-      //     'render': {
-      //       'params': {
-      //         'displayLabel': {
-      //           'identify': 'ingress_filter_enable',
-      //           'label': 'Enable'
-      //         }
-      //       }
-      //     }
-      //   }
-      // },
       {
         'label': 'tag',
         'field': 'membership_type',
         'type': 'radio',
         'layout': {
           'visible': true,
-          'sortable': true,
+          'sortable': false,
           'render': {
             'params': {
-              'disabled':{
+              'disabled':[{
                 'key':'mode',
                 'value':'access'
-              },
+              },{
+                'key':'mode',
+                'value':'trunk'
+              }],
               'displayLabel': {
                 'group_name': 'membership_type',
                 'label': '',
@@ -109,13 +83,16 @@ export class VlanService {
         'type': 'radio',
         'layout': {
           'visible': true,
-          'sortable': true,
+          'sortable': false,
           'render': {
             'params': {
-              'disabled':{
+              'disabled':[{
                 'key':'mode',
                 'value':'access'
-              },
+              },{
+                'key':'mode',
+                'value':'trunk'
+              }],
               'displayLabel': {
                 'group_name': 'membership_type',
                 'label': '',
@@ -133,12 +110,57 @@ export class VlanService {
       {
         'label': 'VLAN',
         'field': 'vlan',
-        'layout': {'visible': true, 'sortable': true}
+        'layout': {'visible': true, 'sortable': false}
       },
       {
-        'label': 'tag/untag',
+        'label': 'tag',
         'field': 'membership_type',
-        'layout': {'visible': true, 'sortable': true}
+        'type': 'radio',
+        'layout': {
+          'visible': true,
+          'sortable': false,
+          'render': {
+            'params': {
+              'disabled':[{
+                'key':'mode',
+                'value':'access'
+              },{
+                'key':'mode',
+                'value':'trunk'
+              }],
+              'displayLabel': {
+                'group_name': 'membership_type',
+                'label': '',
+                'value': 'tag'
+              }
+            }
+          }
+        }
+      },
+      {
+        'label': 'untag',
+        'field': 'membership_type',
+        'type': 'radio',
+        'layout': {
+          'visible': true,
+          'sortable': false,
+          'render': {
+            'params': {
+              'disabled':[{
+                'key':'mode',
+                'value':'access'
+              },{
+                'key':'mode',
+                'value':'trunk'
+              }],
+              'displayLabel': {
+                'group_name': 'membership_type',
+                'label': '',
+                'value': 'untag'
+              }
+            }
+          }
+        }
       }
     ];
   }
@@ -189,6 +211,16 @@ export class VlanService {
       'add': {'enable': false, 'role': 2},
       'remove': {'enable': false, 'role': 2},
       'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getDevicesPortEditableTableActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': false, 'role': 1},
       'search': {'enable': false, 'role': 2}
     };
   }

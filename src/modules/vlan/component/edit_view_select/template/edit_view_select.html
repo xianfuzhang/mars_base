@@ -1,0 +1,14 @@
+<div class="edit_view_select">
+    <div class="edit_view_select__anchor select_ripple mdc-ripple-surface mdc-ripple-upgraded"  ng-click="anchorClick()">
+        <i class="material-icons">build</i>
+        <div style="font-size:16px;display: inline-block">{{'MODULES.VLAN.EDIT_SELECT_VIEW.SHOW_TYPE'|translate}}</div>
+    </div>
+    <div class="edit_view_select__container">
+        <div ng-click="setViewType('edit_vlan')" title="{{'MODULES.VLAN.SELECT_VIEW.TABLE'|translate}}" ng-class="{'show': typeModel.label=='edit_vlan' || model.isShow, 'select': typeModel.label=='edit_vlan'}" class="edit_view_select__container__item select_ripple mdc-ripple-surface mdc-ripple-upgraded">
+            <i class="material-icons">edit</i><div style="font-size:16px;display: inline-block">{{'MODULES.VLAN.EDIT_SELECT_VIEW.EDIT'|translate}}</div>
+        </div>
+        <div ng-click="setViewType('add_vlan')" title="{{'MODULES.VLAN.SELECT_VIEW.LIST'|translate}}" ng-class="{'show': typeModel.label=='add_vlan'|| model.isShow, 'select': typeModel.label=='add_vlan'}" class="edit_view_select__container__item select_ripple mdc-ripple-surface mdc-ripple-upgraded">
+            <i class="material-icons">add</i><div style="font-size:16px;display: inline-block">{{'MODULES.VLAN.EDIT_SELECT_VIEW.ADD'|translate}}</div>
+        </div>
+    </div>
+</div>

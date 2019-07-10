@@ -1,0 +1,43 @@
+<div class="column-manipulation-field">
+  <div class="column-manipulation-field__header">
+    <span class="column-manipulation-field__title"
+          ng-bind="'MODULES.VLAN.TAB.EDIT.CREATE_VLAN'|translate"></span>
+  </div>
+  <form class="endpoint__form" autocomplete="off" novalidate>
+  	<div class="column-manipulation-field__content">
+      <div class="column-manipulation-field__item">
+          <div class="item">
+              <span class="title">Mode:</span>
+              <mdl-select ng-model="model.selectedMode" display-label="{options: model.modeOptions}" disalbe="model.mode"></mdl-select>
+          </div>
+          <div class="item" style="height: 40px;">
+              <span class="title">VLAN:</span>
+              <valid-input class="item-input" ng-if="model.selectedMode.value == 'access'" ng-model="model.vlan" v-require="true" v-regex="model.nativeVlanRegex"></valid-input>
+              <valid-input class="item-input" ng-if="model.selectedMode.value != 'access'" ng-model="model.vlan" v-require="true" v-regex="model.vlanRegex"></valid-input>
+          </div>
+          <div class="item" style="height: 40px;">
+              <span class="title" ng-bind="'MODULES.VLAN.TAB.ADD.COLUMN.NATIVE' | translate"></span>
+              <valid-input class="item-input" ng-model="model.nativeVlan" v-regex="model.nativeVlanRegex" v-disabled="model.selectedMode.value == 'access'"></valid-input>
+          </div>
+          <div class="item">
+              <mdl-radio ng-model="model.membership_type" name="tagType" disable="model.selectedMode.value == 'access' || model.selectedMode.value == 'trunk'"
+                         display-label="{id: 'check_1', label: 'tag', name: 'tagType', value: 'tag'}">
+              </mdl-radio>
+              <mdl-radio ng-model="model.membership_type" name="tagType" disable="model.selectedMode.value == 'access' || model.selectedMode.value == 'trunk'"
+                         display-label="{id: 'check_2', label: 'untag', name: 'tagType', value: 'untag'}">
+              </mdl-radio>
+          </div>
+      </div>
+  	</div>
+
+  	<div class="column-manipulation-field__footer">
+  		<div style="display: inline-block;float: right; margin-left: 15px;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="model.saveBtnDisabled"></mar-button>
+      </div>
+
+      <div style="display: inline-block;float: right;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)"></mar-button>
+      </div>
+  	</div>
+  </form>
+</div>
