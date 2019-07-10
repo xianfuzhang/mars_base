@@ -18,10 +18,10 @@ export class VlanDataManager {
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getVlanConfigUrl(), params).then(
       () => {
-        deferred.resolve();
+        defer.resolve();
       },
       () => {
-        deferred.reject();
+        defer.reject();
       }
     );
     return defer.promise;
@@ -88,6 +88,19 @@ export class VlanDataManager {
       },
       (error) => {
         defer.resolve({'data': {'devices': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
+  putVlanConfig(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.put(this.di.appService.getVlanConfigUrl(), params).then(
+      (res) => {
+        defer.resolve(null);
+      },
+      (error) => {
+        defer.reject(JSON.stringify(error));
       }
     );
     return defer.promise;

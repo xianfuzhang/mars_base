@@ -108,6 +108,7 @@ export class appService {
             'items':[
               {'label': this.translate('MODULE.HEADER.VLAN.NORMAL'), 'url': '/vlan', 'role': 2},
               {'label': this.translate('MODULE.HEADER.VLAN.DYNAMIC'), 'url': '/vlan_dynamic', 'role': 2},
+              {'label': this.translate('MODULE.HEADER.VLAN.GUEST'), 'url': '/vlan_guest', 'role': 2},
               {'label': this.translate('MODULE.HEADER.VLAN.IP_SUBTNET'), 'url': '/vlan_ip', 'role': 2},
             ]
           },

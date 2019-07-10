@@ -55,6 +55,42 @@
 .dynamic__body .status_icon.material_icon.done{
   color:green;
 }
+.createGuestVlan .wizard__body{
+  height: 300px;
+}
+.createGuestVlan .mdc-text-field{
+  width: 80px;
+  margin-left: 20px;
+}
+.createGuestVlan .add-btn{
+  position: relative;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+.guestVlan_establish .types-label{
+  position: relative;
+  display: inline-block;
+  margin: 5px;
+  border-radius: 3px;
+  background-color: #7accef;
+  padding: 5px 3px;
+  color: #fff;
+}
+.guestVlan_establish span.removeBtn {
+  position: absolute;
+  top: -7px;
+  right: -8px;
+  border-radius: 8px;
+  width: 15px;
+  height: 15px;
+  font-size: 3px;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  background-color: red;
+  cursor: pointer;
+}
 
 //
 //@-webkit-keyframes fly_into {

@@ -243,6 +243,46 @@ export class VlanService {
       }
     ];
   }
+
+  getGuestVlanTableActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': true, 'role': 2}
+    };
+  }
+
+  getGuestVlanTableSchema() {
+    return [
+      {
+        'label':  this.translate('MODULES.VLAN.DYNAMIC.TABLE.COLUMN.DEVICE'),
+        'field': 'device_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.DYNAMIC.TABLE.COLUMN.PORT'),
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.VLAN.GUEST.TABLE.COLUMN.VLAN'),
+        'field': 'vlan_id',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];  
+  }
+
+  getGuestVlanTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ];
+  }
 }
 VlanService.$inject = VlanService.getDI();
 VlanService.$$ngIsClass = true;
