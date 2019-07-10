@@ -37,3 +37,7 @@
 .mars-ports-group td .port.selected {
   background-image: url('../../assets/images/port_top_status2.gif') !important;
 }
+
+.mars-ports-group td .port.immutable {
+  cursor: default !important;
+}
