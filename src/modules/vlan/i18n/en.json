@@ -38,7 +38,7 @@
   "MODULES.VLAN.GUEST.CREATE.TITLE": "Create Guest Vlan",
   "MODULES.VLAN.GUEST.CREATE.NO_REST_DEVICE": "The current environment have no AOS device.",
   "MODULES.VLAN.GUEST.CREATE.NO_PORT_VLAN": "Please add a port guest vlan",
-  "MODULES.VLAN.GUEST.DIALOG.CONTENT.BATCH_DELETE": "Sure to delete these guest vlan？"
+  "MODULES.VLAN.GUEST.DIALOG.CONTENT.BATCH_DELETE": "Sure to delete these guest vlan？",
   "MODULES.VLAN.EDIT_SELECT_VIEW.SHOW_TYPE":"Operate Type",
   "MODULES.VLAN.EDIT_SELECT_VIEW.EDIT":"Modify",
   "MODULES.VLAN.EDIT_SELECT_VIEW.ADD":"Add"
