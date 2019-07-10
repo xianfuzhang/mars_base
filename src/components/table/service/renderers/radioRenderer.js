@@ -21,12 +21,19 @@ export class RadioRenderer {
       scope._object = spec.object;
 
       let unsubscribes = [];
-      unsubscribes.push(scope.$watch('_object.' + disableConfig['key'], function () {
-        if (scope._object[disableConfig['key']] === disableConfig['value']){
-          scope.radioDisable = true;
-        } else {
-          scope.radioDisable = false;
-        }
+
+      let watchKeys = new Set();
+      disableConfig.forEach((config) => {
+        watchKeys.add('_object.' + config['key']);
+      })
+      unsubscribes.push(scope.$watchGroup(Array.from(watchKeys), function () {
+        scope.radioDisable = false;
+
+        disableConfig.forEach((config) => {
+          if (scope._object[config['key']] === config['value']){
+            scope.radioDisable = true;
+          }
+        })
       }));
 
       scope.displayLabel = spec.params.displayLabel;
