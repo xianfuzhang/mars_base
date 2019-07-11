@@ -3,7 +3,7 @@
         <tbody>
             <tr ng-repeat="ports in portsGroups track by $index" ng-init="outerIndex = $index">
                 <td ng-repeat="port in ports track by $index" ng-init="innerIndex = $index">
-                    <div class="port {{port.disabled ? 'disabled' : port.selected ? 'selected' : ''}}" title="{{port.title}}" ng-click="selectPort(port.id)"></div>
+                    <div class="port {{port.disabled ? 'disabled' : port.selected ? 'selected' : ''}} {{port.immutable ? 'immutable' : ''}}" title="{{port.title}}" ng-click="!port.immutable && selectPort(port.id)"></div>
                 </td>
             </tr>
         </tbody>

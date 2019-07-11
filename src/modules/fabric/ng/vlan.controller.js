@@ -130,7 +130,8 @@ export class VlanController {
             ports.push({
               id: parseInt(port.port) || port.port,
               title: port.annotations.portName,
-              selected: false
+              selected: false,
+              // immutable: true
             });
           }
         });
@@ -531,7 +532,7 @@ export class VlanController {
         scope.model.vlanPortsList = this.getPortListFromConfig();
       }
 
-      if(scope.vlanModel.editType.label == 'edit_vlan') {
+      if(scope.vlanModel.selectedDevice && scope.vlanModel.editType.label == 'edit_vlan') {
         // specify vlan options
         let vlanConfig = scope.model.vlanConfig.find((device) => {
           return device['device-id'] == scope.vlanModel.selectedDevice.value;
