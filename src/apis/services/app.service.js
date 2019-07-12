@@ -939,14 +939,6 @@ export class appService {
     return this.getZoneEndpoint() + `/dhcprelay/v1/counters`;
   }
 
-  getUpLinkUrl(){
-    return this.getZoneEndpoint() + '/topology/v1/uplink-segments';
-  }
-
-  getUpLinkDeleteUrl(name){
-    return this.getZoneEndpoint() + '/topology/v1/uplink-segments/' + name;
-  }
-
   getVlanConfigUrl(device_id){
     return this.getZoneEndpoint(true) + '/vlan/v1/vlan-config' + (device_id ? '/' + device_id : '');
   }
