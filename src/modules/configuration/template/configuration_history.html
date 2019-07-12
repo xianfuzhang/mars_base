@@ -32,16 +32,13 @@
                     <!--</div>-->
                 <!--</div>-->
             <section class="tab-content">
-                <div class="actions">
-                    <div style="display:inline-block;vertical-align: bottom;">
-                        <mdl-select ng-model="historyFileSelected"
-                                    display-label="fileList">
-                        </mdl-select>
-                    </div>
-                    <div style="display:inline-block;margin-left: 15px;">
-                        <mar-button btn-text="::'MODULE.LOG.BUTTON.DOWNLOAD' | translate" btn-class="'btn-black btn-sm'" btn-icon="'cloud_download'" btn-click="downloadFile()" btn-disabled="fileList.options.length == 1 || historyFileSelected.value == ''" />
-                    </div>
-                </div>
+                <!--<div class="actions">-->
+                    <!--<div style="display:inline-block;vertical-align: bottom;">-->
+                        <!--<mdl-select ng-model="historyFileSelected"-->
+                                    <!--display-label="fileList">-->
+                        <!--</mdl-select>-->
+                    <!--</div>-->
+                <!--</div>-->
                 <mdl-table actions-show="configurationHistoryModel.actionsShow"
                            provider="configurationHistoryModel.provider" api-ready="onAPIReady($api)"
                            need-pagination="true">
