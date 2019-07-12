@@ -43,8 +43,6 @@ export class CreateVlanDialogController {
       vlan: '',
       nativeVlan: '',
       mode: this.di.dataModel.portMode,
-      selectedMode: selectedMode,
-      modeOptions: modeOptions,
       membership_type: membership_type,
       saveBtnDisabled: true
     };
@@ -59,16 +57,9 @@ export class CreateVlanDialogController {
     };
 
     scope.save = (event) =>{
-      let vlans = [];
-      let vlanArr = scope.model.vlan.split(',');
-      vlanArr.forEach((vlan) => {
-        vlans.push(vlan + '/' + scope.model.membership_type)
-      });
-
+      let vlans = scope.model.vlan.split(',');
       let data = {
         vlans: vlans,
-        nativeVlan: scope.model.nativeVlan,
-        mode: scope.model.selectedMode.value,
         membership_type: scope.model.membership_type
       };
 
@@ -80,25 +71,21 @@ export class CreateVlanDialogController {
     };
 
     unsubscribers.push(scope.$watch('model.vlan', () => {
-      let regexStr = scope.model.selectedMode.value == 'access' ? scope.model.nativeVlanRegex : scope.model.vlanRegex
+      let regexStr = scope.model.mode == 'access' ? scope.model.nativeVlanRegex : scope.model.vlanRegex
       if(!scope.model.vlan.match(regexStr)) {
         scope.model.saveBtnDisabled = true;
       } else {
         scope.model.saveBtnDisabled = false;
       }
-
-      if(scope.model.selectedMode.value == 'access') {
-        scope.model.nativeVlan = scope.model.vlan;
-      }
     }, true))
 
-    unsubscribers.push(scope.$watch('model.selectedMode', () => {
-      if(scope.model.selectedMode.value == 'access') {
-        scope.model.membership_type = 'untag';
-      } else if(scope.model.selectedMode.value == 'trunk') {
-        scope.model.membership_type = 'tag';
-      }
-    }, true))
+    // unsubscribers.push(scope.$watch('model.selectedMode', () => {
+    //   if(scope.model.selectedMode.value == 'access') {
+    //     scope.model.membership_type = 'untag';
+    //   } else if(scope.model.selectedMode.value == 'trunk') {
+    //     scope.model.membership_type = 'tag';
+    //   }
+    // }, true))
 
     scope.$on('$destroy', () => {
       unsubscribers.forEach((cb) => {

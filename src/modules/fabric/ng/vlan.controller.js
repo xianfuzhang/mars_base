@@ -85,9 +85,11 @@ export class VlanController {
       portsNumPerRow: 0,
       selectedMode: null,
       modeOptions: null,
+      portEntities: [],
       actionsShow: null,
       provider: null,
       API: null,
+      vlanEntities: [],
       portActionsShow: null,
       portProvider: null,
       portAPI: null,
@@ -242,7 +244,7 @@ export class VlanController {
       DI.vlanDataManager.postVlanConfigByDeviceId(scope.vlanModel.selectedDevice.value, params).then((res) => {
         DI.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.TAB.UPDATE_VLAN_SUCCESS'));
         scope.vlanModel.changedPorts = {count:0}
-        scope.vlanModel.API.queryUpdate();
+        scope.vlanModel.portAPI.queryUpdate();
       }, (err) => {
         DI.notificationService.renderWarning(scope, this.translate('MODULES.VLAN.TAB.UPDATE_VLAN_FAILED'));
         console.error(err)
@@ -250,70 +252,109 @@ export class VlanController {
     }
 
     scope.addPortVlan = () => {
+      if(scope.vlanModel.selectedPortObj.selectedMode.value == 'access') {
+        let newPort = {
+          port: scope.vlanModel.selectedPort.value,
+          native: scope.vlanModel.selectedPortObj.native,
+          mode: scope.vlanModel.selectedPortObj.selectedMode.value,
+          vlans: [scope.vlanModel.selectedPortObj.native + '/' + scope.vlanModel.selectedPortObj.selectedMode.value]
+        }
+
+        let entity = {
+          id: scope.vlanModel.selectedDevice.value + '_' + newPort.native,
+          vlan: newPort.native,
+          membership_type: 'untag',
+          mode: newPort.mode
+        };
+
+        scope.vlanModel.changedPorts.count += 1;
+        scope.vlanModel.changedPorts[scope.vlanModel.selectedPort.value] = newPort;
+        scope.vlanModel.vlanEntities.push(entity);
+        scope.vlanModel.portAPI.inlineFilter();
+        scope.vlanModel.portAPI.update();
+        return;
+      }
+
       DI.modalManager.open({
         template: require('../components/createVlan/template/createVlanDialog.html'),
         controller: 'createVlanDialogCtl',
         windowClass: 'create-vlan-dialog-modal',
         resolve: {
           dataModel: () => {
-            return {portMode: scope.vlanModel.selectedPortObj.mode == '-' ? '' : scope.vlanModel.selectedPortObj.mode}
+            return {portMode: scope.vlanModel.selectedPortObj.selectedMode.value}
           }
         }
       }).result.then((data) => {
         if(!data || data.canceled) {
           return;
         } else if (data && !data.canceled) {
-          // update entity
-          let params = {ports: []};
           let deviceObj = DI._.find(scope.model.vlanConfig, (device) => {
             return device['device-id'] == scope.vlanModel.selectedDevice.value;
           })
 
-          if(deviceObj) {
-            let portObj = deviceObj.ports.find((port) => {
-              return port.port == scope.vlanModel.selectedPort.value;
-            })
+          let portObj = deviceObj && deviceObj.ports.find((port) => {
+            return port.port == scope.vlanModel.selectedPort.value;
+          })
 
-            if(portObj) {
-              portObj.vlans = portObj.vlans.concat(data.result.vlans);
-              params.ports.push(portObj);
-            } else {
-              let portObj = {
-                port: scope.vlanModel.selectedPort.value,
-                native: data.result.nativeVlan,
-                mode: data.result.mode,
-                vlans: data.result.vlans
-              }
+          // update entity
+          let newVlans = []
+          data.result.vlans.forEach((vlan) => {
+            newVlans.push(vlan + '/' + data.result.membership_type)
 
-              params.ports.push(portObj);
-            }
-          } else {
-            let portObj = {
+            let entity = {
+              id: scope.vlanModel.selectedDevice.value + '_' + vlan,
+              vlan: vlan,
+              membership_type: data.result.membership_type,
+              mode: scope.vlanModel.selectedPortObj.selectedMode.value
+            };
+            scope.vlanModel.vlanEntities.push(entity);
+          })
+
+          let changedPort = scope.vlanModel.changedPorts[scope.vlanModel.selectedPort.value];
+          if(changedPort) {
+            let newPort = {
               port: scope.vlanModel.selectedPort.value,
-              native: data.result.nativeVlan,
-              mode: data.result.mode,
-              vlans: data.result.vlans
+              native: scope.vlanModel.selectedPortObj.native,
+              mode: scope.vlanModel.selectedPortObj.selectedMode.value,
+              vlans: changedPort.vlans.concat(newVlans)
             }
 
-            params.ports.push(portObj);
+            scope.vlanModel.changedPorts[scope.vlanModel.selectedPort.value] = newPort;
+          } else{
+            let newPort = {
+              port: scope.vlanModel.selectedPort.value,
+              native: scope.vlanModel.selectedPortObj.native,
+              mode: scope.vlanModel.selectedPortObj.selectedMode.value,
+              vlans: portObj ? portObj.vlans.concat(newVlans) : newVlans
+            }
+
+            scope.vlanModel.changedPorts.count += 1;
+            scope.vlanModel.changedPorts[scope.vlanModel.selectedPort.value] = newPort;
           }
 
-          DI.vlanDataManager.postVlanConfigByDeviceId(scope.vlanModel.selectedDevice.value, params).then((res) => {
-            DI.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.TAB.UPDATE_VLAN_SUCCESS'));
-            scope.vlanModel.portAPI.queryUpdate();
-          }, (err) => {
-            DI.notificationService.renderWarning(scope, this.translate('MODULES.VLAN.TAB.UPDATE_VLAN_FAILED'));
-          })
+          scope.vlanModel.portAPI.inlineFilter();
+          scope.vlanModel.portAPI.update();
+
+          // DI.vlanDataManager.postVlanConfigByDeviceId(scope.vlanModel.selectedDevice.value, params).then((res) => {
+          //   DI.notificationService.renderSuccess(scope, this.translate('MODULES.VLAN.TAB.UPDATE_VLAN_SUCCESS'));
+          //   scope.vlanModel.portAPI.queryUpdate();
+          // }, (err) => {
+          //   DI.notificationService.renderWarning(scope, this.translate('MODULES.VLAN.TAB.UPDATE_VLAN_FAILED'));
+          // })
         }
       });
     }
 
-    scope.removePortVlan = ($value) => {
-      if (!$value.length) return;
+    scope.removePortVlan = () => {
+      let removeItems = scope.vlanModel.portAPI.getSelectedRows()
+      if (!removeItems.length) {
+        DI.notificationService.renderWarning(scope, this.translate('MODULES.VLAN.TAB.EDIT.SELECT_VLAN_WARNING'));
+        return;
+      }
 
       this.di.dialogService.createDialog('warning', this.translate('MODULES.VLAN.TAB.EDIT.DIALOG.DELETE.WARNING'))
         .then(() =>{
-          this.batchDeletePortVlan($value);
+          this.batchDeletePortVlan(removeItems);
         }, () => {
           this.scope.vlanModel.portAPI.queryUpdate();
         });
@@ -590,7 +631,7 @@ export class VlanController {
         return device['device-id'] == scope.vlanModel.selectedDevice.value;
       })
 
-      let entity = this.scope.vlanModel.entities.find((value) => {
+      let entity = this.scope.vlanModel.portEntities.find((value) => {
         return value.id == newValue.trObject.id
       });
 
@@ -642,35 +683,47 @@ export class VlanController {
 
     // update vlan table's one row data
     let _handle_update_port = (newValue) =>{
-      let deviceObj = DI._.find(scope.model.vlanConfig, (device) => {
-        return device['device-id'] == scope.vlanModel.selectedDevice.value;
-      })
-
       let entity = this.scope.vlanModel.vlanEntities.find((value) => {
         return value.id == newValue.trObject.id
       });
 
-      let portObj = deviceObj.ports.find((port) => {
+      let deviceObj = DI._.find(scope.model.vlanConfig, (device) => {
+        return device['device-id'] == scope.vlanModel.selectedDevice.value;
+      })
+
+      let portObj = deviceObj && deviceObj.ports.find((port) => {
         return port.port == scope.vlanModel.selectedPort.value;
       })
 
-      let vlanObj = portObj.vlans.find((vlanStr) => {
-        let vlanArr = vlanStr.split('/')
-        return vlanArr[0] == entity.vlan;
-      }).split('/');
+      if(!portObj) {
+        let newPort = scope.vlanModel.changedPorts[scope.vlanModel.selectedPort.value];
+        let index = newPort.vlans.findIndex((vlan) => {
+          let vlanArr = vlan.split("/");
+          return vlanArr[0] == entity.vlan;
+        })
 
-      if(newValue.column == 'membership_type') {
-        entity.membership_type = newValue.trObject.membership_type;
-      }
-
-      let changedPort = _get_changed_port(portObj, entity);
-      if(changedPort) {
-        Object.keys(scope.vlanModel.changedPorts).indexOf(portObj.port.toString()) == -1 && scope.vlanModel.changedPorts.count++;
-        scope.vlanModel.changedPorts[portObj.port] = changedPort;
+        if(index > -1) {
+          newPort.vlans[index] = entity.vlan + '/' + newValue.trObject.membership_type;
+        }
       } else {
-        if(Object.keys(scope.vlanModel.changedPorts).indexOf(portObj.port.toString()) > -1) {
-          scope.vlanModel.changedPorts.count--;
-          delete scope.vlanModel.changedPorts[portObj.port];
+        let vlanObj = portObj.vlans.find((vlanStr) => {
+          let vlanArr = vlanStr.split('/')
+          return vlanArr[0] == entity.vlan;
+        }).split('/');
+
+        if(newValue.column == 'membership_type') {
+          entity.membership_type = newValue.trObject.membership_type;
+        }
+
+        let changedPort = _get_changed_port(portObj, entity);
+        if(changedPort) {
+          Object.keys(scope.vlanModel.changedPorts).indexOf(portObj.port.toString()) == -1 && scope.vlanModel.changedPorts.count++;
+          scope.vlanModel.changedPorts[portObj.port] = changedPort;
+        } else {
+          if(Object.keys(scope.vlanModel.changedPorts).indexOf(portObj.port.toString()) > -1) {
+            scope.vlanModel.changedPorts.count--;
+            delete scope.vlanModel.changedPorts[portObj.port];
+          }
         }
       }
     };
@@ -856,7 +909,7 @@ export class VlanController {
             //this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(res.data.devices);
             this.entityStandardization(res.data.devices);
             defer.resolve({
-              data: this.scope.vlanModel.entities
+              data: this.scope.vlanModel.portEntities
             });
           });
           return defer.promise;
@@ -932,40 +985,51 @@ export class VlanController {
   }
 
   batchDeletePortVlan(vlanItems) {
-    let deferredArr = [];
-    let params = {ports:[]}, vlans = [];
-    vlanItems.forEach((item) => {
-      vlans.push(item.vlan)
-    })
-
     let deviceObj = this.scope.model.vlanConfig.find((device) => {
       return device['device-id'] == this.scope.vlanModel.selectedDevice.value;
     })
 
-    let portObj = deviceObj.ports.find((port) => {
+    let portObj = deviceObj && deviceObj.ports.find((port) => {
       return port.port == this.scope.vlanModel.selectedPort.value;
     })
 
-    let port = this.di._.cloneDeep(portObj);
-    let vlanObjArr = [];
-    portObj.vlans.forEach((vlanStr) => {
-      let vlanArr = vlanStr.split("/");
-      if(vlans.indexOf(vlanArr[0]) == -1) {
-        vlanObjArr.push(vlanStr);
-      }
-    })
-    port.vlans = vlanObjArr;
-    params.ports.push(port);
+    let changedPort = this.scope.vlanModel.changedPorts[this.scope.vlanModel.selectedPort.value]
+    let newPort = this.di._.cloneDeep(portObj);
 
-    this.di.vlanDataManager.postVlanConfigByDeviceId(this.scope.vlanModel.selectedDevice.value, params)
-      .then(() => {
-        // this.di.notificationService.render(this.scope)
-        this.di.notificationService.renderSuccess(this.scope, this.translate("MODULES.VLAN.TAB.EDIT.DIALOG.DELETE.SUCCESS"));
-        this.scope.vlanModel.portAPI.queryUpdate();
-      }, (msg) => {
-        // this.di.notificationService.render(this.scope)
-        this.di.notificationService.renderWarning(this.scope, this.translate("MODULES.VLAN.TAB.EDIT.DIALOG.DELETE.FAIL"));
-      });
+    if(changedPort || newPort) {
+      vlanItems.forEach((item) => {
+        // update entity
+        let entityIndex = this.scope.vlanModel.vlanEntities.findIndex((entity) => {
+          return entity.id == item.id;
+        })
+        this.scope.vlanModel.vlanEntities.splice(entityIndex, 1)
+
+        // update changePortsList
+        if(changedPort) {
+          let index = changedPort.vlans.findIndex((vlan) => {
+            let vlanArr = vlan.split("/");
+            return vlanArr[0] == item.vlan;
+          })
+
+          changedPort.vlans.splice(index, 1)
+        } else {
+          let index = newPort.vlans.findIndex((vlan) => {
+            let vlanArr = vlan.split("/");
+            return vlanArr[0] == item.vlan;
+          })
+
+          newPort.vlans.splice(index, 1)
+        }
+      })
+
+      this.scope.vlanModel.portAPI.inlineFilter();
+      this.scope.vlanModel.portAPI.update();
+
+      if(!changedPort) {
+        this.scope.vlanModel.changedPorts[newPort.port] = newPort
+        this.scope.vlanModel.changedPorts.count++;
+      }
+    }
   }
 
   formatSubTableValue(relayAgentIps){
@@ -1005,7 +1069,7 @@ export class VlanController {
       case 'edit':
         let dataArr = [];
         if(this.scope.vlanModel.editSelectedType == 'vlan') {
-          this.scope.vlanModel.entities = [];
+          this.scope.vlanModel.portEntities = [];
 
           let foundDevice = entities.find((device) => {
             return device['device-id'] == this.scope.vlanModel.selectedDevice.value
@@ -1034,7 +1098,7 @@ export class VlanController {
             });
           }
 
-          this.scope.vlanModel.entities = this.di._.sortBy(dataArr, (entity) => {
+          this.scope.vlanModel.portEntities = this.di._.sortBy(dataArr, (entity) => {
             return entity.port;
           })
         } else {
@@ -1049,7 +1113,7 @@ export class VlanController {
             });
 
             if(foundPort) {
-              this.scope.vlanModel.selectedPortObj = foundPort;
+              this.scope.vlanModel.selectedPortObj = {selectedMode: {label:foundPort.mode, value:foundPort.mode}, native: foundPort.native};
               foundPort.vlans.forEach((vlan) => {
                 let obj = {};
                 let vlanArr = vlan.split("/")
@@ -1061,10 +1125,10 @@ export class VlanController {
                 dataArr.push(obj);
               })
             } else {
-              this.scope.vlanModel.selectedPortObj = {mode: '-', native: '-'};
+              this.scope.vlanModel.selectedPortObj = {selectedMode: {label:'', value:''}, native: ''};
             }
           } else {
-            this.scope.vlanModel.selectedPortObj = {mode: '-', native: '-'};
+            this.scope.vlanModel.selectedPortObj = {selectedMode: {label:'', value:''}, native: ''};
           }
 
           this.scope.vlanModel.vlanEntities = this.di._.sortBy(dataArr, (entity) => {
