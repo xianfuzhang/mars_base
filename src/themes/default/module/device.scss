@@ -688,6 +688,8 @@
   display: flex;
   flex-direction: column;
   height: calc(100% - 100px);
+  width: 66%;
+  min-width: 1200px;
   background-color: #eff3f6;
   border-radius: 8px;
   transition: box-shadow 300ms ease-in-out;
@@ -745,34 +747,40 @@
 
 .vlan-table-field .content {
   position: relative;
-  height: calc(100% - 60px);
+  height: calc(100% - 100px);
   margin-top: 60px;
   padding: 5px 50px;
   overflow: auto;
 }
 
-.vlan-table-field .content .options {
+.vlan-table-field .content .edit-options {
   position: absolute;
-  left: 300px;
+  left: 400px;
   top: 15px;
+  display: flex;
+  align-items:center;
+  justify-content: center;
+}
+
+.vlan-table-field .content .add-options {
   display: flex;
   align-items:center;
   justify-content: center;
   height: 65px;
 }
 
-.vlan-table-field .content .options .title {
+.vlan-table-field .content .add-options .title {
   font-weight: bold;
   padding: 0 10px;
 }
 
-.vlan-table-field .content .options .input-item {
+.vlan-table-field .content .add-options .input-item {
   width:120px;
   margin-right:10px;
 }
 
-.vlan-table-field .content .options label {
-  color: #d8d9da;
+.vlan-table-field .content label {
+  color: #000;
 }
 
 .vlan-table-field .content .device {
@@ -794,4 +802,48 @@
 .vlan-table-field .content .device .batch-ports {
   width: 150px;
   margin-left: 30px;
+}
+
+.create-vlan-dialog-modal {
+  width: 400px;
+  height: auto !important;
+}
+
+.create-vlan-dialog-modal .column-manipulation-field__content {
+  height: auto !important;
+}
+
+.create-vlan-dialog-modal .column-manipulation-field__item {
+  width: 200px;
+  margin: 0 auto;
+  font-size: 13px !important;
+}
+
+.create-vlan-dialog-modal {
+  width: 400px;
+  height: auto !important;
+}
+
+.create-vlan-dialog-modal .column-manipulation-field__content {
+  height: auto !important;
+}
+
+.create-vlan-dialog-modal .column-manipulation-field__item {
+  width: 250px;
+  margin: 0 auto;
+  font-size: 13px !important;
+}
+
+.create-vlan-dialog-modal .column-manipulation-field__item .item{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.create-vlan-dialog-modal .column-manipulation-field__item .item .title{
+  width: 70px;
+  margin-top: 5px;
+  margin-right: 10px;
+  text-align: left;
 }

@@ -34,7 +34,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve({'data': {'devices': [], 'total': 0}});
+        defer.resolve({'data': {'ports': [], 'total': 0}});
       }
     );
     return defer.promise;

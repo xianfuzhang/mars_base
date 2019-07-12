@@ -62,10 +62,8 @@ export class DialogService {
           defer.resolve(data);
         }
         else {
-          defer.reject(null);
+          defer.reject();
         }
-    },()=>{
-
     });
 
     return defer.promise;

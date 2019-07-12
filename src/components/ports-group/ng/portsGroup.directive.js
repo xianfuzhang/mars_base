@@ -30,9 +30,10 @@ export class PortsGroup {
 
   _link (scope, element) {
     let unSubscribes = []
-    const PORTS_NUM_PER_ROW = 24;  // the default num per row
-
+    const PORTS_NUM_PER_ROW = 27;  // the default num per row
     const PortsNumPerRow = parseInt(scope.portsNumPerRow) || PORTS_NUM_PER_ROW;
+    let originalPortsList = scope.portsList;  // save original ports list value
+
     scope.portsGroups = [];
     let newGroup = [];
     let blankPort = {
@@ -73,6 +74,39 @@ export class PortsGroup {
           scope.portsList[index].selected = !scope.portsList[index].selected;
         }
       }
+
+      let portsListChanged = false;
+      unSubscribes.push(scope.$watch('portsList', (newObj, oldObj) => {
+        if(!portsListChanged) {
+          portsListChanged = true;
+          return;
+        }
+
+        if(originalPortsList === scope.portsList) { // if portsList address has not changed
+          return;
+        }
+
+        // reassign portsGroups
+        originalPortsList = scope.portsList;
+        scope.portsGroups = [];
+        let halfLength = Math.ceil(scope.portsList.length / 2);
+        for (let i=0; i < PortsNumPerRow * 2; i++) {
+          if (i < halfLength) {
+            newGroup.push(scope.portsList[i]);
+          } else if (i < PortsNumPerRow) {
+            newGroup.push(blankPort);
+          } else if (i < PortsNumPerRow + halfLength) {
+            newGroup.push(scope.portsList[i - PortsNumPerRow + halfLength]);
+          } else if (i < PortsNumPerRow * 2) {
+            newGroup.push(blankPort);
+          }
+
+          if (newGroup.length == PortsNumPerRow) {
+            scope.portsGroups.push(newGroup);
+            newGroup = [];
+          }
+        }
+      }, true));
 
       unSubscribes.push(this.di.$rootScope.$on('ports-selected', (evt, msgObj) => {
         if(msgObj.groupId != scope.groupId) return

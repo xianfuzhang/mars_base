@@ -15,7 +15,8 @@ export class textRenderer {
 
     this.render = (spec) => {
       let scope = spec.getContext.$new(),
-          tdElm = spec.element;
+          tdElm = spec.element,
+          searchSwitch = spec.tableParams && spec.tableParams.searchSwitch;
 
       let clickFilterHandler = () => {
         scope.$emit('td-filter-event', {
@@ -38,7 +39,7 @@ export class textRenderer {
         }
       };
       
-      if (tdElm) {
+      if (searchSwitch && tdElm) {
         tdElm.removeEventListener('mouseenter', tdEnterFunc);
         tdElm.removeEventListener('mouseleave', tdLeaveFunc);
       }
@@ -47,8 +48,10 @@ export class textRenderer {
       if (spec.col.def.tooltip) {
         tdElm.title = spec.col_title || spec.value;
       }
-      tdElm.addEventListener('mouseenter', tdEnterFunc);
-      tdElm.addEventListener('mouseleave', tdLeaveFunc);
+      if (searchSwitch) {
+        tdElm.addEventListener('mouseenter', tdEnterFunc);
+        tdElm.addEventListener('mouseleave', tdLeaveFunc);  
+      }
     };
 
     this.getType = () => {

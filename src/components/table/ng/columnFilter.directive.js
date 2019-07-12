@@ -118,9 +118,9 @@ export class columnFilter {
 		scope._result = (event) => {
 			scope.show = false;
 			if (scope.collections.length > 0) {
-				let result = [], display = '';
+				let result = [], display = [];
 				scope.collections.forEach((item) => {
-					display += ' ' +  item.column.label + ':' + (item.compare.value === 'contains' ? ' ' : '=') + item.value;
+					display.push(item.column.label + ':' + (item.compare.value === 'contains' ? ' ' : '=') + item.value);
 					result.push([item.column.value, item.compare.value, item.value]);
 				});
 				this.di.$timeout(() => {

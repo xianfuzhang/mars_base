@@ -88,6 +88,7 @@ export class mdlTable {
         number: 10
       },
       sort: {},
+      columnFilterConditions: [],
       search: {},
       searchResult: '',
       globalSearch: true,
@@ -136,7 +137,7 @@ export class mdlTable {
       scope.tableModel.sort = {};
       scope.tableModel.sort[$col.field] = $col.sort;
       scope._orderInlineFilterData();
-      scope.tableModel.filteredData = scope._clientDataPagination(); 
+      scope._clientDataPagination(); 
     };
 
     scope._orderInlineFilterData = () => {
@@ -174,14 +175,6 @@ export class mdlTable {
     scope._getColumnSortMode = ($col) => {
       return $col.sort || scope.tableModel.CONST_SORT_UNDEFINED;
     };
-
-    /*scope._getColumnWidth = ($col) => {
-      if($col.width){
-        return {"width":$col.width}
-      } else {
-        return {"width": 'auto'};
-      }
-    };*/
 
     scope._isSelected = function (rowId) {
       return scope.tableModel.selectedRowId && scope.tableModel.selectedRowId === rowId;
@@ -273,13 +266,23 @@ export class mdlTable {
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
       }
       else {
-        scope.tableModel.searchResult = columns && columns.display || '';
-        scope.tableModel.search['value'] = columns && columns.display || '';
+        if (columns && columns.display.length > 0) {
+          for (let i = 0, len = columns.display.length; i < len; i++) {
+            let obj = {
+              'display': columns.display[i],
+              'result': []
+            };
+            obj.result.push(columns.result[i]);
+            scope.tableModel.columnFilterConditions.push(obj);
+          }
+        }
+        //scope.tableModel.searchResult = columns && columns.display || '';
+        scope.tableModel.search['value'] = columns && columns.result || '';
       }
       if (scope._isNeedPagination === false ||  scope._isNeedPagination === 'false') {
         scope.inlineFilter(columns && columns.result);
         scope._orderInlineFilterData();
-        scope.tableModel.filteredData = scope._clientDataPagination();
+        scope._clientDataPagination();
         scope.clearRowCheck();
         scope._render();
       }
@@ -290,12 +293,13 @@ export class mdlTable {
     scope._clearSearch = (event) => {
       scope.tableModel.globalSearch = true;
       scope.tableModel.pagination.start = 0;
+      scope.tableModel.columnFilterConditions = [];
       scope.tableModel.searchResult = '';
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
       if (scope._isNeedPagination === false ||  scope._isNeedPagination === 'false') {
         scope.inlineFilter();
         scope._orderInlineFilterData();
-        scope.tableModel.filteredData = scope._clientDataPagination();
+        scope._clientDataPagination();
         scope.clearRowCheck();
         scope._render();
       }
@@ -303,6 +307,24 @@ export class mdlTable {
         scope._queryUpdate();
       }
       event && event.stopPropagation();
+    };
+
+    scope._deletecolumnCondition = (event, index) => {
+      scope.tableModel.columnFilterConditions.splice(index, 1);
+      if (scope.tableModel.columnFilterConditions.length === 0) {
+        scope.tableModel.search['value'] = '';
+        scope.tableModel.globalSearch = true;
+      }
+      let columns = [];
+      scope.tableModel.columnFilterConditions.forEach((item) => {
+        columns.push(item.result[0]);
+      });
+      scope.inlineFilter(columns);
+      scope._orderInlineFilterData();
+      scope._clientDataPagination();
+      scope.clearRowCheck();
+      scope._render();
+      event.stopPropagation();
     };
 
     scope.inlineFilter = (columns) => {
@@ -379,7 +401,7 @@ export class mdlTable {
       } 
       else {
         scope.inlineFilter();
-        scope.tableModel.filteredData = scope._clientDataPagination();
+        scope._clientDataPagination();
       }     
       scope.tableModel.filteredData.forEach((item) => {
         item.isChecked = false;
@@ -472,7 +494,7 @@ export class mdlTable {
 
     scope._render = () => {
       this.di.$timeout(() =>{
-        scope.tableModel.listeners.notify('table.update');
+        scope.tableModel.listeners.notify('table.update', {'searchSwitch': scope.actionsShow.search.enable});
       }, 0);
     };
 
@@ -503,9 +525,8 @@ export class mdlTable {
     };
 
     scope._clientDataPagination = () => {
-      let pgResult = scope.tableModel.inlineFilterData.slice(scope.tableModel.pagination.start, 
+      scope.tableModel.filteredData = scope.tableModel.inlineFilterData.slice(scope.tableModel.pagination.start, 
           scope.tableModel.pagination.start + scope.tableModel.pagination.number);
-      return pgResult;
     };
 
     /*****************************************************************************
@@ -518,11 +539,12 @@ export class mdlTable {
     };
 
     scope._requestUpdate = () => {
-        scope.tableModel.listeners.notify('table.update');
+        scope.tableModel.listeners.notify('table.update', {'searchSwitch': scope.actionsShow.search.enable});
     };
 
     scope._queryUpdate = () => {
       let params = scope._getTableParams();
+      scope.tableModel.columnFilterConditions = [];
       scope.tableModel.searchResult = '';
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
       scope.tableModel.loading = true;
@@ -576,7 +598,7 @@ export class mdlTable {
 
     scope._apiInlineFilter = () => {
       scope.inlineFilter();
-      scope.tableModel.filteredData = scope._clientDataPagination();
+      scope._clientDataPagination();
     };
 
     (function () {
@@ -650,7 +672,18 @@ export class mdlTable {
 
     let subscribes = [];
     subscribes.push(this.di.$rootScope.$on('td-filter-event', (event, params) => {
-      scope._search(false, params);
+      scope.tableModel.search['value'] = params.display;
+      scope.tableModel.columnFilterConditions.push(params);
+      let columns = [];
+      scope.tableModel.columnFilterConditions.forEach((item) => {
+        columns.push(item.result[0]);
+      });
+      scope.inlineFilter(columns);
+      scope._orderInlineFilterData();
+      scope._clientDataPagination();
+      scope.clearRowCheck();
+      scope._render();
+      scope.tableModel.globalSearch = false;
     }));
     
     scope.$on('$destroy', ()=> {

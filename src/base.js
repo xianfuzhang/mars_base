@@ -350,6 +350,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/vlan_guest', {
+      template: require('./modules/vlan/template/guest.html'),
+      controller: 'guestVlanCtrl',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .otherwise({ redirectTo: '/' });
 }
 

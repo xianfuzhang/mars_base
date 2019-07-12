@@ -45,6 +45,7 @@ import {DHCPRelayDefaultEstablishController} from './components/dhcprelayDefault
 import {DHCPRelayIndirectEstablishController} from './components/dhcprelayIndirect_establish/ng/dhcprelayIndirectEstablish.controller';
 import {DHCPRelayInterfaceEstablishController} from './components/dhcprelayInterface_establish/ng/dhcprelayInterfaceEstablish.controller';
 import {VlanController} from './ng/vlan.controller';
+import {CreateVlanDialogController} from './components/createVlan/ng/createVlanDialog.controller';
 
 export default angular
   .module('fabric', [])
@@ -85,6 +86,7 @@ export default angular
   .controller('dhcpRelayIndirectEstablishController', DHCPRelayIndirectEstablishController)
   .controller('dhcpRelayInterfaceEstablishController', DHCPRelayInterfaceEstablishController)
   .controller('vlanController', VlanController)
+  .controller('createVlanDialogCtl', CreateVlanDialogController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)
   .service('stormService', StormService)

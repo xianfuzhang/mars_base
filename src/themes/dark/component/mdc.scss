@@ -386,8 +386,9 @@
 .mdc-select:not(.mdc-select--disabled) .mdc-floating-label{
   color: rgba(255, 255, 255, 0.8);
 }
-
-
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label{
+  color: rgba(255, 255, 255, 0.8);
+}
 .mdc-select--disabled .mdc-floating-label{
   color: rgba(255, 255, 255, 0.8);
 }
