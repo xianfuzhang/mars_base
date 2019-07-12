@@ -24,9 +24,46 @@ mdc设置组件颜色
   margin-left: 24px;
   display: flex;
   align-items: center;
+  min-width: 300px;
+  max-width: 600px;
 }
 .mdl-table-action__search-body{
   width: 100%;
+}
+.mdl-table-action__search .chip{
+  position: relative;
+  display: inline-block;
+  background-color: #999;
+  border-radius: 17px;
+  margin: 4px;
+  color: rgb(255, 255, 255);
+  padding: 7px 12px 7px 12px;
+}
+.mdl-table-action__search .chip > .remove{
+  position: relative;
+  margin-left: 5px;
+  float: right;
+  width: 12px;
+  height: 2px;
+  top: 8px;
+  cursor: pointer;
+}
+.mdl-table-action__search .chip > .remove::before, .mdl-table-action__search .chip > .remove::after{
+  position: absolute;
+  left: 0;
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-color: #ccc;
+}
+.mdl-table-action__search .chip > .remove:hover::before, .mdl-table-action__search .chip > .remove:hover::after{
+  background-color: #fafafa;
+}
+.mdl-table-action__search .chip > .remove::before{
+  transform: rotate(45deg);
+}
+.mdl-table-action__search .chip > .remove::after{
+  transform: rotate(-45deg);
 }
 .column-filter-field .mdc-icon-button.show:before{
   opacity: 0.15;
