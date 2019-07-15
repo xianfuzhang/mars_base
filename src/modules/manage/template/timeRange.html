@@ -1,0 +1,50 @@
+<div class="ntp flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="app-main">
+    <content-header big-title="{{'MODULE.HEADER.MANAGE.NTP' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.MANAGE.NTP' | translate}}</span>
+    </content-header>
+    <section class="app-body timerange" style="display:flex;flex-direction: column;align-items: flex-start">
+      <div class="timerange__row">
+        <div class="first">交换机</div>
+        <div class="second">
+          <mdl-select ng-model="timeRangeModel.curDevice" ng-change="deviceChange($value)"
+                      display-label="timeRangeModel.deviceDisplay">
+          </mdl-select>
+        </div>
+      </div>
+
+      <div class="timerange__row">
+        <div class="first">时间范围名称</div>
+        <div class="second">
+          <mdl-select ng-model="timeRangeModel.curName"  ng-change="nameChange($value)" disable="timeRangeModel.curDevice.value == null"
+                      display-label="timeRangeModel.nameDisplay">
+          </mdl-select>
+        </div>
+        <div class="button" >
+          <mar-button btn-disabled="timeRangeModel.curDevice.value == null" btn-text="::'MODULES.VLAN.DYNAMIC.MENU.BATCH_ACTIVE' | translate" btn-icon="'add'" btn-class="'btn-black btn-sm'" btn-click="addName()"></mar-button>
+        </div>
+        <div class="button" >
+          <mar-button btn-disabled="timeRangeModel.curName == null ||  timeRangeModel.curName.value == null" btn-text="::'MODULES.VLAN.DYNAMIC.MENU.BATCH_DEACTIVE' | translate" btn-icon="'delete'" btn-class="'btn-black btn-sm'" btn-click="removeName()"></mar-button>
+        </div>
+      </div>
+
+      <div ng-if="!(timeRangeModel.curName == null ||  timeRangeModel.curName.value == null)" style="width:100%">
+        <mdl-table actions-show="timeRangeModel.actionsShow"
+                   actions="timeRangeModel.rowActions"
+                   row-select-action="onTableRowSelectAction($event)"
+                   provider="timeRangeModel.provider" api-ready="onAPIReady($api)"
+                   on-add="add()">
+        </mdl-table>
+      </div>
+    </section>
+  </div>
+
+  <!--<ng-controller ng-controller="ntpEstablishController">-->
+    <!--<wizard></wizard>-->
+  <!--</ng-controller>-->
+
+</div>

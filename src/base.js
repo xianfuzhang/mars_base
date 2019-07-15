@@ -357,6 +357,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/time_range', {
+      template: require('./modules/manage/template/timeRange.html'),
+      controller: 'timeRangeController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .otherwise({ redirectTo: '/' });
 }
 

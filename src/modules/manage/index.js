@@ -2,6 +2,7 @@
 
 import {DHCPController} from './ng/dhcp.controller';
 import {NTPController} from './ng/ntp.controller';
+import {TimeRangeController} from './ng/timeRange.controller';
 import {ElasticsearchController} from './ng/elasticsearch.controller';
 import {AnalyzerController} from './ng/analyzer.controller';
 import {ChartSettingDialogController} from './ng/chartSettingDialog.controller';
@@ -19,6 +20,7 @@ export default angular
   .module('manage', [])
   .controller('dhcpController', DHCPController)
   .controller('ntpController', NTPController)
+  .controller('timeRangeController', TimeRangeController)
   .controller('elasticsearchController', ElasticsearchController)
   .controller('analyzerController', AnalyzerController)
   .controller('chartSettingDialogCtrl', ChartSettingDialogController)

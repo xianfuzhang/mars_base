@@ -88,6 +88,26 @@ export class manageService {
     ];
   }
 
+  getTimeRangeTableSchema(){
+    return [
+      {
+        'label': 'type',
+        'field': 'type',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': 'start',
+        'field': 'start',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      },
+      {
+        'label': 'end',
+        'field': 'end',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      }
+    ];
+  }
+
   getApplicationTableActionsShow(){
     return {
       'menu': {'enable': false, 'role': 3},

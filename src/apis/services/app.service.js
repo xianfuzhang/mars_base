@@ -97,8 +97,7 @@ export class appService {
               {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
               {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
               {'label': 'QoS', 'url': '/qos', 'role': 3},
-              //  {'label': 'Storm Profile', 'url': '/storm_control'},
-              // {'label': this.translate('MODULE.HEADER.FABRIC.VLAN'), 'url': '/vlan', 'role': 2},
+
             ]
           },
           {
@@ -165,6 +164,7 @@ export class appService {
             'items': [
               {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.NTP'), 'url': '/ntp', 'role': 3},
+              {'label': 'TimeRange', 'url': '/time_range', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.ANALYZER'), 'url': '/analyzer', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO'), 'url': '/system_info', 'role': 3},
@@ -950,6 +950,27 @@ export class appService {
   getVlanIpDeleteUrl(device_id, vlan_id){
     return this.getZoneEndpoint(true) + `/vlan/v1/vlan-config/${device_id}/vlan/${vlan_id}`;
   }
+
+  getTimeRangeUrl(){
+    return this.getZoneEndpoint(true) + '/timerange/v1';
+  }
+
+  getTimeRangeOfDeviceUrl(deviceId){
+    return this.getZoneEndpoint(true) + '/timerange/v1/' + deviceId;
+  }
+
+  getTimeRangeOfDeviceAndNameUrl(deviceId, name){
+    return this.getZoneEndpoint(true) + '/timerange/v1/' + deviceId + '/' + name;
+  }
+
+  getTimeRangeDeleteAbOfDeviceAndNameUrl(deviceId, name){
+    return this.getZoneEndpoint(true) + '/timerange/v1/' + deviceId + '/' + name + '/absolute';
+  }
+
+  getTimeRangeDeletePerOfDeviceAndNameUrl(deviceId, name, time){
+    return this.getZoneEndpoint(true) + '/timerange/v1/' + deviceId + '/' + name + '/periodic/' + time ;
+  }
+
 }
 
 appService.$inject = appService.getDI();

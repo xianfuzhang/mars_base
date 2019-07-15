@@ -452,6 +452,101 @@ export class ManageDataManager{
     return defer.promise;
   }
 
+
+  getTimeRanges(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTimeRangeUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  getTimeRangeByDevice(deviceId){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTimeRangeOfDeviceUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  postTimeRangeByDevice(deviceId, param){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getTimeRangeOfDeviceUrl(deviceId), param).then(
+      (res) => {
+        defer.resolve(res.data);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  getTimeRangeByDeviceAndName(deviceId, name){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTimeRangeOfDeviceAndNameUrl(deviceId, name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteTimeRangeByDeviceAndName(deviceId, name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTimeRangeOfDeviceAndNameUrl(deviceId, name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+
+  deleteTimeRangeAbsolute(deviceId, name){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTimeRangeDeleteAbOfDeviceAndNameUrl(deviceId, name)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteTimeRangePeri(deviceId, name, time){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getTimeRangeDeletePerOfDeviceAndNameUrl(deviceId, name, time)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
 }
 
 ManageDataManager.$inject = ManageDataManager.getDI();

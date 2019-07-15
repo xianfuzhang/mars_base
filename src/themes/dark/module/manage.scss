@@ -287,3 +287,41 @@
 .show-input-filename-modal {
   width: 350px;
 }
+
+
+@include block(timerange) {
+  padding: 32px 0 0 32px;
+
+  @include element(row) {
+    display: flex;
+    height: 38px;
+    //justify-items: center;
+    align-items: flex-end;
+    padding-left: 5%;
+    width:100%;
+
+    .first {
+      font-size: 20px;
+      line-height: 38px;
+      //padding-left: 16px;
+      min-width: 150px;
+    }
+
+    .second {
+      padding-left: 16px;
+    }
+
+    .button{
+      line-height: 38px;
+      padding-left: 16px;
+    }
+  }
+
+  & .mdl-table-field{
+    background: none;
+  }
+  & .mdl-table-field:hover{
+    box-shadow: none;
+  }
+
+}
