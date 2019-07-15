@@ -5,16 +5,16 @@ export class IntentDataManager {
       '$http',
       'appService'
     ];
-	}
-	constructor(...args) {
-		this.di = {};
+  }
+  constructor(...args) {
+    this.di = {};
     IntentDataManager.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
-	}
+  }
 
-	getIntents(params) {
-		let defer = this.di.$q.defer();
+  getIntents(params) {
+    let defer = this.di.$q.defer();
     
     this.di.$http.get(this.di.appService.getIntentsConfigUrl(), {'params': params}).then(
       (res) => {
@@ -25,10 +25,10 @@ export class IntentDataManager {
       }
     );
     return defer.promise;
-	}
+  }
 
-	createIntent(params) {
-		let defer = this.di.$q.defer();
+  createIntent(params) {
+    let defer = this.di.$q.defer();
     
     this.di.$http.post(this.di.appService.getIntentsUrl(), params).then(
       (res) => {
@@ -40,10 +40,10 @@ export class IntentDataManager {
     );
     return defer.promise;
 
-	}
+  }
 
-	deleteIntent(appId, key) {
-		let defer = this.di.$q.defer();
+  deleteIntent(appId, key) {
+    let defer = this.di.$q.defer();
     
     this.di.$http.delete(this.di.appService.getDeleteIntentUrl(appId, key)).then(
       (res) => {
@@ -54,7 +54,7 @@ export class IntentDataManager {
       }
     );
     return defer.promise;
-	}
+  }
 }
 IntentDataManager.$inject = IntentDataManager.getDI();
 IntentDataManager.$$ngIsClass = true;

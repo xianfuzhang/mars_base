@@ -59,10 +59,10 @@ export class DashboardController {
     this.CLUSTERS_CPU_MEMORY_STATISTIC_NS = 'clusters_cpu_memory_statistic_ns';
     let unSubscribers = [];
     let dataModel = {
-    	selectedClusterCpu: [],
-	    selectedClusterMemory: [],
-	    selectedSwitchCpu: [],
-	    selectedSwitchMemory: [],
+      selectedClusterCpu: [],
+      selectedClusterMemory: [],
+      selectedSwitchCpu: [],
+      selectedSwitchMemory: [],
     };
     scope.interfaceTypes = [{
       label: 'Packets_TX',
@@ -297,7 +297,7 @@ export class DashboardController {
       controller : false,
       swt : false,
     };
-	
+  
     this.di.$scope.panelLoading = {
       controller : false,
       swt : false,
@@ -417,7 +417,7 @@ export class DashboardController {
         }, 30 * 1000)
       }
     }
-	
+  
     this.di.$scope.chartSetting = (type) => {
       let chartDataArr = [], selectedData = [];
       let beginTime, endTime, unitTypeOption, stateTypeOption;
@@ -723,7 +723,7 @@ export class DashboardController {
         // DI.$scope.$apply();
       });
     };
-	
+  
     // draw cluster cpu chart: added by yazhou.miao
     let setClusterCPUChartData = () => {
         let dataArr = [];
@@ -1966,39 +1966,39 @@ export class DashboardController {
 
       if(!data) return;
 
-		  let chartData = {datasets:[], labels:[]};
-		  let dataset = {data:[], backgroundColor:[], label: ''};
-		
-		  dataset.data.push(data['buffered_percent'].toFixed(2));
-		  dataset.backgroundColor.push('rgb(244,164,96)');
-		  chartData.labels.push('buffered');
-		
-		  dataset.data.push(data['cached_percent'].toFixed(2));
-		  dataset.backgroundColor.push('rgb(255,228,196)');
-		  chartData.labels.push('cached');
-		
-		  dataset.data.push(data['free_percent'].toFixed(2));
-		  dataset.backgroundColor.push('rgb(144,238,144)');
-		  chartData.labels.push('free');
-		
-		  dataset.data.push(data['slab_recl_percent'].toFixed(2));
-		  dataset.backgroundColor.push('rgb(128,0,128)');
-		  chartData.labels.push('slab_recl');
-		
-		  dataset.data.push(data['slab_unrecl_percent'].toFixed(2));
-		  dataset.backgroundColor.push('rgb(210,105,30)');
-		  chartData.labels.push('slab_unrecl');
-		
-		  dataset.data.push(data['used_percent'].toFixed(2));
-		  dataset.backgroundColor.push('rgb(255,0,0)');
-		  chartData.labels.push('used');
-		
-		  chartData.datasets.push(dataset);
-		
-		  let options = {
-			  title: {
-				  text: title,
-			  },
+      let chartData = {datasets:[], labels:[]};
+      let dataset = {data:[], backgroundColor:[], label: ''};
+    
+      dataset.data.push(data['buffered_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(244,164,96)');
+      chartData.labels.push('buffered');
+    
+      dataset.data.push(data['cached_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(255,228,196)');
+      chartData.labels.push('cached');
+    
+      dataset.data.push(data['free_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(144,238,144)');
+      chartData.labels.push('free');
+    
+      dataset.data.push(data['slab_recl_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(128,0,128)');
+      chartData.labels.push('slab_recl');
+    
+      dataset.data.push(data['slab_unrecl_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(210,105,30)');
+      chartData.labels.push('slab_unrecl');
+    
+      dataset.data.push(data['used_percent'].toFixed(2));
+      dataset.backgroundColor.push('rgb(255,0,0)');
+      chartData.labels.push('used');
+    
+      chartData.datasets.push(dataset);
+    
+      let options = {
+        title: {
+          text: title,
+        },
         tooltips: {
           callbacks: {
             label: function(tooltipItem, data) {
@@ -2006,15 +2006,15 @@ export class DashboardController {
             }
           }
         }
-		  }
-		
-		  pieChartConfig.data = dataset.data;
-		  pieChartConfig.labels = chartData.labels;
-		  pieChartConfig.colors = dataset.backgroundColor;
-		  pieChartConfig.options = options;
+      }
+    
+      pieChartConfig.data = dataset.data;
+      pieChartConfig.labels = chartData.labels;
+      pieChartConfig.colors = dataset.backgroundColor;
+      pieChartConfig.options = options;
 
       DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
-	  }
+    }
 
     let setDiskPieChartData = (evt, data, title) => {
       // initial
@@ -2125,7 +2125,7 @@ export class DashboardController {
 
       DI.$rootScope.$emit('show_chart_tooltip', {data: pieChartConfig, event: evt});
     }
-	  
+    
     let lineChartOnHover = function() {
         return function(event, chart) {
             // 1.element hover event
@@ -2156,51 +2156,51 @@ export class DashboardController {
     }
 
     let lineChartOnZoom = (chartType) => {
-	  	return function(chart, xRange) {
-			  let ticks = chart.data.labels;
-			  let startIndex = xRange.start;
-			  let endIndex = xRange.end;
-			  if(startIndex === endIndex) {
-				  if(endIndex == ticks.length - 1) {
-					  startIndex = endIndex - 1;
-				  } else {
-					  endIndex = startIndex + 1;
-				  }
-			  }
-			
-			  let start = new Date(ticks[startIndex]);
-			  let startTime = start.getTime();
-			  let end = new Date(ticks[endIndex]);
-			  let endTime =  end.getTime();
-			  let step = Math.floor((endTime - startTime) / ((ticks.length - 1) * 1000));
-			  step = step < 30 ? 30 : step > 3600 ? 3600 : step;
-			
-			  switch(chartType) {
-				  case 'cluster-cpu-chart':
-					  scope.dashboardModel.controller.cpu.begin_time = start;
-					  scope.dashboardModel.controller.cpu.end_time = end;
-					  scope.dashboardModel.controller.cpu.step = step;
-				  	break;
-				  case 'cluster-memory-chart':
-					  scope.dashboardModel.controller.memory.begin_time = start;
-					  scope.dashboardModel.controller.memory.end_time = end;
-					  scope.dashboardModel.controller.memory.step = step;
-				  	break;
+      return function(chart, xRange) {
+        let ticks = chart.data.labels;
+        let startIndex = xRange.start;
+        let endIndex = xRange.end;
+        if(startIndex === endIndex) {
+          if(endIndex == ticks.length - 1) {
+            startIndex = endIndex - 1;
+          } else {
+            endIndex = startIndex + 1;
+          }
+        }
+      
+        let start = new Date(ticks[startIndex]);
+        let startTime = start.getTime();
+        let end = new Date(ticks[endIndex]);
+        let endTime =  end.getTime();
+        let step = Math.floor((endTime - startTime) / ((ticks.length - 1) * 1000));
+        step = step < 30 ? 30 : step > 3600 ? 3600 : step;
+      
+        switch(chartType) {
+          case 'cluster-cpu-chart':
+            scope.dashboardModel.controller.cpu.begin_time = start;
+            scope.dashboardModel.controller.cpu.end_time = end;
+            scope.dashboardModel.controller.cpu.step = step;
+            break;
+          case 'cluster-memory-chart':
+            scope.dashboardModel.controller.memory.begin_time = start;
+            scope.dashboardModel.controller.memory.end_time = end;
+            scope.dashboardModel.controller.memory.step = step;
+            break;
           case 'cluster-interface-chart':
             scope.dashboardModel.controller.interface.begin_time = start;
             scope.dashboardModel.controller.interface.end_time = end;
             scope.dashboardModel.controller.interface.step = step;
             break;
-				  case 'switch-cpu-chart':
-					  scope.dashboardModel.cpu.begin_time = start;
-					  scope.dashboardModel.cpu.end_time = end;
-					  scope.dashboardModel.cpu.step = step;
-				  	break;
-				  case 'switch-memory-chart':
-					  scope.dashboardModel.memory.begin_time = start;
-					  scope.dashboardModel.memory.end_time = end;
-					  scope.dashboardModel.memory.step = step;
-				  	break;
+          case 'switch-cpu-chart':
+            scope.dashboardModel.cpu.begin_time = start;
+            scope.dashboardModel.cpu.end_time = end;
+            scope.dashboardModel.cpu.step = step;
+            break;
+          case 'switch-memory-chart':
+            scope.dashboardModel.memory.begin_time = start;
+            scope.dashboardModel.memory.end_time = end;
+            scope.dashboardModel.memory.step = step;
+            break;
           case 'switch-interface-chart':
             scope.dashboardModel.interface.begin_time = start;
             scope.dashboardModel.interface.end_time = end;
@@ -2211,12 +2211,12 @@ export class DashboardController {
             scope.dashboardModel.dropErrorInterface.end_time = end;
             scope.dashboardModel.dropErrorInterface.step = step;
             break;
-			  }
-			  
-			  scope.$apply()
-		  }
-	  }
-	  
+        }
+        
+        scope.$apply()
+      }
+    }
+    
     let convertControllerData =()=>{
       //1. summary
       let controllerSummary = {};
@@ -2272,12 +2272,12 @@ export class DashboardController {
 
       let p_r_s = 'packetsRecvSent';
       let packagesOrder = this.di._.orderBy(waitOrderPortsStatistics, p_r_s, 'desc');
-	    // let packagesOrder = this.di._.filter(waitOrderPortsStatistics, (val) => {
-	    //   return val['packetsRecvSent'] > 0;
-	    // });
+      // let packagesOrder = this.di._.filter(waitOrderPortsStatistics, (val) => {
+      //   return val['packetsRecvSent'] > 0;
+      // });
       packagesOrder.splice(5, packagesOrder.length-5);
       // chartSwtInterface(packagesOrder, 'swtInterfaceRxTxPackages', 'packages');
-	    setInterfaceRxTxChartData(packagesOrder, 'interface-rxtx-packages', 'packages');
+      setInterfaceRxTxChartData(packagesOrder, 'interface-rxtx-packages', 'packages');
 
       /*let b_r_s = 'bytesRecvSent';
       let bytesOrder = this.di._.orderBy(waitOrderPortsStatistics, b_r_s, 'desc');
@@ -2286,12 +2286,12 @@ export class DashboardController {
 
       let p_d = 'packetsDrop';
       let packagesDropOrder = this.di._.orderBy(waitOrderPortsStatistics, p_d, 'desc');
-	    // let packagesDropOrder = this.di._.filter(waitOrderPortsStatistics, (val) => {
-		   //  return val['packetsDrop'] > 0;
-	    // });
+      // let packagesDropOrder = this.di._.filter(waitOrderPortsStatistics, (val) => {
+       //  return val['packetsDrop'] > 0;
+      // });
       packagesDropOrder.splice(5, packagesDropOrder.length-5);
       // chartSwtInterface(packagesDropOrder, 'swtInterfaceRxTxDrops', 'packages', true);
-	    setInterfaceRxTxChartData(packagesDropOrder, 'interface-rxtx-drops', 'packages', true);
+      setInterfaceRxTxChartData(packagesDropOrder, 'interface-rxtx-drops', 'packages', true);
     };
 
     let convertSwitchData =()=>{
@@ -2411,9 +2411,9 @@ export class DashboardController {
           default:
             dataArr = dataModel.configDevices;
         }
-		
-		  return dataArr;
-	  }
+    
+      return dataArr;
+    }
 
     let getSwtAndPortName = (deviceId, portNo) =>{
       return getPortName(deviceId, portNo) + '(' +  getSwtName(deviceId) +')';
@@ -2429,7 +2429,7 @@ export class DashboardController {
       // if(port)
       return port && port['annotations']['portName'] || '';
     };
-	
+  
     let getISODate = (date) => {
         return date.getUTCFullYear() +
             '-' + pad( date.getUTCMonth() + 1 ) +
@@ -2439,40 +2439,40 @@ export class DashboardController {
             ':00'  +
             'Z';
     }
-	
+  
     let formatLocalTime = (time) => {
-		  let _fillInt= (num, count)=>{
-			  if(!count){
-				  count = 2;
-			  }
-			  let numStr = num + '';
-			  if(numStr.length !== count) {
-				  return '0'.repeat(count - numStr.length) + numStr
-			  } else
-				  return num
-		  };
-		
-		  let d = new Date(time);
-		  let res = _fillInt(d.getHours()) +  ':' +
-			  _fillInt(d.getMinutes()) + ':' +
-			  _fillInt(d.getSeconds()) + ' ' +
-			  _fillInt(d.getDate()) + '/' +
-			  _fillInt(d.getMonth() + 1)
-		
-		  return res
-	  }
-	  
+      let _fillInt= (num, count)=>{
+        if(!count){
+          count = 2;
+        }
+        let numStr = num + '';
+        if(numStr.length !== count) {
+          return '0'.repeat(count - numStr.length) + numStr
+        } else
+          return num
+      };
+    
+      let d = new Date(time);
+      let res = _fillInt(d.getHours()) +  ':' +
+        _fillInt(d.getMinutes()) + ':' +
+        _fillInt(d.getSeconds()) + ' ' +
+        _fillInt(d.getDate()) + '/' +
+        _fillInt(d.getMonth() + 1)
+    
+      return res
+    }
+    
     let pad = (number) => {
         if ( number < 10 ) {
             return '0' + number;
         }
         return number;
     }
-	  
+    
     this.init_application_license().then(()=>{
       init();
     });
-	
+  
     let clusterCpuTimeHasChanged = false;
     unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.controller.cpu.begin_time', 'dashboardModel.controller.cpu.end_time', 'dashboardModel.controller.cpu.selectedData'], () => {
       if(!clusterCpuTimeHasChanged) {
@@ -2496,7 +2496,7 @@ export class DashboardController {
           clusterMemoryTimeHasChanged = true;
           return;
       }
-		
+    
       this.getClustersMemoryAnalyzer(getFilteredDataModel('controller-memory')).then(() => {
         // memory analyzer
         if(scope.dashboardModel.controller.memory.isRealtime) {
@@ -2533,7 +2533,7 @@ export class DashboardController {
 
       setClusterInterfaceChartData();
     },true));
-	
+  
     let cpuTimeHasChanged = false;
     unSubscribers.push(this.di.$scope.$watchGroup(['dashboardModel.cpu.begin_time', 'dashboardModel.cpu.end_time', 'dashboardModel.cpu.selectedData'], () => {
       if(!cpuTimeHasChanged) {
@@ -2557,7 +2557,7 @@ export class DashboardController {
           memoryTimeHasChanged = true;
         return;
       }
-		
+    
       this.getDevicesMemoryAnalyzer(getFilteredDataModel('device-memory')).then(() => {
         //memory analyzer
         if(scope.dashboardModel.memory.isRealtime) {

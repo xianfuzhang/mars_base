@@ -92,9 +92,9 @@ export class SegmentController {
   
     this.unsubscribers.push(this.di.$rootScope.$on('segment-list-refresh',(e, successful)=>{
       if(successful === false) {
-	      this.di.notificationService.renderWarning(this.scope, this.translate('MODULES.LOGICAL.SEGMENT.CREATE.FAIL'));
+        this.di.notificationService.renderWarning(this.scope, this.translate('MODULES.LOGICAL.SEGMENT.CREATE.FAIL'));
       } else {
-	      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.LOGICAL.SEGMENT.CREATE.SUCCESS'));
+        this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.LOGICAL.SEGMENT.CREATE.SUCCESS'));
       }
       
       scope.segmentModel.api.queryUpdate();
@@ -232,17 +232,17 @@ export class SegmentController {
         'field': 'segment_value',
         'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"15%"}
       },
-	    {
-		    'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.TENANT_NAME'),
-		    'field': 'tenant_name',
-		    'type': 'clickabletext',
-		    'layout': {'visible': true, 'sortable': true, 'fixed': true, width:"15%"}
-	    },
-	    {
-		    'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.TENANT_TYPE'),
-		    'field': 'tenant_type',
-		    'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"15%"}
-	    },
+      {
+        'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.TENANT_NAME'),
+        'field': 'tenant_name',
+        'type': 'clickabletext',
+        'layout': {'visible': true, 'sortable': true, 'fixed': true, width:"15%"}
+      },
+      {
+        'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.TENANT_TYPE'),
+        'field': 'tenant_type',
+        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"15%"}
+      },
       {
         'label': this.translate('MODULES.LOGICAL.SEGMENT.TABLE.IP_ADDRESS'),
         'field': 'ip_address',

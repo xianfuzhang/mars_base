@@ -1,17 +1,17 @@
 export class CreateEndpointController {
-	static getDI() {
-		return [
-			'$scope',
+  static getDI() {
+    return [
+      '$scope',
       '$rootScope',
       '$filter',
       '_',
       '$modalInstance',
       'dataModel',
       'regexService'
-		];
-	}
-	constructor(...args){
-		this.di = {};
+    ];
+  }
+  constructor(...args){
+    this.di = {};
     CreateEndpointController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -203,7 +203,7 @@ export class CreateEndpointController {
       });
       this.scope.canceled = true;
     };
-	}
+  }
 
   validateMACIPLocation() {
     let ips = this.di._.filter(this.scope.addedReceiverModel, {'type': 'ip'});

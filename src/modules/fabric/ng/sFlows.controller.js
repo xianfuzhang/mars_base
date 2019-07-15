@@ -1,22 +1,22 @@
 export class sFlowsController {
   static getDI() {
-  	return [
-  		'$scope',
+    return [
+      '$scope',
       '$rootScope',
-  		'$q',
+      '$q',
       '$filter',
       'roleService',
       '_',
-  		'deviceDetailService',
-  		'dialogService',
+      'deviceDetailService',
+      'dialogService',
       'notificationService',
       'deviceDataManager',
       'modalManager',
-  		'tableProviderFactory'
-  	];
+      'tableProviderFactory'
+    ];
   }
   constructor(...args){
-  	this.di = {};
+    this.di = {};
     sFlowsController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -29,14 +29,14 @@ export class sFlowsController {
     };
     this.scope.devices = [];
     this.scope.model = {
-    	'actionsShow':  this.di.deviceDetailService.getSFlowActionsShow(),
-    	'rowActions': this.di.deviceDetailService.getSFlowTableRowActions(),
-    	'provider': null
+      'actionsShow':  this.di.deviceDetailService.getSFlowActionsShow(),
+      'rowActions': this.di.deviceDetailService.getSFlowTableRowActions(),
+      'provider': null
     };
     this.scope.role = this.di.roleService.getRole();
 
     this.scope.onAPIReady = ($api) => {
-    	this.scope.model.API = $api;
+      this.scope.model.API = $api;
     };
 
     this.scope.addFlow = () => {
@@ -73,7 +73,7 @@ export class sFlowsController {
     };
 
     this.scope.batchRemove = ($value) => {
-    	if (!$value.length) return;
+      if (!$value.length) return;
       this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCH.FLOW.DIALOG.CONTENT.BATCH_DELETE_FLOWS'))
       .then(() =>{
         this.batchDeleteFlows($value);
@@ -106,7 +106,7 @@ export class sFlowsController {
     };
 
     this.scope.onTableRowClick = ($event) => {
-    	this.scope.model.API.setSelectedRow($event.$data.id);
+      this.scope.model.API.setSelectedRow($event.$data.id);
     };
 
     this.init();
@@ -124,7 +124,7 @@ export class sFlowsController {
   }
 
   init() {
-  	this.scope.model.provider = this.di.tableProviderFactory.createProvider({
+    this.scope.model.provider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
@@ -154,9 +154,9 @@ export class sFlowsController {
   }
 
   getEntities(data) {
-  	let entities = [];
+    let entities = [];
 
-  	data.forEach((item) => {
+    data.forEach((item) => {
       let obj = {}, device = this.scope.devices.find(device => item.device_id === device.id);
       obj.id = item.device_id + ':' + item.collector_ip;
       obj.device = device && device.name || item.device_id;

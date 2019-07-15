@@ -5,14 +5,14 @@ router.get('/config', (req, res) => {
   return res.json({intents: cloudModel.intents});
 });
 router.post('/', function (req, res) {
-	if(cloudLib.addIntent(req.body)) {
+  if(cloudLib.addIntent(req.body)) {
     return res.status(200).json('Success to add new intent!');
   } else {
     return res.status(400).json('Failed to add new intent!');
   }
 });
 router.delete('/:appId/:key', function(req, res) {
-	if (!req.params.appId) {
+  if (!req.params.appId) {
     return res.status(404).json('App Id is required!');
   }
   if (!req.params.key) {

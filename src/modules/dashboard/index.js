@@ -8,5 +8,5 @@ export default angular
   .module('dashboard', [])
   .controller('DashboardController', DashboardController)
   .controller('dateRangeConfigurationCtrl', DateRangeConfigurationController)
-	.controller('showChartSettingCtrl', ShowChartSettingController)
+  .controller('showChartSettingCtrl', ShowChartSettingController)
   .name;

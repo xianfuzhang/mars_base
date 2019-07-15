@@ -929,7 +929,7 @@ export class ElasticsearchController {
               defer.reject({})
             })
           } else {
-	          defer.reject({})
+            defer.reject({})
           }
         }
         else{

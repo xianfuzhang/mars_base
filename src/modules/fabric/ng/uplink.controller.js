@@ -1,22 +1,22 @@
 export class UpLinkController {
   static getDI() {
-  	return [
-  		'$scope',
+    return [
+      '$scope',
       '$rootScope',
-  		'$q',
+      '$q',
       '$filter',
       'roleService',
       '_',
-  		'deviceService',
-  		'dialogService',
+      'deviceService',
+      'dialogService',
       'notificationService',
-  		'intentDataManager',
+      'intentDataManager',
       'deviceDataManager',
-  		'tableProviderFactory'
-  	];
+      'tableProviderFactory'
+    ];
   }
   constructor(...args){
-  	this.di = {};
+    this.di = {};
     UpLinkController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -25,19 +25,19 @@ export class UpLinkController {
     this.translate = this.di.$filter('translate');
     scope.devices = [];
     scope.model = {
-    	'actionsShow':  this.di.deviceService.getUpLinkActionsShow(),
-    	'rowActions': this.di.deviceService.getUpLinkTableRowActions(),
-    	'provider': null
+      'actionsShow':  this.di.deviceService.getUpLinkActionsShow(),
+      'rowActions': this.di.deviceService.getUpLinkTableRowActions(),
+      'provider': null
     };
     scope.role = this.di.roleService.getRole();
 
     scope.onAPIReady = ($api) => {
-    	scope.model.API = $api;
+      scope.model.API = $api;
     };
 
 
     scope.batchRemove = ($value) => {
-    	if (!$value.length) return;
+      if (!$value.length) return;
       this.di.dialogService.createDialog('warning', this.translate('MODULES.FABRIC.UPLINK.DIALOG.BATCH.DELETE.WARNING'))
       .then(() =>{
           this.batchDeleteUpLinks($value);
@@ -69,7 +69,7 @@ export class UpLinkController {
     };
 
     scope.onTableRowClick = ($event) => {
-    	scope.model.API.setSelectedRow($event.$data.id);
+      scope.model.API.setSelectedRow($event.$data.id);
     };
 
     let init = () => {
@@ -130,9 +130,9 @@ export class UpLinkController {
   }
 
   getEntities(intents) {
-  	let entities = [];
+    let entities = [];
 
-  	intents.forEach((item) => {
+    intents.forEach((item) => {
       let obj = {};
       obj.segment_name = item.segment_name;
       obj.device_id = this.getDeviceName(item.device_id);
