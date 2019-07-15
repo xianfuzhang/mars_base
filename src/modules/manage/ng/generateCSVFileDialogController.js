@@ -1,38 +1,38 @@
 export class  GenerateCSVFileDialogController {
-	static getDI() {
-		return [
-			'$scope',
-			'$modalInstance',
-			'$q',
-			'$filter',
-			'dataModel',
-			'_',
-			'dateService',
-			'appService',
-			'manageDataManager'
-		];
-	}
+  static getDI() {
+    return [
+      '$scope',
+      '$modalInstance',
+      '$q',
+      '$filter',
+      'dataModel',
+      '_',
+      'dateService',
+      'appService',
+      'manageDataManager'
+    ];
+  }
 
-	constructor(...args) {
-		this.di = {};
-		GenerateCSVFileDialogController.getDI().forEach((value, index) => {
-			this.di[value] = args[index];
-		});
-		
+  constructor(...args) {
+    this.di = {};
+    GenerateCSVFileDialogController.getDI().forEach((value, index) => {
+      this.di[value] = args[index];
+    });
+    
     const defaultQuery = {
-			"query": {
-				"match_all": {}
-			}
+      "query": {
+        "match_all": {}
+      }
     }
     
     this.scope = this.di.$scope;
     this.scope.globalInvalid = false;
     this.scope.errMsg = '';
     this.scope.chartModel = {
-    	option: 'indice',
+      option: 'indice',
       query: this.di._.cloneDeep(defaultQuery),
-	    indice: this.di.dataModel.indiceName,
-	    size: this.di.dataModel.indiceSize
+      indice: this.di.dataModel.indiceName,
+      size: this.di.dataModel.indiceSize
     }
     
     this.scope.title = this.di.$filter('translate')("MODULES.MANAGE.ELASTICSEARCH.BUTTON.DOWNLOAD") + ' ' + this.di.dataModel.indiceName;
@@ -53,30 +53,30 @@ export class  GenerateCSVFileDialogController {
       onChangeText: onChangeText,
     }
     
-		this.scope.cancel = (event) => {
-			this.di.$modalInstance.dismiss({
+    this.scope.cancel = (event) => {
+      this.di.$modalInstance.dismiss({
         canceled: true
       });
       event.stopPropagation();
-		};
-		
+    };
+    
   
-		this.scope.generate = (event) => {
+    this.scope.generate = (event) => {
       let query = this.di._.isEqual(this.scope.chartModel.query, defaultQuery) ? false : this.scope.chartModel.query;
       
       this.di.manageDataManager.generateElasticsearchCSVFile(this.scope.chartModel.indice, query)
-				.then((res) => {
+        .then((res) => {
           this.di.$modalInstance.close({
             canceled: false,
             data: {}
           });
-				}, (error) => {
+        }, (error) => {
           this.scope.errMsg = JSON.stringify(error);
-				})
-			
- 			event.stopPropagation();
-		};
-	}
+        })
+      
+       event.stopPropagation();
+    };
+  }
   
 }
 

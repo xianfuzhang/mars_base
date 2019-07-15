@@ -747,9 +747,9 @@ export class DeviceDetailController {
             data: this.scope.detailModel.entities,
             count: this.scope.detailModel.total
           });
-	
+  
           // select the port
-	        this.selectEntity();
+          this.selectEntity();
         });
         return defer.promise;
       },
@@ -773,9 +773,9 @@ export class DeviceDetailController {
         return tab.type === 'port';
       })
     } else if(queryObj.link_port) {
-	    selectedTab = this.di._.find(tabs, (tab) => {
-		    return tab.type === 'link';
-	    })
+      selectedTab = this.di._.find(tabs, (tab) => {
+        return tab.type === 'link';
+      })
     }
     
     selectedTab = selectedTab || this.scope.tabs[0];
@@ -2502,18 +2502,18 @@ export class DeviceDetailController {
 
     return defer.promise;
   }
-	
-	/**
+  
+  /**
    * select the row data depending on data type
-	 */
-	selectEntity() {
-	  let device_id = this.di.$routeParams['deviceId'];
-	  let query = this.di.$location.search();
-	  
-	  if(query.port !== undefined) {
-		  this.scope.detailModel.api.setSelectedRow(device_id + '_' + query.port);
+   */
+  selectEntity() {
+    let device_id = this.di.$routeParams['deviceId'];
+    let query = this.di.$location.search();
+    
+    if(query.port !== undefined) {
+      this.scope.detailModel.api.setSelectedRow(device_id + '_' + query.port);
     } else if(query.link_port !== undefined) {
-		  this.scope.detailModel.api.setSelectedRow(device_id + '_' + query.link_port);
+      this.scope.detailModel.api.setSelectedRow(device_id + '_' + query.link_port);
     }
   
   }

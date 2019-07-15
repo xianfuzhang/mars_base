@@ -49,20 +49,6 @@ export class ConfigurationHistoryController {
       this.scope.configurationHistoryModel.api.queryUpdate();
     }
   
-    this.scope.downloadFile = () => {
-      if (this.scope.historyFileSelected.value == '') return false;
-	
-      this.di.$window.location.href = this.di.appService.getConfigurationHistoryFilesUrl() + `/${this.scope.historyFileSelected.value}`;
-	
-	    // let DI = this.di;
-	    // DI.$rootScope.$emit('start_loading');
-	    // DI.appService.downloadFileWithAuth(url, this.scope.historyFileSelected.value).then(() => {
-		  //   DI.$rootScope.$emit('stop_loading');
-	    // }, () => {
-		  //   DI.$rootScope.$emit('stop_loading');
-	    // });
-    }
-    
     this.scope.onAPIReady = ($api) => {
       this.scope.configurationHistoryModel.api = $api;
     };
@@ -203,7 +189,7 @@ export class ConfigurationHistoryController {
       {
         'label': this.translate('MODULES.CONFIGURATION.HISTORY.COLUMN.TYPE'),
         'field': 'type',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true, width:"20%"}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true, width:"20%"}
       },
       // {
       //   'label': this.translate('MODUELS.CONFIGURATION.HISTORY.COLUMN.CLASS'),

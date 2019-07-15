@@ -32,5 +32,5 @@ export default angular
   .controller('systemInfoController', SystemInfoController)
   .controller('applicationController', ApplicationController)
   .controller('applicationEstablishController', ApplicationEstablishController)
-	.controller('licenseController', LicenseController)
+  .controller('licenseController', LicenseController)
   .name;

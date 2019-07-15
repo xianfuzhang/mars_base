@@ -661,7 +661,7 @@
   text-align: center;
 }
 
-.vlan-table-field {
+.vlan-edit-field {
   position: relative;
   display: inline-block;
   width: 66%;
@@ -674,11 +674,11 @@
   overflow: hidden;
 }
 
-//.vlan-table-field:hover {
+//.vlan-edit-field:hover {
 //  box-shadow: 2px 2px 5px 3px rgba(76, 76, 87, 0.6), -2px -2px 10px 2px rgba(76, 76, 87, 0.6);
 //}
 
-.vlan-table-field .header {
+.vlan-edit-field .header {
   display: flex;
   position: absolute;
   top: 0;
@@ -688,16 +688,16 @@
   background: #3a3a3a;
 }
 
-.vlan-table-field .header label {
+.vlan-edit-field .header label {
   color: #d8d9da;
 }
 
-.vlan-table-field .header .mode_type {
+.vlan-edit-field .header .mode_type {
   width: 300px;
   padding: 0 20px;
 }
 
-.vlan-table-field .header .operation_group {
+.vlan-edit-field .header .operation_group {
   display: flex;
   width: 80%;
   height: 48px;
@@ -705,7 +705,7 @@
   justify-content: space-evenly;
 }
 
-.vlan-table-field .content {
+.vlan-edit-field .content {
   position: relative;
   height: calc(100% - 100px);
   margin-top: 60px;
@@ -713,37 +713,35 @@
   overflow: auto;
 }
 
-.vlan-table-field .content .edit-options {
-  position: absolute;
-  left: 400px;
-  top: 15px;
+.vlan-edit-field .content .edit-options {
   display: flex;
   align-items:center;
-  justify-content: center;
+  margin: 5px 5%;
+  height: 40px;
 }
 
-.vlan-table-field .content .add-options {
+.vlan-edit-field .content .add-options {
   display: flex;
   align-items:center;
   justify-content: center;
   height: 65px;
 }
 
-.vlan-table-field .content .add-options .title {
+.vlan-edit-field .content .add-options .title {
   font-weight: bold;
   padding: 0 10px;
 }
 
-.vlan-table-field .content .add-options .input-item {
+.vlan-edit-field .content .add-options .input-item {
   width:120px;
   margin-right:10px;
 }
 
-.vlan-table-field .content label {
+.vlan-edit-field .content label {
   color: #d8d9da;
 }
 
-.vlan-table-field .content .device {
+.vlan-edit-field .content .device {
   display:flex;
   margin: 10px 0;
   align-items:center;
@@ -751,7 +749,7 @@
   height: 80px;
 }
 
-.vlan-table-field .content .device .name {
+.vlan-edit-field .content .device .name {
   width: 80px;
   font-size: 15px;
   font-weight:bold;
@@ -759,9 +757,17 @@
   overflow: hidden;
 }
 
-.vlan-table-field .content .device .batch-ports {
+.vlan-edit-field .content .device .batch-ports {
   width: 150px;
   margin-left: 30px;
+}
+
+.vlan-edit-field .mdl-table-field {
+  background:none !important;
+}
+
+.vlan-edit-field .mdl-table-field:hover {
+  box-shadow: none !important;
 }
 
 .create-vlan-dialog-modal {
@@ -782,12 +788,11 @@
 .create-vlan-dialog-modal .column-manipulation-field__item .item{
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 
 .create-vlan-dialog-modal .column-manipulation-field__item .item .title{
-  width: 70px;
   margin-top: 5px;
   margin-right: 10px;
   text-align: left;

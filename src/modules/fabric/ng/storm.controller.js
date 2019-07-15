@@ -1,22 +1,22 @@
 export class StormController {
   static getDI() {
-  	return [
-  		'$scope',
+    return [
+      '$scope',
       '$rootScope',
-  		'$q',
+      '$q',
       '$filter',
       'roleService',
       '_',
-  		'deviceService',
-  		'dialogService',
+      'deviceService',
+      'dialogService',
       'notificationService',
-  		'intentDataManager',
+      'intentDataManager',
       'deviceDataManager',
-  		'tableProviderFactory'
-  	];
+      'tableProviderFactory'
+    ];
   }
   constructor(...args){
-  	this.di = {};
+    this.di = {};
     StormController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -25,19 +25,19 @@ export class StormController {
     this.translate = this.di.$filter('translate');
     scope.devices = [];
     scope.model = {
-    	'actionsShow':  this.di.deviceService.getStormActionsShow(),
-    	'rowActions': this.di.deviceService.getStormTableRowActions(),
-    	'provider': null
+      'actionsShow':  this.di.deviceService.getStormActionsShow(),
+      'rowActions': this.di.deviceService.getStormTableRowActions(),
+      'provider': null
     };
     scope.role = this.di.roleService.getRole();
 
     scope.onAPIReady = ($api) => {
-    	scope.model.API = $api;
+      scope.model.API = $api;
     };
 
 
     scope.batchRemove = ($value) => {
-    	if (!$value.length) return;
+      if (!$value.length) return;
       this.di.dialogService.createDialog('warning', this.translate('MODULES.FABRIC.STORM.DIALOG.BATCH.DELETE.WARNING'))
       .then(() =>{
           this.batchDeleteStorms($value);
@@ -71,7 +71,7 @@ export class StormController {
     };
 
     scope.onTableRowClick = ($event) => {
-    	scope.model.API.setSelectedRow($event.$data.device_name);
+      scope.model.API.setSelectedRow($event.$data.device_name);
     };
 
     let init = () => {
@@ -128,7 +128,7 @@ export class StormController {
   }
 
   getEntities(storms) {
-  	let entities = [];
+    let entities = [];
 
     storms.forEach((item) => {
       let keys = this.di._.keys(item);

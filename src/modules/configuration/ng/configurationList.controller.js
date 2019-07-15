@@ -9,6 +9,7 @@ export class ConfigurationListController {
       '$http',
       '$filter',
       '$q',
+      '$window',
       'appService',
       'dialogService',
       'configurationDataManager'
@@ -43,6 +44,7 @@ export class ConfigurationListController {
     scope.checkDisLab = {id: 'check_edit_config', label: this.translate('MODULES.CONFIGURATION.OPTION.START_CHECK')};
     // scope.fileNameSelectedDisLab = {hint: this.translate('MODULES.CONFIGURATION.FILENAME'),options:[]};
     scope.fileNameSelectedDisLab = {options:[]};
+    scope.downloadBtnDisable = true;
     scope.saveBtnLabel = this.translate('MODULES.CONFIGURATION.OPTION.UPDATE');
     scope.broseLabel = {id: 'show_radio', label: this.translate('MODUELS.CONFIGURATION.BROWSE'), name: 'mode', value: 'show'};
     scope.editLabel = {id: 'edit_radio', label: this.translate('MODUELS.CONFIGURATION.EDIT'), name: 'mode', value: 'edit'};
@@ -118,6 +120,12 @@ export class ConfigurationListController {
           // error
         })
     };
+
+    scope.downloadFile = () => {
+      if (scope.configurationListModel.fileNameSelected.value == '') return false;
+
+      this.di.$window.location.href = this.di.appService.getConfigurationHistoryFilesUrl() + `/${scope.configurationListModel.fileNameSelected.value}`;
+    }
 
     let saveConfiguration = (filename) => {
       let config = scope.configurationListModel.configurationShow;
@@ -254,6 +262,12 @@ export class ConfigurationListController {
         scope.options.mode = 'view';
         scope.configurationListModel.saveBtnInvalid = false;
         getConfigurationByName(newValue.value);
+
+        if(newValue.value == 'default' || newValue.value == DEFAULT_FILENAME) {
+          scope.downloadBtnDisable = true;
+        } else {
+          scope.downloadBtnDisable = false;
+        }
       }
     }));
   

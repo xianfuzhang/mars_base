@@ -1,17 +1,17 @@
 export class MonitorEstablishController {
-	static getDI() {
-		return [
-			'$scope',
+  static getDI() {
+    return [
+      '$scope',
       '$rootScope',
       '$filter',
       '$timeout',
       '_',
       'deviceDataManager',
       'notificationService'
-		];
-	}
-	constructor(...args){
-		this.di = {};
+    ];
+  }
+  constructor(...args){
+    this.di = {};
     MonitorEstablishController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -242,7 +242,7 @@ export class MonitorEstablishController {
         cb();
       })
     });
-	}
+  }
 }
 MonitorEstablishController.$inject = MonitorEstablishController.getDI();
 MonitorEstablishController.$$ngIsClass = true;

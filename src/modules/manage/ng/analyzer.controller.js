@@ -1233,7 +1233,7 @@ export class AnalyzerController {
               defer.reject({})
             })
           } else {
-	          defer.reject({})
+            defer.reject({})
           }
         }
         else{

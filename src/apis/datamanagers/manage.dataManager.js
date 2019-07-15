@@ -415,7 +415,7 @@ export class ManageDataManager{
     );
     return defer.promise;
   }
-	
+  
   getLicense(){
     let defer = this.di.$q.defer();
     this.di.$http.get(this.di.appService.getLicenseUrl()).then(

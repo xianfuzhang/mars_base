@@ -301,13 +301,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
-		.when('/license', {
-			template: require('./modules/manage/template/license.html'),
-			controller: 'licenseController',
-			resolve: {
-				loggedin: checkLoggedIn
-			}
-		})
+    .when('/license', {
+      template: require('./modules/manage/template/license.html'),
+      controller: 'licenseController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/analyzer', {
       template: require('./modules/manage/template/analyzer.html'),
       controller: 'analyzerController',
