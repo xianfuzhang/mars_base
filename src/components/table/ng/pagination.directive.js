@@ -58,7 +58,7 @@ export class tablePagination {
           scope._queryUpdate(scope._getTableParams());
         }
         else {
-          scope.tableModel.filteredData = scope._clientDataPagination();
+          scope._clientDataPagination();
           scope.tableModel.filteredData.forEach((item) => {
             item.isChecked = false;
           });
