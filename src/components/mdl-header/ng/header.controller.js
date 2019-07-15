@@ -314,19 +314,37 @@ export class headerController{
         //   if (logicalIndex > -1) origins.splice(logicalIndex , 1);
         // }
 
-        for (let i = 0, j = origins.length; i < j; i++) {
-          for (let x = origins[i].items.length - 1; x >= 0; x--) {
-            let item = origins[i].items[x],
+        for (let i = 0, j = this.scope.menus.groups.length; i < j; i++) {
+          
+          let needDeletes = [];
+          for (let x = 0, y = this.scope.menus.groups[i].items.length - 1; x <= y; x++) {
+            let item = this.scope.menus.groups[i].items[x],
                 state = true;
             if (menuMapping[item.url]) {
               for(let m = 0, n = menuMapping[item.url].length; m < n; m++) {
-                state = state && apps[menuMapping[item.url][m]] ? apps[menuMapping[item.url][m]] !== 'ACTIVE' ? true : false : true;
+                if(apps[menuMapping[item.url][m]]){
+                  if(apps[menuMapping[item.url][m]] !== 'ACTIVE'){
+                    state = false;
+                    break;
+                  }
+                } 
+                else {
+                  state = false;
+                  break;
+                }
               }
             }
             if (!state) {
-              origins[i]['items'].splice(x, 1);
+              needDeletes.push(item['url'])
             }
           }
+          if(needDeletes.length > 0){
+            origins[i]['items'] = origins[i]['items'].filter( item =>{
+              return needDeletes.indexOf(item['url']) === -1;
+            })
+          }
+      
+
         }
         for (let i = origins.length - 1; i >= 0; i--) {
           if (origins[i]['items'].length === 0) {
