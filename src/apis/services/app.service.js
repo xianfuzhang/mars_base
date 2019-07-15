@@ -279,35 +279,40 @@ export class appService {
     ]
   }
 
- /* updateMenuTranslation() {
-    this.CONST.HEADER.menu[0].label = this.translate('MODULE.HEADER.FABRIC');
-    this.CONST.HEADER.menu[0].items[0].label = this.translate('MODULE.HEADER.FABRIC.SUMMARY');
-    this.CONST.HEADER.menu[0].items[1].label = this.translate('MODULE.HEADER.FABRIC.DEVICE');
-    this.CONST.HEADER.menu[0].items[2].label = this.translate('MODULE.HEADER.FABRIC.ENDPOINTS');
-    this.CONST.HEADER.menu[0].items[3].label = this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT');
-    this.CONST.HEADER.menu[0].items[7].label = this.translate('MODULE.HEADER.FABRIC.STORM');
-    this.CONST.HEADER.menu[0].items[8].label = this.translate('MODULE.HEADER.FABRIC.MONITOR');
-    this.CONST.HEADER.menu[1].label = this.translate('MODULE.HEADER.LOGICAL');
-    this.CONST.HEADER.menu[2].label = this.translate('MODULE.HEADER.ALERT');
-    this.CONST.HEADER.menu[2].items[0].label = this.translate('MODULE.HEADER.ALERT.ALERT');
-    this.CONST.HEADER.menu[2].items[1].label = this.translate('MODULE.HEADER.ALERT.HEALTHYCHECK');
-    this.CONST.HEADER.menu[2].items[2].label = this.translate('MODULE.HEADER.ALERT.INFORM');
-    this.CONST.HEADER.menu[3].label = this.translate('MODULE.HEADER.CONFIG');
-    this.CONST.HEADER.menu[3].items[0].label = this.translate('MODULE.HEADER.CONFIG.CONFIGURATION');
-    this.CONST.HEADER.menu[3].items[1].label = this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY');
-    this.CONST.HEADER.menu[4].label = this.translate('MODULE.HEADER.LOG');
-    this.CONST.HEADER.menu[4].items[0].label = this.translate('MODULE.LOG.PAGE.TITLE');
-    this.CONST.HEADER.menu[5].label = this.translate('MODULE.HEADER.ACCOUNT');
-    this.CONST.HEADER.menu[5].items[0].label = this.translate('MODULE.HEADER.ACCOUNT.ACCOUNT_MANAGER');
-    this.CONST.HEADER.menu[6].label = this.translate('MODULE.HEADER.MANAGE');
-    this.CONST.HEADER.menu[6].items[0].label = this.translate('MODULE.HEADER.MANAGE.DHCP');
-    this.CONST.HEADER.menu[6].items[1].label = this.translate('MODULE.HEADER.MANAGE.NTP');
-    this.CONST.HEADER.menu[6].items[2].label = this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH');
-    this.CONST.HEADER.menu[6].items[3].label = this.translate('MODULE.HEADER.MANAGE.ANALYZER');
-    this.CONST.HEADER.menu[6].items[4].label = this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO');
-    this.CONST.HEADER.menu[6].items[5].label = this.translate('MODULE.HEADER.MANAGE.APPLICATION');
-    this.CONST.HEADER.menu[6].items[6].label = this.translate('MODULE.HEADER.MANAGE.LICENSE');
-  }*/
+  getMenuAppMapping() {
+    return {
+      '/fabric_summary': ['com.nocsys.healthycheck'],
+      '/hosts': ['org.onosproject.hostprovider'],
+      '/logical_port': ['com.nocsys.logicalport'],
+      '/uplinks': ['com.nocsys.topology'],
+      '/sflow': ['com.nocsys.sflow'],
+      '/monitor': ['com.nocsys.monitor'],
+      '/host_segment': ['com.nocsys.topologyl3'],
+      '/dhcp_relay': ['org.onosproject.dhcprelay'],
+      '/qos': ['com.nocsys.qos'],
+      '/lbd': ['com.nocsys.lbd'],
+      '/vlan': ['com.nocsys.vlanmgmt'],
+      '/vlan_dynamic': ['com.nocsys.vlanmgmt'],
+      '/vlan_guest': ['com.nocsys.vlanmgmt'],
+      '/vlan_ip': ['com.nocsys.vlanmgmt'],
+      '/tenant': ['com.nocsys.tenant'],
+      '/segment': ['com.nocsys.tenant'],
+      '/endpoints': ['com.nocsys.tenant', 'com.nocsys.endpoint'],
+      '/egp': ['com.nocsys.tenant', 'com.nocsys.egp'],
+      '/alert': ['com.nocsys.alert', 'com.nocsys.healthycheck'],
+      '/healthycheck': ['com.nocsys.alert', 'com.nocsys.healthycheck'],
+      '/inform': ['com.nocsys.alert', 'com.nocsys.healthycheck'],
+      '/configuration_list': ['com.nocsys.utility'],
+      '/configuration_history': ['com.nocsys.utility'],
+      '/log': ['com.nocsys.utility'],
+      '/account_manage': ['com.nocsys.useraccount'],
+      '/dhcp': ['com.nocsys.dhcpv6server', 'com.nocsys.dhcpserver'],
+      '/ntp': ['com.nocsys.ntpserver'],
+      '/elasticsearch': ['com.nocsys.utility'],
+      '/analyzer': ['com.nocsys.analyzer'],
+      '/system_info': ['com.nocsys.utility'],
+    };
+  }
 
   getZoneEndpoint(isComponent, isAuth) {
     let endpoint;
