@@ -1,7 +1,7 @@
 export class CreateHostController {
-	static getDI() {
-		return [
-			'$scope',
+  static getDI() {
+    return [
+      '$scope',
       '$rootScope',
       '$filter',
       '_',
@@ -9,10 +9,10 @@ export class CreateHostController {
       'dataModel',
       'appService',
       'regexService'
-		];
-	}
-	constructor(...args){
-		this.di = {};
+    ];
+  }
+  constructor(...args){
+    this.di = {};
     CreateHostController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -173,7 +173,7 @@ export class CreateHostController {
       });
       this.scope.canceled = true;
     };
-	}
+  }
 
   validateIPLocation() {
     let ips = this.di._.filter(this.scope.addedReceiverModel, {'type': 'ip'});

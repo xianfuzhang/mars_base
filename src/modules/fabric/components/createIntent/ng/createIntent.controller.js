@@ -1,17 +1,17 @@
 export class CreateIntentController {
-	static getDI() {
-		return [
-			'$scope',
+  static getDI() {
+    return [
+      '$scope',
       '$rootScope',
       '$filter',
       '_',
       'intentDataManager',
       '$modalInstance',
       'dataModel'
-		];
-	}
-	constructor(...args){
-		this.di = {};
+    ];
+  }
+  constructor(...args){
+    this.di = {};
     CreateIntentController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -144,7 +144,7 @@ export class CreateIntentController {
         cb();
       })
     })
-	}
+  }
 
   init() {
     let from = this.di.dataModel.from,

@@ -17,7 +17,7 @@ export class headerController{
       'loginDataManager',
       'alertDataManager',
       'manageDataManager',
-	    'deviceDataManager',
+      'deviceDataManager',
       'messageService'
     ];
   }
@@ -32,9 +32,9 @@ export class headerController{
     this.CONST_ADMIN_GROUP = this.di.appService.CONST.ADMIN_GROUP;
     this.scope.groups = angular.copy(this.di.appService.CONST.HEADER);
     this.scope.username = null;
-	  this.scope.messages = [];
-	  this.scope.hasUnreadMsg = false;
-	  this.devices = [];
+    this.scope.messages = [];
+    this.scope.hasUnreadMsg = false;
+    this.devices = [];
     this.scope.userConfig = [
       {'label': this.di.$filter('translate')('MODULE.HEADER.ACCOUNT.LOGOUT'), 'url': '/logout'}
     ];
@@ -63,32 +63,32 @@ export class headerController{
       let theme = this.scope.theme == 'theme_default' ? 'theme_dark' : 'theme_default';
       this.di.$rootScope.$emit('change-theme', theme)
     }
-	
-	  this.scope.messageClick = (message) => {
-    	let unReadNum = 0;
-		  message.isRead = true;
-		
-		  let messages = this.scope.messages;
-		  this.di._.forEach(messages, (message) => {
-			  if(!message.isRead) {
-				  unReadNum++;
-			  }
-		  })
-		  
-		  this.scope.hasUnreadMsg = unReadNum > 0 ? true : false;
-		  
-		  let savedMessages = this.di.messageService.getMessages();
-		  savedMessages.forEach((msg) => {
-		  	if(msg.uuid && (msg.uuid === message.uuid)) {
-		  		msg.isRead = true;
-			  }
-		  })
+  
+    this.scope.messageClick = (message) => {
+      let unReadNum = 0;
+      message.isRead = true;
+    
+      let messages = this.scope.messages;
+      this.di._.forEach(messages, (message) => {
+        if(!message.isRead) {
+          unReadNum++;
+        }
+      })
+      
+      this.scope.hasUnreadMsg = unReadNum > 0 ? true : false;
+      
+      let savedMessages = this.di.messageService.getMessages();
+      savedMessages.forEach((msg) => {
+        if(msg.uuid && (msg.uuid === message.uuid)) {
+          msg.isRead = true;
+        }
+      })
       this.di.messageService.saveMessages(savedMessages);
       
-		  if(message.path.url) {
-			  this.di.$location.path(message.path.url).search(message.path.query);
-		  }
-	  };
+      if(message.path.url) {
+        this.di.$location.path(message.path.url).search(message.path.query);
+      }
+    };
     
     this.init();
 
@@ -96,19 +96,19 @@ export class headerController{
     unsubscribers.push(this.di.$rootScope.$on('application-change-state', (event) => {
       this.filterMenusByApps();
     }));
-	
-	  unsubscribers.push(this.di.$rootScope.$on('new-websocket-message', ($event, message) => {
-		  let messages = this.scope.messages;
-		
-		  messages.splice(0, 0, this.formatMessage(message));
-		
-		  this.scope.hasUnreadMsg = true;
-		  if(messages.length > this.di.appService.CONST.MAX_MESSAGES_NUMBER) {
-			  this.scope.messages = messages.slice(0, this.di.appService.CONST.MAX_MESSAGES_NUMBER);
+  
+    unsubscribers.push(this.di.$rootScope.$on('new-websocket-message', ($event, message) => {
+      let messages = this.scope.messages;
+    
+      messages.splice(0, 0, this.formatMessage(message));
+    
+      this.scope.hasUnreadMsg = true;
+      if(messages.length > this.di.appService.CONST.MAX_MESSAGES_NUMBER) {
+        this.scope.messages = messages.slice(0, this.di.appService.CONST.MAX_MESSAGES_NUMBER);
       }
-	    
+      
       this.scope.$apply();
-	  }));
+    }));
 
     this.scope.$on('$destroy', () => {
       unsubscribers.forEach((cb) => {
@@ -145,30 +145,30 @@ export class headerController{
   setMessageWebsocket() {
     let unReadNum = 0;
     let devices = [];
-	  const THIS = this;
-	
-	  // get devices
-	  THIS.di.deviceDataManager.getDeviceConfigs().then((res) => {
-		  THIS.devices = res;
-	  }, () => {
-		  THIS.devices = [];
-	  }).finally(() => {
-		  // setup message websocket
-		  THIS.di.messageService.init();
-		
-		  let messages = THIS.di.messageService.getMessages();
-		
-		
-		  THIS.di._.forEach(messages, (message) => {
-			  if(!message.isRead) {
-				  unReadNum++;
-			  }
-			
-			  THIS.scope.messages.push(THIS.formatMessage(message));
-		  })
-		
-		  THIS.scope.hasUnreadMsg = unReadNum > 0 ? true : false;
-	  })
+    const THIS = this;
+  
+    // get devices
+    THIS.di.deviceDataManager.getDeviceConfigs().then((res) => {
+      THIS.devices = res;
+    }, () => {
+      THIS.devices = [];
+    }).finally(() => {
+      // setup message websocket
+      THIS.di.messageService.init();
+    
+      let messages = THIS.di.messageService.getMessages();
+    
+    
+      THIS.di._.forEach(messages, (message) => {
+        if(!message.isRead) {
+          unReadNum++;
+        }
+      
+        THIS.scope.messages.push(THIS.formatMessage(message));
+      })
+    
+      THIS.scope.hasUnreadMsg = unReadNum > 0 ? true : false;
+    })
   }
   
   filterMenusByApps() {
@@ -322,109 +322,109 @@ export class headerController{
       }
     });
   }
-	
-	formatMessage(message) {
-		let msg = {};
-		let devices = this.devices;
-		let srcArr, srcPort, srcDevice, dstArr, dstPort, dstDevice;
-		
-		msg.uuid = message.uuid;
-		msg.isRead = message.isRead;
-		msg.time = message.time;
-		msg.title = '';
-		
-		function getDeviceName (deviceId) {
-			let device = devices.find((val) => {
-				return val.id === deviceId
-			})
-			
-			if(device && device.name) {
-				return device.name
-			} else {
-				return deviceId
-			}
-		}
-		
-		switch(message.event) {
-			case 'portState':
-				if(message.payload.link == 'up') {
-					msg.title += this.translate('MODULE.HEADER_INFO.PORT_START') + ' - ';
-				} else {
-					msg.title += this.translate('MODULE.HEADER_INFO.PORT_CLOSE') + ' - ';
-				}
-				
-				msg.title += getDeviceName(message.payload.device) + ':' + message.payload.port;
-				msg.path = {
-					url: '/devices/' + message.payload.device,
-					query: {port:message.payload.port}
-				};
-				break;
-			case 'linkAdded':
-				srcArr = message.payload.src.split(':');
-				srcPort = srcArr[srcArr.length - 1];
-				srcDevice = message.payload.src.slice(0, message.payload.src.length - srcPort.length - 1);
-				
-				dstArr = message.payload.dst.split(':');
-				dstPort = dstArr[dstArr.length - 1];
-				dstDevice = message.payload.dst.slice(0, message.payload.dst.length - dstPort.length - 1);
-				msg.title += this.translate('MODULE.HEADER_INFO.ADD') + 'link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
-				msg.path = {
-					url: '/devices/' + srcDevice,
-					query: {link_port: srcPort}
-				};
-				break;
-			case 'linkRemoved':
-				srcArr = message.payload.src.split(':');
-				srcPort = srcArr[srcArr.length - 1];
-				srcDevice = message.payload.src.slice(0, message.payload.src.length - srcPort.length - 1);
-				
-				dstArr = message.payload.dst.split(':');
-				dstPort = dstArr[dstArr.length - 1];
-				dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
-				msg.title += this.translate('MODULE.HEADER_INFO.REMOVE') + 'link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
-				msg.path = {
-					url: false,
-					query: {}
-				};
-				break;
-			case 'overThreshold':
-				msg.title += this.translate('MODULE.HEADER_INFO.ALERT') + ' - ' + message.payload.rule_name + ':' + message.payload.msg;
-				msg.path = {
-					url: '/alert',
-					query: {uuid: message.payload.uuid}
-				};
-				break;
-			case 'deviceAdded':
-				msg.title += this.translate('MODULE.HEADER_INFO.ADD_DEVICE') + ' - ' + getDeviceName(message.payload.device);
-				msg.path = {
-					url: '/devices/' + message.payload.device,
-					query: {}
-				};
-				break;
-			case 'deviceUpdated':
-				msg.title += this.translate('MODULE.HEADER_INFO.UPDATE_DEVICE') +' - ' + getDeviceName(message.payload.device);
-				msg.path = {
-					url: '/devices/' + message.payload.device,
-					query: {}
-				};
-				break;
-			case 'deviceRemoved':
-				msg.title += this.translate('MODULE.HEADER_INFO.RM_DEVICE') +' - ' + getDeviceName(message.payload.device);
-				msg.path = {
-					url: false,
-					query: {}
-				};
-				break;
-			default:
-				msg.title += this.translate('MODULE.HEADER_INFO.UNKNOWN_MSG');
-				msg.path = {
-					url: false,
-					query: {}
-				};
-		}
-		
-		return msg;
-	}
+  
+  formatMessage(message) {
+    let msg = {};
+    let devices = this.devices;
+    let srcArr, srcPort, srcDevice, dstArr, dstPort, dstDevice;
+    
+    msg.uuid = message.uuid;
+    msg.isRead = message.isRead;
+    msg.time = message.time;
+    msg.title = '';
+    
+    function getDeviceName (deviceId) {
+      let device = devices.find((val) => {
+        return val.id === deviceId
+      })
+      
+      if(device && device.name) {
+        return device.name
+      } else {
+        return deviceId
+      }
+    }
+    
+    switch(message.event) {
+      case 'portState':
+        if(message.payload.link == 'up') {
+          msg.title += this.translate('MODULE.HEADER_INFO.PORT_START') + ' - ';
+        } else {
+          msg.title += this.translate('MODULE.HEADER_INFO.PORT_CLOSE') + ' - ';
+        }
+        
+        msg.title += getDeviceName(message.payload.device) + ':' + message.payload.port;
+        msg.path = {
+          url: '/devices/' + message.payload.device,
+          query: {port:message.payload.port}
+        };
+        break;
+      case 'linkAdded':
+        srcArr = message.payload.src.split(':');
+        srcPort = srcArr[srcArr.length - 1];
+        srcDevice = message.payload.src.slice(0, message.payload.src.length - srcPort.length - 1);
+        
+        dstArr = message.payload.dst.split(':');
+        dstPort = dstArr[dstArr.length - 1];
+        dstDevice = message.payload.dst.slice(0, message.payload.dst.length - dstPort.length - 1);
+        msg.title += this.translate('MODULE.HEADER_INFO.ADD') + 'link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
+        msg.path = {
+          url: '/devices/' + srcDevice,
+          query: {link_port: srcPort}
+        };
+        break;
+      case 'linkRemoved':
+        srcArr = message.payload.src.split(':');
+        srcPort = srcArr[srcArr.length - 1];
+        srcDevice = message.payload.src.slice(0, message.payload.src.length - srcPort.length - 1);
+        
+        dstArr = message.payload.dst.split(':');
+        dstPort = dstArr[dstArr.length - 1];
+        dstDevice = message.payload.src.slice(0, message.payload.dst.length - dstPort.length - 1);
+        msg.title += this.translate('MODULE.HEADER_INFO.REMOVE') + 'link - ' + getDeviceName(srcDevice) + ' >> ' + getDeviceName(dstDevice);
+        msg.path = {
+          url: false,
+          query: {}
+        };
+        break;
+      case 'overThreshold':
+        msg.title += this.translate('MODULE.HEADER_INFO.ALERT') + ' - ' + message.payload.rule_name + ':' + message.payload.msg;
+        msg.path = {
+          url: '/alert',
+          query: {uuid: message.payload.uuid}
+        };
+        break;
+      case 'deviceAdded':
+        msg.title += this.translate('MODULE.HEADER_INFO.ADD_DEVICE') + ' - ' + getDeviceName(message.payload.device);
+        msg.path = {
+          url: '/devices/' + message.payload.device,
+          query: {}
+        };
+        break;
+      case 'deviceUpdated':
+        msg.title += this.translate('MODULE.HEADER_INFO.UPDATE_DEVICE') +' - ' + getDeviceName(message.payload.device);
+        msg.path = {
+          url: '/devices/' + message.payload.device,
+          query: {}
+        };
+        break;
+      case 'deviceRemoved':
+        msg.title += this.translate('MODULE.HEADER_INFO.RM_DEVICE') +' - ' + getDeviceName(message.payload.device);
+        msg.path = {
+          url: false,
+          query: {}
+        };
+        break;
+      default:
+        msg.title += this.translate('MODULE.HEADER_INFO.UNKNOWN_MSG');
+        msg.path = {
+          url: false,
+          query: {}
+        };
+    }
+    
+    return msg;
+  }
 }
 
 headerController.$inject = headerController.getDI();

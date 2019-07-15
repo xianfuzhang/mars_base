@@ -1,16 +1,16 @@
 export class PfcEstablishController {
-	static getDI() {
-		return [
-			'$scope',
+  static getDI() {
+    return [
+      '$scope',
       '$rootScope',
       '$filter',
       '$timeout',
       '_',
       'deviceDataManager',
-		];
-	}
-	constructor(...args){
-		this.di = {};
+    ];
+  }
+  constructor(...args){
+    this.di = {};
     PfcEstablishController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -155,7 +155,7 @@ export class PfcEstablishController {
         cb();
       })
     });
-	}
+  }
 }
 PfcEstablishController.$inject = PfcEstablishController.getDI();
 PfcEstablishController.$$ngIsClass = true;

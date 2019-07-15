@@ -2,6 +2,6 @@
 import {DatePicker} from './ng/date-picker.directive';
 
 export default angular
-	.module('date-picker', [])
-	.directive('datePicker', DatePicker)
-	.name;
+  .module('date-picker', [])
+  .directive('datePicker', DatePicker)
+  .name;

@@ -1,27 +1,27 @@
 export class DialogService {
-	static getDI() {
-		return [
-			'$q',
-			'$filter',
-			'$uibModal'
-		];
-	}
+  static getDI() {
+    return [
+      '$q',
+      '$filter',
+      '$uibModal'
+    ];
+  }
 
-	constructor(...args) {
-		this.di = {};
+  constructor(...args) {
+    this.di = {};
 
-		DialogService.getDI().forEach((value, index) => {
-			this.di[value] = args[index];
-		});
-		this.translate = this.di.$filter('translate');
-	}
+    DialogService.getDI().forEach((value, index) => {
+      this.di[value] = args[index];
+    });
+    this.translate = this.di.$filter('translate');
+  }
 
-	createDialog(type, content) {
-		let defer = this.di.$q.defer();
-		let header = '';
-		type = type || 'warning';
+  createDialog(type, content) {
+    let defer = this.di.$q.defer();
+    let header = '';
+    type = type || 'warning';
 
-		let isInfoNotJson = false;
+    let isInfoNotJson = false;
     switch(type.toLowerCase()) {
       case 'confirm':
         header = this.translate('MODULES.SWITCHES.DIALOG.HEADER.CONFIRM');
@@ -67,7 +67,7 @@ export class DialogService {
     });
 
     return defer.promise;
-	}
+  }
 }
 
 DialogService.$inject = DialogService.getDI();

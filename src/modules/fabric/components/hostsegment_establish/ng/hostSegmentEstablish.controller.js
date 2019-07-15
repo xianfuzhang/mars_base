@@ -1,16 +1,16 @@
 export class HostSegmentEstablishController {
-	static getDI() {
-		return [
-			'$scope',
+  static getDI() {
+    return [
+      '$scope',
       '$rootScope',
       '$filter',
       '$timeout',
       '_',
       'deviceDataManager',
-		];
-	}
-	constructor(...args){
-		this.di = {};
+    ];
+  }
+  constructor(...args){
+    this.di = {};
     HostSegmentEstablishController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -203,7 +203,7 @@ export class HostSegmentEstablishController {
         cb();
       })
     });
-	}
+  }
 }
 HostSegmentEstablishController.$inject = HostSegmentEstablishController.getDI();
 HostSegmentEstablishController.$$ngIsClass = true;

@@ -20,15 +20,15 @@ export class appService {
     this.CONST = {
       MOCKED_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
       LIVE_ZONE_ENDPOINT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/' + this.versionUrl,
-	    LIVE_ZONE_ENDPOINT_AUTH: '[%__PROTOCOL__%]://[%__USERNAME__%]:[%__PASSWORD__%]@[%__ZONE_IP__%]/' + this.versionUrl,
+      LIVE_ZONE_ENDPOINT_AUTH: '[%__PROTOCOL__%]://[%__USERNAME__%]:[%__PASSWORD__%]@[%__ZONE_IP__%]/' + this.versionUrl,
       MOCKED_WEBSOCKETS_ENDPONT: 'ws://localhost:3001/',
       //logstash/ 最后的斜杠是不能去掉的，否则无法正常代理
       LIVE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/logstash/',
       // LIVE_WEBSOCKETS_ENDPONT: 'ws://210.63.204.29:3233/',
       // LIVE_WEBSOCKETS_ENDPONT_PORT: 3233,
-	    MOCKED_MESSAGE_WEBSOCKETS_ENDPONT: 'ws://localhost:3001/mars/websock',
-	    LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/mars/websock/',
-	    // LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://210.63.204.29/mars/websock/',
+      MOCKED_MESSAGE_WEBSOCKETS_ENDPONT: 'ws://localhost:3001/mars/websock',
+      LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://[%__ZONE_IP__%]/mars/websock/',
+      // LIVE_MESSAGE_WEBSOCKETS_ENDPONT: '[%__PROTOCOL__%]://210.63.204.29/mars/websock/',
       
       MOCKED_USERNAME: 'nocsys',
       MOCKED_PASSWORD: 'nocsys',
@@ -47,7 +47,7 @@ export class appService {
       NOCSYS_APP: 'com.nocsys',
       CRYPTO_STRING: 'secret',
       DEFAULT_FILENAME: 'startup_netcfg.cfg',// default configuration file name
-	    MAX_MESSAGES_NUMBER: 100
+      MAX_MESSAGES_NUMBER: 100
     };
     this.loginRole = 1;
     this.roleFilterMenu = [];
@@ -169,7 +169,7 @@ export class appService {
               {'label': this.translate('MODULE.HEADER.MANAGE.ANALYZER'), 'url': '/analyzer', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO'), 'url': '/system_info', 'role': 3},
               {'label': this.translate('MODULE.HEADER.MANAGE.APPLICATION'), 'url': '/application', 'role': 3},
-							{'label': this.translate('MODULE.HEADER.MANAGE.LICENSE'), 'url': '/license', 'role': 3}
+              {'label': this.translate('MODULE.HEADER.MANAGE.LICENSE'), 'url': '/license', 'role': 3}
             ]
           }
 
@@ -215,21 +215,21 @@ export class appService {
     }
     else {
       if(isAuth === true) {
-	      let useraccount = this.di.$cookies.get('useraccount');
-	      let crypto = require('crypto-js');
-	      let decodeBytes = crypto.AES.decrypt(useraccount.toString(), 'secret');
-	      let decodeData = decodeBytes.toString(crypto.enc.Utf8);
-	      let username = JSON.parse(decodeData).user_name;
-	      let password = JSON.parse(decodeData).password;
-	
-	      endpoint = this.CONST.LIVE_ZONE_ENDPOINT_AUTH.replace('[%__USERNAME__%]', username);
-	      endpoint = endpoint.replace('[%__PASSWORD__%]', password);
-	      endpoint = endpoint.replace('[%__ZONE_IP__%]', (this.di.$location.host() + ":" + this.di.$location.port()));
-	      endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
+        let useraccount = this.di.$cookies.get('useraccount');
+        let crypto = require('crypto-js');
+        let decodeBytes = crypto.AES.decrypt(useraccount.toString(), 'secret');
+        let decodeData = decodeBytes.toString(crypto.enc.Utf8);
+        let username = JSON.parse(decodeData).user_name;
+        let password = JSON.parse(decodeData).password;
+  
+        endpoint = this.CONST.LIVE_ZONE_ENDPOINT_AUTH.replace('[%__USERNAME__%]', username);
+        endpoint = endpoint.replace('[%__PASSWORD__%]', password);
+        endpoint = endpoint.replace('[%__ZONE_IP__%]', (this.di.$location.host() + ":" + this.di.$location.port()));
+        endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
       } else {
-	      endpoint = this.CONST.LIVE_ZONE_ENDPOINT.replace('[%__ZONE_IP__%]',
-		      (this.di.$location.host() + ":" + this.di.$location.port()));
-	      endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
+        endpoint = this.CONST.LIVE_ZONE_ENDPOINT.replace('[%__ZONE_IP__%]',
+          (this.di.$location.host() + ":" + this.di.$location.port()));
+        endpoint = endpoint.replace('[%__PROTOCOL__%]', this.di.$location.protocol());
       }
     }
 
@@ -255,25 +255,25 @@ export class appService {
     }
     return endpoint;
   }
-	
-	getMessageWebscoketEndpoint() {
+  
+  getMessageWebscoketEndpoint() {
     let endpoint;
-		if (this.isMocked) {
-			endpoint = this.CONST.MOCKED_MESSAGE_WEBSOCKETS_ENDPONT;
-		} else {
-			endpoint = this.CONST.LIVE_MESSAGE_WEBSOCKETS_ENDPONT.replace('[%__ZONE_IP__%]', this.di.$location.host());
-			if(this.di.$location.protocol() === 'https'){
-				endpoint = endpoint.replace('[%__PROTOCOL__%]', 'wss');
-			} else {
-				endpoint = endpoint.replace('[%__PROTOCOL__%]', 'ws');
-			}
-		}
-		return endpoint;
-	}
-	
-	_downloadFile(url) {
-		let headers = {};
-		let useraccount = this.di.$cookies.get('useraccount');
+    if (this.isMocked) {
+      endpoint = this.CONST.MOCKED_MESSAGE_WEBSOCKETS_ENDPONT;
+    } else {
+      endpoint = this.CONST.LIVE_MESSAGE_WEBSOCKETS_ENDPONT.replace('[%__ZONE_IP__%]', this.di.$location.host());
+      if(this.di.$location.protocol() === 'https'){
+        endpoint = endpoint.replace('[%__PROTOCOL__%]', 'wss');
+      } else {
+        endpoint = endpoint.replace('[%__PROTOCOL__%]', 'ws');
+      }
+    }
+    return endpoint;
+  }
+  
+  _downloadFile(url) {
+    let headers = {};
+    let useraccount = this.di.$cookies.get('useraccount');
     let crypto = require('crypto-js');
     let decodeBytes = crypto.AES.decrypt(useraccount.toString(), 'secret');
     let decodeData = decodeBytes.toString(crypto.enc.Utf8);
@@ -281,32 +281,32 @@ export class appService {
     let password = JSON.parse(decodeData).password;
     
     headers['Authorization'] = "Basic " + window.btoa(username + ':' + password);
-		
-		let deferred = this.di.$q.defer();
-		this.di.$http.get(url,{responseType: 'arraybuffer', headers: headers})
-			.then((result, status, headers) => {
-				deferred.resolve(result.data);
-			}, (data, status) => {
-			  console.error("Request failed with status: " + status);
-				deferred.reject('Error:' + status);
-		})
-		
-		return deferred.promise;
+    
+    let deferred = this.di.$q.defer();
+    this.di.$http.get(url,{responseType: 'arraybuffer', headers: headers})
+      .then((result, status, headers) => {
+        deferred.resolve(result.data);
+      }, (data, status) => {
+        console.error("Request failed with status: " + status);
+        deferred.reject('Error:' + status);
+    })
+    
+    return deferred.promise;
   }
   
-	downloadFileWithAuth(url, filename, type) {
-		filename = filename || 'download_file';
-		type = type || 'text|plain';
-		
-		let deferred = this.di.$q.defer();
+  downloadFileWithAuth(url, filename, type) {
+    filename = filename || 'download_file';
+    type = type || 'text|plain';
+    
+    let deferred = this.di.$q.defer();
     this._downloadFile(url).then((data) => {
       // generate file
       let file = new Blob([data], { type: type});
-	    let fileURL = window.URL.createObjectURL(file);
-	    deferred.resolve();
-	    
-	    // download file
-	    let a = document.createElement("a");
+      let fileURL = window.URL.createObjectURL(file);
+      deferred.resolve();
+      
+      // download file
+      let a = document.createElement("a");
       document.body.appendChild(a);
       a.style = "display: none";
       a.href = fileURL;
@@ -314,11 +314,11 @@ export class appService {
       a.click();
       a.remove();
     }, (error) => {
-	    console.error('Error:Failed to download file.');
+      console.error('Error:Failed to download file.');
       deferred.reject('Error:Failed to download file.');
     });
-		
-		return deferred.promise;
+    
+    return deferred.promise;
   }
   
   getLoginUrl() {
@@ -667,13 +667,13 @@ export class appService {
 
 
   getDownloadFileUrl(filename) {
-	  let useraccount = this.di.$cookies.get('useraccount');
-	  let crypto = require('crypto-js');
-	  let decodeBytes = crypto.AES.decrypt(useraccount.toString(), 'secret');
-	  let decodeData = decodeBytes.toString(crypto.enc.Utf8);
-	  let username = JSON.parse(decodeData).user_name;
-	  let password = JSON.parse(decodeData).password;
-	  
+    let useraccount = this.di.$cookies.get('useraccount');
+    let crypto = require('crypto-js');
+    let decodeBytes = crypto.AES.decrypt(useraccount.toString(), 'secret');
+    let decodeData = decodeBytes.toString(crypto.enc.Utf8);
+    let username = JSON.parse(decodeData).user_name;
+    let password = JSON.parse(decodeData).password;
+    
     return this.di.$location.protocol() + `://${username}:${password}@` + this.di.$location.host() + ":" + this.di.$location.port() + `/download/${filename}`;
   }
 
@@ -708,14 +708,14 @@ export class appService {
   getApplicationByNameUrl(app_name){
     return this.getZoneEndpoint() + '/applications/' + app_name;
   }
-	
-	getLicenseUrl() {
-		return this.getZoneEndpoint() + '/license/v1';
+  
+  getLicenseUrl() {
+    return this.getZoneEndpoint() + '/license/v1';
   }
   
   getLicenseUploadUrl() {
-		return this.getZoneEndpoint() + '/license/BinaryFile';
-	}
+    return this.getZoneEndpoint() + '/license/BinaryFile';
+  }
 
   getSegmentUrl(tenant_name, segment_name){
     let path_url = '/tenants/v1';

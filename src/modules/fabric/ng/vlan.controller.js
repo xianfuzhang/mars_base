@@ -778,7 +778,7 @@ export class VlanController {
     });
     promises.push(vlanMemberDefer.promise);
     this.di.deviceDataManager.getPorts().then((res) => {
-    	portDefer.resolve(res.data.ports);
+      portDefer.resolve(res.data.ports);
     });
     promises.push(portDefer.promise);
     Promise.all(promises).then((resultArr)=>{
@@ -805,10 +805,10 @@ export class VlanController {
       }
       this.scope.model.vlanConfig = resultArr[3];
       this.scope.model.vlanMembers = resultArr[4];
-    	this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(resultArr[4]);
-    	if (this.scope.model.vlansMapArr.length > 0) {
-    		this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.VLAN'), 'value': 'vlan'});
-    	}
+      this.scope.model.vlansMapArr = this.getVlanOptionsFromConfig(resultArr[4]);
+      if (this.scope.model.vlansMapArr.length > 0) {
+        this.scope.model.filterTypes.push({'label': this.translate('MODULES.FABRIC.HOSTSEGMENT.COLUMN.VLAN'), 'value': 'vlan'});
+      }
       if (this.scope.model.filterTypes.length > 0) {
         this.scope.model.selectedFilterType = this.scope.model.filterTypes[0];
         this.scope.model.subFilterItems = this.scope.model.selectedFilterType.value === 'device'
@@ -1152,31 +1152,31 @@ export class VlanController {
   }
 
   getVlanOptionsFromConfig(config) {
-  	let vlanObject = new Map(), result = [];
-  	config.forEach((device) => {
-  		device.vlans.forEach((vlan) => {
-  			vlanObject.set(vlan, vlan);
-  		});
-  	});
-  	vlanObject.forEach((val, key) => {
-  		result.push({
-  			'label': key,
-  			'value': val
-  		});
-  	});
-  	return result;
+    let vlanObject = new Map(), result = [];
+    config.forEach((device) => {
+      device.vlans.forEach((vlan) => {
+        vlanObject.set(vlan, vlan);
+      });
+    });
+    vlanObject.forEach((val, key) => {
+      result.push({
+        'label': key,
+        'value': val
+      });
+    });
+    return result;
   }
 
   getPortListFromConfig() {
-  	let result = [];
-  	if (this.scope.model.selectedFilterType.value === 'device') {
+    let result = [];
+    if (this.scope.model.selectedFilterType.value === 'device') {
       let deviceVlans = new Set(),
           deviceVlanPorts = {},
           portsList = this.getPortsFromDevice(this.scope.model.selectedSubFilter.value);
       //rest交换机默认包含vlan1
       deviceVlans.add(1);      
-  		this.scope.model.vlanConfig.forEach((device => {
-  			if (device['device-id'] === this.scope.model.selectedSubFilter.value) {
+      this.scope.model.vlanConfig.forEach((device => {
+        if (device['device-id'] === this.scope.model.selectedSubFilter.value) {
           //deviceVlanPorts = device.ports;
           device.ports.forEach((port) => {
             port.vlans.forEach((vlan) => {
@@ -1186,8 +1186,8 @@ export class VlanController {
               deviceVlans.add(vlanId);
             });
           });
-  			}
-  		}));
+        }
+      }));
       deviceVlans.forEach((value, key) => {
         result.push({
           id: this.scope.model.selectedSubFilter.value + '_' + value,
@@ -1196,10 +1196,10 @@ export class VlanController {
           ports: this.updatePortsListByDevice(value, deviceVlanPorts[value], this.di._.cloneDeep(portsList))
         }); 
       });
-  	}
-  	else {
-  		//vlan
-  		let devicePortsMap = {};
+    }
+    else {
+      //vlan
+      let devicePortsMap = {};
       this.scope.model.vlanConfig.forEach((device) => {
         if (this.scope.model.selectedSubFilter.value == 1) {
           devicePortsMap[device['device-id']] = [];
@@ -1242,23 +1242,23 @@ export class VlanController {
           });  
         }
       }
-  	}
-  	return result;
+    }
+    return result;
   }
 
   getPortsFromDevice(device_id){
-  	let ports = [];
-  	this.scope.model.ports.forEach((port) => {
-  		if (port.element === device_id) {
-  			let num = parseInt(port.port);
-  			ports.push({
-  				id: num,
+    let ports = [];
+    this.scope.model.ports.forEach((port) => {
+      if (port.element === device_id) {
+        let num = parseInt(port.port);
+        ports.push({
+          id: num,
           title: num,
           selected: false
-  			});
-  		}
-  	});
-  	return ports;
+        });
+      }
+    });
+    return ports;
   }
 
   updatePortsListByDevice(vlanId, vlanPorts, portsList) {
