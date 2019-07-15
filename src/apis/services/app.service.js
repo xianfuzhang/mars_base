@@ -281,13 +281,13 @@ export class appService {
 
   getMenuAppMapping() {
     return {
-      '/fabric_summary': ['com.nocsys.healthycheck'],
       '/hosts': ['org.onosproject.hostprovider'],
       '/logical_port': ['com.nocsys.logicalport'],
       '/uplinks': ['com.nocsys.topology'],
       '/sflow': ['com.nocsys.sflow'],
       '/monitor': ['com.nocsys.monitor'],
       '/host_segment': ['com.nocsys.topologyl3'],
+      '/storm_control':['com.nocsys.storm-control'],
       '/dhcp_relay': ['org.onosproject.dhcprelay'],
       '/qos': ['com.nocsys.qos'],
       '/lbd': ['com.nocsys.lbd'],
@@ -310,7 +310,7 @@ export class appService {
       '/ntp': ['com.nocsys.ntpserver'],
       '/elasticsearch': ['com.nocsys.utility'],
       '/analyzer': ['com.nocsys.analyzer'],
-      '/system_info': ['com.nocsys.utility'],
+      '/system_info': ['com.nocsys.utility']
     };
   }
 
