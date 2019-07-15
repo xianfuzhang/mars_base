@@ -217,6 +217,22 @@ export class DeviceDetailController {
               return tab['value'] === 'group';
             });
           }
+
+          if(res.protocol === 'of') {
+            this.scope.tabs.push({
+              'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.FLOW'),
+              'value': 'flow',
+              'type': 'flow'
+            });
+            this.scope.tabs.push({
+              'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.GROUPS'),
+              'value': 'group',
+              'type': 'group'
+            });
+            // this.di._.remove(this.scope.tabs, (tab)=>{
+            //   return tab['value'] === 'group' || tab['value'] === 'flow';
+            // });
+          }
         }
         this.init();
       });
