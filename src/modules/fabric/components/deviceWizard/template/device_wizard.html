@@ -108,16 +108,16 @@
         <mdl-radio ng-model="switch.fabric_role" name="role" value="leaf"
                    display-label="{id: 'check_1', label: 'Leaf', name: 'role', value: 'leaf'}">
         </mdl-radio>
-        <mdl-radio ng-model="switch.fabric_role" name="role" value="unknown"
+        <mdl-radio ng-model="switch.fabric_role" name="role" value="unknown" ng-if="false"
                    display-label="{id: 'check_3', label: 'None', name: 'role', value: 'unknown'}">
         </mdl-radio>
     </div>
-    <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">
+    <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf' && switch.protocol.value != 'of'">
         <div class="stepForm__input__label">Leaf Group</div>
         <!--<input class="stepForm__input__text" ng-model="switch.leaf_group.name"/>-->
         <valid-input  ng-model="switch.leaf_group.name"  v-rpcid="page_device_1" v-regex="leaf_group_regex"  v-message="{{ 'MODULES.REGEX.FLOW_ADD.LEAFGROUP_NAME' | translate}}" ></valid-input>
     </div>
-    <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf'">
+    <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf' && switch.protocol.value != 'of'">
         <div class="stepForm__input__label">Switch Port</div>
         <!--<input class="stepForm__input__text" name="switch_port" type="number" ng-blur="switchPortChange=true" ng-model="switch.leaf_group.switch_port" min="0" max="65535"/>-->
 

@@ -39,7 +39,8 @@ export class DeviceWizardController {
         {label: 'Nocsys', value: 'Nocsys'},
         {label: 'Mellanox', value: 'Mellanox'},
         {label: 'Pica8', value: 'Pica8'},
-        {label: 'H3C', value: 'H3C'}
+        {label: 'H3C', value: 'H3C'},
+        {label: 'Centec', value: 'Centec'}
       ]
     }
 
@@ -50,7 +51,8 @@ export class DeviceWizardController {
       rack_id: '',
       mfr: scope.mfrDisplayLabel.options[0],
       available: true,
-      fabric_role: 'unknown',
+      fabric_role: 'leaf',
+      // fabric_role: 'unknown', //暂时改成默认leaf
       leaf_group: {name: '', switch_port: ''},
       managementAddress: '',
       port: '',
