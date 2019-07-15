@@ -80,100 +80,203 @@ export class appService {
 
   getHeaderMenus() {
     return [
-          {
-            'group': 'Fabric',
-            'label': this.translate('MODULE.HEADER.FABRIC'),
-            'role': 1,
-            'items': [
-              {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary', 'role': 1},
-              {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices', 'role': 2},
-              {'label': this.translate('MODULE.HEADER.FABRIC.HOSTS'), 'url': '/hosts', 'role': 2},
-              {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
-              {'label': 'Intents', 'url': '/intents', 'role': 2},
-              {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
-              {'label': 'sFlow', 'url': '/sflow', 'role': 2},
-              {'label': this.translate('MODULE.HEADER.FABRIC.STORM'), 'url': '/storm_control', 'role': 2},
-              {'label': this.translate('MODULE.HEADER.FABRIC.MONITOR'), 'url': '/monitor', 'role': 2},
-              {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
-              {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
-              {'label': 'QoS', 'url': '/qos', 'role': 3},
 
-            ]
-          },
-          {
-            'group':'Vlan',
-            'label': this.translate('MODULE.HEADER.VLAN'),
-            'role': 3,
-            'items':[
-              {'label': this.translate('MODULE.HEADER.VLAN.NORMAL'), 'url': '/vlan', 'role': 2},
-              {'label': this.translate('MODULE.HEADER.VLAN.DYNAMIC'), 'url': '/vlan_dynamic', 'role': 2},
-              {'label': this.translate('MODULE.HEADER.VLAN.GUEST'), 'url': '/vlan_guest', 'role': 2},
-              {'label': this.translate('MODULE.HEADER.VLAN.IP_SUBTNET'), 'url': '/vlan_ip', 'role': 2},
-            ]
-          },
-          {
-            'group':'Logical',
-            'label': this.translate('MODULE.HEADER.LOGICAL'),
-            'role': 3,
-            'items':[
-              {'label': 'Tenant', 'url': '/tenant', 'role': 3},
-              {'label': 'Segment', 'url': '/segment', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
-              {'label': 'EGP', 'url': '/egp', 'role': 3}
-            ]
-           },
-          {
-            'group': 'Alert',
-            'label': this.translate('MODULE.HEADER.ALERT'),
-            'role': 2,
-            'items': [
-              // {'label': 'Alert', 'url': '/alert'},
-              {'label': this.translate('MODULE.HEADER.ALERT.ALERT'), 'url': '/alert', 'role': 2},
-              {'label': this.translate('MODULE.HEADER.ALERT.HEALTHYCHECK'), 'url': '/healthycheck', 'role': 2},
-              {'label': this.translate('MODULE.HEADER.ALERT.INFORM'), 'url': '/inform', 'role': 2},
-            ]
-          },
-          {
-            'group': 'Config',
-            'label': this.translate('MODULE.HEADER.CONFIG'),
-            'role': 3,
-            'items': [
-              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration_list', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY'), 'url': '/configuration_history', 'role': 3}
-            ]
-          },
-          {
-            'group': 'Log',
-            'role': 2,
-            'label': this.translate('MODULE.HEADER.LOG'),
-            'items': [
-              {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '/log', 'role': 2}
-            ]
-          },
-          {
-            'group': 'Account',
-            'role': 3,
-            'label': this.translate('MODULE.HEADER.ACCOUNT'),
-            'items': [
-              {'label': this.translate('MODULE.HEADER.ACCOUNT.ACCOUNT_MANAGER'), 'url': '/account_manage', 'role': 3}
-            ]
-          }, {
-            'group': 'Manage',
-            'role': 3,
-            'label': this.translate('MODULE.HEADER.MANAGE'),
-            'items': [
-              {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.MANAGE.NTP'), 'url': '/ntp', 'role': 3},
-              {'label': 'TimeRange', 'url': '/time_range', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.MANAGE.ANALYZER'), 'url': '/analyzer', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO'), 'url': '/system_info', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.MANAGE.APPLICATION'), 'url': '/application', 'role': 3},
-              {'label': this.translate('MODULE.HEADER.MANAGE.LICENSE'), 'url': '/license', 'role': 3}
-            ]
-          }
-
+      {
+        'group': 'Fabric',
+        'label': this.translate('MODULE.HEADER.FABRIC'),
+        'role': 1,
+        'items': [
+          {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary', 'role': 1},
+          {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.FABRIC.HOSTS'), 'url': '/hosts', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
+          {'label': 'Intents', 'url': '/intents', 'role': 2},
+          {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
+          {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
         ]
+      },
+      {
+        'group': 'Functions',
+        'label': this.translate('MODULE.HEADER.FUNCTIONS'),
+        'role': 1,
+        'items': [
+          {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
+        ]
+      },
+      {
+        'group': 'Topology',
+        'label': this.translate('MODULE.HEADER.TOPOLOGY'),
+        'role': 1,
+        'items': [
+          {'label': this.translate('MODULE.HEADER.VLAN.NORMAL'), 'url': '/vlan', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.VLAN.DYNAMIC'), 'url': '/vlan_dynamic', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.VLAN.GUEST'), 'url': '/vlan_guest', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.VLAN.IP_SUBTNET'), 'url': '/vlan_ip', 'role': 2},
+        ]
+      },
+      {
+        'group': 'Security',
+        'label': this.translate('MODULE.HEADER.SECURITY'),
+        'role': 1,
+        'items': [
+          {'label': 'sFlow', 'url': '/sflow', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.FABRIC.MONITOR'), 'url': '/monitor', 'role': 2},
+          {'label': 'QoS', 'url': '/qos', 'role': 3},
+          {'label': this.translate('MODULE.HEADER.FABRIC.STORM'), 'url': '/storm_control', 'role': 2},
+        ]
+      },
+      {
+        'group':'Logical',
+        'label': this.translate('MODULE.HEADER.LOGICAL'),
+        'role': 3,
+        'items':[
+          {'label': 'Tenant', 'url': '/tenant', 'role': 3},
+          {'label': 'Segment', 'url': '/segment', 'role': 3},
+          {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
+          {'label': 'EGP', 'url': '/egp', 'role': 3}
+        ]
+      },
+      {
+        'group': 'Alert',
+        'label': this.translate('MODULE.HEADER.ALERT'),
+        'role': 2,
+        'items': [
+          // {'label': 'Alert', 'url': '/alert'},
+          {'label': this.translate('MODULE.HEADER.ALERT.ALERT'), 'url': '/alert', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.ALERT.HEALTHYCHECK'), 'url': '/healthycheck', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.ALERT.INFORM'), 'url': '/inform', 'role': 2},
+        ]
+      },
+      {
+        'group': 'Config',
+        'label': this.translate('MODULE.HEADER.CONFIG'),
+        'role': 3,
+        'items': [
+          {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration_list', 'role': 3},
+          {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY'), 'url': '/configuration_history', 'role': 3}
+        ]
+      },
+      {
+        'group': 'Account',
+        'role': 3,
+        'label': this.translate('MODULE.HEADER.ACCOUNT'),
+        'items': [
+          {'label': this.translate('MODULE.HEADER.ACCOUNT.ACCOUNT_MANAGER'), 'url': '/account_manage', 'role': 3}
+        ]
+      },
+      {
+        'group': 'System',
+        'role': 3,
+        'label': this.translate('MODULE.HEADER.SYSTEM'),
+        'items': [
+          {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
+          {'label': this.translate('MODULE.HEADER.MANAGE.NTP'), 'url': '/ntp', 'role': 3},
+          // {'label': 'TimeRange', 'url': '/time_range', 'role': 3}, //TODO 暂时隐藏
+          {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '/log', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3},
+          {'label': this.translate('MODULE.HEADER.MANAGE.ANALYZER'), 'url': '/analyzer', 'role': 3},
+          {'label': this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO'), 'url': '/system_info', 'role': 3},
+          {'label': this.translate('MODULE.HEADER.MANAGE.APPLICATION'), 'url': '/application', 'role': 3},
+          {'label': this.translate('MODULE.HEADER.MANAGE.LICENSE'), 'url': '/license', 'role': 3}
+        ]
+      },
+
+
+      //===========old hide
+      // {
+      //   'group': 'Fabric',
+      //   'label': this.translate('MODULE.HEADER.FABRIC'),
+      //   'role': 1,
+      //   'items': [
+      //     {'label': this.translate('MODULE.HEADER.FABRIC.SUMMARY'), 'url': '/fabric_summary', 'role': 1},
+      //     {'label': this.translate('MODULE.HEADER.FABRIC.DEVICE'), 'url': '/devices', 'role': 2},
+      //     {'label': this.translate('MODULE.HEADER.FABRIC.HOSTS'), 'url': '/hosts', 'role': 2},
+      //     {'label': this.translate('MODULE.HEADER.FABRIC.LOGICAL_PORT'), 'url': '/logical_port', 'role': 3},
+      //     {'label': 'Intents', 'url': '/intents', 'role': 2},
+      //     {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
+      //     {'label': 'sFlow', 'url': '/sflow', 'role': 2},
+      //     {'label': this.translate('MODULE.HEADER.FABRIC.STORM'), 'url': '/storm_control', 'role': 2},
+      //     {'label': this.translate('MODULE.HEADER.FABRIC.MONITOR'), 'url': '/monitor', 'role': 2},
+      //     {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
+      //     {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
+      //     {'label': 'QoS', 'url': '/qos', 'role': 3},
+      //
+      //   ]
+      // },
+      // {
+      //   'group':'Vlan',
+      //   'label': this.translate('MODULE.HEADER.VLAN'),
+      //   'role': 3,
+      //   'items':[
+      //     {'label': this.translate('MODULE.HEADER.VLAN.NORMAL'), 'url': '/vlan', 'role': 2},
+      //     {'label': this.translate('MODULE.HEADER.VLAN.DYNAMIC'), 'url': '/vlan_dynamic', 'role': 2},
+      //     {'label': this.translate('MODULE.HEADER.VLAN.GUEST'), 'url': '/vlan_guest', 'role': 2},
+      //     {'label': this.translate('MODULE.HEADER.VLAN.IP_SUBTNET'), 'url': '/vlan_ip', 'role': 2},
+      //   ]
+      // },
+      // {
+      //   'group':'Logical',
+      //   'label': this.translate('MODULE.HEADER.LOGICAL'),
+      //   'role': 3,
+      //   'items':[
+      //     {'label': 'Tenant', 'url': '/tenant', 'role': 3},
+      //     {'label': 'Segment', 'url': '/segment', 'role': 3},
+      //     {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
+      //     {'label': 'EGP', 'url': '/egp', 'role': 3}
+      //   ]
+      //  },
+      // {
+      //   'group': 'Alert',
+      //   'label': this.translate('MODULE.HEADER.ALERT'),
+      //   'role': 2,
+      //   'items': [
+      //     // {'label': 'Alert', 'url': '/alert'},
+      //     {'label': this.translate('MODULE.HEADER.ALERT.ALERT'), 'url': '/alert', 'role': 2},
+      //     {'label': this.translate('MODULE.HEADER.ALERT.HEALTHYCHECK'), 'url': '/healthycheck', 'role': 2},
+      //     {'label': this.translate('MODULE.HEADER.ALERT.INFORM'), 'url': '/inform', 'role': 2},
+      //   ]
+      // },
+      // {
+      //   'group': 'Config',
+      //   'label': this.translate('MODULE.HEADER.CONFIG'),
+      //   'role': 3,
+      //   'items': [
+      //     {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION'), 'url': '/configuration_list', 'role': 3},
+      //     {'label': this.translate('MODULE.HEADER.CONFIG.CONFIGURATION_HISTORY'), 'url': '/configuration_history', 'role': 3}
+      //   ]
+      // },
+      // {
+      //   'group': 'Log',
+      //   'role': 2,
+      //   'label': this.translate('MODULE.HEADER.LOG'),
+      //   'items': [
+      //     {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '/log', 'role': 2}
+      //   ]
+      // },
+      // {
+      //   'group': 'Account',
+      //   'role': 3,
+      //   'label': this.translate('MODULE.HEADER.ACCOUNT'),
+      //   'items': [
+      //     {'label': this.translate('MODULE.HEADER.ACCOUNT.ACCOUNT_MANAGER'), 'url': '/account_manage', 'role': 3}
+      //   ]
+      // }, {
+      //   'group': 'Manage',
+      //   'role': 3,
+      //   'label': this.translate('MODULE.HEADER.MANAGE'),
+      //   'items': [
+      //     {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
+      //     {'label': this.translate('MODULE.HEADER.MANAGE.NTP'), 'url': '/ntp', 'role': 3},
+      //     {'label': 'TimeRange', 'url': '/time_range', 'role': 3},
+      //     {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3},
+      //     {'label': this.translate('MODULE.HEADER.MANAGE.ANALYZER'), 'url': '/analyzer', 'role': 3},
+      //     {'label': this.translate('MODULE.HEADER.MANAGE.SYSTEM_INFO'), 'url': '/system_info', 'role': 3},
+      //     {'label': this.translate('MODULE.HEADER.MANAGE.APPLICATION'), 'url': '/application', 'role': 3},
+      //     {'label': this.translate('MODULE.HEADER.MANAGE.LICENSE'), 'url': '/license', 'role': 3}
+      //   ]
+      // }
+
+    ]
   }
 
  /* updateMenuTranslation() {
@@ -897,19 +1000,19 @@ export class appService {
   }
 
   getHostSegmentUrl(){
-    return this.getZoneEndpoint(true) + `/topology/v2/host-segments`;
+    return this.getZoneEndpoint(true) + `/topologyl3/v1/host-segments`;
   }
 
   getHostSegmentByNameAndDeviceUrl(device_id,seg_name){
-    return this.getZoneEndpoint(true) + `/topology/v2/host-segments/${device_id}/${seg_name}`;
+    return this.getZoneEndpoint(true) + `/topologyl3/v1/host-segments/${device_id}/${seg_name}`;
   }
 
   getHostSegmentByNameUrl(seg_name){
-    return this.getZoneEndpoint(true) + `/topology/v2/host-segments/${seg_name}`;
+    return this.getZoneEndpoint(true) + `/topologyl3/v1/host-segments/${seg_name}`;
   }
 
   getHostSegmentByDeviceUrl(device_id){
-    return this.getZoneEndpoint(true) + `/topology/v2/host-segments/${device_id}`;
+    return this.getZoneEndpoint(true) + `/topologyl3/v1/host-segments/${device_id}`;
   }
 
   getDHCPRelayDefaultUrl(){

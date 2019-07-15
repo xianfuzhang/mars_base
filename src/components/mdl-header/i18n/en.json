@@ -1,5 +1,9 @@
 {
-  "MODULE.HEADER.FABRIC": "Fabric",
+  "MODULE.HEADER.FABRIC": "Switch",
+  "MODULE.HEADER.FUNCTIONS": "Functions",
+  "MODULE.HEADER.TOPOLOGY": "Topology",
+  "MODULE.HEADER.SECURITY": "Security",
+  "MODULE.HEADER.SYSTEM": "System",
   "MODULE.HEADER.ALERT": "Alert",
   "MODULE.HEADER.CONFIG": "Config",
   "MODULE.HEADER.LOG": "Log",
