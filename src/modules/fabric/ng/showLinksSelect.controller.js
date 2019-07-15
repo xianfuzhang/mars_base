@@ -1,26 +1,26 @@
 export class ShowLinksSelectController {
-	static getDI() {
-		return [
-			'$scope',
-			'$q',
+  static getDI() {
+    return [
+      '$scope',
+      '$q',
       'localStoreService',
       '$filter',
       '$modalInstance'
-		];
-	}
+    ];
+  }
 
-	constructor(...args) {
-		this.di = {};
+  constructor(...args) {
+    this.di = {};
     ShowLinksSelectController.getDI().forEach((value, index) => {
-			this.di[value] = args[index];
-		});
-		let scope = this.di.$scope;
+      this.di[value] = args[index];
+    });
+    let scope = this.di.$scope;
 
-		this.translate = this.di.$filter('translate');
+    this.translate = this.di.$filter('translate');
 
     let fabric_storage_ns = "storage_farbic_";
 
-		scope.showLinksModel = {
+    scope.showLinksModel = {
       mode: 0
     };
 
@@ -66,7 +66,7 @@ export class ShowLinksSelectController {
 
 
     init();
-	}
+  }
 }
 ShowLinksSelectController.$inject = ShowLinksSelectController.getDI();
 ShowLinksSelectController.$$ngIsClass = true;

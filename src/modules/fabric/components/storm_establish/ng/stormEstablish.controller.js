@@ -1,16 +1,16 @@
 export class StormEstablishController {
-	static getDI() {
-		return [
-			'$scope',
+  static getDI() {
+    return [
+      '$scope',
       '$rootScope',
       '$filter',
       '$timeout',
       '_',
       'deviceDataManager',
-		];
-	}
-	constructor(...args){
-		this.di = {};
+    ];
+  }
+  constructor(...args){
+    this.di = {};
     StormEstablishController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -223,7 +223,7 @@ export class StormEstablishController {
         cb();
       })
     });
-	}
+  }
 }
 StormEstablishController.$inject = StormEstablishController.getDI();
 StormEstablishController.$$ngIsClass = true;

@@ -81,8 +81,8 @@ export class SegmentEstablishController {
       if(scope.showWizard) return;
   
       init();
-	
-	    scope.mode = 'create';
+  
+      scope.mode = 'create';
       scope.defaultTenant = tenantName ? tenantName : '';
       logicalDataManager.getTenants().then(
         (res) => {
@@ -108,7 +108,7 @@ export class SegmentEstablishController {
         })
       
       if(segmentName) {
-	      scope.mode = 'update';
+        scope.mode = 'update';
         logicalDataManager.getSegment(tenantName, segmentName).then(
           (res) => {
             let segment = res.data;
@@ -171,7 +171,7 @@ export class SegmentEstablishController {
             rootScope.$emit('segment-list-refresh');
             resolve({valid: true, errorMessage: ''});
           }, (err) => {
-	          rootScope.$emit('segment-list-refresh', false);
+            rootScope.$emit('segment-list-refresh', false);
             resolve({valid: false, errorMessage: err.data.message});
           });
       });

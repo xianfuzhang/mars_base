@@ -50,7 +50,7 @@ export default angular
   .service('logDataManager', LogDataManager)
   .service('dateService', DateService)
   .service('manageService', manageService)
-	.service('chartService', chartService)
+  .service('chartService', chartService)
   .service('logicalService', logicalService)
   .service('roleService', RoleService)
   .service('colorService', ColorService)
@@ -60,7 +60,7 @@ export default angular
   .service('intentDataManager', IntentDataManager)
   .service('manageDataManager', ManageDataManager)
   .service('logicalDataManager', LogicalDataManager)
-	.service('messageService', MessageWebsocketService)
+  .service('messageService', MessageWebsocketService)
   .service('regexService', regexService)
   .service('vlanDataManager', VlanDataManager)
   .name;

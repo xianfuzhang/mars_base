@@ -42,16 +42,16 @@ export class DeviceDetailService {
         'value': 'statistic',
         'type': 'statistic'
       },
-      {
-        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.FLOW'),
-        'value': 'flow',
-        'type': 'flow'
-      },
-      {
-        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.GROUPS'),
-        'value': 'group',
-        'type': 'group'
-      },
+      // {
+      //   'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.FLOW'),
+      //   'value': 'flow',
+      //   'type': 'flow'
+      // },
+      // {
+      //   'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.GROUPS'),
+      //   'value': 'group',
+      //   'type': 'group'
+      // },
       {
         'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.ENDPOINTS'),
         'value': 'endpoint',

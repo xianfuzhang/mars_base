@@ -1,46 +1,46 @@
 export class ShowSwitchFlowsController {
-	static getDI() {
-		return [
-			'$scope',
-			'$q',
-			'dataModel',
-			'flowService',
-			'deviceDetailService',
-			'deviceDataManager',
-			'tableProviderFactory'
-		];
-	}
+  static getDI() {
+    return [
+      '$scope',
+      '$q',
+      'dataModel',
+      'flowService',
+      'deviceDetailService',
+      'deviceDataManager',
+      'tableProviderFactory'
+    ];
+  }
 
-	constructor(...args) {
-		this.di = {};
-		ShowSwitchFlowsController.getDI().forEach((value, index) => {
-			this.di[value] = args[index];
-		});
-		this.scope = this.di.$scope;
-		this.scope.switchId = this.di.dataModel.switchId;
+  constructor(...args) {
+    this.di = {};
+    ShowSwitchFlowsController.getDI().forEach((value, index) => {
+      this.di[value] = args[index];
+    });
+    this.scope = this.di.$scope;
+    this.scope.switchId = this.di.dataModel.switchId;
 
-		this.scope.flowsModel = {
+    this.scope.flowsModel = {
       provider: null,
       api: null,
       schema: this.di.deviceDetailService.getTopoDeviceFlowsSchema(),
       entities: []
     };
 
-		this.scope.onTableRowClick = (event) => {
-			if (event.$data){
+    this.scope.onTableRowClick = (event) => {
+      if (event.$data){
         this.scope.flowsModel.api.setSelectedRow(event.$data.id);
       }
-		};
+    };
 
-		this.scope.onApiReady = ($api) => {
+    this.scope.onApiReady = ($api) => {
       this.scope.flowsModel.api = $api;
     };
 
     this.init();
-	}
+  }
 
-	init() {
-		this.scope.flowsModel.provider = this.di.tableProviderFactory.createProvider({
+  init() {
+    this.scope.flowsModel.provider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.deviceDataManager.getDeviceFlows(this.scope.switchId, {}).then((res) => {
@@ -61,11 +61,11 @@ export class ShowSwitchFlowsController {
         };
       }
     });
-	}
+  }
 
-	entityStandardization(entities) {
-		this.scope.flowsModel.entities = [];
-		entities.forEach((entity) => {
+  entityStandardization(entities) {
+    this.scope.flowsModel.entities = [];
+    entities.forEach((entity) => {
       let obj = {};
       obj['id'] = entity.id;
       obj['state'] = entity.state;
@@ -78,7 +78,7 @@ export class ShowSwitchFlowsController {
       obj['app'] = entity.appId;
       this.scope.flowsModel.entities.push(obj);
     });
-	}
+  }
 }
 ShowSwitchFlowsController.$inject = ShowSwitchFlowsController.getDI();
 ShowSwitchFlowsController.$$ngIsClass = true;

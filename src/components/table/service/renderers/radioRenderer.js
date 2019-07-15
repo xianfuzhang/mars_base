@@ -1,7 +1,7 @@
 export class RadioRenderer {
-	static getDI() {
+  static getDI() {
     return [
-    	'$compile',
+      '$compile',
       'renderService',
       'uuid'
     ];

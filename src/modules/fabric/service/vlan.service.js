@@ -12,22 +12,22 @@ export class VlanService {
   }
 
   getVlanTabSchema() {
-  	return [
+    return [
       {
         'label': this.translate('MODULES.VLAN.TAB.SCHEMA.DETAIL'),
         'value': 'detail',
         'type': 'detail'
       },
       {
-      	'label': this.translate('MODULES.VLAN.TAB.SCHEMA.CREATE'),
-      	'value': 'create',
-      	'type': 'create'
+        'label': this.translate('MODULES.VLAN.TAB.SCHEMA.CREATE'),
+        'value': 'create',
+        'type': 'create'
       }
     ];
   }
 
   getPortsListSchema() {
-  	return [
+    return [
       {
         'label': 'Port',
         'field': 'port',

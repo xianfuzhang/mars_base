@@ -17,7 +17,7 @@ export class HostSegmentController {
   }
 
   constructor(...args){
-  	this.di = {};
+    this.di = {};
     HostSegmentController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -26,19 +26,19 @@ export class HostSegmentController {
     this.translate = this.di.$filter('translate');
     scope.devices = [];
     scope.model = {
-    	'actionsShow':  this.di.deviceService.getHostSegmentActionsShow(),
-    	'rowActions': this.di.deviceService.getHostSegmentTableRowActions(),
-    	'provider': null
+      'actionsShow':  this.di.deviceService.getHostSegmentActionsShow(),
+      'rowActions': this.di.deviceService.getHostSegmentTableRowActions(),
+      'provider': null
     };
     scope.role = this.di.roleService.getRole();
 
     scope.onAPIReady = ($api) => {
-    	scope.model.API = $api;
+      scope.model.API = $api;
     };
 
 
     scope.batchRemove = ($value) => {
-    	if (!$value.length) return;
+      if (!$value.length) return;
       this.di.dialogService.createDialog('warning', this.translate('MODULES.FABRIC.HOSTSEGMENT.DIALOG.BATCH.DELETE.WARNING'))
       .then(() =>{
           this.batchDeleteUpLinks($value);
@@ -127,7 +127,7 @@ export class HostSegmentController {
   }
 
   getEntities(segs) {
-  	let entities = [];
+    let entities = [];
 
     segs.forEach((item) => {
       let obj = {};

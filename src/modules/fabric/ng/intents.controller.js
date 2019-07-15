@@ -1,23 +1,23 @@
 export class IntentsController {
   static getDI() {
-  	return [
-  		'$scope',
+    return [
+      '$scope',
       '$rootScope',
-  		'$q',
+      '$q',
       '$filter',
       'roleService',
       '_',
-  		'intentService',
-  		'dialogService',
+      'intentService',
+      'dialogService',
       'notificationService',
-  		'intentDataManager',
+      'intentDataManager',
       'deviceDataManager',
       'modalManager',
-  		'tableProviderFactory'
-  	];
+      'tableProviderFactory'
+    ];
   }
   constructor(...args){
-  	this.di = {};
+    this.di = {};
     IntentsController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -30,14 +30,14 @@ export class IntentsController {
     };
     this.scope.devices = [];
     this.scope.model = {
-    	'actionsShow':  this.di.intentService.getIntentActionsShow(),
-    	'rowActions': this.di.intentService.getIntentTableRowActions(),
-    	'provider': null
+      'actionsShow':  this.di.intentService.getIntentActionsShow(),
+      'rowActions': this.di.intentService.getIntentTableRowActions(),
+      'provider': null
     };
     this.scope.role = this.di.roleService.getRole();
 
     this.scope.onAPIReady = ($api) => {
-    	this.scope.model.API = $api;
+      this.scope.model.API = $api;
     };
 
     this.scope.addIntent = () => {
@@ -104,7 +104,7 @@ export class IntentsController {
     };
 
     this.scope.batchRemove = ($value) => {
-    	if (!$value.length) return;
+      if (!$value.length) return;
       this.di.dialogService.createDialog('warning', this.translate('MODULES.INTENTS.DIALOG.CONTENT.BATCH_DELETE_INTENT'))
       .then(() =>{
           this.batchDeleteIntents($value);
@@ -137,14 +137,14 @@ export class IntentsController {
     };
 
     this.scope.onTableRowClick = ($event) => {
-    	this.scope.model.API.setSelectedRow($event.$data.id);
+      this.scope.model.API.setSelectedRow($event.$data.id);
     };
 
     this.init();
   }
 
   init() {
-  	this.scope.model.provider = this.di.tableProviderFactory.createProvider({
+    this.scope.model.provider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
         this.di.deviceDataManager.getDeviceConfigs().then((configs)=>{
@@ -176,9 +176,9 @@ export class IntentsController {
   }
 
   getEntities(intents) {
-  	let entities = [];
+    let entities = [];
 
-  	intents.forEach((item) => {
+    intents.forEach((item) => {
       let obj = {};
       obj.id = item.id;
       obj.type = this.types[item.type] || item.type;

@@ -1,22 +1,22 @@
 export class MonitorController {
   static getDI() {
-  	return [
-  		'$scope',
+    return [
+      '$scope',
       '$rootScope',
-  		'$q',
+      '$q',
       '$filter',
       'roleService',
       '_',
-  		'deviceService',
-  		'dialogService',
+      'deviceService',
+      'dialogService',
       'notificationService',
-  		'intentDataManager',
+      'intentDataManager',
       'deviceDataManager',
-  		'tableProviderFactory'
-  	];
+      'tableProviderFactory'
+    ];
   }
   constructor(...args){
-  	this.di = {};
+    this.di = {};
     MonitorController.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     });
@@ -25,19 +25,19 @@ export class MonitorController {
     this.translate = this.di.$filter('translate');
     scope.devices = [];
     scope.model = {
-    	'actionsShow':  this.di.deviceService.getMonitorActionsShow(),
-    	'rowActions': this.di.deviceService.getMonitorTableRowActions(),
-    	'provider': null
+      'actionsShow':  this.di.deviceService.getMonitorActionsShow(),
+      'rowActions': this.di.deviceService.getMonitorTableRowActions(),
+      'provider': null
     };
     scope.role = this.di.roleService.getRole();
 
     scope.onAPIReady = ($api) => {
-    	scope.model.API = $api;
+      scope.model.API = $api;
     };
 
 
     // scope.batchRemove = ($value) => {
-    // 	if (!$value.length) return;
+    //   if (!$value.length) return;
     //   this.di.dialogService.createDialog('warning', this.translate('MODULES.FABRIC.MONITOR.DIALOG.BATCH.DELETE.WARNING'))
     //   .then(() =>{
     //       this.batchDeleteStorms($value);
@@ -75,7 +75,7 @@ export class MonitorController {
     };
 
     scope.onTableRowClick = ($event) => {
-    	scope.model.API.setSelectedRow($event.$data.session_id);
+      scope.model.API.setSelectedRow($event.$data.session_id);
     };
 
     let init = () => {
@@ -149,7 +149,7 @@ export class MonitorController {
   }
 
   getEntities(sessions) {
-  	let entities = [];
+    let entities = [];
 
     sessions.forEach((item) => {
       let record = {};
