@@ -101,6 +101,7 @@ export class appService {
         'role': 1,
         'items': [
           {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.MANAGE.TIMERANGE'), 'url': '/time_range', 'role': 3},
         ]
       },
       {
@@ -171,7 +172,6 @@ export class appService {
         'items': [
           {'label': this.translate('MODULE.HEADER.MANAGE.DHCP'), 'url': '/dhcp', 'role': 3},
           {'label': this.translate('MODULE.HEADER.MANAGE.NTP'), 'url': '/ntp', 'role': 3},
-          // {'label': 'TimeRange', 'url': '/time_range', 'role': 3}, //TODO 暂时隐藏
           {'label': this.translate('MODULE.LOG.PAGE.TITLE'), 'url': '/log', 'role': 2},
           {'label': this.translate('MODULE.HEADER.MANAGE.ELASTICSEARCH'), 'url': '/elasticsearch', 'role': 3},
           {'label': this.translate('MODULE.HEADER.MANAGE.ANALYZER'), 'url': '/analyzer', 'role': 3},
@@ -310,7 +310,8 @@ export class appService {
       '/ntp': ['com.nocsys.ntpserver'],
       '/elasticsearch': ['com.nocsys.utility'],
       '/analyzer': ['com.nocsys.analyzer'],
-      '/system_info': ['com.nocsys.utility']
+      '/system_info': ['com.nocsys.utility'],
+      '/time_range':['com.nocsys.timerange']
     };
   }
 
@@ -1064,19 +1065,19 @@ export class appService {
   }
 
   getTimeRangeOfDeviceUrl(deviceId){
-    return this.getZoneEndpoint(true) + '/timerange/v1/' + deviceId;
+    return this.getZoneEndpoint(true) + '/timerange/v1/' + escape(deviceId);
   }
 
   getTimeRangeOfDeviceAndNameUrl(deviceId, name){
-    return this.getZoneEndpoint(true) + '/timerange/v1/' + deviceId + '/' + name;
+    return this.getZoneEndpoint(true) + '/timerange/v1/' + escape(deviceId)  + '/' + name;
   }
 
   getTimeRangeDeleteAbOfDeviceAndNameUrl(deviceId, name){
-    return this.getZoneEndpoint(true) + '/timerange/v1/' + deviceId + '/' + name + '/absolute';
+    return this.getZoneEndpoint(true) + '/timerange/v1/' + escape(deviceId) + '/' + name + '/absolute';
   }
 
   getTimeRangeDeletePerOfDeviceAndNameUrl(deviceId, name, time){
-    return this.getZoneEndpoint(true) + '/timerange/v1/' + deviceId + '/' + name + '/periodic/' + time ;
+    return this.getZoneEndpoint(true) + '/timerange/v1/' + escape(deviceId) + '/' + name + '/periodic/' + time ;
   }
 
 }
