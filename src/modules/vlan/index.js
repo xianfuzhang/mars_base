@@ -1,5 +1,6 @@
 import {DynamicVlanController} from './ng/dynamic.controller';
 import {GuestVlanCtrl} from './ng/guest.controller';
+import {VoiceVlanCtrl} from './ng/voiceVlan.controller';
 import {VlanIpEstablishController} from './component/vlan_ip_establish/ng/VlanIpEstablish.controller';
 import {VlanIpSubnetController} from './ng/ipsubnet.controller';
 import {CreateGuestVlanCtrl} from './component/guestVlan/ng/createGuestVlan.controller'
@@ -10,6 +11,7 @@ export default angular
   .module('vlan', [])
   .controller('dynamicVlanController', DynamicVlanController)
   .controller('guestVlanCtrl', GuestVlanCtrl)
+  .controller('voiceVlanCtrl', VoiceVlanCtrl)
   .controller('vlanIpSubnetController', VlanIpSubnetController)
   .controller('vlanIpEstablishController', VlanIpEstablishController)
   .controller('createGuestVlanCtrl', CreateGuestVlanCtrl)
