@@ -414,10 +414,11 @@ th.sortable.sort-desc .icon-sort .arrow-right{
   min-width: 80px;
 }
 .mdc-list-item.mdc-list-item__normal-size{
-  height: 35px;
+  height: 25px;
 }
 .mdc-list-item.mdc-list-item__small-size{
-  height: 28px;
+  height: 15px;
+  font-size: 0.75rem;
 }
 .pagination {
   display: flex;
