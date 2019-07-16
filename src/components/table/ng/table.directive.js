@@ -362,6 +362,7 @@ export class mdlTable {
       scope.tableModel.pagination.totalItemCount = scope.tableModel.inlineFilterData.length;
       scope.tableModel.pagination.numberOfPages = scope.tableModel.pagination.totalItemCount === 0 ?
           1 : Math.ceil(scope.tableModel.pagination.totalItemCount / scope.tableModel.pagination.number);
+      scope.tableModel.pagination.start = 0;
     };
 
     scope.clearRowCheck = () => {
