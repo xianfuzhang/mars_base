@@ -149,6 +149,14 @@
   cursor: pointer;
 }
 
+.voice-vlan__body .status_icon.material_icon.not_interested{
+  color:red;
+}
+
+.voice-vlan__body .status_icon.material_icon.done{
+  color:#0fd40f;
+}
+
 //
 //@-webkit-keyframes fly_into {
 //  0% {
