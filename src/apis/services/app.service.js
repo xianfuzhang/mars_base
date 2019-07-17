@@ -92,6 +92,7 @@ export class appService {
           {'label': 'Intents', 'url': '/intents', 'role': 2},
           {'label': 'UpLink', 'url': '/uplinks', 'role': 2},
           {'label': 'Host Segment', 'url': '/host_segment', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.FABRIC.LOOPBACK'), 'url': '/lbd', 'role': 2}
         ]
       },
       {
@@ -1047,6 +1048,30 @@ export class appService {
 
   getDHCPRelayCountersUrl(){
     return this.getZoneEndpoint() + `/dhcprelay/v1/counters`;
+  }
+
+  getDeviceLoopbackDetectionUrl(deviceId){
+    if (deviceId) {
+      return this.getZoneEndpoint(true) + `/lbd/v1/${deviceId}`;
+    }
+    else {
+      return this.getZoneEndpoint(true) + '/lbd/v1';
+    }
+  }
+  getPortLoopbackDetectionUrl(deviceId, port) {
+    if (deviceId && port) {
+      return this.getZoneEndpoint(true) + `/lbd/v1/port/${deviceId}/${port}`;
+    }
+    else {
+      return this.getZoneEndpoint(true) + '/lbd/v1/port';
+    }
+  }
+  getUpLinkUrl(){
+    return this.getZoneEndpoint() + '/topology/v1/uplink-segments';
+  }
+
+  getUpLinkDeleteUrl(name){
+    return this.getZoneEndpoint() + '/topology/v1/uplink-segments/' + name;
   }
 
   getVlanConfigUrl(device_id){

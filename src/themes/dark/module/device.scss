@@ -797,3 +797,47 @@
   margin-right: 10px;
   text-align: left;
 }
+.device-lbd-wizard .wizard__dialog-single{
+  width: 600px;
+}
+.device-lbd-wizard .wizard__body{
+  height: 410px;
+}
+.device-lbd-wizard .wizard__body__form{
+  width: 510px;
+  padding-top: 10px;
+}
+.updateDeviceLbd .stepForm__input__label{
+  display: inline-block;
+  width: 120px;
+}
+.updateDeviceLbd .lbd-item > .stepForm__input__label{
+  display: block;
+  float: left;
+}
+.updateDeviceLbd .lbd-item > .radio-values{
+  display: flex;
+  width: 290px;
+  flex-wrap: wrap;
+}
+.updateDeviceLbd .lbd-item > .radio-values > .mdc-form-field{
+  width: 140px;
+}
+.updateDeviceLbd .interval-field.text-field-container, .recover-field.text-field-container{
+  position: relative;
+  display: inline-block;
+}
+.updateDeviceLbd .interval-field .mdc-text-field-helper-text--persistent{
+  position: absolute;
+  left: 180px;
+  top: 5px;
+  display: block;
+  width: 200px;
+}
+.updateDeviceLbd .recover-field .mdc-text-field-helper-text--persistent{
+  position: absolute;
+  left: 180px;
+  top: 5px;
+  display: block;
+  width: 200px;
+}
