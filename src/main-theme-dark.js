@@ -3,6 +3,10 @@ import './themes/dark/index.scss';
 import 'angular';
 import 'angular-cookies';
 import 'angular-route';
+import 'angular-animate';
+import 'angular-material';
+import 'angular-messages';
+import 'angular-route';
 import 'angular-translate';
 import 'angular-ui-bootstrap';
 
@@ -58,12 +62,14 @@ import 'marChart';
 import 'portsGroup';
 import 'languageSelection';
 
-import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, mainCtrl} from './base';
+import {setLanguage, configTranslate, configRouterfunction, configHttpProvider, mainCtrl, configDateLocaleProvider} from './base';
 
 angular
   .module('marsApp', [
     'ngRoute',
     'ngCookies',
+    'ngAnimate',
+    'ngMaterial', 'ngMessages',
     'ui.bootstrap',
     'pascalprecht.translate',
     '_',
@@ -121,4 +127,5 @@ angular
   .config(['$translateProvider', configTranslate])
   .config(['$routeProvider', '$locationProvider', configRouterfunction])
   .config(['$httpProvider', configHttpProvider])
+  .config(['$mdDateLocaleProvider',configDateLocaleProvider])
   .controller('mainCtrl', ['$scope', '$rootScope', mainCtrl]);

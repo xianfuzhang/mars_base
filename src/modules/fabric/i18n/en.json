@@ -222,6 +222,8 @@
   "MODULES.REGEX.FLOW_ADD.PORT_ARRAY":"Please input the right port array!(Example: 2,3,4 or single port number)",
   "MODULES.REGEX.PFC_ADD.PORT":"Invalid port number!",
   "MODULES.REGEX.PFC_ADD.QUEUE":"Invalid queue number!(Range: 0-7)",
+  "MODULES.REGEX.TIMERANGE.HOUR":"0~23",
+  "MODULES.REGEX.TIMERANGE.MINUTE":"0~59",
   "MODULES.TOPO.BUTTON_TOOLTIP.REFRESH": "Refresh",
   "MODULES.TOPO.BUTTON_TOOLTIP.SHOW_TOOLTIP": "Show Tooltip",
   "MODULES.TOPO.BUTTON_TOOLTIP.SHOW_LINES": "Show Lines",

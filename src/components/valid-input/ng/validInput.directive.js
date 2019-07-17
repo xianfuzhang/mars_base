@@ -89,8 +89,11 @@ export class validInput {
           message = this.translate('MODULES.REGEX.FLOW_ADD.HOST')
         } else if (type === 'port_array') {
           message = this.translate('MODULES.REGEX.FLOW_ADD.PORT_ARRAY')
+        } else if (type === 'hour') {
+          message = this.translate('MODULES.REGEX.TIMERANGE.HOUR')
+        } else if (type === 'minute') {
+          message = this.translate('MODULES.REGEX.TIMERANGE.MINUTE')
         }
-
         return message;
       };
 
@@ -121,7 +124,14 @@ export class validInput {
           regex = '^[a-zA-z]+[0-9a-zA-Z\.\-]*$'
         } else if( type === 'port_array'){
           regex = '^(([1-9]|[1-9][0-9])\\s*,\\s*)*([1-9]|[1-9][0-9])$'
+        } else if( type === 'hour'){
+          regex = '^[0-9]|1[0-9]|2[0-3]$'
+        } else if( type === 'minute'){
+          regex = '^[0-9]|[1-5][0-9]$'
         }
+
+
+
         return regex;
       };
 

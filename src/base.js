@@ -453,4 +453,72 @@ function mainCtrl($scope, $rootScope) {
   });
 }
 
-export {setLanguage, configTranslate, configRouterfunction, configHttpProvider, mainCtrl}
+
+function configDateLocaleProvider($mdDateLocaleProvider, $translateProvider){
+  // console.log(
+  // let res = $translateProvider.use('MODULE.HEADER.FABRIC.DHCPRELAY')
+  console.log($translateProvider.preferredLanguage());
+    // .then(res=>{
+    // "use strict";
+    // console.log(res)
+  //
+  // })
+  //
+  // console.log(res)
+
+
+  $mdDateLocaleProvider.months = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+  $mdDateLocaleProvider.shortMonths = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+  $mdDateLocaleProvider.days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  $mdDateLocaleProvider.shortDays = ['日', '一', '二', '三', '四', '五', '六'];
+
+  $mdDateLocaleProvider.firstDayOfWeek = 7;
+
+  // $mdDateLocaleProvider.dates = [1, 2, 3, 4, 5, 6, ...];
+
+  $mdDateLocaleProvider.parseDate = function (dateString) {
+    let d_arr = dateString.split('-');
+    if (d_arr.length !== 3) {
+      return new Date(NaN);
+    }
+    if (parseInt(d_arr[0]) > 2100 || parseInt(d_arr[0]) < 2000) {
+      return new Date(NaN);
+    }
+    if (parseInt(d_arr[1]) - 1 < 0 || parseInt(d_arr[1]) - 1 > 11) {
+      return new Date(NaN);
+    }
+
+    if (parseInt(d_arr[2]) < 0 || parseInt(d_arr[2]) > 31) {
+      return new Date(NaN);
+    }
+
+    let date = new Date();
+    date.setFullYear(parseInt(d_arr[0]));
+    date.setMonth(parseInt(d_arr[1]) - 1);
+    date.setDate(parseInt(d_arr[2]));
+    if (angular.isDate(date)) {
+      return date;
+    } else {
+      return new Date(NaN);
+    }
+  };
+
+  $mdDateLocaleProvider.formatDate = function (date) {
+    if(!date){
+      return '';
+    }
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1 < 10 ? '0' + ( date.getMonth() + 1 ) : (date.getMonth() + 1) + '';
+    let dates = date.getDate() < 10 ? '0' + date.getDate() : date.getDate() + '';
+    return year + '-' + month + '-' + dates;
+  };
+
+  $mdDateLocaleProvider.isDateComplete = function (dateString) {
+    dateString = dateString.trim();
+
+    let re = new RegExp('^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$');
+    return re.test(dateString);
+  };
+}
+
+export {setLanguage, configTranslate, configRouterfunction, configHttpProvider, configDateLocaleProvider, mainCtrl}

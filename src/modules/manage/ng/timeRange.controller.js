@@ -297,7 +297,7 @@ export class TimeRangeController {
 
 
     scope.add = () => {
-      // this.di.$rootScope.$emit('ntp-wizard-show');
+      this.di.$rootScope.$emit('timerange-wizard-show', scope.timeRangeModel.curDevice, scope.timeRangeModel.curName);
     };
 
     scope.deviceChange = ($value) => {

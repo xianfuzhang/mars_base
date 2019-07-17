@@ -295,6 +295,7 @@ export class appService {
       '/vlan_dynamic': ['com.nocsys.vlanmgmt'],
       '/vlan_guest': ['com.nocsys.vlanmgmt'],
       '/vlan_ip': ['com.nocsys.vlanmgmt'],
+      '/vlan_voice': ['com.nocsys.vlanmgmt'],
       '/tenant': ['com.nocsys.tenant'],
       '/segment': ['com.nocsys.tenant'],
       '/endpoints': ['com.nocsys.tenant', 'com.nocsys.endpoint'],

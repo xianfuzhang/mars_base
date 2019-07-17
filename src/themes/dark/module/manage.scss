@@ -323,5 +323,37 @@
   & .mdl-table-field:hover{
     box-shadow: none;
   }
+}
 
+@include block(timerange_establish) {
+  & md-icon{
+    color:white;
+  }
+
+  & .md-datepicker-expand-triangle{
+    border-top-color: white;
+  }
+  & .md-datepicker-input{
+    color:white;
+  }
+
+  & .md-datepicker-open .md-datepicker-input{
+    color:black;
+  }
+
+  & .md-datepicker-input-container{
+    border-bottom-color: white;
+  }
+
+  & .md-datepicker-input-container.md-datepicker-focused{
+    border-bottom-color: white;
+  }
+
+  & .md-icon-button + .md-datepicker-input-container{
+    margin-left:0px;
+  }
+}
+
+.md-datepicker-calendar-pane{
+  z-index: 2000;
 }
