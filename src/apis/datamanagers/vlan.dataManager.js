@@ -131,6 +131,19 @@ export class VlanDataManager {
     );
     return defer.promise;
   }
+
+  getVoiceVlanConfig() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getVoiceVlanUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'devices': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
 }
 VlanDataManager.$inject = VlanDataManager.getDI();
 VlanDataManager.$$ngIsClass = true;

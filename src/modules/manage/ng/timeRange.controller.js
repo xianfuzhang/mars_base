@@ -36,8 +36,8 @@ export class TimeRangeController {
     scope.timeRanges = null;
     scope.timeRangeModel = {
       // 'deviceDisplay': {'hint':'交换机', 'options':[]},
-      'deviceDisplay': {'options': [{'label': '请选择交换机', 'value': null}]},
-      'nameDisplay': {'options': [{'label': '请选择时间范围', 'value': null}]},
+      'deviceDisplay': {'options': [{'label': this.translate('MODULES.TIMERANGES.DISPLAY.SELECT_DEVICE'), 'value': null}]},
+      'nameDisplay': {'options': [{'label': this.translate('MODULES.TIMERANGES.DISPLAY.SELECT_NAME'), 'value': null}]},
       'curDevice': null,
       'curName': null,
       'times': [],
@@ -79,7 +79,7 @@ export class TimeRangeController {
       promises.push(timeRangeDefer.promise);
 
       Promise.all(promises).then(() => {
-        scope.timeRangeModel.deviceDisplay['options'] = [{'label': '请选择交换机', 'value': null}]
+        scope.timeRangeModel.deviceDisplay['options'] = [{'label':  this.translate('MODULES.TIMERANGES.DISPLAY.SELECT_DEVICE'), 'value': null}]
         scope.timeRangeModel.deviceDisplay['options'] = scope.timeRangeModel.deviceDisplay['options'].concat(scope.deviceConfigs.map(config => {
           return {'label': config['name'], 'value': config['id']}
         }));
@@ -108,7 +108,7 @@ export class TimeRangeController {
       promises.push(timeRangeDefer.promise);
 
       Promise.all(promises).then(() => {
-        scope.timeRangeModel.deviceDisplay['options'] = [{'label': '请选择交换机', 'value': null}]
+        scope.timeRangeModel.deviceDisplay['options'] = [{'label':  this.translate('MODULES.TIMERANGES.DISPLAY.SELECT_DEVICE'), 'value': null}]
         scope.timeRangeModel.deviceDisplay['options'] = scope.timeRangeModel.deviceDisplay['options'].concat(scope.deviceConfigs.map(config => {
           return {'label': config['name'], 'value': config['id']}
         }));
@@ -116,7 +116,7 @@ export class TimeRangeController {
         let timeranges = scope.timeRanges.filter(time_range => {
           return time_range.deviceId === scope.timeRangeModel.curDevice.value
         });
-        scope.timeRangeModel.nameDisplay['options'] = [{'label': '请选择时间范围', 'value': null}]
+        scope.timeRangeModel.nameDisplay['options'] = [{'label': this.translate('MODULES.TIMERANGES.DISPLAY.SELECT_NAME'), 'value': null}]
         scope.timeRangeModel.nameDisplay['options'] = scope.timeRangeModel.nameDisplay['options'].concat(timeranges.map(time_range => {
           return {'label': time_range['name'], 'value': time_range['name']}
         }));
@@ -164,7 +164,7 @@ export class TimeRangeController {
       };
       let res = [];
       pers.forEach(per => {
-        res.push({start: format(per['start']), end: format(per['end']), type: 'periodic'})
+        res.push({start: format(per['start']), end: format(per['end']), type: 'periodic', _start: per['start'], _end: per['end']})
       });
       return res;
 
@@ -200,6 +200,7 @@ export class TimeRangeController {
       }
       scope.timeRangeModel.times = _formatTimes(name);
       console.log(scope.timeRangeModel.times);
+      // scope.timeRangeModel.provider = null;
 
       scope.timeRangeModel.provider = this.di.tableProviderFactory.createProvider({
         query: (params) => {
@@ -230,28 +231,35 @@ export class TimeRangeController {
       scope.onTableRowSelectAction = (event) => {
         if (event.data && event.action) {
           if (event.action.value === 'delete') {
-            this.di.dialogService.createDialog('warning', this.translate('MODULES.MANAGE.NTP.REMOVE_NTP_SERVER'))
+            this.di.dialogService.createDialog('warning', this.translate('MODULES.TIMERANGES.CONFIRM.DELETE_RANGE'))
               .then((data) => {
-                this.di.manageDataManager.getNTP().then((res) => {
-                  let ntp = (res.data);
-                  this.di._.remove(ntp['ntp_servers'], (server) => {
-                    return server === event.data.host
+                if (event.data.type === 'absolute'){
+                  this.di.manageDataManager.deleteTimeRangeAbsolute(scope.timeRangeModel.curDevice.value, scope.timeRangeModel.curName.value).then((res)=>{
+                    this.di.notificationService.renderSuccess(scope,this.translate('MODULES.TIMERANGES.MESSAGE.DELETE_RANGE.SUCCESS'));
+                    reInit();
+                  }, err=>{
+                    this.di.notificationService.renderWarning(scope,err.data);
                   });
+                } else if(event.data.type === 'periodic'){
+                  let time_key = event.data['_start']['day'] + '_' +
+                                 event.data['_start']['hour'] + '_' +
+                                 event.data['_start']['minute'] + '_to_' +
+                                 event.data['_end']['day'] + '_' +
+                                 event.data['_end']['hour'] + '_' +
+                                 event.data['_end']['minute'];
+                    this.di.manageDataManager.deleteTimeRangePeri(scope.timeRangeModel.curDevice.value, scope.timeRangeModel.curName.value, time_key).then(res=>{
+                      this.di.notificationService.renderSuccess(scope,this.translate('MODULES.TIMERANGES.MESSAGE.DELETE_RANGE.SUCCESS'));
+                      reInit();
+                    }, err=>{
+                      this.di.notificationService.renderWarning(scope,err.data);
+                    });
 
-                  this.di.manageDataManager.putNTP(ntp).then((res) => {
-                    this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.NTP.REMOVE_NTP_SERVER.SUCCESS'));
-                    scope.ntpmodel.api.queryUpdate();
-                  }, (err) => {
-                    this.di.notificationService.renderWarning(scope, err);
-                  })
-                }, (err) => {
-                  this.di.notificationService.renderWarning(scope, err);
-                });
+                } else {
+                  console.error('un-correct type is:' + event.data.type)
+                }
               }, (res) => {
-                this.di.$log.debug('delete ntp server dialog cancel');
+                this.di.$log.debug('delete time range dialog cancel');
               });
-          } else if (event.action.value === 'edit') {
-            this.di.$rootScope.$emit('ipmac-wizard-show', event.data.host.split('/')[0]);
           }
         }
       };
@@ -268,14 +276,22 @@ export class TimeRangeController {
 
     scope.removeName = () =>{
 
-      this.di.manageDataManager.deleteTimeRangeByDeviceAndName(scope.timeRangeModel.curDevice.value, scope.timeRangeModel.curName.value).then(()=>{
-        scope.timeRangeModel.curName = scope.timeRangeModel.nameDisplay['options'][0];
-        reInit();
-      });
+      this.di.dialogService.createDialog('warning', this.translate('MODULES.TIMERANGES.CONFIRM.DELETE_NAME'))
+        .then((data)=>{
+          this.di.manageDataManager.deleteTimeRangeByDeviceAndName(scope.timeRangeModel.curDevice.value, scope.timeRangeModel.curName.value).then(()=>{
+            this.di.notificationService.renderSuccess(scope, this.translate('MODULES.TIMERANGES.MESSAGE.DELETE_NAME.SUCCESS'));
+            scope.timeRangeModel.curName = scope.timeRangeModel.nameDisplay['options'][0];
+            reInit();
+          }, err=>{
+            this.di.notificationService.renderWarning(scope,err.data);
+          });
+        }, res=>{
+          this.di.$log.debug('delete time range dialog cancel');
+        });
     };
 
     scope.addName = () =>{
-
+      this.di.$rootScope.$emit('timerange-name-wizard-show', scope.timeRangeModel.curDevice);
     };
 
 
@@ -289,7 +305,7 @@ export class TimeRangeController {
       let timeranges = scope.timeRanges.filter(time_range => {
         return time_range.deviceId === device.value
       });
-      scope.timeRangeModel.nameDisplay['options'] = [{'label': '请选择时间范围', 'value': null}]
+      scope.timeRangeModel.nameDisplay['options'] = [{'label': this.translate('MODULES.TIMERANGES.DISPLAY.SELECT_NAME'), 'value': null}]
       scope.timeRangeModel.nameDisplay['options'] = scope.timeRangeModel.nameDisplay['options'].concat(timeranges.map(time_range => {
         return {'label': time_range['name'], 'value': time_range['name']}
       }));
@@ -305,10 +321,10 @@ export class TimeRangeController {
 
     let unsubscribes = [];
 
-    // unsubscribes.push(this.di.$rootScope.$on('ntp-refresh', ($event) => {
-    //   this.di.notificationService.renderSuccess(scope, this.translate('MODULES.MANAGE.NTP.SERVER.CREATE.SUCCESS'));
-    //   scope.ntpmodel.api.queryUpdate();
-    // }));
+    unsubscribes.push(this.di.$rootScope.$on('timerange-name-refresh', ($event) => {
+      this.di.notificationService.renderSuccess(scope, this.translate('MODULES.TIMERANGES.MESSAGE.CREATE_NAME.SUCCESS'));
+      reInit();
+    }));
 
     scope.$on('$destroy', () => {
       unsubscribes.forEach((cb) => {

@@ -364,6 +364,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/vlan_voice', {
+      template: require('./modules/vlan/template/voice-vlan.html'),
+      controller: 'voiceVlanCtrl',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .otherwise({ redirectTo: '/' });
 }
 
