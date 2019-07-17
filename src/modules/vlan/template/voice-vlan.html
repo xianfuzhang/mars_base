@@ -1,0 +1,24 @@
+<mdl-header></mdl-header>
+<div class="app-main voice-vlan__body">
+  <content-header big-title="{{'MODULE.HEADER.VLAN.VOICE_VLAN' | translate}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span>{{'MODULE.HEADER.VLAN.VOICE_VLAN' | translate}}</span>
+  </content-header>
+  <div class="app-body">
+    <div class="mars-col-24">
+      <div class="main__content">
+        <mdl-table actions-show="model.actionsShow"
+                   actions="model.rowActions"
+                   row-click="onTableRowClick($event)"
+                   row-select-action="onTableRowSelectAction($event)"
+                   provider="model.provider" api-ready="onAPIReady($api)"
+                   on-add="addGuestVlan()" on-remove="batchRemoveGuestVlan($value)">
+        </mdl-table>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<ng-controller ng-controller="createVoiceVlanCtrl">-->
+    <!--<wizard class="createGuestVlan"></wizard>-->
+<!--</ng-controller>-->

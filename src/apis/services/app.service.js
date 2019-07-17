@@ -80,7 +80,6 @@ export class appService {
 
   getHeaderMenus() {
     return [
-
       {
         'group': 'Fabric',
         'label': this.translate('MODULE.HEADER.FABRIC'),
@@ -112,6 +111,7 @@ export class appService {
           {'label': this.translate('MODULE.HEADER.VLAN.NORMAL'), 'url': '/vlan', 'role': 2},
           {'label': this.translate('MODULE.HEADER.VLAN.DYNAMIC'), 'url': '/vlan_dynamic', 'role': 2},
           {'label': this.translate('MODULE.HEADER.VLAN.GUEST'), 'url': '/vlan_guest', 'role': 2},
+        {'label': this.translate('MODULE.HEADER.VLAN.VOICE_VLAN'), 'url': '/vlan_voice', 'role': 2},
           {'label': this.translate('MODULE.HEADER.VLAN.IP_SUBTNET'), 'url': '/vlan_ip', 'role': 2},
         ]
       },
@@ -1054,6 +1054,10 @@ export class appService {
   }
   getVlanMembersUrl() {
     return this.getZoneEndpoint(true) + '/vlan/v1/vlan-config/vlanmembers';
+  }
+
+  getVoiceVlanUrl(device_id){
+    return this.getZoneEndpoint(true) + '/vlan/v1/voice-vlan' + (device_id ? '/' + device_id : '');
   }
 
   getVlanIpDeleteUrl(device_id, vlan_id){

@@ -315,6 +315,52 @@ export class VlanService {
       }
     ];
   }
+
+  getVoiceVlanTableActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': true, 'role': 2}
+    };
+  }
+
+  getVoiceVlanTableSchema() {
+    return [
+      {
+        'label':  this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.DEVICE'),
+        'field': 'device_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.VLAN'),
+        'field': 'vlan_id',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.AGING'),
+        'field': 'aging',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.STATUS'),
+        'field': 'status',
+        'type': 'icon',
+        'layout': {'visible': true, 'sortable': false}
+      },
+    ];
+  }
+
+  getVoiceVlanTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ];
+  }
 }
 VlanService.$inject = VlanService.getDI();
 VlanService.$$ngIsClass = true;
