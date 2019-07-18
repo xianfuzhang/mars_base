@@ -149,7 +149,7 @@ export class TimeRangeController {
     };
 
     let _formatAbsoluteTime = (ab) => {
-      let res = {start: null, end: null, type: 'absolute'};
+      let res = {start: null, end: null, type: 'absolute',  typeStr: this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.ABSOLUTE')};
       if (ab['start']) {
         res.start = getTimeStr(ab['start'])
       }
@@ -160,14 +160,26 @@ export class TimeRangeController {
 
     let _formatPeriodicTime = (pers) => {
       let format = (t) => {
-        return t['day'] + ' ' + full(t['hour']) + ':' + full(t['minute']);
+        return translate_per_day(t['day']) + ' ' + full(t['hour']) + ':' + full(t['minute']);
       };
       let res = [];
       pers.forEach(per => {
-        res.push({start: format(per['start']), end: format(per['end']), type: 'periodic', _start: per['start'], _end: per['end']})
+        res.push({start: format(per['start']), end: format(per['end']), type: 'periodic', _start: per['start'], _end: per['end'], typeStr: this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC')})
       });
       return res;
 
+    };
+
+    let translate_per_day = (day) => {
+      let types = this.di.manageService.getTimeRangePeriodicType();
+      let dayItem = types.filter((type)=>{
+        return type.value === day;
+      });
+      if(dayItem[0]){
+        return dayItem[0].label
+      } else {
+        return day;
+      }
     };
 
     let _formatTimes = (name) => {

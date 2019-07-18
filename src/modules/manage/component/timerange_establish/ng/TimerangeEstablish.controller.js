@@ -53,18 +53,7 @@ export class TimeRangeEstablishController {
                         ]},
       periodicDisplay: {
         // 'hint':'周期范围',
-        'options': [
-          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.SUNDAY'), 'value': 'sunday'},
-          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.MONDAY'), 'value': 'monday'},
-          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.TUESDAY'), 'value': 'tuesday'},
-          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.WEDNESDAY'), 'value': 'wednesday'},
-          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.THURSDAY'), 'value': 'thursday'},
-          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.FRIDAY'), 'value': 'friday'},
-          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.SATURDAY'), 'value': 'saturday'},
-          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.DAILY'), 'value': 'daily'},
-          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.WEEKDAYS'), 'value': 'weekdays'},
-          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.WEEKEND'), 'value': 'weekend'},
-        ]
+        'options': this.di.manageService.getTimeRangePeriodicType()
       }
     };
 
