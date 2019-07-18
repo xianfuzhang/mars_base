@@ -205,7 +205,7 @@ export class AccountManageController {
       let obj = {};
       obj['id'] = user['user_name'];
       obj['user_name'] = user['user_name'];
-      obj['group'] = user['groups'];
+      obj['group'] = user['groups'].toString();
       entities.push(obj);
     });
     return entities;
