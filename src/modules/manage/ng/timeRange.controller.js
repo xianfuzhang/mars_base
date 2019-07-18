@@ -206,79 +206,79 @@ export class TimeRangeController {
       return [];
     };
 
+    scope.timeRangeModel.provider = this.di.tableProviderFactory.createProvider({
+      query: (params) => {
+        let defer = this.di.$q.defer();
+        this.di.$timeout(() => {
+          defer.resolve({
+            data: scope.timeRangeModel.times,
+            count: undefined
+          });
+        });
+        return defer.promise;
+      },
+      getSchema: () => {
+        return {
+          schema: this.di.manageService.getTimeRangeTableSchema(),
+          index_name: 'host',
+          rowCheckboxSupport: false,
+          rowActionsSupport: true,
+          authManage: {
+            support: true,
+            currentRole: scope.role
+          }
+        };
+      }
+    });
+
+    scope.onTableRowSelectAction = (event) => {
+      if (event.data && event.action) {
+        if (event.action.value === 'delete') {
+          this.di.dialogService.createDialog('warning', this.translate('MODULES.TIMERANGES.CONFIRM.DELETE_RANGE'))
+            .then((data) => {
+              if (event.data.type === 'absolute'){
+                this.di.manageDataManager.deleteTimeRangeAbsolute(scope.timeRangeModel.curDevice.value, scope.timeRangeModel.curName.value).then((res)=>{
+                  this.di.notificationService.renderSuccess(scope,this.translate('MODULES.TIMERANGES.MESSAGE.DELETE_RANGE.SUCCESS'));
+                  reInit();
+                }, err=>{
+                  this.di.notificationService.renderWarning(scope,err.data);
+                });
+              } else if(event.data.type === 'periodic'){
+                let time_key = event.data['_start']['day'] + '_' +
+                  event.data['_start']['hour'] + '_' +
+                  event.data['_start']['minute'] + '_to_' +
+                  event.data['_end']['day'] + '_' +
+                  event.data['_end']['hour'] + '_' +
+                  event.data['_end']['minute'];
+                this.di.manageDataManager.deleteTimeRangePeri(scope.timeRangeModel.curDevice.value, scope.timeRangeModel.curName.value, time_key).then(res=>{
+                  this.di.notificationService.renderSuccess(scope,this.translate('MODULES.TIMERANGES.MESSAGE.DELETE_RANGE.SUCCESS'));
+                  reInit();
+                }, err=>{
+                  this.di.notificationService.renderWarning(scope,err.data);
+                });
+
+              } else {
+                console.error('un-correct type is:' + event.data.type)
+              }
+            }, (res) => {
+              this.di.$log.debug('delete time range dialog cancel');
+            });
+        }
+      }
+    };
+
+    scope.onAPIReady = ($api) => {
+      scope.timeRangeModel.api = $api;
+    };
+
     let initTimeRangeTable = (name) => {
       if(name === null){
         return ;
       }
       scope.timeRangeModel.times = _formatTimes(name);
       console.log(scope.timeRangeModel.times);
-      // scope.timeRangeModel.provider = null;
 
-      scope.timeRangeModel.provider = this.di.tableProviderFactory.createProvider({
-        query: (params) => {
-          let defer = this.di.$q.defer();
-          this.di.$timeout(() => {
-            defer.resolve({
-              data: scope.timeRangeModel.times,
-              count: undefined
-            });
-            scope.timeRangeModel.api.queryUpdate();
-          });
-          return defer.promise;
-        },
-        getSchema: () => {
-          return {
-            schema: this.di.manageService.getTimeRangeTableSchema(),
-            index_name: 'host',
-            rowCheckboxSupport: false,
-            rowActionsSupport: true,
-            authManage: {
-              support: true,
-              currentRole: scope.role
-            }
-          };
-        }
-      });
-
-      scope.onTableRowSelectAction = (event) => {
-        if (event.data && event.action) {
-          if (event.action.value === 'delete') {
-            this.di.dialogService.createDialog('warning', this.translate('MODULES.TIMERANGES.CONFIRM.DELETE_RANGE'))
-              .then((data) => {
-                if (event.data.type === 'absolute'){
-                  this.di.manageDataManager.deleteTimeRangeAbsolute(scope.timeRangeModel.curDevice.value, scope.timeRangeModel.curName.value).then((res)=>{
-                    this.di.notificationService.renderSuccess(scope,this.translate('MODULES.TIMERANGES.MESSAGE.DELETE_RANGE.SUCCESS'));
-                    reInit();
-                  }, err=>{
-                    this.di.notificationService.renderWarning(scope,err.data);
-                  });
-                } else if(event.data.type === 'periodic'){
-                  let time_key = event.data['_start']['day'] + '_' +
-                                 event.data['_start']['hour'] + '_' +
-                                 event.data['_start']['minute'] + '_to_' +
-                                 event.data['_end']['day'] + '_' +
-                                 event.data['_end']['hour'] + '_' +
-                                 event.data['_end']['minute'];
-                    this.di.manageDataManager.deleteTimeRangePeri(scope.timeRangeModel.curDevice.value, scope.timeRangeModel.curName.value, time_key).then(res=>{
-                      this.di.notificationService.renderSuccess(scope,this.translate('MODULES.TIMERANGES.MESSAGE.DELETE_RANGE.SUCCESS'));
-                      reInit();
-                    }, err=>{
-                      this.di.notificationService.renderWarning(scope,err.data);
-                    });
-
-                } else {
-                  console.error('un-correct type is:' + event.data.type)
-                }
-              }, (res) => {
-                this.di.$log.debug('delete time range dialog cancel');
-              });
-          }
-        }
-      };
-
-      scope.onAPIReady = ($api) => {
-        scope.timeRangeModel.api = $api;
-      };
+      scope.timeRangeModel.api.queryUpdate();
     };
 
     let initDevice = () => {
