@@ -1,21 +1,23 @@
 <div class="timerange_establish">
 
   <div class="stepForm__input">
-    <div class="stepForm__input__label">{{'MODULES.TIMERANGES.LABEL.SWITCH'|translate}}<span
-            class="stepForm__input__required">*</span></div>
-    <div style="padding: 8px 0;font-size: 16px;color: #c3c5c5;">{{device.label}}</div>
+    <div class="stepForm__input__label">{{'MODULES.TIMERANGES.LABEL.SWITCH'|translate}}
+      <!--<span class="stepForm__input__required">*</span>-->
+    </div>
+    <div class="timerange_establish__label">{{device.label}}</div>
   </div>
 
   <div class="stepForm__input">
-    <div class="stepForm__input__label">{{'MODULES.TIMERANGES.LABEL.TIME_RANGE_NAME'|translate}}<span
-            class="stepForm__input__required">*</span></div>
-    <div style="padding: 8px 0;font-size: 16px;color: #c3c5c5;">{{tsEsModel.name.label}}</div>
-    <!--<valid-input v-require="true" ng-model="tsEsModel.name" v-rpcid="page_timerange_es"></valid-input>-->
+    <div class="stepForm__input__label">{{'MODULES.TIMERANGES.LABEL.TIME_RANGE_NAME'|translate}}
+      <!--<span class="stepForm__input__required">*</span>-->
+    </div>
+    <div class="timerange_establish__label">{{tsEsModel.name.label}}</div>
   </div>
 
   <div class="stepForm__input">
-    <div class="stepForm__input__label">{{'MODULES.TIMERANGES.LABEL.MODE'|translate}}<span
-            class="stepForm__input__required">*</span></div>
+    <div class="stepForm__input__label">{{'MODULES.TIMERANGES.ESTABLISH.RANGE.LABEL.MODE'|translate}}
+      <!--<span class="stepForm__input__required">*</span>-->
+    </div>
     <mdl-select ng-model="tsEsModel.mode"
                 display-label="tsEsDisplay.modeDisplay">
     </mdl-select>
@@ -23,24 +25,22 @@
 
 
   <div class="stepForm__input" ng-if="tsEsModel.mode.value == 'absolute'">
-    <div class="stepForm__input__label">
-      <!--on-click="outputChange()"-->
-      <!--开始时间-->
+    <div class="stepForm__input__label" style="margin-left: -10px">
       <mdl-checkbox class="title_checkbox" ng-model="tsEsModel.ab_start_need"
-                        display-label="{label: '开始时间'}">
+                        display-label="tsEsDisplay.startTimeDisplay">
       </mdl-checkbox>
       <span class="stepForm__input__required"></span></div>
-    <div style="display: flex;height:50px;margin-left:-10px;padding-top:5px;" ng-if="tsEsModel.ab_start_need">
+    <div class="timerange_establish__ab_item"  ng-if="tsEsModel.ab_start_need">
       <div>
-        <md-datepicker ng-required="true" ng-model="tsEsModel.ab_start.date" md-placeholder="选择日期"></md-datepicker>
+        <md-datepicker ng-required="true" ng-model="tsEsModel.ab_start.date" md-placeholder="{{'MODULES.TIMERANGES.ESTABLISH.RANGE.LABEL.SELECT_DATE'|translate}}"></md-datepicker>
       </div>
-      <div style="display: flex;">
-        <i class="material-icons" style="line-height: 50px;padding: 0 8px;margin-top: -5px;">access_time</i>
-        <valid-input style="display: inline-block;width:30px;margin-top:-7px;vertical-align: middle;"
+      <div class="timerange_establish__ab_time">
+        <i class="material-icons timerange_establish__ab_time__icon">access_time</i>
+        <valid-input class="timerange_establish__ab_time__input"
                      v-fixed-height="true"  v-require="true" ng-model="tsEsModel.ab_start.hour" v-type="hour"
                      v-rpcid="page_timerange_es"></valid-input>
-        <div style='padding:0 8px;line-height:50px;margin-top:-5px;'>:</div>
-        <valid-input style="display: inline-block;width:30px;margin-top:-7px;vertical-align: middle;"
+        <div class="timerange_establish__ab_time__label">:</div>
+        <valid-input class="timerange_establish__ab_time__input"
                      v-fixed-height="true"  v-require="true"  ng-model="tsEsModel.ab_start.minute" v-type="minute"
                      v-rpcid="page_timerange_es"></valid-input>
       </div>
@@ -48,41 +48,44 @@
   </div>
 
   <div class="stepForm__input" ng-if="tsEsModel.mode.value == 'absolute'">
-    <div class="stepForm__input__label">结束时间<span class="stepForm__input__required">*</span></div>
-    <div style="display: flex;height:50px;margin-left:-10px;padding-top:5px;">
+    <div class="stepForm__input__label">{{'MODULES.TIMERANGES.ESTABLISH.RANGE.LABEL.END_TIME'|translate}}<span class="stepForm__input__required">*</span></div>
+    <div class="timerange_establish__ab_item" >
       <div>
-        <md-datepicker ng-required="true" ng-model="tsEsModel.ab_end.date" md-placeholder="选择日期"></md-datepicker>
+        <md-datepicker ng-required="true" ng-model="tsEsModel.ab_end.date" md-placeholder="{{'MODULES.TIMERANGES.ESTABLISH.RANGE.LABEL.SELECT_DATE'|translate}}"></md-datepicker>
       </div>
-      <div style="display: flex;">
-        <i class="material-icons" style="line-height: 50px;padding: 0 8px;margin-top: -5px;">access_time</i>
-        <valid-input style="display: inline-block;width:30px;margin-top:-7px;vertical-align: middle;"
+      <div class="timerange_establish__ab_time">
+        <i class="material-icons timerange_establish__ab_time__icon">access_time</i>
+        <valid-input class="timerange_establish__ab_time__input"
                      v-fixed-height="true" v-require="true" ng-model="tsEsModel.ab_end.hour" v-type="hour"
                      v-rpcid="page_timerange_es"></valid-input>
-        <div style='padding:0 8px;line-height:50px;margin-top:-5px;'>:</div>
-        <valid-input style="display: inline-block;width:30px;margin-top:-7px;vertical-align: middle;"
+        <div class="timerange_establish__ab_time__label">:</div>
+        <valid-input class="timerange_establish__ab_time__input"
                      v-fixed-height="true" v-require="true" ng-model="tsEsModel.ab_end.minute" v-type="minute"
                      v-rpcid="page_timerange_es"></valid-input>
       </div>
     </div>
+    <div class="timerange_establish__ab_err_msg" ng-if="tsEsModel.isAbsoluteTimeInValid">
+      {{'MODULES.TIMERANGES.ESTABLISH.RANGE.LABEL.TIME_INVALID_MSG'|translate}}
+    </div>
   </div>
 
   <div class="stepForm__input" ng-if="tsEsModel.mode.value == 'periodic'">
-    <div class="stepForm__input__label">开始时间<span class="stepForm__input__required">*</span></div>
-    <div  style="display: flex;height:50px;padding-top:5px;">
+    <div class="stepForm__input__label">{{'MODULES.TIMERANGES.ESTABLISH.RANGE.LABEL.START_TIME'|translate}}<span class="stepForm__input__required">*</span></div>
+    <div class="timerange_establish__per_item">
       <mdl-select ng-model="tsEsModel.per_start.date" ng-change="periodStartTypeChange($value)"
                   display-label="tsEsDisplay.periodicDisplay">
       </mdl-select>
-      <div style="display: flex;">
-        <i class="material-icons" style="line-height: 50px;padding: 0 8px;margin-top: -5px;">access_time</i>
-        <valid-input style="display: inline-block;width:30px;margin-top:-4px;vertical-align: middle;"
+      <div class="timerange_establish__per_time">
+        <i class="material-icons timerange_establish__per_time__icon">access_time</i>
+        <valid-input class="timerange_establish__per_time__input"
                      v-fixed-height="true"
                      v-require="true"
                      ng-model="tsEsModel.per_start.hour"
                      v-type="hour"
                      v-rpcid="page_timerange_es">
         </valid-input>
-        <div style='padding:0 8px;line-height:50px;margin-top:-5px;'>:</div>
-        <valid-input style="display: inline-block;width:30px;margin-top:-4px;vertical-align: middle;"
+        <div class="timerange_establish__per_time__label">:</div>
+        <valid-input class="timerange_establish__per_time__input"
                      v-fixed-height="true"
                      v-require="true"
                      ng-model="tsEsModel.per_start.minute"
@@ -93,22 +96,22 @@
   </div>
 
   <div class="stepForm__input" ng-if="tsEsModel.mode.value == 'periodic'">
-    <div class="stepForm__input__label">结束时间<span class="stepForm__input__required">*</span></div>
-    <div  style="display: flex;height:50px;padding-top:5px;">
+    <div class="stepForm__input__label">{{'MODULES.TIMERANGES.ESTABLISH.RANGE.LABEL.END_TIME'|translate}}<span class="stepForm__input__required">*</span></div>
+    <div class="timerange_establish__per_item">
       <mdl-select ng-model="tsEsModel.per_end.date" ng-change="periodEndTypeChange($value)"
                   display-label="tsEsDisplay.periodicDisplay">
       </mdl-select>
-      <div style="display: flex;">
-        <i class="material-icons" style="line-height: 50px;padding: 0 8px;margin-top: -5px;">access_time</i>
-        <valid-input style="display: inline-block;width:30px;margin-top:-4px;vertical-align: middle;"
+      <div class="timerange_establish__per_time">
+        <i class="material-icons timerange_establish__per_time__icon">access_time</i>
+        <valid-input class="timerange_establish__per_time__input"
                      v-fixed-height="true"
                      v-require="true"
                      ng-model="tsEsModel.per_end.hour"
                      v-type="hour"
                      v-rpcid="page_timerange_es">
         </valid-input>
-        <div style='padding:0 8px;line-height:50px;margin-top:-5px;'>:</div>
-        <valid-input style="display: inline-block;width:30px;margin-top:-4px;vertical-align: middle;"
+        <div class="timerange_establish__per_time__label">:</div>
+        <valid-input class="timerange_establish__per_time__input"
                      v-fixed-height="true"
                      v-require="true"
                      ng-model="tsEsModel.per_end.minute"

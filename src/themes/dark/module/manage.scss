@@ -3,25 +3,25 @@
 //@import 'shared';
 //@import 'framework_layout';
 
-.dhcp .mar_section__header__title{
-  color:white;
+.dhcp .mar_section__header__title {
+  color: white;
 }
 
-.dhcp .mar_section{
+.dhcp .mar_section {
   background-color: transparent;
   color: map_get($colors, body_color);
 }
 
-
-.ntp_switch label{
-  color:white;
-}
-.dhcp_table{
-
+.ntp_switch label {
+  color: white;
 }
 
-.dhcp_table label{
-  color:white;
+.dhcp_table {
+
+}
+
+.dhcp_table label {
+  color: white;
 }
 
 .dhcp_table tr td:first-child {
@@ -33,8 +33,8 @@
   font-size: 16px;
 }
 
-.dhcp_table td{
-  height:45px;
+.dhcp_table td {
+  height: 45px;
 
 }
 
@@ -44,28 +44,29 @@
   //padding-top: 4px;
   font-weight: 400;
   font-size: 16px;
-  width:210px;
+  width: 210px;
 }
 
 .dhcp_table tr {
   margin-top: 4px;
 }
-.dhcp_table .valid_input{
+
+.dhcp_table .valid_input {
   //height:45px;
 }
 
-.dhcp_table .valid_input input{
-  width:250px;
+.dhcp_table .valid_input input {
+  width: 250px;
   //height:45px;
 }
 
-.dhcp .mar_section__body{
+.dhcp .mar_section__body {
   background: none;
 }
 
-.dhcp .valid_input__message{
-  top:0;
-  right:-40px;
+.dhcp .valid_input__message {
+  top: 0;
+  right: -40px;
 }
 
 .sysinfo_table tr td:first-child {
@@ -96,26 +97,28 @@
 }
 
 .elasticsearch-form {
-  height:140px;
-  padding:10px;
+  height: 140px;
+  padding: 10px;
 }
+
 .elasticsearch-form .conditions {
-  margin:0 auto;
+  margin: 0 auto;
   width: 60%;
-  padding:10px 5px;
+  padding: 10px 5px;
   border-raduis: 5px;
 }
 
 .elasticsearch-form .conditions .label {
   margin-right: 15px;
-  font-size:14px;
-  font-weight:bold;
+  font-size: 14px;
+  font-weight: bold;
   color: map_get($colors, body_color);
 }
+
 .elasticsearch-form .conditions .date-input {
-  width:90%;
-  border-radius:5px;
-  font-size:14px;
+  width: 90%;
+  border-radius: 5px;
+  font-size: 14px;
   color: #000 !important;
 }
 
@@ -123,8 +126,9 @@
   height: 200px;
   padding: 10px;
 }
+
 .elasticsearch-csv-file .conditions {
-  margin:0 auto;
+  margin: 0 auto;
   width: 80%;
 }
 
@@ -135,7 +139,7 @@
   color: map_get($colors, body_color);
 }
 
-.elasticsearch-csv-file .conditions .label .must{
+.elasticsearch-csv-file .conditions .label .must {
   font-size: 18px;
   font-weight: bold;
   color: red;
@@ -143,30 +147,35 @@
 
 .elasticsearch-csv-file .conditions .query {
   height: 300px;
-  border-radius:5px;
-  font-size:14px;
+  border-radius: 5px;
+  font-size: 14px;
 }
 
 .license {
   //padding: 10px 5px;
 }
+
 .license .license__detail {
   padding-bottom: 20px;
 }
+
 .license .license__row {
   display: flex;
   margin-bottom: 10px;
 }
+
 .license .license__item {
   margin-right: 20px;
   width: 210px;
   align-items: center;
 }
+
 .license .license__item .license__item-label {
   font-size: 14px;
   font-weight: 700;
   opacity: 0.6;
 }
+
 .license .license__item .license__item-value {
   margin-left: 10px;
 }
@@ -208,45 +217,50 @@
   margin: 8px;
   //top: -20px;
 }
+
 .license .license__upload .save {
   margin-left: 0;
   //margin-top: 10px;
 }
+
 .license .license__upload .label {
   font-weight: 700;
   opacity: .6;
   //margin-top: 25px;
-  font-size:16px;
+  font-size: 16px;
   display: inline;
 }
+
 .license .license__app__label {
   padding: 5px 0;
   opacity: .6;
   font-weight: 700;
   width: 100px;
 }
-.license .mdl-table-field{
+
+.license .mdl-table-field {
   padding-top: 50px;
   box-sizing: border-box;
 }
 
-.elasticsearch .mar_section__header{
+.elasticsearch .mar_section__header {
   background-color: lightgray;
 }
 
-.elasticsearch .mar_section__body{
+.elasticsearch .mar_section__body {
   background-color: lightgray;
 }
 
-.elasticsearch .mdc-select.mdc-select__no-label > .mdc-select__native-control{
+.elasticsearch .mdc-select.mdc-select__no-label > .mdc-select__native-control {
   color: #4C4C4C;
 }
 
 .elasticsearch .setting-group {
-  position:absolute;
+  position: absolute;
   top: -3px !important;
   right: 10px !important;
 }
+
 .elasticsearch .setting-group .item {
   float: right;
   cursor: pointer;
@@ -258,9 +272,11 @@
     background-color: #a1a1a1;
   }
 }
+
 .elasticsearch .setting-group .item:hover {
   color: #a1a1a1;
 }
+
 .show-download-modal {
   width: 500px;
 }
@@ -272,22 +288,21 @@
   padding: 10px 30px;
 }
 
-.show-download-modal .content .text{
+.show-download-modal .content .text {
   font-size: 14px;
 }
 
-.show-download-modal .content .text .indice{
+.show-download-modal .content .text .indice {
   font-weight: bold;
 }
 
-.show-download-modal .content .text .size{
+.show-download-modal .content .text .size {
   font-size: 16px;
 }
 
 .show-input-filename-modal {
   width: 350px;
 }
-
 
 @include block(timerange) {
   padding: 32px 0 0 32px;
@@ -298,7 +313,7 @@
     //justify-items: center;
     align-items: flex-end;
     padding-left: 5%;
-    width:100%;
+    width: 100%;
 
     .first {
       font-size: 20px;
@@ -311,49 +326,147 @@
       padding-left: 16px;
     }
 
-    .button{
+    .button {
       line-height: 38px;
       padding-left: 16px;
     }
   }
 
-  & .mdl-table-field{
+  & .mdl-table-field {
     background: none;
   }
-  & .mdl-table-field:hover{
+  & .mdl-table-field:hover {
     box-shadow: none;
   }
 }
 
 @include block(timerange_establish) {
-  & md-icon{
-    color:white;
+  & .stepForm__input__label .mdc-checkbox-label{
+    font-weight: bold;
+    font-size: 15px;
+    color: white;
   }
 
-  & .md-datepicker-expand-triangle{
+
+
+  & .md-datepicker-input::-webkit-input-placeholder {
+    color: #f6f6f6;
+  }
+  & .md-datepicker-input:-moz-placeholder {
+    color: #f6f6f6;
+  }
+  & .md-datepicker-input:-ms-input-placeholder {
+    color: #f6f6f6;
+  }
+
+  @include element(label) {
+    padding: 8px 0;
+    font-size: 16px;
+    color: #c3c5c5;
+  }
+
+  @include element(ab_item) {
+    display: flex;
+    height: 50px;
+    margin-left: -10px;
+    padding-top: 5px;
+  }
+
+  @include element(ab_time){
+    display: flex;
+    @include element(icon){
+      line-height: 50px;
+      padding: 0 8px;
+      margin-top: -5px;
+    }
+
+    @include element(label){
+      padding: 0 8px;
+      line-height: 50px;
+      margin-top: -5px;
+    }
+
+    @include element(input){
+      display: inline-block;
+      width: 30px;
+      margin-top: -7px;
+      vertical-align: middle;
+    }
+  }
+
+  @include element(per_item){
+    display: flex;
+    height: 50px;
+    padding-top: 5px;
+  }
+
+  @include element(per_time){
+    display: flex;
+    @include element(icon){
+      line-height: 50px;
+      padding: 0 8px;
+      margin-top: -5px
+    }
+
+    @include element(label){
+      padding: 0 8px;
+      line-height: 50px;
+      margin-top: -5px;
+    }
+
+    @include element(input){
+      display: inline-block;
+      width: 30px;
+      margin-top: -4px;
+      vertical-align: middle;
+    }
+  }
+
+  @include element(ab_err_msg){
+    color: red;
+    margin-top: -13px;
+    font-size: 11px;
+    margin-left: 5px;
+  }
+
+
+  & md-icon {
+    color: white;
+  }
+
+  & .md-datepicker-expand-triangle {
     border-top-color: white;
   }
-  & .md-datepicker-input{
-    color:white;
+  & .md-datepicker-input {
+    color: white;
   }
 
-  & .md-datepicker-open .md-datepicker-input{
-    color:black;
+  & .md-datepicker-open .md-datepicker-input {
+    color: black;
   }
 
-  & .md-datepicker-input-container{
+  & .md-datepicker-input-container {
     border-bottom-color: white;
   }
 
-  & .md-datepicker-input-container.md-datepicker-focused{
+  & .md-datepicker-input-container.md-datepicker-focused {
     border-bottom-color: white;
   }
 
-  & .md-icon-button + .md-datepicker-input-container{
-    margin-left:0px;
+  & .md-icon-button + .md-datepicker-input-container {
+    margin-left: 0px;
   }
 }
 
-.md-datepicker-calendar-pane{
+.timerange_name_establish__label{
+  padding: 8px 0;
+  font-size: 16px;
+  color: #c3c5c5;
+}
+
+
+
+
+.md-datepicker-calendar-pane {
   z-index: 2000;
 }

@@ -29,12 +29,12 @@ export class TimeRangeEstablishController {
     const rootScope = this.di.$rootScope;
     this.translate = this.di.$filter('translate');
 
-    scope.wizardHeight = {"height": '600px'};
+    scope.wizardHeight = {"height": '500px'};
 
     let di = this.di;
 
     this.di.$scope.showWizard = false;
-    this.di.$scope.title = this.translate('MODULES.TIMERANGES.ESTABLISH.NAME');
+    this.di.$scope.title = this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.TITLE');
     this.di.$scope.steps = [
       {
         id: 'step1',
@@ -46,20 +46,24 @@ export class TimeRangeEstablishController {
 
     scope.device = null;
     scope.tsEsDisplay = {
-      modeDisplay: {'options': [{'label': '固定区间', 'value': 'absolute'}, {'label': '周期区间', 'value': 'periodic'}]},
-      periodicDisplay:{
+      startTimeDisplay : {label: this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.LABEL.START_TIME') },
+      modeDisplay: {'options': [
+                        {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.ABSOLUTE'), 'value': 'absolute'},
+                        {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC'), 'value': 'periodic'}
+                        ]},
+      periodicDisplay: {
         // 'hint':'周期范围',
-        'options':[
-          {'label': 'sunday', 'value': 'sunday'},
-          {'label': 'monday', 'value': 'monday'},
-          {'label': 'tuesday', 'value': 'tuesday'},
-          {'label': 'wednesday', 'value': 'wednesday'},
-          {'label': 'thursday', 'value': 'thursday'},
-          {'label': 'friday', 'value': 'friday'},
-          {'label': 'saturday', 'value': 'saturday'},
-          {'label': 'daily', 'value': 'daily'},
-          {'label': 'weekdays', 'value': 'weekdays'},
-          {'label': 'weekend', 'value': 'weekend'},
+        'options': [
+          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.SUNDAY'), 'value': 'sunday'},
+          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.MONDAY'), 'value': 'monday'},
+          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.TUESDAY'), 'value': 'tuesday'},
+          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.WEDNESDAY'), 'value': 'wednesday'},
+          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.THURSDAY'), 'value': 'thursday'},
+          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.FRIDAY'), 'value': 'friday'},
+          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.SATURDAY'), 'value': 'saturday'},
+          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.DAILY'), 'value': 'daily'},
+          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.WEEKDAYS'), 'value': 'weekdays'},
+          {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.WEEKEND'), 'value': 'weekend'},
         ]
       }
     };
@@ -68,6 +72,7 @@ export class TimeRangeEstablishController {
       mode: null,
       name: null,
       ab_start_need: false,
+      isAbsoluteTimeInValid: false,
       ab_start: {
         date: null,
         hour: null,
@@ -95,6 +100,7 @@ export class TimeRangeEstablishController {
         mode: null,
         name: null,
         ab_start_need: false,
+        isAbsoluteTimeInValid: false,
         ab_start: {
           date: null,
           hour: null,
@@ -131,26 +137,26 @@ export class TimeRangeEstablishController {
     };
 
 
-    scope.periodStartTypeChange = ($value) =>{
+    scope.periodStartTypeChange = ($value) => {
       // {'label': 'daily', 'value': 'daily'},
       // {'label': 'weekdays', 'value': 'weekdays'},
       // {'label': 'weekend', 'value': 'weekend'},
-      if($value.value === 'daily' || $value.value === 'weekdays' || $value.value === 'weekend'){
+      if ($value.value === 'daily' || $value.value === 'weekdays' || $value.value === 'weekend') {
         scope.tsEsModel.per_end.date = angular.copy($value);
       } else {
         let endValue = scope.tsEsModel.per_end.date.value;
-        if(endValue === 'daily' || endValue === 'weekdays' || endValue === 'weekend'){
+        if (endValue === 'daily' || endValue === 'weekdays' || endValue === 'weekend') {
           scope.tsEsModel.per_end.date = angular.copy($value);
         }
       }
     };
 
-    scope.periodEndTypeChange = ($value) =>{
-      if($value.value === 'daily' || $value.value === 'weekdays' || $value.value === 'weekend'){
+    scope.periodEndTypeChange = ($value) => {
+      if ($value.value === 'daily' || $value.value === 'weekdays' || $value.value === 'weekend') {
         scope.tsEsModel.per_start.date = angular.copy($value);
       } else {
         let endValue = scope.tsEsModel.per_start.date.value;
-        if(endValue === 'daily' || endValue === 'weekdays' || endValue === 'weekend'){
+        if (endValue === 'daily' || endValue === 'weekdays' || endValue === 'weekend') {
           scope.tsEsModel.per_start.date = angular.copy($value);
         }
       }
@@ -184,6 +190,11 @@ export class TimeRangeEstablishController {
       }
       let param = {'name': scope.tsEsModel.name.value};
       if (scope.tsEsModel.mode.value === 'absolute') {
+        if (!checkAbsoluteTime()) {
+          return new Promise((resolve, reject) => {
+            resolve(inValidJson);
+          });
+        }
         param['absolute'] = {
           'end': {
             'year': scope.tsEsModel.ab_end.date.getFullYear(),
@@ -261,6 +272,88 @@ export class TimeRangeEstablishController {
 
     unsubscribes.push(this.di.$rootScope.$on('timerange-wizard-show', ($event, device, time_name) => {
       scope.open(device, time_name);
+    }));
+
+    let getAbsoluteStartTime = () => {
+      let date = angular.copy(scope.tsEsModel.ab_start.date);
+      date.setHours(scope.tsEsModel.ab_start.hour);
+      date.setMinutes(scope.tsEsModel.ab_start.minute);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      return date;
+    }
+
+    let getAbsoluteEndTime = () => {
+      let date = angular.copy(scope.tsEsModel.ab_end.date);
+      date.setHours(scope.tsEsModel.ab_end.hour);
+      date.setMinutes(scope.tsEsModel.ab_end.minute);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      return date;
+    }
+
+    let checkAbsoluteTime = () => {
+      if (!checkAllAbsoluteTimeFinished()) {
+        scope.tsEsModel.isAbsoluteTimeInValid = false;
+        return false;
+      }
+      let startDate = getAbsoluteStartTime();
+      let endDate = getAbsoluteEndTime();
+      console.log(startDate.getTime())
+      console.log(endDate.getTime())
+      if(scope.tsEsModel.ab_start_need){
+        if (startDate.getTime() >= endDate.getTime()) {
+          scope.tsEsModel.isAbsoluteTimeInValid = true;
+          return false;
+        } else {
+          scope.tsEsModel.isAbsoluteTimeInValid = false;
+          return true;
+        }
+      }
+      return true;
+
+    }
+
+    let checkAllAbsoluteTimeFinished = () => {
+      if (scope.tsEsModel.ab_end.date === null ||
+        scope.tsEsModel.ab_end.date === '' ||
+        scope.tsEsModel.ab_end.hour === null ||
+        scope.tsEsModel.ab_end.hour === '' ||
+        scope.tsEsModel.ab_end.minute === null ||
+        scope.tsEsModel.ab_end.minute === '') {
+        return false;
+      }
+
+      if (scope.tsEsModel.ab_start_need === true &&
+        (scope.tsEsModel.ab_end.date === null ||
+        scope.tsEsModel.ab_end.date === '' ||
+        scope.tsEsModel.ab_end.hour === null ||
+        scope.tsEsModel.ab_end.hour === '' ||
+        scope.tsEsModel.ab_end.minute === null ||
+        scope.tsEsModel.ab_end.minute === '')) {
+        return false;
+      }
+      return true;
+    };
+
+    unsubscribes.push(scope.$watchGroup(['tsEsModel.ab_start.date', 'tsEsModel.ab_start.hour', 'tsEsModel.ab_start.minute'], (newValue, oldValue) => {
+      if (scope.tsEsModel.isAbsoluteTimeInValid) {
+        checkAbsoluteTime();
+      }
+    }));
+
+    unsubscribes.push(scope.$watchGroup(['tsEsModel.ab_end.date', 'tsEsModel.ab_end.hour', 'tsEsModel.ab_end.minute'], (newValue, oldValue) => {
+      if (scope.tsEsModel.ab_start_need && scope.tsEsModel.isAbsoluteTimeInValid) {
+        checkAbsoluteTime();
+      }
+    }));
+
+    unsubscribes.push(scope.$watch('tsEsModel.ab_start_need', (newValue, oldValue) => {
+      if(scope.tsEsModel.isAbsoluteTimeInValid){
+        if(newValue === false){
+          scope.tsEsModel.isAbsoluteTimeInValid = false;
+        }
+      }
     }));
 
     this.di.$scope.$on('$destroy', () => {
