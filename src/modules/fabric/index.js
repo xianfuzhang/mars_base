@@ -31,10 +31,12 @@ import {CreateEndpointController} from './components/createEndpoint/ng/createEnd
 import {CreateHostController} from './components/createHost/ng/createHost.controller';
 import {PfcEstablishController} from './components/pfc_establish/ng/pfcEstablish.controller';
 import {UpLinkEstablishController} from './components/uplink_establish/ng/upLinkEstablish.controller';
+import {updateDeviceLbdCtrl} from './components/updateDeviceLBD/ng/updateDeviceLbd.controller';
 import {sFlowController} from './components/sflow_establish/ng/sflowEstablish.controller';
 import {TrunkController} from  './components/trunk_establish/ng/trunk.controller';
 import {UpLinkController} from './ng/uplink.controller';
 import {StormController} from './ng/storm.controller';
+import {LbdCtrl} from './ng/lbd.controller';
 import {StormEstablishController} from './components/storm_establish/ng/stormEstablish.controller';
 import {MonitorController} from './ng/monitor.controller';
 import {MonitorEstablishController} from './components/monitor_establish/ng/monitorEstablish.controller';
@@ -77,8 +79,10 @@ export default angular
   .controller('stormEstablishController', StormEstablishController)
   .controller('monitorController', MonitorController)
   .controller('monitorEstablishController', MonitorEstablishController)
+  .controller('updateDeviceLbdCtrl', updateDeviceLbdCtrl)
   .controller('trunkCtrl', TrunkController)
   .controller('sflowCtrl', sFlowController)
+  .controller('lbdCtrl', LbdCtrl)
   .controller('hostSegmentController', HostSegmentController)
   .controller('hostSegmentEstablishController', HostSegmentEstablishController)
   .controller('dhcpRelayController', DHCPRelayController)

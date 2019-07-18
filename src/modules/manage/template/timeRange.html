@@ -2,14 +2,14 @@
   <!--<mar-header></mar-header>-->
   <mdl-header></mdl-header>
   <div class="app-main">
-    <content-header big-title="{{'MODULE.HEADER.MANAGE.NTP' | translate}}">
+    <content-header big-title="{{'MODULE.HEADER.MANAGE.TIMERANGE' | translate}}">
       <a href="/">Mars Cloud</a>
       <span>•</span>
-      <span>{{'MODULE.HEADER.MANAGE.NTP' | translate}}</span>
+      <span>{{'MODULE.HEADER.MANAGE.TIMERANGE' | translate}}</span>
     </content-header>
     <section class="app-body timerange" style="display:flex;flex-direction: column;align-items: flex-start">
       <div class="timerange__row">
-        <div class="first">交换机</div>
+        <div class="first">{{'MODULES.TIMERANGES.LABEL.SWITCH'|translate}}</div>
         <div class="second">
           <mdl-select ng-model="timeRangeModel.curDevice" ng-change="deviceChange($value)"
                       display-label="timeRangeModel.deviceDisplay">
@@ -18,17 +18,17 @@
       </div>
 
       <div class="timerange__row">
-        <div class="first">时间范围名称</div>
+        <div class="first">{{'MODULES.TIMERANGES.LABEL.TIME_RANGE_NAME'|translate}}</div>
         <div class="second">
           <mdl-select ng-model="timeRangeModel.curName"  ng-change="nameChange($value)" disable="timeRangeModel.curDevice.value == null"
                       display-label="timeRangeModel.nameDisplay">
           </mdl-select>
         </div>
         <div class="button" >
-          <mar-button btn-disabled="timeRangeModel.curDevice.value == null" btn-text="::'MODULES.VLAN.DYNAMIC.MENU.BATCH_ACTIVE' | translate" btn-icon="'add'" btn-class="'btn-black btn-sm'" btn-click="addName()"></mar-button>
+          <mar-button btn-disabled="timeRangeModel.curDevice.value == null" btn-text="::'MODULES.TIMERANGES.BUTTON.ADD_NAME' | translate" btn-icon="'add'" btn-class="'btn-black btn-sm'" btn-click="addName()"></mar-button>
         </div>
         <div class="button" >
-          <mar-button btn-disabled="timeRangeModel.curName == null ||  timeRangeModel.curName.value == null" btn-text="::'MODULES.VLAN.DYNAMIC.MENU.BATCH_DEACTIVE' | translate" btn-icon="'delete'" btn-class="'btn-black btn-sm'" btn-click="removeName()"></mar-button>
+          <mar-button btn-disabled="timeRangeModel.curName == null ||  timeRangeModel.curName.value == null" btn-text="::'MODULES.TIMERANGES.BUTTON.DELETE_NAME' | translate" btn-icon="'delete'" btn-class="'btn-black btn-sm'" btn-click="removeName()"></mar-button>
         </div>
       </div>
 
@@ -43,8 +43,8 @@
     </section>
   </div>
 
-  <!--<ng-controller ng-controller="ntpEstablishController">-->
-    <!--<wizard></wizard>-->
-  <!--</ng-controller>-->
+  <ng-controller ng-controller="timeRangeNameEstablishController">
+    <wizard></wizard>
+  </ng-controller>
 
 </div>

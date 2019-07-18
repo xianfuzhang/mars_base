@@ -1537,6 +1537,99 @@ export class DeviceService {
     ]
   }
 
+  getLoopbackActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': false, 'role': 2},
+      'remove': {'enable': false, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': true, 'role': 2}
+    };
+  }
+
+  getSwitchLoopbackTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.FABRIC.STORM.ROW.ACTION.EDIT'),
+        'role': 2,
+        'value': 'edit'
+      }
+    ];
+  }
+  getPortLoopbackTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.LOOPBACK.STATUS.ENABLE'),
+        'role': 2,
+        'value': 'enable'
+      },
+      {
+        'label': this.translate('MODULES.LOOPBACK.STATUS.DISABLE'),
+        'role': 2,
+        'value': 'disable'
+      }
+    ];
+  }
+
+  getSwitchLoopbackSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.LOOPBACK.SCHEMA.DEVICE'),
+        'field': 'device',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOOPBACK.SCHEMA.STATUS'),
+        'field': 'status_display',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOOPBACK.SCHEMA.INTERVAL'),
+        'field': 'interval',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOOPBACK.SCHEMA.RECOVER'),
+        'field': 'recover_display',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOOPBACK.SCHEMA.ACTION'),
+        'field': 'action_display',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOOPBACK.SCHEMA.TRAP'),
+        'field': 'trap_display',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
+
+  getPortLoopbackSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.LOOPBACK.SCHEMA.DEVICE'),
+        'field': 'device',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOOPBACK.SCHEMA.PORT'),
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOOPBACK.SCHEMA.STATUS'),
+        'field': 'status_display',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.LOOPBACK.SCHEMA.OPERSTATE'),
+        'field': 'operState',
+        'layout': {'visible': true, 'sortable': true}
+      },
+    ];
+  }
 
   getMonitorActionsShow() {
     return {

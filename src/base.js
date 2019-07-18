@@ -117,6 +117,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/lbd', {
+      template: require('./modules/fabric/template/lbd.html'),
+      controller: 'lbdCtrl',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/logical_port', {
       template: require('./modules/fabric/template/interface_group.html'),
       controller: 'interfaceGroupController',

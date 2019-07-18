@@ -362,6 +362,7 @@ export class mdlTable {
       scope.tableModel.pagination.totalItemCount = scope.tableModel.inlineFilterData.length;
       scope.tableModel.pagination.numberOfPages = scope.tableModel.pagination.totalItemCount === 0 ?
           1 : Math.ceil(scope.tableModel.pagination.totalItemCount / scope.tableModel.pagination.number);
+      scope.tableModel.pagination.start = 0;
     };
 
     scope.clearRowCheck = () => {
@@ -601,50 +602,49 @@ export class mdlTable {
       scope._clientDataPagination();
     };
 
-    (function () {
-      scope.tableModel.api = {
-        //在controller中通知table render body
-        update: scope._apiUpdate,
-        //在controller中设置column显示/隐藏func(column_field, true/false)
-        setColumnVisibility: scope._apiSetColumnVisibility,
-        inlineFilter : scope._apiInlineFilter,
-        //在controller中更新table data
-        queryUpdate: scope._apiQueryUpdate,
-        //在controller中返回table所有columns的visible值{column_field: true/false, ...}
-        getColumnsVisibility: scope._apiGetColumnVisibility,
-        getColumnsFilter: scope._apiGetColumnFilter,
-        setSelectedRow: (itemId) => {
-            // var found;
-            if (!itemId) { // unselect
-              scope.tableModel.selectedRowId = null;
-              return;
-            }
-            // NOTE: set the ID anyway - the developer is responsible of having this valid for now
-            scope.tableModel.selectedRowId = itemId;
-        },
-        getSelectedRows: ()=>{
-          return scope.tableModel.removeItems;
-        },
-        resetSelectedRows: ()=>{
-          scope.clearRowCheck();
-        }
-      };
-
-      if (scope.provider) {
-        scope._OnRegistryToRenders();
-        scope.tableModel.loading = true;
-        scope.onTableHeaderInit();
-        scope.apiReady({$api: scope.tableModel.api});
-        scope.provider.query(scope._getTableParams())
-          .then(function (response) {
-            scope.tableModel.loading = false;
-            scope._onDataSuccess(response);
-          }, function () {
-            scope.tableModel.loading = false;
-            scope._onDataError();
-          });
+    scope.tableModel.api = {
+      //在controller中通知table render body
+      update: scope._apiUpdate,
+      //在controller中设置column显示/隐藏func(column_field, true/false)
+      setColumnVisibility: scope._apiSetColumnVisibility,
+      inlineFilter : scope._apiInlineFilter,
+      //在controller中更新table data
+      queryUpdate: scope._apiQueryUpdate,
+      //在controller中返回table所有columns的visible值{column_field: true/false, ...}
+      getColumnsVisibility: scope._apiGetColumnVisibility,
+      getColumnsFilter: scope._apiGetColumnFilter,
+      setSelectedRow: (itemId) => {
+          // var found;
+          if (!itemId) { // unselect
+            scope.tableModel.selectedRowId = null;
+            return;
+          }
+          // NOTE: set the ID anyway - the developer is responsible of having this valid for now
+          scope.tableModel.selectedRowId = itemId;
+      },
+      getSelectedRows: ()=>{
+        return scope.tableModel.removeItems;
+      },
+      resetSelectedRows: ()=>{
+        scope.clearRowCheck();
       }
-    })(this);
+    };
+
+    if (scope.provider) {
+      scope._OnRegistryToRenders();
+      scope.tableModel.loading = true;
+      scope.onTableHeaderInit();
+      scope.apiReady = scope.apiReady || angular.noop;
+      scope.apiReady({$api: scope.tableModel.api});
+      scope.provider.query(scope._getTableParams())
+        .then(function (response) {
+          scope.tableModel.loading = false;
+          scope._onDataSuccess(response);
+        }, function () {
+          scope.tableModel.loading = false;
+          scope._onDataError();
+        });
+    }
 
     scope.$watch(
       () =>{
