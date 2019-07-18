@@ -445,6 +445,16 @@
     color: black;
   }
 
+  & .md-datepicker-open .md-datepicker-input::-webkit-input-placeholder {
+    color: black;
+  }
+  & .md-datepicker-open .md-datepicker-input:-moz-placeholder {
+    color: black;
+  }
+  & .md-datepicker-open .md-datepicker-input:-ms-input-placeholder {
+    color: black;
+  }
+
   & .md-datepicker-input-container {
     border-bottom-color: white;
   }
