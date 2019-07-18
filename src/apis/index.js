@@ -4,6 +4,7 @@ import {LoginDataManager} from './datamanagers/login.dataManager';
 import {AccountDataManager} from './datamanagers/account.dataManager';
 import {ConfigurationDataManager} from './datamanagers/configuration.dataManager';
 import {AlertDataManager} from './datamanagers/alert.dataManager';
+import {LoopbackDataManager} from './datamanagers/loopback.dataManager';
 import {appService} from './services/app.service';
 import {commonService} from './services/common.service';
 import {switchService} from './services/switch.service';
@@ -46,6 +47,7 @@ export default angular
   .service('configurationDataManager', ConfigurationDataManager)
   .service('dashboardDataManager', DashboardDataManager)
   .service('alertDataManager', AlertDataManager)
+  .service('loopbackDataManager', LoopbackDataManager)
   .service('logService', LogService)
   .service('logDataManager', LogDataManager)
   .service('dateService', DateService)

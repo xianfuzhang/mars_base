@@ -1,0 +1,64 @@
+<div class="updateDeviceLbd">
+  <div class="stepForm__input lbd-item">
+      <div class="stepForm__input__label">{{'MODULES.LOOPBACK.SCHEMA.STATUS' | translate}}
+        <span>:</span>
+      </div>
+      <div class="radio-values">
+          <mdl-radio ng-model="model.status" display-label="model.statusLabel.enableLabel" 
+            on-click="supportMLAG(true)">
+          </mdl-radio>
+          <mdl-radio ng-model="model.status" display-label="model.statusLabel.disableLabel"
+            on-click="supportMLAG(false)">
+          </mdl-radio>
+      </div>
+  </div>
+  <div class="stepForm__input lbd-item">
+      <div class="stepForm__input__label">{{'MODULES.LOOPBACK.SCHEMA.ACTION' | translate}}
+        <span>:</span>
+      </div>
+      <div class="radio-values">
+          <mdl-radio ng-model="model.action" display-label="model.actionLabel.noneLabel" 
+            on-click="supportMLAG(true)">
+          </mdl-radio>
+          <mdl-radio ng-model="model.action" display-label="model.actionLabel.blockLabel"
+            on-click="supportMLAG(false)">
+          </mdl-radio>
+          <mdl-radio ng-model="model.action" display-label="model.actionLabel.shutdownLabel"
+            on-click="supportMLAG(false)">
+          </mdl-radio>
+      </div>
+  </div>
+  <div class="stepForm__input lbd-item">
+      <div class="stepForm__input__label">{{'MODULES.LOOPBACK.SCHEMA.TRAP' | translate}}
+        <span>:</span>
+      </div>
+      <div class="radio-values">
+          <mdl-radio ng-model="model.trap" display-label="model.trapLabel.noneLabel" 
+            on-click="supportMLAG(true)">
+          </mdl-radio>
+          <mdl-radio ng-model="model.trap" display-label="model.trapLabel.recoverLabel"
+            on-click="supportMLAG(false)">
+          </mdl-radio>
+          <mdl-radio ng-model="model.trap" display-label="model.trapLabel.detectLabel"
+            on-click="supportMLAG(false)">
+          </mdl-radio>
+          <mdl-radio ng-model="model.trap" display-label="model.trapLabel.bothLabel"
+            on-click="supportMLAG(false)">
+          </mdl-radio>
+      </div>
+  </div>
+  <div class="stepForm__input">
+    <div class="stepForm__input__label">{{'MODULES.LOOPBACK.SCHEMA.INTERVAL' | translate}}
+      <span>:</span>
+    </div>
+    <mdl-text class="interval-field" ng-model="model.interval"
+       helper="model.intervalHelper" display-label="model.intervalDisplayLabel"></mdl-text>
+  </div>
+  <div class="stepForm__input">
+    <div class="stepForm__input__label">{{'MODULES.LOOPBACK.SCHEMA.RECOVER' | translate}}
+      <span>:</span>
+    </div>
+    <mdl-text class="recover-field" ng-model="model.recover"
+      helper="model.recoverHelper" display-label="model.recoverDisplayLabel"></mdl-text>
+  </div>
+</div>
