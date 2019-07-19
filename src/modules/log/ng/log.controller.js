@@ -307,6 +307,7 @@ export class LogController {
     let exceptionStr = '';
     let exceptionObj = {}
     let newException = true;
+    let nginxRegex = /([^ ]*) ([^ ]*) ([^ ]*) (\[.*\]) (\".*?\") (-|[0-9]*) (-|[0-9]*) (\".*?\") (\".*?\")/
     if(!Array.isArray(origins)) return entities;
     origins.forEach((item) => {
       let obj = {};
@@ -325,7 +326,7 @@ export class LogController {
           exceptionStr = '';
           newException = true;
         }
-        
+
         obj.created_time = arr[0];
         obj.type = arr[1];
         obj.level = arr[2];
@@ -333,24 +334,62 @@ export class LogController {
         obj.operation = arr[4];
         obj.content = arr[5];
         entities.push(obj);
-      } else if(arr.length ===  1){
-        exceptionStr += arr[0];
-        newException = false;
+      }
+      // else if(arr.length ===  1){
+      //   exceptionStr += arr[0];
+      //   newException = false;
+      // }
+      else if(arr.length === 1 && item.match(nginxRegex)) { // nginx normal日志
+        obj = {}
+        obj.created_time = '-';
+        obj.type = '-';
+        obj.level = '-';
+        obj.creator = '-';
+        obj.operation = '-';
+        obj.content = item;
+
+        try {
+          let timeRegex = /\[(.*)\]/, typeRegex = /(GET|POST|PUT|DELETE|PATCH).*HTTP\//
+          let tmpStr = item.match(timeRegex)[1];
+          let timestr = tmpStr.replace(':', ' ', 1);
+          let datetime = new Date(timestr)
+
+          tmpStr = item.match(typeRegex);
+          let typeArr = tmpStr[0].split(' ')
+          obj.created_time = datetime.toISOString();
+          obj.type = typeArr[0];
+          obj.creator = typeArr[1];
+          obj.content = item;
+        } catch(e) {
+          // TODO:
+        } finally {
+          entities.push(obj);
+        }
+      }
+      else {
+        obj = {}
+        obj.created_time = '-';
+        obj.type = '-';
+        obj.level = '-';
+        obj.creator = '-';
+        obj.operation = '-';
+        obj.content = item;
+        entities.push(obj);
       }
     });
     
-    if(exceptionStr) {
-      exceptionObj = {}
-      exceptionObj.created_time = '-';
-      exceptionObj.type = 'EXCEPTION';
-      exceptionObj.level = '-';
-      exceptionObj.creator = '-';
-      exceptionObj.operation = '-';
-      exceptionObj.content = exceptionStr;
-      entities.push(exceptionObj);
-      exceptionStr = '';
-      newException = true;
-    }
+    // if(exceptionStr) {
+    //   exceptionObj = {}
+    //   exceptionObj.created_time = '-';
+    //   exceptionObj.type = 'EXCEPTION';
+    //   exceptionObj.level = '-';
+    //   exceptionObj.creator = '-';
+    //   exceptionObj.operation = '-';
+    //   exceptionObj.content = exceptionStr;
+    //   entities.push(exceptionObj);
+    //   exceptionStr = '';
+    //   newException = true;
+    // }
     return entities;
   }
   

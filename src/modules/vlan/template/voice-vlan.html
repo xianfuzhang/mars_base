@@ -6,19 +6,52 @@
     <span>{{'MODULE.HEADER.VLAN.VOICE_VLAN' | translate}}</span>
   </content-header>
   <div class="app-body">
-    <div class="mars-col-24">
-      <div class="main__content">
+    <div style="display:flex;width:100%;">
+      <div class="main__content" style="width:60%">
         <mdl-table actions-show="model.actionsShow"
                    actions="model.rowActions"
                    row-click="onTableRowClick($event)"
                    row-select-action="onTableRowSelectAction($event)"
+                   row-actions-filter="onTableRowActionsFilter($event)"
                    provider="model.provider" api-ready="onAPIReady($api)"
-                   on-add="addGuestVlan()" on-remove="batchRemoveGuestVlan($value)">
+                   on-add="addVoiceVlan()" on-remove="batchRemoveVoiceVlan($value)">
         </mdl-table>
+      </div>
+      <div class="main__content" style="width:40%">
+          <div>
+              <div style="margin:5px 10px;font-size:15px;font-weight:bold;">ouis</div>
+              <mdl-table actions-show="model.ouiActionsShow"
+                        actions="model.ouiRowActions"
+                        row-select-action="onTableRowSelectAction($event)"
+                        provider="model.ouiProvider" api-ready="onOuiAPIReady($api)"
+                        on-add="addOui()" on-remove="batchRemoveOui($value)">
+              </mdl-table>
+          </div>
+
+          <div style="margin-top: 60px;position:relative;">
+              <div style="margin:5px 10px;font-size:15px;font-weight:bold;">ports</div>
+              <div style="position: absolute;top:40px;right:38px;">
+                  <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="savePort()" btn-disabled="!model.changedPorts.length"/>
+              </div>
+              <mdl-table actions-show="model.portActionsShow"
+                        actions="model.portRowActions"
+                        row-select-action="onTableRowSelectAction($event)"
+                        provider="model.portProvider" api-ready="onPortAPIReady($api)"
+                        on-add="addPort()" on-remove="batchRemovePort($value)">
+              </mdl-table>
+          </div>
       </div>
     </div>
   </div>
 </div>
 <!--<ng-controller ng-controller="createVoiceVlanCtrl">-->
-    <!--<wizard class="createGuestVlan"></wizard>-->
+    <!--<wizard class="create-voice-vlan"></wizard>-->
+<!--</ng-controller>-->
+
+<!--<ng-controller ng-controller="createVoiceVlanOuiCtrl">-->
+<!--<wizard class="create-voice-vlan-oui"></wizard>-->
+<!--</ng-controller>-->
+
+<!--<ng-controller ng-controller="createVoiceVlanPortCtrl">-->
+<!--<wizard class="create-voice-vlan-port"></wizard>-->
 <!--</ng-controller>-->

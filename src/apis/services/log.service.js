@@ -21,12 +21,12 @@ export class LogService {
       {
         'label': this.translate('MODULE.LOG.COLUMN.TIME'),
         'field': 'created_time',
-        'layout': {'visible': true, 'sortable': true, 'fixed': true, 'width':'20%'}
+        'layout': {'visible': true, 'sortable': true, 'fixed': true, 'width':'200px'}
       },
       {
         'label': this.translate('MODULE.LOG.COLUMN.TYPE'),
         'field': 'type',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true, 'width':'10%'}
+        'layout': {'visible': true, 'sortable': false, 'fixed': true, 'width':'100px'}
       },
       // {
       //   'label': this.translate('MODULE.LOG.COLUMN.LEVEL'),
@@ -41,7 +41,7 @@ export class LogService {
       {
         'label': this.translate('MODULE.LOG.COLUMN.CREATOR'),
         'field': 'creator',
-        'layout': {'visible': true, 'sortable': false, 'fixed': true, 'width':'20%'}
+        'layout': {'visible': true, 'sortable': false, 'fixed': true, 'width':'100px'}
       },
       {
         'label': this.translate('MODULE.LOG.COLUMN.CONTENT'),
