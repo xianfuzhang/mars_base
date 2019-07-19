@@ -3109,14 +3109,53 @@ export class DashboardController {
           let diffSeconds = ((new Date(analyzer.timepoint)).getTime() - (new Date(data.analyzer[index - 1].timepoint)).getTime()) / 1000;
 
           newAnalyzer.timepoint = analyzer.timepoint;
-          newAnalyzer.packets_rx = Math.ceil((analyzer.packetsReceived - data.analyzer[index - 1].packetsReceived) / diffSeconds);
-          newAnalyzer.packets_tx = Math.ceil((analyzer.packetsSent - data.analyzer[index - 1].packetsSent) / diffSeconds);
-          newAnalyzer.dropped_rx = Math.ceil((analyzer.packetsRxDropped - data.analyzer[index - 1].packetsRxDropped) / diffSeconds);
-          newAnalyzer.dropped_tx = Math.ceil((analyzer.packetsTxDropped - data.analyzer[index - 1].packetsTxDropped) / diffSeconds);
-          newAnalyzer.error_rx = Math.ceil((analyzer.packetsRxErrors - data.analyzer[index - 1].packetsRxErrors) / diffSeconds);
-          newAnalyzer.error_tx = Math.ceil((analyzer.packetsTxErrors - data.analyzer[index - 1].packetsTxErrors) / diffSeconds);
-          newAnalyzer.bytes_tx = Math.ceil((analyzer.bytesSent - data.analyzer[index - 1].bytesSent) / diffSeconds);
-          newAnalyzer.bytes_rx = Math.ceil((analyzer.bytesReceived - data.analyzer[index - 1].bytesReceived) / diffSeconds);
+          if(analyzer.packetsReceived && data.analyzer[index - 1].packetsReceived) {
+            newAnalyzer.packets_rx = Math.ceil((analyzer.packetsReceived - data.analyzer[index - 1].packetsReceived) / diffSeconds);
+          } else {
+            newAnalyzer.packets_rx = 0;
+          }
+
+          if(analyzer.packetsSent && data.analyzer[index - 1].packetsSent) {
+            newAnalyzer.packets_tx = Math.ceil((analyzer.packetsSent - data.analyzer[index - 1].packetsSent) / diffSeconds);
+          } else {
+            newAnalyzer.packets_tx = 0;
+          }
+
+          if(analyzer.packetsRxDropped && data.analyzer[index - 1].packetsRxDropped) {
+            newAnalyzer.dropped_rx = Math.ceil((analyzer.packetsRxDropped - data.analyzer[index - 1].packetsRxDropped) / diffSeconds);
+          } else {
+            newAnalyzer.dropped_rx = 0;
+          }
+
+          if(analyzer.packetsTxDropped && data.analyzer[index - 1].packetsTxDropped) {
+            newAnalyzer.dropped_tx = Math.ceil((analyzer.packetsTxDropped - data.analyzer[index - 1].packetsTxDropped) / diffSeconds);
+          } else {
+            newAnalyzer.dropped_tx = 0;
+          }
+
+          if(analyzer.packetsRxErrors && data.analyzer[index - 1].packetsRxErrors) {
+            newAnalyzer.error_rx = Math.ceil((analyzer.packetsRxErrors - data.analyzer[index - 1].packetsRxErrors) / diffSeconds);
+          } else {
+            newAnalyzer.error_rx = 0;
+          }
+
+          if(analyzer.packetsTxErrors && data.analyzer[index - 1].packetsTxErrors) {
+            newAnalyzer.error_tx = Math.ceil((analyzer.packetsTxErrors - data.analyzer[index - 1].packetsTxErrors) / diffSeconds);
+          } else {
+            newAnalyzer.error_tx = 0;
+          }
+
+          if(analyzer.bytesSent && data.analyzer[index - 1].bytesSent) {
+            newAnalyzer.bytes_tx = Math.ceil((analyzer.bytesSent - data.analyzer[index - 1].bytesSent) / diffSeconds);
+          } else {
+            newAnalyzer.bytes_tx = 0;
+          }
+
+          if(analyzer.bytesReceived && data.analyzer[index - 1].bytesReceived) {
+            newAnalyzer.bytes_rx = Math.ceil((analyzer.bytesReceived - data.analyzer[index - 1].bytesReceived) / diffSeconds);
+          } else {
+            newAnalyzer.bytes_rx = 0;
+          }
 
           newData.analyzer.push(newAnalyzer);
         }
