@@ -114,166 +114,104 @@ export class FunctionDataManager{
   }
 
 
-  // getAlertGroupBasicConfig(){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.get(this.di.appService.getAlertGroupBasicConfigUrl()).then(
-  //     (res) => {
-  //       defer.resolve(res.data);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.resolve(null);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-  //
-  //
-  // deleteAlertGroupBasicConfig(){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.delete(this.di.appService.getAlertGroupBasicConfigUrl()).then(
-  //     (res) => {
-  //       defer.resolve(res);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.reject(error);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-  //
-  // setAlertGroupBasicConfig(param){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.post(this.di.appService.getAlertGroupBasicConfigUrl(),param).then(
-  //     (res) => {
-  //       defer.resolve(res);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.reject(error);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-  //
-  //
-  // addReceiveGroup(param){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.post(this.di.appService.getAlertGroupReceiveSettingUrl(),param).then(
-  //     (res) => {
-  //       defer.resolve(res);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.resolve(null);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-  //
-  // getAllReceiveGroup(){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.get(this.di.appService.getAlertGroupReceiveUrl()).then(
-  //     (res) => {
-  //       if(JSON.stringify(res.data) === '{}'){
-  //         defer.resolve(null);
-  //       }
-  //       defer.resolve(res.data);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.resolve(null);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-  //
-  // getReceiveGroup(name){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.get(this.di.appService.getAlertGroupReceiveByNameUrl(name)).then(
-  //     (res) => {
-  //       defer.resolve(res.data);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.resolve(null);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-  //
-  // deleteReceiveGroup(name){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.delete(this.di.appService.getAlertGroupReceiveByNameUrl(name)).then(
-  //     (res) => {
-  //       defer.resolve(res.data);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.reject(error);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-  //
-  //
-  // getAllHealthyCheck(){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.get(this.di.appService.getAllHealthyCheckUrl()).then(
-  //     (res) => {
-  //       defer.resolve(res.data);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.resolve(null);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-  //
-  // setHealthyCheck(object , source, params){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.post(this.di.appService.getHealthyCheckUrl(object , source), params).then(
-  //     (res) => {
-  //       defer.resolve(res.data);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.resolve(null);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-  //
-  //
-  // getHealthyCheck(object , source, name){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.get(this.di.appService.getHealthyCheckByNameUrl(object , source, name)).then(
-  //     (res) => {
-  //       defer.resolve(res.data);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.resolve(null);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
-  //
-  // deleteHealthyCheck(object , source, name){
-  //   let defer = this.di.$q.defer();
-  //   this.di.$http.delete(this.di.appService.getHealthyCheckByNameUrl(object , source, name)).then(
-  //     (res) => {
-  //       defer.resolve(res.data);
-  //     },
-  //     (error) => {
-  //       this.di.$log.error(error);
-  //       defer.reject(error);
-  //     }
-  //   );
-  //   return defer.promise;
-  // }
+  testGetPoeMain(){
+    let defer = this.di.$q.defer();
+    setTimeout(function () {
+      defer.resolve({
+        "poes": [
+          {
+            "deviceId": "rest:192.168.40.228:80",
+            "group": 1,
+            "power": 780,
+            "operStatus": "on",
+            "consumptionPower": 0,
+            "threshold": 95,
+            "notifyCtrl": true,
+            "dllPowerType": "type2Pse",
+            "dllPowerSource": "primary"
+          },{
+            "deviceId": "of:00008cea1b8d0f66",
+            "group": 1,
+            "power": 780,
+            "operStatus": "on",
+            "consumptionPower": 0,
+            "threshold": 95,
+            "notifyCtrl": true,
+            "dllPowerType": "type2Pse",
+            "dllPowerSource": "primary"
+          }
+        ]
+      })
+    })
+    return defer.promise;
+  }
+
+  testGetPoePorts(){
+    let defer = this.di.$q.defer();
+    setTimeout(function () {
+      defer.resolve( {
+        "ports": [
+          {
+            "deviceId": "rest:192.168.40.228:80",
+            "group": 1,
+            "port": 1,
+            "status": true,
+            "powerPairsControlAbility": false,
+            "powerPairs": "spare",
+            "detectionStatus": "disabled",
+            "priority": 3,
+            "mpsAbsentCounter": 0,
+            "powerClassifications": "class0",
+            "mirroredDllPdReqPower": 0,
+            "dllPseAllocatePower": 0,
+            "maxPower": 30000,
+            "usedPower": 0,
+            "timeRange": "time1",
+            "timeRangeActive": false
+          },
+          {
+            "deviceId": "rest:192.168.40.228:80",
+            "group": 1,
+            "port": 2,
+            "status": true,
+            "powerPairsControlAbility": false,
+            "powerPairs": "spare",
+            "detectionStatus": "disabled",
+            "priority": 3,
+            "mpsAbsentCounter": 0,
+            "powerClassifications": "class0",
+            "mirroredDllPdReqPower": 0,
+            "dllPseAllocatePower": 0,
+            "maxPower": 30000,
+            "usedPower": 0,
+            "timeRange": "time1",
+            "timeRangeActive": false
+          },
+          {
+            "deviceId": "rest:192.168.40.228:80",
+            "group": 1,
+            "port": 12,
+            "status": true,
+            "powerPairsControlAbility": false,
+            "powerPairs": "spare",
+            "detectionStatus": "disabled",
+            "priority": 3,
+            "mpsAbsentCounter": 0,
+            "powerClassifications": "class0",
+            "mirroredDllPdReqPower": 0,
+            "dllPseAllocatePower": 0,
+            "maxPower": 30000,
+            "usedPower": 0,
+            "timeRange": "time1",
+            "timeRangeActive": false
+          }
+
+        ]
+      }
+      )
+    })
+    return defer.promise;
+  }
 
 
 

@@ -40,6 +40,7 @@ export class functionService {
       {
         'label': this.translate('MODULES.FUNCTIONS.POE.COLUMN.OPER_STATUS'),
         'field': 'operStatus',
+        'type': 'icon',
         'layout': {'visible': true, 'sortable': true, 'fixed': true}
       },
       {
@@ -92,6 +93,7 @@ export class functionService {
       {
         'label': this.translate('MODULES.FUNCTIONS.POE.COLUMN.STATUS'),
         'field': 'status',
+        'type': 'icon',
         'layout': {'visible': true, 'sortable': true, 'fixed': true}
       },
       // {
@@ -186,6 +188,21 @@ export class functionService {
       }
     ];
   }
+
+
+  getPoePriorityMap(){
+    return {
+      '1': this.translate('MODULES.FUNCTIONS.POE.PRIORITY_LEVEL.CRITICAL'),
+      '2': this.translate('MODULES.FUNCTIONS.POE.PRIORITY_LEVEL.HIGH'),
+      '3': this.translate('MODULES.FUNCTIONS.POE.PRIORITY_LEVEL.LOW')
+    }
+  }
+
+  getPoePriorityLabel(priority){
+    return this.getPoePriorityMap()[priority + ''];
+  }
+
+
   //
   //
   // getHcTypeSwtDisLabel(){

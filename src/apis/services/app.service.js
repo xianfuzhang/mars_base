@@ -101,7 +101,7 @@ export class appService {
         'items': [
           {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
           {'label': this.translate('MODULE.HEADER.MANAGE.TIMERANGE'), 'url': '/time_range', 'role': 3},
-          {'label': this.translate('MODULE.HEADER.MANAGE.POE'), 'url': '/poe', 'role': 3},
+          {'label': this.translate('MODULE.HEADER.FUNCTIONS.POE'), 'url': '/poe', 'role': 3},
         ]
       },
       {
