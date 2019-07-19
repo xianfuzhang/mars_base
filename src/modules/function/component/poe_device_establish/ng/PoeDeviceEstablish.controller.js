@@ -55,6 +55,8 @@ export class PoeDeviceEstablishController {
 
       scope.data = data;
       reset();
+      scope.model.threshold = scope.data.threshold+'';
+      // console.log(scope.model.threshold + '《======')
       scope.showWizard = true;
     };
 

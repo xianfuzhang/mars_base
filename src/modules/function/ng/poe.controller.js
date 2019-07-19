@@ -188,8 +188,8 @@ export class PoeController {
     });
     switch(scope.tabSelected.type){
       case 'switch':
-        this.di.functionDataManager.getPoeMain().then((res)=>{
-        // this.di.functionDataManager.testGetPoeMain().then((res)=>{
+        // this.di.functionDataManager.getPoeMain().then((res)=>{
+        this.di.functionDataManager.testGetPoeMain().then((res)=>{
           poeDefer.resolve(res.data.poes);
         },
         (err)=>{
@@ -197,8 +197,8 @@ export class PoeController {
         });
         break;
       case 'port':
-        this.di.functionDataManager.getPoePorts().then((res)=>{
-        // this.di.functionDataManager.testGetPoePorts().then((res)=>{
+        // this.di.functionDataManager.getPoePorts().then((res)=>{
+        this.di.functionDataManager.testGetPoePorts().then((res)=>{
           poeDefer.resolve(res.data.ports);
         },
         (err)=>{
@@ -241,11 +241,13 @@ export class PoeController {
             'port': item.port,
             'uuid': item.deviceId + ':' + item.port,
             'group': item.group,
-            'status': (item.status === true || item.status === 'true') ?'done' : 'not_interested',
+            'status_icon': (item.status === true || item.status === 'true') ?'done' : 'not_interested',
+            'status': item.status,
             'powerPairsControlAbility': item.powerPairsControlAbility,
             'powerPairs': item.powerPairs,
             'detectionStatus': item.detectionStatus,
-            'priority': this.di.functionService.getPoePriorityLabel(item.priority),
+            'priorityStr': this.di.functionService.getPoePriorityLabel(item.priority),
+            'priority': item.priority,
             'mpsAbsentCounter': item.mpsAbsentCounter,
             'powerClassifications': item.group,
             'mirroredDllPdReqPower': item.mirroredDllPdReqPower,

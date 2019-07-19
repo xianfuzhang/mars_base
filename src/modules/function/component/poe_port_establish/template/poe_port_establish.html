@@ -1,0 +1,43 @@
+<div class="poe_port_establish">
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FUNCTIONS.POE.COLUMN.DEVICE_NAME'|translate}}
+            <!--<span class="stepForm__input__required">*</span>-->
+        </div>
+        <div class="poe_port_establish__label">{{data.device_name}}</div>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FUNCTIONS.POE.COLUMN.DEVICE_PORT'|translate}}
+            <!--<span class="stepForm__input__required">*</span>-->
+        </div>
+        <div class="poe_port_establish__label">{{data.port}}</div>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FUNCTIONS.POE.COLUMN.STATUS'|translate}}<span class="stepForm__input__required">*</span></div>
+        <mdl-select ng-model="model.status"
+                    display-label="display.statusDisplay">
+        </mdl-select>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FUNCTIONS.POE.COLUMN.PRIORITY'|translate}}<span class="stepForm__input__required">*</span></div>
+        <mdl-select ng-model="model.priority"
+                    display-label="display.priorityDisplay">
+        </mdl-select>
+    </div>
+
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FUNCTIONS.POE.COLUMN.MAX_POWER'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-require="true" v-regex="maxpower_valid_regex" v-message="{{maxpower_valid_message}}" ng-model="model.maxPower" v-rpcid="page_poe_port_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FUNCTIONS.POE.COLUMN.TIME_RANGE'|translate}}<span class="stepForm__input__required">*</span></div>
+        <mdl-select ng-model="model.timeRange"
+                    display-label="display.timeRangeDisplay">
+        </mdl-select>
+    </div>
+</div>

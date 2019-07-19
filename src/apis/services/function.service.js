@@ -92,7 +92,7 @@ export class functionService {
       // },
       {
         'label': this.translate('MODULES.FUNCTIONS.POE.COLUMN.STATUS'),
-        'field': 'status',
+        'field': 'status_icon',
         'type': 'icon',
         'layout': {'visible': true, 'sortable': true, 'fixed': true}
       },
@@ -113,7 +113,7 @@ export class functionService {
       // },
       {
         'label': this.translate('MODULES.FUNCTIONS.POE.COLUMN.PRIORITY'),
-        'field': 'priority',
+        'field': 'priorityStr',
         'layout': {'visible': true, 'sortable': true,}
       },
       // {
