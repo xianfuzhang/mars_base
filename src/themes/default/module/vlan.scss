@@ -155,6 +155,34 @@
 .voice-vlan__body .status_icon.material_icon.done{
   color:#0fd40f;
 }
+
+.voice-vlan-dialog-modal {
+  width: 500px;
+  height: auto !important;
+}
+
+.voice-vlan-dialog-modal .column-manipulation-field__content {
+  height: auto !important;
+}
+
+.voice-vlan-dialog-modal .column-manipulation-field__item {
+  width: 330px;
+  margin: 0 auto;
+  font-size: 13px !important;
+}
+
+.voice-vlan-dialog-modal .column-manipulation-field__item .item{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.voice-vlan-dialog-modal .column-manipulation-field__item .item .title{
+  width: 50px;
+  margin-top: 5px;
+  text-align: left;
+}
+
 //
 //@-webkit-keyframes fly_into {
 //  0% {

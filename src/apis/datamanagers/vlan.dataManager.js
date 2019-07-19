@@ -66,6 +66,19 @@ export class VlanDataManager {
     return defer.promise;
   }
 
+  getVlanConfigByDeviceId(deviceId) {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getVlanConfigUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'devices': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
   removeVlanIp(device_id, vlan_id) {
     let defer = this.di.$q.defer();
     this.di.$http.delete(this.di.appService.getVlanIpDeleteUrl(device_id, vlan_id)).then(
@@ -140,6 +153,58 @@ export class VlanDataManager {
       },
       (error) => {
         defer.resolve({'data': {'devices': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
+  postVoiceVlanConfig(params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getVoiceVlanUrl(), params).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (error) => {
+        defer.resolve({'data': {'devices': [], 'total': 0}});
+      }
+    );
+    return defer.promise;
+  }
+
+  postVoiceVlanConfigByDeviceId(device_id, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getVoiceVlanUrl(device_id), params).then(
+      () => {
+        defer.resolve();
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  putVoiceVlanConfigByDeviceId(device_id, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.put(this.di.appService.getVoiceVlanUrl(device_id), params).then(
+      () => {
+        defer.resolve();
+      },
+      (error) => {
+        defer.reject(error);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteVoiceVlanConfigByDeviceId(device_id) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getVoiceVlanUrl(device_id)).then(
+      () => {
+        defer.resolve();
+      },
+      (error) => {
+        defer.reject(error);
       }
     );
     return defer.promise;
