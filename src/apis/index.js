@@ -30,6 +30,8 @@ import {applicationService} from './services/application.service';
 import {flowCacheService} from './services/flowCache.service';
 import {MessageWebsocketService} from './services/message.service';
 import {regexService} from './services/regex.service';
+import {functionService} from './services/function.service';
+import {FunctionDataManager} from './datamanagers/function.dataManager';
 
 export default angular
   .module('apis', [])
@@ -40,6 +42,8 @@ export default angular
   .service('notificationService', notificationService)
   .service('dialogService', DialogService)
   .service('flowService', FlowService)
+  .service('functionService', functionService)
+  .service('functionDataManager', FunctionDataManager)
   .service('deviceDataManager', DeviceDataManager)
   .service('stormDataManager', StormDataManager)
   .service('loginDataManager', LoginDataManager)

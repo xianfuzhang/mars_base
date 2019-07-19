@@ -23,6 +23,7 @@ class AliasProvider {
     return {
       'login': path.resolve('src/modules/login/'),
       'dashboard': path.resolve('src/modules/dashboard/'),
+      'function': path.resolve('src/modules/function/'),
       'fabric': path.resolve('src/modules/fabric/'),
       'vlan': path.resolve('src/modules/vlan/'),
       'logical': path.resolve('src/modules/logical/'),

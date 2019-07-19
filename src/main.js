@@ -25,6 +25,7 @@ import 'moment'
 
 import 'login';
 import 'dashboard';
+import 'function';
 import 'fabric';
 import 'logical';
 import 'configuration';
@@ -88,6 +89,7 @@ angular
     'apis',
     'localStore',
     'dashboard',
+    'function',
     'login',
     'fabric',
     'logical',
