@@ -1,0 +1,15 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+//@import 'framework_layout';
+
+@include block(poe){
+  & .status_icon.material_icon.not_interested{
+    color:red;
+  }
+
+  & .status_icon.material_icon.done{
+    color:#0fd40f;
+  }
+
+}

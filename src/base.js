@@ -378,6 +378,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/poe', {
+      template: require('./modules/function/template/poe.html'),
+      controller: 'poeController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .otherwise({ redirectTo: '/' });
 }
 
