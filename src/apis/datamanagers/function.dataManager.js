@@ -117,30 +117,30 @@ export class FunctionDataManager{
   testGetPoeMain(){
     let defer = this.di.$q.defer();
     setTimeout(function () {
-      defer.resolve({
-        "poes": [
-          {
-            "deviceId": "rest:192.168.40.228:80",
-            "group": 1,
-            "power": 780,
-            "operStatus": "on",
-            "consumptionPower": 0,
-            "threshold": 95,
-            "notifyCtrl": true,
-            "dllPowerType": "type2Pse",
-            "dllPowerSource": "primary"
-          },{
-            "deviceId": "of:00008cea1b8d0f66",
-            "group": 1,
-            "power": 780,
-            "operStatus": "on",
-            "consumptionPower": 0,
-            "threshold": 95,
-            "notifyCtrl": true,
-            "dllPowerType": "type2Pse",
-            "dllPowerSource": "primary"
-          }
-        ]
+      defer.resolve({data:{"poes": [
+        {
+          "deviceId": "rest:192.168.40.228:80",
+          "group": 1,
+          "power": 780,
+          "operStatus": "on",
+          "consumptionPower": 0,
+          "threshold": 95,
+          "notifyCtrl": true,
+          "dllPowerType": "type2Pse",
+          "dllPowerSource": "primary"
+        },{
+          "deviceId": "of:00008cea1b8d0f66",
+          "group": 1,
+          "power": 780,
+          "operStatus": "on",
+          "consumptionPower": 0,
+          "threshold": 95,
+          "notifyCtrl": true,
+          "dllPowerType": "type2Pse",
+          "dllPowerSource": "primary"
+        }
+      ]}
+
       })
     })
     return defer.promise;
@@ -149,8 +149,7 @@ export class FunctionDataManager{
   testGetPoePorts(){
     let defer = this.di.$q.defer();
     setTimeout(function () {
-      defer.resolve( {
-        "ports": [
+      defer.resolve( {data:{"ports": [
           {
             "deviceId": "rest:192.168.40.228:80",
             "group": 1,
@@ -206,7 +205,8 @@ export class FunctionDataManager{
             "timeRangeActive": false
           }
 
-        ]
+        ]}
+
       }
       )
     })

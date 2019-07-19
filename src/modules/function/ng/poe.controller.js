@@ -52,28 +52,12 @@ export class PoeController {
       'rowActions': null,
       'schema': null,
       'provider': null,
-      'api': null,
-      // actionsShow: {
-      //   'menu': {'enable': true, 'role': 2},
-      //   'add': {'enable': false, 'role': 2},
-      //   'remove': {'enable': true, 'role': 2},
-      //   'refresh': {'enable': true, 'role': 2},
-      //   'search': {'enable': false, 'role': 2}
-      // },
-      // rowActions: [
-      //   {
-      //     'label': this.translate('MODULES.ALERT.HISTORY.DELETE'),
-      //     'role': 2,
-      //     'value': 'delete'
-      //   }
-      // ],
-      // alertTableProvider: null,
-      // alertAPI: null
+      'api': null
     };
 
     scope.onTableRowClick = (event) => {
       if (event.$data){
-        scope.poeModel.alertAPI.setSelectedRow(event.$data.uuid);
+        scope.poeModel.api.setSelectedRow(event.$data.uuid);
       }
     };
 
@@ -83,8 +67,8 @@ export class PoeController {
       prepareTableData();
     };
 
-    scope.onAlertAPIReady = ($api) => {
-      scope.poeModel.alertAPI = $api;
+    scope.onApiReady = ($api) => {
+      scope.poeModel.api = $api;
     };
 
 
@@ -121,10 +105,10 @@ export class PoeController {
     };
 
     scope.onTableRowSelectAction = (event) => {
-      if (this.scope.tabSelected.type === 'switch') {
-        this.scope.$emit('update-device-poe-wizard-show', event.data);
+      if (scope.tabSelected.type === 'switch') {
+        scope.$emit('update-device-poe-wizard-show', event.data);
       } else {
-        this.scope.$emit('update-port-poe-wizard-show', event.data);
+        scope.$emit('update-port-poe-wizard-show', event.data);
         // let status = event.action.value === "enable" ? true : false;
         // this.di.loopbackDataManager.updatePortLoopbackStatus(event.data.deviceId, event.data.port, {'status': status}).then(
         //   () => {
@@ -139,6 +123,14 @@ export class PoeController {
 
     this.init();
 
+    unSubscribers.push(this.di.$rootScope.$on('device-poe-refresh',()=>{
+      scope.poeModel.api.queryUpdate();
+    }));
+
+    unSubscribers.push(this.di.$rootScope.$on('port-poe-refresh',()=>{
+      scope.poeModel.api.queryUpdate();
+    }));
+
     scope.$on('$destroy', () => {
       this.di._.each(unSubscribers, (unSubscribe) => {
         unSubscribe();
@@ -148,7 +140,6 @@ export class PoeController {
 
   init(){
     let scope = this.di.$scope;
-    let m = this.di.alertDataManager;
     scope.poeModel.provider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
@@ -200,7 +191,6 @@ export class PoeController {
         this.di.functionDataManager.getPoeMain().then((res)=>{
         // this.di.functionDataManager.testGetPoeMain().then((res)=>{
           poeDefer.resolve(res.data.poes);
-          // poeDefer.resolve(res.poes);
         },
         (err)=>{
           poeDefer.reject(err);
@@ -210,7 +200,6 @@ export class PoeController {
         this.di.functionDataManager.getPoePorts().then((res)=>{
         // this.di.functionDataManager.testGetPoePorts().then((res)=>{
           poeDefer.resolve(res.data.ports);
-          // poeDefer.resolve(res.ports);
         },
         (err)=>{
           poeDefer.reject(err);
