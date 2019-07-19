@@ -135,7 +135,7 @@
                         </div>
                         <div style="display:flex;align-items: center;margin-right:30px;">
                             <span style="margin-right:10px;min-width:40px;" ng-bind="'MODULES.VLAN.TAB.ADD.COLUMN.NATIVE' | translate"></span>
-                            <valid-input class="item-input" ng-model="vlanModel.selectedPortObj.native" ng-value="vlanModel.selectedPortObj.native" v-require="true" v-regex="vlanModel.nativeVlanRegex" v-disabled="vlanModel.selectedPortObj.selectedMode.value == 'access' && vlanModel.vlanEntities.length > 0"></valid-input>
+                            <valid-input style="color:white;" class="item-input" ng-model="vlanModel.selectedPortObj.native" v-require="true" v-regex="vlanModel.nativeVlanRegex" v-disabled="vlanModel.selectedPortObj.selectedMode.value == 'access' && vlanModel.vlanEntities.length > 0"></valid-input>
                         </div>
                         <div style="display:flex;align-items: center;">
                             <mar-button style="margin-top:5px;" btn-text="::'MODULES.VLAN.TAB.EDIT.ADD_VLAN' | translate" btn-class="'btn-white btn-sm'"
