@@ -260,3 +260,169 @@
 .show-input-filename-modal {
   width: 350px;
 }
+
+
+@include block(timerange) {
+  padding: 32px 0 0 32px;
+
+  @include element(row) {
+    display: flex;
+    height: 38px;
+    //justify-items: center;
+    align-items: flex-end;
+    padding-left: 5%;
+    width: 100%;
+
+    .first {
+      font-size: 20px;
+      line-height: 38px;
+      //padding-left: 16px;
+      min-width: 150px;
+    }
+
+    .second {
+      padding-left: 16px;
+    }
+
+    .button {
+      line-height: 38px;
+      padding-left: 16px;
+    }
+  }
+
+  & .mdl-table-field {
+    background: none;
+  }
+  & .mdl-table-field:hover {
+    box-shadow: none;
+  }
+}
+
+@include block(timerange_establish) {
+
+  & .stepForm__input__label .mdc-checkbox-label{
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+  }
+
+
+  & .md-datepicker-input::-webkit-input-placeholder {
+    color: #606060;
+  }
+  & .md-datepicker-input:-moz-placeholder {
+    color: #606060;
+  }
+  & .md-datepicker-input:-ms-input-placeholder {
+    color: #606060;
+  }
+
+
+  @include element(label) {
+    padding: 8px 0;
+    font-size: 16px;
+    color: #7b7b7b;
+  }
+
+  @include element(ab_item) {
+    display: flex;
+    height: 50px;
+    margin-left: -10px;
+    padding-top: 5px;
+  }
+
+  @include element(ab_time){
+    display: flex;
+    @include element(icon){
+      line-height: 50px;
+      padding: 0 8px;
+      margin-top: -5px;
+    }
+
+    @include element(label){
+      padding: 0 8px;
+      line-height: 50px;
+      margin-top: -5px;
+    }
+
+    @include element(input){
+      display: inline-block;
+      width: 30px;
+      margin-top: -7px;
+      vertical-align: middle;
+    }
+  }
+
+  @include element(per_item){
+    display: flex;
+    height: 50px;
+    padding-top: 5px;
+  }
+
+  @include element(per_time){
+    display: flex;
+    @include element(icon){
+      line-height: 50px;
+      padding: 0 8px;
+      margin-top: -5px
+    }
+
+    @include element(label){
+      padding: 0 8px;
+      line-height: 50px;
+      margin-top: -5px;
+    }
+
+    @include element(input){
+      display: inline-block;
+      width: 30px;
+      margin-top: -4px;
+      vertical-align: middle;
+    }
+  }
+
+  @include element(ab_err_msg){
+    color: red;
+    margin-top: -13px;
+    font-size: 11px;
+    margin-left: 5px;
+  }
+
+
+  & md-icon {
+    color: black;
+  }
+
+  & .md-datepicker-expand-triangle {
+    border-top-color: black;
+  }
+  & .md-datepicker-input {
+    color: black;
+  }
+
+  & .md-datepicker-open .md-datepicker-input {
+    color: black;
+  }
+
+  & .md-datepicker-input-container {
+    border-bottom-color: black;
+  }
+
+  & .md-datepicker-input-container.md-datepicker-focused {
+    border-bottom-color: black;
+  }
+
+  & .md-icon-button + .md-datepicker-input-container {
+    margin-left: 0px;
+  }
+}
+
+.timerange_name_establish__label{
+  padding: 8px 0;
+  font-size: 16px;
+  color: #7b7b7b;
+}
+
+.md-datepicker-calendar-pane {
+  z-index: 2000;
+}

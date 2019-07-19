@@ -90,23 +90,44 @@ export class manageService {
 
   getTimeRangeTableSchema(){
     return [
+      // {
+      //   'label': this.translate('MODULES.TIMERANGES.TABLE.TYPE'),
+      //   'field': 'type',
+      //   'layout': {'visible': true, 'sortable': true, 'fixed': true},
+      // },
       {
-        'label': 'type',
-        'field': 'type',
+        'label': this.translate('MODULES.TIMERANGES.TABLE.TYPE'),
+        'field': 'typeStr',
         'layout': {'visible': true, 'sortable': true, 'fixed': true},
       },
       {
-        'label': 'start',
+        'label': this.translate('MODULES.TIMERANGES.TABLE.START'),
         'field': 'start',
         'layout': {'visible': true, 'sortable': true, 'fixed': true},
       },
       {
-        'label': 'end',
+        'label': this.translate('MODULES.TIMERANGES.TABLE.END'),
         'field': 'end',
         'layout': {'visible': true, 'sortable': true, 'fixed': true},
       }
     ];
   }
+
+  getTimeRangePeriodicType() {
+    return [
+      {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.SUNDAY'), 'value': 'sunday'},
+      {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.MONDAY'), 'value': 'monday'},
+      {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.TUESDAY'), 'value': 'tuesday'},
+      {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.WEDNESDAY'), 'value': 'wednesday'},
+      {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.THURSDAY'), 'value': 'thursday'},
+      {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.FRIDAY'), 'value': 'friday'},
+      {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.SATURDAY'), 'value': 'saturday'},
+      {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.DAILY'), 'value': 'daily'},
+      {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.WEEKDAYS'), 'value': 'weekdays'},
+      {'label': this.translate('MODULES.TIMERANGES.ESTABLISH.RANGE.PERIODIC.TYPE.WEEKEND'), 'value': 'weekend'},
+    ]
+  }
+
 
   getApplicationTableActionsShow(){
     return {
@@ -189,6 +210,8 @@ export class manageService {
       }
     ];
   }
+
+
 }
 
 

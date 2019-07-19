@@ -201,7 +201,11 @@
   color:white !important;
   border-bottom-color: white!important;
 }
-.link_select label, input{
+.link_select label{
+  color:white!important;
+}
+
+.link_select  input{
   color:white!important;
 }
 .link_select .mdc-notched-outline__idle{
