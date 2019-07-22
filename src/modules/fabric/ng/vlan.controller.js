@@ -79,6 +79,7 @@ export class VlanController {
       selectedDevice: [],
       changedPorts: {count: 0},
       addedDevices: [],
+      portInputArr: [],
       vlanInput: '',
       nativeVlan: '',
       tagType: '',
@@ -148,7 +149,7 @@ export class VlanController {
         scope.vlanModel.addedDevices.push({
           id: deviceId,
           name: scope.vlanModel.selectedDevice.label,
-          ports: ports
+          ports: ports,
         })
 
         scope.vlanModel.portsNumPerRow = halfNum > scope.vlanModel.portsNumPerRow ? halfNum : scope.vlanModel.portsNumPerRow;
@@ -360,51 +361,16 @@ export class VlanController {
         });
     };
 
-    scope.formatPortsToStr = (ports) => {
-      // get formatted port string
-      let formattedArr = [];
-
-      let sortedPorts = DI._.sortBy(ports, () => {
-        return ports.id
-      })
-
-      let startId, currentId, preId;
-      for (let i = 0; i < sortedPorts.length; i++) {
-        currentId = parseInt(sortedPorts[i].id);
-        if(sortedPorts[i].selected && startId == undefined) {
-          startId = parseInt(sortedPorts[i].id);
-          preId = parseInt(sortedPorts[i].id);
-          continue;
-        }
-
-        if(sortedPorts[i].selected && currentId - preId == 1) {
-          preId = currentId;
-        } else if(sortedPorts[i].selected) {
-          if(startId == preId) {
-            formattedArr.push(preId);
-          } else {
-            formattedArr.push(startId + '-' + preId);
-          }
-
-          startId = currentId;
-          preId = currentId;
-        }
-      }
-
-      if(startId == preId && startId !== undefined) {
-        formattedArr.push(preId);
-      } else if(startId !== undefined){
-        formattedArr.push(startId + '-' + preId);
-      }
-
-      return formattedArr.join(',');
-    }
-
     let batchChangePortsInterval = null;
-    scope.batchChangePorts = (index, portsStr) => {
+    scope.batchChangePorts = (index) => {
       const getPortsArrayFromStr = this.getPortsArrayFromStr;
+      let portsStr = scope.vlanModel.portInputArr[index];
+
+      let regex = new RegExp(scope.vlanModel.portsBatchRegex)
+      if(!portsStr || !portsStr.match(regex)) return;
+
       function handleBatch() {
-        let regex = new RegExp(scope.portsBatchRegex)
+        let regex = new RegExp(scope.vlanModel.portsBatchRegex)
         if(portsStr && portsStr.match(regex)) {
           let portsArr = getPortsArrayFromStr(portsStr);
           scope.vlanModel.addedDevices[index].ports.forEach((port) => {
@@ -603,6 +569,15 @@ export class VlanController {
       }
     }, true));
 
+    unsubscribers.push(scope.$watch('vlanModel.addedDevices', (newValue, oldValue) => {
+      if(!newValue || !oldValue) return;
+
+      scope.vlanModel.portInputArr = [];
+      scope.vlanModel.addedDevices.forEach(device => {
+        scope.vlanModel.portInputArr.push(_formatPortsToStr(device.ports))
+      })
+    }, true));
+
     unsubscribers.push(scope.$on('td-select-change', (event, newValue) => {
       if(scope.vlanModel.editSelectedType == 'vlan') {
         _handle_update_vlan(newValue);
@@ -624,6 +599,46 @@ export class VlanController {
     });
 
     this.init();
+
+    let _formatPortsToStr = (ports) => {
+      // get formatted port string
+      let formattedArr = [];
+
+      let sortedPorts = DI._.sortBy(ports, () => {
+        return ports.id
+      })
+
+      let startId, currentId, preId;
+      for (let i = 0; i < sortedPorts.length; i++) {
+        currentId = parseInt(sortedPorts[i].id);
+        if(sortedPorts[i].selected && startId == undefined) {
+          startId = parseInt(sortedPorts[i].id);
+          preId = parseInt(sortedPorts[i].id);
+          continue;
+        }
+
+        if(sortedPorts[i].selected && currentId - preId == 1) {
+          preId = currentId;
+        } else if(sortedPorts[i].selected) {
+          if(startId == preId) {
+            formattedArr.push(preId);
+          } else {
+            formattedArr.push(startId + '-' + preId);
+          }
+
+          startId = currentId;
+          preId = currentId;
+        }
+      }
+
+      if(startId == preId && startId !== undefined) {
+        formattedArr.push(preId);
+      } else if(startId !== undefined){
+        formattedArr.push(startId + '-' + preId);
+      }
+
+      return formattedArr.join(',');
+    }
 
     // update port table's one row data
     let _handle_update_vlan = (newValue) =>{
