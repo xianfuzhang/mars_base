@@ -13,3 +13,28 @@
   }
 
 }
+.dhcp-snoop-wizard.createSnoop .wizard__body{
+  height: 300px;
+}
+.dhcp-snoop-wizard .createSnoop{
+  display: flex;
+  flex-direction: column;
+}
+.dhcp-snoop-wizard .stepForm__input {
+  display: flex;
+  vertical-align: middle;
+  align-items: baseline;
+  margin: 10px 0;
+}
+.dhcp-snoop-wizard .stepForm__input__label{
+  width: 100px;
+  display: inline-block;
+}
+.dhcp-snoop-wizard  .vlan-list{
+  display: inline-block;
+  vertical-align: top;
+}
+.text-field-container .mdc-text-field-helper-text.mdc-text-field-helper-text--persistent{
+  width: 175px;
+  display: block;
+}
