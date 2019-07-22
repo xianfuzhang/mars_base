@@ -504,8 +504,11 @@ export class ForceTopo {
               .attr('width', '36')
               .attr('height', '36')
           })
-          .on('contextmenu',function () {
+          .on('contextmenu',function (d) {
             d3.event.preventDefault();
+            if(d['isHost'] && d['isHost'] === true){
+              return;
+            }
             let deviceId = this.getAttribute('deviceId');
             // console.log(this.getBoundingClientRect())
             // console.log(DI.d3.clientPoint(this, 'contextmenu'))
