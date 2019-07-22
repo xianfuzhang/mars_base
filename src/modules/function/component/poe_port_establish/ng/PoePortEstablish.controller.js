@@ -95,11 +95,7 @@ export class PoePortEstablishController {
       reset();
       scope.model.status = scope.display.statusDisplay.options.find((option)=>{return option.value === scope.data.status});
       scope.model.priority = scope.display.priorityDisplay.options.find((option)=>{return option.value === scope.data.priority});
-      if(scope.data.timeRange !== null && scope.data.timeRange !== ''){
-        scope.model.timeRange = scope.display.priorityDisplay.options.find((option)=>{return option.value === scope.data.timeRange});
-      } else {
-        scope.model.timeRange = scope.display.timeRangeDisplay.options[0];
-      }
+
 
       scope.model.maxPower = scope.data.maxPower;
       if(scope.isTimeRangeEnable){
@@ -111,12 +107,22 @@ export class PoePortEstablishController {
               scope.display.timeRangeDisplay.options.push({'label': range.name, 'value':range.name})
             })
           }
+          if(scope.data.timeRange !== null && scope.data.timeRange !== ''){
+            scope.model.timeRange = scope.display.timeRangeDisplay.options.find((option)=>{return option.value === scope.data.timeRange});
+          } else {
+            scope.model.timeRange = scope.display.timeRangeDisplay.options[0];
+          }
           scope.showWizard = true;
         },err=>{
           this.di.notificationService.renderWarning(scope, err.data.message|| err.data|| err);
-          scope.showWizard = true;
+          scope.showWizard = false;
         });
       } else {
+        if(scope.data.timeRange !== null && scope.data.timeRange !== ''){
+          scope.model.timeRange = scope.display.timeRangeDisplay.options.find((option)=>{return option.value === scope.data.timeRange});
+        } else {
+          scope.model.timeRange = scope.display.timeRangeDisplay.options[0];
+        }
         scope.showWizard = true;
       }
 
