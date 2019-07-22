@@ -1,0 +1,48 @@
+<div class="column-manipulation-field">
+  <div class="column-manipulation-field__header">
+    <span class="column-manipulation-field__title"
+          ng-bind="'MODULES.VLAN.TAB.EDIT.ADD_VLAN'|translate"></span>
+  </div>
+  <form class="endpoint__form" autocomplete="off" novalidate>
+      <div class="column-manipulation-field__content">
+      <div class="column-manipulation-field__item">
+          <div class="item">
+              <span class="title">{{::'MODULES.VLAN.VOICE.TABLE.COLUMN.DEVICE' | translate}}:</span>
+              <mdl-select ng-model="model.selectedDevice"
+                          display-label="{options: model.deviceOptions}">
+              </mdl-select>
+          </div>
+          <div class="item">
+              <span class="title">VLAN:</span>
+              <mdl-select ng-model="model.selectedVlan"
+                          display-label="{options: model.vlanOptions}">
+              </mdl-select>
+          </div>
+          <div class="item" style="height: 50px;">
+              <span class="title">{{::'MODULES.VLAN.VOICE.TABLE.COLUMN.AGING' | translate}}:</span>
+              <valid-input v-require="true" v-type="int" min="5"  max="43200" v-regex="agingRegex" v-rpcid="aging" ng-model="model.aging" ng-value="1440"></valid-input>
+              <span style="margin-top: 13px;"><span>{{::'MODULES.VLAN.VOICE.AGING.UNIT' | translate}}</span>&nbsp;&nbsp;(5-43200)</span>
+          </div>
+          <div class="item">
+              <span class="title">{{::'MODULES.VLAN.VOICE.TABLE.COLUMN.STATUS' | translate}}:</span>
+              <mdl-radio ng-model="model.status" name="status"
+                         display-label="{id: 'check_1', label: 'Enable', name: 'status', value: 'enable'}">
+              </mdl-radio>
+              <mdl-radio ng-model="model.membership_type" name="tagType"
+                         display-label="{id: 'check_2', label: 'Disable', name: 'status', value: 'disable'}">
+              </mdl-radio>
+          </div>
+      </div>
+      </div>
+
+      <div class="column-manipulation-field__footer">
+          <div style="display: inline-block;float: right; margin-left: 15px;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="!model.selectedDevice.value || !model.selectedVlan.value || !model.agingValid"></mar-button>
+      </div>
+
+      <div style="display: inline-block;float: right;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)"></mar-button>
+      </div>
+      </div>
+  </form>
+</div>

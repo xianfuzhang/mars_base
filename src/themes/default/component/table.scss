@@ -286,6 +286,12 @@ mdc设置组件颜色
   background-image: url('../../assets/images/loading.gif');
   background-size: 34px 34px;
 }
+.mdl-table-body__row td .mdc-select {
+  width: 120px;
+}
+.mdl-table-body__row td .mdc-select__selected-text {
+  text-align: center;
+}
 .mdl-table-header__row th {
   white-space: nowrap;
   overflow: hidden;

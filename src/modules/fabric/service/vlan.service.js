@@ -335,7 +335,7 @@ export class VlanService {
       },
       {
         'label': this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.VLAN'),
-        'field': 'vlan_id',
+        'field': 'vlan',
         'layout': {'visible': true, 'sortable': true}
       },
       {
@@ -353,6 +353,140 @@ export class VlanService {
   }
 
   getVoiceVlanTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.VLAN.VOICE.TABLE.ROW.ACTION.ENABLE'),
+        'role': 2,
+        'value': 'enable'
+      },
+      {
+        'label': this.translate('MODULES.VLAN.VOICE.TABLE.ROW.ACTION.DISABLE'),
+        'role': 2,
+        'value': 'disable'
+      }
+    ];
+  }
+
+  getVoiceVlanOuiTableActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getVoiceVlanOuiTableSchema() {
+    return [
+      {
+        'label':  this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.MAC_ADDRESS'),
+        'field': 'mac_address',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.MASK_ADDRESS'),
+        'field': 'mask_address',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.DESCRIPTION'),
+        'field': 'description',
+        'layout': {'visible': true, 'sortable': false}
+      }
+    ];
+  }
+
+  getVoiceVlanOuiTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ];
+  }
+
+  getVoiceVlanPortTableActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  getVoiceVlanPortTableSchema() {
+    return [
+      {
+        'label':  "PORT",
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.SECURITY'),
+        'field': 'security',
+        'type': 'select',
+        'layout': {
+          'visible': true,
+          'sortable': false,
+          'render': {'params': {'options': [
+            {'label': this.translate("MODULES.VLAN.VOICE.TABLE.COLUMN.SECURITY.ENABLE"), 'value': true},
+            {'label': this.translate("MODULES.VLAN.VOICE.TABLE.COLUMN.SECURITY.DISABLE"), 'value': false},
+          ]}}
+        }
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.RULE'),
+        'field': 'rule',
+        'type': 'select',
+        'layout': {
+          'visible': true,
+          'sortable': false,
+          'render': {'params': {'options': [
+            {'label': 'oui', 'value': 'oui'},
+            {'label': 'lldp', 'value': 'lldp'},
+            {'label': 'oui/lldp', 'value': 'oui/lldp'},
+          ]}}
+        }
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.PRIORITY'),
+        'field': 'priority',
+        'type': 'select',
+        'layout': {
+          'visible': true,
+          'sortable': false,
+          'render': {'params': {'options': [
+            {'label': '0', 'value': '0'},
+            {'label': '1', 'value': '1'},
+            {'label': '2', 'value': '2'},
+            {'label': '3', 'value': '3'},
+            {'label': '4', 'value': '4'},
+            {'label': '5', 'value': '5'},
+            {'label': '6', 'value': '6'}
+          ]}}
+        }
+      },
+      {
+        'label':  this.translate('MODULES.VLAN.VOICE.TABLE.COLUMN.MODE'),
+        'field': 'mode',
+        'type': 'select',
+        'layout': {
+          'visible': true,
+          'sortable': false,
+          'render': {'params': {'options': [
+            {'label': this.translate("MODULES.VLAN.VOICE.TABLE.COLUMN.MODE.MANUAL"), 'value': 'manual'},
+            {'label': this.translate("MODULES.VLAN.VOICE.TABLE.COLUMN.MODE.AUTO"), 'value': 'auto'},
+            {'label': this.translate("MODULES.VLAN.VOICE.TABLE.COLUMN.MODE.NONE"), 'value': 'none'}
+          ]}}
+        }
+      }
+    ];
+  }
+
+  getVoiceVlanPortTableRowActions() {
     return [
       {
         'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
