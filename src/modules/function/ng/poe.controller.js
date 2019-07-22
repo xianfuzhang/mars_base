@@ -11,6 +11,7 @@ export class PoeController {
       'roleService',
       'dialogService',
       'appService',
+      'applicationService',
       'notificationService',
       'tableProviderFactory',
       'functionDataManager',
@@ -80,6 +81,11 @@ export class PoeController {
           break;
         case 'port':
           schema = this.di.functionService.getPoePortTableSchema();
+          if(this.di.applicationService.getAppsState()['com.nocsys.timerange'] !== 'ACTIVE'){
+            schema = schema.filter((f)=>{
+              return f.field !== 'timeRange'
+            })
+          }
           break;
       }
       return schema;

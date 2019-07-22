@@ -287,11 +287,12 @@ export class TimeRangeEstablishController {
         scope.tsEsModel.isAbsoluteTimeInValid = false;
         return false;
       }
-      let startDate = getAbsoluteStartTime();
-      let endDate = getAbsoluteEndTime();
-      console.log(startDate.getTime())
-      console.log(endDate.getTime())
+
+      // console.log(startDate.getTime())
+      // console.log(endDate.getTime())
       if(scope.tsEsModel.ab_start_need){
+        let startDate = getAbsoluteStartTime();
+        let endDate = getAbsoluteEndTime();
         if (startDate.getTime() >= endDate.getTime()) {
           scope.tsEsModel.isAbsoluteTimeInValid = true;
           return false;
@@ -301,7 +302,6 @@ export class TimeRangeEstablishController {
         }
       }
       return true;
-
     }
 
     let checkAllAbsoluteTimeFinished = () => {
