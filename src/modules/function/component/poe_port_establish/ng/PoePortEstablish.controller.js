@@ -33,7 +33,7 @@ export class PoePortEstablishController {
     this.translate = this.di.$filter('translate');
 
     scope.maxpower_valid_regex = '^3[0-9]{3}|[1-2][0-9]{4}|30000$';
-    scope.maxpower_valid_message = '请输入正确的功率区间(3000-30000)';
+    scope.maxpower_valid_message = this.translate('MODULES.FUNCTIONS.POE.PORT_ES.POWER.MESSAGE');
 
     scope.wizardHeight = {"height":'450px'};
     scope.isWizardCenter = true;
@@ -66,7 +66,7 @@ export class PoePortEstablishController {
           {'label':this.translate('MODULES.FUNCTIONS.POE.PRIORITY_LEVEL.LOW'), 'value':3}]
       },
       timeRangeDisplay: {
-        options:[{'label':'请选择时间范围', 'value': null}]
+        options:[{'label':this.translate('MODULES.TIMERANGES.DISPLAY.SELECT_NAME'), 'value': null}]
       }
     }
     scope.model = {
@@ -103,7 +103,7 @@ export class PoePortEstablishController {
 
       scope.model.maxPower = scope.data.maxPower;
       if(scope.isTimeRangeEnable){
-        scope.display.timeRangeDisplay.options = [{'label':'请选择时间范围', 'value': null}];
+        scope.display.timeRangeDisplay.options = [{'label':this.translate('MODULES.TIMERANGES.DISPLAY.SELECT_NAME'), 'value': null}];
         this.di.manageDataManager.getTimeRangeByDevice(scope.data.deviceId).then(res=>{
           let rangeList = res.data[scope.data.deviceId];
           if(Array.isArray(rangeList) && rangeList.length > 0){
