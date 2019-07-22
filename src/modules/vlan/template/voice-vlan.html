@@ -5,9 +5,9 @@
     <span>•</span>
     <span>{{'MODULE.HEADER.VLAN.VOICE_VLAN' | translate}}</span>
   </content-header>
-  <div class="app-body">
+  <div class="app-body" style="height:calc(100% - 60px)">
     <div style="display:flex;width:100%;">
-      <div class="main__content" style="width:60%">
+      <div class="main__content" style="width:60%;overflow-y: auto;">
         <mdl-table actions-show="model.actionsShow"
                    actions="model.rowActions"
                    row-click="onTableRowClick($event)"
@@ -17,9 +17,9 @@
                    on-add="addVoiceVlan()" on-remove="batchRemoveVoiceVlan($value)">
         </mdl-table>
       </div>
-      <div class="main__content" style="width:40%">
+      <div class="main__content" style="width:40%;overflow-y: auto;">
           <div>
-              <div style="margin:5px 10px;font-size:15px;font-weight:bold;">ouis</div>
+              <div class="header">ouis&nbsp;-&nbsp;<span ng-bind="model.selectedDevice.device_name"></span></div>
               <mdl-table actions-show="model.ouiActionsShow"
                         actions="model.ouiRowActions"
                         row-select-action="onTableRowSelectAction($event)"
@@ -29,7 +29,7 @@
           </div>
 
           <div style="margin-top: 60px;position:relative;">
-              <div style="margin:5px 10px;font-size:15px;font-weight:bold;">ports</div>
+              <div class="header">ports&nbsp;-&nbsp;<span ng-bind="model.selectedDevice.device_name"></span></div>
               <div style="position: absolute;top:40px;right:38px;">
                   <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="savePort()" btn-disabled="!model.changedPorts.length"/>
               </div>
