@@ -432,6 +432,14 @@
   background-color: var(--mdc-theme-background, #fff);
 }
 
+.wizard__body .isContentVerticalCenter{
+  display:flex;
+}
+
+.wizard__body .isContentVerticalCenter form{
+  margin:auto;
+}
+
 
 
 @keyframes border_rotate {

@@ -367,6 +367,13 @@
   min-width: 50%;
 }
 
+.wizard__body .isContentVerticalCenter{
+  display:flex;
+}
+
+.wizard__body .isContentVerticalCenter form{
+  margin:auto;
+}
 
 
 @keyframes border_rotate {

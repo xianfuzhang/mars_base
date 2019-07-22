@@ -34,6 +34,7 @@ export class Wizard {
       scope.showWizard = scope.showWizard || false;
       scope.loading = false;
       scope.wizardStyle = scope.wizardHeight || {};
+      scope.isWizardContentVerticalCenter = scope.isWizardCenter || false;
       scope.wizardForm = {};
     }
     

@@ -20,7 +20,7 @@
                 <div ng-repeat="step in steps track by $index" class="wizard__body__left__step" ng-class="{'+active': curIndex === $index }" ng-click="allowSkip === false ? false : switchTo($index)">{{($index+1) + '. ' +step.title}}</div>
             </div>
 
-            <div class="wizard__body__right" ng-class="{'+single': steps.length < 2}">
+            <div class="wizard__body__right" ng-class="{'+single': steps.length < 2, 'isContentVerticalCenter': isWizardContentVerticalCenter}">
                 <form name="wizardForm" autocomplete="off" novalidate>
                     <div class="wizard__body__form" ng-class="{'+single': steps.length < 2}">
                         <div ng-show="curIndex == $index" ng-repeat="step in steps track by $index" class="wizard__body__right__content">
