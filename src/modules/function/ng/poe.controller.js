@@ -188,8 +188,8 @@ export class PoeController {
     });
     switch(scope.tabSelected.type){
       case 'switch':
-        // this.di.functionDataManager.getPoeMain().then((res)=>{
-        this.di.functionDataManager.testGetPoeMain().then((res)=>{
+        this.di.functionDataManager.getPoeMain().then((res)=>{
+        // this.di.functionDataManager.testGetPoeMain().then((res)=>{
           poeDefer.resolve(res.data.poes);
         },
         (err)=>{
@@ -197,8 +197,8 @@ export class PoeController {
         });
         break;
       case 'port':
-        // this.di.functionDataManager.getPoePorts().then((res)=>{
-        this.di.functionDataManager.testGetPoePorts().then((res)=>{
+        this.di.functionDataManager.getPoePorts().then((res)=>{
+        // this.di.functionDataManager.testGetPoePorts().then((res)=>{
           poeDefer.resolve(res.data.ports);
         },
         (err)=>{
