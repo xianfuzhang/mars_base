@@ -102,6 +102,7 @@ export class appService {
           {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
           {'label': this.translate('MODULE.HEADER.MANAGE.TIMERANGE'), 'url': '/time_range', 'role': 3},
           {'label': this.translate('MODULE.HEADER.FUNCTIONS.POE'), 'url': '/poe', 'role': 3},
+          {'label': this.translate('MODULE.HEADER.FABRIC.SNOOPING'), 'url': '/dhcp_snoop', 'role': 2}
         ]
       },
       {
@@ -1051,6 +1052,15 @@ export class appService {
 
   getDHCPRelayCountersUrl(){
     return this.getZoneEndpoint() + `/dhcprelay/v1/counters`;
+  }
+
+  getDHCPSnoopUrl(type) {
+    if (type) {
+      return this.getZoneEndpoint(true) +  `/dhcpsnoop/v1/${type}`;
+    }
+    else {
+      return this.getZoneEndpoint(true) +  '/dhcpsnoop/v1';
+    }
   }
 
   getDeviceLoopbackDetectionUrl(deviceId){

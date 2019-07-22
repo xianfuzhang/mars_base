@@ -21,13 +21,13 @@
             ng-if="actionsShow.search.enable && 
                     (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.search.role)">
         <div class="mdl-table-action__search-body">
-          <div class="chips-list" ng-show="!tableModel.globalSearch">
+          <div class="chips-list" ng-class="{true: 'hide', false: 'show'}[tableModel.globalSearch === true]">
             <div class="chip" ng-repeat="item in tableModel.columnFilterConditions track by $index">
               <span>{{item.display}}</span>
               <span class="remove" ng-click="_deletecolumnCondition($event, $index)"></span>
             </div>
           </div>
-          <input ng-show="tableModel.globalSearch" type="text" placeholder="{{placeholder}}"
+          <input ng-class="{true: 'show', false: 'hide'}[tableModel.globalSearch === true]" type="text" placeholder="{{placeholder}}"
                  ng-model="tableModel.searchResult" ng-model-options="{debounce: 1000}"
                  ng-change="_search(true)" ng-readonly="!tableModel.globalSearch"
                  class="mdc-text-field__input mdl-table-action__search-body__input">

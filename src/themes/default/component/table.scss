@@ -29,6 +29,12 @@ mdc设置组件颜色
 .mdl-table-action__search-body{
   width: 100%;
 }
+.mdl-table-action__search-body > .show{
+  display: inline-block;
+}
+.mdl-table-action__search-body > .hide{
+  display: none;
+}
 .mdl-table-action__search .chip{
   position: relative;
   display: inline-block;

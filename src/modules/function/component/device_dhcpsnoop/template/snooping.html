@@ -1,0 +1,26 @@
+<div>
+	<div class="stepForm__input">
+    <div class="stepForm__input__label">{{'MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.DEVICE_NAME' | translate}}
+      <span>:</span>
+    </div>
+    <mdl-select ng-model="model.device" display-label="model.deviceDisplayLabel">
+    </mdl-select>
+  </div>
+  <div class="stepForm__input">
+    <div class="stepForm__input__label">{{'MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.VLAN' | translate}}
+      <span>:</span>
+    </div>
+  	<div class="vlan-list">
+      <mdl-radio ng-model="model.vlanType" display-label="model.vlanTypeLabel.allLabel" >
+      </mdl-radio>
+      <div class="other-vlan">
+        <mdl-radio ng-model="model.vlanType" display-label="model.vlanTypeLabel.otherLabel">
+        </mdl-radio>
+        <mdl-text  ng-model="model.vlanRange" ng-show="model.vlanType ==='other'"
+          helper="model.vlanHelper" display-label="model.vlanRangeDisplayLabel"></mdl-text>
+      </div>
+    </div>
+  </div>
+  <div class="stepForm__input" ng-if="createFlag === false">
+  </div>
+</div>

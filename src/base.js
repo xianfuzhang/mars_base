@@ -217,6 +217,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/dhcp_snoop', {
+      template: require('./modules/function/template/snooping.html'),
+      controller: 'snoopCtrl',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/dhcp', {
       template: require('./modules/manage/template/dhcp.html'),
       controller: 'dhcpController',
