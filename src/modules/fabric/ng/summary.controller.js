@@ -163,7 +163,8 @@ export class FabricSummaryController {
       switchContextMenu: {
         location:{'x':0, 'y':1},
         isShow : false,
-        data:this.di.deviceService.getSummarySwitchMenu()
+        data:this.di.deviceService.getSummarySwitchMenu(),
+        back_data: null
       },
       srcHost:null,
       dstHost: null,
@@ -1128,6 +1129,21 @@ export class FabricSummaryController {
     unsubscribers.push(this.di.$rootScope.$on('switch_opt',(evt, data)=>{
 
       if(scope.role > 1){
+        scope.fabricModel.switchContextMenu.data = angular.copy(scope.fabricModel.switchContextMenu.back_data)
+        let device = this.devices.find((device)=>{
+          return device.id === data.id
+        })
+        if(device){
+          if(device.protocol !== 'of') {
+            this.di._.remove(scope.fabricModel.switchContextMenu.data, (item)=>{
+              return 'summary_switch_menu_show_group' === item['msg'] ||
+                    'summary_switch_menu_create_group' === item['msg'] ||
+                    'summary_switch_menu_show_flow' === item['msg'] ||
+                    'summary_switch_menu_create_flow' === item['msg'];
+            });
+          }
+        }
+
         if(this.di.$scope.fabricModel.switchContextMenu.data.length === 0){
           return;
         }
@@ -1406,6 +1422,7 @@ export class FabricSummaryController {
             return 'summary_switch_reboot' === item['msg'];
           });
         }
+        scope.fabricModel.switchContextMenu.back_data = angular.copy(scope.fabricModel.switchContextMenu.data)
       };
 
       _get_license_info();
