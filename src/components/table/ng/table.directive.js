@@ -673,7 +673,12 @@ export class mdlTable {
     let subscribes = [];
     subscribes.push(this.di.$rootScope.$on('td-filter-event', (event, params) => {
       scope.tableModel.search['value'] = params.display;
-      scope.tableModel.columnFilterConditions.push(params);
+      let index = scope.tableModel.columnFilterConditions.findIndex((item) => {
+        return item.display === params.display;
+      });
+      if (index === -1) {
+        scope.tableModel.columnFilterConditions.push(params);
+      } 
       let columns = [];
       scope.tableModel.columnFilterConditions.forEach((item) => {
         columns.push(item.result[0]);
