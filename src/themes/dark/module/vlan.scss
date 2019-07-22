@@ -157,6 +157,18 @@
   color:#0fd40f;
 }
 
+.voice-vlan__body .header {
+  display: block;
+  position: relative;
+  margin-bottom: 3px;
+  padding:5px 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #f1f1f1;
+  outline: none;
+  background-color: #414141;
+}
+
 .voice-vlan-dialog-modal {
   width: 500px;
   height: auto !important;
@@ -167,7 +179,7 @@
 }
 
 .voice-vlan-dialog-modal .column-manipulation-field__item {
-  width: 330px;
+  width: 350px;
   margin: 0 auto;
   font-size: 13px !important;
 }
@@ -179,7 +191,7 @@
 }
 
 .voice-vlan-dialog-modal .column-manipulation-field__item .item .title{
-  width: 50px;
+  width: 80px;
   margin-top: 5px;
   text-align: left;
 }

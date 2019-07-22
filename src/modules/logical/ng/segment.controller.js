@@ -191,7 +191,8 @@ export class SegmentController {
     return {
       'add': {'enable': true, 'role': 2},
       'remove': {'enable': true, 'role': 2},
-      'refresh': {'enable': true, 'role': 2}
+      'refresh': {'enable': true, 'role': 2},
+      'search': {'enable': true, 'role': 2}
     };
   }
   
