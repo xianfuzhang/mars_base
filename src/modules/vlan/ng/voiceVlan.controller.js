@@ -379,6 +379,8 @@ export class VoiceVlanCtrl{
   }
 
   init() {
+    // init flag
+    let voiceVlanInitFlag = true, ouiInitFlag = true, portInitFlag = true;
     this.scope.model.provider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
@@ -579,6 +581,9 @@ export class VoiceVlanCtrl{
       })
     }
 
+    result = this.di._.sortBy(result, (port) => {
+      return parseInt(port.port)
+    })
     return result;
   }
 
