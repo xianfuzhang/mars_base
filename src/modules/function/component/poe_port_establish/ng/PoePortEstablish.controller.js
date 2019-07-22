@@ -12,8 +12,11 @@ export class PoePortEstablishController {
       '$timeout',
       '$filter',
       '_',
+      'manageDataManager',
       'functionDataManager',
-      'functionService'
+      'functionService',
+      'applicationService',
+      'notificationService',
     ];
   }
 
@@ -32,7 +35,8 @@ export class PoePortEstablishController {
     scope.maxpower_valid_regex = '^3[0-9]{3}|[1-2][0-9]{4}|30000$';
     scope.maxpower_valid_message = '请输入正确的功率区间(3000-30000)';
 
-    scope.wizardHeight = {"height":'400px'};
+    scope.wizardHeight = {"height":'450px'};
+    scope.isWizardCenter = true;
 
     let di = this.di;
 
@@ -71,6 +75,7 @@ export class PoePortEstablishController {
       priority:null,
       status: null
     };
+    scope.isTimeRangeEnable = false;
 
     let reset = () =>{
       scope.model = {
@@ -83,7 +88,10 @@ export class PoePortEstablishController {
     this.di.$scope.open = (data) => {
       if(scope.showWizard) return;
 
+
+      scope.isTimeRangeEnable = this.di.applicationService.getAppsState()['com.nocsys.timerange'] === 'ACTIVE';
       scope.data = angular.copy(data);
+
       reset();
       scope.model.status = scope.display.statusDisplay.options.find((option)=>{return option.value === scope.data.status});
       scope.model.priority = scope.display.priorityDisplay.options.find((option)=>{return option.value === scope.data.priority});
@@ -94,8 +102,25 @@ export class PoePortEstablishController {
       }
 
       scope.model.maxPower = scope.data.maxPower;
+      if(scope.isTimeRangeEnable){
+        scope.display.timeRangeDisplay.options = [{'label':'请选择时间范围', 'value': null}];
+        this.di.manageDataManager.getTimeRangeByDevice(scope.data.deviceId).then(res=>{
+          let rangeList = res.data[scope.data.deviceId];
+          if(Array.isArray(rangeList) && rangeList.length > 0){
+            rangeList.forEach(range=>{
+              scope.display.timeRangeDisplay.options.push({'label': range.name, 'value':range.name})
+            })
+          }
+          scope.showWizard = true;
+        },err=>{
+          this.di.notificationService.renderWarning(scope, err.data.message|| err.data|| err);
+          scope.showWizard = true;
+        });
+      } else {
+        scope.showWizard = true;
+      }
 
-      scope.showWizard = true;
+
     };
 
     function validCurrentDom(dom_class) {

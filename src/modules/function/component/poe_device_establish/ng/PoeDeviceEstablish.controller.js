@@ -30,6 +30,7 @@ export class PoeDeviceEstablishController {
     this.translate = this.di.$filter('translate');
 
     scope.wizardHeight = {"height":'200px'};
+    scope.isWizardCenter = true;
 
     let di = this.di;
 

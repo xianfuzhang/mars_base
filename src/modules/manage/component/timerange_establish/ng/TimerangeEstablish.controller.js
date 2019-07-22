@@ -29,7 +29,8 @@ export class TimeRangeEstablishController {
     const rootScope = this.di.$rootScope;
     this.translate = this.di.$filter('translate');
 
-    scope.wizardHeight = {"height": '500px'};
+    scope.wizardHeight = {"height": '450px'};
+    scope.isWizardCenter = true;
 
     let di = this.di;
 
