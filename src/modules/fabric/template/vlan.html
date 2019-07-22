@@ -194,7 +194,7 @@
                     <div class="name">{{device.name}}:</div>
                     <ports-group group-id="{{'group-id-' + $index}}" ports-list="device.ports" ports-num-per-row="{{vlanModel.portsNumPerRow}}"></ports-group>
                     <div class="batch-ports">
-                        <span ng-bind="'MODULES.VLAN.TAB.EDIT.BATCH_INPUT' | translate"></span><valid-input ng-model="batchPorts" ng-value="formatPortsToStr(device.ports)" v-require="true" v-regex="portsBatchRegex" v-name="ports" v-rpcid="device-ports-input" ng-change="batchChangePorts($index, batchPorts)"></valid-input>
+                        <span ng-bind="'MODULES.VLAN.TAB.EDIT.BATCH_INPUT' | translate"></span><valid-input ng-model="vlanModel.portInputArr[$index]" v-require="true" v-regex="vlanModel.portsBatchRegex" v-name="ports" v-rpcid="device-ports-input" ng-change="batchChangePorts($index)"></valid-input>
                     </div>
                 </div>
             </div>
