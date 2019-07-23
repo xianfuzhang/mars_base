@@ -130,18 +130,8 @@ export class mdlSelect {
       let compare = function (Obj_1, Obj_2) {
         let state = true;
         for (let key in Obj_1) {
-          if (typeof (Obj_2[key]) === 'undefined') {
+          if (Obj_1[key] !== Obj_2[key]) {
             state = false;
-          } 
-          else {
-            if (typeof (Obj_1[key]) === 'object') {
-              state = compare(Obj_1[key],Obj_2[key]);
-            } 
-            else {
-              if (Obj_1[key] !== Obj_2[key]) {
-                state = false;
-              }
-            }
           }
         }
         return state;
