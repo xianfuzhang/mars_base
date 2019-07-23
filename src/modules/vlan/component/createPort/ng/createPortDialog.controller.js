@@ -6,7 +6,7 @@ export class CreatePortDialogController {
       '$modalInstance',
       '_',
       'dataModel',
-      'deviceDataManager',
+      'vlanDataManager',
     ];
   }
   constructor(...args){
@@ -50,13 +50,18 @@ export class CreatePortDialogController {
     };
 
     let portOptions = [];
-    this.di.deviceDataManager.getDeviceWithPorts(DI.dataModel.device.device_id).then((res) => {
+    this.di.vlanDataManager.getVlanConfigByDeviceId(DI.dataModel.device.device_id).then((res) => {
       res.data.ports.forEach((port) => {
+        let foundVlan = port.vlans.find((vlanStr) => {
+          let vlanArr = vlanStr.split('/')
+          return vlanArr[0] == DI.dataModel.device.basic.vlan
+        })
+
         let foundPort = DI._.find(DI.dataModel.device.ports, (vlanPort) => {
           return vlanPort.port == port.port
         })
 
-        if(!foundPort) {
+        if(foundVlan && !foundPort) {
           portOptions.push({
             label: port.port,
             value: parseInt(port.port)
