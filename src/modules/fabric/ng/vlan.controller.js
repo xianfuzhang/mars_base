@@ -205,7 +205,7 @@ export class VlanController {
           if(port.selected) {
             ports.push({
               port: port.id,
-              native: nativeVlan,
+              native: parseInt(nativeVlan),
               mode: scope.vlanModel.selectedMode.value,
               vlans: vlans
             })
