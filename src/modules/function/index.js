@@ -7,7 +7,7 @@ import {PoeDeviceEstablishController} from './component/poe_device_establish/ng/
 import {PoePortEstablishController} from './component/poe_port_establish/ng/PoePortEstablish.controller'
 import {snoopCtrl} from './ng/snooping.controller';
 import {SnoopService} from './service/snoop.service';
-import {EstablishSnoopCtrl} from './components/device_dhcpsnoop/ng/establishSnoop.controller'
+import {EstablishSnoopCtrl} from './component/device_dhcpsnoop/ng/establishSnoop.controller'
 
 export default angular
   .module('function', [])
