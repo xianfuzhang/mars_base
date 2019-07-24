@@ -116,6 +116,61 @@ export class SnoopService{
       }
     ];
   }
+
+  getHostSnoopTableSchema() {
+    return [
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.DEVICE_NAME'),
+        'field': 'device_name',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.INTERFACE'),
+        'field': 'interface',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.VLAN'),
+        'field': 'vlan',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.TYPE'),
+        'field': 'type',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.LEASE'),
+        'field': 'lease',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.IP_ADDRESS'),
+        'field': 'ip_address',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.MAC_ADDRESS'),
+        'field': 'mac_address',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.HOST_NAME'),
+        'field': 'host_name',
+        'layout': {'visible': true, 'sortable': false}
+      }
+    ];
+  }
+
+  getHostSnoopTableActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': false, 'role': 2},
+      'remove': {'enable': false, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': true, 'role': 2}
+    };
+  }
 }
 SnoopService.$inject = SnoopService.getDI();
 SnoopService.$$ngIsClass = true;

@@ -207,6 +207,7 @@ export class VoiceVlanCtrl{
       })
 
       this.di.vlanDataManager.postVoiceVlanConfigByDeviceId(scope.model.selectedDevice.device_id, params).then(() => {
+        scope.model.changedPorts = []
         this.di.notificationService.renderSuccess(this.scope, this.translate("MODULES.VLAN.VOICE.TABLE.MESSAGE.UPDATE_PORT_SUCCESS"));
       }, () => {
         this.scope.model.portAPI.queryUpdate();
@@ -381,6 +382,7 @@ export class VoiceVlanCtrl{
   init() {
     // init flag
     let voiceVlanInitFlag = true, ouiInitFlag = true, portInitFlag = true;
+    let initDefer = this.di.$q.defer();
     this.scope.model.provider = this.di.tableProviderFactory.createProvider({
       query: (params) => {
         let defer = this.di.$q.defer();
@@ -416,6 +418,7 @@ export class VoiceVlanCtrl{
 
           this.scope.model.voiceVlanMap = this.getVoiceVlanMap(res[1]);
           this.scope.entities = this.getEntities();
+          initDefer.resolve();
 
           if(this.scope.entities.length > 0) {
             this.scope.model.selectedDevice = this.scope.model.voiceVlanMap[this.scope.entities[0].device_id];
@@ -447,21 +450,31 @@ export class VoiceVlanCtrl{
         let defer = this.di.$q.defer();
 
         this.scope.ouiEntities = [];
-        this.di.vlanDataManager.getVoiceVlanConfig().then((res)=>{
-          this.scope.model.voiceVlanMap = this.getVoiceVlanMap(res.data.devices);
-          if(this.scope.model.selectedDevice) {
-            this.scope.model.selectedDevice = this.scope.model.voiceVlanMap[this.scope.model.selectedDevice.device_id];
-          }
-          this.scope.ouiEntities = this.getOuiEntities();
+        if(ouiInitFlag) {
+          initDefer.promise.then(() => {
+            this.scope.ouiEntities = this.getOuiEntities();
+            defer.resolve({
+              data: this.scope.ouiEntities
+            });
+          })
 
-          defer.resolve({
-            data: this.scope.ouiEntities
+          ouiInitFlag = false;
+        } else {
+          this.di.vlanDataManager.getVoiceVlanConfig().then((res)=>{
+            this.scope.model.voiceVlanMap = this.getVoiceVlanMap(res.data.devices);
+            if(this.scope.model.selectedDevice) {
+              this.scope.model.selectedDevice = this.scope.model.voiceVlanMap[this.scope.model.selectedDevice.device_id];
+            }
+            this.scope.ouiEntities = this.getOuiEntities();
+            defer.resolve({
+              data: this.scope.ouiEntities
+            });
+          }, (err) => {
+            defer.resolve({
+              data: this.scope.ouiEntities
+            });
           });
-        }, (err) => {
-          defer.resolve({
-            data: this.scope.ouiEntities
-          });
-        });
+        }
 
         return defer.promise;
       },
@@ -484,21 +497,32 @@ export class VoiceVlanCtrl{
         let defer = this.di.$q.defer();
 
         this.scope.portEntities = [];
-        this.di.vlanDataManager.getVoiceVlanConfig().then((res)=>{
-          this.scope.model.voiceVlanMap = this.getVoiceVlanMap(res.data.devices);
-          if(this.scope.model.selectedDevice) {
-            this.scope.model.selectedDevice = this.scope.model.voiceVlanMap[this.scope.model.selectedDevice.device_id];
-          }
-          this.scope.portEntities = this.getPortEntities();
+        if(portInitFlag) {
+          initDefer.promise.then(() => {
+            this.scope.portEntities = this.getPortEntities();
+            defer.resolve({
+              data: this.scope.portEntities
+            });
+          })
 
-          defer.resolve({
-            data: this.scope.portEntities
+          portInitFlag = false;
+        } else {
+          this.di.vlanDataManager.getVoiceVlanConfig().then((res) => {
+            this.scope.model.voiceVlanMap = this.getVoiceVlanMap(res.data.devices);
+            if (this.scope.model.selectedDevice) {
+              this.scope.model.selectedDevice = this.scope.model.voiceVlanMap[this.scope.model.selectedDevice.device_id];
+            }
+            this.scope.portEntities = this.getPortEntities();
+
+            defer.resolve({
+              data: this.scope.portEntities
+            });
+          }, (err) => {
+            defer.resolve({
+              data: this.scope.portEntities
+            });
           });
-        }, (err) => {
-          defer.resolve({
-            data: this.scope.portEntities
-          });
-        });
+        }
 
         return defer.promise;
       },
@@ -575,7 +599,7 @@ export class VoiceVlanCtrl{
           'port': port.port,
           'security': port.security,
           'rule': port.rule,
-          'priority': port.priority.toString(),
+          'priority': port.priority,
           'mode': port.mode,
         });
       })
