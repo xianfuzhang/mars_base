@@ -33,9 +33,16 @@ export class LicenseController {
       uploadBtnDisable: true,
       detail: {},
       uploadLabel: this.translate('MODULES.MANAGE.LICENSE.UPLOAD'),
-      // actionsShow: this.di.manageService.getLicenseTableActionsShow(),
+      actionsShow:{
+        'menu': {'enable': false, 'role': 3},
+        'add': {'enable': false, 'role': 3},
+        'remove': {'enable': false, 'role': 3},
+        'refresh': {'enable': false, 'role': 3},
+        'search': {'enable': false, 'role': 3}
+      },
       // rowActions: this.di.manageService.getLicenseTableRowActions(),
       licenseTableProvider: null,
+
       api: null,
     };
   
