@@ -34,6 +34,11 @@ export class snoopCtrl {
         'label': this.translate('MODULES.LOOPBACK.TAB.PORT'),
         'value': 'port',
         'type': 'port'
+      },
+      {
+        'label': this.translate('MODULES.FUNCTIONS.SOOPING.TAB.HOST'),
+        'value': 'host',
+        'type': 'host'
       }
     ];
     this.scope.tabSelected = null;
@@ -76,7 +81,7 @@ export class snoopCtrl {
       if (this.scope.tabSelected.type === 'switch') {
         this.scope.$emit('update-device-lbd-wizard-show', event.data);
       }
-      else {
+      else if (this.scope.tabSelected.type === 'port') {
         let status = event.action.value === "enable" ? true : false;
         this.di.loopbackDataManager.updatePortLoopbackStatus(event.data.deviceId, event.data.port, {'status': status}).then(
           () => {
@@ -163,7 +168,22 @@ export class snoopCtrl {
               'trusted': p.trusted
             });
           });
-          break;  
+          break; 
+        case 'host':
+          item.binding.forEach((i) => {
+            this.scope.entities.push({
+              'device_name': this.scope.deviceMap[item.deviceId] || item.deviceId,
+              'deviceId': item.deviceId,
+              'interface': i.interface,
+              'vlan': i.vlan,
+              'type': i.type,
+              'lease': i.lease,
+              'ip_address': i.ipAddress,
+              'mac_address': i.macAddress,
+              'host_name': i.hostName
+            });
+          });
+          break;   
       }
     });
   }
@@ -183,6 +203,9 @@ export class snoopCtrl {
       case 'port':
         schema = this.di.snoopService.getPortSnoopTableSchema();
         break;
+      case 'host':
+        schema = this.di.snoopService.getHostSnoopTableSchema();
+        break;
     }
     return schema;
   }
@@ -191,17 +214,20 @@ export class snoopCtrl {
     let actions = null;
     switch(this.scope.tabSelected.type){
       case 'switch':
-      actions = this.di.snoopService.getDeviceSnoopTableActionsShow();
+        actions = this.di.snoopService.getDeviceSnoopTableActionsShow();
         break;
       case 'port':
-      actions = this.di.snoopService.getPortSnoopTableActionsShow();
+        actions = this.di.snoopService.getPortSnoopTableActionsShow();
         break;
+      case 'host':
+        actions = this.di.snoopService.getHostSnoopTableActionsShow();
+        break;  
     }
     return actions;
   }
 
   getTableRowActions() {
-    let actions = null;
+    let actions = [];
     switch (this.scope.tabSelected.type) {
       case 'switch':
         actions = this.di.snoopService.getDeviceSnoopTableRowActions();
@@ -216,14 +242,16 @@ export class snoopCtrl {
   getEntities() {
     let defer = this.di.$q.defer(),
         deviceDefer = this.di.$q.defer(),
-        lbDefer = this.di.$q.defer();
+        lbDefer = this.di.$q.defer(),
+        type = this.scope.tabSelected.type === 'host' ? 'binding' : null;
     this.di.deviceDataManager.getDeviceConfigs().then((devices) => {
       devices.forEach((device) => {
         this.scope.deviceMap[device['id']] = device['name'];
       });
       deviceDefer.resolve();
-    });    
-    this.di.snoopDataManager.getDeviceSnoopList().then((res)=>{
+    });
+
+    this.di.snoopDataManager.getDeviceSnoopList(type).then((res)=>{
       lbDefer.resolve(res.data.devices);
     });
     this.di.$q.all([lbDefer.promise, deviceDefer.promise]).then((arr) => {

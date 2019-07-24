@@ -21,13 +21,18 @@
           </mdl-table>
         </section>
         <section class="tab-content" ng-if="tabSelected.type == 'port'" style="display: inline-flex;">
-            <mdl-table actions-show="model.actionsShow"
-                actions="model.rowActions"
-                row-select-action="onTableRowSelectAction($event)"
-                row-actions-filter="onTableRowActionsFilter($event)"
-                provider="model.provider" api-ready="onApiReady($api)">
-            </mdl-table>
-          </section>
+          <mdl-table actions-show="model.actionsShow"
+              actions="model.rowActions"
+              row-select-action="onTableRowSelectAction($event)"
+              row-actions-filter="onTableRowActionsFilter($event)"
+              provider="model.provider" api-ready="onApiReady($api)">
+          </mdl-table>
+        </section>
+        <section class="tab-content" ng-if="tabSelected.type == 'host'" style="display: inline-flex;">
+          <mdl-table actions-show="model.actionsShow"
+              provider="model.provider" api-ready="onApiReady($api)">
+          </mdl-table>
+        </section>
       </div>  
     </div>
   </section>
