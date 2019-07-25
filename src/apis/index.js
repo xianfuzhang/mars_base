@@ -33,6 +33,7 @@ import {MessageWebsocketService} from './services/message.service';
 import {regexService} from './services/regex.service';
 import {functionService} from './services/function.service';
 import {FunctionDataManager} from './datamanagers/function.dataManager';
+import {topoManageService} from './services/topoManage.service';
 
 export default angular
   .module('apis', [])
@@ -71,4 +72,5 @@ export default angular
   .service('messageService', MessageWebsocketService)
   .service('regexService', regexService)
   .service('vlanDataManager', VlanDataManager)
+  .service('topoManageService', topoManageService)
   .name;

@@ -62,7 +62,7 @@ export class CreateGuestVlanCtrl {
         }
         devices[guest.device_id]['guestvlans'].push({
           "port": guest.port,
-          "guestVlan": guest.guestVlan
+          "guestVlan": parseInt(guest.guestVlan)
         });
       });
       for(let key in devices) {

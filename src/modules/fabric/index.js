@@ -46,7 +46,7 @@ import {DHCPRelayController} from './ng/dhcpRelay.controller';
 import {DHCPRelayDefaultEstablishController} from './components/dhcprelayDefault_establish/ng/dhcprelayDefaultEstablish.controller';
 import {DHCPRelayIndirectEstablishController} from './components/dhcprelayIndirect_establish/ng/dhcprelayIndirectEstablish.controller';
 import {DHCPRelayInterfaceEstablishController} from './components/dhcprelayInterface_establish/ng/dhcprelayInterfaceEstablish.controller';
-import {VlanController} from './ng/vlan.controller';
+// import {VlanController} from './ng/vlan.controller';
 import {CreateVlanDialogController} from './components/createVlan/ng/createVlanDialog.controller';
 
 export default angular
@@ -89,7 +89,7 @@ export default angular
   .controller('dhcpRelayDefaultEstablishController', DHCPRelayDefaultEstablishController)
   .controller('dhcpRelayIndirectEstablishController', DHCPRelayIndirectEstablishController)
   .controller('dhcpRelayInterfaceEstablishController', DHCPRelayInterfaceEstablishController)
-  .controller('vlanController', VlanController)
+  // .controller('vlanController', VlanController)
   .controller('createVlanDialogCtl', CreateVlanDialogController)
   .service('deviceService', DeviceService)
   .service('deviceDetailService', DeviceDetailService)

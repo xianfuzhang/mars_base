@@ -343,34 +343,41 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
-    .when('/vlan', {
-      template: require('./modules/fabric/template/vlan.html'),
-      controller: 'vlanController',
+    .when('/vlan_all', {
+      template: require('./modules/topo/template/vlan_all.html'),
+      controller: 'vlanAllController',
       resolve: {
         loggedin: checkLoggedIn
       }
     })
-    .when('/vlan_ip', {
-      template: require('./modules/vlan/template/ipsubnet.html'),
-      controller: 'vlanIpSubnetController',
-      resolve: {
-        loggedin: checkLoggedIn
-      }
-    })
-    .when('/vlan_dynamic', {
-      template: require('./modules/vlan/template/dynamic.html'),
-      controller: 'dynamicVlanController',
-      resolve: {
-        loggedin: checkLoggedIn
-      }
-    })
-    .when('/vlan_guest', {
-      template: require('./modules/vlan/template/guest.html'),
-      controller: 'guestVlanCtrl',
-      resolve: {
-        loggedin: checkLoggedIn
-      }
-    })
+    // .when('/vlan', {
+    //   template: require('./modules/fabric/template/vlan.html'),
+    //   controller: 'vlanController',
+    //   resolve: {
+    //     loggedin: checkLoggedIn
+    //   }
+    // })
+    // .when('/vlan_ip', {
+    //   template: require('./modules/vlan/template/ipsubnet.html'),
+    //   controller: 'vlanIpSubnetController',
+    //   resolve: {
+    //     loggedin: checkLoggedIn
+    //   }
+    // })
+    // .when('/vlan_dynamic', {
+    //   template: require('./modules/vlan/template/dynamic.html'),
+    //   controller: 'dynamicVlanController',
+    //   resolve: {
+    //     loggedin: checkLoggedIn
+    //   }
+    // })
+    // .when('/vlan_guest', {
+    //   template: require('./modules/vlan/template/guest.html'),
+    //   controller: 'guestVlanCtrl',
+    //   resolve: {
+    //     loggedin: checkLoggedIn
+    //   }
+    // })
     .when('/time_range', {
       template: require('./modules/manage/template/timeRange.html'),
       controller: 'timeRangeController',
@@ -378,13 +385,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
-    .when('/vlan_voice', {
-      template: require('./modules/vlan/template/voice-vlan.html'),
-      controller: 'voiceVlanCtrl',
-      resolve: {
-        loggedin: checkLoggedIn
-      }
-    })
+    // .when('/vlan_voice', {
+    //   template: require('./modules/vlan/template/voice-vlan.html'),
+    //   controller: 'voiceVlanCtrl',
+    //   resolve: {
+    //     loggedin: checkLoggedIn
+    //   }
+    // })
     .when('/poe', {
       template: require('./modules/function/template/poe.html'),
       controller: 'poeController',

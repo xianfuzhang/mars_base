@@ -24,6 +24,7 @@ class AliasProvider {
       'login': path.resolve('src/modules/login/'),
       'dashboard': path.resolve('src/modules/dashboard/'),
       'function': path.resolve('src/modules/function/'),
+      'topoManage': path.resolve('src/modules/topo/'),
       'fabric': path.resolve('src/modules/fabric/'),
       'vlan': path.resolve('src/modules/vlan/'),
       'logical': path.resolve('src/modules/logical/'),

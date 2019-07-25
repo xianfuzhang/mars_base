@@ -26,6 +26,7 @@ import 'moment'
 import 'login';
 import 'dashboard';
 import 'function';
+import 'topoManage';
 import 'fabric';
 import 'logical';
 import 'configuration';
@@ -91,6 +92,7 @@ angular
     'localStore',
     'dashboard',
     'function',
+    'topoManage',
     'login',
     'fabric',
     'logical',

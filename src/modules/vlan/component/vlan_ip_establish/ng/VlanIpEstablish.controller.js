@@ -149,7 +149,7 @@ export class VlanIpEstablishController {
             'device-id': scope.vlanIpModel.device.value,
             'vlans': [
               {
-                'vlan': scope.vlanIpModel.vlan_id,
+                'vlan': parseInt(scope.vlanIpModel.vlan_id),
                 'ip': scope.vlanIpModel.ip,
                 'mask': scope.vlanIpModel.mask,
               }
