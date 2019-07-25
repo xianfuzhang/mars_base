@@ -345,8 +345,15 @@ export class DashboardController {
       let date, before, begin_time, end_time, isController = false, typeKey, model;
 
       function setRealtime() {
-        date = DI.dateService.getTodayObject();
-        before = DI.dateService.getBeforeDateObject(30 * REALTIME_GRID_NUM * 1000);
+        if(type in ['device-interface', 'device-interface-drop-error', 'controller-interface']) {
+          let delayTime = 15 * 1000; // set delay time for 15s with interface chart to keep the latest data valid
+          date = DI.dateService.getBeforeDateObject(delayTime);
+          before = DI.dateService.getBeforeDateObject(delayTime + 30 * REALTIME_GRID_NUM * 1000);
+        } else {
+          date = DI.dateService.getTodayObject();
+          before = DI.dateService.getBeforeDateObject(30 * REALTIME_GRID_NUM * 1000);
+        }
+
         begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
         end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
       }
