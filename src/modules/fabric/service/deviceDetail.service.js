@@ -65,6 +65,57 @@ export class DeviceDetailService {
     ];
   }
 
+
+  getDeviceDetailMenuSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.SUMMARY'),
+        'value': 'summary',
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.ANALYZER'),
+        'value': 'analyzer',
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.PORT'),
+        'value': 'port',
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.LINK'),
+        'value': 'link',
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.STATISTICS'),
+        'value': 'statistic',
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.FLOW'),
+        'value': 'flow',
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.GROUPS'),
+        'value': 'group',
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.ENDPOINTS'),
+        'value': 'endpoint',
+      },
+      {
+        'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.FUNCTIONS'),
+        'value':'functions',
+        'type': 'menu_list',
+        'list': [
+          {
+            'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.PFC'),
+            'value': 'pfc',
+          },
+          // {'label':'acl','value':'acl'}
+        ]
+      }
+    ];
+  }
+
+
   getPortActionsShow() {
     return {
       'menu': {'enable': false, 'role': 2}, 

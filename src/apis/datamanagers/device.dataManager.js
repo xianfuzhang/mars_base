@@ -172,7 +172,7 @@ export class DeviceDataManager {
         defer.resolve({data: res.data});
       },
       (error) => {
-        defer.resolve({data: {'groups': [], 'total': 0}});
+        defer.reject(error);
       }
     );
     return defer.promise;
@@ -565,7 +565,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve([]);
+        defer.reject(error);
       }
     );
     return defer.promise;

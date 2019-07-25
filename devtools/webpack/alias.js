@@ -39,6 +39,7 @@ class AliasProvider {
       'mdc': path.resolve('src/components/mdc/'),
       'mdlHeader': path.resolve('src/components/mdl-header'),
       'menu': path.resolve('src/components/menu/'),
+      'toggleMenu': path.resolve('src/components/toggle-menu/'),
       'marHeader': path.resolve('src/components/mar-header/'),
       'contentHeader': path.resolve('src/components/content-header/'),
       'staticTable': path.resolve('src/components/static-table/'),

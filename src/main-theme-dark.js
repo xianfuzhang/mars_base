@@ -40,6 +40,7 @@ import 'staticTable';
 import 'mdlTable';
 import 'modal';
 import 'menu';
+import 'toggleMenu';
 import 'marDrawer';
 import 'marHeader';
 import 'marSection';
@@ -100,6 +101,7 @@ angular
     'mdlTable',
     'modal',
     'menu',
+    'toggleMenu',
     'marDrawer',
     'marHeader',
     'contentHeader',

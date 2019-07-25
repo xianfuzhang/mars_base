@@ -209,6 +209,7 @@ export class DeviceDetailController {
           this.scope.detailValue = res;
 
           this.scope.page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE') + "(" + this.scope.detailValue.name + ")";
+          this.scope._page_title = this.translate('MODULES.SWITCH.DETAIL.TITLE') + "(" + this.scope.detailValue.name + ")";
           this.scope.detailValue.leaf_group = !this.scope.detailValue.leaf_group ? '-' : this.scope.detailValue.leaf_group;
 
           // res.mfr = 'pica8'; //Test code
@@ -218,19 +219,19 @@ export class DeviceDetailController {
             });
           }
 
-          if(res.protocol === 'of') {
-            this.scope.tabs.push({
-              'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.FLOW'),
-              'value': 'flow',
-              'type': 'flow'
-            });
-            this.scope.tabs.push({
-              'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.GROUPS'),
-              'value': 'group',
-              'type': 'group'
-            });
-            // this.di._.remove(this.scope.tabs, (tab)=>{
-            //   return tab['value'] === 'group' || tab['value'] === 'flow';
+          if(res.protocol !== 'of') {
+            this.removeTab(this.scope.tabs, 'flow');
+            this.removeTab(this.scope.tabs, 'group');
+
+            // this.scope.tabs.push({
+            //   'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.FLOW'),
+            //   'value': 'flow',
+            //   'type': 'flow'
+            // });
+            // this.scope.tabs.push({
+            //   'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.GROUPS'),
+            //   'value': 'group',
+            //   'type': 'group'
             // });
           }
         }
@@ -542,9 +543,18 @@ export class DeviceDetailController {
       this.scope.detailModel.api = $api;
     };
 
+    // this.scope.onTabChange= (tab) => {
+    //   if (tab && !this.scope.tabSwitch){
+    //     this.scope.tabSelected = tab;
+    //     this.scope.tabSwitch = true;
+    //     this.prepareTableData();
+    //   }
+    // };
+
     this.scope.onTabChange= (tab) => {
       if (tab && !this.scope.tabSwitch){
         this.scope.tabSelected = tab;
+        this.scope.page_title =  this.scope._page_title + ' - ' + tab.label;
         this.scope.tabSwitch = true;
         this.prepareTableData();
       }
@@ -553,7 +563,7 @@ export class DeviceDetailController {
     this.scope.onTableRowClick = (event) => {
       if (event.$data){
         let rowIndex = event.$data.id;
-        if(this.scope.tabSelected.type === 'pfc'){
+        if(this.scope.tabSelected.value === 'pfc'){
           rowIndex = event.$data.port;
         }
         this.scope.detailModel.api.setSelectedRow(rowIndex);
@@ -563,7 +573,7 @@ export class DeviceDetailController {
     this.scope.onTableRowActionsFilter = (event) => {
       let filterActions = [];
       if (event.data) {
-        switch (this.scope.tabSelected.type){
+        switch (this.scope.tabSelected.value){
           case 'port':
             event.actions.forEach((action) =>{
               if (event.data.isEnabled && action.value === 'disable') {
@@ -589,7 +599,7 @@ export class DeviceDetailController {
 
     this.scope.onTableRowSelectAction = (event) => {
       if (event.data) {
-        switch (this.scope.tabSelected.type){
+        switch (this.scope.tabSelected.value){
           case 'port':
             if (event.action.value === 'analyzer') {
               this.scope.port_id = event.data.port_id;
@@ -714,7 +724,7 @@ export class DeviceDetailController {
 
     this.scope.batchRemove = ($value) => {
       if ($value.length) {
-        if (this.scope.tabSelected.type === 'flow') {
+        if (this.scope.tabSelected.value === 'flow') {
           this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCH.DETAIL.DIALOG.CONTENT.BATCH_DELETE_FLOWS'))
             .then(() =>{
               this.batchDeleteDeviceFlows($value);
@@ -722,7 +732,7 @@ export class DeviceDetailController {
               this.di.$log.debug('delete switch flows cancel');
           });
         }
-        else if (this.scope.tabSelected.type === 'group') {
+        else if (this.scope.tabSelected.value === 'group') {
           this.di.dialogService.createDialog('warning', this.translate('MODULES.SWITCH.DETAIL.DIALOG.CONTENT.BATCH_DELETE_GROUPS'))
             .then(() =>{
               this.batchDeleteDeviceGroups($value);
@@ -750,6 +760,13 @@ export class DeviceDetailController {
   
           // select the port
           this.selectEntity();
+        }, err=>{
+          this.scope.tabSwitch = false;
+          defer.resolve({
+            data: [],
+            count: 0
+          });
+          this.di.notificationService.renderWarning(this.scope, err.data.message|| err.data|| err);
         });
         return defer.promise;
       },
@@ -770,23 +787,23 @@ export class DeviceDetailController {
     let tabs = this.scope.tabs;
     if(queryObj.port) {
       selectedTab = this.di._.find(tabs, (tab) => {
-        return tab.type === 'port';
+        return tab.value === 'port';
       })
     } else if(queryObj.link_port) {
       selectedTab = this.di._.find(tabs, (tab) => {
-        return tab.type === 'link';
+        return tab.value === 'link';
       })
     }
-    
+
     selectedTab = selectedTab || this.scope.tabs[0];
     this.scope.onTabChange(selectedTab);
   }
 
   prepareTableData() {
-    this.scope.detailModel.schema = this.getSchema(this.scope.tabSelected.type);
-    this.scope.detailModel.actionsShow = this.getActionsShow(this.scope.tabSelected.type);
-    this.scope.detailModel.rowActions = this.getRowActions(this.scope.tabSelected.type);
-    //this.scope.detailModel.entities = this.getEntities(this.scope.tabSelected.type);
+    this.scope.detailModel.schema = this.getSchema(this.scope.tabSelected.value);
+    this.scope.detailModel.actionsShow = this.getActionsShow(this.scope.tabSelected.value);
+    this.scope.detailModel.rowActions = this.getRowActions(this.scope.tabSelected.value);
+    //this.scope.detailModel.entities = this.getEntities(this.scope.tabSelected.value);
   }
 
   getSchema(type) {
@@ -858,7 +875,7 @@ export class DeviceDetailController {
       support: true,
       currentRole: this.scope.role
     };
-    switch (this.scope.tabSelected.type) {
+    switch (this.scope.tabSelected.value) {
       case 'port':
         schema['index_name'] = 'id';
         schema['rowCheckboxSupport'] = false;
@@ -900,7 +917,7 @@ export class DeviceDetailController {
 
   getEntities(params) {
     let defer = this.di.$q.defer();
-    switch (this.scope.tabSelected.type) {
+    switch (this.scope.tabSelected.value) {
       case 'summary':
         let defersArr = [],
             fanDefer = this.di.$q.defer(),
@@ -1001,11 +1018,15 @@ export class DeviceDetailController {
       case 'group':
         this.di.deviceDataManager.getDeviceGroups(this.scope.deviceId, params).then((res) => {
           defer.resolve({'data': res.data.groups, 'total': res.data.total});
+        },err=>{
+          defer.reject(err);
         });
         break;
       case 'pfc':
         this.di.deviceDataManager.getPFCListByDeviceId(this.scope.deviceId).then((res) => {
           defer.resolve({'data': res.data.pfcs, 'total': res.data.total});
+        },err=>{
+          defer.reject(err);
         });
         break;
     }
@@ -2161,7 +2182,7 @@ export class DeviceDetailController {
 
   entityStandardization(entities) {
     this.scope.detailModel.entities = [];
-    switch (this.scope.tabSelected.type) {
+    switch (this.scope.tabSelected.value) {
       case 'summary':
         this.prepareTempSensors(entities[0]);
         this.preparePsuSensors(entities[1]);
@@ -2463,31 +2484,38 @@ export class DeviceDetailController {
         }
       };
 
+
       let _reset_tab_list = () => {
-        let tabs = this.di.deviceDetailService.getTabSchema();
+        // let tabs = this.di.deviceDetailService.getTabSchema();
+        let tabs = this.di.deviceDetailService.getDeviceDetailMenuSchema();
         // this.scope.tabs = this.di.deviceDetailService.getTabSchema();
         if(!scope.isHCEnable){
-          this.di._.remove(tabs, (tab)=>{
-            return tab['value'] === 'summary';
-          });
+          this.removeTab(tabs, 'summary');
+          // this.di._.remove(tabs, (tab)=>{
+          //   return tab['value'] === 'summary';
+          // });
         }
 
         if(!this.scope.isQosEnable){
-          this.di._.remove(tabs, (tab)=>{
-            return tab['value'] === 'pfc';
-          });
+          this.removeTab(tabs, 'pfc');
+          // this.di._.remove(tabs, (tab)=>{
+          //   return tab['value'] === 'pfc';
+          // });
         }
 
         if(!this.scope.isOpenflowEnable){
-          this.di._.remove(tabs, (tab)=>{
-            return tab['value'] === 'flow' || tab['value'] === 'group';
-          });
+          this.removeTab(tabs, 'flow');
+          this.removeTab(tabs, 'group');
+          // this.di._.remove(tabs, (tab)=>{
+          //   return tab['value'] === 'flow' || tab['value'] === 'group';
+          // });
         }
 
         if(!this.scope.isEndpointEnable){
-          this.di._.remove(tabs, (tab)=>{
-            return tab['value'] === 'endpoint';
-          });
+          this.removeTab(tabs, 'endpoint');
+          // this.di._.remove(tabs, (tab)=>{
+          //   return tab['value'] === 'endpoint';
+          // });
         }
 
         this.scope.tabs = tabs;
@@ -2502,7 +2530,35 @@ export class DeviceDetailController {
 
     return defer.promise;
   }
-  
+
+  removeTab(tabs, deleteName){
+    this.di._.remove(tabs, (tab)=>{
+      return tab['value'] === deleteName;
+    });
+
+    tabs.forEach(tab=>{
+      if(tab.type === 'menu_list'){
+        this.di._.remove(tab.list, subTab=>{
+          return subTab['value'] === deleteName;
+        })
+      }
+    })
+
+    let deleteNames = [];
+    tabs.forEach(tab=>{
+      if(tab.type === 'menu_list'){
+        if(tab.list.length === 0){
+          deleteNames.push(tab.value);
+        }
+      }
+    });
+    deleteNames.forEach(name=>{
+      this.di._.remove(tabs, (tab)=>{
+        return tab['value'] === name;
+      });
+    })
+
+  }
   /**
    * select the row data depending on data type
    */
