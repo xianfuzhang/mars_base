@@ -68,14 +68,14 @@ export class toggleMenu {
             if(display.type && display.type === 'menu_list'){
               display.list.forEach(display=>{
                 if (display.value === value) {
-                  scope.value = angular.copy(display);
+                  // scope.value = angular.copy(display);
                   scope.change({$value: scope.value});
                 }
                 return false;
               })
             } else {
               if (display.value === value) {
-                scope.value = angular.copy(display);
+                // scope.value = angular.copy(display);
                 scope.change({$value: scope.value});
 
                 return false;
