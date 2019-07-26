@@ -69,15 +69,14 @@ export class toggleMenu {
               display.list.forEach(display=>{
                 if (display.value === value) {
                   // scope.value = angular.copy(display);
-                  scope.change({$value: scope.value});
+                  scope.change({$value: angular.copy(display)});
                 }
                 return false;
               })
             } else {
               if (display.value === value) {
                 // scope.value = angular.copy(display);
-                scope.change({$value: scope.value});
-
+                scope.change({$value: angular.copy(display)});
                 return false;
               }
             }
