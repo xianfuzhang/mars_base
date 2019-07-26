@@ -543,14 +543,6 @@ export class DeviceDetailController {
       this.scope.detailModel.api = $api;
     };
 
-    // this.scope.onTabChange= (tab) => {
-    //   if (tab && !this.scope.tabSwitch){
-    //     this.scope.tabSelected = tab;
-    //     this.scope.tabSwitch = true;
-    //     this.prepareTableData();
-    //   }
-    // };
-
     this.scope.onTabChange= (tab) => {
       if (tab && !this.scope.tabSwitch){
         this.scope.tabSelected = tab;

@@ -273,6 +273,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/traffic_segment', {
+      template: require('./modules/function/template/segment.html'),
+      controller: 'trafficCtrl',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/qos', {
       template: require('./modules/logical/template/qos.html'),
       controller: 'qosCtrl',

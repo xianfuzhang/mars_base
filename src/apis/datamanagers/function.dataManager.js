@@ -213,8 +213,44 @@ export class FunctionDataManager{
     return defer.promise;
   }
 
+  getTrafficSegmentList() {
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getTrafficSegmentUrl()).then(
+      (res) => {
+        defer.resolve(res.data.sessions);
+      },
+      (err) => {
+        defer.resolve([]);
+      }
+    );
+    return defer.promise;
+  }
 
+  createTrafficSegment(device_id, params) {
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getTrafficSegmentUrl(device_id), params).then(
+      (res) => {
+        defer.resolve();
+      },
+      (err) => {
+        defer.reject(err);
+      }
+    );
+    return defer.promise;
+  }
 
+  deleteTrafficSegment(device_id, session_id) {
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getDeleteTrafficSegmentUrl(device_id, session_id)).then(
+      (res) => {
+        defer.resolve();
+      },
+      (err) => {
+        defer.reject(err);
+      }
+    );
+    return defer.promise;
+  }
 }
 
 FunctionDataManager.$inject = FunctionDataManager.getDI();
