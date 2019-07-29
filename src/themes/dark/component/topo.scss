@@ -10,16 +10,21 @@
 		//fill: rgb(255, 255, 255);
 		//stroke-width: 2;
 		//stroke: rgb(0, 0, 0);
-		fill: #292929;
+		//fill: #292929;
 		stroke-width: 2;
-		stroke: #b7b2b2;
+		//stroke: #b7b2b2;
+
+		stroke: #5694E3;
+		fill: #5694E3;
 	}
 
 	@include element(node-normal){
-		fill: #292929;
+		//fill: #292929;
+		fill: #5694E3;
 	}
 
 	@include element(node-error){
+		stroke: rgb(177, 48, 7);
 		fill: rgb(177, 48, 7);
 	}
 }
@@ -74,7 +79,8 @@
 
 .topo_line{
 	fill: none;
-	stroke: green;
+	//stroke: green;
+	stroke: white;
 	stroke-width: 1;
 }
 
@@ -102,15 +108,17 @@
 
 .topo__node-outline.node_select{
 	stroke-width: 4;
-	stroke: rgb(255,124,9);
+	//stroke: rgb(255,124,9);
+	stroke: white;
 }
 
 .topo__node-outline.host-select{
-	fill: rgb(255,124,9)
+	//fill: rgb(255,124,9)
+	stroke: white;
 }
 
 .status_normal{
-	fill: green;
+	fill: white;
 }
 
 .status_error{
