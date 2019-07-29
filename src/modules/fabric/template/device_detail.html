@@ -312,6 +312,12 @@
                        on-add="createGroup()" on-remove="batchRemove($value)">
             </mdl-table>
           </section>
+          <section class="tab-content" ng-if="tabSelected.value == 'snoop'">
+            <mdl-table actions-show="detailModel.actionsShow"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)">
+            </mdl-table>
+          </section>
           <section class="tab-content" ng-if="tabSelected.value == 'pfc'">
             <mdl-table style="width:800px;" actions-show="detailModel.actionsShow"
                        actions="detailModel.rowActions"

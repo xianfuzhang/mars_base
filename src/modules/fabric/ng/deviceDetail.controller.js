@@ -21,6 +21,7 @@ export class DeviceDetailController {
       'modalManager',
       'applicationService',
       'logicalDataManager',
+      'snoopDataManager',
       'chartService',
       'dateService'
     ];
@@ -819,6 +820,9 @@ export class DeviceDetailController {
       case 'group':
         schema = this.di.deviceDetailService.getDeviceGroupsSchema();
         break;
+      case 'snoop':
+        schema = this.di.deviceDetailService.getDeviceDHCPSnoopSchema();
+        break;  
       case 'pfc':
         schema = this.di.deviceDetailService.getDevicePFCSchema();
 
@@ -847,6 +851,9 @@ export class DeviceDetailController {
       case 'group':
         actions = this.di.deviceDetailService.getGroupActionsShow();
         break;
+      case 'snoop':
+        actions = this.di.deviceDetailService.geSnoopActionsShow();
+        break;  
       case 'pfc':
         actions = this.di.deviceDetailService.getPFCActionsShow();
         break;
@@ -1014,6 +1021,13 @@ export class DeviceDetailController {
           defer.reject(err);
         });
         break;
+      case 'snoop':
+        this.di.snoopDataManager.getDeviceSnoopList(this.scope.deviceId).then((res)=>{
+          defer.resolve({'data': res.data.devices});
+        }, (error) => {
+          defer.reject(error);
+        });
+        break;  
       case 'pfc':
         this.di.deviceDataManager.getPFCListByDeviceId(this.scope.deviceId).then((res) => {
           defer.resolve({'data': res.data.pfcs, 'total': res.data.total});
@@ -2326,6 +2340,23 @@ export class DeviceDetailController {
           obj['vlan_id'] = groupObj.vlan_id;
           obj['type'] = entity.type;
           obj['buckets'] = JSON.stringify(entity.buckets);
+          this.scope.detailModel.entities.push(obj);
+        });
+        break;
+      case 'snoop':
+        entities.forEach((entity) => {
+          let obj = {};
+          entity.ports.forEach((p) => {
+            obj['id'] = p['port'];
+            obj['delegate'] = entity.basic.isDelegate ? this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.DELEGATE.TRUE') : this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.DELEGATE.FALSE');
+            obj['global_status'] = entity.basic.globalStatus ? this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.ENABLE') : this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.DISABLE');
+            obj['info_status'] = entity.basic.infoStatus ? this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.ENABLE') : this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.DISABLE');
+            obj['mac_verify'] = entity.basic.macVerify ? this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.ENABLE') : this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.DISABLE');
+            obj['vlan'] = entity.basic.vlans.toString();
+            obj['port'] = p['port'];
+            obj['trusted_display'] = p['trusted'];
+            obj['circuitId'] = p['circuitId'];
+          });
           this.scope.detailModel.entities.push(obj);
         });
         break;
