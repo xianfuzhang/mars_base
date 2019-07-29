@@ -226,6 +226,19 @@ export class FunctionDataManager{
     return defer.promise;
   }
 
+  getAcl(deviceId){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getAclUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (err) => {
+        defer.reject(err);
+      }
+    );
+    return defer.promise;
+  }
+
   createTrafficSegment(device_id, params) {
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getTrafficSegmentUrl(device_id), params).then(
@@ -239,11 +252,37 @@ export class FunctionDataManager{
     return defer.promise;
   }
 
+  postAcl(deviceId, params){
+    let defer = this.di.$q.defer();
+    this.di.$http.post(this.di.appService.getAclUrl(deviceId), params).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (err) => {
+        defer.reject(err);
+      }
+    );
+    return defer.promise;
+  }
+
   deleteTrafficSegment(device_id, session_id) {
     let defer = this.di.$q.defer();
     this.di.$http.delete(this.di.appService.getDeleteTrafficSegmentUrl(device_id, session_id)).then(
       (res) => {
         defer.resolve();
+      },
+      (err) => {
+        defer.reject(err);
+      }
+    );
+    return defer.promise;
+  }
+
+  deleteAcl(deviceId){
+    let defer = this.di.$q.defer();
+    this.di.$http.delete(this.di.appService.getAclUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res);
       },
       (err) => {
         defer.reject(err);
