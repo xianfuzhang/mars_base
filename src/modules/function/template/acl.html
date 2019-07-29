@@ -1,0 +1,25 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{'MODULE.HEADER.FABRIC.ACL'|translate}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span ng-bind="'MODULE.HEADER.FABRIC.ACL'|translate"></span>
+  </content-header>
+  <section class="app-body" >
+    <div class="main__content">
+      <mdl-table actions-show="model.actionsShow"
+                 actions="model.rowActions"
+                 row-click="onTableRowClick($event)"
+                 row-select-action="onTableRowSelectAction($event)"
+                 row-actions-filter="onTableRowActionsFilter($event)"
+                 provider="model.provider" api-ready="onAPIReady($api)"
+                 on-add="addAcl()" on-remove="batchRemove($value)">
+      </mdl-table>
+    </div>
+  </section>
+
+  <ng-controller ng-controller="aclEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+</div>
+
