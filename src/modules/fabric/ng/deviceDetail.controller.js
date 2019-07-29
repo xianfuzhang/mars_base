@@ -21,6 +21,7 @@ export class DeviceDetailController {
       'modalManager',
       'applicationService',
       'logicalDataManager',
+      'snoopDataManager',
       'chartService',
       'dateService'
     ];
@@ -543,14 +544,6 @@ export class DeviceDetailController {
       this.scope.detailModel.api = $api;
     };
 
-    // this.scope.onTabChange= (tab) => {
-    //   if (tab && !this.scope.tabSwitch){
-    //     this.scope.tabSelected = tab;
-    //     this.scope.tabSwitch = true;
-    //     this.prepareTableData();
-    //   }
-    // };
-
     this.scope.onTabChange= (tab) => {
       if (tab && !this.scope.tabSwitch){
         this.scope.tabSelected = tab;
@@ -827,6 +820,9 @@ export class DeviceDetailController {
       case 'group':
         schema = this.di.deviceDetailService.getDeviceGroupsSchema();
         break;
+      case 'snoop':
+        schema = this.di.deviceDetailService.getDeviceDHCPSnoopSchema();
+        break;  
       case 'pfc':
         schema = this.di.deviceDetailService.getDevicePFCSchema();
 
@@ -855,6 +851,9 @@ export class DeviceDetailController {
       case 'group':
         actions = this.di.deviceDetailService.getGroupActionsShow();
         break;
+      case 'snoop':
+        actions = this.di.deviceDetailService.geSnoopActionsShow();
+        break;  
       case 'pfc':
         actions = this.di.deviceDetailService.getPFCActionsShow();
         break;
@@ -1022,6 +1021,13 @@ export class DeviceDetailController {
           defer.reject(err);
         });
         break;
+      case 'snoop':
+        this.di.snoopDataManager.getDeviceSnoopList(this.scope.deviceId).then((res)=>{
+          defer.resolve({'data': res.data.devices});
+        }, (error) => {
+          defer.reject(error);
+        });
+        break;  
       case 'pfc':
         this.di.deviceDataManager.getPFCListByDeviceId(this.scope.deviceId).then((res) => {
           defer.resolve({'data': res.data.pfcs, 'total': res.data.total});
@@ -2090,14 +2096,53 @@ export class DeviceDetailController {
           let diffSeconds = ((new Date(analyzer.timepoint)).getTime() - (new Date(data.analyzer[index - 1].timepoint)).getTime()) / 1000;
 
           newAnalyzer.timepoint = analyzer.timepoint;
-          newAnalyzer.packets_rx = Math.ceil((analyzer.packetsReceived - data.analyzer[index - 1].packetsReceived) / diffSeconds);
-          newAnalyzer.packets_tx = Math.ceil((analyzer.packetsSent - data.analyzer[index - 1].packetsSent) / diffSeconds);
-          newAnalyzer.dropped_rx = Math.ceil((analyzer.packetsRxDropped - data.analyzer[index - 1].packetsRxDropped) / diffSeconds);
-          newAnalyzer.dropped_tx = Math.ceil((analyzer.packetsTxDropped - data.analyzer[index - 1].packetsTxDropped) / diffSeconds);
-          newAnalyzer.error_rx = Math.ceil((analyzer.packetsRxErrors - data.analyzer[index - 1].packetsRxErrors) / diffSeconds);
-          newAnalyzer.error_tx = Math.ceil((analyzer.packetsTxErrors - data.analyzer[index - 1].packetsTxErrors) / diffSeconds);
-          newAnalyzer.bytes_tx = Math.ceil((analyzer.bytesSent - data.analyzer[index - 1].bytesSent) / diffSeconds);
-          newAnalyzer.bytes_rx = Math.ceil((analyzer.bytesReceived - data.analyzer[index - 1].bytesReceived) / diffSeconds);
+          if(analyzer.packetsReceived && data.analyzer[index - 1].packetsReceived && analyzer.packetsReceived >= data.analyzer[index - 1].packetsReceived) {
+            newAnalyzer.packets_rx = Math.ceil((analyzer.packetsReceived - data.analyzer[index - 1].packetsReceived) / diffSeconds);
+          } else {
+            newAnalyzer.packets_rx = 0;
+          }
+
+          if(analyzer.packetsSent && data.analyzer[index - 1].packetsSent && analyzer.packetsSent >= data.analyzer[index - 1].packetsSent) {
+            newAnalyzer.packets_tx = Math.ceil((analyzer.packetsSent - data.analyzer[index - 1].packetsSent) / diffSeconds);
+          } else {
+            newAnalyzer.packets_tx = 0;
+          }
+
+          if(analyzer.packetsRxDropped && data.analyzer[index - 1].packetsRxDropped && analyzer.packetsRxDropped >= data.analyzer[index - 1].packetsRxDropped) {
+            newAnalyzer.dropped_rx = Math.ceil((analyzer.packetsRxDropped - data.analyzer[index - 1].packetsRxDropped) / diffSeconds);
+          } else {
+            newAnalyzer.dropped_rx = 0;
+          }
+
+          if(analyzer.packetsTxDropped && data.analyzer[index - 1].packetsTxDropped && analyzer.packetsTxDropped >= data.analyzer[index - 1].packetsTxDropped) {
+            newAnalyzer.dropped_tx = Math.ceil((analyzer.packetsTxDropped - data.analyzer[index - 1].packetsTxDropped) / diffSeconds);
+          } else {
+            newAnalyzer.dropped_tx = 0;
+          }
+
+          if(analyzer.packetsRxErrors && data.analyzer[index - 1].packetsRxErrors && analyzer.packetsRxErrors >= data.analyzer[index - 1].packetsRxErrors) {
+            newAnalyzer.error_rx = Math.ceil((analyzer.packetsRxErrors - data.analyzer[index - 1].packetsRxErrors) / diffSeconds);
+          } else {
+            newAnalyzer.error_rx = 0;
+          }
+
+          if(analyzer.packetsTxErrors && data.analyzer[index - 1].packetsTxErrors && data.analyzer[index - 1].packetsRxErrors >= data.analyzer[index - 1].packetsTxErrors) {
+            newAnalyzer.error_tx = Math.ceil((analyzer.packetsTxErrors - data.analyzer[index - 1].packetsTxErrors) / diffSeconds);
+          } else {
+            newAnalyzer.error_tx = 0;
+          }
+
+          if(analyzer.bytesSent && data.analyzer[index - 1].bytesSent && analyzer.bytesSent >= data.analyzer[index - 1].bytesSent) {
+            newAnalyzer.bytes_tx = Math.ceil((analyzer.bytesSent - data.analyzer[index - 1].bytesSent) / diffSeconds);
+          } else {
+            newAnalyzer.bytes_tx = 0;
+          }
+
+          if(analyzer.bytesReceived && data.analyzer[index - 1].bytesReceived && analyzer.bytesReceived >= data.analyzer[index - 1].bytesReceived) {
+            newAnalyzer.bytes_rx = Math.ceil((analyzer.bytesReceived - data.analyzer[index - 1].bytesReceived) / diffSeconds);
+          } else {
+            newAnalyzer.bytes_rx = 0;
+          }
 
           newData.analyzer.push(newAnalyzer);
         }
@@ -2295,6 +2340,23 @@ export class DeviceDetailController {
           obj['vlan_id'] = groupObj.vlan_id;
           obj['type'] = entity.type;
           obj['buckets'] = JSON.stringify(entity.buckets);
+          this.scope.detailModel.entities.push(obj);
+        });
+        break;
+      case 'snoop':
+        entities.forEach((entity) => {
+          let obj = {};
+          entity.ports.forEach((p) => {
+            obj['id'] = p['port'];
+            obj['delegate'] = entity.basic.isDelegate ? this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.DELEGATE.TRUE') : this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.DELEGATE.FALSE');
+            obj['global_status'] = entity.basic.globalStatus ? this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.ENABLE') : this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.DISABLE');
+            obj['info_status'] = entity.basic.infoStatus ? this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.ENABLE') : this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.DISABLE');
+            obj['mac_verify'] = entity.basic.macVerify ? this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.ENABLE') : this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.STATUS.DISABLE');
+            obj['vlan'] = entity.basic.vlans.toString();
+            obj['port'] = p['port'];
+            obj['trusted_display'] = p['trusted'];
+            obj['circuitId'] = p['circuitId'];
+          });
           this.scope.detailModel.entities.push(obj);
         });
         break;

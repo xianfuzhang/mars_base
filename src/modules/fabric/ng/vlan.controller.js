@@ -832,7 +832,6 @@ export class VlanController {
       }
       
       this.scope.model.ports = resultArr[5];
-      console.log(resultArr);
       this.scope.tabSwitch = false;
       this.scope.onTabChange(this.scope.tabs[0]);
       this.scope.model.actionsShow = this.getActionsShow();

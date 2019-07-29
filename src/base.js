@@ -224,6 +224,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/acl', {
+      template: require('./modules/function/template/acl.html'),
+      controller: 'aclCtrl',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/dhcp', {
       template: require('./modules/manage/template/dhcp.html'),
       controller: 'dhcpController',
@@ -269,6 +276,13 @@ function configRouterfunction ($routeProvider,
     .when('/segment', {
       template: require('./modules/logical/template/segment.html'),
       controller: 'segmentController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
+    .when('/traffic_segment', {
+      template: require('./modules/function/template/segment.html'),
+      controller: 'trafficCtrl',
       resolve: {
         loggedin: checkLoggedIn
       }

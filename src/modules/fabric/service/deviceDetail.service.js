@@ -109,6 +109,10 @@ export class DeviceDetailService {
             'label': this.translate('MODULES.SWITCH.DETAIL.TAB.SCHEMA.PFC'),
             'value': 'pfc',
           },
+          {
+            'label': this.translate('MODULE.FUNCTIONS.SOOPING.TITLE'),
+            'value': 'snoop',
+          }
           // {'label':'acl','value':'acl'}
         ]
       }
@@ -171,6 +175,16 @@ export class DeviceDetailService {
       'menu': {'enable': false, 'role': 2},
       'add': {'enable': true, 'role': 2},
       'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
+  geSnoopActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 2},
+      'add': {'enable': false, 'role': 2},
+      'remove': {'enable': false, 'role': 2},
       'refresh': {'enable': true, 'role': 2},
       'search': {'enable': false, 'role': 2}
     };
@@ -585,6 +599,51 @@ export class DeviceDetailService {
         'field': 'buckets',
         'layout': {'visible': true, 'sortable': true}
       },
+    ];
+  }
+
+  getDeviceDHCPSnoopSchema() {
+    return [
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.DELEGATE'),
+        'field': 'delegate',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.GLOBAL_STATUS'),
+        'field': 'global_status',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.INFO_STATUS'),
+        'field': 'info_status',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.MAC_VERIFY'),
+        'field': 'mac_verify',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.VLAN'),
+        'field': 'vlan',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.PORT'),
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.TRUST'),
+        'field': 'trusted_display',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.SCHEMA.CIRCUIT'),
+        'field': 'circuitId',
+        'layout': {'visible': true, 'sortable': false}
+      }
     ];
   }
   

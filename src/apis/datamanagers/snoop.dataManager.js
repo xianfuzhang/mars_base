@@ -13,9 +13,9 @@ export class SnoopDataManager {
     });
   }
 
-  getDeviceSnoopList() {
+  getDeviceSnoopList(type) {
     let defer = this.di.$q.defer();
-    this.di.$http.get(this.di.appService.getDHCPSnoopUrl()).then(
+    this.di.$http.get(this.di.appService.getDHCPSnoopUrl(type)).then(
       (res) => {
         defer.resolve(res);
       },

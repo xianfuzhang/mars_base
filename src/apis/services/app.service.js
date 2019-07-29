@@ -47,7 +47,8 @@ export class appService {
       NOCSYS_APP: 'com.nocsys',
       CRYPTO_STRING: 'secret',
       DEFAULT_FILENAME: 'startup_netcfg.cfg',// default configuration file name
-      MAX_MESSAGES_NUMBER: 100
+      MAX_MESSAGES_NUMBER: 100,
+      MAX_TRAFFIC_SEGMENT_SESSION: 8
     };
     this.loginRole = 1;
     this.roleFilterMenu = [];
@@ -102,7 +103,9 @@ export class appService {
           {'label': this.translate('MODULE.HEADER.FABRIC.DHCPRELAY'), 'url': '/dhcp_relay', 'role': 2},
           {'label': this.translate('MODULE.HEADER.MANAGE.TIMERANGE'), 'url': '/time_range', 'role': 3},
           {'label': this.translate('MODULE.HEADER.FUNCTIONS.POE'), 'url': '/poe', 'role': 3},
-          {'label': this.translate('MODULE.HEADER.FABRIC.SNOOPING'), 'url': '/dhcp_snoop', 'role': 2}
+          {'label': this.translate('MODULE.HEADER.FABRIC.SNOOPING'), 'url': '/dhcp_snoop', 'role': 2},
+          {'label': 'Traffic Segment', url: '/traffic_segment', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.FABRIC.ACL'), 'url': '/acl', 'role': 2}
         ]
       },
       {
@@ -293,6 +296,8 @@ export class appService {
       '/host_segment': ['com.nocsys.topologyl3'],
       '/storm_control':['com.nocsys.storm-control'],
       '/dhcp_relay': ['org.onosproject.dhcprelay'],
+      '/dhcp_snoop': ['com.nocsys.dhcpsnoop'],
+      '/traffic_segment': ['com.nocsys.trafficsegment'],
       '/qos': ['com.nocsys.qos'],
       '/lbd': ['com.nocsys.lbd'],
       '/vlan_all': ['com.nocsys.vlanmgmt'],
@@ -313,6 +318,7 @@ export class appService {
       '/log': ['com.nocsys.utility'],
       '/account_manage': ['com.nocsys.useraccount'],
       '/dhcp': ['com.nocsys.dhcpv6server', 'com.nocsys.dhcpserver'],
+      // '/acl': ['com.nocsys.acl'],
       '/ntp': ['com.nocsys.ntpserver'],
       '/elasticsearch': ['com.nocsys.utility'],
       '/analyzer': ['com.nocsys.analyzer'],
@@ -1012,6 +1018,18 @@ export class appService {
     return str;
   }
 
+  getTrafficSegmentUrl(device_id) {
+    if (device_id) {
+      return this.getZoneEndpoint(true) + `/trafficsegment/v1/sessions/${device_id}`;
+    }
+    else {
+      return this.getZoneEndpoint(true) + '/trafficsegment/v1/sessions';
+    }
+  }
+  getDeleteTrafficSegmentUrl(device_id, session_id) {
+    return this.getZoneEndpoint(true) + `/trafficsegment/v1/sessions/${device_id}/${session_id}`;
+  }
+
   getHostSegmentUrl(){
     return this.getZoneEndpoint(true) + `/topologyl3/v1/host-segments`;
   }
@@ -1098,6 +1116,10 @@ export class appService {
 
   getVoiceVlanUrl(device_id){
     return this.getZoneEndpoint(true) + '/vlan/v1/voice-vlan' + (device_id ? '/' + device_id : '');
+  }
+
+  getAclUrl(device_id){
+    return this.getZoneEndpoint(true) + '/acl/v1/policy' + (device_id ? '/' + device_id : '');
   }
 
   getVlanIpDeleteUrl(device_id, vlan_id){

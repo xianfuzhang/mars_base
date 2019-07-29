@@ -171,6 +171,56 @@ export class SnoopService{
       'search': {'enable': true, 'role': 2}
     };
   }
+
+  getTrafficSegmentTableActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 1},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': false, 'role': 2},
+      'refresh': {'enable': true, 'role': 1},
+      'search': {'enable': true, 'role': 2}
+    };
+  }
+
+  getTrafficSegmentTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULE.FUNCTIONS.SOOPING.TABLE.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ];
+  }
+
+  getTrafficSegmentTableSchema() {
+    return [
+      {
+        'label': this.translate('MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.DEVICE_NAME'),
+        'field': 'device_name',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.SESSION'),
+        'field': 'session',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.EXCLUDEVLANS'),
+        'field': 'exclude_vlans',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.UP_LINKS'),
+        'field': 'up_links',
+        'layout': {'visible': true, 'sortable': false}
+      },
+      {
+        'label': this.translate('MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.DOWN_LINKS'),
+        'field': 'down_links',
+        'layout': {'visible': true, 'sortable': false}
+      }
+    ];
+  }
 }
 SnoopService.$inject = SnoopService.getDI();
 SnoopService.$$ngIsClass = true;

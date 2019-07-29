@@ -87,6 +87,8 @@ export class CreateGuestVlanCtrl {
     scope.open = () => {
       if(scope.showWizard) return;
       scope.model.port = scope.model.portDisplayLabel.options[0];
+      scope.model.vlanId = null;
+      scope.model.port_vlans = [];
       scope.showWizard = true;
     };
 
