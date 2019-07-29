@@ -224,6 +224,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/acl', {
+      template: require('./modules/function/template/acl.html'),
+      controller: 'aclCtrl',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .when('/dhcp', {
       template: require('./modules/manage/template/dhcp.html'),
       controller: 'dhcpController',
