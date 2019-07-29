@@ -14,7 +14,7 @@
 
   }
   @include element(node-unselect) {
-    fill: #565656;
+    fill: #8294f5;
   }
 
   @include element(node-normal) {
@@ -31,21 +31,23 @@
   }
 
   @include element(path-normal) {
-    stroke: green;
+    stroke: white;
     //stroke-width: 1.5;
-    fill: white;
+    fill: gray;
   }
 
   @include element(path-error) {
-    stroke: red;
+    fill: red;
     //stroke-width: 1.5;
-    fill: white;
+    stroke: red;
   }
 
   @include element(node-outline) {
-    fill: rgb(255, 255, 255);
+    //fill: rgb(255, 255, 255);
+    fill: #5694E3;
     stroke-width: 2;
-    stroke: rgb(0, 0, 0);
+    //stroke: rgb(0, 0, 0);
+    stroke:  #5694E3;
   }
 
   @include element(line-normal) {
@@ -57,20 +59,24 @@
 
 .force-topo__node-outline.node-select {
   //fill: #3D9CBD;
-  stroke: rgb(255, 124, 9)
+  stroke: black;
+  //stroke: #639c4f;;
 
 }
 
 .force-topo__node-outline.node-unselect {
-  fill: rgb(255, 255, 255);
+  //fill: rgb(255, 255, 255);
+  fill: #5694E3;
 }
 
 .force-topo__node-outline.host-select {
-  fill: rgb(255, 124, 9)
+  //fill: rgb(255, 124, 9)
+  fill: #5694E3;
 }
 
 .force-topo__node-outline.host-unselect {
-  fill: rgb(255, 255, 255);
+  //fill: rgb(255, 255, 255);
+  fill: #5694E3;
 }
 
 .svg_revert {
