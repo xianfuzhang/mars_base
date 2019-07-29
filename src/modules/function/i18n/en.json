@@ -56,7 +56,8 @@
   "MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.DOWN_LINKS": "Down Link",
   "MODULE.FUNCTIONS.TRAFFIC.CREATE.TITLE": "Create Traffic Segment",
   "MODULE.FUNCTIONS.TRAFFIC.CREATE.NO_DEVICE": "Mars have not available device right now",
-  "MODULE.FUNCTIONS.TRAFFIC.CREATE.VLAN.HELP": "The VLAN max number 8£¬seperated by comma",
+  "MODULE.FUNCTIONS.TRAFFIC.CREATE.VLAN.HELP": "The VLAN max number 8, seperated by comma",
   "MODULE.FUNCTIONS.TRAFFIC.CREATE.NEED_EXCLUDE_VLAN": "Need to add exclude vlan",
-  "MODULE.FUNCTIONS.TRAFFIC.CREATE.NEED_DOWNLINK_PORT": "Need to add downlink port"
+  "MODULE.FUNCTIONS.TRAFFIC.CREATE.NEED_DOWNLINK_PORT": "Need to add downlink port",
+  "MODULE.FUNCTIONS.TRAFFIC.DELETE.SUCCESS": "Delete switch {{deviceName}} traffic segment success."
 }

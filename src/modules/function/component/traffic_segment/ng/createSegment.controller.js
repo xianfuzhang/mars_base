@@ -69,13 +69,14 @@ export class CreateSegmentCtrl {
     
     scope.changeDevice = (device)  => {
       scope.model.portDisplayLabel.options = [];
-      console.log(device);
       scope.model.devicePorts[device.value].forEach((p) => {
         scope.model.portDisplayLabel.options.push({
           'label': p,
           'value': p
         });
       });
+      scope.model.up_link = scope.model.portDisplayLabel.options[0];
+      scope.model.down_link = scope.model.portDisplayLabel.options[0];
     };
 
     scope.addLinkPort = (type) => {
@@ -122,10 +123,12 @@ export class CreateSegmentCtrl {
         if (scope.model.session.value > 4) {
           if (!scope.model.vlans) {
             scope.model.vlanHelper.validation = 'true';
-            return resolve({valid: false, errorMessage: this.di.$filter('translate')("MODULE.FUNCTIONS.TRAFFIC.CREATE.NEED_EXCLUDE_VLAN")});
           }
           else {
             scope.model.vlanHelper.validation = this.di.regexService.excute('excludeVlan', scope.model.vlans) ?'false' : 'true';
+          }
+          if (scope.model.vlanHelper.validation === 'true') {
+            return resolve({valid: false, errorMessage: this.di.$filter('translate')("MODULE.FUNCTIONS.TRAFFIC.CREATE.NEED_EXCLUDE_VLAN")});
           }
           if (scope.model.downlinks.length === 0) {
             return resolve({valid: false, errorMessage: this.di.$filter('translate')("MODULE.FUNCTIONS.TRAFFIC.CREATE.NEED_DOWNLINK_PORT")});
@@ -146,6 +149,10 @@ export class CreateSegmentCtrl {
 
     scope.open = () => {
       if(scope.showWizard) return;
+      scope.model.vlans = null;
+      scope.model.addedPorts = [];
+      scope.model.uplinks = [];
+      scope.model.downlinks = [];
       scope.showWizard = true;
     };
 
@@ -173,6 +180,7 @@ export class CreateSegmentCtrl {
           'value': i + 1
         });
       }
+      scope.model.session = scope.model.sessionDisplayLabel.options[0];
       scope.model.devicePorts[scope.model.device.value].forEach((val) => {
         scope.model.portDisplayLabel.options.push({
           'label': val,

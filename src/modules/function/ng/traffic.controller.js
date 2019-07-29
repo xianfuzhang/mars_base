@@ -48,7 +48,7 @@ export class TrafficCtrl {
       for (let key in this.scope.model.trafficDevicePortsMap) {
         if (devicePortsMap[key]) {
           this.scope.model.trafficDevicePortsMap[key].forEach((p) => {
-            let index = devicePortsMap[key]['ports'].indexOf(p);
+            let index = devicePortsMap[key]['ports'].indexOf(parseInt(p));
             if (index > -1) devicePortsMap[key]['ports'].splice(index, 1);
           });
           if (devicePortsMap[key]['ports'].length === 0) {
@@ -64,7 +64,22 @@ export class TrafficCtrl {
     };
 
     this.scope.onTableRowSelectAction = (event) => {
-
+      if (event.action.value === 'delete')  {
+        this.di.functionDataManager.deleteTrafficSegment(event.data.device_id, event.data.session).then(() => {
+          this.scope.alert = {
+            type: 'success',
+            msg: this.di.$filter('translate')('MODULE.FUNCTIONS.TRAFFIC.DELETE.SUCCESS', {deviceName: event.data.device_name})
+          }
+          this.di.notificationService.render(this.scope);
+          this.scope.model.API.queryUpdate();
+        }, (error) => {
+          this.scope.alert = {
+            type: 'error',
+            msg: error.data && error.data.message || error.statusText
+          }
+          this.di.notificationService.render(this.scope);
+        });
+      }
     };
 
     //获取交换机以及端口数信息
@@ -126,18 +141,25 @@ export class TrafficCtrl {
 
   getEntities(sessions) {
     let result = [];
+    this.scope.model.trafficDevicePortsMap = {};
     sessions.forEach((session) => {
       if (!this.scope.model.trafficDevicePortsMap.hasOwnProperty(session['deviceId'])) {
         this.scope.model.trafficDevicePortsMap[session['deviceId']] = [];
       }
-      this.scope.model.trafficDevicePortsMap[session['deviceId']] = this.scope.model.trafficDevicePortsMap[session['deviceId']].concat(
-        session['uplinks'], session['downlinks']);
+      if (session['uplinks'] && session['uplinks'].length > 0) {
+        this.scope.model.trafficDevicePortsMap[session['deviceId']] = this.scope.model.trafficDevicePortsMap[session['deviceId']].concat(session['uplinks']);
+      }
+      if (session['downlinks'] && session['downlinks'].length > 0) {
+        this.scope.model.trafficDevicePortsMap[session['deviceId']] = this.scope.model.trafficDevicePortsMap[session['deviceId']].concat(session['downlinks']);
+      }
+      
       result.push({
         'device_id': session['deviceId'],
+        'session': session['sessionId'],
         'device_name': this.scope.model.deviceMap[session['deviceId']] || session['deviceId'],
         'exclude_vlans': session['excludeVlans'] ? session['excludeVlans'].toString() : '-',
-        'up_links': session['uplinks'].toString(),
-        'down_links': session['downlinks'].toString()
+        'up_links': session['uplinks'] ? session['uplinks'].toString() : '-',
+        'down_links': session['downlinks'] ? session['downlinks'].toString() : '-'
       });
       /* if (!this.scope.model.deviceSessionsMap.hasOwnProperty(session['deviceId'])) {
         this.scope.model.deviceSessionsMap[session['deviceId']] = [];

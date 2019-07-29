@@ -1020,14 +1020,14 @@ export class appService {
 
   getTrafficSegmentUrl(device_id) {
     if (device_id) {
-      return this.getZoneEndpoint() + `/trafficsegment/v1/sessions/${device_id}`;
+      return this.getZoneEndpoint(true) + `/trafficsegment/v1/sessions/${device_id}`;
     }
     else {
-      return this.getZoneEndpoint() + '/trafficsegment/v1/sessions';
+      return this.getZoneEndpoint(true) + '/trafficsegment/v1/sessions';
     }
   }
   getDeleteTrafficSegmentUrl(device_id, session_id) {
-    return this.getZoneEndpoint() + `/trafficsegment/v1/sessions/${device_id}/${session_id}`;
+    return this.getZoneEndpoint(true) + `/trafficsegment/v1/sessions/${device_id}/${session_id}`;
   }
 
   getHostSegmentUrl(){
