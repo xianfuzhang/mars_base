@@ -28,9 +28,22 @@
 }
 
 .\+show.mdc-button.topo_setting__button {
-  border: 1px solid lightgray;
+  //border: 1px solid lightgray;
   background-color: #000;
 }
+
+.mdc-button.topo_setting__button:hover{
+  background-color: gray;
+}
+
+.mdc-button.topo_setting__button:before{
+  background: none;
+}
+
+.mdc-button.topo_setting__button:after{
+  background: none;
+}
+
 
 .topo_setting__button svg{
   color:whitesmoke;
@@ -134,7 +147,7 @@
         height: 100%;
         width: 5px;
         border: 0;
-        background-color: #cccccc;
+        background-color: #4c4c4c;
         top: 0;
         position: absolute;
         right: 295px;
@@ -143,7 +156,7 @@
         .line{
           height: 40px;
           width: 1px;
-          background-color: black;
+          //background-color: black;
           border: 0;
           top: 45%;
           left: 2px;
@@ -151,31 +164,43 @@
         }
 
         .ctrl_button.show_arrow {
-          background-image: url('../../assets/images/action/show_arrow.png');
-          background-position: 0px;
+          //background-image: url('../../assets/images/action/show_arrow.png');
+          //background-position: 0px;
+          i{
+            transform: scale(2) rotate(270deg);
+          }
         }
         .ctrl_button {
           height: 40px;
           width: 30px;
-          background-color: white;
-          border: 1px solid lightgray;
+          background-color: #ADADAD;
+          //border: 1px solid lightgray;
           border-right-width: 0;
           top: 10%;
-          left: -25px;
+          left: -30px;
           position: absolute;
           cursor: pointer;
           border-top-left-radius: 3px;
           border-bottom-left-radius: 3px;
-          background-image: url('../../assets/images/action/hide_arrow.png');
-          background-size: 20px 30px;
-          background-repeat: no-repeat;
-          background-position: 5px;
+          //background-image: url('../../assets/images/action/hide_arrow.png');
+          //background-size: 20px 30px;
+          //background-repeat: no-repeat;
+          //background-position: 5px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          i{
+            color:#282828;
+            transition: transform .2s linear;
+            transform: scale(2) rotate(90deg);
+          }
         }
 
       }
 
       .summary_drawer_right {
-        background-color: #272727;
+        background-color: #4c4c4c;
         position: absolute;
         right: 0;
         top: 0;
