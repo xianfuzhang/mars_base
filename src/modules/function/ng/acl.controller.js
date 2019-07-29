@@ -173,10 +173,15 @@ export class AclController {
       query: (params) => {
         let defer = this.di.$q.defer();
 
-        this.di.functionDataManager.getAcl().then((configs)=>{
-          this.scope.entities = [];
-          this.scope.entities = this.di.aclService.getAllAcls();
+        this.scope.entities = [];
+        this.di.functionDataManager.getAcl().then((res)=>{
+          this.scope.entities = this.getAclEntities(res.data.acl);
           let data = arr;
+          defer.resolve({
+            data: this.scope.entities
+          });
+        }, (err) => {
+          this.di.notificationService.renderWarning(this.scope, "MODULE.FUNCTIONS.ACL.MESSAGE.ERROR.GET_ACL_REQUEST");
           defer.resolve({
             data: this.scope.entities
           });
@@ -197,6 +202,10 @@ export class AclController {
         };
       }
     });
+  }
+
+  getAclEntities(aclArray) {
+
   }
 
   completedDetails(entities, details){
