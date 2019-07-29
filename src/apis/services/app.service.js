@@ -105,7 +105,7 @@ export class appService {
           {'label': this.translate('MODULE.HEADER.FUNCTIONS.POE'), 'url': '/poe', 'role': 3},
           {'label': this.translate('MODULE.HEADER.FABRIC.SNOOPING'), 'url': '/dhcp_snoop', 'role': 2},
           {'label': 'Traffic Segment', url: '/traffic_segment', 'role': 2},
-          {'label': this.translate('MODULE.HEADER.FABRIC.ACL'), 'url': '/acl', 'role': 2}
+          // {'label': this.translate('MODULE.HEADER.FABRIC.ACL'), 'url': '/acl', 'role': 2}
         ]
       },
       {
