@@ -38,7 +38,7 @@
           </mdl-text>
         </div>
         <div class="login-fields__btn login-fields__element">
-          <mar-button btn-text="loginModel.buttomText" btn-icon="'account_circle'" btn-style="'width:100%'" btn-class="'btn-white btn-lg'" btn-click="login($event)" btn-disabled="loginForm.$invalid" />
+          <mar-button btn-text="loginModel.buttomText" btn-icon="'account_circle'" btn-style="'width:100%'" btn-class="'btn-white btn-lg login-button'" btn-click="login($event)" btn-disabled="loginForm.$invalid" />
         </div>
         <div class="login-fields__message-error login-fields__element" ng-show="showBrowserMsg">
           <span>{{ loginModel.errorMessage }}</span>

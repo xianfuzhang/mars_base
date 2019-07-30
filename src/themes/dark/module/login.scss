@@ -33,13 +33,12 @@
   width: 300px;
   //height: 450px;
   padding: 64px;
-  background: #e8e1e122;
+  //background: #e8e1e122;
   border-radius: 10px;
   transition: box-shadow .2s linear, transform .2s linear;
 }
 .login-fields:hover{
-  box-shadow: 0 0 5px #211919;
-  //transform: translateY(-5px);
+  //box-shadow: 0 0 5px #211919;
 }
 .login-fields__logo{
   background: url('../../assets/images/mars_logo.png') no-repeat center center;
@@ -160,6 +159,10 @@
 .logo_svg {
   font-size: 106px;
 
+}
+
+.login-button{
+  border-radius: 20px;
 }
 
 /*.logo_svg_outer:before{
