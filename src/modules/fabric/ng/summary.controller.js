@@ -1315,10 +1315,11 @@ export class FabricSummaryController {
       obj.speed = port.portSpeed;
       obj.device_name = port.element;
       obj.isEnabled = port.isEnabled;
-      obj.port_status = port.isEnabled === true ? 'up':'down';
+      obj.port_status = port.annotations.linkStatus;
+      // obj.port_status = port.isEnabled === true ? 'up':'down';
         // this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE') :
         // this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE');
-      obj.admin_state = port.annotations.adminState === 'enabled' ?
+      obj.admin_state = port.isEnabled === true ?
         this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.ENABLE') :
         this.translate('MODULES.SWITCHES.PORT.ROW.ACTION.DISABLE');
 

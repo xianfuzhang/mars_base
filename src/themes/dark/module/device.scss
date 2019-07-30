@@ -209,6 +209,11 @@
         width: 295px;
         display: inline-block;
         overflow: auto;
+
+
+        & .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input{
+          color:white;
+        }
       }
     }
   }

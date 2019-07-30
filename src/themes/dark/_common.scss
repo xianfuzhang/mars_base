@@ -6,6 +6,11 @@ body{
   color: map_get($colors, body_color);
 }
 
+html{
+  background-color: map_get($colors, body_background_color);
+  color: map_get($colors, body_color);
+}
+
 table {
   border-color: map_get($colors, table_border_color);
 }
