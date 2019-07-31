@@ -2,7 +2,7 @@ $grid-size: 12;
 html{
   height:100%;
   width: 100%;
-  
+
   body{
     height: 100%;
     width: 100%;
@@ -35,6 +35,13 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: rgba(255, 255, 255, 0.6);
   transition: background-color 9999s ease-in-out 0s;
 }
+
+ng-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .app-main:before, .app-main:after{
   content: " ";
   display: table;
@@ -48,6 +55,8 @@ input:-webkit-autofill:active {
   height: calc(100% - 50px);
   min-height: 450px;
   overflow: auto;
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 .app-body{
   height:100%;
@@ -221,7 +230,7 @@ input:-webkit-autofill:active {
   background-size: 32px 32px;
   margin-right: 20px;
 }
-.tenant__body .mdl-table-field__content, .qos .mdl-table-field__content, 
+.tenant__body .mdl-table-field__content, .qos .mdl-table-field__content,
 .egp .mdl-table-field__content, .account_manager .mdl-table-field__content,
 .ipv4_mapping .mdl-table-field__content, .ipv6_mapping .mdl-table-field__content,
 .ntp .mdl-table-field__content{
@@ -234,7 +243,7 @@ input:-webkit-autofill:active {
 
 
 input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active{
- -webkit-text-fill-color: inherit; 
+ -webkit-text-fill-color: inherit;
 }
 @include block(column) {
   @for $index-alpha from 1 to $grid-size {
