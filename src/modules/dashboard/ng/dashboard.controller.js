@@ -1436,10 +1436,10 @@ export class DashboardController {
           }
         }
 
-      scope.switchDiskChartConfig.data = [usedArr, freeArr, reservedArr];
+      scope.switchDiskChartConfig.data = [freeArr, usedArr, reservedArr];
       scope.switchDiskChartConfig.labels = labelsArr;
-      scope.switchDiskChartConfig.series = ['used_percent', 'free_percent', 'reserved_percent'];
-      scope.switchDiskChartConfig.colors = [{backgroundColor: 'rgb(250,128,114)'}, {backgroundColor: 'rgb(144,238,144)'}, {backgroundColor: 'rgb(244,164,96)'}];
+      scope.switchDiskChartConfig.series = ['free_percent', 'used_percent', 'reserved_percent'];
+      scope.switchDiskChartConfig.colors = [{backgroundColor: 'rgb(144,238,144)'}, {backgroundColor: 'rgb(250,128,114)'}, {backgroundColor: 'rgb(0, 118, 203)'}];
       scope.switchDiskChartConfig.options = options;
     };
 
