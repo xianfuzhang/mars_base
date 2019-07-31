@@ -7,9 +7,9 @@
         </content-header>
         <div class="flex_entirety__body__body dashboard__body">
             <div class="mars-row dashboard-summary">
-                <div class="mars-row-flex mars-panel">
+                <div class="mars-row-flex">
                     <div class="summary-row">
-                        <div class="mars-col-12 col-gutter-md summary-item">
+                        <div class="summary-item">
                           <div class="mdc-card panel-widget panel-blue-bg-white margin-right-16 margin-left-8">
                             <div class="widget-left">
                               <i class="material-icons md-48">zoom_out_map</i>
@@ -22,7 +22,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="mars-col-12 col-gutter-md summary-item">
+                        <div class="summary-item">
                           <div class="mdc-card panel-widget panel-orange-bg-white">
                             <div class="widget-left">
                               <i class="material-icons md-48">shuffle</i>
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="summary-row">
-                        <div class="mars-col-12 col-gutter-md summary-item">
+                        <div class="summary-item">
                           <div class="mdc-card panel-widget panel-green-bg-white margin-right-16 margin-left-48">
                             <div class="widget-left">
                               <i class="material-icons md-48">swap_vert</i>
@@ -50,7 +50,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="mars-col-12 col-gutter-md summary-item">
+                        <div class="summary-item">
                           <div class="mdc-card panel-widget panel-teal-bg-white">
                             <div class="widget-left">
                               <div class="material-icon-left-container panel-material-red">
@@ -135,7 +135,7 @@
                 <div class="mars-row-flex">
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
                         <div class="chart_title">
-                            <span>{{'MODULES.DASHBOARD.SWITCH_INTERFACE_PACKETS'|translate}}</span>
+                            <span style="font-weight: bold;">{{'MODULES.DASHBOARD.SWITCH_INTERFACE_PACKETS'|translate}}</span>
                         </div>
                         <div>
                             <canvas id="interface-rxtx-packages" height="300"
@@ -163,7 +163,7 @@
 
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
                         <div class="chart_title">
-                            <span>{{'MODULES.DASHBOARD.SWITCH_INTERFACE_DROP_ERROR_PACKETS'|translate}}</span>
+                            <span style="font-weight: bold;">{{'MODULES.DASHBOARD.SWITCH_INTERFACE_DROP_ERROR_PACKETS'|translate}}</span>
                         </div>
                         <div>
                             <canvas id="interface-rxtx-drop-error" height="300"
