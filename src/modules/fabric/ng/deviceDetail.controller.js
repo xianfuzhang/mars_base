@@ -1202,7 +1202,7 @@ export class DeviceDetailController {
       analyzer.forEach((item, index) =>{
         let data = [];
         item.analyzer.forEach((record) => {
-          data.push((record.system_percent + record.user_percent).toFixed(2))
+          data.push((100 - record.idle_percent).toFixed(2))
         })
         dataArr.push(data);
         series.push(item.name);
@@ -1289,7 +1289,7 @@ export class DeviceDetailController {
       analyzer.forEach((item, index) =>{
         let data = [];
         item.analyzer.forEach((record) => {
-          data.push((record.system_percent + record.user_percent).toFixed(2))
+          data.push((100 - record.idle_percent).toFixed(2))
         })
         dataArr.push(data);
         series.push(item.name);
