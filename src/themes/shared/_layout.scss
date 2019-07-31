@@ -114,7 +114,7 @@ input:-webkit-autofill:active {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 40px;
 }
 
 .mars-row-flex .chart-loading {
@@ -135,10 +135,10 @@ input:-webkit-autofill:active {
   width: 40%;
 }
 .mars-row-flex .dashboard-panel:first-child {
-  margin-right: 15px;
+  margin-right: 2%;
 }
 .mars-row-flex .dashboard-panel:last-child {
-  margin-left: 15px;
+  margin-left: 2%;
 }
 
 .mars-row-flex-space-between{
