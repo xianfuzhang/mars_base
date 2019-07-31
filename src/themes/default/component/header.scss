@@ -8,7 +8,7 @@
 
 .navbar-inner{
   background: #263238;
-  height: 47px;
+  height: 75px;
   //min-width: 820px;
 }
 .navbar-flex-between{
@@ -21,17 +21,19 @@
   user-select: none;
 }
 .navbar-inner__container{
-  padding: 0 12px;
+  //padding: 0 12px;
   height: 100%;
   display: flex;
   align-items: center;
 }
 .navbar-inner__brand{
   background-image: url('../../assets/images/mars_logo.png');
-  background-size:60px 47px;
-  height: 47px;
-  width: 60px;
+  background-size:75px 65px;
+  background-repeat: no-repeat;
+  height: 65px;
+  width: 75px;
   cursor: pointer;
+  margin: 0 31px;
 }
 .navbar-inner__nav{
   list-style: none;
@@ -54,7 +56,7 @@
   color: white;
   float: right;
   display: flex;
-  margin-right: 24px;
+  margin-right: 31px;
   align-items: center;
 }
 .navbar-inner__account{
@@ -67,7 +69,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  line-height: 47px;
+  line-height: 75px;
 }
 .navbar-inner__account-user{
   margin: 0 4px;
@@ -92,10 +94,10 @@
   display: block;
   position: relative;
   color: rgba(255,255,255,0.87);
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 47px;
-  padding: 0 24px;
+  font-size: 18px;
+  //font-weight: 300;
+  line-height: 75px;
+  padding: 0 18px;
   text-transform: capitalize;
   transition: all .3s;
 }
@@ -131,7 +133,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  height: 47px;
+  height: 75px;
 }
 .navbar-inner__notification-toggle:hover {
   opacity: .8;
@@ -169,7 +171,7 @@
 }
 .notification-status{
   position: absolute;
-  top: 10px;
+  top: 22px;
   left: 14px;
   z-index: 2;
   display: none;
@@ -192,7 +194,7 @@
   opacity: 1;
 }
 .navbar-inner__dropdown-menu li{
-  border-bottom: 1px solid rgba(38,50,56,0.56);
+  //border-bottom: 1px solid rgba(38,50,56,0.56);
   box-sizing: border-box;
   line-height: 48px;
   cursor: pointer;
@@ -205,7 +207,7 @@
   background: #37474F;
   display: block;
   color: #fff;
-  font-weight: 300;
+  font-size: 16px;
   line-height: 48px;
   padding: 0 16px;
   transition: background .3s;
