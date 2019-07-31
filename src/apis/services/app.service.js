@@ -318,7 +318,7 @@ export class appService {
       '/log': ['com.nocsys.utility'],
       '/account_manage': ['com.nocsys.useraccount'],
       '/dhcp': ['com.nocsys.dhcpv6server', 'com.nocsys.dhcpserver'],
-      // '/acl': ['com.nocsys.acl'],
+      '/acl': ['com.nocsys.acl'],
       '/ntp': ['com.nocsys.ntpserver'],
       '/elasticsearch': ['com.nocsys.utility'],
       '/analyzer': ['com.nocsys.analyzer'],
