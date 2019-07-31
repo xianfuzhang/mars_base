@@ -66,7 +66,9 @@
 @include block(dashboard) {
 
   @include element(body){
-    padding: 20px 50px;
+    padding: 20px 5%;
+    min-width: 1200px;
+    overflow-x: auto;
   }
   @include element(horizontal_box) {
     display: block;
@@ -166,11 +168,23 @@
   height: 300px;
 }
 .dashboard-summary .summary-item{
-  min-width: 275px;
+  min-width: 250px;
+  display: flex;
+  box-sizing: border-box;
+  width: 46%;
+  float: left;
 }
 .dashboard-summary .summary-row{
   min-width: 550px;
   flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+}
+.dashboard-summary .summary-row:first-child{
+  margin-right: 2%;
+}
+.dashboard-summary .summary-row:last-child{
+  margin-left: 2%;
 }
 .dashboard__body .statistic-chart{
   min-width: 550px;
@@ -228,11 +242,12 @@
   flex-direction: row;
   width: 100%;
   height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 .dashboard-summary .panel-blue-bg-white{
   background-color: #30a5ff;
   color: #fff; 
-  border-right: 1px solid #ccc;
 }
 .dashboard-summary .panel-blue-bg-white>.widget-left{
   background-color: #0077cb;
@@ -240,7 +255,6 @@
 .dashboard-summary .panel-orange-bg-white{
   background-color: #ffb53e; 
   color: #fff; 
-  border-right: 1px solid #ccc;
 }
 .dashboard-summary .panel-orange-bg-white>.widget-left{
   background-color: #c78500;
@@ -248,7 +262,6 @@
 .dashboard-summary .panel-teal-bg-white{
   background-color: #1ebfae; 
   color: #fff; 
-  border-right: 1px solid #ccc;
 }
 .dashboard-summary .panel-teal-bg-white>.widget-left{
   background-color: #008e7f;
@@ -256,7 +269,6 @@
 .dashboard-summary .panel-green-bg-white{
   background-color: #47D147; 
   color: #fff; 
-  border-right: 1px solid #ccc;
 }
 .dashboard-summary .panel-green-bg-white>.widget-left{
   background-color: #009f0e;
