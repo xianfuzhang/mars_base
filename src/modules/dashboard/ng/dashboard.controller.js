@@ -745,7 +745,7 @@ export class DashboardController {
         analyzer.forEach((controller) => {
             let data = [];
             controller.analyzer.forEach((item) => {
-                data.push((item.user_percent + item.system_percent).toFixed(2))
+                data.push((100 - item.idle_percent).toFixed(2))
             });
             dataArr.push(data);
             series.push(controller.name);
@@ -817,7 +817,7 @@ export class DashboardController {
       analyzer.forEach((controller) => {
         let data = [];
         controller.analyzer.forEach((item) => {
-          data.push((item.user_percent + item.system_percent).toFixed(2))
+          data.push((1 - item.idle_percent).toFixed(2))
         });
         dataArr.push(data);
         series.push(controller.name);
@@ -2792,7 +2792,7 @@ export class DashboardController {
       if (device.name) {
         let data = [], deviceObj = {};
         device.analyzer.forEach((record) =>{
-          let utilize = record.system_percent + record.user_percent;//.toFixed(1)
+          let utilize = 100 - record.idle_percent;//.toFixed(1)
           data.push(utilize);
         });
         device['avarage'] = data.length > 0 ? (this.di._.sum(data)/data.length) : 0;
