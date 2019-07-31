@@ -198,7 +198,38 @@ export class AddHealthyCheckController {
       });
     };
 
+    function validCurrentDom(dom_class) {
+      let out = document.getElementsByClassName(dom_class);
+
+      if(out && out.length === 1){
+        let invalidDoms = out[0].getElementsByClassName('mdc-text-field--invalid');
+        if(invalidDoms && invalidDoms.length > 0){
+          return false;
+        }
+      }
+      return true;
+    }
+
     this.di.$scope.submit = function() {
+      let inValidJson = {
+        valid: false,
+        errorMessage: ''
+      };
+
+      di.$rootScope.$emit('page_healthy_check');
+      if(!validCurrentDom('add_healthycheck')){
+        return new Promise((resolve, reject) => {
+          resolve(inValidJson);
+        });
+      }
+
+      if(!scope.healthyCheckAddedModel.group){
+        inValidJson.errorMessage = translate('MODULES.ALERT.ADD_HEALTHY_CHECK.NO_RECIEVE_GROUP')
+        return new Promise((resolve, reject) => {
+          resolve(inValidJson);
+        });
+      }
+
 
       let value = Number(scope.healthyCheckAddedModel.query.value);
       let object = scope.healthyCheckAddedModel.object.value;

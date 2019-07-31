@@ -27,9 +27,25 @@
   color: black;
 }
 
-.\+show.mdc-button.topo_setting__button {
-  border: 1px solid lightgray;
+.mdc-button.topo_setting__button:hover{
   background-color: lightgray;
+}
+.mdc-button.topo_setting__button:focus{
+  //background: none;
+}
+
+.mdc-button.topo_setting__button:before{
+  background: none;
+}
+
+.mdc-button.topo_setting__button:after{
+  background: none;
+}
+
+
+.\+show.mdc-button.topo_setting__button {
+  //border: 1px solid lightgray;
+  background-color: gray;
 }
 
 @include block(detail_summary) {
@@ -67,8 +83,12 @@
   .mar_section{
     box-shadow: none !important;
     margin: 12px 8px;
+    background-color: transparent;
   }
 
+  .mar_section__header{
+    background-color: #dedede;
+  }
   @include element(link) {
     cursor: pointer;
     text-decoration: underline;
@@ -111,16 +131,18 @@
         height: 100%;
         width: 5px;
         border: 0;
-        background-color: #cccccc;
+        background-color: #ececec;
         top: 0;
         position: absolute;
         right: 295px;
         cursor: col-resize;
 
+        box-shadow: -2px 0px 4px 1px #a0a0a0;
+
         .line{
           height: 40px;
           width: 1px;
-          background-color: black;
+          //background-color: black;
           border: 0;
           top: 45%;
           left: 2px;
@@ -128,31 +150,45 @@
         }
 
         .ctrl_button.show_arrow {
-          background-image: url('../../assets/images/action/show_arrow.png');
-          background-position: 0px;
+          //background-image: url('../../assets/images/action/show_arrow.png');
+          //background-position: 0px;
+          i{
+            transform: scale(2) rotate(270deg);
+          }
         }
         .ctrl_button {
           height: 40px;
           width: 30px;
-          background-color: white;
-          border: 1px solid lightgray;
+          //background-color: white;
+          background-color: #efefef;
+          //border: 1px solid lightgray;
           border-right-width: 0;
           top: 10%;
-          left: -25px;
+          left: -30px;
           position: absolute;
           cursor: pointer;
-          border-top-left-radius: 3px;
-          border-bottom-left-radius: 3px;
-          background-image: url('../../assets/images/action/hide_arrow.png');
-          background-size: 20px 30px;
-          background-repeat: no-repeat;
-          background-position: 5px;
+          border-top-left-radius: 5px;
+          border-bottom-left-radius: 5px;
+          //background-image: url('../../assets/images/action/hide_arrow.png');
+          //background-size: 20px 30px;
+          //background-repeat: no-repeat;
+          //background-position: 5px;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          i{
+            color:#282828;
+            transition: transform .2s linear;
+            transform: scale(2) rotate(90deg);
+          }
         }
 
       }
 
       .summary_drawer_right {
-        background-color: white;
+        background-color: #ececec;
         position: absolute;
         right: 0;
         top: 0;

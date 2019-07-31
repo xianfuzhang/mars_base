@@ -32,42 +32,47 @@
   }
 
   @include element(path-normal) {
-    stroke: green;
+    stroke: white;
     //stroke-width: 1.5;
-    fill: white;
+    fill: gray;
   }
 
   @include element(path-error) {
     stroke: red;
     //stroke-width: 1.5;
-    fill: white;
+    fill: red;
   }
 
   @include element(node-outline) {
-    fill: #292929;
+    fill: #5694E3;
     stroke-width: 2;
-    stroke: #b7b2b2;
+    stroke: #5694E3;
   }
 
   @include element(line-normal) {
     stroke: whitesmoke;
-    stroke-width: 2;
+    //stroke-width: 2;
   }
 
 }
 .force-topo__node-outline.node-select {
   //fill: #3D9CBD;
-  stroke: rgb(255, 124, 9)
+  fill: #5694E3;
+  //stroke: rgb(255, 124, 9)
+  stroke: whitesmoke
 }
 .force-topo__node-outline.node-unselect {
-  fill: #292929;
+  //fill: #292929;
+  fill: #5694E3;
 }
 
 .force-topo__node-outline.host-select {
-  fill: rgb(255,124,9)
+  //fill: rgb(255,124,9)
+  stroke: whitesmoke
 }
 .force-topo__node-outline.host-unselect {
-  fill: rgb(255, 255, 255);
+  //fill: rgb(255, 255, 255);
+  fill: #5694E3;
 }
 
 .svg_revert {

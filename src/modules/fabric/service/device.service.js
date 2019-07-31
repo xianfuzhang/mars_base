@@ -504,7 +504,7 @@ export class DeviceService {
         'show': true
       },
       {
-        'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.STATUS'),
+        'title': this.translate('MODULES.SWITCHES.PORT.COLUMN.LINK_STATUS'),
         'field': 'port_status',
         'sortable': "port_status",
         'show': true

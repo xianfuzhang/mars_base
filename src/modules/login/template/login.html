@@ -2,46 +2,49 @@
   <div class="language-location">
     <language-selection></language-selection>
   </div>
-  <div class="login-fields">
+  <div class="login__back" style="display:flex;justify-content: center;align-items: center;position: relative;">
+    <div class="login-fields">
 
-    <form class="login__form" name="loginForm" autocomplete="off" novalidate>
-      <div class="login-fields__logo" style="display: none;"></div>
-      <div class="logo_svg_outer" style="width:300px;height: 120px;">
-        <svg class="logo_svg" style="width:300px;height: 120px;" version="1.1" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
+      <form class="login__form" name="loginForm" autocomplete="off" novalidate>
+        <div class="login-fields__logo" style="display: none;"></div>
+        <div class="logo_svg_outer" style="width:300px;height: 120px;">
+          <svg class="logo_svg" style="width:300px;height: 100px;-webkit-box-reflect: below 0 -webkit-linear-gradient(transparent,transparent 50%,rgba(255,255,255,.1));" version="1.1" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
 
-          <symbol id="text">
-            <text class="text" y="86px">MARS</text>
-          </symbol>
+            <symbol id="text">
+              <text class="text" y="86px">MARS</text>
+            </symbol>
 
-          <g>
-            <use xlink:href="#text" class="use-text"></use>
-            <use xlink:href="#text" class="use-text"></use>
-            <use xlink:href="#text" class="use-text"></use>
-            <use xlink:href="#text" class="use-text"></use>
-            <use xlink:href="#text" class="use-text"></use>
-          </g>
+            <g>
+              <use xlink:href="#text" class="use-text" style="display: none"></use>
+              <use xlink:href="#text" class="use-text" style="display: none"></use>
+              <use xlink:href="#text" class="use-text" style="display: none"></use>
+              <use xlink:href="#text" class="use-text" style="display: none"></use>
+              <use xlink:href="#text" class="use-text"></use>
+            </g>
 
-        </svg>
-      </div>
+          </svg>
+        </div>
 
-      <div class="login-fields__username login-fields__element">
-        <mdl-text ng-model="loginModel.username"
-                  helper="loginModel.nameHelper"
-                  display-label="loginModel.userNameDisplayLabel">
-        </mdl-text>
-      </div>
-      <div class="login-fields__password login-fields__element">
-        <mdl-text ng-model="loginModel.password"
-                  helper="loginModel.passwordHelper"
-                  display-label="loginModel.passwordDisplayLabel">
-        </mdl-text>
-      </div>
-      <div class="login-fields__btn login-fields__element">
-        <mar-button btn-text="loginModel.buttomText" btn-icon="'account_circle'" btn-style="'width:100%'" btn-class="'btn-white btn-lg'" btn-click="login($event)" btn-disabled="loginForm.$invalid" />
-      </div>
-      <div class="login-fields__message-error login-fields__element" ng-show="showBrowserMsg">
-        <span>{{ loginModel.errorMessage }}</span>
-      </div>
-    </form>
+        <div class="login-fields__username login-fields__element">
+          <mdl-text ng-model="loginModel.username"
+                    helper="loginModel.nameHelper"
+                    display-label="loginModel.userNameDisplayLabel">
+          </mdl-text>
+        </div>
+        <div class="login-fields__password login-fields__element">
+          <mdl-text ng-model="loginModel.password"
+                    helper="loginModel.passwordHelper"
+                    display-label="loginModel.passwordDisplayLabel">
+          </mdl-text>
+        </div>
+        <div class="login-fields__btn login-fields__element">
+          <mar-button btn-text="loginModel.buttomText" btn-icon="'account_circle'" btn-style="'width:100%'" btn-class="'btn-white btn-lg login-button'" btn-click="login($event)" btn-disabled="loginForm.$invalid" />
+        </div>
+        <div class="login-fields__message-error login-fields__element" ng-show="showBrowserMsg">
+          <span>{{ loginModel.errorMessage }}</span>
+        </div>
+      </form>
+    </div>
   </div>
+
 </div>

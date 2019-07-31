@@ -28,7 +28,7 @@
 
 
     @include element(icon){
-      background: url('../../assets/images/arrow.svg') no-repeat;
+      background: url('../../assets/images/arrow_black.svg') no-repeat;
       background-size: 15px;
       height: 15px;
       width: 15px;
@@ -54,7 +54,7 @@
 
     @include  element(title){
       display: inline-block;
-
+      font-weight:bold;
     }
 
     @include  element(setting){

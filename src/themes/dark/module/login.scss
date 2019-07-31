@@ -11,17 +11,34 @@
   overflow: hidden;
   box-sizing: border-box;
 }
+
+.login__back{
+  width:600px;
+  height: 600px;
+}
+
+.login__back:before{
+  background: url('../../assets/images/mars_login_background.png') no-repeat center center;
+  content: "";
+  position: absolute;
+  width:600px;
+  height: 600px;
+  transform: scale(1.5);
+  top:-60px;
+  opacity:.1;
+}
+
 .login-fields{
+  z-index:10;
   width: 300px;
   //height: 450px;
   padding: 64px;
-  background: #e8e1e122;
+  //background: #e8e1e122;
   border-radius: 10px;
   transition: box-shadow .2s linear, transform .2s linear;
 }
 .login-fields:hover{
-  box-shadow: 0 0 5px #211919;
-  //transform: translateY(-5px);
+  //box-shadow: 0 0 5px #211919;
 }
 .login-fields__logo{
   background: url('../../assets/images/mars_logo.png') no-repeat center center;
@@ -140,11 +157,15 @@
 }
 
 .logo_svg {
-  font-size: 100px;
+  font-size: 106px;
 
 }
 
-.logo_svg_outer:before{
+.login-button{
+  border-radius: 20px;
+}
+
+/*.logo_svg_outer:before{
   background: url('../../assets/images/mars_logo.png') no-repeat center center;
   opacity: 1;
   content: "";
@@ -157,14 +178,14 @@
   //left: 0;
   //right: 0;
   animation: bgiAnimation 4s ease-in-out;
-}
+}*/
 
 .use-text {
   fill: none;
   stroke: white;
 
   stroke-width: 2px;
-  opacity: 0;
+  opacity: 1;
 
 }
 
@@ -204,10 +225,15 @@
 }
 .use-text:nth-child(5) {
   //stroke: #1B8798;
-  stroke: black;
-  stroke-dasharray: 7% 28%;
-  stroke-dashoffset: 35%;
-  animation: animation5 4s ease-in-out;
+  stroke: #dadada;
+  opacity:1;
+  //stroke-dasharray: 7% 28%;
+  //stroke-dashoffset: 35%;
+  stroke-dashoffset: 0%;
+  stroke-dasharray: 100% 0%;
+  fill: #dadada;
+
+  animation: animation5 2s ease-in-out;
 
 }
 
@@ -239,8 +265,8 @@
   75% {
     stroke: #0f11c2;
     opacity: 1;
-    stroke-dasharray: 7% 28%;
-    stroke-dashoffset: 7%;
+    stroke-dasharray: 0 87.5%;
+    stroke-dashoffset: 35%;
   }
   100% {
     //stroke:  #47b7e0;
@@ -267,8 +293,8 @@
   75% {
     stroke: #D61C59;
     opacity: 1;
-    stroke-dasharray: 7% 28%;
-    stroke-dashoffset: 14%;
+    stroke-dasharray: 0 87.5%;
+    stroke-dashoffset: 35%;
   }
   100% {
     //stroke:  #47b7e0;
@@ -295,8 +321,8 @@
   75% {
     stroke: #E7D84B;
     opacity: 1;
-    stroke-dasharray: 7% 28%;
-    stroke-dashoffset: 21%;
+    stroke-dasharray: 0 87.5%;
+    stroke-dashoffset: 35%;
   }
   100% {
     //stroke:  #47b7e0;
@@ -309,27 +335,27 @@
 
 @keyframes animation4 {
   0% {
-    stroke: #EFEAC5;
+    stroke: #47b7e0;
     opacity: 1;
     stroke-dashoffset: 35%;
     stroke-dasharray: 0 87.5%;
   }
   50% {
-    stroke: #EFEAC5;
+    stroke: #47b7e0;
     opacity: 1;
     stroke-dasharray: 7% 28%;
     stroke-dashoffset: 28%;
   }
   75% {
-    stroke: #EFEAC5;
+    stroke: #47b7e0;
     opacity: 1;
-    stroke-dasharray: 7% 28%;
-    stroke-dashoffset: 28%;
+    stroke-dasharray: 0 87.5%;
+    stroke-dashoffset: 35%;
   }
   100% {
     //stroke: #47b7e0;
-    stroke: #EFEAC5;
-    opacity: 1;
+    stroke: #47b7e0;
+    opacity: 0;
     stroke-dasharray: 0 87.5%;
     stroke-dashoffset: 35%;
   }
@@ -337,30 +363,37 @@
 
 @keyframes animation5 {
   0% {
-    stroke: #1B8798;
+    //stroke: #47b7e0;
+    stroke: #dadada;
+    //fill: none;
     opacity: 1;
+      fill: #dadada00;
     stroke-dashoffset: 35%;
     stroke-dasharray: 0 87.5%;
   }
-  50% {
-    stroke: #1B8798;
-    opacity: 1;
-    //fill: #616161;
-    stroke-dasharray: 7% 28%;
-    stroke-dashoffset: 35%;
-  }
+  //50% {
+  //  stroke: #dadada;
+  //  //fill: white;
+  //  opacity: 1;
+  //  //fill: #616161;
+  //  fill: #dadada00;
+  //  stroke-dasharray: 7% 28%;
+  //  stroke-dashoffset: 35%;
+  //}
   75% {
     //stroke: #47b7e0;
-    stroke: #1B8798;
+    stroke: #dadada;
+    fill: #dadada55;
     opacity: 1;
-    stroke-dasharray: 7% 28%;
-    stroke-dashoffset: 35%;
+    stroke-dashoffset: 0%;
+    stroke-dasharray: 100% 0%;
   }
   100% {
-    stroke: #1B8798;
+    stroke: #dadada;
     //stroke: #1B8798;
+    fill: #dadada;
     opacity: 1;
-    stroke-dashoffset: 35%;
-    stroke-dasharray: 0 87.5%;
+    stroke-dashoffset: 0%;
+    stroke-dasharray: 100% 0%;
   }
 }

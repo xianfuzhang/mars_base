@@ -22,7 +22,7 @@
     //border-bottom: 1px solid whitesmoke;
     min-width:400px;
     outline: none;
-    background-color: #414141;
+    background-color: #606060;
 
 
     @include element(icon){
@@ -52,7 +52,7 @@
 
     @include  element(title){
       display: inline-block;
-
+      font-weight:bold;
     }
 
     @include  element(setting){
