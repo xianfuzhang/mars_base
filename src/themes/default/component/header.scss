@@ -63,6 +63,10 @@
   height: 100%;
   position: relative;
   float: left;
+  padding:0 10px;
+}
+.navbar-inner__account:hover{
+  background-color: #37474F;
 }
 .navbar-inner__account-summary{
   user-select: none;
@@ -123,10 +127,15 @@
 }
 .navbar-inner__notification{
   position: relative;
-  margin-right: 20px;
+  //margin-right: 20px;
+  padding:0 10px;
   font-size: 12px;
   color: #FFFFFF;
 }
+.navbar-inner__notification:hover{
+  background-color: #37474F;
+}
+
 .navbar-inner__notification-toggle{
   position: relative;
   user-select: none;
@@ -233,13 +242,19 @@
 }
 
 .navbar-inner__theme {
-  margin-top: 6px;
+  height:100%;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  //margin-top: 6px;
   cursor: pointer;
-  margin-right: 20px;
+  //margin-right: 20px;
+  padding:0 10px;
   text-align: center;
 }
 .navbar-inner__theme:hover {
-  opacity: .8;
+  //opacity: .8;
+  background-color: #37474F;
 }
 
 
