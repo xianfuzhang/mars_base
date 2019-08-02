@@ -22,6 +22,8 @@ export class DeviceDetailController {
       'applicationService',
       'logicalDataManager',
       'snoopDataManager',
+      'functionDataManager',
+      'aclService',
       'chartService',
       'dateService'
     ];
@@ -52,6 +54,8 @@ export class DeviceDetailController {
       entities: [],
       total: null
     };
+    this.scope.aclMap = {};
+    this.scope.selectedAcl = null;
 
     let date = this.di.dateService.getTodayObject();
     let before = this.di.dateService.getBeforeDateObject(30*60*1000); // 前30分钟
@@ -559,6 +563,11 @@ export class DeviceDetailController {
         if(this.scope.tabSelected.value === 'pfc'){
           rowIndex = event.$data.port;
         }
+
+        if(this.scope.tabSelected.value === 'acl'){
+          rowIndex = event.$data.policy_id;
+          this.scope.selectedAcl = this.scope.aclMap[event.$data.policy_id]
+        }
         this.scope.detailModel.api.setSelectedRow(rowIndex);
       }
     };
@@ -698,6 +707,18 @@ export class DeviceDetailController {
                 });
             }
             break;
+          case 'acl':
+            if (event.action.value === 'delete') {
+              this.di.dialogService.createDialog('warning', this.translate('MODULE.FUNCTIONS.ACL.MESSAGE.DELETE_ACL'))
+                .then((data) =>{
+                  this.di.functionDataManager.deleteAcl(event.data.policy_id)
+                    .then((res) =>{
+                      this.scope.model.API.queryUpdate();
+                    });
+                }, (res) =>{
+                  this.di.$log.debug('Delete ACL dialog cancel');
+                });
+            }
         }
       }
     };
@@ -714,6 +735,9 @@ export class DeviceDetailController {
       this.di.$rootScope.$emit('pfc-wizard-show', this.scope.deviceId);
     };
 
+    this.scope.addAcl = () => {
+      this.di.$rootScope.$emit('acl-wizard-show');
+    }
 
     this.scope.batchRemove = ($value) => {
       if ($value.length) {
@@ -733,7 +757,14 @@ export class DeviceDetailController {
               this.di.$log.debug('delete switch flows cancel');
           });
         }
-        
+        else if (this.scope.tabSelected.value === 'acl') {
+          this.di.dialogService.createDialog('warning', this.translate('MODULE.FUNCTIONS.ACL.MESSAGE.DELETE_ACL'))
+            .then(() =>{
+              this.batchDeleteAcls($value);
+            }, () =>{
+              this.di.$log.debug('delete acl cancel');
+            });
+        }
       }
     };
   }
@@ -825,7 +856,8 @@ export class DeviceDetailController {
         break;  
       case 'pfc':
         schema = this.di.deviceDetailService.getDevicePFCSchema();
-
+      case 'acl':
+        schema = this.di.aclService.getTableSchema(true);
     }
     return schema;
   }
@@ -856,6 +888,9 @@ export class DeviceDetailController {
         break;  
       case 'pfc':
         actions = this.di.deviceDetailService.getPFCActionsShow();
+        break;
+      case 'acl':
+        actions = this.di.aclService.getTableActionsShow();
         break;
     }
     return actions;
@@ -907,6 +942,11 @@ export class DeviceDetailController {
         break;
       case 'pfc':
         schema['index_name'] = 'port';
+        schema['rowCheckboxSupport'] = true;
+        schema['rowActionsSupport'] = true;
+        break;
+      case 'acl':
+        schema['index_name'] = 'policy_id';
         schema['rowCheckboxSupport'] = true;
         schema['rowActionsSupport'] = true;
         break;
@@ -1033,6 +1073,64 @@ export class DeviceDetailController {
           defer.resolve({'data': res.data.pfcs, 'total': res.data.total});
         },err=>{
           defer.reject(err);
+        });
+        break;
+      case 'acl':
+        this.di.functionDataManager.getAcl(this.scope.deviceId).then((res) => {
+          res.data.acl.forEach((acl) => {
+            this.di.$scope.aclMap[acl['policyId']] = acl;
+          });
+          defer.resolve({'data': res.data.acl, 'total': res.data.total});
+        },err=>{
+          // TODO: test
+          let testAcl = [
+            {
+              "deviceId": "rest:192.168.40.225:80",
+              "policyId": 1648303342,
+              "port": "eth1/50",
+              "direction": true,
+              "action": "permit",
+              "mac": {
+                "srcMac": "66:11:11:11:11:11",
+                "dstMac": "22:22:22:22:22:22",
+                "etherType": "0800",
+                "vid": "1001"
+              },
+              "ipv4": {
+                "protocol": 17,
+                "srcIp": "1.1.1.1",
+                "dstIp": "2.2.2.2",
+                "srcPort": 5000,
+                "dstPort": 6000
+              }
+            },
+            {
+              "deviceId": "rest:192.168.40.228:80",
+              "policyId": 1648303343,
+              "port": "eth1/50",
+              "direction": false,
+              "action": "deny",
+              "mac": {
+                "srcMac": "66:11:11:11:11:11",
+                "dstMac": "22:22:22:22:22:22",
+                "etherType": "0801",
+                "vid": "1001"
+              },
+              "ipv4": {
+                "protocol": 19,
+                "srcIp": "1.1.1.1",
+                "dstIp": "2.2.2.2",
+                "srcPort": 5100,
+                "dstPort": 6200
+              }
+            }
+          ];
+          testAcl.forEach((acl) => {
+            this.di.$scope.aclMap[acl['policyId']] = acl;
+          });
+          defer.resolve({'data': testAcl, 'total': 2});
+
+          // defer.reject(err);
         });
         break;
     }
@@ -2373,6 +2471,23 @@ export class DeviceDetailController {
           this.scope.detailModel.entities.push(obj);
         });
         break;
+      case 'acl':
+        entities.forEach((entity) => {
+          let obj = {};
+          obj = {
+            'policy_id': entity.policyId,
+            'port': entity.port,
+            'direction': entity.direction ? 'IN' : 'OUT',
+            'action': entity.action == 'permit' ? 'done' : 'not_interested'
+          };
+
+          this.scope.detailModel.entities.push(obj);
+        });
+
+        if(this.scope.detailModel.entities.length) {
+          this.scope.selectedAcl = this.scope.aclMap[this.scope.detailModel.entities[0].policy_id]
+        }
+        break;
     }
   }
   
@@ -2467,6 +2582,28 @@ export class DeviceDetailController {
       }
       this.di.notificationService.render(this.scope);
       this.scope.detailModel.api.queryUpdate();
+    });
+  }
+
+  batchDeleteAcls(arr) {
+    let deferredArr = [];
+    arr.forEach((item) => {
+      let defer = this.di.$q.defer();
+      this.di.functionDataManager.deleteAcl(item.policy_id)
+        .then(() => {
+          defer.resolve();
+        }, (msg) => {
+          defer.reject(msg);
+        });
+      deferredArr.push(defer.promise);
+    });
+
+    this.di.$q.all(deferredArr).then(() => {
+      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULE.FUNCTIONS.ACL.BATCH.DELETE.SUCCESS'));
+      this.scope.model.API.queryUpdate();
+    }, (msg) => {
+      this.di.notificationService.renderWarning(this.scope, this.translate('MODULE.FUNCTIONS.ACL.BATCH.DELETE.FAILED'));
+      this.scope.model.API.queryUpdate();
     });
   }
 
