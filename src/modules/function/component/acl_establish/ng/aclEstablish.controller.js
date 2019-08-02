@@ -25,6 +25,7 @@ export class AclEstablishController {
     const deviceDataManager = this.di.deviceDataManager;
     const rootScope = this.di.$rootScope;
 
+    this.translate = this.di.$filter('translate')
     scope.protocolDisplayLabel = {
       options: [
         {label: 'OpenFlow', value: 'of'},
@@ -63,7 +64,7 @@ export class AclEstablishController {
 
     scope.showWizard = false;
     scope.mode = 'add'; // 'add': add a new switch | 'update': update the switch
-    scope.title = this.di.$filter('translate')('COMPONENT.DEVICEWIZARD.TITLE.CREATE_DEVICE');
+    scope.title = ('MODULE.FUNCTIONS.ACL.WIZARD.TITLE');
     scope.steps = [
       {
         id: 'step1',
@@ -122,32 +123,6 @@ export class AclEstablishController {
               scope.showWizard = true;
             }
           });
-
-        // deviceDataManager.getDeviceDetail(deviceId)
-        //   .then((res) => {
-        //     if(res) {
-        //       const device = res.data;
-        //       let port = device.annotations.channelId ? device.annotations.channelId.split(':')[1] : '';
-        //
-        //       scope.switch = {
-        //         id: device.id,
-        //         mac_address: device.mac,
-        //         description: 'test',
-        //         available: device.available,
-        //         fabric_role: device.type,
-        //         leaf_group: device.leaf_group,
-        //         rack_id: device.rack_id,
-        //         mfr: device.mfr,
-        //         community: device.community,
-        //         name: device.annotations.name,
-        //         managementAddress: device.annotations.managementAddress,
-        //         port: parseInt(port),
-        //         protocol: device.annotations.protocol,
-        //       }
-        //
-        //       scope.showWizard = true;
-        //     }
-        //   });
       } else { // 'add' mode
         scope.mode = 'add';
         scope.switch = _.cloneDeep(initSwitch);
@@ -274,28 +249,10 @@ export class AclEstablishController {
       }
     }));
   
-    unsubscribes.push(scope.$watch('switch.managementAddress', (newIp, oldIp) => {
-      if(newIp == oldIp) return
-  
-      scope.mac_addresses = [];
-      let macs = Object.keys(scope.mac_ip_bindings)
-      for(let mac of macs) {
-        if(scope.mac_ip_bindings[mac].indexOf(newIp) != -1) {
-          scope.mac_addresses.push(mac)
-        }
-      }
-    }));
-    
-    unsubscribes.push(this.di.$rootScope.$on('switch-wizard-show', ($event, deviceId) => {
+    unsubscribes.push(this.di.$rootScope.$on('acl-wizard-show', ($event, deviceId) => {
       scope.open(deviceId);
     }));
 
-    unsubscribes.push(this.di.$rootScope.$on('switch-wizard-show-4-dhcp', ($event, mac, ip) => {
-      scope.open();
-      scope.switch.mac_address = mac;
-      scope.switch.managementAddress = ip;
-    }));
-    
     scope.$on('$destroy', () => {
       unsubscribes.forEach((cb) => {
         cb();
