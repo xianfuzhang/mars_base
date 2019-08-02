@@ -198,6 +198,7 @@ export class DeviceDetailController {
     this.scope.isTenantEnable= false;
     this.scope.isEndpointEnable= false;
     this.scope.isPOEEnable = false;
+    this.scope.isSnoopEnable = false;
 
     this.scope.summary = {
       fanSensors: [],
@@ -2577,6 +2578,7 @@ export class DeviceDetailController {
         let TENANT_APP_NAME = 'com.nocsys.tenant';
         let ENDPINT_APP_NAME = 'com.nocsys.endpoint';
         let POE_APP_NAME = 'com.nocsys.poe';
+        let SNOOP_APP_NAME = 'com.nocsys.dhcpsnoop';
         if(allState[OPENFLOW_APP_NAME] === 'ACTIVE'){
           scope.isOpenflowEnable = true;
         }
@@ -2598,6 +2600,11 @@ export class DeviceDetailController {
         if(allState[POE_APP_NAME] === 'ACTIVE'){
           scope.isPOEEnable = true;
         }
+        if(allState[SNOOP_APP_NAME] === 'ACTIVE'){
+          scope.isSnoopEnable = true;
+        }
+
+
 
       };
 
@@ -2637,6 +2644,10 @@ export class DeviceDetailController {
 
         if(!this.scope.isPOEEnable){
           this.removeTab(tabs, 'poe');
+        }
+
+        if(!this.scope.isSnoopEnable){
+          this.removeTab(tabs, 'snoop');
         }
 
         this.scope.tabs = tabs;
