@@ -6,6 +6,7 @@ export class headerController{
       '$rootScope',
       '$cookies',
       '$location',
+      '$timeout',
       '$window',
       '$filter',
       '_',
@@ -40,6 +41,7 @@ export class headerController{
     ];
     //this.scope.alerts_acount = 0;
     this.scope.location = (url, event) => {
+      this.scope.$emit('change-selected-menu-item', {'url': url});
       event && event.stopPropagation();
       if (url === '/logout') {
         this.di.$cookies.remove('useraccount');
@@ -96,6 +98,11 @@ export class headerController{
     unsubscribers.push(this.di.$rootScope.$on('application-change-state', (event) => {
       this.filterMenusByApps();
     }));
+    unsubscribers.push(this.di.$rootScope.$on('change-selected-menu-item', (event, param) => {
+      this.di.$timeout(() => {
+        this.changeSelectedMenuItem(param.url);
+      });
+    }));
   
     unsubscribers.push(this.di.$rootScope.$on('new-websocket-message', ($event, message) => {
       let messages = this.scope.messages;
@@ -119,10 +126,9 @@ export class headerController{
 
   init() {
     this.scope.menus = this.di.localStoreService.getSyncStorage().get('menus');
-    let useraccount = this.di.$cookies.get('useraccount');
+    let useraccount = this.di.$cookies.get('useraccount'),
+        url = this.di.$location.path();
     if (!useraccount || !this.scope.menus) {
-
-      let url = this.di.$location.path();
       let search = this.di.$location.search();
       if(url !== '/'){
         url = window.btoa(url);
@@ -140,6 +146,9 @@ export class headerController{
 
     this.filterMenusByApps();
     this.setMessageWebsocket();
+    this.di.$timeout(() => {
+      this.changeSelectedMenuItem(url);
+    }, 500);
   }
 
   setMessageWebsocket() {
@@ -462,6 +471,23 @@ export class headerController{
     }
     
     return msg;
+  }
+
+  changeSelectedMenuItem(selectedUrl) {
+    if (selectedUrl !== '/dashboard' && selectedUrl !== '/logout') {
+      let ulNodes = document.querySelector('.navbar-inner__nav').children;
+      for (let i = 0, l = ulNodes.length; i < l; i++) {
+        if (ulNodes[i].classList.contains('selected')) ulNodes[i].classList.remove('selected');
+        let liNodes = ulNodes[i].querySelectorAll('li>a');
+        for (let j = 0, m = liNodes.length; j < m; j++) {
+          let url = liNodes[j].attributes['data-url'] && liNodes[j].attributes['data-url'].value;
+          if (selectedUrl === url) {
+            ulNodes[i].classList.add('selected');
+            liNodes[j].classList.add('selected');
+          }
+        }
+      }
+    }
   }
 }
 
