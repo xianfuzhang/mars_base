@@ -112,6 +112,10 @@ export class DeviceDetailService {
           {
             'label': this.translate('MODULE.FUNCTIONS.SOOPING.TITLE'),
             'value': 'snoop',
+          },
+          {
+            'label': this.translate('MODULE.HEADER.FUNCTIONS.POE'),
+            'value': 'poe',
           }
           // {'label':'acl','value':'acl'}
         ]

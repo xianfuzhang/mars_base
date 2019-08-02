@@ -19,8 +19,10 @@ export class DeviceDetailController {
       'deviceDataManager',
       'tableProviderFactory',
       'modalManager',
+      'functionService',
       'applicationService',
       'logicalDataManager',
+      'functionDataManager',
       'snoopDataManager',
       'chartService',
       'dateService'
@@ -195,6 +197,7 @@ export class DeviceDetailController {
     this.scope.isHCEnable= false;
     this.scope.isTenantEnable= false;
     this.scope.isEndpointEnable= false;
+    this.scope.isPOEEnable = false;
 
     this.scope.summary = {
       fanSensors: [],
@@ -417,6 +420,11 @@ export class DeviceDetailController {
 
     unSubscribers.push(this.di.$rootScope.$on('pfc-list-refresh',()=>{
       this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.SWITCH.DETAIL.PFC.CREATE.SUCCESS'));
+      this.scope.detailModel.api.queryUpdate();
+    }));
+
+    unSubscribers.push(this.di.$rootScope.$on('port-poe-refresh',()=>{
+      this.di.notificationService.renderSuccess(this.scope, this.translate('MODULES.FUNCTIONS.POE.PORT_ES.MSG.UPDATE_SUCCESS'));
       this.scope.detailModel.api.queryUpdate();
     }));
 
@@ -698,6 +706,9 @@ export class DeviceDetailController {
                 });
             }
             break;
+          case 'poe':
+            this.scope.$emit('update-port-poe-wizard-show', event.data);
+            break;
         }
       }
     };
@@ -825,6 +836,18 @@ export class DeviceDetailController {
         break;  
       case 'pfc':
         schema = this.di.deviceDetailService.getDevicePFCSchema();
+        break;
+      case 'poe':
+        schema = this.di.functionService.getPoePortTableSchema();
+        if(this.di.applicationService.getAppsState()['com.nocsys.timerange'] !== 'ACTIVE'){
+          schema = schema.filter((f)=>{
+            return f.field !== 'timeRange';
+          })
+        }
+        schema = schema.filter((f)=>{
+          return f.field !== 'device_name';
+        })
+        break;
 
     }
     return schema;
@@ -857,6 +880,8 @@ export class DeviceDetailController {
       case 'pfc':
         actions = this.di.deviceDetailService.getPFCActionsShow();
         break;
+      case 'poe':
+        actions = this.di.functionService.getPoeActionsShow();
     }
     return actions;
   }
@@ -906,6 +931,11 @@ export class DeviceDetailController {
         schema['rowActionsSupport'] = true;
         break;
       case 'pfc':
+        schema['index_name'] = 'port';
+        schema['rowCheckboxSupport'] = true;
+        schema['rowActionsSupport'] = true;
+        break;
+      case 'poe':
         schema['index_name'] = 'port';
         schema['rowCheckboxSupport'] = true;
         schema['rowActionsSupport'] = true;
@@ -1035,6 +1065,13 @@ export class DeviceDetailController {
           defer.reject(err);
         });
         break;
+      case 'poe':
+        this.di.functionDataManager.getPoePortsByDeviceId(this.scope.deviceId).then((res)=>{
+          defer.resolve({'data': res.data[this.scope.deviceId], 'total': res.data.total});
+        }, err=>{
+          defer.reject(err);
+        });
+
     }
     return defer.promise;
   }
@@ -2373,6 +2410,17 @@ export class DeviceDetailController {
           this.scope.detailModel.entities.push(obj);
         });
         break;
+      case 'poe':
+        entities.forEach(entity=>{
+          entity.status_icon = (entity.status === true || entity.status === 'true') ?'done' : 'not_interested';
+          entity.priorityStr =  this.di.functionService.getPoePriorityLabel(entity.priority);
+          entity.powerClassifications = entity.group;
+          entity.deviceId = this.scope.deviceId;
+          entity.device_name = this.scope.detailValue.name;
+
+          this.scope.detailModel.entities.push(entity);
+        })
+        break;
     }
   }
   
@@ -2404,6 +2452,8 @@ export class DeviceDetailController {
         break;
       case 'pfc':
         actions = this.di.deviceDetailService.getDevicePFCTableRowActions();
+      case 'poe':
+        actions = this.di.functionService.getSwitchPortPoeTableRowActions();
         break;
     }
     return actions;
@@ -2526,6 +2576,7 @@ export class DeviceDetailController {
         let HEALTHYCHECK_APP_NAME = 'com.nocsys.healthycheck';
         let TENANT_APP_NAME = 'com.nocsys.tenant';
         let ENDPINT_APP_NAME = 'com.nocsys.endpoint';
+        let POE_APP_NAME = 'com.nocsys.poe';
         if(allState[OPENFLOW_APP_NAME] === 'ACTIVE'){
           scope.isOpenflowEnable = true;
         }
@@ -2544,6 +2595,10 @@ export class DeviceDetailController {
         if(allState[ENDPINT_APP_NAME] === 'ACTIVE'){
           scope.isEndpointEnable = true;
         }
+        if(allState[POE_APP_NAME] === 'ACTIVE'){
+          scope.isPOEEnable = true;
+        }
+
       };
 
 
@@ -2578,6 +2633,10 @@ export class DeviceDetailController {
           // this.di._.remove(tabs, (tab)=>{
           //   return tab['value'] === 'endpoint';
           // });
+        }
+
+        if(!this.scope.isPOEEnable){
+          this.removeTab(tabs, 'poe');
         }
 
         this.scope.tabs = tabs;

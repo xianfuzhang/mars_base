@@ -327,6 +327,15 @@
                        on-add="createPFC()" on-remove="batchRemove($value)">
             </mdl-table>
           </section>
+          <section class="tab-content poe" ng-if="tabSelected.value == 'poe'">
+            <mdl-table actions-show="detailModel.actionsShow"
+                       actions="detailModel.rowActions"
+                       row-select-action="onTableRowSelectAction($event)"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)">
+            </mdl-table>
+          </section>
+
         </div>
       </div>
 
@@ -350,5 +359,8 @@
     <wizard></wizard>
   </ng-controller>
 
+  <ng-controller ng-controller="poePortEstablishController">
+    <wizard></wizard>
+  </ng-controller>
 
 </div>
