@@ -116,8 +116,11 @@ export class DeviceDetailService {
           {
             'label': this.translate('MODULE.HEADER.FUNCTIONS.POE'),
             'value': 'poe',
+          },
+          {
+            'label': this.translate('MODULE.HEADER.FABRIC.ACL'),
+            'value': 'acl'
           }
-          // {'label':'acl','value':'acl'}
         ]
       }
     ];

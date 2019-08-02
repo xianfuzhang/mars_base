@@ -10,9 +10,11 @@
                  uib-dropdown-toggle
                  aria-haspopup="true"
                  aria-expanded="false">{{menu.label}}</a>
+              <div class="indicator"></div>   
               <ul class="navbar-inner__dropdown-menu" uib-dropdown-menu>
                 <li ng-repeat="item in menu.items">
-                  <a ng-click="location(item.url, $event)" class="header_ripple mdc-ripple-surface mdc-ripple-upgraded">{{item.label}}</a>
+                  <a ng-click="location(item.url, $event)"  data-url="{{item.url}}"
+                      class="header_ripple mdc-ripple-surface mdc-ripple-upgraded">{{item.label}}</a>
                 </li>
               </ul>
             </li>
