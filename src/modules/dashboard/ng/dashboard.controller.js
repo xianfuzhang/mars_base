@@ -82,7 +82,8 @@ export class DashboardController {
     let before = this.di.dateService.getBeforeDateObject(30*60*1000); // 前30分钟
     let one_minute_before = this.di.dateService.getBeforeDateObject(60 * 1000); // 前1分钟
     const GRID_NUM = 20; // chart grid number
-    const REALTIME_GRID_NUM = 10; // realtime chart grid number
+    const REALTIME_GRID_NUM = 20; // realtime chart grid number
+    const SET_INTERVAL_TIME = 15; // realtime chart update interval time 15s
     let begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
     let one_minute_before_time = new Date(one_minute_before.year, one_minute_before.month, one_minute_before.day, one_minute_before.hour, one_minute_before.minute, 0);
     let end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
@@ -345,14 +346,8 @@ export class DashboardController {
       let date, before, begin_time, end_time, isController = false, typeKey, model;
 
       function setRealtime() {
-        if(type in ['device-interface', 'device-interface-drop-error', 'controller-interface']) {
-          let delayTime = 15 * 1000; // set delay time for 15s with interface chart to keep the latest data valid
-          date = DI.dateService.getBeforeDateObject(delayTime);
-          before = DI.dateService.getBeforeDateObject(delayTime + 30 * REALTIME_GRID_NUM * 1000);
-        } else {
-          date = DI.dateService.getTodayObject();
-          before = DI.dateService.getBeforeDateObject(30 * REALTIME_GRID_NUM * 1000);
-        }
+        date = DI.dateService.getTodayObject();
+        before = DI.dateService.getBeforeDateObject(SET_INTERVAL_TIME * REALTIME_GRID_NUM * 1000);
 
         begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
         end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
@@ -401,7 +396,7 @@ export class DashboardController {
       model.isRealtime = !model.isRealtime;
       if (!model.isRealtime) {
         setHistoricalTime();
-        model.origin_begin_time = begin_time;;
+        model.origin_begin_time = begin_time;
         model.origin_end_time = end_time;
         model.begin_time = begin_time;
         model.end_time = end_time;
@@ -413,7 +408,7 @@ export class DashboardController {
         setRealtime();
         model.begin_time = begin_time;
         model.end_time = end_time;
-        model.step = 30;
+        model.step = SET_INTERVAL_TIME;
 
         model.intervalFlag = setInterval(() => {
           setRealtime();
@@ -421,7 +416,7 @@ export class DashboardController {
           model.end_time = end_time;
 
           scope.$apply();
-        }, 30 * 1000)
+        }, SET_INTERVAL_TIME * 1000)
       }
     }
   
