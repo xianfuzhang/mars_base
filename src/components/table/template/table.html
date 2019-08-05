@@ -91,7 +91,16 @@
       <div class="mdl-table-body" ng-class="{true: 'pagination-table', false: 'all-table'}[_isNeedPagination]">
         <table class="mdl-table">
           <tbody ng-if="tableModel.loading">
-            <tr class="mdl-table-body__row"><td class="text-center"><span class="loading"></span></td></tr>
+            <tr class="mdl-table-body__row">
+              <td class="text-center">
+                <!--<span class="loading"></span>-->
+                <!--<span style="position: relative;">-->
+                <!--<div style="height:20px;position: relative;">-->
+                  <loading is-loading="tableModel.loading" png-size="50" style="height:70px;"></loading>
+                <!--</div>-->
+                <!--</span>-->
+              </td>
+            </tr>
           </tbody>
           <tbody ng-if="!tableModel.loading && tableModel.filteredData.length===0">
             <tr class="mdl-table-body__row">

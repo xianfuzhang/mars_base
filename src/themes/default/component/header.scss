@@ -102,10 +102,11 @@
   opacity: 0.8;
 }
 .navbar-inner__dropdown > .indicator{
-  height: 5px;
+  height: 1px;
   opacity: 0;
-  top: 46px;
-  background: #47b8e0;
+  top: 48px;
+  //background: #47b8e0;
+  background-image:linear-gradient(to left,rgba(69,183,223, 0), rgba(69,183,223, 1) 25%, rgba(69,183,223, 1) 75%, rgba(69,183,223, 0));
   position: relative;
 }
 .navbar-inner__dropdown-toggle{
