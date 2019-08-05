@@ -69,6 +69,8 @@ export class FabricSummaryController {
     let scope = this.di.$scope;
     scope.role = this.di.roleService.getRole();
 
+    scope.isLoading = true;
+
     scope.licenseModel = {
       isOpenflowEnable: false,
       isQosEnable: false,
@@ -345,7 +347,12 @@ export class FabricSummaryController {
         if(DI.$scope.fabricModel.topoSetting.show_path){
           _render_path_select(this.endpoints);
         }
+
+        scope.isLoading = false;
         DI.$scope.$apply();
+      }, (err)=>{
+        scope.isLoading = false;
+        DI.notificationService.renderWarning(scope, err.data.message|err.data|err)
       });
     };
 
