@@ -61,7 +61,8 @@ export class DeviceDetailController {
     let before = this.di.dateService.getBeforeDateObject(30*60*1000); // 前30分钟
     let one_minute_before = this.di.dateService.getBeforeDateObject(60 * 1000); // 前1分钟
     const GRID_NUM = 24; // chart grid number
-    const REALTIME_GRID_NUM = 16; // chart grid number
+    const REALTIME_GRID_NUM = 20; // chart grid number
+    const SET_INTERVAL_TIME = 15; // realtime chart update interval time 15s
     let begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, 0);
     let one_minute_before_time = new Date(one_minute_before.year, one_minute_before.month, one_minute_before.day, one_minute_before.hour, one_minute_before.minute, 0);
     let end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, 0);
@@ -249,7 +250,7 @@ export class DeviceDetailController {
 
       function setRealtime() {
         date = DI.dateService.getTodayObject();
-        before = DI.dateService.getBeforeDateObject(30 * REALTIME_GRID_NUM * 1000);
+        before = DI.dateService.getBeforeDateObject(SET_INTERVAL_TIME * REALTIME_GRID_NUM * 1000);
         begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
         end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
       }
@@ -292,7 +293,7 @@ export class DeviceDetailController {
         setRealtime();
         model.begin_time = begin_time;
         model.end_time = end_time;
-        model.step = 30;
+        model.step = SET_INTERVAL_TIME;
 
         model.intervalFlag = setInterval(() => {
           setRealtime();
@@ -300,7 +301,7 @@ export class DeviceDetailController {
           model.end_time = end_time;
 
           scope.$apply();
-        }, 30 * 1000)
+        }, SET_INTERVAL_TIME * 1000)
       }
     }
 
