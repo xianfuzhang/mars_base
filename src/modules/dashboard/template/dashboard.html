@@ -127,7 +127,8 @@
                             <div class="item" ng-class="{'+disable': dashboardModel.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.cpu.isRealtime || chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
                         </div>
 
-                        <div class="chart-loading" ng-show="dashboardModel.cpu.loading"></div>
+                        <!--<div class="chart-loading" ng-show="dashboardModel.cpu.loading"></div>-->
+                        <loading is-loading="dashboardModel.cpu.loading" png-size="60" style="position: absolute;"></loading>
                     </div>
 
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
@@ -151,7 +152,8 @@
                             <div class="item" ng-class="{'+disable': dashboardModel.memory.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.memory.isRealtime || chartSetting('device-memory')"><i class="material-icons">settings</i></div>
                         </div>
 
-                        <div class="chart-loading" ng-show="dashboardModel.memory.loading"></div>
+                        <!--<div class="chart-loading" ng-show="dashboardModel.memory.loading"></div>-->
+                        <loading is-loading="dashboardModel.memory.loading" png-size="60" style="position: absolute;"></loading>
                     </div>
                 </div>
 
@@ -181,7 +183,7 @@
                             <div class="item" ng-class="{'+disable': dashboardModel.interface.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.interface.isRealtime || chartSetting('device-interface')"><i class="material-icons">settings</i></div>
                         </div>
 
-                        <div class="chart-loading" ng-show="dashboardModel.interface.loading"></div>
+                        <loading is-loading="dashboardModel.interface.loading" png-size="60" style="position: absolute;"></loading>
                     </div>
 
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
@@ -209,12 +211,12 @@
                             <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-interface-drop-error')"><i class="material-icons">settings</i></div>
                         </div>
 
-                        <div class="chart-loading" ng-show="dashboardModel.dropErrorInterface.loading"></div>
+                        <loading is-loading="dashboardModel.dropErrorInterface.loading" png-size="60" style="position: absolute;"></loading>
                     </div>
                 </div>
 
                 <div class="mars-row-flex">
-                    <div class="col-gutter-md left-panel mars-panel dashboard-panel">
+                    <div class="col-gutter-md left-panel mars-panel dashboard-panel" style="position:relative;">
                         <canvas id="switch-disk-usage-rate" height="300"
                                 class="chart chart-bar"
                                 chart-type="bar"
@@ -231,7 +233,9 @@
                             <!--<div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-disk')"><i class="material-icons">undo</i></div>-->
                         </div>
 
-                        <div class="chart-loading" ng-show="dashboardModel.disk.loading"></div>
+                        <!--<div class="chart-loading" ng-show="dashboardModel.disk.loading"></div>-->
+                        <!--<loading is-loading="dashboardModel.disk.loading" png-size="100" style="position: absolute;top: 50%;left: 50%;"></loading>-->
+                        <loading is-loading="dashboardModel.disk.loading" png-size="60" style="position: absolute;"></loading>
                     </div>
 
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
@@ -253,7 +257,7 @@
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.controller.cpu.isRealtime || chartSetting('controller-cpu')"><i class="material-icons">settings</i></div>
                         </div>
 
-                        <div class="chart-loading" ng-show="dashboardModel.controller.cpu.loading"></div>
+                        <loading is-loading="dashboardModel.controller.cpu.loading" png-size="60" style="position: absolute;"></loading>
                     </div>
                 </div>
 
@@ -277,7 +281,7 @@
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.memory.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.controller.memory.isRealtime || chartSetting('controller-memory')"><i class="material-icons">settings</i></div>
                         </div>
 
-                        <div class="chart-loading" ng-show="dashboardModel.controller.memory.loading"></div>
+                        <loading is-loading="dashboardModel.controller.memory.loading" png-size="60" style="position: absolute;"></loading>
                     </div>
 
                     <div class="col-gutter-md left-panel mars-panel dashboard-panel">
@@ -301,7 +305,7 @@
 
                         </div>
 
-                        <div class="chart-loading" ng-show="dashboardModel.controller.interface.loading"></div>
+                        <loading is-loading="dashboardModel.controller.controller.interface.loading" png-size="60" style="position: absolute;"></loading>
                     </div>
                 </div>
             </div>
