@@ -548,6 +548,7 @@ export class mdlTable {
       scope.tableModel.columnFilterConditions = [];
       scope.tableModel.searchResult = '';
       scope.tableModel.search['value'] = scope.tableModel.searchResult;
+      scope.tableModel.filteredData = [];
       scope.tableModel.loading = true;
       return scope.provider.query(params).then(
         function (response) {
