@@ -129,6 +129,10 @@
   line-height: 25px;
   min-height: 25px;
   border-radius: 4px;
+  white-space: normal;
+}
+.notification-wrapper__content pre{
+  white-space: pre-wrap;
 }
 .alert-warning{
   color: #a94442;
