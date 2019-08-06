@@ -812,7 +812,7 @@ export class DashboardController {
       analyzer.forEach((controller) => {
         let data = [];
         controller.analyzer.forEach((item) => {
-          data.push((1 - item.idle_percent).toFixed(2))
+          data.push((100 - item.idle_percent).toFixed(2))
         });
         dataArr.push(data);
         series.push(controller.name);
