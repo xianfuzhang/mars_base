@@ -12,6 +12,11 @@ html{
   color: map_get($colors, body_color);
 }
 
+
+::-webkit-scrollbar-thumb{
+  background: rgba(253, 253, 253, 0.4);
+}
+
 table {
   border-color: map_get($colors, table_border_color);
 }
