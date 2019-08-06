@@ -475,7 +475,7 @@ export class headerController{
 
   changeSelectedMenuItem(selectedUrl) {
     if (selectedUrl !== '/dashboard' && selectedUrl !== '/logout') {
-      let ulNodes = document.querySelector('.navbar-inner__nav').children;
+      let ulNodes = document.querySelector('.navbar-inner__nav') && document.querySelector('.navbar-inner__nav').children || [];
       for (let i = 0, l = ulNodes.length; i < l; i++) {
         if (ulNodes[i].classList.contains('selected')) ulNodes[i].classList.remove('selected');
         let liNodes = ulNodes[i].querySelectorAll('li>a');
