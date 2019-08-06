@@ -39,6 +39,8 @@ export class headerController{
     this.scope.userConfig = [
       {'label': this.di.$filter('translate')('MODULE.HEADER.ACCOUNT.LOGOUT'), 'url': '/logout'}
     ];
+    this.scope.timeout1 = null;
+    this.scope.timeout2 = null;
     //this.scope.alerts_acount = 0;
     this.scope.location = (url, event) => {
       this.scope.$emit('change-selected-menu-item', {'url': url});
@@ -99,7 +101,7 @@ export class headerController{
       this.filterMenusByApps();
     }));
     unsubscribers.push(this.di.$rootScope.$on('change-selected-menu-item', (event, param) => {
-      this.di.$timeout(() => {
+      this.scope.timeout1 = this.di.$timeout(() => {
         this.changeSelectedMenuItem(param.url);
       });
     }));
@@ -121,6 +123,8 @@ export class headerController{
       unsubscribers.forEach((cb) => {
         cb();
       });
+      this.di.$timeout.cancel(this.scope.timeout1);
+      this.di.$timeout.cancel(this.scope.timeout2);
     });
   }
 
@@ -146,9 +150,9 @@ export class headerController{
 
     this.filterMenusByApps();
     this.setMessageWebsocket();
-    this.di.$timeout(() => {
+    this.scope.timeout2 = this.di.$timeout(() => {
       this.changeSelectedMenuItem(url);
-    }, 500);
+    }, 1000);
   }
 
   setMessageWebsocket() {
