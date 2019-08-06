@@ -190,6 +190,14 @@
   min-width: 550px;
 }
 
+.dashboard__body::-webkit-scrollbar {
+  height: 4px;
+  width: 8px;
+}
+.dashboard__body::-webkit-scrollbar-thumb{
+  background: rgba(253, 253, 253, 0.4);
+}
+
 .dashboard__body .left-panel{
   flex-grow:3;position:relative;
 }
