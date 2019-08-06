@@ -2,7 +2,8 @@
  * 页面通用样式
  */
 body{
-  background-color: map_get($colors, body_background_color);
+  //background-color: map_get($colors, body_background_color);
+  background:linear-gradient(to bottom, map_get($colors, body_background_color), #47b8e033);
   color: map_get($colors, body_color);
 }
 
