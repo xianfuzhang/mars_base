@@ -53,7 +53,7 @@ export class Loading {
 
       // scope.loadingStyle.circle = (parseInt(pSize)/2) * 0.95;
       // console.log(scope.loadingStyle.circle);
-      console.log("============" + scope.circleStyle);
+      // console.log("============" + scope.circleStyle);
       // let unSubscribes = [];
       // this.imageCount = 11;
       // let loading = element.find('canvas')[0];
