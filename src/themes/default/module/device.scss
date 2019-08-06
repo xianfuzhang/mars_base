@@ -334,6 +334,15 @@
   overflow-y: auto;
   flex-wrap: wrap;
 }
+
+.device-summary::-webkit-scrollbar {
+  height: 4px;
+  width: 8px;
+}
+.device-summary::-webkit-scrollbar-thumb{
+  //background: rgba(253, 253, 253, 0.4);
+}
+
 .tab-content .left-panel{
   position:relative;
   width: 80%;

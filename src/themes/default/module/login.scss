@@ -1,5 +1,6 @@
 .login{
   background: url('../../assets/images/background.png') no-repeat center center fixed;
+  //background: url('../../assets/images/login_bg_big.jpg') no-repeat center center fixed;
   background-size: cover;
   height: 100%;
   width: 100%;
@@ -13,20 +14,27 @@
 }
 
 .login__back{
-  width:600px;
+  //width:600px;
   height: 600px;
 }
 
-.login__back:before{
+.login-logo{
   background: url('../../assets/images/mars_login_background.png') no-repeat center center;
-  content: "";
-  position: absolute;
-  width:600px;
-  height: 600px;
-  transform: scale(1.5);
-  top:-60px;
-  opacity:.1;
+  width:400px;
+  height: 400px;
+  background-size: 300px 300px;
 }
+
+//.login__back:before{
+//  background: url('../../assets/images/mars_login_background.png') no-repeat center center;
+//  content: "";
+//  position: absolute;
+//  width:600px;
+//  height: 600px;
+//  transform: scale(1.5);
+//  top:-60px;
+//  opacity:.1;
+//}
 
 .login-fields{
   z-index:10;
@@ -121,6 +129,10 @@
   line-height: 25px;
   min-height: 25px;
   border-radius: 4px;
+  white-space: normal;
+}
+.notification-wrapper__content pre{
+  white-space: pre-wrap;
 }
 .alert-warning{
   color: #a94442;
@@ -163,6 +175,16 @@
 
 .login-button{
   border-radius: 20px;
+  background-color: #45b7df;
+  //color: whitesmoke;
+}
+
+.login-button:hover:not(.disabled){
+  background-color: #45b7df;
+}
+
+.login-button:hover{
+  background-color: #45b7df;
 }
 
 /*.logo_svg_outer:before{
@@ -225,16 +247,16 @@
 }
 .use-text:nth-child(5) {
   //stroke: #1B8798;
-  stroke: #dadada;
+  stroke: #45b7df;
   opacity:1;
   //stroke-dasharray: 7% 28%;
   //stroke-dashoffset: 35%;
   stroke-dashoffset: 0%;
   stroke-dasharray: 100% 0%;
-  fill: #dadada;
-
+  fill: #45b7df;
   user-select: none;
-  animation: animation5 2s ease-in-out;
+
+  animation: animation5 1.5s ease-in-out;
 
 }
 
@@ -336,39 +358,69 @@
 
 @keyframes animation4 {
   0% {
-    stroke: #47b7e0;
+    stroke: #dadada;
+
     opacity: 1;
     stroke-dashoffset: 35%;
     stroke-dasharray: 0 87.5%;
   }
   50% {
-    stroke: #47b7e0;
+    stroke: #dadada;
     opacity: 1;
     stroke-dasharray: 7% 28%;
     stroke-dashoffset: 28%;
   }
   75% {
-    stroke: #47b7e0;
+    stroke: #dadada;
     opacity: 1;
     stroke-dasharray: 0 87.5%;
     stroke-dashoffset: 35%;
   }
   100% {
     //stroke: #47b7e0;
-    stroke: #47b7e0;
+    stroke: #dadada;
     opacity: 0;
     stroke-dasharray: 0 87.5%;
     stroke-dashoffset: 35%;
   }
 }
 
+//@keyframes animation4 {
+//  0% {
+//    stroke: #47b7e0;
+//
+//    opacity: 1;
+//    stroke-dashoffset: 35%;
+//    stroke-dasharray: 0 87.5%;
+//  }
+//  50% {
+//    stroke: #47b7e0;
+//    opacity: 1;
+//    stroke-dasharray: 7% 28%;
+//    stroke-dashoffset: 28%;
+//  }
+//  75% {
+//    stroke: #47b7e0;
+//    opacity: 1;
+//    stroke-dasharray: 0 87.5%;
+//    stroke-dashoffset: 35%;
+//  }
+//  100% {
+//    //stroke: #47b7e0;
+//    stroke: #47b7e0;
+//    opacity: 0;
+//    stroke-dasharray: 0 87.5%;
+//    stroke-dashoffset: 35%;
+//  }
+//}
+
 @keyframes animation5 {
   0% {
     //stroke: #47b7e0;
-    stroke: #dadada;
+    stroke: #45b7df;
     //fill: none;
     opacity: 1;
-    fill: #dadada00;
+    fill: #45b7df00;
     stroke-dashoffset: 35%;
     stroke-dasharray: 0 87.5%;
   }
@@ -383,16 +435,16 @@
   //}
   75% {
     //stroke: #47b7e0;
-    stroke: #dadada;
-    fill: #dadada55;
+    stroke: #45b7df;
+    fill: #45b7df55;
     opacity: 1;
     stroke-dashoffset: 0%;
     stroke-dasharray: 100% 0%;
   }
   100% {
-    stroke: #dadada;
+    stroke: #45b7df;
     //stroke: #1B8798;
-    fill: #dadada;
+    fill: #45b7df;
     opacity: 1;
     stroke-dashoffset: 0%;
     stroke-dasharray: 100% 0%;

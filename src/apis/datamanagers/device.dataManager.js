@@ -142,7 +142,7 @@ export class DeviceDataManager {
         defer.resolve(res);
       },
       (error) => {
-        defer.resolve({'data': {'statistics': []}});
+        defer.reject(error);
       }
     );
     return defer.promise;

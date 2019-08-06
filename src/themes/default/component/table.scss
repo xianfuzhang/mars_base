@@ -9,7 +9,7 @@ mdc设置组件颜色
   flex-direction: column;
   height: 100%;
   padding: 0 5%;
-  background-color: #eff3f6;
+  //background-color: #eff3f6;
   border-radius: 8px;
   //transition: box-shadow 300ms ease-in-out;
 }
@@ -164,6 +164,15 @@ mdc设置组件颜色
   overflow: auto;
   /* border: 1px solid rgba(0, 0, 0, 0.1); */
 }
+
+.mdl-table-body::-webkit-scrollbar {
+  height: 4px;
+  width: 8px;
+}
+.mdl-table-body::-webkit-scrollbar-thumb{
+  //background: rgba(253, 253, 253, 0.4);
+}
+
 .mdl-table-footer{
   position: relative;
   float: left;
@@ -306,7 +315,7 @@ mdc设置组件颜色
   border-left: 1px solid transparent;
 }
 .mdl-table-header__row th.border-left{
-  border-left-color: #9dacac;
+  border-left-color: #9dacac4a;
 }
 .mdl-table-header__row th:first-child{
   border-left: 0;

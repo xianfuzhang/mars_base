@@ -591,7 +591,17 @@ export class DeviceDetailController {
     };
 
     this.scope.onTabChange= (tab) => {
+      if(this.scope.tabSwitch){
+        console.log("One page is loading!");
+      }
+      if(this.scope.tabSelected !== null && tab !== null){
+        if(this.scope.tabSelected.value === tab.value){
+          console.log("The page " + tab.label +" is showing");
+          return;
+        }
+      }
       if (tab && !this.scope.tabSwitch){
+        console.log("Start to load page: " + tab.label);
         this.scope.tabSelected = tab;
         this.scope.page_title =  this.scope._page_title + ' - ' + tab.label;
         this.scope.tabSwitch = true;
@@ -820,6 +830,7 @@ export class DeviceDetailController {
       query: (params) => {
         let defer = this.di.$q.defer();
         this.getEntities(params).then((res) => {
+          console.log("Page load data success");
           this.scope.tabSwitch = false;
           this.entityStandardization(res.data);
           this.scope.detailModel.total = res.total;
@@ -830,7 +841,9 @@ export class DeviceDetailController {
   
           // select the port
           this.selectEntity();
+          console.log("Page load success");
         }, err=>{
+          console.log("Page load data error");
           this.scope.tabSwitch = false;
           defer.resolve({
             data: [],
@@ -1031,18 +1044,26 @@ export class DeviceDetailController {
             tempDefer = this.di.$q.defer();
         this.di.deviceDataManager.getDeviceTemperatureSensors(this.scope.deviceId).then((data) => {
           tempDefer.resolve(data);
+        }, err => {
+          tempDefer.reject(err);
         });
         defersArr.push(tempDefer.promise);
         this.di.deviceDataManager.getDevicePsuSensors(this.scope.deviceId).then((data) => {
           psuDefer.resolve(data);
+        }, err => {
+          psuDefer.reject(err);
         });
         defersArr.push(psuDefer.promise);
         this.di.deviceDataManager.getDeviceFanSensors(this.scope.deviceId).then((data) => {
           fanDefer.resolve(data);
+        }, err => {
+          fanDefer.reject(err);
         });
         defersArr.push(fanDefer.promise);
         this.di.$q.all(defersArr).then((resArr) => {
           defer.resolve({'data': resArr});
+        }, err=>{
+          defer.reject(err);
         });
         break;
       case 'analyzer':
@@ -1076,6 +1097,8 @@ export class DeviceDetailController {
         // get device ports
         this.di.deviceDataManager.getDevicePorts(this.scope.deviceId, params).then((res) => {
           portsDefer.resolve(res.data);
+        }, err=>{
+          portsDefer.reject(err);
         });
         deferArr.push(portsDefer.promise);
         
@@ -1083,6 +1106,8 @@ export class DeviceDetailController {
           // get segments and ports
           this.getSegmentsPorts(this.scope.deviceId).then((res) => {
             segmentsDefer.resolve(res);
+          }, err=>{
+            segmentsDefer.reject(err);
           });
           deferArr.push(segmentsDefer.promise)
         }
@@ -1093,6 +1118,8 @@ export class DeviceDetailController {
           } else {
             defer.resolve({data: {ports: resArr[0].ports}, total: resArr[0].total});
           }
+        }, err => {
+            defer.reject(err);
         })
         break;
       case 'link':
@@ -1103,22 +1130,32 @@ export class DeviceDetailController {
           });
           this.di.deviceDataManager.getDeviceLinks(this.scope.deviceId, params).then((res) => {
             defer.resolve({'data': res.data, 'total': res.data.total});
+          }, err => {
+            defer.reject(err);
           });
-        });        
+        }, err => {
+          defer.reject(err);
+        });
         break;
       case 'statistic':
         this.di.deviceDataManager.getDevicePortsStatistics(this.scope.deviceId, params).then((res) => {
           defer.resolve({'data': res.data.statistics, 'total': res.data.total});
+        }, err => {
+          defer.reject(err);
         });
         break;
       case 'flow':
         this.di.deviceDataManager.getDeviceFlows(this.scope.deviceId, params).then((res) => {
           defer.resolve({'data': res.data.flows, 'total': res.data.total});
+        }, err => {
+          defer.reject(err);
         });
         break;
       case 'endpoint':
         this.di.deviceDataManager.getEndpoints(params).then((res) => {
           defer.resolve({'data': res.data.hosts, 'total': res.data.total});
+        }, err => {
+          defer.reject(err);
         });
         break;
       case 'group':

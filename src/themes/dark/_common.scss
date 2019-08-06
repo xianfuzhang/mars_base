@@ -2,13 +2,19 @@
  * 页面通用样式
  */
 body{
-  background-color: map_get($colors, body_background_color);
+  //background-color: map_get($colors, body_background_color);
+  background:linear-gradient(to bottom, map_get($colors, body_background_color), #47b8e033);
   color: map_get($colors, body_color);
 }
 
 html{
   background-color: map_get($colors, body_background_color);
   color: map_get($colors, body_color);
+}
+
+
+::-webkit-scrollbar-thumb{
+  background: rgba(253, 253, 253, 0.4);
 }
 
 table {
