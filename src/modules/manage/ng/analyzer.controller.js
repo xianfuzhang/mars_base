@@ -263,6 +263,67 @@ export class AnalyzerController {
       }
     }
 
+    this.di.$scope.refresh = (type) => {
+      let date, before, begin_time, end_time, isController = false, typeKey, model;
+
+      date = DI.dateService.getTodayObject();
+      before = DI.dateService.getBeforeDateObject(30 * 60 * 1000);
+      begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
+      end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
+
+      scope.nginxTimerangeAnalyzer.isRealtime = !scope.nginxTimerangeAnalyzer.isRealtime;
+      if (!scope.nginxTimerangeAnalyzer.isRealtime) {
+        setHistoricalTime();
+        scope.nginxTimerangeAnalyzer.originBeginTime = begin_time;;
+        scope.nginxTimerangeAnalyzer.originEndTime = end_time;
+        scope.nginxTimerangeAnalyzer.startTime = begin_time;
+        scope.nginxTimerangeAnalyzer.endTime = end_time;
+
+        clearInterval(scope.nginxTimerangeAnalyzer.intervalFlag);
+        scope.nginxTimerangeAnalyzer.intervalFlag = null;
+      } else {
+        setRealtime();
+        scope.nginxTimerangeAnalyzer.startTime = begin_time;
+        scope.nginxTimerangeAnalyzer.endTime = end_time;
+
+        scope.nginxTimerangeAnalyzer.intervalFlag = setInterval(() => {
+          setRealtime();
+          scope.nginxTimerangeAnalyzer.startTime = begin_time;
+          scope.nginxTimerangeAnalyzer.endTime = end_time;
+
+          scope.$apply();
+        }, 30 * 1000)
+      }
+    }
+
+    this.di.$scope.refresh = (type) => {
+      let date, before, begin_time, end_time, isController = false, typeKey, model;
+
+      date = DI.dateService.getTodayObject();
+      before = DI.dateService.getBeforeDateObject(30 * 60 * 1000);
+      begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
+      end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
+
+      switch(type) {
+        case 'nginx-type-analyzer':
+          scope.nginxTypeAnalyzer.startTime = begin_time;
+          scope.nginxTypeAnalyzer.endTime = end_time;
+          break;
+        case 'nginx-analyzer':
+          scope.nginxTimerangeAnalyzer.startTime = begin_time;
+          scope.nginxTimerangeAnalyzer.endTime = end_time;
+          break;
+        case 'syslog-analyzer':
+          scope.syslogAnalyzer.startTime = begin_time;
+          scope.syslogAnalyzer.endTime = end_time;
+          break;
+        case 'filebeat-analyzer':
+          scope.filebeatAnalyzer.startTime = begin_time;
+          scope.filebeatAnalyzer.endTime = end_time;
+          break;
+      }
+    }
+
     scope.chartSetting = (type) => {
       let beginTime, endTime;
       switch(type) {
@@ -408,7 +469,8 @@ export class AnalyzerController {
       const pad = this.pad;
       let options = {
         title: {
-          text: this.translate('MODULES.MANAGE.ELASTICSEARCH.API_DETAIL_ANY')
+          display: true,
+          // text: this.translate('MODULES.MANAGE.ELASTICSEARCH.API_DETAIL_ANY')
         },
         scales: {
           yAxes: [{
@@ -495,7 +557,7 @@ export class AnalyzerController {
       let options = {
         title: {
           display: true,
-          text: title,
+          // text: title,
         },
         scales: {
           yAxes: [{
@@ -603,7 +665,7 @@ export class AnalyzerController {
       let options = {
         title: {
           display: true,
-          text: this.translate('MODULES.MANAGE.ELASTICSEARCH.SYSLOG_DETAIL_ANY'),
+          // text: this.translate('MODULES.MANAGE.ELASTICSEARCH.SYSLOG_DETAIL_ANY'),
         },
         scales: {
           yAxes: [{
@@ -687,7 +749,7 @@ export class AnalyzerController {
       let options = {
         title: {
           display: true,
-          text: this.translate('MODULES.MANAGE.ELASTICSEARCH.SYSTEM_DETAIL_ANY'),
+          // text: this.translate('MODULES.MANAGE.ELASTICSEARCH.SYSTEM_DETAIL_ANY'),
         },
         scales: {
           yAxes: [{
