@@ -25,6 +25,15 @@ body{
   font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 13px;
 }
+
+::-webkit-scrollbar {
+  height: 4px;
+  width: 8px;
+}
+::-webkit-scrollbar-thumb{
+  background: rgba(253, 253, 253, 0.4);
+}
+
 tbody{
   overflow-y: auto;
 }
@@ -52,8 +61,8 @@ ng-view {
 .app-main{
   display: flex;
   flex-direction: column;
-  height: calc(100% - 50px);
-  min-height: 450px;
+  //height: calc(100% - 50px);
+  //min-height: 450px;
   overflow: auto;
   flex-grow: 1;
   flex-shrink: 1;
@@ -90,6 +99,9 @@ ng-view {
   width: 100%;
   box-sizing: border-box;
 }
+
+
+
 .main__content__full-width{
   width: 100%;
   height: auto;
@@ -108,6 +120,14 @@ ng-view {
   float: left;
   height: 100%;
   width: 100%;
+}
+
+.tab-content::-webkit-scrollbar {
+  height: 4px;
+  width: 8px;
+}
+.tab-content::-webkit-scrollbar-thumb{
+  background: rgba(253, 253, 253, 0.4);
 }
 
 .mars-row {
