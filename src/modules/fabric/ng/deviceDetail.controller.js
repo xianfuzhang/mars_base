@@ -310,6 +310,37 @@ export class DeviceDetailController {
       }
     }
 
+    this.di.$scope.refresh = (type) => {
+      let date, before, begin_time, end_time, isController = false, typeKey, model;
+
+      date = DI.dateService.getTodayObject();
+      before = DI.dateService.getBeforeDateObject(30 * 60 * 1000);
+      begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
+      end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
+
+      switch(type) {
+        case 'device-cpu':
+          typeKey = 'cpu';
+          break;
+        case 'device-memory':
+          typeKey = 'memory';
+          break;
+        case 'device-ports':
+          typeKey = 'ports';
+          break;
+        case 'device-port':
+          typeKey = 'port';
+          break;
+      }
+
+      model = scope.chartModel[typeKey];
+      model.origin_begin_time = begin_time;
+      model.origin_end_time = end_time;
+      model.begin_time = begin_time;
+      model.end_time = end_time;
+      model.step = Math.floor((model.origin_end_time.getTime() - model.origin_begin_time) / (GRID_NUM * 1000));
+    }
+
     this.scope.resetTimeScale = (type) => {
       if (type === 'device-cpu') {
         this.di.$scope.chartModel.cpu.begin_time = scope.chartModel.cpu.origin_begin_time;
@@ -1361,7 +1392,7 @@ export class DeviceDetailController {
     let options = {
       title: {
         display: true,
-        text: this.translate('MODULES.SWITCH.DETAIL.CPU_USAGE'),
+        // text: this.translate('MODULES.SWITCH.DETAIL.CPU_USAGE'),
       },
       legend: {
         display: false
@@ -1481,7 +1512,7 @@ export class DeviceDetailController {
     let options = {
       title: {
         display: true,
-        text: this.translate('MODULES.SWITCH.DETAIL.MEMORY_USAGE'),
+        // text: this.translate('MODULES.SWITCH.DETAIL.MEMORY_USAGE'),
       },
       legend: {
         display: false
@@ -1582,7 +1613,8 @@ export class DeviceDetailController {
     const pad = this.pad;
     let options = {
       title: {
-        text: this.translate('MODULES.SWITCH.DETAIL.DISK_USAGE')
+        display: true,
+        // text: this.translate('MODULES.SWITCH.DETAIL.DISK_USAGE')
       },
       legend: {
         display: true,
