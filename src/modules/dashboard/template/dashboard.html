@@ -127,10 +127,10 @@
                         </div>
 
                         <div class="setting-group out_title">
-                            <div class="item" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('device-cpu')"><i class="material-icons">refresh</i></div>
-                            <div class="item" title="{{dashboardModel.cpu.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-cpu')"><i class="material-icons">{{dashboardModel.cpu.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
-                            <div class="item" ng-class="{'+disable': dashboardModel.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.cpu.isRealtime || resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
-                            <div class="item" ng-class="{'+disable': dashboardModel.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.cpu.isRealtime || chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.cpu.isRealtime || dashboardModel.cpu.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('device-cpu')"><i class="material-icons">refresh</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.cpu.loading}" title="{{dashboardModel.cpu.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-cpu')"><i class="material-icons">{{dashboardModel.cpu.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.cpu.isRealtime || dashboardModel.cpu.loading}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.cpu.isRealtime || resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.cpu.isRealtime || dashboardModel.cpu.loading}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.cpu.isRealtime || chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
                         </div>
 
                         <!--<div class="chart-loading" ng-show="dashboardModel.cpu.loading"></div>-->
@@ -156,10 +156,10 @@
                         </div>
 
                         <div class="setting-group out_title">
-                            <div class="item" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('device-memory')"><i class="material-icons">refresh</i></div>
-                            <div class="item" title="{{dashboardModel.memory.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-memory')"><i class="material-icons">{{dashboardModel.memory.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
-                            <div class="item" ng-class="{'+disable': dashboardModel.memory.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.memory.isRealtime || resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
-                            <div class="item" ng-class="{'+disable': dashboardModel.memory.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.memory.isRealtime || chartSetting('device-memory')"><i class="material-icons">settings</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.memory.isRealtime || dashboardModel.memory.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('device-memory')"><i class="material-icons">refresh</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.memory.loading}"  title="{{dashboardModel.memory.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-memory')"><i class="material-icons">{{dashboardModel.memory.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.memory.isRealtime || dashboardModel.memory.loading}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.memory.isRealtime || resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.memory.isRealtime || dashboardModel.memory.loading}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.memory.isRealtime || chartSetting('device-memory')"><i class="material-icons">settings</i></div>
                         </div>
 
                         <!--<div class="chart-loading" ng-show="dashboardModel.memory.loading"></div>-->
@@ -188,7 +188,7 @@
 
                         <div class="setting-group out_title">
                             <mdl-select ng-model="dashboardModel.interface.typeOption" display-label="{options: interfaceTypes}" disable="dashboardModel.interface.isRealtime"></mdl-select>
-                            <div class="item" ng-class="{'+disable': dashboardModel.interface.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('device-interface')"><i class="material-icons">refresh</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.interface.isRealtime || dashboardModel.interface.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('device-interface')"><i class="material-icons">refresh</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.interface.loading}" title="{{dashboardModel.interface.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-interface')"><i class="material-icons">{{dashboardModel.interface.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.interface.isRealtime || dashboardModel.interface.loading}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.interface.isRealtime || resetTimeScale('device-interface')"><i class="material-icons">undo</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.interface.isRealtime || dashboardModel.interface.loading}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.interface.isRealtime || chartSetting('device-interface')"><i class="material-icons">settings</i></div>
@@ -273,7 +273,7 @@
                         </div>
 
                         <div class="setting-group out_title">
-                            <div class="item" ng-class="{'+disable': dashboardModel.controller.cpu.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('controller-cpu')"><i class="material-icons">refresh</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.controller.cpu.isRealtime || dashboardModel.controller.cpu.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('controller-cpu')"><i class="material-icons">refresh</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.cpu.loading}" title="{{dashboardModel.controller.cpu.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('controller-cpu')"><i class="material-icons">{{dashboardModel.controller.cpu.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.cpu.isRealtime || dashboardModel.controller.cpu.loading}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.controller.cpu.isRealtime || resetTimeScale('controller-cpu')"><i class="material-icons">undo</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.cpu.isRealtime || dashboardModel.controller.cpu.loading}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.controller.cpu.isRealtime || chartSetting('controller-cpu')"><i class="material-icons">settings</i></div>
@@ -303,7 +303,7 @@
                         </div>
 
                         <div class="setting-group out_title">
-                            <div class="item" ng-class="{'+disable': dashboardModel.controller.memory.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('controller-memory')"><i class="material-icons">refresh</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.controller.memory.isRealtime || dashboardModel.controller.memory.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('controller-memory')"><i class="material-icons">refresh</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.memory.loading}" title="{{dashboardModel.controller.memory.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('controller-memory')"><i class="material-icons">{{dashboardModel.controller.memory.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.memory.isRealtime || dashboardModel.controller.memory.loading}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.controller.memory.isRealtime || resetTimeScale('controller-memory')"><i class="material-icons">undo</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.memory.isRealtime || dashboardModel.controller.memory.loading}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.controller.memory.isRealtime || chartSetting('controller-memory')"><i class="material-icons">settings</i></div>
@@ -331,7 +331,7 @@
                         </div>
 
                         <div class="setting-group out_title">
-                            <div class="item" ng-class="{'+disable': dashboardModel.controller.interface.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('controller-interface')"><i class="material-icons">refresh</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.controller.interface.isRealtime || dashboardModel.controller.interface.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('controller-interface')"><i class="material-icons">refresh</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.interface.loading}" title="{{dashboardModel.controller.interface.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('controller-interface')"><i class="material-icons">{{dashboardModel.controller.interface.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.interface.isRealtime || dashboardModel.controller.interface.loading}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.controller.interface.isRealtime || resetTimeScale('controller-interface')"><i class="material-icons">undo</i></div>
                             <div class="item" ng-class="{'+disable': dashboardModel.controller.interface.isRealtime || dashboardModel.controller.interface.loading}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.controller.interface.isRealtime || chartSetting('controller-interface')"><i class="material-icons">settings</i></div>
