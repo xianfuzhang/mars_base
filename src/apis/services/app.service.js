@@ -131,6 +131,7 @@ export class appService {
           {'label': this.translate('MODULE.HEADER.FABRIC.MONITOR'), 'url': '/monitor', 'role': 2},
           {'label': 'QoS', 'url': '/qos', 'role': 3},
           {'label': this.translate('MODULE.HEADER.FABRIC.STORM'), 'url': '/storm_control', 'role': 2},
+          {'label': 'EGP', 'url': '/egp', 'role': 3}
         ]
       },
       {
@@ -141,7 +142,6 @@ export class appService {
           {'label': 'Tenant', 'url': '/tenant', 'role': 3},
           {'label': 'Segment', 'url': '/segment', 'role': 3},
           {'label': this.translate('MODULE.HEADER.FABRIC.ENDPOINTS'), 'url': '/endpoints', 'role': 2},
-          {'label': 'EGP', 'url': '/egp', 'role': 3}
         ]
       },
       {
