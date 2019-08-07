@@ -389,7 +389,7 @@ export class ElasticsearchController {
             }
           }],
           xAxes: [{
-            barThickness: 50,
+            barThickness: 40,
           }],
         },
         tooltips: {

@@ -1468,7 +1468,7 @@ export class DashboardController {
             },
           }],
           xAxes: [{
-            barThickness: 40,
+            barThickness: 'flex',
           }],
         },
         tooltips: {
@@ -1835,7 +1835,7 @@ export class DashboardController {
                 }],
                 xAxes: [{
                   stacked: true,
-                  barThickness: 40,
+                  barThickness: 'flex',
                 }],
             },
             tooltips: {
