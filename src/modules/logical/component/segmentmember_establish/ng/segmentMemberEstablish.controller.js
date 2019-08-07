@@ -648,10 +648,22 @@ export class SegmentMemberEstablishController {
 
     let _formatVlanPorts = () =>{
       let ports = [];
+      let isContainsAny = false;
+      let anyPorts = [];
       this.di._.forEach(scope.memberModel.vlanPorts,(port)=>{
         ports.push(port.port.value + '/' + port.tagValue.value)
+        if(port.port.value === 'any'){
+          isContainsAny = true;
+          anyPorts.push(port.port.value + '/' + port.tagValue.value)
+          // anyPorts.push(port)
+        }
       });
-      return ports;
+
+      if(isContainsAny){
+        return anyPorts;
+      } else {
+        return ports;
+      }
     };
 
 
@@ -763,6 +775,13 @@ export class SegmentMemberEstablishController {
               }
             }
           });
+
+          let filterPorts =  scope.memberModel.vlanPorts.filter(p=>{return p.port.value === 'any'});
+          if(filterPorts.length > 1){
+            validJson_Copy.valid = false;
+            validJson_Copy.errorMessage = this.translate("MODULES.LOGICAL.SEGMENT_MEMBER.MSG.ALREADY_HAS_MORE_ALL_PORTS");
+          }
+
         } else if(scope.memberModel.vlanPorts.length === 0 && scope.memberModel.vlanLogicalPorts.length === 0 && scope.memberModel.vlanMacBased.length === 0){
           validJson_Copy.valid = false;
           validJson_Copy.errorMessage =  this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ERROR_HAVE_MEMBER');
