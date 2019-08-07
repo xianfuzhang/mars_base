@@ -354,6 +354,7 @@ export class SegmentMemberEstablishController {
             scope.vlanDeviceDisplayLabel.options = this.di._.sortBy(this.di._.map(scope._phyPorts[scope.selected.vlanDevice.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
               return {'label': String(portNum), 'value': String(portNum)}
             });
+            scope.vlanDeviceDisplayLabel.options.unshift({'label':this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ALL_PORTS'), 'value':'any'})
           } else if(param.type === 'vxlan'){
             if(data){
               if(data['name']){
@@ -539,6 +540,16 @@ export class SegmentMemberEstablishController {
     };
 
     scope.addVlanPorts = () => {
+      let isContainAllPorts = false;
+      scope.memberModel.vlanPorts.forEach(port=>{
+        if(port.port.value === 'any'){
+          isContainAllPorts = true;
+        }
+      })
+      if(isContainAllPorts){
+        scope.errorMessage = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.MSG.ALREADY_HAS_ALL_PORTS');
+        return;
+      }
       scope.memberModel.vlanPorts.push({'port':scope.vlanDeviceDisplayLabel.options[0], 'tagValue': scope.tagDisplayLabel.options[0]})
     };
 
@@ -601,6 +612,7 @@ export class SegmentMemberEstablishController {
       scope.vlanDeviceDisplayLabel.options = this.di._.sortBy(this.di._.map(scope._phyPorts[$value.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
         return {'label': String(portNum), 'value': String(portNum)}
       })
+      scope.vlanDeviceDisplayLabel.options.unshift({'label':this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ALL_PORTS'), 'value':'any'})
 
     };
 
