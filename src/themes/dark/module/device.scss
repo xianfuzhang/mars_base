@@ -416,7 +416,11 @@
 
   @include state(disable) {
     cursor: default;
-    background-color: black;
+    background-color: dimgray;
+
+    &:hover {
+      background-color: dimgray;
+    }
   }
 }
 .tab-content .left-panel .setting-group .item:hover {
