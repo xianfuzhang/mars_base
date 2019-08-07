@@ -34,7 +34,7 @@
                                         display-label="{options: nginxTimerangeAnalyzer.ipOptions}"
                                         ng-change="nginxIpSelect($value)">
                             </mdl-select>
-                            <div class="item" title="{{'MODULES.DASHBOARD.REFRESH'|translate}}" ng-class="{'+disable': nginxTimerangeAnalyzer.loading}" ng-click="refresh('nginx-analyzer')"><i class="material-icons">refresh</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.REFRESH'|translate}}" ng-class="{'+disable': nginxTimerangeAnalyzer.loading || nginxTimerangeAnalyzer.isRealtime}" ng-click="refresh('nginx-analyzer')"><i class="material-icons">refresh</i></div>
                             <div class="item" title="{{nginxTimerangeAnalyzer.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-class="{'+disable': nginxTimerangeAnalyzer.loading}"  ng-click="realtime('nginx-analyzer')"><i class="material-icons">{{nginxTimerangeAnalyzer.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
                             <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-class="{'+disable': nginxTimerangeAnalyzer.isRealtime || nginxTimerangeAnalyzer.loading}" ng-click="nginxTimerangeAnalyzer.isRealtime || resetTimeScale('nginx-analyzer')"><i class="material-icons">undo</i></div>
                             <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-class="{'+disable': nginxTimerangeAnalyzer.isRealtime || nginxTimerangeAnalyzer.loading}" ng-click="nginxTimerangeAnalyzer.isRealtime || chartSetting('nginx-analyzer')"><i class="material-icons">settings</i></div>
