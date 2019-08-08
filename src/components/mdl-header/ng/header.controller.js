@@ -105,6 +105,7 @@ export class headerController{
         this.changeSelectedMenuItem(param.url);
       });
     }));
+
     unsubscribers.push(this.di.$rootScope.$on('$translateChangeSuccess', () => {
       console.log('in header contrl...');
       this.di.appService.CONST.HEADER['menu'] = this.di.appService.getHeaderMenus();
@@ -117,6 +118,7 @@ export class headerController{
           'groups': this.di.appService.roleFilterMenu
         });
     }));
+    
     unsubscribers.push(this.di.$rootScope.$on('new-websocket-message', ($event, message) => {
       let messages = this.scope.messages;
     

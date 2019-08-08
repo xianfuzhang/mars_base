@@ -144,50 +144,62 @@
             </div>
             <div class="mars-row-flex" style="margin-left: 5px;margin-top: 5px;">
               <div class="col-gutter-md left-panel mars-panel">
-                <canvas id="switch-cpu-usage-rate" height="250"
-                        class="chart chart-line"
-                        chart-type="line"
-                        chart-data="deviceCpuChartConfig.data"
-                        chart-labels="deviceCpuChartConfig.labels"
-                        chart-series="deviceCpuChartConfig.series"
-                        chart-fill="false"
-                        chart-options="deviceCpuChartConfig.options"
-                        chart-click="deviceCpuChartConfig.onClick"
-                        chart-hover="deviceCpuChartConfig.onHover">
-                </canvas>
+                <div class="chart_title">
+                  <span style="font-weight: bold;">{{'MODULES.SWITCH.DETAIL.CPU_USAGE'|translate}}</span>
+                </div>
+                <div>
+                  <canvas id="switch-cpu-usage-rate" height="250"
+                          class="chart chart-line"
+                          chart-type="line"
+                          chart-data="deviceCpuChartConfig.data"
+                          chart-labels="deviceCpuChartConfig.labels"
+                          chart-series="deviceCpuChartConfig.series"
+                          chart-fill="false"
+                          chart-options="deviceCpuChartConfig.options"
+                          chart-click="deviceCpuChartConfig.onClick"
+                          chart-hover="deviceCpuChartConfig.onHover">
+                  </canvas>
+                </div>
 
-                <div class="setting-group"  ng-show="!chartModel.cpu.loading">
-                  <div class="item" title="{{chartModel.cpu.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-cpu')"><i class="material-icons">{{chartModel.cpu.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
-                  <div class="item" ng-class="{'+disable': chartModel.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.cpu.isRealtime || resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
-                  <div class="item" ng-class="{'+disable': chartModel.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.cpu.isRealtime || chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
+                <div class="setting-group">
+                  <div class="item" ng-class="{'+disable': chartModel.cpu.isRealtime || chartModel.cpu.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('device-cpu')"><i class="material-icons">refresh</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.cpu.loading}" title="{{chartModel.cpu.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-cpu')"><i class="material-icons">{{chartModel.cpu.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.cpu.isRealtime || chartModel.cpu.loading}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.cpu.isRealtime || resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.cpu.isRealtime || chartModel.cpu.loading}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.cpu.isRealtime || chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
                   <!--<div class="item" title="{{deviceCpuChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>-->
                 </div>
 
-                <div class="chart-loading" ng-show="chartModel.cpu.loading"></div>
+                <loading is-loading="chartModel.cpu.loading" png-size="60" style="position: absolute;"></loading>
               </div>
             </div>
             <div class="mars-row-flex" style="margin-left: 5px;">
               <div class="col-gutter-md left-panel mars-panel">
-                <canvas id="switch-memory-usage-rate" height="250"
-                        class="chart chart-line"
-                        chart-type="line"
-                        chart-data="deviceMemoryChartConfig.data"
-                        chart-labels="deviceMemoryChartConfig.labels"
-                        chart-series="deviceMemoryChartConfig.series"
-                        chart-fill="false"
-                        chart-options="deviceMemoryChartConfig.options"
-                        chart-click="deviceMemoryChartConfig.onClick"
-                        chart-hover="deviceMemoryChartConfig.onHover">
-                </canvas>
+                <div class="chart_title">
+                  <span style="font-weight: bold;">{{'MODULES.SWITCH.DETAIL.MEMORY_USAGE'|translate}}</span>
+                </div>
+                <div>
+                  <canvas id="switch-memory-usage-rate" height="250"
+                          class="chart chart-line"
+                          chart-type="line"
+                          chart-data="deviceMemoryChartConfig.data"
+                          chart-labels="deviceMemoryChartConfig.labels"
+                          chart-series="deviceMemoryChartConfig.series"
+                          chart-fill="false"
+                          chart-options="deviceMemoryChartConfig.options"
+                          chart-click="deviceMemoryChartConfig.onClick"
+                          chart-hover="deviceMemoryChartConfig.onHover">
+                  </canvas>
+                </div>
 
-                <div class="setting-group"  ng-show="!chartModel.memory.loading">
-                  <div class="item" title="{{chartModel.memory.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-memory')"><i class="material-icons">{{chartModel.memory.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
-                  <div class="item" ng-class="{'+disable': chartModel.memory.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.memory.isRealtime || resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
-                  <div class="item" ng-class="{'+disable': chartModel.memory.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.memory.isRealtime || chartSetting('device-memory')"><i class="material-icons">settings</i></div>
+                <div class="setting-group">
+                  <div class="item" ng-class="{'+disable': chartModel.memory.isRealtime || chartModel.memory.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('device-memory')"><i class="material-icons">refresh</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.memory.loading}" title="{{chartModel.memory.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-memory')"><i class="material-icons">{{chartModel.memory.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.memory.isRealtime || chartModel.memory.loading}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.memory.isRealtime || resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.memory.isRealtime || chartModel.memory.loading}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.memory.isRealtime || chartSetting('device-memory')"><i class="material-icons">settings</i></div>
                   <!--<div class="item" title="{{deviceMemoryChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>-->
                 </div>
 
-                <div class="chart-loading" ng-show="chartModel.memory.loading"></div>
+                <loading is-loading="chartModel.memory.loading" png-size="60" style="position: absolute;"></loading>
               </div>
             </div>
             <div class="mars-row-flex" style="margin-left: 5px;">
@@ -209,32 +221,38 @@
                   </canvas>
                 </div>
 
-                <div class="setting-group out_title"  ng-show="!chartModel.ports.loading">
-                  <mdl-select ng-model="chartModel.ports.unitTypeOption" display-label="{options: portUnitTypes}" disable="chartModel.ports.isRealtime"></mdl-select>
-                  <mdl-select ng-model="chartModel.ports.stateTypeOption" display-label="{options: portStateTypes}" disable="chartModel.ports.isRealtime || chartModel.ports.unitTypeOption.value.startsWith('bytes')"></mdl-select>
-                  <div class="item" title="{{chartModel.ports.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-ports')"><i class="material-icons">{{chartModel.ports.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
-                  <div class="item" ng-class="{'+disable': chartModel.ports.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.ports.isRealtime || resetTimeScale('device-ports')"><i class="material-icons">undo</i></div>
-                  <div class="item" ng-class="{'+disable': chartModel.ports.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.ports.isRealtime || chartSetting('device-ports')"><i class="material-icons">settings</i></div>
+                <div class="setting-group out_title">
+                  <mdl-select diable="chartModel.ports.loading" ng-model="chartModel.ports.unitTypeOption" display-label="{options: portUnitTypes}" disable="chartModel.ports.isRealtime"></mdl-select>
+                  <mdl-select diable="chartModel.ports.loading" ng-model="chartModel.ports.stateTypeOption" display-label="{options: portStateTypes}" disable="chartModel.ports.isRealtime || chartModel.ports.unitTypeOption.value.startsWith('bytes')"></mdl-select>
+                  <div class="item" ng-class="{'+disable': chartModel.ports.isRealtime || chartModel.ports.loading}" title="{{'MODULES.DASHBOARD.REFRESH' | translate}}" ng-click="refresh('device-ports')"><i class="material-icons">refresh</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.ports.loading}" title="{{chartModel.ports.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-ports')"><i class="material-icons">{{chartModel.ports.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.ports.isRealtime || chartModel.ports.loading}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.ports.isRealtime || resetTimeScale('device-ports')"><i class="material-icons">undo</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.ports.isRealtime || chartModel.ports.loading}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.ports.isRealtime || chartSetting('device-ports')"><i class="material-icons">settings</i></div>
                   <!--<div class="item" title="{{deviceMemoryChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>-->
                 </div>
 
-                <div class="chart-loading" ng-show="chartModel.ports.loading"></div>
+                <loading is-loading="chartModel.ports.loading" png-size="60" style="position: absolute;"></loading>
               </div>
             </div>
             <div class="mars-row-flex" style="margin-left: 5px;">
               <div class="col-gutter-md left-panel mars-panel">
-                <canvas id="switch-disk-usage-rate" height="250"
-                        class="chart chart-bar"
-                        chart-type="bar"
-                        chart-data="deviceDiskChartConfig.data"
-                        chart-labels="deviceDiskChartConfig.labels"
-                        chart-colors="deviceDiskChartConfig.colors"
-                        chart-series="deviceDiskChartConfig.series"
-                        chart-fill="false"
-                        chart-options="deviceDiskChartConfig.options">
-                </canvas>
+                <div class="chart_title">
+                  <span>{{'MODULES.SWITCH.DETAIL.DISK_USAGE'|translate}}</span>
+                </div>
+                <div>
+                  <canvas id="switch-disk-usage-rate" height="250"
+                          class="chart chart-bar"
+                          chart-type="bar"
+                          chart-data="deviceDiskChartConfig.data"
+                          chart-labels="deviceDiskChartConfig.labels"
+                          chart-colors="deviceDiskChartConfig.colors"
+                          chart-series="deviceDiskChartConfig.series"
+                          chart-fill="false"
+                          chart-options="deviceDiskChartConfig.options">
+                  </canvas>
+                </div>
 
-                <div class="chart-loading" ng-show="chartModel.disk.loading"></div>
+                <loading is-loading="chartModel.disk.loading" png-size="60" style="position: absolute;"></loading>
               </div>
             </div>
           </section>
@@ -260,12 +278,12 @@
                           chart-options="devicePortChartConfig.options">
                   </canvas>
 
-                  <div class="setting-group" ng-show="!chartModel.port.loading">
-                    <mdl-select ng-model="chartModel.port.unitTypeOption" display-label="{options: portUnitTypes}" disable="chartModel.port.isRealtime"></mdl-select>
-                    <mdl-select ng-model="chartModel.port.stateTypeOption" display-label="{options: portStateTypes}" disable="chartModel.port.isRealtime || chartModel.port.unitTypeOption.value.startsWith('bytes')"></mdl-select>
-                    <div class="item" title="{{chartModel.port.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-port')"><i class="material-icons">{{chartModel.port.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
-                    <div class="item" ng-class="{'+disable': chartModel.port.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.port.isRealtime || resetTimeScale('device-port')"><i class="material-icons">undo</i></div>
-                    <div class="item" ng-class="{'+disable': chartModel.port.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.port.isRealtime || chartSetting('device-port')"><i class="material-icons">settings</i></div>
+                  <div class="setting-group">
+                    <mdl-select ng-model="chartModel.port.unitTypeOption" display-label="{options: portUnitTypes}" disable="chartModel.port.isRealtime" || chartModel.port.loading></mdl-select>
+                    <mdl-select ng-model="chartModel.port.stateTypeOption" display-label="{options: portStateTypes}" disable="chartModel.port.isRealtime || chartModel.port.loading || chartModel.port.unitTypeOption.value.startsWith('bytes')"></mdl-select>
+                    <div class="item" ng-class="{'+disable': chartModel.port.loading}" title="{{chartModel.port.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-port')"><i class="material-icons">{{chartModel.port.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                    <div class="item" ng-class="{'+disable': chartModel.port.isRealtime || chartModel.port.loading}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.port.isRealtime || resetTimeScale('device-port')"><i class="material-icons">undo</i></div>
+                    <div class="item" ng-class="{'+disable': chartModel.port.isRealtime || chartModel.port.loading}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.port.isRealtime || chartSetting('device-port')"><i class="material-icons">settings</i></div>
                     <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="closePortAnalyzerChart()"><i class="material-icons">close</i></div>
                     <!--<div class="item" title="{{clusterInterfaceChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-interface')"><i class="material-icons">swap_horiz</i></div>-->
 

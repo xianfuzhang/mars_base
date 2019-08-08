@@ -30,9 +30,11 @@ body{
   height: 4px;
   width: 8px;
 }
+
 ::-webkit-scrollbar-thumb{
   background: rgba(253, 253, 253, 0.4);
 }
+
 
 tbody{
   overflow-y: auto;
@@ -127,7 +129,7 @@ ng-view {
   width: 8px;
 }
 .tab-content::-webkit-scrollbar-thumb{
-  background: rgba(253, 253, 253, 0.4);
+  //background: rgba(253, 253, 253, 0.4);
 }
 
 .mars-row {

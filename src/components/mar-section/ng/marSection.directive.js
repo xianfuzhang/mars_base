@@ -131,7 +131,7 @@ export class marSection {
           if(!scope.isDown && !scope.isUp){
             let bodyDom = angular.element(element[0].getElementsByClassName('mar_section__body'));
             let computedStyle = window.getComputedStyle(bodyDom[0], null);
-            //js动态计算高度时，需要去掉padding，否则动画最后有波动
+            //js鍔ㄦ�佽绠楅珮搴︽椂锛岄渶瑕佸幓鎺塸adding锛屽惁鍒欏姩鐢绘渶鍚庢湁娉㈠姩
             scope.lastHeight = bodyDom[0].clientHeight - parseInt(computedStyle['paddingTop']) - parseInt(computedStyle['paddingBottom']);
 
             //scope.lastHeight > bodyDom[0].clientHeight? scope.lastHeight :bodyDom[0].clientHeight ;

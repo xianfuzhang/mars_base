@@ -33,4 +33,3 @@ export class regexService {
   }
 }
 regexService.$inject = regexService.getDI();
-regexService.$$ngIsClass = true;

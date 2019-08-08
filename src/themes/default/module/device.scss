@@ -340,7 +340,11 @@
   width: 8px;
 }
 .device-summary::-webkit-scrollbar-thumb{
+<<<<<<< HEAD
   background: rgba(253, 253, 253, 0.4);
+=======
+  //background: rgba(253, 253, 253, 0.4);
+>>>>>>> temp_master
 }
 
 .tab-content .left-panel{
@@ -378,11 +382,15 @@
   @include state(disable) {
     cursor: default;
     background-color: lightgray;
+
+    &:hover {
+      background-color: lightgray;
+    }
   }
 }
 .tab-content .left-panel .setting-group .item:hover {
   //color: #a1a1a1;
-  background-color: lightgray;
+  background-color: lightblue;
 }
 .tab-content .right-panel{
   flex-grow:1;

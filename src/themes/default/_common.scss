@@ -7,6 +7,11 @@ body{
   color: map_get($colors, body_color);
 }
 
+
+::-webkit-scrollbar-thumb{
+  background: rgba(100, 100, 100,.5);
+}
+
 :focus {
   outline: none;
 }

@@ -238,7 +238,6 @@ export class ElasticsearchController {
         }
       });
     };
-  
     scope.clear = (defaultTime) => {
       let begin_date, end_date, begin_time, end_time;
   
@@ -372,7 +371,8 @@ export class ElasticsearchController {
       const pad = this.pad;
       let options = {
         title: {
-          text: this.translate('MODULES.MANAGE.ELASTICSEARCH.SPACE_STATIC')
+          display: true,
+          // text: this.translate('MODULES.MANAGE.ELASTICSEARCH.SPACE_STATIC')
         },
         scales: {
           yAxes: [{
@@ -388,7 +388,7 @@ export class ElasticsearchController {
             }
           }],
           xAxes: [{
-            barThickness: 50,
+            barThickness: 40,
           }],
         },
         tooltips: {
@@ -430,7 +430,7 @@ export class ElasticsearchController {
       let options = {
         title: {
           display: true,
-          text: this.translate('MODULES.MANAGE.ELASTICSEARCH.DATA_TIME'),
+          // text: this.translate('MODULES.MANAGE.ELASTICSEARCH.DATA_TIME'),
         },
         scales: {
           yAxes: [{

@@ -419,6 +419,54 @@ export class DashboardController {
         }, SET_INTERVAL_TIME * 1000)
       }
     }
+
+    this.di.$scope.refresh = (type) => {
+      let date, before, begin_time, end_time, isController = false, typeKey, model;
+
+      date = DI.dateService.getTodayObject();
+      before = DI.dateService.getBeforeDateObject(30 * 60 * 1000);
+      begin_time = new Date(before.year, before.month, before.day, before.hour, before.minute, before.second);
+      end_time = new Date(date.year, date.month, date.day, date.hour, date.minute, date.second);
+
+      switch(type) {
+        case 'device-cpu':
+          typeKey = 'cpu';
+          break;
+        case 'device-memory':
+          typeKey = 'memory';
+          break;
+        case 'device-interface':
+          typeKey = 'interface';
+          break;
+        case 'device-interface-drop-error':
+          typeKey = 'dropErrorInterface';
+          break;
+        case 'controller-cpu':
+          isController = true;
+          typeKey = 'cpu';
+          break;
+        case 'controller-memory':
+          isController = true;
+          typeKey = 'memory';
+          break;
+        case 'controller-interface':
+          isController = true;
+          typeKey = 'interface';
+          break;
+      }
+
+      if(isController) {
+        model = scope.dashboardModel.controller[typeKey];
+      } else {
+        model = scope.dashboardModel[typeKey];
+      }
+
+      model.origin_begin_time = begin_time;
+      model.origin_end_time = end_time;
+      model.begin_time = begin_time;
+      model.end_time = end_time;
+      model.step = Math.floor((model.origin_end_time.getTime() - model.origin_begin_time) / (GRID_NUM * 1000));
+    }
   
     this.di.$scope.chartSetting = (type) => {
       let chartDataArr = [], selectedData = [];
@@ -750,7 +798,7 @@ export class DashboardController {
         let options = {
             title: {
                 display: true,
-                  text: this.translate('MODULES.DASHBOARD.CONTROLLER_CPU_USAGE'),
+                  // text: this.translate('MODULES.DASHBOARD.CONTROLLER_CPU_USAGE'),
             },
             scales: {
                 yAxes: [{
@@ -848,7 +896,7 @@ export class DashboardController {
       let options = {
         title: {
           display: true,
-          text: this.translate('MODULES.DASHBOARD.CONTROLLER_MEMORY_USAGE'),
+          // text: this.translate('MODULES.DASHBOARD.CONTROLLER_MEMORY_USAGE'),
         },
         scales: {
           yAxes: [{
@@ -984,7 +1032,7 @@ export class DashboardController {
       let options = {
         title: {
           display: true,
-          text: this.translate('MODULES.DASHBOARD.CONTROLLER_INTERFACE_PACKETS'),
+          // text: this.translate('MODULES.DASHBOARD.CONTROLLER_INTERFACE_PACKETS'),
         },
         scales: {
           yAxes: [{
@@ -1126,7 +1174,7 @@ export class DashboardController {
         // },
         title: {
             display: true,
-            text: this.translate('MODULES.DASHBOARD.SWITCH_CPU_USAGE'),
+            // text: this.translate('MODULES.DASHBOARD.SWITCH_CPU_USAGE'),
         },
         scales: {
           yAxes: [{
@@ -1225,7 +1273,7 @@ export class DashboardController {
       let options = {
           title: {
               display: true,
-                  text: this.translate('MODULES.DASHBOARD.SWITCH_MEMORY_USAGE'),
+              // text: this.translate('MODULES.DASHBOARD.SWITCH_MEMORY_USAGE'),
           },
           scales: {
               yAxes: [{
@@ -1403,7 +1451,8 @@ export class DashboardController {
       const pad = this.pad;
       let options = {
         title: {
-          text: this.translate('MODULES.DASHBOARD.SWITCH_DISK_USAGE')
+          display: true,
+          // text: this.translate('MODULES.DASHBOARD.SWITCH_DISK_USAGE')
         },
         scales: {
           yAxes: [{
@@ -1419,7 +1468,7 @@ export class DashboardController {
             },
           }],
           xAxes: [{
-            barThickness: 40,
+            barThickness: 'flex',
           }],
         },
         tooltips: {
@@ -1767,7 +1816,8 @@ export class DashboardController {
         const pad = this.pad;
         let options = {
             title: {
-                text: title
+              display: true,
+              // text: title
             },
             scales: {
                 yAxes: [{
@@ -1778,29 +1828,29 @@ export class DashboardController {
                     },
                     ticks: {
                         beginAtZero: false,
-            callback: function(value, index, values) {
-              return getFormattedNumber(value);
-            }
+                        callback: function(value, index, values) {
+                          return getFormattedNumber(value);
+                        }
                     }
                 }],
-                  xAxes: [{
-                    stacked: true,
-          barThickness: 40,
+                xAxes: [{
+                  stacked: true,
+                  barThickness: 'flex',
                 }],
             },
-      tooltips: {
-        callbacks: {
-          label: function(tooltipItem, data) {
-            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                  var label = data.datasets[tooltipItem.datasetIndex].label || '';
 
-            if (label) {
-              label += ': ';
-            }
-            label += getFormattedNumber(tooltipItem.yLabel);
-            return label;
-          }
-        }
-      },
+                  if (label) {
+                    label += ': ';
+                  }
+                  label += getFormattedNumber(tooltipItem.yLabel);
+                  return label;
+                }
+              }
+            },
         }
 
         if(drop) {
@@ -2482,8 +2532,10 @@ export class DashboardController {
         return;
       }
 
+      DI.$scope.dashboardModel.controller.cpu.loading = true;
       this.getClustersCPUAnalyzer(getFilteredDataModel('controller-cpu')).then(() => {
         //cpu analyzer
+        DI.$scope.dashboardModel.controller.cpu.loading = false;
         if(scope.dashboardModel.controller.cpu.isRealtime) {
           setRealtimeClusterCPUChartData();
         } else {
@@ -2498,9 +2550,11 @@ export class DashboardController {
           clusterMemoryTimeHasChanged = true;
           return;
       }
-    
+
+      DI.$scope.dashboardModel.controller.memory.loading = true;
       this.getClustersMemoryAnalyzer(getFilteredDataModel('controller-memory')).then(() => {
         // memory analyzer
+        DI.$scope.dashboardModel.controller.memory.loading = false;
         if(scope.dashboardModel.controller.memory.isRealtime) {
           setRealtimeClusterMemoryChartData();
         } else {
@@ -2516,8 +2570,10 @@ export class DashboardController {
         return;
       }
 
+      DI.$scope.dashboardModel.controller.interface.loading = true;
       this.getClustersInterfaceAnalyzer(getFilteredDataModel('controller-interface')).then(() => {
         // interface analyzer
+        DI.$scope.dashboardModel.controller.interface.loading = false;
         if(scope.dashboardModel.controller.interface.isRealtime) {
           setRealtimeClusterInterfaceChartData();
         } else {
@@ -2543,8 +2599,10 @@ export class DashboardController {
         return;
       }
 
+      DI.$scope.dashboardModel.cpu.loading = true;
       this.getDevicesCPUAnalyzer(getFilteredDataModel('device-cpu')).then(() => {
         // cpu analyzer
+        DI.$scope.dashboardModel.cpu.loading = false;
         if(scope.dashboardModel.cpu.isRealtime) {
           setRealtimeSwitchCpuChartData();
         } else {
@@ -2559,9 +2617,11 @@ export class DashboardController {
           memoryTimeHasChanged = true;
         return;
       }
-    
+
+      DI.$scope.dashboardModel.memory.loading = true;
       this.getDevicesMemoryAnalyzer(getFilteredDataModel('device-memory')).then(() => {
         //memory analyzer
+        DI.$scope.dashboardModel.memory.loading = false;
         if(scope.dashboardModel.memory.isRealtime) {
           setRealtimeSwitchMemoryChartData();
         } else {
@@ -2578,7 +2638,7 @@ export class DashboardController {
       }
 
       this.getDevicesDiskAnalyzer(getFilteredDataModel('device-disk')).then(() => {
-        // //disk analyzer
+        //disk analyzer
         setSwitchDiskChartData();
       });
     },true));

@@ -257,7 +257,7 @@
 
 .elasticsearch .setting-group {
   position: absolute;
-  top: -3px !important;
+  top: 10px !important;
   right: 10px !important;
 }
 
@@ -273,9 +273,9 @@
   }
 }
 
-.elasticsearch .setting-group .item:hover {
-  color: #a1a1a1;
-}
+//.elasticsearch .setting-group .item:hover {
+//  color: #a1a1a1;
+//}
 
 .show-download-modal {
   width: 500px;

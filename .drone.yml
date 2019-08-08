@@ -1,0 +1,25 @@
+pipeline:
+  Mars web test:
+    image: node:8.14.0
+    commands:
+      - npm install
+      - npm run build:prod
+  wechat:
+    image: lizheming/drone-wechat
+    corpid: ww8e2c422fcf314137
+    corp_secret: lXyGS1M3SxqgK0bSm7XkdYZ-fsczWJ9UOTFgMuFQje4
+    agent_id: 1000006
+    to_tag: ${DRONE_REPO_NAME}
+    msg_url: ${DRONE_BUILD_LINK}
+    safe: 1
+    btn_txt: more
+    title: ${DRONE_REPO_NAME}
+    message: >
+      {%if success %}
+        build {{build.number}} succeeded. Good job.
+      {% else %}
+        build {{build.number}} failed. Fix me please.
+      {% endif %}
+    when:
+      status: [ failure ]
+

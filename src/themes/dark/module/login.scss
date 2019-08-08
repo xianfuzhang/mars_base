@@ -45,9 +45,9 @@
   border-radius: 10px;
   transition: box-shadow .2s linear, transform .2s linear;
 }
-/* .login-fields:hover{
+.login-fields:hover{
   //box-shadow: 0 0 5px #211919;
-} */
+}
 .login-fields__logo{
   background: url('../../assets/images/mars_logo.png') no-repeat center center;
   margin: auto auto 10px auto;
@@ -95,9 +95,9 @@
 .create-user-account-modal .column-manipulation-field__content{
   color: rgba(255, 255, 255, 1);
 }
-/* .create-user-account-modal .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input{
+.create-user-account-modal .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input{
   //-webkit-text-fill-color: rgba(0,0,0,0.87);
-} */
+}
 .update-user-modal .column-manipulation-field__item{
   text-align: inherit;
   margin: 0 auto;
