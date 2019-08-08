@@ -1,0 +1,25 @@
+<div class="stepForm vlan_ip_es">
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{::'MODULES.VLAN.IP.TABLE.COLUMN.DEVICE' | translate}}<span class="stepForm__input__required">*</span></div>
+        <mdl-select style="margin-right:20px;" disable="isEdit" ng-model="vlanIpModel.device" display-label="displayLabel">
+        </mdl-select>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.VLAN.IP.TABLE.COLUMN.VLAN'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-disabled="isEdit" v-name="vlan" v-require="true" v-type="vlan" ng-model="vlanIpModel.vlan_id" v-rpcid="page_vlanIp_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.VLAN.IP.TABLE.COLUMN.IP'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-name="ip" v-require="true" v-type="ipv4" ng-model="vlanIpModel.ip" v-rpcid="page_vlanIp_es" ></valid-input>
+    </div>
+
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.VLAN.IP.TABLE.COLUMN.MASK'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-name="mask" v-require="true" v-type="ipv4" v-message="{{'MODULES.VLAN.IP.ES.MESSAGE.MASK_NOT_CORRECT'|translate}}" ng-model="vlanIpModel.mask" v-rpcid="page_vlanIp_es" ></valid-input>
+    </div>
+
+
+</div>

@@ -1,0 +1,28 @@
+<div class="application flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="app-main">
+    <content-header big-title="{{'MODULE.HEADER.MANAGE.APPLICATION' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.MANAGE.APPLICATION' | translate}}</span>
+    </content-header>
+    <section class="app-body">
+      <div class="main__content">
+        <mdl-table actions-show="applicationModel.actionsShow"
+                   actions="applicationModel.rowActions"
+                   row-click="onTableRowClick($event)"
+                   row-select-action="onTableRowSelectAction($event)"
+                   row-actions-filter="onTableRowActionsFilter($event)"
+                   provider="applicationModel.applicationTableProvider" api-ready="onAPIReady($api)"
+                   on-add="add()">
+        </mdl-table>
+      </div>
+    </section>
+  </div>
+
+  <ng-controller ng-controller="applicationEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+</div>

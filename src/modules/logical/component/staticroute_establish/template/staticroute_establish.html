@@ -1,0 +1,18 @@
+<div class="staticroute_establish">
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.STATICROUTE.COLUMN.NAME'|translate}}</div>
+        <valid-input v-require="true" ng-model="staticRouteEsModel.name" v-rpcid="page_staticroute_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.STATICROUTE.COLUMN.DEST'|translate}}</div>
+        <valid-input v-require="true" ng-model="staticRouteEsModel.ip" v-type="ipv4_mask" v-rpcid="page_staticroute_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input multiple_ip">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.TENANT.DETAIL.STATICROUTE.COLUMN.NEXT_HOP'|translate}}</div>
+        <mdl-select ng-model="staticRouteEsModel.nextHopGroup" display-label="nexthopGroupDisplayLabel">
+        </mdl-select>
+    </div>
+
+</div>

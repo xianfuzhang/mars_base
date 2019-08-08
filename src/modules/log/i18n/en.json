@@ -1,0 +1,19 @@
+{
+  "MODULE.LOG.PAGE.TITLE": "System Log",
+  "MODULE.LOG.COLUMN.TIME": "Created Time",
+  "MODULE.LOG.COLUMN.TYPE": "Type",
+  "MODULE.LOG.COLUMN.LEVEL": "Level",
+  "MODULE.LOG.COLUMN.OPERATION": "Operation",
+  "MODULE.LOG.COLUMN.CREATOR": "Creator",
+  "MODULE.LOG.COLUMN.CONTENT": "Content",
+  "MODULE.LOG.BUTTON.SEARCH": "Search",
+  "MODULE.LOG.BUTTON.DOWNLOAD": "Download",
+  "MODULE.LOG.BUTTON.PAUSE": "Pause",
+  "MODULE.LOG.BUTTON.CONTINUE": "Continue",
+  "MODULE.LOG.BUTTON.CLEAR_LOG": "Clear",
+  "MODULE.LOG.BUTTON.MARK": "Mark",
+  "MODULE.LOG.DOWNLOAD_LABEL": "System Log Download:",
+  "MODULE.LOG.DOWNLOAD_FILE_SELECT": "Please select the file",
+  "MODULE.LOG.TAB.REALTIME": "Realtime Log",
+  "MODULE.LOG.TAB.HISTORY": "History Log"
+}

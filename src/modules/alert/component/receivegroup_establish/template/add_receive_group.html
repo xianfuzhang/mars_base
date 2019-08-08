@@ -1,0 +1,103 @@
+<div class="receiveGroup">
+    <div class="stepForm__input" style="padding:5px;">
+        <div class="stepForm__input__label">{{'MODULES.ALERT.INFORM.RGTABLE.GROUP_NAME'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-require="true" ng-model="nameModel.groupName" v-rpcid="page_add_rg" ></valid-input>
+        <!--<input style="box-shadow:2px 2px 2px lightgray" class="stepForm__input__text ng-valid ng-not-empty ng-valid-required" type="text" ng-model="nameModel.groupName" ng-required="true" required="required" />-->
+    </div>
+
+    <div>
+
+        <!--<button  ng-click="addEmailReceiver()" class="mdc-button mdc-button&#45;&#45;raised" style="width:120px;margin-left:10px;background-color:black;color:white;">-->
+            <!--<i class="material-icons mdc-button__icon" aria-hidden="true">add</i>-->
+            <!--{{ 'MODULES.ALERT.RECEIVE_GROUP.EMAIL'|translate}}-->
+        <!--</button>-->
+        <div style="display: inline-block; margin-left:20px; margin-right:15px;">
+            <mar-button btn-text="::'MODULES.ALERT.RECEIVE_GROUP.EMAIL' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addEmailReceiver()"/>
+        </div>
+
+        <!--<button  ng-click="addWechatReceiver()" class="mdc-button mdc-button&#45;&#45;raised" style="width:120px;margin-left:40px;background-color:black;color:white;">-->
+            <!--<i class="material-icons mdc-button__icon" aria-hidden="true">add</i>-->
+            <!--{{ 'MODULES.ALERT.RECEIVE_GROUP.WECHAT'|translate}}-->
+        <!--</button>-->
+        <div style="display: inline-block; margin-left:15px;">
+            <mar-button btn-text="::'MODULES.ALERT.RECEIVE_GROUP.WECHAT' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addWechatReceiver()"/>
+        </div>
+        <!--<button class="mdc-button" id="addEmail" ng-click="addEmailReceiver()">-->
+            <!--<i class="material-icons mdc-button__icon" aria-hidden="true">add</i>-->
+
+        <!--</button>-->
+
+        <!--<button class="mdc-button" id="addWechat" ng-click="addWechatReceiver()">-->
+            <!--<i class="material-icons mdc-button__icon" aria-hidden="true">add</i>-->
+            <!--微信-->
+        <!--</button>-->
+
+    </div>
+
+    <div class="receiveGroup__content">
+        <div class="receiveGroup__content__item"  ng-repeat="receiver in addedReceiverModel">
+            <div class="type"> {{receiver.type}}</div>
+            <mdl-button class="remove" ng-click="removeReceiver(receiver)" icon-name="remove_circle" size='small'></mdl-button>
+            <div ng-if="receiver.type == 'email'">
+                <table class="receiveGroup_table">
+                    <tr>
+                        <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{'MODULES.ALERT.RECEIVE_GROUP.EMAIL.NAME'|translate}}</div></td>
+                        <td>
+                            <div class="criteria_line">
+                                <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="receiver.name"/>-->
+                                <valid-input v-require="true" ng-model="receiver.name" v-rpcid="page_add_rg" ></valid-input>
+                            </div>
+                        </td>
+                        <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{receiver.name}}</div></td>-->
+                    </tr>
+                    <tr>
+                        <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{'MODULES.ALERT.RECEIVE_GROUP.EMAIL.ADDRESS'|translate}}</div></td>
+
+                        <td>
+                            <div class="criteria_line">
+                                <valid-input v-require="true" ng-model="receiver.email" v-regex="email_regex" v-message="{{ 'MODULES.REGEX.ADD_RG.EMAIL' | translate}}" v-rpcid="page_add_rg" ></valid-input>
+                             <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="receiver.email"/>-->
+                            </div>
+                        </td>
+                        <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{receiver.email}}</div></td>-->
+                    </tr>
+                </table>
+            </div>
+
+            <div ng-if="receiver.type == 'wechat'">
+                <table class="receiveGroup_table" >
+                    <tr>
+                        <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{'MODULES.ALERT.RECEIVE_GROUP.WECHAT.DEPARTMENT'|translate}}</div></td>
+                        <td>
+                            <div class="criteria_line">
+                                <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="receiver.name"/>-->
+                                <valid-input v-require="true" ng-model="receiver.name" v-rpcid="page_add_rg" ></valid-input>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{ 'MODULES.ALERT.RECEIVE_GROUP.WECHAT.AGENTID'|translate}}</div></td>
+                        <td>
+                            <div class="criteria_line">
+                                <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="receiver.agentId"/>-->
+                                <valid-input v-require="true" ng-model="receiver.agentId" v-rpcid="page_add_rg" ></valid-input>
+                            </div>
+                        </td>
+                        <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{receiver.agentId}}</div></td>-->
+                    </tr>
+                    <tr>
+                        <td><div class="wizard__body__input__label criteria_line stepForm__input__label" >{{'MODULES.ALERT.RECEIVE_GROUP.WECHAT.SECRET'|translate}}</div></td>
+                        <td>
+                            <div class="criteria_line">
+                                <!--<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="receiver.secret"/>-->
+                                <valid-input v-require="true" ng-model="receiver.secret" v-rpcid="page_add_rg" ></valid-input>
+                            </div>
+                        </td>
+                        <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{receiver.secret}}</div></td>-->
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

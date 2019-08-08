@@ -1,0 +1,230 @@
+<!--<div class="dhcp flex_entirety">-->
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="app-main dhcp">
+    <content-header big-title="{{'MODULE.HEADER.MANAGE.DHCP' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.MANAGE.DHCP' | translate}}</span>
+    </content-header>
+    <section class="app-body">
+      <!--<div class="mars-col-24">-->
+	      <div class="main__content" style="overflow: auto">
+        <mdl-tabs ng-model="tabSelected" options="tabs"
+                  class-list="main__content__device-detail-tabs"
+                  on-select="onTabChange($value)">
+        </mdl-tabs>
+        <section class="tab-content" ng-if="tabSelected.type == 'dhcp_server'">
+          <div style="margin-top: 16px;flex-shrink: 1;flex-grow: 1;display: block;">
+            <div style="display: inline-block">
+              <div style="display: inline-block;vertical-align:top;height:100%;padding:8px;border-radius: 5px;text-align:left;">
+                <mar-section s-title="{{'MODULES.MANAGE.DHCP.NORMAL_CONFIG'|translate}}" no-fold="true" class="">
+                  <!--<div style="display: block">-->
+                  <transclude-body>
+
+                    <!--<div class="mdc-text-field mdc-text-field&#45;&#45;dense mdc-text-field&#45;&#45;outlined" id="dhcp_start_ip_component" style="width:350px;margin-top:8px;display: block;">-->
+                    <!--<input type="text" id="dhcp_start_ip" class="mdc-text-field__input" ng-model="dhcpModel.dhcpserver.startip">-->
+                    <!--<label for="dhcp_start_ip" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING.TOKEN_URL"|translate}}</label>-->
+                    <!--<div class="mdc-notched-outline">-->
+                    <!--<svg>-->
+                    <!--<path class="mdc-notched-outline__path"/>-->
+                    <!--</svg>-->
+                    <!--</div>-->
+                    <!--<div class="mdc-notched-outline__idle"></div>-->
+                    <!--</div>-->
+
+                    <!--<div class="mdc-text-field mdc-text-field&#45;&#45;dense mdc-text-field&#45;&#45;outlined" id="dhcp_end_ip_component" style="width:350px;margin-top:8px;display: block;">-->
+                    <!--<input type="text" id="dhcp_end_ip" class="mdc-text-field__input" ng-model="dhcpModel.dhcpserver.endip">-->
+                    <!--<label for="dhcp_end_ip" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING.TOKEN_URL"|translate}}</label>-->
+                    <!--<div class="mdc-notched-outline">-->
+                    <!--<svg>-->
+                    <!--<path class="mdc-notched-outline__path"/>-->
+                    <!--</svg>-->
+                    <!--</div>-->
+                    <!--<div class="mdc-notched-outline__idle"></div>-->
+                    <!--</div>-->
+
+                    <!--<div class="mdc-text-field mdc-text-field&#45;&#45;dense mdc-text-field&#45;&#45;outlined" id="dhcp_subnet_component" style="width:350px;margin-top:8px;display: block;">-->
+                    <!--<input type="text" id="dhcp_subnet" class="mdc-text-field__input" ng-model="dhcpModel.dhcpserver.subnet">-->
+                    <!--<label for="dhcp_subnet" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING.TOKEN_URL"|translate}}</label>-->
+                    <!--<div class="mdc-notched-outline">-->
+                    <!--<svg>-->
+                    <!--<path class="mdc-notched-outline__path"/>-->
+                    <!--</svg>-->
+                    <!--</div>-->
+                    <!--<div class="mdc-notched-outline__idle"></div>-->
+                    <!--</div>-->
+
+                    <!--<div class="mdc-text-field mdc-text-field&#45;&#45;dense mdc-text-field&#45;&#45;outlined" id="dhcp_domain_component" style="width:350px;margin-top:8px;display: block;">-->
+                    <!--<input type="text" id="dhcp_domain" class="mdc-text-field__input" ng-model="dhcpModel.dhcpserver.domain">-->
+                    <!--<label for="dhcp_domain" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING.TOKEN_URL"|translate}}</label>-->
+                    <!--<div class="mdc-notched-outline">-->
+                    <!--<svg>-->
+                    <!--<path class="mdc-notched-outline__path"/>-->
+                    <!--</svg>-->
+                    <!--</div>-->
+                    <!--<div class="mdc-notched-outline__idle"></div>-->
+                    <!--</div>-->
+
+                    <!--<div class="mdc-text-field mdc-text-field&#45;&#45;dense mdc-text-field&#45;&#45;outlined" id="dhcp_router_component" style="width:350px;margin-top:8px;display: block;">-->
+                    <!--<input type="text" id="dhcp_router" class="mdc-text-field__input" ng-model="dhcpModel.dhcpserver.router">-->
+                    <!--<label for="dhcp_router" class="mdc-floating-label">{{"MODULES.ALERT.SERVER_CONFIG.WECHAT_SETTING.TOKEN_URL"|translate}}</label>-->
+                    <!--<div class="mdc-notched-outline">-->
+                    <!--<svg>-->
+                    <!--<path class="mdc-notched-outline__path"/>-->
+                    <!--</svg>-->
+                    <!--</div>-->
+                    <!--<div class="mdc-notched-outline__idle"></div>-->
+                    <!--</div>-->
+
+                    <table class="dhcp_table" style="margin:auto">
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.STARTIP'|translate}}<span class="stepForm__input__required">*</span></div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.STARTIP'|translate}}" v-require="true" ng-model="dhcpModel.dhcpserver.startip" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.ENDIP'|translate}}<span class="stepForm__input__required">*</span></div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.ENDIP'|translate}}" v-require="true" ng-model="dhcpModel.dhcpserver.endip" v-type="ipv4"  v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.SUBNET'|translate}}<span class="stepForm__input__required">*</span></div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.SUBNET'|translate}}" v-require="true" ng-model="dhcpModel.dhcpserver.subnet" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.DNS'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.DNS'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.domain" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.ROUTER'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.ROUTER'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.router" v-type="ipv4" v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                    </table>
+                  </transclude-body>
+                </mar-section>
+              </div>
+
+              <div style="display: inline-block;vertical-align:top;height:100%;padding:8px;border-radius: 5px;text-align:left;">
+                <mar-section s-title="{{'MODULES.MANAGE.DHCP.HIGH_CONFIG'|translate}}" no-fold="true" class="">
+                  <!--<div style="display: block">-->
+                  <transclude-body>
+
+                    <table class="dhcp_table" style="margin:auto">
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.TTL'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.TTL'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.ttl" v-regex="regex.ttl_regex" v-message="{{ 'MODULES.MANAGE.DHCP.TTL.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.LEASE'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.LEASE'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.lease" v-regex="regex.dhcp_int_regex" v-message="{{ 'MODULES.MANAGE.DHCP.LEASE.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.RENEW'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.RENEW'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.renew" v-regex="regex.dhcp_int_regex" v-message="{{ 'MODULES.MANAGE.DHCP.RENEW.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.REBIND'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.REBIND'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.rebind" v-regex="regex.dhcp_int_regex" v-message="{{ 'MODULES.MANAGE.DHCP.REBIND.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.DELAY'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.DELAY'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.delay" v-regex="regex.delay_regex" v-message="{{ 'MODULES.MANAGE.DHCP.DELAY.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                      <tr>
+                        <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCP.TIMEOUT'|translate}}</div></td>-->
+                        <td><valid-input v-label="{{'MODULES.MANAGE.DHCP.TIMEOUT'|translate}}" v-require="false" ng-model="dhcpModel.dhcpserver.timeout" v-regex="regex.timeout_regex" v-message="{{ 'MODULES.MANAGE.DHCP.TIMEOUT.REGEX' | translate}}" v-rpcid="page_dhcp" ></valid-input></td>
+                      </tr>
+                    </table>
+                  </transclude-body>
+                </mar-section>
+              </div>
+
+              <div style="text-align: center;margin-top:15px;">
+                <div style="display: inline-block;">
+                  <!--<button id="server_config_clear" ng-click="clearServerConfig()" class="mdc-button mdc-button&#45;&#45;raised" style="width:200px;height:50px;font-size:20px;color:white;">{{ "MODULES.ALERT.SERVER_CONFIG.CLEAR_SETTING"|translate}}</button>-->
+                  <mar-button btn-id="'server_config_clear'" btn-text="::'MODULES.MANAGE.DHCP.BUTTON.CLEAR' | translate" btn-icon="'clear'" btn-class="'btn-white btn-lg'" btn-click="clearDHCPConfig()" />
+                </div>
+                <div style="display: inline-block;margin-left: 20px;">
+                  <!--<button id="server_config_save" ng-click="saveServerConfig()" class="mdc-button mdc-button&#45;&#45;raised" style="width:200px;height:50px;font-size:20px;color:white;">{{ "MODULES.ALERT.SERVER_CONFIG.SAVE_SETTING"|translate}}</button>-->
+                  <mar-button id="'server_config_save'" btn-text="::'MODULES.MANAGE.DHCP.BUTTON.SAVE' | translate" btn-icon="'done'" btn-class="'btn-black btn-lg'" btn-click="saveDHCPConfig()"/>
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+        </section>
+        <section class="tab-content ipv4_mapping" ng-if="tabSelected.type == 'ipmac_mapping'">
+          <mdl-table actions-show="dhcpModel.actionsShow"
+                     actions="dhcpModel.rowActions"
+                     row-select-action="onDHCPTableRowSelectAction($event)"
+                     provider="dhcpModel.dhcpTableProvider" api-ready="onDHPAPIReady($api)"
+                     on-add="addIPMac()"
+                     on-remove="batchRemove($value)" >
+            <!--row-click="onTableRowClick($event)"-->
+          </mdl-table>
+        </section>
+
+        <section class="tab-content" ng-if="tabSelected.type == 'dhcp_server_v6'">
+          <div style="display: inline-block;vertical-align:top;padding:8px;border-radius: 5px;text-align:left;">
+            <mar-section s-title="{{'MODULES.MANAGE.DHCP.TAB.DHCP_SERVER_V6'|translate}}" no-fold="true" class="">
+              <transclude-body>
+                <table class="dhcp_table" style="margin:auto">
+                  <div class="ntp_switch" style="margin-bottom: 20px;">
+                    <!--<td><div class="stepForm__input__label" style="display:inline-block">{{'MODULES.MANAGE.DHCPV6.IS_ENABLE'|translate}}</div></td>-->
+                    <td style="display: flex;flex-direction: row">
+                      <div class="stepForm__input__label" style="display:inline-block;text-align: center;line-height: 45px;">{{'MODULES.MANAGE.DHCPV6.IS_ENABLE'|translate}} &nbsp : &nbsp</div>
+                      <mdl-switch style="vertical-align: top" on-click="changeSwitch()" ng-model="dhcpModel.dhcpserverv6.isEnable" name="ntp_enable" display-label="displayLabel.v6enable_radio">
+                      </mdl-switch>
+                    </td>
+                  </div>
+                  <tr>
+                    <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.DNS_SERVER'|translate}}</div></td>-->
+                    <td><valid-input  v-label="{{'MODULES.MANAGE.DHCPV6.DNS_SERVER'|translate}}" ng-model="dhcpModel.dhcpserverv6.dns_server" v-type="ipv6" v-rpcid="page_dhcp_v6" ></valid-input></td>
+                  </tr>
+                  <tr>
+                    <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.DOMAIN_SEARCH_LIST'|translate}}</div></td>-->
+                    <td><valid-input v-label="{{'MODULES.MANAGE.DHCPV6.DOMAIN_SEARCH_LIST'|translate}}" ng-model="dhcpModel.dhcpserverv6.domain_search_list"  v-rpcid="page_dhcp_v6" ></valid-input></td>
+                  </tr>
+                  <tr>
+                    <!--<td><div style="display: inline-block;">{{'MODULES.MANAGE.DHCPV6.SNTP_SERVER'|translate}}</div></td>-->
+                    <td><valid-input v-label="{{'MODULES.MANAGE.DHCPV6.SNTP_SERVER'|translate}}"  ng-model="dhcpModel.dhcpserverv6.sntp_server" v-type="ipv6" v-rpcid="page_dhcp_v6" ></valid-input></td>
+                  </tr>
+                </table>
+              </transclude-body>
+            </mar-section>
+          </div>
+          <div style="text-align: left;margin-top: 15px;margin-left: 40px;">
+            <div style="display: inline-block;">
+              <!--<button id="server_config_clear" ng-click="clearServerConfig()" class="mdc-button mdc-button&#45;&#45;raised" style="width:200px;height:50px;font-size:20px;color:white;">{{ "MODULES.ALERT.SERVER_CONFIG.CLEAR_SETTING"|translate}}</button>-->
+              <mar-button btn-id="'server_config_clear'" btn-text="::'MODULES.MANAGE.DHCP.BUTTON.CLEAR' | translate" btn-icon="'clear'" btn-class="'btn-white btn-lg'" btn-click="clearDHCPV6Config()" />
+            </div>
+            <div style="display: inline-block;margin-left: 20px;">
+              <mar-button id="'server_config_save'" btn-text="::'MODULES.MANAGE.DHCP.BUTTON.SAVE' | translate" btn-icon="'done'" btn-class="'btn-black btn-lg'" btn-click="saveDHCPV6Config()"/>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-content ipv6_mapping" ng-if="tabSelected.type == 'ipmac_mapping_v6'">
+          <mdl-table actions-show="dhcpModel.v6actionsShow"
+                     actions="dhcpModel.v6rowActions"
+                     provider="dhcpModel.dhcpv6TableProvider" api-ready="onDHCPV6APIReady($api)"
+                    >
+          </mdl-table>
+        </section>
+      </div>
+      <!--</div>-->
+    </section>
+
+    <ng-controller ng-controller="ipmacEstablishController">
+      <wizard></wizard>
+    </ng-controller>
+
+    <ng-controller ng-controller="deviceWizardController">
+      <wizard></wizard>
+    </ng-controller>
+
+  </div>
+
+
+<!--</div>-->

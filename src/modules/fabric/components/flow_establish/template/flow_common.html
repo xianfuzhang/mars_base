@@ -1,0 +1,53 @@
+<div class="flow_common">
+
+    <div class="stepForm__input" ng-show="showTableId">
+        <div class="stepForm__input__label">Table ID</div>
+
+        <mdl-select ng-model="flowEstablishModel.tableIdType" ng-change="changeTableId($value)"
+                    display-label="tableIdSchemaList">
+        </mdl-select>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'|translate}}<span class="stepForm__input__required">*</span></div>
+
+        <valid-input v-name="flow_priority" v-require="true" ng-model="flow.priority" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_common" ></valid-input>
+        <!--<input class="stepForm__input__text ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required" ng-blur="changeModel.priorityChange=true" name="flow_priority" type="text" ng-model="flow.priority" ng-required="true" required="required" ng-pattern="num_regex" />-->
+
+        <!--<span class="stepForm__input__error" ng-show="wizardForm.flow_priority.$invalid && changeModel.priorityChange">端口无效</span>-->
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.SWITCH.DETAIL.FLOW.COLUMN.TIMEOUT'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-name="flow_timeout" v-require="true" ng-model="flow.timeout" v-regex="num_regex_with_zero" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_common" ></valid-input>
+        <!--<input class="stepForm__input__text ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required" ng-blur="changeModel.timeoutChange=true" name="flow_timeout" type="text" ng-model="flow.timeout" ng-required="true" required="required" ng-pattern="num_regex" />-->
+        <!--<span class="stepForm__input__error" ng-show="wizardForm.flow_timeout.$invalid && changeModel.timeoutChange"></span>-->
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.SWITCH.DETAIL.FLOW.COLUMN.IS_PERMANENT'|translate}}</div>
+        <mdl-switch ng-model="flow.isPermanent" name="isPermanent"
+                    display-label="{on: 'True', off: 'False', id: 'isPermanent'}">
+        </mdl-switch>
+    </div>
+</div>
+
+
+<!--<div class="wizard__body__input">-->
+    <!--<div class="wizard__body__input__label stepForm__input__label">Priority<span class="wizard__body__input__required">*</span></div>-->
+    <!--<input class="wizard__body__input__text stepForm__input__text" name="priority" type="text" ng-model="flow.priority" ng-required="true" ng-pattern="num_regex" />-->
+<!--</div>-->
+<!--<div class="wizard__body__input">-->
+    <!--<div class="wizard__body__input__label stepForm__input__label">Timeout<span class="wizard__body__input__required">*</span></div>-->
+    <!--<input class="wizard__body__input__text stepForm__input__text" name="timeout" type="text" ng-model="flow.timeout" ng-required="true" ng-pattern="num_regex"/>-->
+    <!--&lt;!&ndash;<div class="wizard__body__input__annotaions">&ndash;&gt;-->
+        <!--&lt;!&ndash;Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future. When a switch with the entered MAC is discovered, this configuration will automatically be applied to it.&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->
+<!--<div class="wizard__body__input">-->
+    <!--<div class="wizard__body__input__label stepForm__input__label">Is Permanent<span class="wizard__body__input__required">*</span></div>-->
+    <!--&lt;!&ndash;<input class="wizard__body__input__text-postfix" name="port" type="number" ng-model="switch.port" ng-required="true" min="0" max="65535"/>&ndash;&gt;-->
+    <!--<mdl-switch ng-model="flow.isPermanent" name="isPermanent"-->
+            <!--display-label="{on: 'True', off: 'False', id: 'isPermanent'}">-->
+    <!--</mdl-switch>-->
+<!--</div>-->

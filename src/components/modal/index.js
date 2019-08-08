@@ -1,4 +1,4 @@
-import './scss/modal';
+// import './scss/modal';
 
 import { modalBackdrop } from './ng/modalBackdrop.directive';
 import { modalCenter } from './ng/modalCenter.directive';

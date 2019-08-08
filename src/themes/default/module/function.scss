@@ -1,0 +1,79 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+//@import 'framework_layout';
+
+@include block(poe){
+  & .status_icon.material_icon.not_interested{
+    color:red;
+  }
+
+  & .status_icon.material_icon.done{
+    color:#0fd40f;
+  }
+
+}
+.dhcp-snoop-wizard.createSnoop .wizard__body{
+  height: 300px;
+}
+.dhcp-snoop-wizard .createSnoop{
+  display: flex;
+  flex-direction: column;
+}
+.dhcp-snoop-wizard .stepForm__input {
+  display: flex;
+  vertical-align: middle;
+  align-items: baseline;
+  margin: 10px 0;
+}
+.dhcp-snoop-wizard .stepForm__input__label{
+  width: 100px;
+  display: inline-block;
+}
+.dhcp-snoop-wizard  .vlan-list{
+  display: inline-block;
+  vertical-align: top;
+}
+.text-field-container .mdc-text-field-helper-text.mdc-text-field-helper-text--persistent{
+  width: 175px;
+  display: block;
+}
+.createSegment .add-btn{
+  display: inline-block;
+  margin-left: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.acl__body .status_icon.material_icon.not_interested{
+  color:red;
+}
+
+.acl__body .status_icon.material_icon.done{
+  color:#0fd40f;
+}
+
+.acl__body .header {
+  display: block;
+  position: relative;
+  margin-bottom: 3px;
+  padding:5px 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #f1f1f1;
+  outline: none;
+  background-color: #414141;
+}
+
+.acl__body .item {
+  padding: 4px 10px;
+}
+
+.acl__body .name {
+  display: inline-block;
+  width: 120px;
+  font-weight: bold;
+}
+
+.acl__body .value {
+  font-size: 15px;
+}

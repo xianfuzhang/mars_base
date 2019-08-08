@@ -6,25 +6,32 @@
   <div class="column-manipulation-field__content">
     <div class="column-manipulation-field__column">
       <div ng-repeat="item in columns_1 track by $index">
-        <mdl-checkbox ng-model="item.visible"
+        <mdl-checkbox ng-model="item.visible"  disable="item.fixed"
                       display-label="item.ui">
         </mdl-checkbox>
       </div>
     </div>
     <div class="column-manipulation-field__column">
       <div ng-repeat="item in columns_2 track by $index">
-        <mdl-checkbox ng-model="item.visible"
+        <mdl-checkbox ng-model="item.visible"  disable="item.fixed"
                       display-label="item.ui">
         </mdl-checkbox>
       </div>
     </div>
   </div>
   <div class="column-manipulation-field__footer">
-    <button class="mdc-button mdc-ripple-upgraded right"
+    <div style="display: inline-block;float: right; margin-left: 15px;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="model.endpointForm.$invalid"></mar-button>
+      </div>
+
+      <div style="display: inline-block;float: right;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)"></mar-button>
+      </div>
+    <!-- <button class="mdc-button mdc-ripple-upgraded right"
             ng-click="save($event)"
             ng-bind="'MODULES.TABLE.COLUMN.SAVE'|translate"></button>
     <button class="mdc-button mdc-ripple-upgraded right"
             ng-click="cancel($event)"
-            ng-bind="'MODULES.TABLE.COLUMN.CANCEL'|translate"></button>
+            ng-bind="'MODULES.TABLE.COLUMN.CANCEL'|translate"></button> -->
   </div>
 </div>

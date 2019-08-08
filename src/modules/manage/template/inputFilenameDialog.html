@@ -1,0 +1,22 @@
+<div class="column-manipulation-field">
+ 	<div class="column-manipulation-field__header">
+		<span class="column-manipulation-field__title"
+          ng-bind="'MODULES.MANAGE.ELASTICSEARCH.DIALOG.INPUT_FILENAME'|translate"></span>
+ 	</div>
+ 	<form class="dateRange__form" name="filenameForm" autocomplete="off">
+ 		<div style="height:70px;" class="column-manipulation-field__content column-manipulation-field__content__date-range-modifier">
+			<div style="margin-left:80px;font-size:16px !important;">
+				<valid-input v-require="true" v-span="true" ng-model="dialogModel.filename" v-rpcid="filename" v-regex="fileNameRegex" v-message="{{ 'MODULES.CONFIGURATION_LIST.ERROR.FILENAME.INVALID' | translate}}"></valid-input>
+			</div>
+ 		</div>
+	 	<div class="column-manipulation-field__footer">
+			<div style="display: inline-block;float: right; margin-left: 15px;">
+				<mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-white btn-sm'" btn-click="save($event)" btn-disabled="filenameForm.$invalid" />
+			</div>
+
+			<div style="display: inline-block;float: right;margin-right:15px;">
+				<mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)" />
+			</div>
+	    </div>
+	</form>
+ </div>

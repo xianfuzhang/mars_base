@@ -1,0 +1,23 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{page_title}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span ng-bind="'MODULE.ACCOUNT.MANAGE.TITLE'|translate"></span>
+  </content-header>
+  <section class="app-body account_manager">
+    <div class="mars-col-24">
+      <div class="main__content">
+        <section class="tab-content">
+          <mdl-table actions-show="accountModel.actionsShow"
+                     actions="accountModel.rowActions"
+                     row-select-action="onTableRowSelectAction($event)"
+                     row-click="onTableRowClick($event)"
+                     provider="accountModel.provider" api-ready="onAPIReady($api)"
+                     on-add="createUser()" on-remove="batchRemove($value)">
+          </mdl-table>
+        </section>
+      </div>
+    </div>
+  </section>
+</div>

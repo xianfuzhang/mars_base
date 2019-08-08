@@ -1,0 +1,13 @@
+<div class="ip_mac_establish">
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.MANAGE.DHCP.TABLE.MAC'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input ng-if="isEdit != true" v-name="mac" v-require="true" ng-model="ipmacModel.mac" v-type="mac" v-rpcid="page_ipmac" ></valid-input>
+        <div ng-if="isEdit == true" style="font-size:15px;">{{ipmacModel.mac}}</div>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.MANAGE.DHCP.TABLE.IP'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-name="ip" v-require="true" ng-model="ipmacModel.ip" v-type="ipv4" v-rpcid="page_ipmac" ></valid-input>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+//@import 'framework_layout';
+
+/* .alert-list, .alert-rules{
+  margin-bottom: 80px;
+} */
+.alert-list .mdl-table-field, .alert-rules .mdl-table-field{
+  /* padding: 0 24px; */
+  overflow: hidden;
+}
+
+.sender_wechat_section{
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  //border: 1px solid #fafafa;
+  padding: 8px;
+  //background-color: #fafafa;
+  border-radius: 5px;
+  text-align: left;
+}
+
+.sender_email_section{
+  margin-left: 50px;
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  //border: 1px solid #fafafa;
+  padding: 8px;
+  //background-color: #fafafa;
+  border-radius: 5px;
+  text-align: left;
+}
+
+@-webkit-keyframes fly_into {
+  0% {
+    margin-left: -100%;
+  }
+
+  100% {
+    margin-left: 0%;
+  }
+}
+
+@-moz-keyframes fly_into {
+  0% {
+    margin-left: -100%;
+  }
+
+  100% {
+    margin-left: 0%;
+  }
+}
+
+@-ms-keyframes fly_into {
+  0% {
+    margin-left: -100%;
+  }
+
+  100% {
+    margin-left: 0%;
+  }
+}
+
+@keyframes fly_into {
+  0% {
+    margin-left: -100%;
+  }
+
+  100% {
+    margin-left: 0%;
+  }
+}
+
+.inform .mdc-card{
+  box-shadow: none;
+}
+
+.inform .mar_section__body{
+  background: #fbfbfb;
+}

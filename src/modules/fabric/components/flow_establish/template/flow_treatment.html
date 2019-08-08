@@ -1,0 +1,45 @@
+<div class="wizard__body__input flow_instruction">
+
+    <div ng-if='showTableId' ng-repeat="inputItem in treatmentPageApplyAction" class="stepForm__input">
+        <div ng-if="inputItem.input_type == undefined" class="stepForm__input__label">{{inputItem.field_label}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span></div>
+
+        <mdl-checkbox ng-if="inputItem.input_type =='checkbox'" on-click="outputChange()" style="margin-left: -8px;margin-top: 16px;" class="title_checkbox" ng-model="inputItem.value"
+                      display-label="inputItem.displayLabel">
+        </mdl-checkbox>
+
+        <valid-input ng-if="inputItem.input_type == undefined" v-require="{{inputItem.require}}" ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_instruction"></valid-input>
+    </div>
+
+    <div ng-if="showTableId && treatmentPageGroup.groups != null" class="stepForm__input">
+        <div class="stepForm__input__label" ng-bind="'MODULES.FABRIC.FLOW.ESTABLISH.GROUP_TYPE'|translate"></div>
+        <mdl-select ng-model="treatmentPageGroup.groupTypeSelected" value-change="groupChanged()"
+                    display-label="treatmentPageGroup.groupsDisplayLabel" >
+        </mdl-select>
+    </div>
+    <div  ng-if="showTableId && treatmentPageGroup.groups != null" >
+        <div class="stepForm__input__label">Group ID</div>
+        <mdl-select ng-model="treatmentPageGroup.groupSelected"
+                    display-label="treatmentPageGroup.groupIdDisplayLabel">
+        </mdl-select>
+    </div>
+
+    <div ng-if='!showTableId'>
+        <div  class="stepForm__input">
+            <div class="stepForm__input__label">{{'MODULES.FABRIC.FLOW.ESTABLISH.OUTPUT'|translate}}<span class="stepForm__input__required">*</span></div>
+            <!--value-change="outputChange()"-->
+            <mdl-select  ng-model="treatmentModel.output"
+                        display-label="treatmentOutputDisplayLabel" >
+            </mdl-select>
+        </div>
+        <div  class="stepForm__input" ng-if="treatmentModel.output.value == 'PORT'">
+            <div class="stepForm__input__label">{{'MODULES.FABRIC.FLOW.ESTABLISH.PORTS'|translate}}<span class="stepForm__input__required">*</span></div>
+            <valid-input v-require="true" ng-model="treatmentModel.ports" v-type="port_array" v-rpcid="page_flow_instruction"></valid-input>
+        </div>
+
+        <div  class="stepForm__input" ng-if="treatmentModel.output.value == 'PORT'">
+            <div class="stepForm__input__label">{{'MODULES.FABRIC.FLOW.ESTABLISH.VLAN_PUSH'|translate}}</div>
+            <valid-input ng-model="treatmentModel.push_vlan" v-type="vlan" v-rpcid="page_flow_instruction"></valid-input>
+        </div>
+    </div>
+
+</div>

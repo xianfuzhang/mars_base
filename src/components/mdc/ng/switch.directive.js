@@ -1,6 +1,8 @@
 export class mdlSwitch {
   static getDI() {
-    return [];
+    return [
+      '_'
+    ];
   }
   constructor(...args){
     this.di = {};
@@ -12,6 +14,7 @@ export class mdlSwitch {
     this.restrict = 'E';
     this.template = require('../templates/switch.html');
     this.scope = {
+      onClick: '&',
       displayLabel: '=',
       disable: '=',
       data: '=ngModel',
@@ -23,7 +26,10 @@ export class mdlSwitch {
     if (scope.disable) {   //scope.$eval(attrs.status)
       element.find('input').attr('disabled', true);
     }
-    if (scope.data) {
+
+    scope.onClick = scope.onClick || angular.noop;
+
+    if (scope.data === true || scope.data === "true") {
       element.find('input').attr('checked' ,true);
     }
     scope.onLabel = (scope.displayLabel && scope.displayLabel.on) || 'on';
@@ -33,10 +39,23 @@ export class mdlSwitch {
     scope.clicked = () => {
       scope.data = !scope.data;
       ngModel.$setViewValue(scope.data);
+      scope.onClick();
     };
 
-    scope.$on('$destroy', ()=> {
 
+    let unSubscribers = [];
+    unSubscribers.push(scope.$watch('data',(value)=>{
+      if (value === true || value === "true") {
+        element.find('input').attr('checked' ,true);
+      } else {
+        element.find('input').attr('checked' ,false);
+      }
+    }));
+
+    scope.$on('$destroy', ()=> {
+      this.di._.forEach(unSubscribers,(unSub)=>{
+        unSub();
+      })
     });
   }
 }

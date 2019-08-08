@@ -1,0 +1,68 @@
+<div class="column-manipulation-field">
+  <div class="column-manipulation-field__header">
+    <span class="column-manipulation-field__title"
+          ng-bind="'MODULES.TOPO.SWITCH.FLOW.TITLE'|translate"></span>
+  </div>
+  <section class="tab-content">
+  	<div class="detail-row">
+  		<div class="left-item">
+	  		<span class="detail-name" ng-bind="::'MODULES.SWITCH.DETAIL.FLOW.COLUMN.TABLENAME'|translate"></span>
+	  		<span>:</span>
+			<span class="detail-value">{{detail.tableId}}</span>
+	  	</div>
+	  	<div class="right-item">
+			<span class="detail-name" ng-bind="::'MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'|translate"></span>
+			<span>:</span>
+			<span class="detail-value">{{detail.state}}</span>
+	  	</div>
+  	</div>
+  	<div class="detail-row">
+  		<div class="left-item">
+			<span class="detail-name" ng-bind="::'MODULES.SWITCH.DETAIL.FLOW.COLUMN.APP'|translate"></span>
+			<span>:</span>
+			<span class="detail-value">{{detail.appId}}</span>
+	  	</div>
+	  	<div class="right-item">
+			<span class="detail-name" ng-bind="::'MODULES.SWITCH.DETAIL.FLOW.COLUMN.PRIORITY'|translate"></span>
+			<span>:</span>
+			<span class="detail-value">{{detail.priority}}</span>
+	  	</div>
+  	</div>
+  	<div class="detail-row">
+  		<div class="left-item">
+			<span class="detail-name" ng-bind="::'MODULES.SWITCH.DETAIL.FLOW.COLUMN.PACKETS'|translate"></span>
+			<span>:</span>
+			<span class="detail-value">{{detail.packets}}</span>
+	  	</div>
+	  	<div class="right-item">
+			<span class="detail-name" ng-bind="::'MODULES.SWITCH.DETAIL.FLOW.COLUMN.DURATION'|translate"></span>
+			<span>:</span>
+			<span class="detail-value">{{detail.life}}</span>
+	  	</div>
+  	</div>
+  	<div class="detail-row">
+		<span class="detail-name" ng-bind="::'MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR'|translate"></span>
+		<span>:</span>
+		<div ng-if="criteria.length > 0">
+			<div class="detail-value" ng-repeat="item in criteria">
+				<span>{{item}}</span>
+			</div>
+		</div>
+		<div ng-if="criteria.length === 0">
+			<span>-</span>
+		</div>
+  	</div>
+  	<div class="detail-row">
+		<span class="detail-name" ng-bind="::'MODULES.SWITCH.DETAIL.FLOW.COLUMN.TREATMENT'|translate"></span>
+		<span>:</span>
+		<div ng-if="treatment.length > 0">
+			<div class="detail-value" ng-repeat="item in treatment">
+				<span>{{item}}</span>
+			</div>
+		</div>
+		<div ng-if="treatment.length === 0">
+			<span>-</span>
+		</div>
+  	</div>
+  </section>
+</div>

@@ -1,0 +1,15 @@
+<div class="cos_establish">
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">queue</div>
+        <mdl-select ng-model="model.queueObject" display-label="queuesLabel" disable="model.update">
+        </mdl-select>
+    </div>
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">dscp<span class="stepForm__input__required">*</span></div>
+        <!-- <valid-input v-name="dscp" v-require="true" ng-model="model.dscp" v-rpcid="page_tenant_es" ></valid-input> -->
+        <mdl-text ng-model="model.dscp"
+                  helper="model.dscpHelper"
+                  display-label="model.dscpDisplayLabel">
+        </mdl-text>
+    </div>
+</div>

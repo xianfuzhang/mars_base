@@ -1,0 +1,40 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+//@import 'framework_layout';
+
+.tenant-detail .route_item{
+  min-width: 200px;
+  margin-right: 20px;
+  align-items: center;
+  padding:10px;
+}
+
+.tenant-detail .route_item .route_item_label{
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.tenant-detail .route_item .route_item_value{
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+.tenant-detail .mar_section{
+  background: none;
+  border: 1px solid #f1f1f1;
+  border-radius: 5px;
+  //box-shadow: 2px 2px 2px gray;
+}
+
+.tenant-detail .mdc-card{
+  box-shadow: none;
+}
+
+//.tenant-detail .mar_section__body{
+//  color: whitesmoke;
+//}
+//
+//.tenant-detail .mar_section__header{
+//  color: whitesmoke;
+//}

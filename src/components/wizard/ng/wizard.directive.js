@@ -7,6 +7,7 @@ export class Wizard {
     return [
       '$compile',
       '$sce',
+      '$timeout',
       '$filter'
     ];
   }
@@ -20,71 +21,130 @@ export class Wizard {
     this.replace = true;
     this.restrict = 'E';
     this.template = require('../template/wizard');
-    this.scope = {
-      title: '=',
-      steps: '=',
-      allowSkip: '=',
-      showWizard: '=',
-      beforeCancel: '&',
-      beforeSubmit: '&'
-    };
+    this.scope = false;
     this.link = (...args) => this._link.apply(this, args);
   }
 
-  _link (scope) {
+  _link (scope, element) {
     let unsubscribers = [];
 
-    (function init () {
+    let init = () => {
       scope.curIndex = 0;
+      scope.errorMessage = '';
       scope.showWizard = scope.showWizard || false;
-
-      scope.preStep = function() {
-        scope.curIndex = scope.curIndex != 0 ? scope.curIndex - 1 : scope.curIndex;
-      }
-
-      scope.nextStep = function() {
-        scope.curIndex = scope.curIndex < scope.steps.length ? scope.curIndex + 1 : scope.curIndex;
-      }
-
-      scope.switchTo = function($index) {
-        scope.curIndex = $index;
-      }
-
-      scope.cancel = function() {
-        let formModel = {};
-        for(let key in scope.wizardForm) {
-          if (!key.startsWith('$')) {
-            formModel[key] = scope.wizardForm[key].$viewValue;
-          }
+      scope.loading = false;
+      scope.wizardStyle = scope.wizardHeight || {};
+      scope.isWizardContentVerticalCenter = scope.isWizardCenter || false;
+      scope.wizardForm = {};
+    }
+    
+    init();
+  
+    scope.preStep = function() {
+      let preIndex = scope.curIndex != 0 ? scope.curIndex - 1 : scope.curIndex;
+      if(typeof scope.stepValidation == 'function' && preIndex != scope.curIndex) {
+        // validate the step form by parent controller scope
+        let res = scope.stepValidation(scope.curIndex + 1, preIndex + 1);
+        if(res.valid == false) {
+          scope.errorMessage = res.errorMessage;
+        } else {
+          scope.curIndex = preIndex;
+          scope.errorMessage = '';
         }
-
-        if (scope.beforeCancel({formData: formModel}))
-          scope.showWizard = false;
+      } else {
+        scope.curIndex = preIndex;
       }
+    }
 
-      scope.submit = function() {
-        let formModel = {};
-        for(let key in scope.wizardForm) {
-          if (!key.startsWith('$')) {
-            formModel[key] = scope.wizardForm[key].$viewValue;
-          }
+    scope.nextStep = function() {
+      let nextIndex = scope.curIndex < scope.steps.length ? scope.curIndex + 1 : scope.curIndex;
+      if(typeof scope.stepValidation == 'function' && nextIndex != scope.curIndex) {
+        // validate the step form by parent controller scope
+        let res = scope.stepValidation(scope.curIndex + 1, nextIndex + 1);
+        if(res.valid == false) {
+          scope.errorMessage = res.errorMessage;
+        } else {
+          scope.curIndex = nextIndex;
+          scope.errorMessage = '';
         }
-
-        if (scope.beforeSubmit({formData: formModel}))
-            scope.showWizard = false;
+      } else {
+        scope.curIndex = nextIndex;
       }
+    }
 
-      const sce = this.di.$sce;
-      scope.trustAsHtml = function(string) {
-        return sce.trustAsHtml(string);
-      };
+    scope.switchTo = function($index) {
+      let nextIndex = $index;
+      if(typeof scope.stepValidation == 'function' && nextIndex != scope.curIndex) {
+        // validate the step form by parent controller scope
+        let res = scope.stepValidation(scope.curIndex + 1, nextIndex + 1);
+        if(res.valid == false) {
+          scope.errorMessage = res.errorMessage;
+        } else {
+          scope.curIndex = nextIndex;
+          scope.errorMessage = '';
+        }
+      } else {
+        scope.curIndex = nextIndex;
+      }
+    }
 
-      scope.$on('$destroy', () => {
-        unsubscribers.forEach((cb) => {
-          cb();
+    let _closeWizard = () =>{
+      scope.isWizardClosing =  true;
+      scope.$apply();
+      this.di.$timeout(()=>{
+        scope.showWizard = false;
+        scope.isWizardClosing =  false;
+      },400);
+    }
+
+    scope.postCancel = function() {
+      scope.cancel()
+        .then((result) => {
+          if (result.valid == false) {
+            scope.errorMessage = result.errorMessage || '';
+          } else {
+            _closeWizard();
+          }
         });
+    }
+
+    scope.postSubmit = function() {
+      scope.loading = true;
+      scope.submit()
+        .then((result) => {
+          scope.loading = false;
+          
+          if (result.valid == false) {
+            scope.errorMessage = result.errorMessage || '';
+          } else {
+            // scope.showWizard = false;
+            _closeWizard();
+          }
+
+          scope.$apply();
+        });
+    }
+    
+    scope.closeMessage = function() {
+      scope.errorMessage = '';
+    }
+
+    const sce = this.di.$sce;
+    scope.trustAsHtml = function(string) {
+      return sce.trustAsHtml(string);
+    };
+    
+    unsubscribers.push(scope.$watch('showWizard', (newVal) => {
+      if(newVal === true) {
+        init()
+      }
+    }));
+
+    scope.$on('$destroy', () => {
+      unsubscribers.forEach((cb) => {
+        cb();
       });
-    }).call(this);
+    });
   }
 }
 

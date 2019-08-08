@@ -1,0 +1,23 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{page_title}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span ng-bind="'MODULES.SWITCHES.TAB.SCHEMA.ENDPOINT'|translate"></span>
+  </content-header>
+  <section class="app-body" >
+    <div class="mars-col-24">
+      <div class="main__content">
+        <section class="tab-content">
+          <mdl-table actions-show="endpointModel.actionsShow"
+                     actions="endpointModel.rowActions"
+                     row-click="onTableRowClick($event)"
+                     row-select-action="onTableRowSelectAction($event)"
+                     on-add="addEndpoint()" on-remove="batchRemove($value)"
+                     provider="endpointModel.endpointProvider" api-ready="onEndpointApiReady($api)">
+          </mdl-table>
+          </section>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,47 @@
+<div class="storm_establish">
+
+    <div class="stepForm__input">
+        <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.STORM.WIZARD.DEVICE'|translate}}</div>-->
+        <mdl-select ng-model="stormModel.device" display-label="displayLabel.device" disable="isEdit">
+        </mdl-select>
+    </div>
+
+    <div class="stepForm__input" style="display: flex;flex-direction: row;">
+        <div style="display:inline-block;vertical-align: top">
+            <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.STORM.WIZARD.UNICAST_ENABLED'|translate}}</div>-->
+            <mdl-select ng-model="stormModel.unicast_enabled" display-label="displayLabel.unicast_status">
+            </mdl-select>
+        </div>
+        <div style="display:inline-block;vertical-align: top;margin-left:5px;">
+            <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.STORM.WIZARD.UNICAST'|translate}}</div>-->
+            <valid-input  v-label="{{'MODULES.FABRIC.STORM.WIZARD.UNICAST'|translate}}" v-require="true" ng-model="stormModel.unicast" v-regex="pps_regex" v-message="{{ 'MODULES.FABRIC.STORM.REG.PPS' | translate}}" v-rpcid="page_storm_establish" ></valid-input>
+
+        </div>
+    </div>
+
+    <div class="stepForm__input"  style="display: flex;flex-direction: row;">
+        <div style="display:inline-block;vertical-align: top">
+            <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.STORM.WIZARD.BCAST_ENABLED'|translate}}</div>-->
+            <mdl-select ng-model="stormModel.bcast_enabled" display-label="displayLabel.bcast_status">
+            </mdl-select>
+        </div>
+        <div style="display:inline-block;vertical-align: top;margin-left:5px;">
+            <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.STORM.WIZARD.BCAST'|translate}}</div>-->
+            <valid-input v-label="{{'MODULES.FABRIC.STORM.WIZARD.BCAST'|translate}}" v-require="true" ng-model="stormModel.bcast" v-regex="pps_regex" v-message="{{ 'MODULES.FABRIC.STORM.REG.PPS' | translate}}" v-rpcid="page_storm_establish" ></valid-input>
+        </div>
+    </div>
+
+    <div class="stepForm__input"  style="display: flex;flex-direction: row;">
+        <div style="display:inline-block;vertical-align: top">
+            <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.STORM.WIZARD.MCAST_ENABLED'|translate}}</div>-->
+            <mdl-select ng-model="stormModel.mcast_enabled" display-label="displayLabel.mcast_status">
+            </mdl-select>
+        </div>
+        <div style="display:inline-block;vertical-align: top;margin-left:5px;">
+            <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.STORM.WIZARD.MCAST'|translate}}</div>-->
+            <valid-input v-label="{{'MODULES.FABRIC.STORM.WIZARD.MCAST'|translate}}" v-require="true" ng-model="stormModel.mcast" v-regex="pps_regex" v-message="{{ 'MODULES.FABRIC.STORM.REG.PPS' | translate}}" v-rpcid="page_storm_establish" ></valid-input>
+        </div>
+    </div>
+
+
+</div>

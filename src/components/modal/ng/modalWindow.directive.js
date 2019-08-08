@@ -33,11 +33,11 @@ export class modalWindow {
 
       scope.close = (evt) => {
         let modal = this.di.modalStack.getTop();
-        if (modal && evt.target === evt.currentTarget) {
+        // if (modal && evt.target === evt.currentTarget) {
           evt.preventDefault();
           evt.stopPropagation();
           this.di.modalStack.dismiss(modal.key, {canceled: true});
-        }
+        // }
       };
 
       // trigger CSS transitions

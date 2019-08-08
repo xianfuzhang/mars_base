@@ -1,0 +1,54 @@
+<div class="column-manipulation-field">
+  <div class="column-manipulation-field__header">
+    <span class="column-manipulation-field__title"
+          ng-bind="'MODULE.ACCOUNT.UPDATE.TITTLE'|translate"></span>
+  </div>
+  <form class="user__form" name="userModel.userForm" autocomplete="off" novalidate>
+    <div class="column-manipulation-field__content">
+      <div class="column-manipulation-field__item padding-left-20">
+        <div class="label">
+          <label ng-bind="'MODULE.ACCOUNT.CREATE.NAME'|translate"></label>
+        </div>
+        <mdl-text ng-model="userModel.user_name" disable="true">
+        </mdl-text>
+      </div>
+      <div class="column-manipulation-field__item">
+        <mdl-checkbox ng-model="userModel.changePwd" display-label="userModel.pwdLabel">
+        </mdl-checkbox>
+        <mdl-checkbox ng-model="userModel.changeGroup" display-label="userModel.groupLabel">
+        </mdl-checkbox>
+      </div>
+      <div class="column-manipulation-field__item padding-left-20" ng-if="userModel.changePwd">
+        <div class="label">
+          <label ng-bind="'MODULE.ACCOUNT.UPDATE.NEW_PASSWORD'|translate"></label>
+          <span class="stepForm__input__required">*</span>
+        </div>
+        <mdl-text ng-model="userModel.newPwd" helper="userModel.passwordHelper"
+                  display-label="userModel.passwordDisplayLabel"></mdl-text>
+      </div>
+      <div class="column-manipulation-field__item padding-left-20" ng-if="userModel.changeGroup">
+        <div class="group-item-field">
+          <span ng-bind="'MODULE.ACCOUNT.CREATE.GROUPS'|translate"></span>
+          <mdl-checkbox ng-model="userModel.group.supergroup" display-label="userModel.superGroupDisplayLabel">
+          </mdl-checkbox>
+          <mdl-checkbox ng-model="userModel.group.admingroup" display-label="userModel.adminGroupDisplayLabel">
+          </mdl-checkbox>
+          <mdl-checkbox ng-model="userModel.group.guestgroup" display-label="userModel.guestGroupDisplayLabel">
+          </mdl-checkbox>
+          <div class="group-item-field__group-helper" ng-show="userModel.groupHelper.validation === 'true'">
+            {{userModel.groupHelper.content}}
+          </div>
+        </div>  
+      </div>
+    </div>
+    <div class="column-manipulation-field__footer">
+      <div style="display: inline-block;float: right; margin-left: 15px;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="userModel.userForm.$invalid" />
+      </div>
+
+      <div style="display: inline-block;float: right;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)" />
+      </div>
+    </div>
+  </form>
+</div>

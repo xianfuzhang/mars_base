@@ -1,0 +1,163 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{page_title}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span>{{'MODULE.HEADER.LOGICAL.TENANT' | translate}}</span>
+  </content-header>
+  <section class="app-body tenant-detail">
+    <div class="main__content">
+      <mdl-tabs ng-model="tabSelected" options="tabs"
+                class-list="main__content__device-detail-tabs"
+                on-select="onTabChange($value)">
+      </mdl-tabs>
+      <div style="display:flex;height:100%" ng-if="tabSelected.type == 'segment'">
+        <div class="mars-col-16">
+          <div class="main__content">
+            <section class="tab-content">
+              <mdl-table actions-show="detailModel.actionsShow"
+                         actions="detailModel.rowActions"
+                         row-select-action="onTableRowSelectAction($event)"
+                         row-click="onTableRowClick($event)"
+                         provider="detailModel.provider" api-ready="onApiReady($api)"
+                         on-add="addSegment()" on-remove="batchRemove($value)">
+              </mdl-table>
+            </section>
+          </div>
+        </div>
+        <div class="mars-col-8" ng-if="tabSelected.type === 'segment' && segment">
+          <div class="segment-detail">
+            <h3 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.TITLE'|translate"></h3>
+            <div class="segment-vlan-member" ng-show="segment.type === 'vlan'">
+              <h4 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.VLAN.TITLE'|translate"></h4>
+              <mdl-table actions-show="segmentModel.actionsShow"
+                         provider="segmentModel.vlanProvider" api-ready="onVlanApiReady($api)">
+              </mdl-table>
+            </div>
+            <div class="segment-vxlan-member" ng-show="segment.type === 'vxlan'">
+              <h4 ng-bind="'MODULES.LOGICAL.TENANT.DETAIL.SEGMENT.DETAIL.VXLAN.TITLE'|translate"></h4>
+              <mdl-table actions-show="segmentModel.actionsShow"
+                         provider="segmentModel.vxlanProvider" api-ready="onVxlanApiReady($api)">
+              </mdl-table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;height:100%;flex-direction:column;width:100%;overflow-y:auto;" ng-if="tabSelected.type == 'route'">
+        <!--<div style="display: flex;flex-direction:column;width:100%;height:100%;overflow-y:auto;">-->
+          <div ng-if="tenantType == 'Normal'" style="min-width:300px;max-width:500px;margin-bottom: 10px;margin-top:10px;">
+            <mar-section s-title="{{'MODULES.LOGICAL.TENANT.ROUTER.LABEL.ROUTER_DETAIL'|translate}}" no-fold="true" class="detail_summary">
+              <transclude-body>
+                <div style="margin-bottom: 10px;">
+                  <span class="route_item">
+                    <label class="route_item_label">{{'MODULES.LOGICAL.TENANT.ROUTER.LABEL.ROUTER_NAME'|translate}}:</label>
+                    <span class="route_item_value">{{tenantRouteModel.name}}</span>
+                  </span>
+                  <span class="route_item">
+                    <label class="route_item_label">{{'MODULES.LOGICAL.TENANT.ROUTER.LABEL.SEGMENT_WHITE_LIST'|translate}}:</label>
+                    <span class="route_item_value">{{tenantRouteModel.segments}}</span>
+                  </span>
+                </div>
+                <div style="text-align: right;">
+                  <mar-button ng-if="!tenantRouteModel.name" btn-id="'save_tenant_router'" btn-text="::'MODULES.LOGICAL.TENANT.DETAIL.BUTTON.SETTINGS' | translate" btn-style="'height:33px;'" btn-class="'btn-white'" btn-icon="'settings'" btn-click="routeSetting()" ></mar-button>
+                  <mar-button ng-if="tenantRouteModel.name" btn-id="'clear_tenant_router'" btn-text="::'MODULES.LOGICAL.TENANT.DETAIL.BUTTON.CLEAR' | translate" btn-style="'height:33px;'" btn-class="'btn-white'" btn-icon="'clear'"  btn-click="clearRouteSetting()" ></mar-button>
+                </div>
+
+              </transclude-body>
+            </mar-section>
+          </div>
+
+          <div ng-if="tenantType == 'System'" style="min-width:300px;max-width:500px;margin-bottom: 10px;margin-top:10px;">
+            <mar-section s-title= "{{'MODULES.LOGICAL.TENANT.DETAIL.SYSTEM_ROUTE.TITLE'|translate}}" no-fold="true" class="detail_summary">
+              <transclude-body>
+                <div style="margin-bottom: 10px;">
+                  <span class="route_item">
+                      <label class="route_item_label">{{'MODULES.LOGICAL.TENANT.ROUTER.LABEL.TENANT_ROUTER'|translate}}:</label>
+                      <span class="route_item_value">{{tenantRouteModel.tenant_routers}}</span>
+                    </span>
+
+                </div>
+                <div style="text-align: right;">
+                  <mar-button ng-if="!tenantRouteModel.name" btn-id="'save_tenant_router'" btn-text="::'MODULES.LOGICAL.TENANT.DETAIL.BUTTON.SETTINGS' | translate" btn-style="'height:33px;'" btn-class="'btn-white'"  btn-icon="'settings'" btn-click="routeSetting()" ></mar-button>
+                  <mar-button ng-if="tenantRouteModel.name" btn-id="'clear_tenant_router'" btn-text="::'MODULES.LOGICAL.TENANT.DETAIL.BUTTON.CLEAR' | translate" btn-style="'height:33px;'" btn-class="'btn-white'" btn-icon="'clear'"  btn-click="clearRouteSetting()" ></mar-button>
+                </div>
+              </transclude-body>
+            </mar-section>
+          </div>
+
+          <div style="display: flex;flex-direction: column;width:100%;height:100%;" ng-if="tenantRouteModel.name && tenantType == 'Normal' ">
+
+            <div style="margin-bottom: 20px;">
+              <div style="min-width:800px;max-width:1200px;">
+                <mar-section s-title="{{'MODULES.LOGICAL.TENANT.ROUTER.LABEL.POLICY_ROUTER'|translate}}" no-fold="true" class="detail_summary">
+                  <transclude-body>
+                    <mdl-table actions-show="detailModel.actionsShow4policy"
+                               actions="detailModel.rowActions4policy"
+                               row-select-action="onTableRowSelectAction4policy($event)"
+                               row-click="onTableRowClick4policy($event)"
+                               provider="detailModel.provider4policy" api-ready="onApiReady4policy($api)"
+                               on-add="addPolicyRoute()" on-remove="batchRemove4policy($value)">
+                    </mdl-table>
+                  </transclude-body>
+                </mar-section>
+              </div>
+            </div>
+            <div style="margin-bottom:20px;">
+              <div style="min-width:400px;max-width:600px;margin-bottom: 20px;margin-right:20px;display: inline-block">
+                <mar-section s-title="{{'MODULES.LOGICAL.TENANT.ROUTER.LABEL.STATIC_ROUTER'|translate}}" no-fold="true" class="detail_summary">
+                  <transclude-body>
+                    <mdl-table actions-show="detailModel.actionsShow4static"
+                               actions="detailModel.rowActions4static"
+                               row-select-action="onTableRowSelectAction4static($event)"
+                               row-click="onTableRowClick4static($event)"
+                               provider="detailModel.provider4static" api-ready="onApiReady4static($api)"
+                               on-add="addStaticRoute()" on-remove="batchRemove4static($value)">
+                    </mdl-table>
+                  </transclude-body>
+                </mar-section>
+              </div>
+              <div style="min-width:400px;max-width:600px;display: inline-block">
+                <mar-section s-title="{{'MODULES.LOGICAL.TENANT.ROUTER.LABEL.NEXTHOP_GROUP'|translate}}" no-fold="true" class="detail_summary">
+                  <transclude-body>
+                    <mdl-table actions-show="detailModel.actionsShow4nexthop"
+                               actions="detailModel.rowActions4nexthop"
+                               row-select-action="onTableRowSelectAction4nexthop($event)"
+                               row-click="onTableRowClick4nexthop($event)"
+                               provider="detailModel.provider4nexthop" api-ready="onApiReady4nexthop($api)"
+                               on-add="addNexthopGroup()" on-remove="batchRemove4nexthop($value)">
+                    </mdl-table>
+                  </transclude-body>
+                </mar-section>
+              </div>
+
+            </div>
+
+
+          </div>
+        <!--</div>-->
+      </div>
+    </div>
+
+  </section>
+
+  <ng-controller ng-controller="segmentEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+  <ng-controller ng-controller="routeEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+  <ng-controller ng-controller="staticRouteEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+  <ng-controller ng-controller="nexthopEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+  <ng-controller ng-controller="policyRouteEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+</div>

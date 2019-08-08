@@ -1,0 +1,42 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+    <content-header big-title="{{'MODULE.HEADER.FABRIC.ACL' | translate}}">
+        <a href="/">Mars Cloud</a>
+        <span>•</span>
+        <span>{{'MODULE.HEADER.VLAN.VOICE_VLAN' | translate}}</span>
+    </content-header>
+    <div class="app-body acl__body" style="height:calc(100% - 60px)">
+        <div style="display:flex;width:100%;">
+            <div class="main__content" style="width:60%;">
+                <mdl-table actions-show="model.actionsShow"
+                           actions="model.rowActions"
+                           row-click="onTableRowClick($event)"
+                           row-select-action="onTableRowSelectAction($event)"
+                           provider="model.provider" api-ready="onAPIReady($api)"
+                           on-add="addAcl()" on-remove="batchRemoveAcl($value)">
+                </mdl-table>
+            </div>
+            <div class="main__content" style="width:40%;">
+                <div ng-if="model.selectedAcl.mac" style="margin-bottom: 30px;">
+                    <div class="header">MAC&nbsp;-&nbsp;<span ng-bind="model.selectedAcl.policyId"></span></div>
+                    <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.SRC_MAC' | translate"></span><span class="value" ng-bind="model.selectedAcl.mac.srcMac"></span></div>
+                    <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.DST_MAC' | translate"></span><span class="value" ng-bind="model.selectedAcl.mac.dstMac"></span></div>
+                    <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.ETHER_TYPE' | translate"></span><span class="value" ng-bind="model.selectedAcl.mac.etherType"></span></div>
+                    <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.VLAN' | translate"></span><span class="value" ng-bind="model.selectedAcl.mac.vid"></span></div>
+                </div>
+
+                <div ng-if="model.selectedAcl.ipv4">
+                    <div class="header">IPV4&nbsp;-&nbsp;<span ng-bind="model.selectedAcl.policyId"></span></div>
+                    <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.PROTOCAL' | translate"></span><span class="value" ng-bind="model.selectedAcl.ipv4.protocol"></span></div>
+                    <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.SRC_IP' | translate"></span><span class="value" ng-bind="model.selectedAcl.ipv4.srcIp"></span></div>
+                    <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.SRC_PORT' | translate"></span><span class="value" ng-bind="model.selectedAcl.ipv4.srcPort"></span></div>
+                    <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.DST_IP' | translate"></span><span class="value" ng-bind="model.selectedAcl.ipv4.dstIp"></span></div>
+                    <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.DST_PORT' | translate"></span><span class="value" ng-bind="model.selectedAcl.ipv4.dstPort"></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-controller ng-controller="aclEstablishController">
+    <wizard class="create-acl"></wizard>
+</ng-controller>

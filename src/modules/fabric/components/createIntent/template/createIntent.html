@@ -1,0 +1,50 @@
+<div class="column-manipulation-field">
+  <div class="column-manipulation-field__header">
+    <span class="column-manipulation-field__title"
+          ng-bind="'MODULES.INTENT.CREATE.TITLE'|translate"></span>
+  </div>
+  <form class="intent__form" name="model.intentForm" autocomplete="off" novalidate>
+  	<div class="column-manipulation-field__content">
+      <div class="column-manipulation-field__item" style="margin-bottom: 20px;">
+        <mdl-select ng-model="model.type" ng-change='typeChange($value)' display-label="typesLabel">
+        </mdl-select>
+      </div>
+      <div class="column-manipulation-field__item" ng-show="!host_type">
+        <div class="endpoint-item">
+          <mdl-select ng-model="model.ingressDevice" display-label="srcDevicesLabel" disable="model.srcDeviceStatus">
+          </mdl-select>
+          <mdl-text ng-model="model.ingressPort" 
+                    helper="model.ingressPortHelper"
+                    display-label="model.ingressPortDisplayLabel">
+          </mdl-text>
+        </div>
+      </div>
+      <div class="column-manipulation-field__item" ng-show='!host_type'>
+        <div class="endpoint-item">
+          <mdl-select ng-model="model.egressDevice" display-label="dstDevicesLabel">
+          </mdl-select>
+          <mdl-text ng-model="model.egressPort" 
+                    helper="model.egressPortHelper"
+                    display-label="model.egressPortDisplayLabel">
+          </mdl-text>
+        </div>  
+      </div>
+      <div class="column-manipulation-field__item"  ng-show='host_type'>
+         <mdl-select ng-model="model.srcHost" display-label="srcEndpointsLabel" disable="model.srcHostStatus">
+          </mdl-select>
+      </div>
+      <div class="column-manipulation-field__item"  ng-show='host_type'>
+         <mdl-select ng-model="model.dstHost" display-label="dstEndpointsLabel">
+          </mdl-select>
+      </div>
+  	</div>
+  	<div class="column-manipulation-field__footer">
+  		<div style="display: inline-block;float: right; margin-left: 15px;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="model.intentForm.$invalid"></mar-button>
+      </div>
+      <div style="display: inline-block;float: right;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)"></mar-button>
+      </div>
+  	</div>
+  </form>
+</div>  

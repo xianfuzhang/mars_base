@@ -1,0 +1,52 @@
+@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+@include block(receiveGroup){
+
+  @include element(content){
+    padding:5px;
+
+    @include element(item){
+      margin-top: 16px;
+      border-radius: 3px;
+      border: 1px solid gray;
+      display: block;
+      padding: 12px 30px 12px 12px;
+      position: relative;
+      box-shadow: 2px 2px 2px lightgray;
+
+      .remove {
+        top:0;
+        right:0;
+        position: absolute;
+      }
+
+      .type {
+        top: -8px;
+        left: 16px;
+        position: absolute;
+        background-color: white;
+        padding: 0 4px;
+        color: #6a6af9;
+        box-shadow: 2px 2px 2px lightgray;
+        border-radius: 2px;
+      }
+
+      @include element(line){
+        display:block;
+      }
+    }
+  }
+}
+
+.receiveGroup_table tr td:first-child {
+  //text-align: right;
+  //padding-right: 4px;
+  //background-color: red;
+  //padding-top: 4px;
+  font-weight: 300;
+  min-width:80px;
+  //font-size: 11px;
+}
+

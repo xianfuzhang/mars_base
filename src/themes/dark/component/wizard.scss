@@ -1,0 +1,461 @@
+//@import 'xbem';
+//@import 'default';
+//@import '../shared/mixin';
+
+@include block(wizard) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: #fff;
+  //background-color: #4a4a4a;
+  background: rgba(74,74,74,.7);
+  z-index: 1000;
+  overflow: hidden;
+
+  //div {
+  //  box-sizing: border-box;
+  //}
+  
+  @include element(dialog) {
+    position: relative;
+    margin: 50px auto;
+    width: 760px;
+    border-radius: 8px;
+    background: #282828;
+    //border: 1px solid #000;
+    box-shadow: 0 0 3px 3px rgba(0,0,0,.4);
+    overflow: hidden;
+    //animation: come-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: come-in 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+  
+    @include keyframes(come-in) {
+      0% {
+        transform: scaleY(0);
+      }
+      100% {
+        transform: scaleY(1);
+      }
+    }
+
+    @include keyframes(come-out) {
+      0% {
+        transform: scaleY(1);
+      }
+      100% {
+        transform: scaleY(0);
+      }
+    }
+    
+    @include state(hide) {
+      //animation: come-out 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+      animation: come-out-single 0.5s cubic-bezier(0.95, 0.05, 0.795, 0.035);
+    }
+
+
+  }
+  
+  @include element(dialog-single) {
+    position: relative;
+    margin: 50px auto;
+    width: 570px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 0 3px 3px rgba(0,0,0,.4);
+    //border: 1px solid #000;
+    overflow: hidden;
+    //animation: come-in-single 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: come-in 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+    
+    @include keyframes(come-in-single) {
+      0% {
+        transform: scaleY(0);
+      }
+      100% {
+        transform: scaleY(1);
+      }
+    }
+
+    @include keyframes(come-out-single) {
+      0% {
+        transform: scaleY(1);
+      }
+      100% {
+        transform: scaleY(0);
+      }
+    }
+
+    @include state(hide) {
+      //animation: come-out-single 0.5s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+      animation: come-out-single 0.5s cubic-bezier(0.95, 0.05, 0.795, 0.035);
+    }
+  }
+
+  @include element(header) {
+    height: 40px;
+    line-height: 40px;
+    padding: 5px 0;
+    color: #fff;
+    //border-bottom: 1px solid #777;
+    background-color: #2d2d2d;
+    //background: linear-gradient(to right, #99a9c1, #8ed6f3, #5d90a5 98%, #6c909c);
+
+    @include element(title) {
+      float: left;
+      margin-left: 15px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    @include element(dismiss) {
+      position: relative;
+      float: right;
+      width: 32px;
+      height: 32px;
+      margin-right: 15px;
+      margin-top: 5px;
+      //background: url('../../assets/images/dialog-close.png') 100% 100% no-repeat;
+      cursor: pointer;
+      user-select: none;
+
+      .border {
+
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        top: 0;
+        border-radius: 50%;
+
+        //&:hover {
+        //  animation: border_rotate linear infinite 2s ;
+        //}
+      }
+
+      .material-icons{
+        font-size: 32px;
+        transform: rotate(45deg);
+      }
+
+      &:hover {
+        .border{
+          border-top: 1px solid white;
+          animation: border_rotate linear infinite .7s ;
+        }
+        //transform: scale(1.05);
+      }
+    }
+  
+    @include element(alert) {
+      position: absolute;
+      top: 52px;
+      right: 0;
+      width: 570px;
+      box-sizing: border-box;
+      padding: 10px 0;
+      color: #8a6d3b;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+      background-color: #fcf8e3;
+      border-color: #faebcc;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      opacity: 0.8;
+      z-index: 100;
+    
+      @include state(single) {
+        width: 100%;
+      }
+      
+      &.ng-hide {
+        opacity: 0;
+      }
+      
+      &.ng-hide-add {
+        transition: all linear 0.5s;
+      }
+  
+      &.ng-hide-remove {
+        transition: all linear 0.5s;
+      }
+    
+      @include element(close) {
+        float: right;
+        cursor: pointer;
+        margin-right: 20px;
+      }
+    }
+  }
+
+  @include element(body) {
+    height: 500px;
+    clear: both;
+    
+    @include element(left) {
+      height: 100%;
+      float: left;
+      width: 190px;
+      //background: -webkit-linear-gradient(top,#CCCCCC,#F0F0F0);
+      //background: -moz-linear-gradient(top,#CCCCCC,#F0F0F0);
+      //background: -ms-linear-gradient(top,#CCCCCC,#F0F0F0);
+      //background: linear-gradient(top,#CCCCCC,#F0F0F0);
+      background-color: #414141;
+      overflow: hidden;
+
+      @include element(step) {
+        position: relative;
+        padding: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        text-align: left;
+        //background-color: #333333;
+        //background: -webkit-linear-gradient(left,#ECF0F0,#BCBCBC);
+        //background: -moz-linear-gradient(left,#ECF0F0,#BCBCBC);
+        //background: -ms-linear-gradient(left,#ECF0F0,#BCBCBC);
+        //background: linear-gradient(left,#ECF0F0,#BCBCBC);
+        border-bottom: 1px solid #666666;
+        color: map_get($colors, body_color);
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #101010;
+        }
+
+        @include state(active) {
+          background-color: #000;
+          color: #fff;
+        }
+      }
+    }
+
+    @include element(right) {
+      float: left;
+      padding: 3px 10px 5px;
+      height: 100%;
+      width: 567px;
+      background: #414141;
+      //background: #282828;
+      box-sizing: border-box;
+      //box-sizing: border-box;
+      overflow: auto;
+      position: relative;
+  
+      @include state(single) {
+        width: 100%;
+      }
+      
+      @include element(content) {
+        width: 100%;
+        height: 100%;
+      }
+      
+      @include element(alert) {
+        position: absolute;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 15px 0;
+        color: #8a6d3b;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+        border: 1px solid transparent;
+        border-radius: 4px;
+      }
+    }
+    
+    @include element(form) {
+      width: 350px;
+      padding: 0 15px;
+      overflow-x: hidden;
+  
+      @include state(single) {
+        margin: 0 auto;
+      }
+    }
+  }
+
+  @include element(footer) {
+    width: 100%;
+    height: 50px;
+    //border-top: 1px solid #777;
+    background-color: #414141;
+    //background-color: #191919;
+    //background: -webkit-linear-gradient(left,#000000,#4C4C4C,#000000);
+    //background: -moz-linear-gradient(left,#000000,#4C4C4C,#000000);
+    //background: -ms-linear-gradient(left,#000000,#4C4C4C,#000000);
+    //background: linear-gradient(left,#000000,#4C4C4C,#000000);
+
+    @include element(btn-group) {
+      display: block;
+      float: right;
+      margin-right: 20px;
+    }
+
+    @include element(btn) {
+      display: inline-block;
+      margin: 7px 5px 0;
+    }
+  }
+}
+
+@include block(stepForm) {
+  //div {
+  //  box-sizing: border-box;
+  //}
+  
+  @include element(input) {
+    position: relative;
+    margin: 10px 0 20px;
+    
+    @include element(error) {
+      font-size: 12px;
+      color: red;
+    }
+    
+    @include element(label) {
+      font-weight: bold;
+      font-size: 15px;
+      /*text-decoration:underline;*/
+      text-transform: capitalize;
+    }
+    
+    @include element(textarea) {
+      width: 100%;
+      height: 70px;
+      font-size: 15px;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    
+    @include element(text) {
+      width: 100%;
+      height: 30px;
+      font-size: 15px;
+      padding: 0 5px;
+      border: 1px solid darkgray;
+      box-sizing: border-box;
+      border-radius: 5px;
+      background-color: map_get($colors, input_background_color);
+    }
+    
+    @include element(text-prefix) {
+      width: 70%;
+      height: 30px;
+      font-size: 15px;
+      border: 1px solid rgb(169, 169, 169);
+      box-sizing: border-box;
+      border-radius: 5px;
+      display: inline-block;
+    }
+    @include element(separator) {
+      width: 10%;
+      height: 30px;
+      font-size: 16px;
+      text-align: center;
+      font-weight: bold;
+    }
+    @include element(text-postfix) {
+      width: 20%;
+      height: 30px;
+      font-size: 15px;
+      text-align: center;
+      border: 1px solid rgb(169, 169, 169);
+      box-sizing: border-box;
+      border-radius: 5px;
+      display: inline-block;
+    }
+    
+    @include element(annotation) {
+      margin: 5px 0;
+      font-size: 10px;
+      font-weight: 300;
+      font-style: italic;
+    }
+    
+    @include element(required) {
+      font-size: 18px;
+      color: red;
+      font-weight: 800;
+    }
+  }
+}
+
+.wizard__body .mdc-form-field > label {
+  color: map_get($colors, body_color);
+}
+
+.wizard__body .mdc-radio .mdc-radio__native-control:enabled:not(:checked) + .mdc-radio__background .mdc-radio__outer-circle {
+  border-color: rgba(255, 255, 255, 0.54);
+}
+
+.wizard__body .mdc-radio .mdc-radio__native-control:disabled:checked + .mdc-radio__background .mdc-radio__outer-circle {
+  border-color: #47B8E0;
+  border-color: var(--mdc-theme-secondary, #47B8E0);
+}
+
+.wizard__body .mdc-radio__native-control:disabled + .mdc-radio__background .mdc-radio__inner-circle, [aria-disabled="true"] .mdc-radio__native-control + .mdc-radio__background .mdc-radio__inner-circle {
+  border-color: var(--mdc-theme-secondary, #47B8E0);
+}
+
+.wizard__body .mdc-radio__native-control:disabled + .mdc-radio__background .mdc-radio__outer-circle, [aria-disabled="true"] .mdc-radio__native-control + .mdc-radio__background .mdc-radio__outer-circle {
+  border-color: rgba(255, 255, 255, 1);
+}
+
+.wizard__body .mdc-select.mdc-select__no-label {
+  min-width: 50%;
+}
+
+.wizard__body .mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mdc-text-field__input {
+  border-bottom-color: rgba(255, 255, 255, 1);
+}
+
+.wizard__body .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.wizard__body .mdc-text-field:not(.mdc-text-field--disabled) + .mdc-text-field-helper-text {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.wizard__body .mdc-line-ripple {
+  background-color: var(--mdc-theme-background, #fff);
+}
+
+.wizard__body .isContentVerticalCenter{
+  display:flex;
+}
+
+.wizard__body .isContentVerticalCenter form{
+  margin:auto;
+}
+
+
+
+@keyframes border_rotate {
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes border_rotate{
+  0%{
+    -webkit-transform: rotate(0deg);
+  }
+  100%{
+    -webkit-transform: rotate(360deg);
+  }
+}

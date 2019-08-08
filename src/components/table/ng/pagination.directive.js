@@ -3,6 +3,7 @@ export class tablePagination {
     return [
       '$log',
       '$filter',
+      '$timeout',
       'tableConsts'
     ];
   }
@@ -38,8 +39,13 @@ export class tablePagination {
     scope.pageEnd = 0;
     scope.pages = [];
 
-    scope._changeSelect = (childScope) => {
-      scope.model = childScope.model;
+    scope._changeSelect = ($value) => {
+      scope.model = $value;
+      if (!scope._isNeedPagination) {
+        scope.tableModel.pagination.number = scope.model.value;
+        scope.tableModel.pagination.numberOfPages = scope.tableModel.pagination.totalItemCount === 0 ?
+          1 : Math.ceil(scope.tableModel.pagination.totalItemCount / scope.tableModel.pagination.number);
+      }
       scope._selectPage(1);
     };
 
@@ -48,8 +54,21 @@ export class tablePagination {
         scope.tableModel.pagination.start = (page - 1) * scope.model.value;
         scope.tableModel.pagination.number = scope.model.value;
         scope.tableModel.removeItems = [];
-        scope._queryUpdate(scope._getTableParams());
-        scope.$emit('pagination-checkbox-unselect');
+        if (scope._isNeedPagination) {
+          scope._queryUpdate(scope._getTableParams());
+        }
+        else {
+          scope._clientDataPagination();
+          scope.tableModel.filteredData.forEach((item) => {
+            item.isChecked = false;
+          });
+          scope._render();
+          //当filteredData数据变少时不会触发table-render-ready指令$last === true，需要手动触发
+          //翻页时下一页数据少不需要滚动轴，此时也需要手动触发
+          this.di.$timeout(() =>{
+            scope.$emit('table-render-ready');  
+          });
+        }
       }
     };
 
@@ -80,21 +99,12 @@ export class tablePagination {
       for (i = start; i < end; i++) {
         scope.pages.push(i);
       }
-
-      /*if (prevPage !== scope.currentPage) {
-        scope.stPageChange({newPage: scope.currentPage});
-      }*/
     }
 
     //table state --> view
     scope.$watch(function () {
       return scope.tableModel.pagination;
     }, redraw, true);
-
-    scope.$watch('currentPage', (c) => {
-      scope.inputPage = c;
-      this.di.$log.info('table current page',scope.inputPage);
-    });
   }
 }
 

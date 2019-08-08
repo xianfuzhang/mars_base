@@ -1,0 +1,61 @@
+<header class='header_menu'>
+  <nav class="navbar">
+    <div class="navbar-inner" ng-controller="headerCtrl">
+      <div class="navbar-inner__container">
+        <span class="navbar-inner__brand" ng-click="location('/dashboard', $event)"></span>
+        <div class="navbar-flex-between">
+          <ul class="navbar-inner__nav">
+            <li class="navbar-inner__dropdown" ng-repeat="menu in menues" uib-dropdown>
+              <a class="navbar-inner__dropdown-toggle"
+                 uib-dropdown-toggle
+                 aria-haspopup="true"
+                 aria-expanded="false">{{menu.label}}</a>
+              <div class="indicator"></div>   
+              <ul class="navbar-inner__dropdown-menu" uib-dropdown-menu>
+                <li ng-repeat="item in menu.items">
+                  <a ng-click="location(item.url, $event)"  data-url="{{item.url}}"
+                      class="header_ripple mdc-ripple-surface mdc-ripple-upgraded">{{item.label}}</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <div class="navbar-inner__right">
+            <!-- <language-selection></language-selection> -->
+            <div class="navbar-inner__theme" title="{{'MODULE.HEADER.THEME.DARK'|translate}}" ng-if="theme == 'theme_default'" ng-click="changeTheme()"> <i class="material-icons">brightness_2</i></div>
+            <div class="navbar-inner__theme" title="{{'MODULE.HEADER.THEME.DEFAULT'|translate}}" ng-if="theme == 'theme_dark'" ng-click="changeTheme()"><i class="material-icons">wb_sunny</i></div>
+
+            <div class="navbar-inner__notification navbar-inner__dropdown" uib-dropdown>
+              <div class="navbar-inner__notification-toggle" uib-dropdown-toggle>
+                <span class="notification-status" ng-class="{'has-alert': hasUnreadMsg}"></span>
+                <i class="material-icons">notifications</i>
+              </div>
+              <ul class="navbar-inner__dropdown-menu navbar-inner__dropdown-menu__right" uib-dropdown-menu>
+                <li ng-repeat="msg in messages track by $index">
+                  <a ng-click="messageClick(msg)" title="{{msg.title}}">
+                    <div class="title" ng-class="{'non-read': !msg.isRead}">
+                      {{msg.title}}
+                    </div>
+                    <div class="time" ng-bind="msg.time"></div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="navbar-inner__account navbar-inner__dropdown" uib-dropdown>
+              <div class="navbar-inner__account-summary" uib-dropdown-toggle>
+                <i class="material-icons">account_circle</i>
+                <span class="navbar-inner__account-user">{{username}}</span>
+                <span class="dropdown-caret" ></span>
+              </div>
+              <ul class="navbar-inner__dropdown-menu navbar-inner__dropdown-menu__right" uib-dropdown-menu>
+                <li ng-repeat="item in userConfig">
+                  <a ng-click="location(item.url, $event)" class="header_ripple mdc-ripple-surface mdc-ripple-upgraded">{{item.label}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

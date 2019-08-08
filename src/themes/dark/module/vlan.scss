@@ -1,0 +1,249 @@
+@include block(view_select) {
+  display: flex;
+  //box-shadow: 0 0 5px #bbbbbb;
+  z-index: 5;
+  cursor: pointer;
+
+  @include element(anchor) {
+    display: flex;
+    padding: 8px;
+    background-color: black;
+    border-right: 1px solid #282828;
+
+    z-index: 10;
+  }
+
+  @include element(container) {
+    display: flex;
+
+
+
+    @include element(item) {
+      padding: 8px;
+      border-right: 1px solid #282828;
+      transition: opacity .2s linear,margin-left .2s linear;
+      opacity: 0;
+      margin-left: -43px;
+      background-color: gray;
+
+      &.last{
+        border-right: none;
+      }
+
+      &.select{
+        background-color: black;
+        //border-right: none;
+      }
+
+      &.select.show{
+        z-index: 9;
+      }
+
+      &.show {
+        opacity: 1;
+        margin-left: 0px;
+        z-index: 5;
+      }
+    }
+
+
+  }
+}
+
+@include block(edit_view_select) {
+  display: flex;
+  z-index: 5;
+  cursor: pointer;
+
+  @include element(anchor) {
+    display: flex;
+    padding: 8px;
+    background-color: black;
+    border-right: 1px solid #282828;
+
+    z-index: 10;
+  }
+
+  @include element(container) {
+    display: flex;
+
+
+
+    @include element(item) {
+      padding: 8px;
+      border-right: 1px solid #282828;
+      transition: opacity .2s linear,margin-left .2s linear;
+      opacity: 0;
+      margin-left: -43px;
+      display:flex;
+      align-items: center;
+      background-color: gray;
+
+      &.last{
+        border-right: none;
+      }
+
+      &.select{
+        background-color: black;
+        //border-right: none;
+      }
+
+      &.select.show{
+        z-index: 9;
+      }
+
+      &.show {
+        opacity: 1;
+        margin-left: 0px;
+        z-index: 5;
+      }
+    }
+
+
+  }
+}
+
+
+
+.dynamic__body .status_icon.material_icon.not_interested{
+  color:red;
+}
+
+.dynamic__body .status_icon.material_icon.done{
+  color:#0fd40f;
+}
+.createGuestVlan .wizard__body{
+  height: 300px;
+}
+.createGuestVlan .mdc-text-field{
+  width: 80px;
+  margin-left: 20px;
+}
+.createGuestVlan .add-btn{
+  position: relative;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+.guestVlan_establish .types-label{
+  position: relative;
+  display: inline-block;
+  margin: 5px;
+  border-radius: 3px;
+  background-color: #7accef;
+  padding: 5px 3px;
+  color: #fff;
+}
+.guestVlan_establish span.removeBtn {
+  position: absolute;
+  top: -7px;
+  right: -8px;
+  border-radius: 8px;
+  width: 15px;
+  height: 15px;
+  font-size: 3px;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  background-color: red;
+  cursor: pointer;
+}
+
+.voice-vlan__body .status_icon.material_icon.not_interested{
+  color:red;
+}
+
+.voice-vlan__body .status_icon.material_icon.done{
+  color:#0fd40f;
+}
+
+.voice-vlan__body .header {
+  display: block;
+  position: relative;
+  margin-bottom: 3px;
+  padding:5px 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #f1f1f1;
+  outline: none;
+  background-color: #414141;
+}
+
+.voice-vlan-dialog-modal {
+  width: 500px;
+  height: auto !important;
+}
+
+.voice-vlan-dialog-modal .column-manipulation-field__content {
+  height: auto !important;
+}
+
+.voice-vlan-dialog-modal .column-manipulation-field__item {
+  width: 350px;
+  margin: 0 auto;
+  font-size: 13px !important;
+}
+
+.voice-vlan-dialog-modal .column-manipulation-field__item .item{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.voice-vlan-dialog-modal .column-manipulation-field__item .item .title{
+  width: 80px;
+  margin-top: 5px;
+  text-align: left;
+}
+
+.vlan_all{
+  padding-left:16px;
+}
+//
+//@-webkit-keyframes fly_into {
+//  0% {
+//    margin-left: -100%;
+//  }
+//
+//  100% {
+//    margin-left: 0%;
+//  }
+//}
+//
+//@-moz-keyframes fly_into {
+//  0% {
+//    margin-left: -100%;
+//  }
+//
+//  100% {
+//    margin-left: 0%;
+//  }
+//}
+//
+//@-ms-keyframes fly_into {
+//  0% {
+//    margin-left: -100%;
+//  }
+//
+//  100% {
+//    margin-left: 0%;
+//  }
+//}
+//
+//@keyframes fly_into {
+//  0% {
+//    margin-left: -100%;
+//  }
+//
+//  100% {
+//    margin-left: 0%;
+//  }
+//}
+//
+//.inform .mdc-card{
+//  box-shadow: none;
+//}
+//
+//.inform .mar_section__body{
+//  background: #fbfbfb;
+//}

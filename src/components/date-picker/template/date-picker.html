@@ -1,0 +1,11 @@
+<div class="calendar-date-container">
+	<div class="input-group calendar-date-field">
+	  <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="data"
+	  	popup-placement="auto bottom-left" is-open="isOpend" 
+	  	datepicker-options="dateOptions" ng-required="true" close-text="Close" 
+	  	alt-input-formats="altInputFormats" />
+	  <span class="input-group-btn">
+	    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="material-icons">calendar_today</i></button>
+	  </span>
+	</div>
+</div>

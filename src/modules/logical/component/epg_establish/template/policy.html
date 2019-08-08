@@ -1,0 +1,29 @@
+<div class="egp-group-establish">
+    <div class="stepForm__input">
+      <div class="stepForm__input__label">
+          <span ng-bind="'MODULES.LOGICAL.EGP.TAB.GROUP.CREATE.GROUP'|translate"></span>
+          <span class="stepForm__input__required">*</span>
+      </div>
+      <mdl-select ng-model="model.groupObject" display-label="groupsLabel">
+      </mdl-select>
+    </div>
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">
+            <span ng-bind="'MODULES.LOGICAL.EGP.TAB.GROUP.CREATE.TENANT'|translate"></span>
+        </div>
+        <!--<mdl-select ng-model="model.tenantObject" display-label="tenantsLabel">-->
+        <!--</mdl-select>-->
+        <mdl-text ng-model="model.tenantName" disable="true">
+        </mdl-text>
+    </div>
+    <div class="stepForm__input name-field">
+        <div class="stepForm__input__label">
+            <span ng-bind="'MODULES.LOGICAL.EGP.TAB.GROUP.CREATE.NAME'|translate"></span>
+            <span class="stepForm__input__required">*</span>
+        </div>
+        <mdl-text ng-model="model.name"
+                  helper="model.nameHelper"
+                  display-label="model.nameDisplayLabel">
+        </mdl-text>
+    </div>
+</div>

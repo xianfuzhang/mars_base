@@ -1,0 +1,46 @@
+<div class="flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="configuration__body flex_entirety__body app-body">
+
+    <content-header big-title="{{'MODULE.HEADER.FUNCTIONS.POE' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.FUNCTIONS.POE' | translate}}</span>
+    </content-header>
+    <div class="poe flex_entirety__body__body" style="display:flex;flex-direction: row">
+      <div class="mars-col-24">
+        <div class="main__content">
+          <mdl-tabs ng-model="tabSelected" options="tabs"
+                    class-list="main__content__device-detail-tabs"
+                    on-select="onTabChange($value)">
+          </mdl-tabs>
+          <section class="tab-content" ng-if="tabSelected.type == 'switch'" style="display: inline-flex;">
+            <mdl-table actions-show="poeModel.actionsShow"
+                       actions="poeModel.rowActions"
+                       row-select-action="onTableRowSelectAction($event)"
+                       provider="poeModel.provider" api-ready="onApiReady($api)">
+            </mdl-table>
+          </section>
+          <section class="tab-content" ng-if="tabSelected.type == 'port'" style="display: inline-flex;">
+            <mdl-table actions-show="poeModel.actionsShow"
+                       actions="poeModel.rowActions"
+                       row-select-action="onTableRowSelectAction($event)"
+                       row-actions-filter="onTableRowActionsFilter($event)"
+                       provider="poeModel.provider" api-ready="onApiReady($api)">
+            </mdl-table>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-controller ng-controller="poeDeviceEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+  <ng-controller ng-controller="poePortEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+</div>

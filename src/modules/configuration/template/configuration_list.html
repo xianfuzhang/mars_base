@@ -1,0 +1,75 @@
+<div class="configuration_list flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="configuration_list__body flex_entirety__body">
+
+    <content-header big-title="{{'MODULE.HEADER.CONFIG.CONFIGURATION' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.CONFIG.CONFIGURATION' | translate}}</span>
+    </content-header>
+    <div class="configuration flex_entirety__body__body">
+
+      <div class="configuration__content" jsoneditor ng-model="configurationListModel.configurationShow" options="options" prefix-text="true">
+        <!--<div id="configurationListPre" contenteditable="{{configurationListModel.mode == 'edit' || configurationListModel.mode == 'add'}}" class="configuration__content__codepre" ng-class="{'+edit': configurationListModel.mode == 'edit', '+add': configurationListModel.mode == 'add'}">{{configurationListModel.configurationShow}}</div>-->
+      </div>
+
+      <div class="configuration__operation">
+
+        <div class="configuration__operation__form" ng-class="{'+disable': configurationListModel.globalInvalid }">
+          <div class="configuration__operation__form__input">
+            <div class="configuration__operation__form__input__label" ng-bind="'MODUELS.CONFIGURATION.SELECT_CONFIG'|translate"></div>
+            <div style="display: flex;align-items: center;">
+              <mdl-select ng-model="configurationListModel.fileNameSelected"
+                        disable="configurationListModel.globalInvalid"
+                        display-label="fileNameSelectedDisLab">
+              </mdl-select>
+
+              <div style="display:inline-block;margin-left: 15px;">
+                  <mar-button btn-text="::'MODULE.LOG.BUTTON.DOWNLOAD' | translate" btn-class="'btn-black btn-sm'" btn-icon="'cloud_download'" btn-click="downloadFile()" btn-disabled="downloadBtnDisable" />
+              </div>
+            </div>
+          </div>
+
+          <div class="configuration__operation__form__input">
+            <div class="configuration__operation__form__input__label" ng-bind="'MODUELS.CONFIGURATION.MANIPULATION'|translate"></div>
+            <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
+                       display-label="broseLabel">
+            </mdl-radio>
+            <mdl-radio ng-hide="configurationListModel.fileNameSelected.value == 'default'"
+                       ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
+                       display-label="editLabel">
+            </mdl-radio>
+            <mdl-radio ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
+                       display-label="addLabel">
+            </mdl-radio>
+            <mdl-radio ng-hide="configurationListModel.fileNameSelected.value == 'startup_netcfg.cfg'"
+                       ng-model="configurationListModel.mode" disable="configurationListModel.globalInvalid"
+                       display-label="saveLabel">
+            </mdl-radio>
+          </div>
+
+          <div class="configuration__operation__form__input" ng-show="configurationListModel.mode == 'add'">
+            <div class="configuration__operation__form__input__label" ng-bind="'MODUELS.CONFIGURATION.CONFIG_NAME'|translate"></div>
+
+            <div class="mdc-text-field mdc-text-field--dense mdc-text-field--outlined" id="fileName" style="width:200px;margin-top:8px;">
+              <input type="text" id="tf-outlined" class="mdc-text-field__input" ng-model="configurationListModel.fileName" ng-value="configurationListModel.mode == 'add' ? '' : configurationListModel.fileNameSelected.value" maxlength="255">
+              <!--<label for="tf-outlined" class="mdc-floating-label" ng-class="{'+filename-active': configurationListModel.mode == 'add'}">{{'MODULES.CONFIGURATION.FILENAME' | translate}}</label>-->
+              <div class="mdc-notched-outline">
+                <svg>
+                  <path class="mdc-notched-outline__path"/>
+                </svg>
+              </div>
+              <div class="mdc-notched-outline__idle"></div>
+            </div>
+          </div>
+
+          <div ng-show="configurationListModel.mode != 'show'">
+            <mar-button btn-id="'save-configuration-list'" btn-style="'width:200px'" btn-text="saveBtnLabel" btn-icon="'done'" btn-class="'btn-white btn-lg'" btn-disabled="configurationListModel.saveBtnInvalid || configurationListModel.globalInvalid" btn-click="saveConfigFile()"/>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

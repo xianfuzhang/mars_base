@@ -45,6 +45,10 @@ export class mdlTextarea {
       }
       element.removeClass('mdc-text-field--focused');
     };
+    
+    scope.$watch('displayLabel.hint', (newVal, oldVal) => {
+      scope.hint = newVal;
+    });
   }
 }
 mdlTextarea.$inject = mdlTextarea.getDI();

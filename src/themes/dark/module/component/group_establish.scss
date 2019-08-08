@@ -1,0 +1,50 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+.bucket-form {
+  position: relative;
+  margin-top: 20px;
+  padding: 5px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+
+.bucket-form .title {
+  position: absolute;
+  top: -12px;
+  left: 20px;
+  width: 70px;
+  padding: 2px;
+  text-align: center;
+  font-size: 15px;
+  color: #000;
+  background-color: #fff;
+  box-shadow: 5px 5px 5px grey;
+  border-radius: 3px;
+}
+
+.bucket-form .types-label {
+  position:relative;
+  display:inline-block;
+  margin: 10px 7px 0 0;
+  border-radius:3px;
+  background-color:#7accef;
+  padding:5px 3px;
+  color:#fff;
+}
+
+.bucket-form .removeBtn {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  border-radius: 8px;
+  width: 15px;
+  height: 15px;
+  font-size: 3px;
+  text-align:center;
+  vertical-align: middle;
+  color: white;
+  background-color: red;
+  cursor: pointer;
+}

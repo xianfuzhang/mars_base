@@ -1,0 +1,99 @@
+<div class="dhcprelay_indirect_establish">
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.DHCP_RELAY.WIZARD.CONNECT_POINT'|translate}}<span class="stepForm__input__required">*</span></div>
+        <div style="display: flex">
+            <mdl-select style="margin-right:20px;" ng-model="dhcpRelayModel.device" display-label="displayLabel.device"  ng-change="deviceChange($value)">
+            </mdl-select>
+            <mdl-select  ng-model="dhcpRelayModel.port" display-label="displayLabel.port" >
+            </mdl-select>
+        </div>
+
+    </div>
+
+    <div class="stepForm__input multiple_ip">
+        <div class="stepForm__input__label">{{'MODULES.DHCP_RELAY.WIZARD.SERVER_IPS'|translate}}<span class="stepForm__input__required">*</span></div>
+        <!--<valid-input style="width:90%;display:inline-block;" ng-model="dhcpRelayModel.server_ip" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>-->
+        <div>
+            <mdl-text ng-model="dhcpRelayModel.server_ip" style="display:inline-block;"
+                      display-label="serverIPDisplayLabel">
+            </mdl-text>
+
+            <div class="add-btn mdc-ripple-surface"  style="margin-bottom: 10px;"  ng-click="addServerIP()">
+                <i class="material-icons " style="user-select: none;">add</i>
+            </div>
+        </div>
+        <div class="" style="margin-top:5px;min-height:35px;" ng-show="dhcpRelayModel.server_ips.length">
+            <div class="types-label" ng-repeat="ip in dhcpRelayModel.server_ips">
+                <span ng-bind="ip"></span>
+                <span class="removeBtn" ng-click="removeSelectedServerIP(ip)">-</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="stepForm__input multiple_ip">
+        <div class="stepForm__input__label">{{'MODULES.DHCP_RELAY.WIZARD.GATEWAY_IPS'|translate}}</div>
+        <!--<valid-input style="width:90%;display:inline-block;" ng-model="dhcpRelayModel.gateway_ip" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>-->
+        <div>
+            <mdl-text ng-model="dhcpRelayModel.gateway_ip" style="display:inline-block;"
+                      display-label="gatewayIPDisplayLabel">
+            </mdl-text>
+
+            <div class="add-btn mdc-ripple-surface"  style="margin-bottom: 10px;"  ng-click="addGatewayIP()">
+                <i class="material-icons " style="user-select: none;">add</i>
+            </div>
+        </div>
+
+        <div class="" style="margin-top:5px;min-height:35px;" ng-show="dhcpRelayModel.gateway_ips.length">
+            <div class="types-label" ng-repeat="ip in dhcpRelayModel.gateway_ips">
+                <span ng-bind="ip"></span>
+                <span class="removeBtn" ng-click="removeSelectedGatewayIP(ip)">-</span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="stepForm__input__label">{{'MODULES.DHCP_RELAY.WIZARD.AGENT_IPS_LIST'|translate}}</div>
+        <div style="display: inline-block; margin-right:15px;">
+            <mar-button btn-id="port" btn-text="::'MODULES.FABRIC.HOSTSEGMENT.ACTION.ADD_PORTS' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addRelayIps()"></mar-button>
+
+        </div>
+
+        <div class="inline_content">
+            <div class="item"  ng-repeat="relayAgent in dhcpRelayModel.relayAgentIps">
+                <mdl-button class="remove" ng-click="removeRelayIps($index)" icon-name="remove_circle" size='small'></mdl-button>
+                <table class="inline_content_table">
+                    <tr>
+                        <td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.DHCP_RELAY.SUB.COLUMN.DEVICE"|translate}}</div></td>
+                        <td>
+                            <div class="criteria_line">
+                                <mdl-select ng-model="relayAgent.device" display-label="displayLabel.device4add">
+                                </mdl-select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.DHCP_RELAY.WIZARD.IPV4"|translate}}</div></td>
+                        <td>
+                            <div class="criteria_line">
+                                <valid-input  v-name="vlan" ng-model="relayAgent.ipv4" v-type="ipv4" v-rpcid="page_dhcprelay_indirect_es" ></valid-input>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.DHCP_RELAY.WIZARD.IPV6"|translate}}</div></td>
+                        <td>
+                            <div class="criteria_line">
+                                <valid-input  v-name="vlan" ng-model="relayAgent.ipv6" v-type="ipv6" v-rpcid="page_dhcprelay_indirect_es" ></valid-input>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>

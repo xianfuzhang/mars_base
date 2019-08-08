@@ -1,0 +1,232 @@
+export class DHCPRelayInterfaceEstablishController {
+  static getDI() {
+    return [
+      '$scope',
+      '$rootScope',
+      '$filter',
+      '$timeout',
+      '$q',
+      '_',
+      'deviceDataManager',
+    ];
+  }
+
+  constructor(...args) {
+    this.di = {};
+    DHCPRelayInterfaceEstablishController.getDI().forEach((value, index) => {
+      this.di[value] = args[index];
+    });
+    let unsubscribes = [];
+    this.scope = this.di.$scope;
+    let scope = this.di.$scope;
+    let rootScope = this.di.$rootScope;
+    let di = this.di;
+    let deviceDataManager = this.di.deviceDataManager;
+    this.translate = this.di.$filter('translate');
+
+    scope.queue_regex = '^[0-7]$';
+    scope.deviceId = null;
+    scope.isEdit = false;
+
+    scope.isFromDeviceDetail = false;
+
+    scope.showWizard = false;
+    scope.title = this.translate("MODULES.DHCP_RELAY.DHCPRELAY_INTERFACE.WIZARD");
+    scope.steps = [
+      {
+        id: 'step1',
+        title: this.translate('MODULES.DHCP_RELAY.DHCPRELAY_INTERFACE.WIZARD'),
+        content: require('../template/dhcprelay_interface_establish'),
+      }
+
+    ];
+
+    scope.dhcpRelayModel = {
+      device: null,
+      port: null,
+      vlan: '',
+      vlan_type:null,
+      ip: '',
+      mac: '',
+    };
+
+    scope.displayLabel = {
+      device: {'options': [], hint: this.translate('MODULES.SWITCHES.TAB.SCHEMA.SWITCH')},
+      device4add: {'options': []},
+
+      port: {'options': [], hint:this.translate('MODULES.DHCP_RELAY.WIZARD.PORT')},
+      tag: {
+        'options': [
+          {'label': 'Tag', 'value': 'tag'},
+          {'label': 'Untag', 'value': 'untag'}
+        ]
+      }
+    };
+
+    let inValidJson = {
+      valid: false,
+      errorMessage: ''
+    };
+
+
+    let validJson = {
+      valid: true,
+      errorMessage: ''
+    };
+
+    function validCurrentDom(dom_class) {
+      let out = document.getElementsByClassName(dom_class);
+
+      if (out && out.length === 1) {
+        let invalidDoms = out[0].getElementsByClassName('ng-invalid');
+        if (invalidDoms && invalidDoms.length > 0) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    scope.cancel = function () {
+      return new Promise((resolve, reject) => {
+        resolve({valid: true, errorMessage: ''});
+      });
+    };
+
+
+    // let genPortValue4Sub = () => {
+    //   let ports = [];
+    //   this.di._.forEach(scope.hostSegmentModel.ports, (port) => {
+    //     let portStr = '';
+    //     if (port.type === 'port') {
+    //       portStr = port.number + '/' + port.tagValue.value;
+    //     } else {
+    //       portStr = 'trunk' + port.number + '/' + port.tagValue.value;
+    //     }
+    //     ports.push(portStr)
+    //   })
+    //   return ports;
+    // };
+
+    // let _formatRelayIps = (ips) =>{
+    //   let res = {};
+    //   ips.forEach((relay_ip)=>{
+    //     res[relay_ip.device.value] = {ipv4: relay_ip.ipv4, ipv6: relay_ip.ipv6};
+    //   })
+    //   return res;
+    // }
+
+    scope.submit = function () {
+      let inValidJson_Copy = angular.copy(inValidJson);
+      let params = {};
+      params['connectPoint'] = scope.dhcpRelayModel.device.value + '/' + scope.dhcpRelayModel.port.value;
+      params['vlan'] = scope.dhcpRelayModel.vlan + '/' + scope.dhcpRelayModel.vlan_type.value;
+      params['ip'] = scope.dhcpRelayModel.ip;
+      params['mac'] = scope.dhcpRelayModel.mac;
+
+      di.$rootScope.$emit('page_dhcprelay_interface_es');
+      if (!validCurrentDom('dhcprelay_interface_establish')) {
+        return new Promise((resolve, reject) => {
+          resolve(inValidJson_Copy);
+        });
+      }
+
+      return new Promise((resolve, reject) => {
+        deviceDataManager.postDHCPRelayInterface({'interfaces':[params]})
+          .then(() => {
+            rootScope.$emit('relay-interface-list-refresh');
+            resolve({valid: true, errorMessage: ''});
+          }, (err) => {
+            resolve({valid: false, errorMessage: err.message});
+          });
+      });
+    };
+
+
+    scope.open = () => {
+      if (scope.showWizard) return;
+
+      scope.displayLabel.device.options = [];
+      scope.displayLabel.port.options = [];
+      scope.dhcpRelayModel = {
+        device: null,
+        port: null,
+        vlan: '',
+        ip: '',
+        mac: '',
+      };
+
+      let deviceDefer = this.di.$q.defer();
+      let portsDefer = this.di.$q.defer();
+      let promises = [];
+
+      this.di.deviceDataManager.getPorts().then((res)=>{
+        if(res.data.ports){
+          scope._phyPorts = this.di._.groupBy(res.data.ports , "element");
+        }
+        portsDefer.resolve();
+      },(err)=>{
+        portsDefer.reject(err);
+      });
+      promises.push(portsDefer.promise);
+
+      deviceDataManager.getDeviceConfigs().then((configs) => {
+        this.di._.forEach(configs, (config) => {
+          scope.displayLabel.device.options.push({'label': config['name'], 'value': config['id']})
+        });
+        deviceDefer.resolve();
+      }, (err) => {
+        deviceDefer.reject(err);
+      });
+      promises.push(deviceDefer.promise);
+
+      Promise.all(promises).then(()=>{
+        scope.dhcpRelayModel.device = scope.displayLabel.device.options[0];
+        scope.displayLabel.port.options = this.di._.sortBy(this.di._.map(scope._phyPorts[scope.dhcpRelayModel.device.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
+          return {'label': String(portNum), 'value': String(portNum)}
+        });
+        scope.dhcpRelayModel.port = scope.displayLabel.port.options[0];
+
+        scope.showWizard = true;
+        scope.$apply();
+      },(err)=>{
+        console.log(err)
+      });
+    };
+
+    scope.deviceChange = ($value) =>{
+      scope.displayLabel.port.options = [];
+      scope.displayLabel.port.options = this.di._.sortBy(this.di._.map(scope._phyPorts[$value.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
+        return {'label': String(portNum), 'value': String(portNum)}
+      })
+
+      scope.dhcpRelayModel.port = scope.displayLabel.port.options[0];
+    };
+
+
+    unsubscribes.push(this.di.$rootScope.$on('relay-interface-wizard-show', ($event, data) => {
+      scope.open();
+    }));
+
+    scope.$on('$destroy', () => {
+      unsubscribes.forEach((cb) => {
+        cb();
+      })
+    });
+  }
+
+  isIPv4(ip) {
+    let ipv4_regex = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
+    let regexp = new RegExp(ipv4_regex);
+
+    return regexp.test(ip);
+  }
+
+  isIPv6(ip) {
+    let ipv6_regex = /((^\s*((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))\s*$)|(^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$))/;
+    let regexp = new RegExp(ipv6_regex);
+
+    return regexp.test(ip);
+  }
+}
+DHCPRelayInterfaceEstablishController.$inject = DHCPRelayInterfaceEstablishController.getDI();
+DHCPRelayInterfaceEstablishController.$$ngIsClass = true;

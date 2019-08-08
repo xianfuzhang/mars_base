@@ -1,0 +1,277 @@
+
+<div class="summary flex_entirety">
+    <!--<mar-header></mar-header>-->
+    <mdl-header></mdl-header>
+
+    <div class="summary__body flex_entirety__body" style="padding:0">
+        <content-header style="margin-left:8px;margin-right:8px;" big-title="{{'MODULE.HEADER.FABRIC.SUMMARY' | translate}}">
+            <a href="/">Mars Cloud</a>
+            <span>•</span>
+            <span>{{'MODULE.HEADER.FABRIC.SUMMARY' | translate}}</span>
+        </content-header>
+
+        <div class="summary__body__content flex_entirety__body__body">
+
+            <div ng-style="resize_right_plus" class="summary_drawer_left">
+                <topo ng-if="fabricModel.isShowTopo && fabricModel.topoType.value  =='spine_leaf'" spines="fabricModel.deSpines"
+                                                     leafs="fabricModel.deLeafs"
+                                                     others="fabricModel.deOthers"
+                                                     links="fabricModel.deLinks"
+                                                     logical-ports="fabricModel.deLogicalPorts"
+                                                     topo-setting="fabricModel.topoSetting">
+                </topo>
+
+                <force-topo ng-if="fabricModel.isShowTopo && fabricModel.topoType.value =='force'"
+                      devices="fabricModel.devices"
+                      links="fabricModel.deLinks"
+                      hosts="fabricModel.deHosts"
+                      topo-setting="fabricModel.topoSetting">
+                </force-topo>
+
+                <donut-topo ng-if="fabricModel.isShowTopo && fabricModel.topoType.value  =='donut'" spines="fabricModel.deSpines"
+                      leafs="fabricModel.deLeafs"
+                      others="fabricModel.deOthers"
+                      links="fabricModel.deLinks"
+                      topo-setting="fabricModel.topoSetting">
+                </donut-topo>
+                <!--<div style="width:100%;height:100%;">-->
+                    <!--<svg  class="testsvg" width="100%" height="100%" >-->
+
+                    <!--</svg>-->
+                <!--</div>-->
+            </div>
+            <div class="line_space summary_drawer_line_space" ng-style="resize_right" ng-mousedown="resize_div($event)">
+                <div class="line">
+                </div>
+
+                <div class="ctrl_button" ng-class="{'show_arrow': showLeftDiv == false}" ng-click="hide_right_div($event)">
+                    <i class="material-icons">arrow_drop_up</i>
+                </div>
+
+            </div>
+            <div class="right_div summary_drawer_right" ng-style="resize_length">
+                <mar-section s-title="{{'MODULES.TOPO.TITLE.SETTING'|translate}}" class="topo_setting">
+                    <transclude-body>
+                    <div>
+                        <mdl-select  ng-model="fabricModel.topoType"
+                                    display-label="displayLabel.topoTypes">
+                        </mdl-select>
+                    </div>
+                    <div style="margin:2px;">
+                        <div ng-click="topoRefresh()" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.REFRESH'|translate}}" id="refresh_topo"  class="+front mdc-button topo_setting__button">
+                            <svg style="height:32px;width:32px;margin:0;" class="mdc-button__icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                                <path d="M0 0h24v24H0z" fill="none"/>
+                            </svg>
+                        </div>
+
+                        <div ng-click="tooltipSetting()" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_TOOLTIP'|translate}}" id="settings_topo" ng-class="{'+show':fabricModel.topoSetting.show_tooltips}" class="+front mdc-button topo_setting__button">
+                            <svg style="height:28px;width:28px;margin:0;" class="mdc-button__icon" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="none" d="M0 0h24v24H0V0z"/>
+                                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                            </svg>
+
+                        </div>
+                        <div ng-click="lineSetting()" ng-if="fabricModel.topoType.value !='force'" id="line_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_LINES'|translate}}" ng-class="{'+show':fabricModel.topoSetting.show_links}"  class="+front mdc-button topo_setting__button">
+                            <i class="material-icons">link</i>
+                        </div>
+
+                        <div ng-click="portSettings()" ng-if="fabricModel.topoType.value  =='spine_leaf'" id="port_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_PORTS'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_ports }" class="+front mdc-button topo_setting__button">
+                            <svg style="height:24px;width:24px;margin:0;" class="mdc-button__icon" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-334 518 44 49" width="44pt" height="49pt">
+                                <g stroke="none" stroke-opacity="1" stroke-dasharray="none" fill="none" fill-opacity="1">
+                                    <g>
+                                        <line x1="-330.99363" y1="559.43924" x2="-292.99363" y2="559.43924" fill="white"/>
+                                        <line x1="-330.99363" y1="559.43924" x2="-292.99363" y2="559.43924" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-330.985" y1="534.6" x2="-330.985" y2="559.393" fill="white"/>
+                                        <line x1="-330.985" y1="534.6" x2="-330.985" y2="559.393" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-293.11824" y1="534.43556" x2="-293.11824" y2="559.22856" fill="white"/>
+                                        <line x1="-293.11824" y1="534.43556" x2="-293.11824" y2="559.22856" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-330.99363" y1="534.43924" x2="-322.59364" y2="534.43924" fill="white"/>
+                                        <line x1="-330.99363" y1="534.43924" x2="-322.59364" y2="534.43924" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-301.8" y1="534.43924" x2="-293.4" y2="534.43924" fill="white"/>
+                                        <line x1="-301.8" y1="534.43924" x2="-293.4" y2="534.43924" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-322.5495" y1="530" x2="-322.5495" y2="534.3002" fill="white"/>
+                                        <line x1="-322.5495" y1="530" x2="-322.5495" y2="534.3002" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-301.8167" y1="530" x2="-301.8167" y2="534.3002" fill="white"/>
+                                        <line x1="-301.8167" y1="530" x2="-301.8167" y2="534.3002" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-322.52683" y1="529.97244" x2="-319.52683" y2="529.97244" fill="white"/>
+                                        <line x1="-322.52683" y1="529.97244" x2="-319.52683" y2="529.97244" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-304.8" y1="529.97244" x2="-301.8" y2="529.97244" fill="white"/>
+                                        <line x1="-304.8" y1="529.97244" x2="-301.8" y2="529.97244" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-318.3499" y1="525.7284" x2="-318.3499" y2="530.0286" fill="white"/>
+                                        <line x1="-318.3499" y1="525.7284" x2="-318.3499" y2="530.0286" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-305.9835" y1="525.7284" x2="-305.9835" y2="530.0286" fill="white"/>
+                                        <line x1="-305.9835" y1="525.7284" x2="-305.9835" y2="530.0286" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-318.15692" y1="525.71087" x2="-307.80002" y2="525.71087" fill="white"/>
+                                        <line x1="-318.15692" y1="525.71087" x2="-307.80002" y2="525.71087" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-322.59364" y1="553.03924" x2="-323.39364" y2="553.03924" fill="white"/>
+                                        <line x1="-322.59364" y1="553.03924" x2="-323.39364" y2="553.03924" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-315.76368" y1="553.0392" x2="-316.56368" y2="553.0392" fill="white"/>
+                                        <line x1="-315.76368" y1="553.0392" x2="-316.56368" y2="553.0392" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-308.9337" y1="553.03924" x2="-309.7337" y2="553.03924" fill="white"/>
+                                        <line x1="-308.9337" y1="553.03924" x2="-309.7337" y2="553.03924" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                        <line x1="-301.8" y1="553.0392" x2="-302.6" y2="553.0392" fill="white"/>
+                                        <line x1="-301.8" y1="553.0392" x2="-302.6" y2="553.0392" stroke="black" stroke-linecap="square" stroke-linejoin="miter" stroke-width="4"/>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <div ng-if="licenseModel.isCalcPathEnable" ng-click="pathSettings()" id="path_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_PATH'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_path }" class="+front mdc-button topo_setting__button">
+                            <div class="path_topo" style="background-size: 28px;width:28px;height:28px;"></div>
+                        </div>
+
+                        <div ng-click="monitorSettings()" id="monitor_topo" title="{{'MODULES.TOPO.BUTTON_TOOLTIP.SHOW_MONITOR'|translate}}"  ng-class="{'+show':fabricModel.topoSetting.show_monitor }" class="+front mdc-button topo_setting__button">
+                            <div class="monitor_topo" style="background-size: 28px;width:28px;height:28px;"></div>
+                        </div>
+
+                    </div>
+                    </transclude-body>
+                </mar-section>
+
+                <mar-section ng-show="fabricModel.topoSetting.show_monitor"  s-title="{{'MODULES.TOPO.TITLE.MONITOR'|translate}}" class="detail_summary topo_monitor">
+                    <transclude-body>
+
+                        <div style="margin-top:5px;">
+                            <span style="width:80px;display: inline-block"> {{'MODULES.TOPO.MONITOR.STATE'|translate}}: </span>
+                            <span style="width:100px;display: inline-block"> {{ fabricModel.monitorState }}</span>
+                        </div>
+
+                        <div style="margin-top:5px;">
+                            <!--<span style="width:80px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.MONITOR.BUSY'|translate}}: </span>-->
+                            <valid-input style="display: inline-block;width:80px;vertical-align: middle;" v-label="{{'MODULES.TOPO.MONITOR.BUSY'|translate}}" v-fixed-height="true" v-require="true" ng-model="fabricModel.busyMetric" v-type="int" v-rpcid="topo_monitor_metric" v-disabled="monitorInterval"></valid-input>
+                            <mdl-select style="display: inline-block;width:80px;vertical-align: middle;" ng-model="fabricModel.busyMetricUnit" disable="monitorInterval!= null"
+                                        display-label="displayLabel.fluxUnits">
+                            </mdl-select>
+                        </div>
+                        <div style="margin-top:5px;">
+                            <!--<span style="width:80px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.MONITOR.CONGESTION'|translate}}: </span>-->
+                            <valid-input style="display: inline-block;width:80px;vertical-align: middle;" v-label="{{'MODULES.TOPO.MONITOR.CONGESTION'|translate}}" v-fixed-height="true" v-require="true" ng-model="fabricModel.congestionMetric" v-type="int" v-rpcid="topo_monitor_metric" v-disabled="monitorInterval"></valid-input>
+                            <mdl-select style="display: inline-block;width:80px;vertical-align: middle;" ng-model="fabricModel.congestionMetricUnit" disable="monitorInterval!= null"
+                                        display-label="displayLabel.fluxUnits">
+                            </mdl-select>
+                        </div>
+                        <div style="margin-top:15px;margin-left:55px;min-width: 300px;">
+                            <mar-button id="'server_config_clear'"  btn-text="::'MODULES.TOPO.MONITOR.STOP_MONITOR' | translate" btn-class="'btn-black btn-sm'" btn-icon="'stop'" btn-click="stopMonitor()"></mar-button>
+                            <mar-button style='margin-left: 20px;' id="'server_config_save'" btn-disabled="monitorInterval" btn-text="::'MODULES.TOPO.MONITOR.START_MONITOR' | translate" btn-class="'btn-black btn-sm'" btn-icon="'play_arrow'"  btn-click="startMonitor()"></mar-button>
+                        </div>
+
+                    </transclude-body>
+                </mar-section>
+
+
+                <mar-section ng-show="fabricModel.topoSetting.show_path && licenseModel.isCalcPathEnable"  s-title="{{'MODULES.TOPO.TITLE.PATH'|translate}}" class="detail_summary topo_path_search">
+                    <transclude-body>
+                        <div style="margin-top:5px;">
+                            <!--<span style="width:50px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.PATH.START'|translate}}: </span>-->
+                            <mdl-select ng-model="fabricModel.srcHost" style="display: inline-block;vertical-align: middle;" ng-class="{'shake_animation': fabricModel.srcHost_select == false}"
+                                        display-label="displayLabel.srcHosts">
+                            </mdl-select>
+                        </div>
+                        <div style="margin-top:5px;">
+                            <!--<span style="width:50px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.PATH.END'|translate}}: </span>-->
+                            <mdl-select ng-model="fabricModel.dstHost" style="display: inline-block;vertical-align: middle;" ng-class="{'shake_animation': fabricModel.dstHost_select == false}"
+                                        display-label="displayLabel.dstHosts">
+                            </mdl-select>
+                        </div>
+                        <div style="margin-top:5px;">
+                            <!--<span style="width:50px;display: inline-block;vertical-align: middle;"> {{'MODULES.TOPO.PATH.LATENCY'|translate}}: </span>-->
+                            <valid-input v-label="{{'MODULES.TOPO.PATH.LATENCY'|translate}}" style="display: inline-block;width:80px;vertical-align: middle;" v-fixed-height="true" ng-model="fabricModel.latency" v-type="int" v-rpcid="topo_path_search" ></valid-input>
+                            <!--<span style="width:50px;display: inline-block"> {{'MODULES.TOPO.PATH.NANOSECONDS'|translate}} </span>-->
+                        </div>
+
+                        <div style="margin-top:15px;margin-left:55px;">
+                            <mar-button id="'server_config_clear'" btn-text="::'MODULES.TOPO.PATH.CLEAR_SEARCH' | translate" btn-class="'btn-black'" btn-click="clearPath()"></mar-button>
+                            <mar-button style='margin-left: 20px;' id="'server_config_save'" btn-text="::'MODULES.TOPO.PATH.SEARCH' | translate" btn-class="'btn-black'" btn-click="findPath()"></mar-button>
+                        </div>
+                    </transclude-body>
+                </mar-section>
+
+                <mar-section ng-show="fabricModel.showPathInfo"  s-title="{{'MODULES.TOPO.TITLE.PATH_INFO_DETAIL'|translate}}" class="detail_summary">
+                    <transclude-body>
+                        <table id="pathInfo" class="topo_path_table"></table>
+                    </transclude-body>
+                </mar-section>
+
+                <mar-section ng-show="fabricModel.showHostDetail"  s-title="{{'MODULES.TOPO.TITLE.PATH_HOST_DETAIL'|translate}}" class="detail_summary">
+                    <transclude-body>
+                        <table id="pathHost" class="topo_host_table"></table>
+                    </transclude-body>
+                </mar-section>
+
+                <mar-section ng-show="fabricModel.showSwitchDetail"  s-title="{{'MODULES.TOPO.TITLE.DEVICE_DETAIL'|translate}}" class="detail_summary">
+                    <transclude-body>
+                    <table id="topo_detail" class="topo_table"></table>
+                    </transclude-body>
+                </mar-section>
+
+                <mar-section ng-if="fabricModel.showSwitchDetail" s-title="{{'MODULES.TOPO.TITLE.ENDPOINTS'|translate}}" class="detail_interface">
+                    <transclude-body>
+                        <static-table style="max-width:400px;min-width: 80px;" data="fabricModel.endpoints" scale="small" columns="fabricModel.endpointsSchema"></static-table>
+                        <!--<mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">-->
+                        <!--</mdl-table>-->
+                    </transclude-body>
+                </mar-section>
+
+                <mar-section ng-if="fabricModel.showSwitchDetail" s-title="{{'MODULES.TOPO.TITLE.INTERFACES'|translate}}" class="detail_interface">
+                    <transclude-body>
+                    <static-table style="max-width:400px" data="fabricModel.switchPorts" scale="small" columns="fabricModel.portsSchema"></static-table>
+                    <!--<mdl-table provider="fabricModel.interfaceProvider" api-ready="onSumInterfaceApiReady($api)" style="max-width:400px">-->
+                    <!--</mdl-table>-->
+                    </transclude-body>
+                </mar-section>
+
+                <mar-section ng-if="fabricModel.showSwitchDetail"  s-title="{{'MODULES.TOPO.TITLE.LINKS'|translate}}" class="detail_link">
+                    <transclude-body>
+                    <static-table style="max-width:400px" data="fabricModel.switchLinks" columns="fabricModel.linksSchema"></static-table>
+                    </transclude-body>
+                </mar-section>
+
+                <!--<mar-section ng-if="fabricModel.showSwitchDetail"  title="Flows" class="detail_flow">-->
+                    <!--<div style="">-->
+                    <!--<button class="material-icons mdc-icon-button mdc-card__action&#45;&#45;icon" >add</button>-->
+                    <!--</div>-->
+                    <!--<static-table style="max-width:400px" data="fabricModel.switchLinks" columns="fabricModel.linksSchema"></static-table>-->
+                <!--</mar-section>-->
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <!--<footer></footer>-->
+    <mdl-menu data="fabricModel.switchContextMenu.data" is-show="fabricModel.switchContextMenu.isShow" location="fabricModel.switchContextMenu.location"></mdl-menu>
+    <!--<div id="toolbar" class="mdc-menu" tabindex="-1" style="position: fixed;z-index: 100;">-->
+        <!--<ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">-->
+            <!--<li class="mdc-list-item" role="menuitem" tabindex="0" msg="bb">-->
+                <!--A Menu Item-->
+            <!--</li>-->
+            <!--<li class="mdc-list-item" role="menuitem" tabindex="{{1==1?-1:0}}" aria-disabled="true" msg="aa">-->
+                <!--Disabled Menu Item-->
+            <!--</li>-->
+
+        <!--</ul>-->
+    <!--</div>-->
+
+    <mar-drawer is-right=true></mar-drawer>
+    <device-tooltip></device-tooltip>
+    <link-tooltip></link-tooltip>
+    <ng-controller ng-controller="deviceWizardController">
+        <wizard></wizard>
+    </ng-controller>
+
+    <ng-controller ng-controller="flowEstablishController">
+        <wizard></wizard>
+    </ng-controller>
+
+    <ng-controller ng-controller="groupEstablishController">
+        <wizard></wizard>
+    </ng-controller>
+
+    <ng-controller ng-controller="pfcEstablishController">
+        <wizard></wizard>
+    </ng-controller>
+
+    <loading is-loading="isLoading" png-size="100" style="position: fixed;"></loading>
+</div>

@@ -1,0 +1,44 @@
+.egp-policy-wizard .wizard__body{
+  height: 610px;
+ }
+.egp-policy-wizard .wizard__body__right{
+  overflow:  auto;
+  //padding: 16px;
+ }
+.egp-policy-wizard .wizard__body__form{
+  width: 440px;
+ }
+.egp-group-establish .name-field .mdc-text-field{
+  margin-bottom: 0;
+}
+.egp-group-establish .name-field .mdc-text-field-helper-text{
+  margin-bottom: 0;
+}
+.egp-group-establish .add-btn{
+  position: absolute;
+  top: 40px;
+  cursor: pointer;
+  left: 190px;
+}
+.egp-group-establish .mdc-select{
+  width: 150px;
+}
+.egp-group-establish .mdc-text-field__input{
+  width: 150px;
+  padding-top: 0;
+}
+.egp-group-establish .stepForm__input{
+  margin: 0;
+  padding: 10px 0;
+}
+.egp-group-establish .rule-action{
+  display: inline-block;
+  margin-right: 30px;
+}
+.policy-rules{
+  padding: 20px;
+  border-left: 1px solid lightgray;
+}
+.policy-rules .policy-rules-table{
+  height: calc(100% - 50px);
+}

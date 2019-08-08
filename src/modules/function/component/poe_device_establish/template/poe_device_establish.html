@@ -1,0 +1,14 @@
+<div class="poe_device_establish">
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.TIMERANGES.LABEL.SWITCH'|translate}}
+            <!--<span class="stepForm__input__required">*</span>-->
+        </div>
+        <div class="poe_device_establish__label">{{data.device_name}}</div>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.FUNCTIONS.POE.COLUMN.THRESHOLD'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-require="true" v-type="int" ng-model="model.threshold" v-rpcid="page_poe_device_es" ></valid-input>
+    </div>
+</div>

@@ -22,7 +22,7 @@ export class showHideColumnCtrl {
       });
     };
     this.di.$scope.save = () =>{
-      this.di.$log.info(this.di.$scope.columns_2);
+      //this.di.$log.info(this.di.$scope.columns_2);
       let data = this.di.$scope.columns_1.concat(this.di.$scope.columns_2);
       this.di.$modalInstance.close({
         canceled: false,
@@ -40,6 +40,7 @@ export class showHideColumnCtrl {
     Object.keys(columns).forEach((key, index) => {
       let obj = {};
       obj.visible = columns[key].visible;
+      obj.fixed = columns[key].fixed;
       obj.ui = {'id': columns[key].field, 'label': columns[key].def.label};
       if (index < harlf) {
         this.di.$scope.columns_1.push(obj);

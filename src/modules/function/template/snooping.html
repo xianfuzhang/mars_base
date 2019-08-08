@@ -1,0 +1,43 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{'MODULE.FUNCTIONS.SOOPING.TITLE'|translate}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span ng-bind="'MODULE.FUNCTIONS.SOOPING.TITLE'|translate"></span>
+  </content-header>
+  <section class="app-body" >
+    <div class="mars-col-24">
+    	<div class="main__content">
+        <mdl-tabs ng-model="tabSelected" options="tabs"
+                  class-list="main__content__device-detail-tabs"
+                  on-select="onTabChange($value)">
+        </mdl-tabs>
+        <section class="tab-content" ng-if="tabSelected.type == 'switch'" style="display: inline-flex;">
+          <mdl-table actions-show="model.actionsShow"
+              actions="model.rowActions"
+              row-select-action="onTableRowSelectAction($event)"
+              provider="model.provider" api-ready="onApiReady($api)"
+              on-add="createDHCPSnooping()">
+          </mdl-table>
+        </section>
+        <section class="tab-content" ng-if="tabSelected.type == 'port'" style="display: inline-flex;">
+          <mdl-table actions-show="model.actionsShow"
+              actions="model.rowActions"
+              row-select-action="onTableRowSelectAction($event)"
+              row-actions-filter="onTableRowActionsFilter($event)"
+              provider="model.provider" api-ready="onApiReady($api)">
+          </mdl-table>
+        </section>
+        <section class="tab-content" ng-if="tabSelected.type == 'host'" style="display: inline-flex;">
+          <mdl-table actions-show="model.actionsShow"
+              provider="model.provider" api-ready="onApiReady($api)">
+          </mdl-table>
+        </section>
+      </div>  
+    </div>
+  </section>
+</div>
+<ng-controller class="dhcp-snoop-wizard" ng-class="{true: 'createSnoop', false: 'updateSnoop'}[createFlag === true]"
+                ng-controller="establishSnoopCtrl">
+  <wizard></wizard>
+</ng-controller>

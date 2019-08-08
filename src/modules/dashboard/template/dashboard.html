@@ -1,17 +1,333 @@
+<div class="dashboard flex_entirety">
+    <mdl-header></mdl-header>
+    <div class="flex_entirety__body">
+        <content-header big-title="{{'MODULES.DASHBOARD.HOME'|translate}}">
+            <span>Mars Cloud</span>
+        </content-header>
+        <div class="flex_entirety__body__body dashboard__body">
+            <div class="mars-row dashboard-summary">
+                <div class="mars-row-flex">
+                    <div class="summary-row">
+                        <div class="summary-item">
+                          <div class="mdc-card panel-widget panel-blue-bg-white margin-right-16 margin-left-8">
+                            <div class="widget-left">
+                                <div class="circle1">
+                                    <div class="circle2">
+                                        <div class="circle3">
+                                            <div class="circle4">
+                                                <i class="material-icons md-48">zoom_out_map</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-right">
+                              <div class="widget-top">
+                                <div class="large">{{dashboardModel.controllerSummary.count}}</div>
+                                <div class="medium" ng-bind="'MODULES.DASHBOARD.CONTROLLER'|translate"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="summary-item">
+                          <div class="mdc-card panel-widget panel-orange-bg-white">
+                            <div class="widget-left">
+                                <div class="circle1">
+                                    <div class="circle2">
+                                        <div class="circle3">
+                                            <div class="circle4">
+                                                <i class="material-icons md-48">shuffle</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-right">
+                              <div class="widget-top">
+                                <div class="large">{{dashboardModel.switchSummary.spineCount}}</div>
+                                <div class="medium">Spine</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="summary-row">
+                        <div class="summary-item">
+                          <div class="mdc-card panel-widget panel-green-bg-white margin-right-16 margin-left-48">
+                            <div class="widget-left">
+                                <div class="circle1">
+                                    <div class="circle2">
+                                        <div class="circle3">
+                                            <div class="circle4">
+                                                <i class="material-icons md-48">swap_vert</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-right">
+                              <div class="widget-top">
+                                <div class="large">{{dashboardModel.switchSummary.leafCount}}</div>
+                                <div class="medium">Leaf</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="summary-item">
+                          <div class="mdc-card panel-widget panel-teal-bg-white">
+                            <div class="widget-left">
+                                <div class="circle1">
+                                    <div class="circle2">
+                                        <div class="circle3">
+                                            <div class="circle4">
+                                                <i class="material-icons md-48">swap_horiz</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="widget-right">
+                              <div class="material-icon-right-container">
+                                <div class="large">{{dashboardModel.controllerSummary.inactives.length}}</div>&nbsp;
+                                <div class="small margin-left-8" ng-bind="'MODULES.DASHBOARD.ABNORMAL_CONTROLLER'|translate"></div>
+                              </div>
+                              <div class="material-icon-right-container">
+                                <div class="large">{{dashboardModel.switchSummary.unknownCount}}</div>&nbsp;
+                                <div class="small margin-left-8" ng-bind="'MODULES.DASHBOARD.IDLE_SWITCH'|translate"></div>
+                              </div>
+                              <div class="material-icon-right-container">
+                                <div class="large">{{dashboardModel.switchSummary.unavailableCount}}</div>&nbsp;
+                                <div class="small margin-left-8" ng-bind="'MODULES.DASHBOARD.ABNORMAL_SWITCH'|translate"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-<div class="header" style="display: flex;flex-direction: column;flex-wrap: nowrap;height: 100%">
-  <mar-header headers="dashModel.headers"></mar-header>
+            <div class="mars-row" ng-if="isAnalyzeEnable">
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md left-panel mars-panel dashboard-panel">
+                            <canvas id="switch-cpu-usage-rate" height="300"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-data="switchCpuChartConfig.data"
+                                chart-labels="switchCpuChartConfig.labels"
+                                chart-series="switchCpuChartConfig.series"
+                                chart-fill="false"
+                                chart-options="switchCpuChartConfig.options"
+                                chart-click="switchCpuChartConfig.onClick"
+                                chart-hover="switchCpuChartConfig.onHover">
+                        </canvas>
 
-  <div style="flex-grow: 2;
-              flex-basis:auto;
-              flex-shrink: 1;background-color: white;overflow: hidden;">
-    <!--<canvas width="850px" height="800px" id="canvas" style="background-color: #00D3FF"></canvas>-->
-    <div style="height:600px;width:1000px">
-      <topo spines="dashModel.deSpines" leafs="dashModel.deLeafs" others="dashModel.deOthers" links="dashModel.deLinks"></topo>
+                        <div class="setting-group"  ng-show="!dashboardModel.cpu.loading">
+                            <div class="item" title="{{dashboardModel.cpu.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-cpu')"><i class="material-icons">{{dashboardModel.cpu.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.cpu.isRealtime || resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.cpu.isRealtime || chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
+                        </div>
+
+                        <!--<div class="chart-loading" ng-show="dashboardModel.cpu.loading"></div>-->
+                        <loading is-loading="dashboardModel.cpu.loading" png-size="60" style="position: absolute;"></loading>
+                    </div>
+
+                    <div class="col-gutter-md left-panel mars-panel dashboard-panel">
+
+                            <canvas id="switch-memory-usage-rate" height="300"
+                                    class="chart chart-line"
+                                    chart-type="line"
+                                    chart-data="switchMemoryChartConfig.data"
+                                    chart-labels="switchMemoryChartConfig.labels"
+                                    chart-series="switchMemoryChartConfig.series"
+                                    chart-fill="false"
+                                    chart-options="switchMemoryChartConfig.options"
+                                    chart-click="switchMemoryChartConfig.onClick"
+                                    chart-hover="switchMemoryChartConfig.onHover">
+                            </canvas>
+
+
+                        <div class="setting-group"  ng-show="!dashboardModel.memory.loading">
+                            <div class="item" title="{{dashboardModel.memory.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-memory')"><i class="material-icons">{{dashboardModel.memory.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.memory.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.memory.isRealtime || resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.memory.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.memory.isRealtime || chartSetting('device-memory')"><i class="material-icons">settings</i></div>
+                        </div>
+
+                        <!--<div class="chart-loading" ng-show="dashboardModel.memory.loading"></div>-->
+                        <loading is-loading="dashboardModel.memory.loading" png-size="60" style="position: absolute;"></loading>
+                    </div>
+                </div>
+
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md left-panel mars-panel dashboard-panel">
+                        <div class="chart_title">
+                            <span style="font-weight: bold;">{{'MODULES.DASHBOARD.SWITCH_INTERFACE_PACKETS'|translate}}</span>
+                        </div>
+                        <div>
+                            <canvas id="interface-rxtx-packages" height="300"
+                                    class="chart chart-line"
+                                    chart-type="line"
+                                    chart-data="switchInterfaceRxTxChartConfig.data"
+                                    chart-labels="switchInterfaceRxTxChartConfig.labels"
+                                    chart-fill="false"
+                                    chart-series="switchInterfaceRxTxChartConfig.series"
+                                    chart-options="switchInterfaceRxTxChartConfig.options"
+                                    chart-click="switchInterfaceRxTxChartConfig.onClick"
+                                    chart-hover="switchInterfaceRxTxChartConfig.onHover">
+                            </canvas>
+                        </div>
+
+                        <div class="setting-group out_title" ng-show="!dashboardModel.interface.loading">
+                            <mdl-select ng-model="dashboardModel.interface.typeOption" display-label="{options: interfaceTypes}" disable="dashboardModel.interface.isRealtime"></mdl-select>
+                            <div class="item" title="{{dashboardModel.interface.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-interface')"><i class="material-icons">{{dashboardModel.interface.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.interface.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.interface.isRealtime || resetTimeScale('device-interface')"><i class="material-icons">undo</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.interface.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.interface.isRealtime || chartSetting('device-interface')"><i class="material-icons">settings</i></div>
+                        </div>
+
+                        <loading is-loading="dashboardModel.interface.loading" png-size="60" style="position: absolute;"></loading>
+                    </div>
+
+                    <div class="col-gutter-md left-panel mars-panel dashboard-panel">
+                        <div class="chart_title">
+                            <span style="font-weight: bold;">{{'MODULES.DASHBOARD.SWITCH_INTERFACE_DROP_ERROR_PACKETS'|translate}}</span>
+                        </div>
+                        <div>
+                            <canvas id="interface-rxtx-drop-error" height="300"
+                                    class="chart chart-line"
+                                    chart-type="line"
+                                    chart-data="switchInterfaceDropErrorChartConfig.data"
+                                    chart-labels="switchInterfaceDropErrorChartConfig.labels"
+                                    chart-fill="false"
+                                    chart-series="switchInterfaceDropErrorChartConfig.series"
+                                    chart-options="switchInterfaceDropErrorChartConfig.options"
+                                    chart-click="switchInterfaceDropErrorChartConfig.onClick"
+                                    chart-hover="switchInterfaceDropErrorChartConfig.onHover">
+                            </canvas>
+                        </div>
+
+                        <div class="setting-group out_title" ng-show="!dashboardModel.dropErrorInterface.loading">
+                            <mdl-select ng-model="dashboardModel.dropErrorInterface.typeOption" display-label="{options: interfaceTypes.slice(0,2)}">
+                            </mdl-select>
+                            <div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-interface-drop-error')" disable="false"><i class="material-icons">undo</i></div>
+                            <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-interface-drop-error')"><i class="material-icons">settings</i></div>
+                        </div>
+
+                        <loading is-loading="dashboardModel.dropErrorInterface.loading" png-size="60" style="position: absolute;"></loading>
+                    </div>
+                </div>
+
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md left-panel mars-panel dashboard-panel" style="position:relative;">
+                        <canvas id="switch-disk-usage-rate" height="300"
+                                class="chart chart-bar"
+                                chart-type="bar"
+                                chart-data="switchDiskChartConfig.data"
+                                chart-labels="switchDiskChartConfig.labels"
+                                chart-colors="switchDiskChartConfig.colors"
+                                chart-series="switchDiskChartConfig.series"
+                                chart-fill="false"
+                                chart-options="switchDiskChartConfig.options">
+                        </canvas>
+
+                        <div class="setting-group"  ng-show="!dashboardModel.disk.loading">
+                            <!--<div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartSetting('device-disk')"><i class="material-icons">settings</i></div>-->
+                            <!--<div class="item" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="resetTimeScale('device-disk')"><i class="material-icons">undo</i></div>-->
+                        </div>
+
+                        <!--<div class="chart-loading" ng-show="dashboardModel.disk.loading"></div>-->
+                        <!--<loading is-loading="dashboardModel.disk.loading" png-size="100" style="position: absolute;top: 50%;left: 50%;"></loading>-->
+                        <loading is-loading="dashboardModel.disk.loading" png-size="60" style="position: absolute;"></loading>
+                    </div>
+
+                    <div class="col-gutter-md left-panel mars-panel dashboard-panel">
+                        <canvas id="cluster-cpu-usage-rate" height="300"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-data="clusterCpuChartConfig.data"
+                                chart-labels="clusterCpuChartConfig.labels"
+                                chart-series="clusterCpuChartConfig.series"
+                                chart-fill="false"
+                                chart-options="clusterCpuChartConfig.options"
+                                chart-click="clusterCpuChartConfig.onClick"
+                                chart-hover="clusterCpuChartConfig.onHover">
+                        </canvas>
+
+                        <div class="setting-group" ng-show="!dashboardModel.controller.cpu.loading">
+                            <div class="item" title="{{dashboardModel.controller.cpu.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('controller-cpu')"><i class="material-icons">{{dashboardModel.controller.cpu.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.controller.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.controller.cpu.isRealtime || resetTimeScale('controller-cpu')"><i class="material-icons">undo</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.controller.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.controller.cpu.isRealtime || chartSetting('controller-cpu')"><i class="material-icons">settings</i></div>
+                        </div>
+
+                        <loading is-loading="dashboardModel.controller.cpu.loading" png-size="60" style="position: absolute;"></loading>
+                    </div>
+                </div>
+
+                <div class="mars-row-flex">
+                    <div class="col-gutter-md left-panel mars-panel dashboard-panel">
+                        <canvas id="cluster-memory-usage-rate" height="300"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-data="clusterMemoryChartConfig.data"
+                                chart-labels="clusterMemoryChartConfig.labels"
+                                chart-series="clusterMemoryChartConfig.series"
+                                chart-fill="false"
+                                chart-options="clusterMemoryChartConfig.options"
+                                chart-click="clusterMemoryChartConfig.onClick"
+                                chart-hover="clusterMemoryChartConfig.onHover">
+                        </canvas>
+
+                        <div class="setting-group" ng-show="!dashboardModel.controller.memory.loading">
+                            <div class="item" title="{{dashboardModel.controller.memory.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('controller-memory')"><i class="material-icons">{{dashboardModel.controller.memory.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.controller.memory.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.controller.memory.isRealtime || resetTimeScale('controller-memory')"><i class="material-icons">undo</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.controller.memory.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.controller.memory.isRealtime || chartSetting('controller-memory')"><i class="material-icons">settings</i></div>
+                        </div>
+
+                        <loading is-loading="dashboardModel.controller.memory.loading" png-size="60" style="position: absolute;"></loading>
+                    </div>
+
+                    <div class="col-gutter-md left-panel mars-panel dashboard-panel">
+                        <canvas id="cluster-interface-packages" height="300"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-data="clusterInterfaceChartConfig.data"
+                                chart-labels="clusterInterfaceChartConfig.labels"
+                                chart-series="clusterInterfaceChartConfig.series"
+                                chart-fill="false"
+                                chart-options="clusterInterfaceChartConfig.options"
+                                chart-click="clusterInterfaceChartConfig.onClick"
+                                chart-hover="clusterInterfaceChartConfig.onHover">
+                        </canvas>
+
+                        <div class="setting-group" ng-show="!dashboardModel.controller.interface.loading">
+                            <div class="item" title="{{dashboardModel.controller.interface.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('controller-interface')"><i class="material-icons">{{dashboardModel.controller.interface.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.controller.interface.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="dashboardModel.controller.interface.isRealtime || resetTimeScale('controller-interface')"><i class="material-icons">undo</i></div>
+                            <div class="item" ng-class="{'+disable': dashboardModel.controller.interface.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="dashboardModel.controller.interface.isRealtime || chartSetting('controller-interface')"><i class="material-icons">settings</i></div>
+                            <!--<div class="item" title="{{clusterInterfaceChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-interface')"><i class="material-icons">swap_horiz</i></div>-->
+
+                        </div>
+
+                        <loading is-loading="dashboardModel.controller.controller.interface.loading" png-size="60" style="position: absolute;"></loading>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="mars-row" ng-if="isAnalyzeEnable">-->
+                <!--<div class="mars-row-flex">-->
+                    <!--<div class="col-gutter-md left-panel mars-panel dashboard-panel">-->
+                        <!--<canvas id="cluster-test-rate" height="300"-->
+                                <!--class="chart chart-pie"-->
+                                <!--chart-type="pie"-->
+                                <!--chart-data="clusterCpuPieChartConfig.data"-->
+                                <!--chart-labels="clusterCpuPieChartConfig.labels"-->
+                                <!--chart-fill="false"-->
+                                <!--chart-options="clusterCpuPieChartConfig.options"-->
+                                <!--chart-options="clusterCpuPieChartConfig.colors">-->
+                        <!--</canvas>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+            <!--</div>-->
+
+            <chart-tooltip></chart-tooltip>
+        </div>
     </div>
-  </div>
-
-  <footer></footer>
-
-  <mar-drawer is-right=true></mar-drawer>
 </div>

@@ -1,43 +1,47 @@
-export class checkboxRendererFactory {
-  static getDI () {
+export class CheckboxRenderer {
+  static getDI() {
     return [
+      '$compile',
       'renderService',
-      '$filter',
-      '_'
+      'uuid'
     ];
   }
 
-  constructor (...args) {
-    this.di = [];
-    checkboxRendererFactory.getDI().forEach((value, index) => {
+  constructor(...args) {
+    this.di = {};
+    CheckboxRenderer.getDI().forEach((value, index) => {
       this.di[value] = args[index];
     }, this);
-  }
-
-  checkboxRenderer () {
-    let stringFilter = this.di.$filter('string');
-
-    this.initialize = (spec) => {
-      this.spec = spec;
-    };
 
     this.render = (spec) => {
-      return this.di._.escape(stringFilter(spec.value));
-    };
+      let tdElm = spec.element,
+          scope = spec.getContext.$new();
+      if (!spec.object['id']) spec.object['id'] = this.di.uuid();    
+      scope.displayLabel = spec.params.displayLabel;
+      scope.displayLabel['id'] = spec.object['id'] + '+' + scope.displayLabel['identify'];
+      scope.checkboxModel = spec.value;
+      scope.onClick = (val) => {
+        console.log('checkboxRender current value =' + val);
+        spec.object[spec.col.field] = val;
+        spec.value = val;
+        scope.$emit('td-checkbox-change', {'column': spec.col.field, 'newValue': val, 'trObject': spec.object});
+        console.log('checkboxRender spec object =' + JSON.stringify(spec.object));
+      };
+
+      const innerHtml = '<mdl-checkbox ng-model="checkboxModel" display-label="displayLabel"'
+                      + 'on-click="onClick($value)"></mdl-checkbox>';
+      const elm = this.di.$compile(innerHtml)(scope);
+      angular.element(tdElm).empty().append(elm);
+    }
 
     this.getType = () => {
-      return this.di.renderService.render().CONST_TYPE_HTML;
+      return this.di.renderService.render().CONST_TYPE_DOM;
     };
+  }  
 
-    this.getClasses = () => {
-      return 'test';
-    };
-  }
-
-  createItem () {
-    return new this.checkboxRenderer();
+  createFactory () {
+    return new CheckboxRenderer(this.di.$compile, this.di.renderService, this.di.uuid);
   }
 }
-
-checkboxRendererFactory.$inject = checkboxRendererFactory.getDI();
-checkboxRendererFactory.$$ngIsClass = true;
+CheckboxRenderer.$inject = CheckboxRenderer.getDI();
+CheckboxRenderer.$$ngIsClass = true;

@@ -1,0 +1,109 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+//@include block(topo){
+//  //background-image: url("../../assets/images/graphback.png") ;
+//  //background-repeat: repeat-y;
+//}
+
+@include block(force-topo) {
+
+  @include element(node-select) {
+    fill: #8294f5;
+
+  }
+  @include element(node-unselect) {
+    fill: #8294f5;
+  }
+
+  @include element(node-normal) {
+    stroke: #fff;
+    stroke-width: 1.5;
+    fill: #565656;
+  }
+
+  @include element(text) {
+    fill: black;
+    stroke: black;
+    stroke-width: 1;
+    user-select: none;
+  }
+
+  @include element(path-normal) {
+    stroke: white;
+    //stroke-width: 1.5;
+    fill: gray;
+  }
+
+  @include element(path-error) {
+    fill: red;
+    //stroke-width: 1.5;
+    stroke: red;
+  }
+
+  @include element(node-outline) {
+    //fill: rgb(255, 255, 255);
+    fill: #5694E3;
+    stroke-width: 2;
+    //stroke: rgb(0, 0, 0);
+    stroke:  #5694E3;
+  }
+
+  @include element(line-normal) {
+    stroke: #639c4f;
+    //stroke-width: 2;
+  }
+
+}
+
+.force-topo__node-outline.node-select {
+  //fill: #3D9CBD;
+  stroke: black;
+  //stroke: #639c4f;;
+
+}
+
+.force-topo__node-outline.node-unselect {
+  //fill: rgb(255, 255, 255);
+  fill: #5694E3;
+}
+
+.force-topo__node-outline.host-select {
+  //fill: rgb(255, 124, 9)
+  fill: #5694E3;
+}
+
+.force-topo__node-outline.host-unselect {
+  //fill: rgb(255, 255, 255);
+  fill: #5694E3;
+}
+
+.svg_revert {
+  z-index: 90;
+  background-color: white;
+  position: absolute;
+  box-shadow: 1px 2px 3px gray;
+  border:0;
+  //left: 16px;
+  //top: 16px;
+  //border: 1px solid lightgray;
+  border-radius: 4px;
+  padding: 8px;
+  user-select: none;
+}
+
+.no_vlan_port {
+  fill: #a7a7a7;
+  stroke: #a7a7a7;
+}
+
+.no_vlan_port.port_vlan_untag {
+  fill: #26ec26;
+  stroke: #26ec26;
+}
+
+.no_vlan_port.port_vlan_tag {
+  fill: #fff506;
+  stroke: #fff506;
+}

@@ -1,6 +1,6 @@
 export class TableController {
   static getDI() {
-    return ['$log','$scope', 'modalManager'];
+    return ['$log','$scope', '$timeout', 'modalManager'];
   }
 
   constructor(...args){
@@ -11,7 +11,6 @@ export class TableController {
     this.scope = this.di.$scope;
 
     this.onMenu = () => {
-      this.di.$log.info('table controller in menu popup func.');
       this.di.modalManager.open({
           template: require('../template/showHideColumn.html'),
           controller: 'showHideColumnCtrl',
@@ -29,13 +28,16 @@ export class TableController {
         data.result.forEach((item, index) => {
           this.scope.tableModel.columnsByField[item.ui.id]['visible'] = item.visible;
         });
+        this.di.$timeout(() => {
+          this.di.$scope.$emit('table-show-hide-columns')
+        }, 0);
       }
     });
     };
 
-    this.onFilter = () => {
+   /* this.onFilter = () => {
       this.di.$log.info('table controller in filter popup func.');
-    };
+    };*/
 
     this.select = (row, action) => {
       let index = this.scope.tableModel.removeItems.indexOf(row);
@@ -47,8 +49,18 @@ export class TableController {
       }
     };
 
-    this.rowSelectAction = (row, action) => {
-      this.di.$log.info('table controller row action func');
+    this.rowSelectAction = (data, action) => {
+      let rowSelectAction = this.scope.rowSelectAction || angular.noop;
+      rowSelectAction({$event: {data: data, action: action}});
+    };
+
+    this.rowActionsFilter = (data, actions) => {
+      let roleFilterActions = actions.filter((action) => {
+        return this.scope.tableModel.currentRole >= action.role;
+      });
+      let rowActionsFilter = this.scope.rowActionsFilter || angular.noop;
+      let filter = rowActionsFilter({$event:{data: data, actions: roleFilterActions}}) || roleFilterActions;
+      return filter;
     };
   }
 }

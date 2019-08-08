@@ -1,0 +1,52 @@
+<div class="column-manipulation-field">
+  <div class="column-manipulation-field__header">
+    <span class="column-manipulation-field__title"
+          ng-bind="'MODULE.ACCOUNT.CREATE.TITTLE'|translate"></span>
+  </div>
+  <form class="user__form" name="userModel.userForm" autocomplete="off" novalidate>
+    <div class="column-manipulation-field__content">
+      <div class="column-manipulation-field__item">
+        <mdl-text ng-model="userModel.user_name"
+                  helper="userModel.userNameHelper"
+                  display-label="userModel.userNameDisplayLabel">
+        </mdl-text>
+      </div>
+      <div class="column-manipulation-field__item">
+        <mdl-text ng-model="userModel.password"
+                  helper="userModel.passwordHelper"
+                  display-label="userModel.passwordDisplayLabel">
+        </mdl-text>
+      </div>
+      <div class="column-manipulation-field__item">
+        <div class="group-item-field">
+          <span ng-bind="'MODULE.ACCOUNT.CREATE.GROUPS'|translate"></span>
+          <mdl-checkbox ng-model="userModel.group.supergroup" display-label="userModel.superGroupDisplayLabel">
+          </mdl-checkbox>
+          <mdl-checkbox ng-model="userModel.group.admingroup" display-label="userModel.adminGroupDisplayLabel">
+          </mdl-checkbox>
+          <mdl-checkbox ng-model="userModel.group.guestgroup" display-label="userModel.guestGroupDisplayLabel">
+          </mdl-checkbox>
+          <div class="group-item-field__group-helper" ng-show="userModel.groupHelper.validation === 'true'">
+            {{userModel.groupHelper.content}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="column-manipulation-field__footer">
+      <!--<button class="mdc-button mdc-ripple-upgraded right" type="submit"-->
+              <!--ng-click="save($event)"-->
+              <!--ng-bind="'MODULES.TABLE.COLUMN.SAVE'|translate"></button>-->
+      <!--<button class="mdc-button mdc-ripple-upgraded right"-->
+              <!--ng-click="cancel($event)"-->
+              <!--ng-bind="'MODULES.TABLE.COLUMN.CANCEL'|translate"></button>-->
+
+      <div style="display: inline-block;float: right; margin-left: 15px;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="userModel.userForm.$invalid" />
+      </div>
+
+      <div style="display: inline-block;float: right;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)" />
+      </div>
+    </div>
+  </form>
+</div>

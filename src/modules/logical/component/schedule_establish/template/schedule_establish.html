@@ -1,0 +1,22 @@
+<div class="qos_schedule_establish">
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.SCHEDULE.TAB.POLICY.TABLE.QUEUE'|translate}}</div>
+        <mdl-select ng-model="model.queueObject" display-label="queuesLabel" disable="model.update">
+        </mdl-select>
+    </div>
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.LOGICAL.SCHEDULE.TAB.POLICY.TABLE.WEIGHT'|translate}}<span class="stepForm__input__required">*</span></div>
+        <!-- <valid-input v-name="dscp" v-require="true" ng-model="model.dscp" v-rpcid="page_tenant_es" ></valid-input> -->
+        <!--<mdl-text ng-model="model.weight"-->
+                  <!--helper="model.weightHelper"-->
+                  <!--display-label="model.weightDisplayLabel">-->
+        <!--</mdl-text>-->
+        <valid-input v-require="true"
+                     v-helper="{{'MODULES.LOGICAL.QOS.TAB.SCHEDULE.WEIGHT.HELP'|translate}}"
+                     v-message="{{'MODULES.LOGICAL.QOS.TAB.SCHEDULE.WEIGHT.HELP'|translate}}"
+                     v-regex="weight_regex"
+                     ng-model="model.weight"
+                     v-rpcid="page_qos_schedule">
+        </valid-input>
+    </div>
+</div>

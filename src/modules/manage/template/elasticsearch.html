@@ -1,0 +1,65 @@
+<div class="flex_entirety elasticsearch">
+    <mdl-header></mdl-header>
+
+    <div class="flex_entirety__body">
+        <content-header big-title="{{pageTitle}}">
+            <a href="/">Mars Cloud</a>
+            <span>•</span>
+            <span ng-bind="::'MODULE.HEADER.MANAGE.ELASTICSEARCH' | translate"></span>
+        </content-header>
+
+        <div class="flex_entirety__body__body dashboard__body">
+            <div class="mars-row">
+                <div class="mars-row-flex">
+                    <div class="left-panel mars-panel" style="width:100%;position:relative;">
+                        <canvas id="elasticsearch-indice-summary" height="350"
+                                class="chart chart-bar"
+                                chart-type="bar"
+                                chart-data="indiceSummaryChartConfig.data"
+                                chart-labels="indiceSummaryChartConfig.labels"
+                                chart-colors="indiceSummaryChartConfig.colors"
+                                chart-series="indiceSummaryChartConfig.series"
+                                chart-options="indiceSummaryChartConfig.options"
+                                chart-click="indiceSummaryChartConfig.onClick">
+                        </canvas>
+
+                        <div class="setting-group" ng-show="!elasticsearchModel.summaryLoading">
+                            <div class="item" title="{{'MODULES.MANAGE.ELASTICSEARCH.BACKUP'|translate}}" ng-click="backup()"><i class="material-icons">backup</i></div>
+                        </div>
+
+                        <div class="chart-loading" ng-show="elasticsearchModel.summaryLoading"></div>
+                    </div>
+                </div>
+
+
+                <div class="mars-row-flex">
+                    <div class="left-panel mars-panel" style="width:100%;position:relative;">
+                        <canvas id="elasticsearch-indice-analyzer" height="350"
+                                class="chart chart-line"
+                                chart-type="line"
+                                chart-fill="true"
+                                chart-data="indiceAnalyzerChartConfig.data"
+                                chart-labels="indiceAnalyzerChartConfig.labels"
+                                chart-series="indiceAnalyzerChartConfig.series"
+                                chart-options="indiceAnalyzerChartConfig.options"
+                                chart-click="indiceAnalyzerChartConfig.onClick"
+                                chart-hover="indiceAnalyzerChartConfig.onHover">
+                        </canvas>
+
+                        <div class="setting-group" ng-show="!elasticsearchModel.analyzerLoading">
+                            <mdl-select ng-model="elasticsearchModel.indiceSelectedOption"
+                                        display-label="{options: elasticsearchModel.indiceOptions}"
+                                        disable="loading"
+                                        ng-change="indiceSelect($value)">
+                            </mdl-select>
+                            <div class="item" title="{{'MODULES.MANAGE.ELASTICSEARCH.RESTORE'|translate}}" ng-click="resetTimeScale('indice-analyzer')"><i class="material-icons">undo</i></div>
+                            <div class="item" title="{{'MODULES.MANAGE.ELASTICSEARCH.CLEAR'|translate}}" ng-click="clear()"><i class="material-icons">delete_forever</i></div>
+                        </div>
+
+                        <div class="chart-loading" ng-show="elasticsearchModel.analyzerLoading"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

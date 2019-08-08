@@ -1,0 +1,34 @@
+<div class="dhcprelay_interface_establish">
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.DHCP_RELAY.WIZARD.CONNECT_POINT'|translate}}<span class="stepForm__input__required">*</span></div>
+        <div style="display: flex">
+            <mdl-select style="margin-right:20px;" ng-model="dhcpRelayModel.device" display-label="displayLabel.device"  ng-change="deviceChange($value)">
+            </mdl-select>
+            <mdl-select  ng-model="dhcpRelayModel.port" display-label="displayLabel.port" >
+            </mdl-select>
+        </div>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.DHCP_RELAY.COLUMN.VLAN'|translate}}<span class="stepForm__input__required">*</span></div>
+        <!--<valid-input style="width:90%;display:inline-block;" ng-model="dhcpRelayModel.server_ip" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}"></valid-input>-->
+        <div style="display: flex">
+            <valid-input style="width:20%;display:inline-block;margin-right: 16px;" v-require="true" ng-model="dhcpRelayModel.vlan" v-type="int" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}"  v-rpcid="page_dhcprelay_interface_es"></valid-input>
+            <mdl-select style="margin-top: 4px;"  ng-model="dhcpRelayModel.vlan_type" display-label="displayLabel.tag" >
+            </mdl-select>
+        </div>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.DHCP_RELAY.COLUMN.IP'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input style="width:90%;display:inline-block;" v-require="true" ng-model="dhcpRelayModel.ip" v-type="ipv4_mask" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4_MASK' | translate}}" v-rpcid="page_dhcprelay_interface_es"></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{'MODULES.DHCP_RELAY.COLUMN.MAC'|translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input style="width:90%;display:inline-block;" v-require="true" ng-model="dhcpRelayModel.mac" v-type="mac" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}" v-rpcid="page_dhcprelay_interface_es"></valid-input>
+    </div>
+
+
+</div>

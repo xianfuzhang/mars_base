@@ -1,0 +1,397 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{page_title}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span ng-bind="'MODULES.SWITCH.DETAIL.TITLE'|translate"></span>
+  </content-header>
+  <section class="app-body">
+    <div class="main__content deviceDetail">
+
+      <div style="display: flex;height:100%;">
+        <toggle-menu ng-model="tabSelected" change="onTabChange($value)" display-label="tabs" style="flex-basis: 200px;flex-shrink: 0;flex-grow: 0;"></toggle-menu>
+        <div style="flex-grow:1;flex-shrink: 1;padding: 16px 16px 16px 32px;">
+          <section class="tab-content" ng-if="tabSelected.value == 'summary'">
+            <div class="hide">
+              <mdl-table provider="detailModel.provider"></mdl-table>
+            </div>
+            <div class="device-detail" ng-if="detailDisplay">
+              <div class="device-detail__row">
+                <div class="device-detail__item">
+                  <label class="device-detail__item-label"
+                         ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.NAME'|translate"></label>
+                  <span class="device-detail__item-value">{{detailValue.name}}</span>
+                </div>
+                <div class="device-detail__item">
+                  <label class="device-detail__item-label"
+                         ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.IP'|translate"></label>
+                  <span class="device-detail__item-value">{{detailValue.mgmtIpAddress}}</span>
+                </div>
+                <div class="device-detail__item">
+                  <label class="device-detail__item-label"
+                         ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.MAC'|translate"></label>
+                  <span class="device-detail__item-value">{{detailValue.mac}}</span>
+                </div>
+              </div>
+              <div class="device-detail__row">
+                <div class="device-detail__item">
+                  <label class="device-detail__item-label"
+                         ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.RACK'|translate"></label>
+                  <span class="device-detail__item-value">{{detailValue.rack_id}}</span>
+                </div>
+                <div class="device-detail__item">
+                  <label class="device-detail__item-label"
+                         ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.TYPE'|translate"></label>
+                  <span class="device-detail__item-value">{{detailValue.type}}</span>
+                </div>
+                <div ng-if="detailValue.type == 'leaf' && detailValue.leafGroup.name != null" class="device-detail__item">
+                  <label class="device-detail__item-label"
+                         ng-bind="'MODULES.PORT.MLAG.LEAFGROUP'|translate"></label>
+                  <span class="device-detail__item-value">{{detailValue.leafGroup.name}}</span>
+                </div>
+                <div class="device-detail__item">
+                  <label class="device-detail__item-label"
+                         ng-bind="'MODULES.SWITCH.DETAIL.FLOW.COLUMN.STATE'|translate"></label>
+                  <span class="device-detail__item-value "
+                        ng-class="{
+                  'device-detail__available': detailValue.available === true,
+                  'device-detail__inavailable': detailValue.available === false
+                  }"></span>
+                </div>
+
+                <!--<div class="device-detail__item">-->
+                <!--<label class="device-detail__item-label"-->
+                <!--ng-bind="'MODULES.SWITCHES.SWITCH.COLUMN.GROUP'|translate"></label>-->
+                <!--<span class="device-detail__item-value">{{Object.keys(detailValue.leaf_group)}}</span>-->
+                <!--</div>-->
+              </div>
+            </div>
+            <div class="device-summary">
+              <div class="mdc-card temp-sensors">
+                <h2 ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.TEMP.INFO'|translate"></h2>
+                <div class="mdc-card__content">
+                  <div class="temp-sensor" ng-repeat="temp in summary.tempSensors">
+                    <label class="temp-name" ng-bind="temp.name"></label>
+                    <gradient-scale min-value="0 ℃" max-Value="100 ℃"
+                                    current-Value="temp.value" color-gradient="temp.gradient">
+                    </gradient-scale>
+                  </div>
+                </div>
+              </div>
+              <div class="mdc-card fan-sensors">
+                <h2 ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.FAN.INFO'|translate"></h2>
+                <div class="mdc-card__content">
+                  <div class="fan-sensor" ng-repeat="fan in summary.fanSensors">
+                    <label class="fan-name" ng-bind="fan.display"></label>
+                    <gradient-scale min-value="0 RPM" max-Value="20000 RPM"
+                                    current-Value="fan.RPM" color-gradient="fan.gradient">
+                    </gradient-scale>
+                  </div>
+                </div>
+              </div>
+              <div class="mdc-card psu-sensors">
+                <h2 ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.INFO'|translate"></h2>
+                <div class="mdc-card__content">
+                  <div class="psu-sensor" ng-repeat="psu in summary.psuSensors">
+                    <div class="psu-item">
+                      <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.NAME'|translate"></label>
+                      <span class="psu-value" ng-bind="psu.name"></span>
+                    </div>
+                    <div class="psu-item">
+                      <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.STATUS'|translate"></label>
+                      <i class="psu-status" ng-class="{true: 'green', false: 'red'}[psu.status === 'good']"></i>
+                    </div>
+                    <div class="psu-item">
+                      <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.MODEL'|translate"></label>
+                      <span class="psu-value" ng-bind="psu.model"></span>
+                    </div>
+                    <div class="psu-item">
+                      <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.TYPE'|translate"></label>
+                      <span class="psu-value" ng-bind="psu.powertype"></span>
+                    </div>
+                    <div class="psu-item">
+                      <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.VIN'|translate"></label>
+                      <span class="psu-value" ng-bind="psu.vin"></span>
+                    </div>
+                    <div class="psu-item">
+                      <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.VOUT'|translate"></label>
+                      <span class="psu-value" ng-bind="psu.vout"></span>
+                    </div>
+                    <div class="psu-item">
+                      <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.IIN'|translate"></label>
+                      <span class="psu-value" ng-bind="psu.iin"></span>
+                    </div>
+                    <div class="psu-item">
+                      <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.IOUT'|translate"></label>
+                      <span class="psu-value" ng-bind="psu.iout"></span>
+                    </div>
+                    <div class="psu-item">
+                      <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.PIN'|translate"></label>
+                      <span class="psu-value" ng-bind="psu.pin"></span>
+                    </div>
+                    <div class="psu-item">
+                      <label class="psu-label" ng-bind="'MODULES.SWITCH.DETAIL.SUMMARY.PSU.POUT'|translate"></label>
+                      <span class="psu-value" ng-bind="psu.pout"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="tab-content" ng-if="tabSelected.value == 'analyzer'" style="overflow-y: auto;">
+            <div class="hide">
+              <mdl-table provider="detailModel.provider"></mdl-table>
+            </div>
+            <div class="mars-row-flex" style="margin-left: 5px;margin-top: 5px;">
+              <div class="col-gutter-md left-panel mars-panel">
+                <canvas id="switch-cpu-usage-rate" height="250"
+                        class="chart chart-line"
+                        chart-type="line"
+                        chart-data="deviceCpuChartConfig.data"
+                        chart-labels="deviceCpuChartConfig.labels"
+                        chart-series="deviceCpuChartConfig.series"
+                        chart-fill="false"
+                        chart-options="deviceCpuChartConfig.options"
+                        chart-click="deviceCpuChartConfig.onClick"
+                        chart-hover="deviceCpuChartConfig.onHover">
+                </canvas>
+
+                <div class="setting-group"  ng-show="!chartModel.cpu.loading">
+                  <div class="item" title="{{chartModel.cpu.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-cpu')"><i class="material-icons">{{chartModel.cpu.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.cpu.isRealtime || resetTimeScale('device-cpu')"><i class="material-icons">undo</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.cpu.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.cpu.isRealtime || chartSetting('device-cpu')"><i class="material-icons">settings</i></div>
+                  <!--<div class="item" title="{{deviceCpuChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>-->
+                </div>
+
+                <div class="chart-loading" ng-show="chartModel.cpu.loading"></div>
+              </div>
+            </div>
+            <div class="mars-row-flex" style="margin-left: 5px;">
+              <div class="col-gutter-md left-panel mars-panel">
+                <canvas id="switch-memory-usage-rate" height="250"
+                        class="chart chart-line"
+                        chart-type="line"
+                        chart-data="deviceMemoryChartConfig.data"
+                        chart-labels="deviceMemoryChartConfig.labels"
+                        chart-series="deviceMemoryChartConfig.series"
+                        chart-fill="false"
+                        chart-options="deviceMemoryChartConfig.options"
+                        chart-click="deviceMemoryChartConfig.onClick"
+                        chart-hover="deviceMemoryChartConfig.onHover">
+                </canvas>
+
+                <div class="setting-group"  ng-show="!chartModel.memory.loading">
+                  <div class="item" title="{{chartModel.memory.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-memory')"><i class="material-icons">{{chartModel.memory.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.memory.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.memory.isRealtime || resetTimeScale('device-memory')"><i class="material-icons">undo</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.memory.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.memory.isRealtime || chartSetting('device-memory')"><i class="material-icons">settings</i></div>
+                  <!--<div class="item" title="{{deviceMemoryChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>-->
+                </div>
+
+                <div class="chart-loading" ng-show="chartModel.memory.loading"></div>
+              </div>
+            </div>
+            <div class="mars-row-flex" style="margin-left: 5px;">
+              <div class="col-gutter-md left-panel mars-panel">
+                <div class="chart_title">
+                  <span>{{'MODULES.SWITCH.DETAIL.ANALYZER.PORT.TOP10'|translate}}</span>
+                </div>
+                <div>
+                  <canvas id="switch-ports-usage-rate" height="250"
+                          class="chart chart-line"
+                          chart-type="line"
+                          chart-data="devicePortsChartConfig.data"
+                          chart-labels="devicePortsChartConfig.labels"
+                          chart-series="devicePortsChartConfig.series"
+                          chart-fill="false"
+                          chart-options="devicePortsChartConfig.options"
+                          chart-click="devicePortsChartConfig.onClick"
+                          chart-hover="devicePortsChartConfig.onHover">
+                  </canvas>
+                </div>
+
+                <div class="setting-group out_title"  ng-show="!chartModel.ports.loading">
+                  <mdl-select ng-model="chartModel.ports.unitTypeOption" display-label="{options: portUnitTypes}" disable="chartModel.ports.isRealtime"></mdl-select>
+                  <mdl-select ng-model="chartModel.ports.stateTypeOption" display-label="{options: portStateTypes}" disable="chartModel.ports.isRealtime || chartModel.ports.unitTypeOption.value.startsWith('bytes')"></mdl-select>
+                  <div class="item" title="{{chartModel.ports.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-ports')"><i class="material-icons">{{chartModel.ports.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.ports.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.ports.isRealtime || resetTimeScale('device-ports')"><i class="material-icons">undo</i></div>
+                  <div class="item" ng-class="{'+disable': chartModel.ports.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.ports.isRealtime || chartSetting('device-ports')"><i class="material-icons">settings</i></div>
+                  <!--<div class="item" title="{{deviceMemoryChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-cpu')"><i class="material-icons">swap_horiz</i></div>-->
+                </div>
+
+                <div class="chart-loading" ng-show="chartModel.ports.loading"></div>
+              </div>
+            </div>
+            <div class="mars-row-flex" style="margin-left: 5px;">
+              <div class="col-gutter-md left-panel mars-panel">
+                <canvas id="switch-disk-usage-rate" height="250"
+                        class="chart chart-bar"
+                        chart-type="bar"
+                        chart-data="deviceDiskChartConfig.data"
+                        chart-labels="deviceDiskChartConfig.labels"
+                        chart-colors="deviceDiskChartConfig.colors"
+                        chart-series="deviceDiskChartConfig.series"
+                        chart-fill="false"
+                        chart-options="deviceDiskChartConfig.options">
+                </canvas>
+
+                <div class="chart-loading" ng-show="chartModel.disk.loading"></div>
+              </div>
+            </div>
+          </section>
+          <section class="tab-content" ng-if="tabSelected.value == 'port'">
+            <mdl-table actions-show="detailModel.actionsShow"
+                       actions="detailModel.rowActions"
+                       row-actions-filter="onTableRowActionsFilter($event)"
+                       row-select-action="onTableRowSelectAction($event)"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)">
+            </mdl-table>
+
+            <div ng-show="chartModel.port.display" style="position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(0,0,0,0.5);">
+              <div class="mars-row-flex" style="justify-content: center;margin-top: 400px;">
+                <div class="col-gutter-md left-panel mars-panel">
+                  <canvas id="device-port-packages" height="300"
+                          class="chart chart-line"
+                          chart-type="line"
+                          chart-data="devicePortChartConfig.data"
+                          chart-labels="devicePortChartConfig.labels"
+                          chart-series="devicePortChartConfig.series"
+                          chart-fill="false"
+                          chart-options="devicePortChartConfig.options">
+                  </canvas>
+
+                  <div class="setting-group" ng-show="!chartModel.port.loading">
+                    <mdl-select ng-model="chartModel.port.unitTypeOption" display-label="{options: portUnitTypes}" disable="chartModel.port.isRealtime"></mdl-select>
+                    <mdl-select ng-model="chartModel.port.stateTypeOption" display-label="{options: portStateTypes}" disable="chartModel.port.isRealtime || chartModel.port.unitTypeOption.value.startsWith('bytes')"></mdl-select>
+                    <div class="item" title="{{chartModel.port.isRealtime ? HISTORY_DATA : REALTIME_DATA}}" ng-click="realtime('device-port')"><i class="material-icons">{{chartModel.port.isRealtime ? 'pause' : 'play_arrow'}}</i></div>
+                    <div class="item" ng-class="{'+disable': chartModel.port.isRealtime}" title="{{'MODULES.DASHBOARD.RESTORE'|translate}}" ng-click="chartModel.port.isRealtime || resetTimeScale('device-port')"><i class="material-icons">undo</i></div>
+                    <div class="item" ng-class="{'+disable': chartModel.port.isRealtime}" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="chartModel.port.isRealtime || chartSetting('device-port')"><i class="material-icons">settings</i></div>
+                    <div class="item" title="{{'MODULES.DASHBOARD.SETTING'|translate}}" ng-click="closePortAnalyzerChart()"><i class="material-icons">close</i></div>
+                    <!--<div class="item" title="{{clusterInterfaceChartConfig.isRealtime ? REALTIME_DATA : HISTORY_DATA}}" ng-click="resetTimeScale('controller-interface')"><i class="material-icons">swap_horiz</i></div>-->
+
+                  </div>
+
+                  <div class="chart-loading" ng-show="chartModel.port.loading"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="tab-content" ng-if="tabSelected.value == 'link'">
+            <mdl-table actions-show="detailModel.actionsShow"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)">
+            </mdl-table>
+          </section>
+          <section class="tab-content" ng-if="tabSelected.value == 'statistic'">
+            <mdl-table actions-show="detailModel.actionsShow"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)">
+            </mdl-table>
+          </section>
+          <section class="tab-content" ng-if="tabSelected.value == 'flow'">
+            <mdl-table actions-show="detailModel.actionsShow"
+                       actions="detailModel.rowActions"
+                       row-select-action="onTableRowSelectAction($event)"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)"
+                       on-add="createFlow()" on-remove="batchRemove($value)">
+            </mdl-table>
+          </section>
+          <section class="tab-content" ng-if="tabSelected.value == 'endpoint'">
+            <mdl-table actions-show="detailModel.actionsShow"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)">
+            </mdl-table>
+          </section>
+          <section class="tab-content" ng-if="tabSelected.value == 'group'">
+            <mdl-table actions-show="detailModel.actionsShow"
+                       actions="detailModel.rowActions"
+                       row-select-action="onTableRowSelectAction($event)"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)"
+                       on-add="createGroup()" on-remove="batchRemove($value)">
+            </mdl-table>
+          </section>
+          <section class="tab-content" ng-if="tabSelected.value == 'snoop'">
+            <mdl-table actions-show="detailModel.actionsShow"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)">
+            </mdl-table>
+          </section>
+          <section class="tab-content" ng-if="tabSelected.value == 'pfc'">
+            <mdl-table style="width:800px;" actions-show="detailModel.actionsShow"
+                       actions="detailModel.rowActions"
+                       row-select-action="onTableRowSelectAction($event)"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)"
+                       on-add="createPFC()" on-remove="batchRemove($value)">
+            </mdl-table>
+          </section>
+          <section class="tab-content poe" ng-if="tabSelected.value == 'poe'">
+            <mdl-table actions-show="detailModel.actionsShow"
+                       actions="detailModel.rowActions"
+                       row-select-action="onTableRowSelectAction($event)"
+                       row-click="onTableRowClick($event)"
+                       provider="detailModel.provider" api-ready="onApiReady($api)">
+            </mdl-table>
+          </section>
+
+          <section style="display: flex;flex-direction: row;" class="tab-content acl__body" ng-if="tabSelected.value == 'acl'">
+              <mdl-table style="width:60%;" actions-show="detailModel.actionsShow"
+                         actions="detailModel.rowActions"
+                         row-select-action="onTableRowSelectAction($event)"
+                         row-click="onTableRowClick($event)"
+                         provider="detailModel.provider" api-ready="onApiReady($api)"
+                         on-add="addAcl()" on-remove="batchRemove($value)">
+              </mdl-table>
+              <div class="main__content" style="width:30%;">
+                  <div ng-if="selectedAcl.mac" style="margin-bottom: 30px;">
+                      <div class="header">MAC&nbsp;-&nbsp;<span ng-bind="selectedAcl.policyId"></span></div>
+                      <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.SRC_MAC' | translate"></span><span class="value" ng-bind="selectedAcl.mac.srcMac"></span></div>
+                      <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.DST_MAC' | translate"></span><span class="value" ng-bind="selectedAcl.mac.dstMac"></span></div>
+                      <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.ETHER_TYPE' | translate"></span><span class="value" ng-bind="selectedAcl.mac.etherType"></span></div>
+                      <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.VLAN' | translate"></span><span class="value" ng-bind="selectedAcl.mac.vid"></span></div>
+                  </div>
+
+                  <div ng-if="selectedAcl.ipv4">
+                      <div class="header">IPV4&nbsp;-&nbsp;<span ng-bind="selectedAcl.policyId"></span></div>
+                      <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.PROTOCAL' | translate"></span><span class="value" ng-bind="selectedAcl.ipv4.protocol"></span></div>
+                      <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.SRC_IP' | translate"></span><span class="value" ng-bind="selectedAcl.ipv4.srcIp"></span></div>
+                      <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.SRC_PORT' | translate"></span><span class="value" ng-bind="selectedAcl.ipv4.srcPort"></span></div>
+                      <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.DST_IP' | translate"></span><span class="value" ng-bind="selectedAcl.ipv4.dstIp"></span></div>
+                      <div class="item"><span class="name" ng-bind="'MODULE.FUNCTIONS.ACL.TABLE.SCHEMA.DST_PORT' | translate"></span><span class="value" ng-bind="selectedAcl.ipv4.dstPort"></span></div>
+                  </div>
+              </div>
+          </section>
+        </div>
+      </div>
+
+      <!--<mdl-tabs ng-model="tabSelected" options="tabs"-->
+                <!--class-list="main__content__device-detail-tabs"-->
+                <!--on-select="onTabChange($value)">-->
+      <!--</mdl-tabs>-->
+
+    </div>
+  </section>
+
+  <ng-controller ng-controller="flowEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+  <ng-controller ng-controller="groupEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+  <ng-controller ng-controller="pfcEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+
+  <ng-controller ng-controller="poePortEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+  <ng-controller ng-controller="aclEstablishController">
+      <wizard class="create-acl"></wizard>
+  </ng-controller>
+
+
+</div>

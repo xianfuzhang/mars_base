@@ -1,0 +1,25 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{page_title}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span ng-bind="'MODULES.SWITCHES.TAB.SCHEMA.SWITCH'|translate"></span>
+  </content-header>
+  <section class="app-body" >
+    <div class="main__content">
+      <mdl-table actions-show="deviceModel.actionsShow"
+                 actions="deviceModel.rowActions"
+                 row-click="onTableRowClick($event)"
+                 row-select-action="onTableRowSelectAction($event)"
+                 row-actions-filter="onTableRowActionsFilter($event)"
+                 provider="deviceModel.deviceProvider" api-ready="onDeviceAPIReady($api)"
+                 on-add="addSwitch()" on-remove="batchRemove($value)">
+      </mdl-table>
+    </div>
+  </section>
+
+  <ng-controller ng-controller="deviceWizardController">
+    <wizard></wizard>
+  </ng-controller>
+</div>
+

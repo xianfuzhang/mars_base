@@ -83,17 +83,16 @@ export class modalCenter {
 
       scope.onWindowResize = () => {
         windowHeight = this.di.$window.innerHeight;
-
         scope.reposition();
       };
 
       scope._checkHeightChange = () => {
         modalHeight = scope.getModalHeight();
         // is there a height difference ?
-        if (Math.abs(modalHeight - oldModalHeight) >= 5) {
+       /* if (Math.abs(modalHeight - oldModalHeight) >= 5) {
           // yes
           scope.reposition();
-        }
+        }*/
         oldModalHeight = modalHeight;
       };
 

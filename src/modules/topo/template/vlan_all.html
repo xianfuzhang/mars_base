@@ -1,0 +1,319 @@
+<div class="flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="configuration__body flex_entirety__body app-body">
+
+    <content-header big-title="{{page_title}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>VLAN</span>
+    </content-header>
+    <div class="vlan_all main__content" style="display:flex;flex-direction: row">
+      <div style="display: flex;height:100%;width:100%;">
+        <toggle-menu ng-model="menuSelected" change="onMenuChange($value)" display-label="page_menus" style="flex-basis: 200px;flex-shrink: 0;flex-grow: 0;">
+
+        </toggle-menu>
+        <div style="flex-grow:1;flex-shrink: 1;padding: 16px 16px 16px 32px;width:100%;" >
+
+          <ng-controller ng-if="menuSelected.value == 'static_vlan'" style="height:100%;width:100%"  ng-controller="vlanController">
+            <section class="app-body vlan-container" style="flex-direction: column">
+              <div class="main__content">
+                <mdl-tabs ng-model="tabSelected" options="tabs"
+                          class-list="main__content__device-detail-tabs"
+                          on-select="onTabChange($value)">
+                </mdl-tabs>
+                <section class="tab-content vlan-list" ng-class="{'mars-col-24': model.typeMode.label == 'topo'}" ng-if="tabSelected.type == 'default'" style="display: flex;">
+                  <div style="width:100%;">
+                    <div style="position: relative; display: flex; height: 100%;">
+                      <div class="type-container">
+                        <view-select type-model="model.typeMode" view-change="viewChanged()" ></view-select>
+                      </div>
+                      <div class="ports-container" ng-if="model.typeMode.label === 'port'">
+                        <div class="filter-container">
+                          <mdl-select ng-if="model.filterTypes.length > 0" ng-model="model.selectedFilterType"
+                                      display-label="{options: model.filterTypes}" ng-change="changeFilterType($value)">
+                          </mdl-select>
+                          <mdl-select ng-if="model.filterTypes.length > 0" ng-model="model.selectedSubFilter"
+                                      display-label="{options: model.subFilterItems}" ng-change="changeDisplayPorts($value)"></mdl-select>
+                        </div>
+                        <div class="device-list">
+                          <div class="no-result" ng-if="model.vlanPortsList.length === 0"
+                               ng-bind="'MODULES.VLAN.TAB.DEFAULT.NO_DATA' | translate">
+                          </div>
+                          <div ng-if="model.vlanPortsList.length > 0">
+                            <div class="vlan-segment" ng-repeat="vlan in model.vlanPortsList track by $index">
+                              <div class="name">
+                                <span ng-bind="'MODULES.VLAN.TAB.DEFAULT.DEVICE_NAME'|translate"></span>
+                                {{vlan.deviceName}}
+                                <span>/</span>
+                                <span ng-bind="'MODULES.VLAN.TAB.DEFAULT.VLAN_ID'|translate"></span>
+                                {{vlan.vlanId}}
+                              </div>
+                              <ports-group group-id="{{'group-id-' + $index}}" ports-list="vlan.ports"></ports-group>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div ng-if="model.typeMode.label === 'table'" style="margin-top: 56px;">
+                        <mdl-table actions-show="model.actionsShow"
+                                   row-click="onTableRowClick($event)"
+                                   provider="model.provider" api-ready="onApiReady($api)">
+                        </mdl-table>
+                      </div>
+
+                      <div ng-if="model.typeMode.label === 'topo'" style="width:100%;border:1px solid lightgray;overflow:hidden;position: relative">
+                        <div style="position: absolute;left: 160px;z-index:4">
+                          <mdl-select display-label="{options: model.topoVlanIdSelect}" ng-model="model.topoVlanIdFilter" ng-change="changeVlanTopoId($value)">
+                          </mdl-select>
+                        </div>
+                        <vlan-topo devices="model.topoDevices"
+                                   vlan-config="model.vlanConfig"
+                                   links="model.topoLinks">
+                        </vlan-topo>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <section class="tab-content" ng-if="tabSelected.type == 'edit'">
+                  <div class="vlan-edit-field" >
+                    <div class="header">
+                      <div class="mode_type">
+                        <!--<mdl-radio ng-model="vlanModel.editType" name="editType" value="edit_vlan"-->
+                        <!--display-label="{id: 'check_1', label: '修改', name: 'editType', value: 'edit_vlan'}">-->
+                        <!--</mdl-radio>-->
+                        <!--<mdl-radio ng-model="vlanModel.editType" name="editType" value="add_vlan"-->
+                        <!--display-label="{id: 'check_2', label: '添加', name: 'editType', value: 'add_vlan'}">-->
+                        <!--</mdl-radio>-->
+
+                        <edit-view-select type-model="vlanModel.editType" ></edit-view-select>
+                      </div>
+
+                      <div class="operation_group" ng-if="vlanModel.editType.label == 'edit_vlan'">
+                        <div>
+                          <mdl-radio style="margin-right:10px;" ng-model="vlanModel.editSelectedType" name="editSelectedType" value="port"
+                                     display-label="{id: 'check_2', label: 'Port', name: 'editSelectedType', value: 'port'}">
+                          </mdl-radio>
+                          <mdl-radio style="margin-right:20px;" ng-model="vlanModel.editSelectedType" name="editSelectedType" value="vlan"
+                                     display-label="{id: 'check_1', label: 'VLAN', name: 'editSelectedType', value: 'vlan'}">
+                          </mdl-radio>
+                        </div>
+
+                        <div>
+                          <mar-button btn-text="'MODULES.COMMON.BUTTON.SUBMIT' | translate" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="updateVlan()" btn-disabled="vlanModel.changedPorts.count == 0"/>
+                        </div>
+                      </div>
+
+                      <div class="operation_group" ng-if="vlanModel.editType.label == 'add_vlan'">
+                        <div style="display: flex;align-items: center;width:270px;">
+                          <mdl-select ng-model="vlanModel.selectedDevice" display-label="{options: model.devicesMapArr}"></mdl-select>
+                          <mdl-button ng-click="addDevice()" icon-name="add" disabled="addDeviceDisabled"></mdl-button>
+                          <mdl-button ng-click="removeDevice()" icon-name="remove" disabled="removeDeviceDisabled"></mdl-button>
+                        </div>
+                        <div style="display: flex;align-items: center;">
+                          <mar-button btn-text="::'MODULES.COMMON.BUTTON.SUBMIT' | translate" btn-class="'btn-black btn-md'" btn-icon="'done'" btn-click="createVlan()" btn-disabled="!vlanModel.addedDevices.length || !vlanModel.vlanInput"/>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="content" ng-if="vlanModel.editType.label  == 'edit_vlan'">
+                      <div ng-if="vlanModel.editSelectedType == 'port'">
+                        <div class="edit-options">
+                          <div style="display: flex;align-items: center;margin-right:30px;">
+                            <span style="margin-right:10px;min-width:40px;">Switch:</span>
+                            <mdl-select ng-model="vlanModel.selectedDevice" display-label="{options: model.devicesMapArr}"></mdl-select>
+                          </div>
+                        </div>
+                        <div class="edit-options">
+                          <div style="display:flex;align-items: center;margin-right:30px;">
+                            <span style="margin-right:10px;min-width:40px;">Port:</span>
+                            <mdl-select ng-model="vlanModel.selectedPort" display-label="{options: vlanModel.portsOptions}"></mdl-select>
+                          </div>
+                          <mar-button style="display:none;margin-top:5px;" btn-text="::'MODULES.VLAN.TAB.EDIT.CLEAR_PORT' | translate" btn-class="'btn-black btn-sm'"
+                                      btn-icon="'delete_forever'" btn-click="resetPort()"
+                                      btn-disabled="vlanModel.vlanEntities.length == 0">
+                          </mar-button>
+                        </div>
+                        <div class="edit-options">
+                          <div style="display:flex;align-items: center;margin-right:30px;">
+                            <span style="margin-right:10px;min-width:40px;">Mode:</span>
+                            <mdl-select ng-model="vlanModel.selectedPortObj.selectedMode" display-label="{options: vlanModel.modeOptions}"></mdl-select>
+                          </div>
+                          <div style="display:flex;align-items: center;margin-right:30px;">
+                            <span style="margin-right:10px;min-width:40px;" ng-bind="'MODULES.VLAN.TAB.ADD.COLUMN.NATIVE' | translate"></span>
+                            <valid-input style="color:white;" class="item-input" ng-model="vlanModel.selectedPortObj.native" v-require="true" v-regex="vlanModel.nativeVlanRegex" v-disabled="vlanModel.selectedPortObj.selectedMode.value == 'access' && vlanModel.vlanEntities.length > 0"></valid-input>
+                          </div>
+                          <div style="display:flex;align-items: center;">
+                            <mar-button style="margin-top:5px;" btn-text="::'MODULES.VLAN.TAB.EDIT.ADD_VLAN' | translate" btn-class="'btn-white btn-sm'"
+                                        btn-icon="'add'" btn-click="addPortVlan()"
+                                        btn-disabled="vlanModel.selectedPortObj.selectedMode.value == 'access' && vlanModel.vlanEntities.length > 0 || vlanModel.selectedPortObj.selectedMode.value == '' || vlanModel.selectedPortObj.native == ''">
+                            </mar-button>
+                            <mar-button style="margin-top:5px;margin-left: 20px;" btn-text="::'MODULES.VLAN.TAB.EDIT.REMOVE_VLAN' | translate" btn-class="'btn-black btn-sm'"
+                                        btn-icon="'clear'" btn-click="removePortVlan()"
+                                        btn-disabled="vlanModel.vlanEntities.length == 0">
+                            </mar-button>
+                            <!--<mdl-button ng-attr-title="{{'MODULES.VLAN.TAB.EDIT.ADD_VLAN' | translate}}" ng-click="addPortVlan($event)"-->
+                            <!--disabled="vlanModel.selectedPortObj.selectedMode == 'access' && vlanModel.vlanEntities.length > 0 || vlanModel.selectedPortObj.selectedMode.value == ''"-->
+                            <!--icon-name="add">-->
+                            <!--</mdl-button>-->
+                            <!--<mdl-button ng-attr-title="{{'MODULES.VLAN.TAB.EDIT.REMOVE_VLAN' | translate}}" ng-click="removePortVlan($event)"-->
+                            <!--disabled="vlanModel.vlanEntities.length == 0"-->
+                            <!--icon-name="remove">-->
+                            <!--</mdl-button>-->
+                          </div>
+                        </div>
+
+                        <mdl-table style="height: auto;" actions-show="vlanModel.portActionsShow"
+                                   row-click="onVlanTableRowClick($event)"
+                                   provider="vlanModel.portProvider" api-ready="onPortApiReady($api)">
+                        </mdl-table>
+                      </div>
+
+                      <div ng-if="vlanModel.editSelectedType == 'vlan'">
+                        <div class="edit-options">
+                          <span>VLAN:</span>
+                          <mdl-select style="margin-left:10px;" ng-model="vlanModel.selectedVlan" display-label="{options: vlanModel.vlanOptions}"></mdl-select>
+                        </div>
+
+                        <mdl-table style="height: auto;" actions-show="vlanModel.actionsShow"
+                                   row-click="onVlanTableRowClick($event)"
+                                   provider="vlanModel.provider" api-ready="onVlanApiReady($api)">
+                        </mdl-table>
+                      </div>
+                    </div>
+
+                    <div class="content" ng-if="vlanModel.editType.label  == 'add_vlan'">
+                      <div class="add-options">
+                        <span class="title">Mode:</span><mdl-select ng-model="vlanModel.selectedMode" display-label="{options: vlanModel.modeOptions}"></mdl-select>
+                        <span class="title">VLAN:</span>
+                        <valid-input class="item-input" ng-if="vlanModel.selectedMode.value == 'access'" ng-model="vlanModel.vlanInput" v-require="true" v-regex="vlanModel.nativeVlanRegex"></valid-input>
+                        <valid-input class="item-input" ng-if="vlanModel.selectedMode.value != 'access'" ng-model="vlanModel.vlanInput" v-require="true" v-regex="vlanModel.vlanInputRegex"></valid-input>
+                        <span class="title" ng-bind="'MODULES.VLAN.TAB.ADD.COLUMN.NATIVE' | translate"></span><valid-input class="item-input" ng-model="vlanModel.nativeVlan" v-regex="vlanModel.nativeVlanRegex" v-disabled="vlanModel.selectedMode.value == 'access'"></valid-input>
+                        <mdl-radio ng-model="vlanModel.tagType" name="tagType" value="edit_vlan" disable="vlanModel.selectedMode.value == 'access' || vlanModel.selectedMode.value == 'trunk'"
+                                   display-label="{id: 'check_1', label: 'tag', name: 'tagType', value: 'tag'}">
+                        </mdl-radio>
+                        <mdl-radio ng-model="vlanModel.tagType" name="tagType" value="add_vlan" disable="vlanModel.selectedMode.value == 'access' || vlanModel.selectedMode.value == 'trunk'"
+                                   display-label="{id: 'check_2', label: 'untag', name: 'tagType', value: 'untag'}">
+                        </mdl-radio>
+                      </div>
+                      <div class="device" ng-repeat="device in vlanModel.addedDevices track by $index">
+                        <div class="name">{{device.name}}:</div>
+                        <ports-group group-id="{{'group-id-' + $index}}" ports-list="device.ports" ports-num-per-row="{{vlanModel.portsNumPerRow}}"></ports-group>
+                        <div class="batch-ports">
+                          <span ng-bind="'MODULES.VLAN.TAB.EDIT.BATCH_INPUT' | translate"></span><valid-input ng-model="vlanModel.portInputArr[$index]" v-require="true" v-regex="vlanModel.portsBatchRegex" v-name="ports" v-rpcid="device-ports-input" ng-change="batchChangePorts($index)"></valid-input>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </section>
+          </ng-controller>
+
+          <div ng-if="menuSelected.value == 'vlan_ip'" style="height:100%;width:100%"  ng-controller="vlanIpSubnetController">
+            <div class="alert-list flex_entirety__body__body" style="display:flex;flex-direction: row">
+              <div >
+                <div class="main__content">
+                  <mdl-table actions-show="ipSubnetModel.actionsShow"
+                             actions="ipSubnetModel.rowActions"
+                             row-click="onTableRowClick($event)"
+                             row-select-action="onTableRowSelectAction($event)"
+                             provider="ipSubnetModel.tableProvider" api-ready="onAPIReady($api)"
+                             on-add="addVlanIp()"
+                             on-remove="batchRemove($value)">
+                  </mdl-table>
+                </div>
+              </div>
+            </div>
+            <ng-controller ng-controller="vlanIpEstablishController">
+              <wizard></wizard>
+            </ng-controller>
+          </div>
+
+          <div ng-if="menuSelected.value == 'dynamic_vlan'" style="height:100%;width:100%" ng-controller="dynamicVlanController">
+            <div class="dynamic__body flex_entirety__body__body" style="display:flex;flex-direction: row">
+              <div >
+                <div class="main__content" style="position: relative">
+                  <div style="position: absolute;right: 70px;top:36px;">
+                    <mar-button btn-text="::'MODULES.VLAN.DYNAMIC.MENU.BATCH_ACTIVE' | translate" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="batchEnable()"></mar-button>
+                    <mar-button btn-text="::'MODULES.VLAN.DYNAMIC.MENU.BATCH_DEACTIVE' | translate" btn-icon="'not_interested'" btn-class="'btn-black btn-sm'" btn-click="batchDisable()"></mar-button>
+                  </div>
+                  <mdl-table actions-show="dynamicModel.actionsShow"
+                             actions="dynamicModel.rowActions"
+                             row-click="onTableRowClick($event)"
+                             row-select-action="onTableRowSelectAction($event)"
+                             row-actions-filter="onTableRowActionsFilter($event)"
+                             provider="dynamicModel.tableProvider" api-ready="onAPIReady($api)"
+                             on-add="addDynamic()">
+                  </mdl-table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div ng-if="menuSelected.value == 'guest_vlan'" style="height:100%;width:100%" ng-controller="guestVlanCtrl">
+            <div class="mars-col-24" style="height:100%">
+              <div class="main__content" style="height:100%">
+                <mdl-table actions-show="model.actionsShow"
+                           actions="model.rowActions"
+                           row-click="onTableRowClick($event)"
+                           row-select-action="onTableRowSelectAction($event)"
+                           provider="model.provider" api-ready="onAPIReady($api)"
+                           on-add="addGuestVlan()" on-remove="batchRemoveGuestVlan($value)">
+                </mdl-table>
+              </div>
+            </div>
+            <ng-controller ng-controller="createGuestVlanCtrl">
+              <wizard class="createGuestVlan"></wizard>
+            </ng-controller>
+          </div>
+
+          <div ng-if="menuSelected.value == 'voice_vlan'"  style="height:100%;width:100%" ng-controller="voiceVlanCtrl">
+            <div class="app-body" style="height:calc(100% - 60px)">
+              <div style="display:flex;width:100%;">
+                <div class="main__content" style="width:60%;overflow-y: auto;">
+                  <mdl-table actions-show="model.actionsShow"
+                             actions="model.rowActions"
+                             row-click="onTableRowClick($event)"
+                             row-select-action="onTableRowSelectAction($event)"
+                             row-actions-filter="onTableRowActionsFilter($event)"
+                             provider="model.provider" api-ready="onAPIReady($api)"
+                             on-add="addVoiceVlan()" on-remove="batchRemoveVoiceVlan($value)">
+                  </mdl-table>
+                </div>
+                <div class="main__content" style="width:40%;overflow-y: auto;">
+                  <div>
+                    <div class="header">ouis&nbsp;-&nbsp;<span ng-bind="model.selectedDevice.device_name"></span></div>
+                    <mdl-table actions-show="model.ouiActionsShow"
+                               actions="model.ouiRowActions"
+                               row-select-action="onTableRowSelectAction($event)"
+                               provider="model.ouiProvider" api-ready="onOuiAPIReady($api)"
+                               on-add="addOui()" on-remove="batchRemoveOui($value)">
+                    </mdl-table>
+                  </div>
+
+                  <div style="margin-top: 60px;position:relative;">
+                    <div class="header">ports&nbsp;-&nbsp;<span ng-bind="model.selectedDevice.device_name"></span></div>
+                    <div style="position: absolute;top:40px;right:38px;">
+                      <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="savePort()" btn-disabled="!model.changedPorts.length"/>
+                    </div>
+                    <mdl-table actions-show="model.portActionsShow"
+                               actions="model.portRowActions"
+                               row-select-action="onTableRowSelectAction($event)"
+                               provider="model.portProvider" api-ready="onPortAPIReady($api)"
+                               on-add="addPort()" on-remove="batchRemovePort($value)">
+                    </mdl-table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>

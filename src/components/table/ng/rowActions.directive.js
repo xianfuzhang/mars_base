@@ -1,6 +1,12 @@
 export class rowActions {
   static getDI () {
-    return ['$log', '$window'];
+    return [
+      '$log',
+      '$rootScope',
+      '$window',
+      '$compile',
+      '$templateCache'
+    ];
   }
 
   constructor(...args) {
@@ -13,31 +19,68 @@ export class rowActions {
     this.template = require('../template/rowActions.html');
     this.scope = {
       data: '=',
+      size: '=',
       actionItems: '='
     };
     this.link = (...args) => this._link.apply(this, args);
   }
 
   _link(scope, element, attrs, ctrl) {
+    let unsubscribers = [];
+    scope.size = scope.size || 'normal';
+    scope.actions =  ctrl.rowActionsFilter(scope.data, scope.actionItems);
     let document = this.di.$window.document;
     let buttonElement = element.children().eq(0).children().eq(0);
     let menuElement = element.children().eq(0).children().eq(1);
 
-    let onTriggerClickHide = (event) => {
+    let onTriggerClickRemove = (event) => {
       if (event.target === buttonElement[0]) {
         return;
       }
       else {
-        if (menuElement[0].classList.contains('mdc-menu--open')) {
-          menuElement[0].classList.remove('mdc-menu--open');
-        }
+       let nodes = document.getElementsByClassName('table-row-action-list');
+       for(let i=0; i< nodes.length; i++) {
+         document.body.removeChild(nodes[i]);
+       }
       }
     };
-    document.body.addEventListener('click', onTriggerClickHide, true);
+    document.body.addEventListener('click', onTriggerClickRemove, true);
+
+    let calculatePosition = (event, menuElement) => {
+      let windowInnerWidth = this.di.$window.document.body.scrollWidth,
+        windowInnerHeight = this.di.$window.document.body.scrollHeight;
+      let menuHeight = scope.actions.length ? scope.actions.length * 35 + 16 : 0;
+      let topPosition = event.clientY, leftPosition = event.clientX;
+      if (topPosition + menuHeight > windowInnerHeight) {
+        topPosition = event.clientY - menuHeight;
+      }
+      return {
+        top: topPosition,
+        left: leftPosition
+      };
+    };
+
+    let insertMenuList = (event) => {
+      let menuHtml = this.di.$templateCache.get('table-row-action-list.html');
+      let menuElement = this.di.$compile(menuHtml)(scope);
+      document.body.appendChild(menuElement[0]);
+      let position = calculatePosition(event, menuElement);
+      menuElement.css({
+        position: 'absolute',
+        left: position.left + 'px',
+        top: position.top + 'px',
+        display: 'block',
+        opacity: 1
+      });
+    };
 
     scope._menuToggle = (event) => {
-      menuElement.toggleClass('mdc-menu--open');
-      event && event.stopPropagation();
+      //menuElement.toggleClass('mdc-menu--open');
+      scope.actions =  ctrl.rowActionsFilter(scope.data, scope.actionItems);
+      if (scope.actions.length > 0) {
+        insertMenuList(event);
+        event && event.stopPropagation();  
+      }
     };
 
     scope.clickItem = (item, event) => {
@@ -46,7 +89,10 @@ export class rowActions {
     };
 
     scope.$on('$destroy', ()=> {
-      document.body.removeEventListener('click', onTriggerClickHide);
+     document.body.removeEventListener('click', onTriggerClickRemove);
+      unsubscribers.forEach((cb) => {
+        cb();
+      });
     });
   }
 }

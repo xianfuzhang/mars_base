@@ -1,0 +1,68 @@
+<!--<div class="valid_input" ng-style="blockOrInline">-->
+    <!--<input ng-disabled="disabled" class="ng-pristine ng-untouched ng-not-empty ng-valid-required"-->
+           <!--ng-style="inputStyle" ng-mouseenter="mouseEnter()"-->
+           <!--ng-mouseleave="mouseLeave()" ng-focus="focus()"-->
+           <!--ng-class="{'afterBlur': validModel.change, 'mouseover':validModel.mouseOver, 'focus':validModel.focus}"-->
+           <!--ng-blur="blur()"  type="text" ng-model="vModel"-->
+           <!--ng-required="validModel.require"-->
+           <!--ng-pattern="validModel.ngPattern"-->
+           <!--ng-model-options="{allowInvalid:true}"-->
+           <!--autocomplete="off"/>-->
+    <!--<span  class="valid_input__message" ng-style="resizeStyle" ng-show="(vModel !== '' && vModel !== undefined) && validModel.isInvalid && validModel.mouseOver && validModel.focus != true">{{validModel.message}}</span>-->
+    <!--<span  class="valid_input__message" ng-style="resizeStyle" ng-show="(vModel == '' || vModel == undefined)&& validModel.mouseOver && validModel.change && validModel.require && validModel.focus != true">{{validModel.emptyMessage}}</span>-->
+<!--</div>-->
+<div style="position: relative;">
+    <div class="valid_input mdc-text-field"
+         ng-style='validModel.vStyle'
+         ng-class="{'mdc-text-field--no-label': validModel.floatLabel == null ,'mdc-text-field--with-trailing-icon':validModel.conTrailIcon,'mdc-text-field--with-leading-icon':validModel.conLeadIcon}">
+        <!--<input type="text" id="{{id}}" class="mdc-text-field__input">-->
+        <span class="valid_lead_icon" ng-transclude='leading'>
+            <!-- 示例 -->
+            <!--<i class="material-icons mdc-text-field__icon" tabindex="0" role="button">event</i>-->
+        </span>
+        <input type="text" id="{{id}}"  class="mdc-text-field__input" ng-disabled="disabled"
+               ng-style="inputStyle" ng-mouseenter="mouseEnter()"
+               ng-mouseleave="mouseLeave()" ng-focus="focus()"
+               ng-class="{'afterBlur': validModel.change, 'mouseover':validModel.mouseOver, 'focus':validModel.focus}"
+               ng-blur="blur($event)"  type="text" ng-model="vModel"
+               ng-required="validModel.require"
+               ng-model-options="{allowInvalid:true}"
+               autocomplete="off"/>
+        <label class="mdc-floating-label" for="{{id}}" ng-show="validModel.floatLabel != null" >{{validModel.floatLabel}}</label>
+
+        <span class="valid_trail_icon" ng-transclude='trailing'>
+            <!--<i class="material-icons mdc-text-field__icon" tabindex="0" role="button">event</i>-->
+        </span>
+        <!--<span> <i class="material-icons mdc-text-field__icon" tabindex="0" role="button">event</i></span>-->
+        <!--<label class="mdc-floating-label" for="{{id}}">dafsdfasdfasd</label>-->
+        <div class="mdc-line-ripple"></div>
+    </div>
+    <p id="{{help_id}}"
+       ng-show="validModel.isInvalid || validModel.message != null"
+       class="mdc-text-field-helper-text valid_input"
+       ng-class="{'input_is_invalid': validModel.isInvalid,
+                  'fixed_height': validModel.fixedHeight,
+                  'con_trailing_icon': validModel.conTrailIcon,
+                  'con_leading_icon': validModel.conLeadIcon}"
+       aria-hidden="true">
+        {{validModel.message}}
+    </p>
+</div>
+
+<!--<div class="mdc-text-field mdc-text-field&#45;&#45;no-label">-->
+    <!--<input type="text" class="mdc-text-field__input" placeholder="Placeholder text" aria-label="Label">-->
+    <!--<div class="mdc-line-ripple"></div>-->
+<!--</div>-->
+
+<!--<div class="text-field-container">-->
+    <!--<div class="mdc-text-field">-->
+        <!--<input type="{{type}}" id="{{id}}" list="{{datalist}}" class="mdc-text-field__input"-->
+               <!--ng-class="{'no-floating-label': !hint}"-->
+               <!--ng-style="inputStyle" ng-mouseenter="mouseEnter()"-->
+               <!--ng-mouseleave="mouseLeave()"-->
+               <!--ng-disabled="disabled"-->
+               <!--ng-model="value" ng-focus="focus()" ng-blur="blur()">-->
+        <!--<label class="mdc-floating-label" for="{{id}}">{{hint}}</label>-->
+        <!--<div class="mdc-line-ripple"></div>-->
+    <!--</div>-->
+<!--</div>-->

@@ -1,0 +1,30 @@
+<div class="flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="dynamic__body flex_entirety__body app-body">
+
+    <content-header big-title="{{'MODULE.HEADER.VLAN.DYNAMIC' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.VLAN.DYNAMIC' | translate}}</span>
+    </content-header>
+    <div class="alert-list flex_entirety__body__body" style="display:flex;flex-direction: row">
+      <div >
+        <div class="main__content" style="position: relative">
+          <div style="position: absolute;right: 70px;top:36px;">
+            <mar-button btn-text="::'MODULES.VLAN.DYNAMIC.MENU.BATCH_ACTIVE' | translate" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="batchEnable()"></mar-button>
+            <mar-button btn-text="::'MODULES.VLAN.DYNAMIC.MENU.BATCH_DEACTIVE' | translate" btn-icon="'not_interested'" btn-class="'btn-black btn-sm'" btn-click="batchDisable()"></mar-button>
+          </div>
+          <mdl-table actions-show="dynamicModel.actionsShow"
+                     actions="dynamicModel.rowActions"
+                     row-click="onTableRowClick($event)"
+                     row-select-action="onTableRowSelectAction($event)"
+                     row-actions-filter="onTableRowActionsFilter($event)"
+                     provider="dynamicModel.tableProvider" api-ready="onAPIReady($api)"
+                     on-add="addDynamic()">
+          </mdl-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

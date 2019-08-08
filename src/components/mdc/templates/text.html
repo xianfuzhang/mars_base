@@ -1,8 +1,9 @@
 <div class="text-field-container">
-  <div class="mdc-text-field mdc-text-field--upgraded">
-    <input type="{{type}}" id="{{id}}" class="mdc-text-field__input"
+  <div class="mdc-text-field">
+    <input type="{{type}}" name="{{id}}" id="{{id}}" list="{{datalist}}" class="mdc-text-field__input"
+    		ng-class="{'no-floating-label': !hint}"
            ng-model="value" ng-focus="focus()" ng-blur="blur()">
-    <label class="mdc-floating-label" for="{{id}}">{{hint}}</label>
+    <label class="mdc-floating-label" for="{{id}}" ng-bind="hint"></label>
     <div class="mdc-line-ripple"></div>
   </div>
 </div>

@@ -1,0 +1,22 @@
+<div class="guestVlan_establish">
+	<div class="stepForm__input">
+    <mdl-select ng-model="model.device" display-label="model.deviceDisplayLabel">
+    </mdl-select>
+  </div>
+  <div class="stepForm__input"  style="display: flex;flex-direction: row;">
+  	<mdl-select ng-model="model.port" display-label="model.portDisplayLabel">
+    </mdl-select>
+    <mdl-text ng-model="model.vlanId" style="display:inline-block;"
+              display-label="model.vlanDisplayLabel">
+    </mdl-text>
+    <div class="add-btn" ng-click="addPorts()">
+        <i class="material-icons " style="user-select: none;">add</i>
+    </div>
+  </div>
+  <div class="stepForm__input">
+		<div class="types-label" ng-repeat="guest in model.port_vlans">
+      <span>{{guest.device_name}}/{{guest.port}}/{{guest.guestVlan}}</span>
+      <span class="removeBtn" ng-click="removePort(guest)">-</span>
+    </div>
+  </div>
+</div>

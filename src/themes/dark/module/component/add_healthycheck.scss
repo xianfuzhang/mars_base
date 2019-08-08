@@ -1,0 +1,38 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+@include block(add_healthycheck){
+  //padding:24px;
+  //margin-top:16px;
+
+  @include element('disabled_input'){
+    height:30px;
+    font-size:16px;
+  }
+  @include element(content) {
+    //height: 30px;
+    //line-height: 30px;
+    margin: 10px 0 20px;
+    font-size: 16px;
+    //margin-top: 16px;
+    white-space:nowrap;
+    display:flex;
+    flex-direction:row;
+
+    @include element(label) {
+      width: 100px;
+      display: inline-block;
+      vertical-align: top;
+      font-weight: 300;
+    }
+
+    @include element(input) {
+      display: inline-block;
+      vertical-align: top;
+      width: 230px;
+    }
+  }
+}
+
+

@@ -1,0 +1,10 @@
+<button ng-attr-type="{{btnType}}" ng-attr-id="{{btnId}}"
+        class="mar-button {{btnClass}} mdc-ripple-surface mdc-ripple-upgraded"
+        style="{{btnStyle}}"
+        ng-click="btnClick({ $event: $event})"
+        ng-disabled="btnDisabled"
+        ng-class="{'disabled': btnDisabled}">
+    <i ng-if="btnIcon" class="btn-icon {{btnIconClass}}">{{btnIcon}}</i>
+    <span ng-if="btnIcon" class="btn-separator"> </span>
+    <span ng-if="btnText" ng-bind="btnText" class="{{btnTextClass}}"></span>
+</button>

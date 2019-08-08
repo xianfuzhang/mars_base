@@ -1,0 +1,29 @@
+<div class="flex_entirety">
+  <mdl-header></mdl-header>
+  <div class="flex_entirety__body app-body">
+
+    <content-header big-title="{{'MODULE.HEADER.VLAN.IP_SUBTNET' | translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{'MODULE.HEADER.VLAN.IP_SUBTNET' | translate}}</span>
+    </content-header>
+    <div class="alert-list flex_entirety__body__body" style="display:flex;flex-direction: row">
+      <div >
+        <div class="main__content">
+          <mdl-table actions-show="ipSubnetModel.actionsShow"
+                     actions="ipSubnetModel.rowActions"
+                     row-click="onTableRowClick($event)"
+                     row-select-action="onTableRowSelectAction($event)"
+                     provider="ipSubnetModel.tableProvider" api-ready="onAPIReady($api)"
+                     on-add="addVlanIp()"
+                     on-remove="batchRemove($value)">
+          </mdl-table>
+        </div>
+       </div> 
+    </div>
+  </div>
+
+  <ng-controller ng-controller="vlanIpEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+</div>

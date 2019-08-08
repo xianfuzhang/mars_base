@@ -1,0 +1,54 @@
+<div class="column-manipulation-field">
+  <div class="column-manipulation-field__header">
+    <span class="column-manipulation-field__title"
+          ng-bind="'MODULES.ENDPOINT.CREATE.TITLE'|translate"></span>
+  </div>
+  <form class="endpoint__form" name="model.endpointForm" autocomplete="off" novalidate>
+  	<div class="column-manipulation-field__content">
+      <div class="column-manipulation-field__item">
+        <mdl-select ng-model="model.segment" display-label="segmentSelect" ng-change="changeSegment($value)"></mdl-select>
+      </div>
+  		<div class="column-manipulation-field__item">
+        <mdl-text ng-model="model.mac"
+                  helper="model.macHelper"
+                  display-label="model.macDisplayLabel">
+        </mdl-text>
+      </div>
+      <div class="column-manipulation-field__item">
+        <div class="button-group">
+          <mar-button btn-text="::'MODULES.ENDPOINT.CREATE.BUTTON.IP' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;margin-right: 20px;'" btn-click="addIP()"></mar-button>
+          <mar-button btn-text="::'MODULES.ENDPOINT.CREATE.BUTTON.LOCATION' | translate" btn-icon="'add'" btn-class="'btn-black   btn-md'" btn-style="'width:120px;'" btn-click="addLocation()"></mar-button>
+        </div>
+        <p class="error-msg" ng-show="model.ip_hint" ng-bind="::'MODULES.ENDPOINT.CREATE.HINT.IP'|translate"></p>
+        <p class="error-msg" ng-show="model.location_hint" ng-bind="::'MODULES.ENDPOINT.CREATE.HINT.LOCATION'|translate"></p>
+      </div>
+      <div class="column-manipulation-field__item">
+        <div class="receiveGroup__content__item receiveGroup"  ng-repeat="receiver in addedReceiverModel">
+          <div class="type"> {{receiver.label}}</div>
+          <mdl-button class="remove" ng-click="removeReceiver(receiver)" icon-name="remove_circle" size='small'></mdl-button>
+          <div ng-if="receiver.type == 'ip'">
+              <mdl-text ng-model="receiver.ip"
+                  helper="receiver.ipHelper"
+                  display-label="receiver.ipDisplayLabel">
+              </mdl-text>
+          </div>
+          <div ng-if="receiver.type == 'location'">
+              <mdl-select ng-model="receiver.device" display-label="receiver.deviceOptions"
+                          ng-change="changeDevice($value, receiver)"></mdl-select>
+              <mdl-select ng-model="receiver.port" display-label="receiver.portOptions"></mdl-select>
+          </div>
+        </div>
+      </div>
+  	</div>
+
+  	<div class="column-manipulation-field__footer">
+  		<div style="display: inline-block;float: right; margin-left: 15px;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="model.endpointForm.$invalid"></mar-button>
+      </div>
+
+      <div style="display: inline-block;float: right;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)"></mar-button>
+      </div>
+  	</div>
+  </form>
+</div>  

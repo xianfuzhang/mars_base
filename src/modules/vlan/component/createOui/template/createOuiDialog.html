@@ -1,0 +1,34 @@
+<div class="column-manipulation-field">
+  <div class="column-manipulation-field__header">
+    <span class="column-manipulation-field__title"
+          ng-bind="'MODULES.VLAN.TAB.EDIT.ADD_VLAN'|translate"></span>
+  </div>
+  <form name="ouiForm" class="endpoint__form" autocomplete="off" novalidate>
+      <div class="column-manipulation-field__content">
+          <div class="column-manipulation-field__item" style="width: 300px;">
+              <div class="item" style="height: 50px;">
+                  <span class="title">{{::'MODULES.VLAN.VOICE.TABLE.COLUMN.MAC_ADDRESS' | translate}}:</span>
+                  <valid-input v-require="true" v-type="mac" v-rpcid="macAddress" ng-model="model.macAddress"></valid-input>
+              </div>
+              <div class="item" style="height: 50px;">
+                  <span class="title">{{::'MODULES.VLAN.VOICE.TABLE.COLUMN.MASK_ADDRESS' | translate}}:</span>
+                  <valid-input v-require="true" v-type="mac" v-rpcid="maskAddress" ng-model="model.maskAddress"></valid-input>
+              </div>
+              <div class="item" style="height: 50px;">
+                  <span class="title">{{::'MODULES.VLAN.VOICE.TABLE.COLUMN.DESCRIPTION' | translate}}:</span>
+                  <valid-input v-require="true" v-rpcid="description" ng-model="model.description"></valid-input>
+              </div>
+          </div>
+      </div>
+
+      <div class="column-manipulation-field__footer">
+          <div style="display: inline-block;float: right; margin-left: 15px;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="ouiForm.$invalid || !model.inputValid"></mar-button>
+      </div>
+
+      <div style="display: inline-block;float: right;">
+        <mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)"></mar-button>
+      </div>
+      </div>
+  </form>
+</div>

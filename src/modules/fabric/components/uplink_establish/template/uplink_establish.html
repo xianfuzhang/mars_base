@@ -1,0 +1,79 @@
+<div class="uplink_establish">
+
+    <div class="stepForm__input">
+        <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.SEGMENT_NAME'|translate}}<span class="stepForm__input__required">*</span></div>-->
+        <valid-input  v-name="segmentName" v-label="{{'MODULES.FABRIC.UPLINK.COLUMN.SEGMENT_NAME'|translate}}" v-require="true" ng-model="upLinkModel.segment_name" v-rpcid="page_uplink_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.DEVICE'|translate}}</div>-->
+        <mdl-select ng-model="upLinkModel.device" display-label="displayLabel.device">
+        </mdl-select>
+    </div>
+
+    <div class="stepForm__input">
+        <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.VLAN'|translate}}<span class="stepForm__input__required">*</span></div>-->
+        <valid-input  v-name="vlan" v-label="{{'MODULES.FABRIC.UPLINK.COLUMN.VLAN'|translate}}" v-require="true" ng-model="upLinkModel.vlan" v-type="vlan" v-rpcid="page_uplink_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.GATEWAY'|translate}}<span class="stepForm__input__required">*</span></div>-->
+        <valid-input  v-name="gw" v-label="{{'MODULES.FABRIC.UPLINK.COLUMN.GATEWAY'|translate}}" v-require="true" ng-model="upLinkModel.gateway" v-type="ipv4"  v-rpcid="page_uplink_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.GATEWAY_MAC'|translate}}<span ng-show="upLinkModel.device.value.indexOf('of') == 0" class="stepForm__input__required">*</span></div>-->
+        <valid-input ng-if="upLinkModel.device.value.indexOf('of') == 0" v-label="{{'MODULES.FABRIC.UPLINK.COLUMN.GATEWAY_MAC'|translate}}"  v-name="gw_mac" v-require="true" ng-model="upLinkModel.gateway_mac" v-type="mac"  v-rpcid="page_uplink_es" ></valid-input>
+        <valid-input ng-if="upLinkModel.device.value.indexOf('of') != 0" v-label="{{'MODULES.FABRIC.UPLINK.COLUMN.GATEWAY_MAC'|translate}}" v-name="gw_mac" ng-model="upLinkModel.gateway_mac" v-type="mac"  v-rpcid="page_uplink_es" ></valid-input>
+    </div>
+
+    <div class="stepForm__input">
+        <!--<div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.IPADDRESS'|translate}}<span class="stepForm__input__required">*</span></div>-->
+        <valid-input  v-name="ip" v-label="{{'MODULES.FABRIC.UPLINK.COLUMN.IPADDRESS'|translate}}" v-require="true" ng-model="upLinkModel.ip_address" v-type="ipv4_mask"  v-rpcid="page_uplink_es" ></valid-input>
+    </div>
+
+    <div>
+        <div class="stepForm__input__label">{{'MODULES.FABRIC.UPLINK.COLUMN.PORT'|translate}}</div>
+        <div style="display: inline-block; margin-right:15px;">
+            <mar-button btn-id="port" btn-text="::'MODULES.FABRIC.UPLINK.ACTION.ADD_PORTS' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addNormalPorts()"></mar-button>
+
+            <mar-button btn-id="logical_port" btn-text="::'MODULES.FABRIC.UPLINK.ACTION.ADD_LOGICAL_PORTS' | translate" btn-icon="'add'" btn-class="'btn-black btn-md'" btn-style="'width:120px;'" btn-click="addLogicalPorts()"></mar-button>
+        </div>
+
+        <div class="inline_content">
+            <div class="item"  ng-repeat="port in upLinkModel.ports">
+                <mdl-button class="remove" ng-click="deletePorts(port)" icon-name="remove_circle" size='small'></mdl-button>
+                <table class="inline_content_table">
+                    <valid-input ng-if="port.type=='port'" v-type="port" v-label="{{'MODULES.FABRIC.UPLINK.COLUMN.PORT'|translate}}" v-require="true" ng-model="port.number" v-rpcid="page_uplink_es" ></valid-input>
+                    <valid-input ng-if="port.type=='trunk'" v-type="port" v-label="Trunk" v-require="true" ng-model="port.number" v-rpcid="page_uplink_es" ></valid-input>
+                    <div class="criteria_line">
+                        <mdl-select ng-model="port.tagValue" display-label="displayLabel.tag">
+                        </mdl-select>
+                    </div>
+                    <!--<tr>-->
+                        <!--<td>-->
+                            <!--<div class="wizard__body__input__label criteria_line stepForm__input__label" ng-if="port.type=='trunk'" >Trunk</div>-->
+                            <!--<div class="wizard__body__input__label criteria_line stepForm__input__label" ng-if="port.type=='port'">{{'MODULES.FABRIC.UPLINK.COLUMN.PORT'|translate}}</div>-->
+                        <!--</td>-->
+                        <!--<td>-->
+                            <!--<div class="criteria_line">-->
+                                <!--<valid-input v-require="true" ng-model="port.number" v-rpcid="page_uplink_es" ></valid-input>-->
+                            <!--</div>-->
+                        <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{"MODULES.LOGICAL.SEGMENT_MEMBER.TAG"|translate}}</div></td>-->
+                        <!--<td>-->
+                            <!--<div class="criteria_line">-->
+                                <!--<mdl-select ng-model="port.tagValue" display-label="displayLabel.tag">-->
+                                <!--</mdl-select>-->
+                            <!--</div>-->
+                        <!--</td>-->
+                    <!--</tr>-->
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>

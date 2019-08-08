@@ -1,0 +1,56 @@
+<div class="createSegment">
+	<div class="stepForm__input">
+    <div class="stepForm__input__label">{{'MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.DEVICE_NAME' | translate}}
+      <span>:</span>
+    </div>
+    <mdl-select ng-model="model.device" display-label="model.deviceDisplayLabel" ng-change="changeDevice($value)">
+    </mdl-select>
+  </div>
+  <div class="stepForm__input">
+    <div class="stepForm__input__label">{{'MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.SESSION' | translate}}
+      <span>:</span>
+    </div>
+  	<mdl-select ng-model="model.session" display-label="model.sessionDisplayLabel">
+    </mdl-select>
+  </div>
+  <div class="stepForm__input" ng-show="model.session.value > 4">
+    <div class="stepForm__input__label">{{'MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.EXCLUDEVLANS' | translate}}
+      <span>:</span>
+    </div>
+    <mdl-text ng-model="model.vlans" style="display:inline-block;"  helper="model.vlanHelper"
+              display-label="model.vlanDisplayLabel">
+    </mdl-text>
+  </div>
+  <div class="stepForm__input">
+    <div class="stepForm__input__label">{{'MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.UP_LINKS' | translate}}
+      <span>:</span>
+    </div>
+    <mdl-select ng-model="model.up_link" display-label="model.portDisplayLabel">
+    </mdl-select>
+    <div class="add-btn" ng-click="addLinkPort('uplink')">
+      <i class="material-icons" style="margin-top: 5px;">add</i>
+    </div>
+    <div class="member-items multiple_ip" style="margin-top:5px;" ng-show="model.uplinks.length">
+      <div class="types-label" ng-repeat="member in model.uplinks track by $index">
+        <span>{{member}}</span>
+        <span class="removeBtn" ng-click="removeSelected('uplink', $index, member)">-</span>
+      </div>
+    </div>
+  </div>
+  <div class="stepForm__input">
+      <div class="stepForm__input__label">{{'MODULE.FUNCTIONS.TRAFFIC.TABLE.SCHEMA.DOWN_LINKS' | translate}}
+        <span>:</span>
+      </div>
+      <mdl-select ng-model="model.down_link" display-label="model.portDisplayLabel">
+      </mdl-select>
+      <div class="add-btn" ng-click="addLinkPort('downlink')">
+        <i class="material-icons" style="margin-top: 5px;">add</i>
+      </div>
+      <div class="member-items multiple_ip" style="margin-top:5px;" ng-show="model.downlinks.length">
+        <div class="types-label" ng-repeat="member in model.downlinks track by $index">
+          <span>{{member}}</span>
+          <span class="removeBtn" ng-click="removeSelected('downlink', $index, member)">-</span>
+        </div>
+      </div>
+  </div>
+</div>

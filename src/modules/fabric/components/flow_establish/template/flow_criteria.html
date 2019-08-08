@@ -1,0 +1,143 @@
+<div class="wizard__body__input flow_criteria stepForm">
+    <div ng-repeat="inputItem in criteriaPageFirstInputs" class="stepForm__input">
+        <!--<div class="stepForm__input__label">{{inputItem.field_label}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span><span ng-if="inputItem.field == 'ether_type'"  ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)"><i class="material-icons" style="vertical-align: bottom;cursor: pointer;">help</i></span></div>-->
+        <valid-input ng-change="firstInputChange()" ng-if="inputItem.input_type == undefined" v-label="{{inputItem.field_label}}" v-require="{{inputItem.require}}" ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_criteria" >
+            <transclude-trailing>
+                <i ng-if="inputItem.field == 'ether_type'" ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)" class="material-icons mdc-text-field__icon" style="cursor: pointer;">help</i>
+            </transclude-trailing>
+        </valid-input>
+        <mdl-select ng-if="inputItem.input_type =='select'" ng-model="inputItem.value" value-change="firstInputChange('select')"
+                    display-label="inputItem.displayLabel">
+        </mdl-select>
+    </div>
+
+    <div ng-if=" flowEstablishModel.tableIdType.value !='60' && flowEstablishModel.tableIdType.value !='0'" ng-repeat="inputItemObject in criteriaPageSecondInputs" class="stepForm__input">
+        <div ng-repeat="(field, inputItemArr) in inputItemObject">
+            <div ng-repeat="inputItem in inputItemArr">
+                <!--<div class="stepForm__input__label">{{inputItem.field_label}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span><span ng-if="inputItem.field == 'ether_type'"  ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)"><i class="material-icons" style="vertical-align: bottom;cursor: pointer;">help</i><span></span></div>-->
+                <valid-input ng-if="inputItem.input_type == undefined" v-require="{{inputItem.require}}" v-label="{{inputItem.field_label}}" ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_criteria" >
+                    <transclude-trailing>
+                        <i ng-if="inputItem.field == 'ether_type'" ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)" class="material-icons mdc-text-field__icon" style="cursor: pointer;">help</i>
+                    </transclude-trailing>
+                </valid-input>
+
+                <mdl-select ng-if="inputItem.input_type =='select'" ng-model="inputItem.value"
+                            display-label="inputItem.displayLabel">
+                </mdl-select>
+            </div>
+        </div>
+    </div>
+    <div ng-if=" flowEstablishModel.tableIdType.value =='60'">
+        <div class="flow_criteria__header">
+            <mdl-select ng-model="flowEstablishModel.table60SchemaOption"
+                        display-label="table60SchemaList">
+            </mdl-select>
+
+            <div class="flow_criteria__header__action" style="vertical-align: bottom;">
+                <mdl-button ng-click="addTable60Acl()" icon-name="add"></mdl-button>
+            </div>
+        </div>
+        <div ng-repeat="inputItemObject in criteriaPageSecondInputs" class="stepForm__input flow_criteria__body">
+            <div ng-repeat="(field, inputItemArr) in inputItemObject" class="flow_criteria__body__item">
+                <div class="type"> {{field}} </div>
+                <mdl-button class="remove" ng-click="delTable60Acl(field)" icon-name="remove_circle" size='small'></mdl-button>
+                <div ng-repeat="inputItem in inputItemArr">
+                    <!--<div class="stepForm__input__label">{{inputItem.field_label}}<span ng-if="inputItem.require =='true' " class="stepForm__input__required">*</span><span ng-if="inputItem.field == 'ether_type'" ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)"><i class="material-icons" style="vertical-align: bottom;cursor: pointer;">help</i></span></div>-->
+                    <valid-input style="display: inline-block;" ng-if="inputItem.input_type == undefined" v-label="{{inputItem.field_label}}" v-require="{{inputItem.require}}"
+                                 ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_criteria">
+                        <transclude-trailing>
+                            <i ng-if="inputItem.field == 'ether_type'" ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)" class="material-icons mdc-text-field__icon" style="cursor: pointer;">help</i>
+                        </transclude-trailing>
+                    </valid-input>
+                    <!--<span style="vertical-align: top" ng-if="inputItem.field == 'ether_type'" ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)"><i class="material-icons" style="vertical-align: bottom;cursor: pointer;">help</i></span>-->
+
+                    <mdl-select ng-if="inputItem.input_type =='select'" ng-model="inputItem.value"
+                                display-label="inputItem.displayLabel">
+                    </mdl-select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div ng-if=" flowEstablishModel.tableIdType.value =='0'">
+        <div class="flow_criteria__header">
+            <mdl-select ng-model="flowEstablishModel.table0SchemaOption"
+                        display-label="table0SchemaList">
+            </mdl-select>
+
+            <div class="flow_criteria__header__action" style="vertical-align: bottom;">
+                <mdl-button ng-click="addTable0Acl()" icon-name="add"></mdl-button>
+            </div>
+        </div>
+        <div ng-repeat="inputItemObject in criteriaPageSecondInputs" class="stepForm__input flow_criteria__body">
+            <div ng-repeat="(field, inputItemArr) in inputItemObject" class="flow_criteria__body__item">
+                <div class="type"> {{field}} </div>
+                <mdl-button class="remove" ng-click="delTable0Acl(field)" icon-name="remove_circle" size='small'></mdl-button>
+                <div ng-repeat="inputItem in inputItemArr">
+                    <valid-input style="display: inline-block;" ng-if="inputItem.input_type == undefined" v-label="{{inputItem.field_label}}" v-require="{{inputItem.require}}"
+                                 ng-model="inputItem.value" v-type="inputItem.type" v-rpcid="page_flow_criteria">
+                        <transclude-trailing>
+                            <i ng-if="inputItem.field == 'ether_type'" ng-mouseover="showToolTip($event)" ng-mouseleave="hideToolTip($event)" class="material-icons mdc-text-field__icon" style="cursor: pointer;">help</i>
+                        </transclude-trailing>
+                    </valid-input>
+
+                    <mdl-select ng-if="inputItem.input_type =='select'" ng-model="inputItem.value"
+                                display-label="inputItem.displayLabel">
+                    </mdl-select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--<div class="flow_criteria__name">{{ 'MODULES.SWITCH.DETAIL.FLOW.COLUMN.SELECTOR_TYPE'|translate}}</div>-->
+    <!--<div class="flow_criteria__header">-->
+        <!--<mdl-select ng-model="flowEstablishModel.criteriaType"-->
+                    <!--display-label="criteriaSchemaList">-->
+        <!--</mdl-select>-->
+        <!--<div class="flow_criteria__header__action">-->
+            <!--<mdl-button ng-click="addCriteria()" icon-name="add"></mdl-button>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div id="criteria_list" class="flow_criteria__body">-->
+        <!--<div class="flow_criteria__body__item"  ng-repeat="criteria in criteriasModel">-->
+            <!--<div class="type"> {{criteria.type}} </div>-->
+            <!--<mdl-button class="remove" ng-click="removeCriteria(criteria.uuid)" icon-name="remove_circle" size='small'></mdl-button>-->
+            <!--<table class="flow_table">-->
+                <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<td><div class="wizard__body__input__label criteria_line stepForm__input__label" >Type</div></td>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{criteria.type}}</div></td>&ndash;&gt;-->
+                <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                <!--<tr ng-repeat="item in criteria.content">-->
+                    <!--<td><div class="wizard__body__input__label criteria_line stepForm__input__label">{{item.field}}<span class="stepForm__input__required">*</span></div></td>-->
+                    <!--<td>-->
+                        <!--<div class="criteria_line" ng-if="item.type=='string'">-->
+                            <!--&lt;!&ndash;<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="item.value"/>&ndash;&gt;-->
+                            <!--<valid-input  v-require="true" ng-model="item.value" v-rpcid="page_flow_criteria" ></valid-input>-->
+                        <!--</div>-->
+                        <!--<div class="criteria_line" ng-if="item.type=='int'">-->
+                            <!--<valid-input  v-require="true" ng-model="item.value" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.NUMBER' | translate}}" v-rpcid="page_flow_criteria" ></valid-input>-->
+                            <!--&lt;!&ndash;<input class="wizard__body__input__text stepForm__input__text" type="text" ng-required="true" ng-model="item.value" ng-pattern="num_regex"/>&ndash;&gt;-->
+                        <!--</div>-->
+
+                        <!--<div class="criteria_line" ng-if="item.type=='ip'">-->
+                            <!--<valid-input  v-require="true" ng-model="item.value" v-rpcid="page_flow_criteria" ></valid-input>-->
+                            <!--&lt;!&ndash;<valid-input  v-require="true" ng-model="item.value" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_flow_criteria" ></valid-input>&ndash;&gt;-->
+                        <!--</div>-->
+
+                        <!--<div class="criteria_line" ng-if="item.type=='ipv6'">-->
+                            <!--<valid-input  v-require="true" ng-model="item.value" v-regex="ipv6_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV6' | translate}}" v-rpcid="page_flow_criteria" ></valid-input>-->
+                        <!--</div>-->
+
+                        <!--<div class="criteria_line" ng-if="item.type=='mac'">-->
+                            <!--<valid-input  v-require="true" ng-model="item.value" v-regex="mac_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}" v-rpcid="page_flow_criteria" ></valid-input>-->
+                        <!--</div>-->
+
+                    <!--</td>-->
+                <!--</tr>-->
+            <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
+    <device-tooltip no-apply="true"></device-tooltip>
+</div>

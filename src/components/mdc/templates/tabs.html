@@ -1,4 +1,10 @@
-<ul class="mdc-tab-bar" role="tablist">
-  <tab-item ng-repeat="option in options track by $index" option="option" ng-model="model"></tab-item>
-  <span class="mdc-tab-bar__indicator"></span>
-</ul>
+<div class="mdc-tab-bar mdc-tab-field" role="tablist">
+  <div class="mdc-tab-scroller">
+    <div class="mdc-tab-scroller__scroll-area mdc-tab-scroller__scroll-area--scroll">
+      <div class="mdc-tab-scroller__scroll-content">
+        <tab-item ng-repeat="option in options track by $index" option="option" ng-model="model"></tab-item>
+      </div>
+    </div>
+  </div>
+  <!-- <span class="mdc-tab-bar__indicator"></span> -->
+</div>

@@ -19,12 +19,7 @@ export class modalBackdrop {
   }
 
   _link (scope) {
-    (function init () {
-      // trigger CSS transitions
-      this.di.$timeout(() => {
-        scope.animate = true;
-      });
-    }).call(this);
+    scope.animate = true;
   }
 }
 

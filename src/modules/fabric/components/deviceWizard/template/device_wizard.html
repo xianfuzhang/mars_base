@@ -1,0 +1,130 @@
+<div class="stepForm">
+    <input type="hidden" ng-model="switch.id">
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.NAME' | translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input v-require="true" ng-model="switch.name" v-rpcid="page_device_1" v-type="host"></valid-input>
+        <!--<input class="stepForm__input__text" name="name" type="text" ng-blur="nameChange=true" ng-model="switch.name" ng-required="true"/>-->
+        <!--<span class="stepForm__input__error" ng-show="wizardForm.name.$invalid && nameChange">必填项</span>-->
+    </div>
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.PROTOCOL' | translate}}<span class="stepForm__input__required">*</span></div>
+
+        <!--<valid-input v-require="true" v-list="protocals-datalist" ng-model="switch.protocol" v-rpcid="page_device_1" ></valid-input>-->
+        <!--<datalist id="protocals-datalist">-->
+            <!--<option ng-value="protocol" ng-repeat="protocol in protocols"/>-->
+        <!--</datalist>-->
+
+
+        <mdl-select ng-model="switch.protocol"
+                    display-label="protocolDisplayLabel">
+        </mdl-select>
+
+    </div>
+
+    <div class="stepForm__input" ng-if="switch.protocol.value == 'snmp' || switch.protocol.value == 'rest'">
+        <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MGMT_PORT' | translate}}</div>
+        <!--<input class="stepForm__input__text" name="community" type="text" ng-model="switch.community"/>-->
+        <valid-input ng-model="switch.mgmt_port" v-name="mgmt_port" v-type="port" v-rpcid="page_device_1" ></valid-input>
+        <!--<valid-input ng-model="switch.community" v-rpcid="page_device_1" ></valid-input>-->
+    </div>
+
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MAC' | translate}}<span class="stepForm__input__required">*</span></div>
+        <!--<mdl-select ng-model="mac_address" name="mac_address"-->
+        <!--display-label="{ options: [{label: '男1', value: '0'}, {label: '男2', value: '1'}]}">-->
+        <!--</mdl-select>-->
+        <valid-input v-require="true" v-list="mac-datalist" ng-model="switch.mac_address" v-rpcid="page_device_1" v-regex="mac_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.MAC' | translate}}"></valid-input>
+        <datalist id="mac-datalist">
+            <option ng-value="mac" ng-repeat="mac in mac_addresses"/>
+        </datalist>
+        <!--<input class="stepForm__input__text" name="mac" list="mac_addresses_datalist" ng-blur="macChange=true" ng-model="switch.mac_address" ng-pattern="mac_regex"/>-->
+        <!--<datalist id="mac_addresses_datalist">-->
+            <!--<option ng-value="mac" ng-repeat="mac in mac_addresses"/>-->
+        <!--</datalist>-->
+        <!--<div class="stepForm__input__annotaions">-->
+            <!--Choose a value for a known switch with no assigned fabric role, or enter a value expected to come online in the future.-->
+        <!--</div>-->
+    </div>
+    <div class="stepForm__input" style="display: flex;flex-direction: row">
+        <div ng-if="switch.protocol.value == 'of'">
+            <div  class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MANAGEMENT_ADDRESS' | translate}}<span class="stepForm__input__required">*</span></div>
+            <div>
+                <valid-input v-require="true" v-list="ip-datalist" v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
+            </div>
+        </div>
+        <div ng-if="switch.protocol.value != 'of'">
+            <div  class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MANAGEMENT_ADDRESS' | translate}} & {{::'MODULES.SWITCHES.SWITCH.COLUMN.PORT' | translate}}<span class="stepForm__input__required">*</span></div>
+            <div style="display: flex;flex-direction: row;">
+                <valid-input v-require="true" v-list="ip-datalist" v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
+                <span class="stepForm__input__separator" style="margin-top: 10px;" >&nbsp;:&nbsp;</span>
+                <valid-input  v-require="true" v-span="true" ng-model="switch.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
+            </div>
+        </div>
+        <datalist id="ip-datalist">
+            <option ng-value="ip" ng-repeat="ip in ip_addresses"/>
+        </datalist>
+        <!--
+        <div ng-if="switch.protocol.value != 'of'" class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MANAGEMENT_ADDRESS' | translate}} & {{::'MODULES.SWITCHES.SWITCH.COLUMN.PORT' | translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input ng-if="switch.protocol.value != 'of'" v-require="true" v-list="ip-datalist" v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
+
+        <div ng-if="switch.protocol.value == 'of'" class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MANAGEMENT_ADDRESS' | translate}}<span class="stepForm__input__required">*</span></div>
+        <valid-input ng-if="switch.protocol.value == 'of'" v-require="true" v-list="ip-datalist" v-span="true" ng-model="switch.managementAddress" v-regex="ip_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.IPV4' | translate}}" v-rpcid="page_device_1" ></valid-input>
+        <datalist id="ip-datalist">
+            <option ng-value="ip" ng-repeat="ip in ip_addresses"/>
+        </datalist>
+        <span class="stepForm__input__separator" ng-if="switch.protocol.value != 'of'">&nbsp;:&nbsp;</span>
+        <valid-input ng-if="switch.protocol.value != 'of'" v-require="true" v-span="true" ng-model="switch.port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
+        -->
+    </div>
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.RACK' | translate}}</div>
+        <!--<input class="stepForm__input__text" name="rack_id" type="text" ng-model="switch.rack_id"/>-->
+        <valid-input ng-model="switch.rack_id" v-name="rack_id" v-rpcid="page_device_1" ></valid-input>
+    </div>
+    <div class="stepForm__input" ng-if="switch.protocol.value == 'snmp'">
+        <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.COMMUNITY' | translate}}</div>
+        <!--<input class="stepForm__input__text" name="community" type="text" ng-model="switch.community"/>-->
+        <valid-input ng-model="switch.community" v-name="community" v-rpcid="page_device_1" ></valid-input>
+        <!--<valid-input ng-model="switch.community" v-rpcid="page_device_1" ></valid-input>-->
+    </div>
+    <div class="stepForm__input">
+        <div class="stepForm__input__label">{{::'MODULES.SWITCHES.SWITCH.COLUMN.MFR' | translate}}</div>
+        <!--<input class="stepForm__input__text" name="mfr" type="text" ng-model="switch.mfr"/>-->
+        <mdl-select ng-model="switch.mfr"
+                    display-label="mfrDisplayLabel">
+        </mdl-select>
+    </div>
+    <div class="stepForm__input">
+        <div class="stepForm__input__label" style="text-decoration: underline">{{::'MODULES.SWITCHES.SWITCH.COLUMN.AVAILABLE' | translate}}</div>
+        <mdl-switch ng-model="switch.available" name="status" ng-blur="statusChange=true"
+                    display-label="{on: 'Up', off: 'Down', id: 'status'}">
+        </mdl-switch>
+    </div>
+    <div class="stepForm__input">
+        <div class="stepForm__input__label" style="text-decoration: underline">{{::'MODULES.SWITCHES.SWITCH.COLUMN.ROLE' | translate}}</div>
+        <mdl-radio ng-model="switch.fabric_role" name="role" value="spine"
+                   display-label="{id: 'check_2', label: 'Spine', name: 'role', value: 'spine'}">
+        </mdl-radio>
+        <mdl-radio ng-model="switch.fabric_role" name="role" value="leaf"
+                   display-label="{id: 'check_1', label: 'Leaf', name: 'role', value: 'leaf'}">
+        </mdl-radio>
+        <mdl-radio ng-model="switch.fabric_role" name="role" value="unknown" ng-if="false"
+                   display-label="{id: 'check_3', label: 'None', name: 'role', value: 'unknown'}">
+        </mdl-radio>
+    </div>
+    <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf' && switch.protocol.value != 'of'">
+        <div class="stepForm__input__label">Leaf Group</div>
+        <!--<input class="stepForm__input__text" ng-model="switch.leaf_group.name"/>-->
+        <valid-input  ng-model="switch.leaf_group.name"  v-rpcid="page_device_1" v-regex="leaf_group_regex"  v-message="{{ 'MODULES.REGEX.FLOW_ADD.LEAFGROUP_NAME' | translate}}" ></valid-input>
+    </div>
+    <div class="stepForm__input" ng-if="switch.fabric_role == 'leaf' && switch.protocol.value != 'of'">
+        <div class="stepForm__input__label">Switch Port</div>
+        <!--<input class="stepForm__input__text" name="switch_port" type="number" ng-blur="switchPortChange=true" ng-model="switch.leaf_group.switch_port" min="0" max="65535"/>-->
+
+        <valid-input ng-model="switch.leaf_group.switch_port" v-regex="num_regex" v-message="{{ 'MODULES.REGEX.FLOW_ADD.PORT' | translate}}" v-rpcid="page_device_1" ></valid-input>
+    </div>
+    <!--<div class="stepForm__input">
+        <div class="stepForm__input__label">Description</div>
+        <textarea class="stepForm__input__textarea" name="description" ng-model="switch.description" class="stepForm__input__textarea" resize="false"></textarea>
+    </div>-->
+</div>

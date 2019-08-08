@@ -1,0 +1,22 @@
+<div class="column-manipulation-field">
+    <div class="column-manipulation-field__header">
+        <span class="column-manipulation-field__title"
+            ng-bind="'MODULES.TOPO.SWITCH.LINK.TITLE'|translate"></span>
+    </div>
+    <div class="link_select content">
+        <div ng-repeat="displayLabel in displayLabelArr">
+            <mdl-radio ng-model="showLinksModel.mode"
+                       display-label="displayLabel">
+            </mdl-radio>
+        </div>
+    </div>
+    <div class="column-manipulation-field__footer">
+        <div style="display: inline-block;float: right; margin-left: 15px;">
+            <mar-button btn-text="::'MODULES.TABLE.COLUMN.SAVE' | translate" btn-type="'submit'" btn-icon="'done'" btn-class="'btn-black btn-sm'" btn-click="save($event)" btn-disabled="userModel.userForm.$invalid" />
+        </div>
+
+        <div style="display: inline-block;float: right;">
+            <mar-button btn-text="::'MODULES.TABLE.COLUMN.CANCEL' | translate" btn-icon="'clear'" btn-class="'btn-white btn-sm'" btn-click="cancel($event)" />
+        </div>
+    </div>
+</div>

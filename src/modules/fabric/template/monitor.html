@@ -1,0 +1,23 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="{{'MODULE.HEADER.FABRIC.MONITOR' | translate}}">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span>{{'MODULE.HEADER.FABRIC.MONITOR' | translate}}</span>
+  </content-header>
+  <section class="app-body" >
+    	<div class="main__content">
+        <mdl-table actions-show="model.actionsShow"
+                   actions="model.rowActions"
+                   row-click="onTableRowClick($event)"
+                   row-select-action="onTableRowSelectAction($event)"
+                   provider="model.provider" api-ready="onAPIReady($api)"
+                   on-add="addMonitor()">
+        </mdl-table>
+      </div>
+  </section>
+
+  <ng-controller ng-controller="monitorEstablishController">
+    <wizard></wizard>
+  </ng-controller>
+</div>  

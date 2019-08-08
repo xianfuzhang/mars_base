@@ -1,0 +1,191 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+.mar-button {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 0;
+  border-radius: 2px;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.mar-button .btn-icon {
+  display: inline-block;
+  vertical-align: middle;
+  font-family: 'Material Icons';
+  border: 0px;
+  text-transform: none;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
+}
+
+// button sizes
+.btn-lg {
+  height: 50px;
+  line-height: 30px;
+  font-size: 20px;
+  padding: 0 30px;
+}
+
+.btn-lg:hover:not(.disabled) {
+  //transform: scale(1.05);
+}
+
+.btn-lg .btn-icon {
+  font-size: 23px;
+}
+
+.btn-lg .btn-separator {
+  margin: 0 2px;
+}
+
+.btn-md {
+  height: 40px;
+  line-height: 30px;
+  font-size: 17px;
+  padding: 0 20px;
+}
+
+.btn-md:hover:not(.disabled) {
+  //transform: scale(1.1);
+}
+
+.btn-md .btn-icon {
+  font-size: 18px;
+}
+.btn-lg .btn-separator {
+  margin: 0 1px;
+}
+
+.btn-sm {
+  height: 30px;
+  line-height: 20px;
+  font-size: 12px;
+  padding: 0 10px;
+  //transform: scale(1);
+  transition: transform linear .1s;
+}
+
+.btn-sm:hover:not(.disabled) {
+  //transform: scale(1.1);
+}
+
+.btn-sm .btn-icon {
+  font-size: 14px;
+}
+
+.btn-lg .btn-separator {
+  margin: 0 1px;
+}
+
+// button themes
+.btn-white {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+  //transform: scale(1);
+  transition: transform linear .2s, transform linear .2s;;
+}
+
+.btn-white:hover:not(.disabled) {
+  //background-color: #efefef;
+  //border-color: #dddddd;
+  box-shadow: 0 2px 3px -1px rgba(0,0,0,.1), 0 4px 4px 0 rgba(0,0,0,.1), 0 1px 6px 0 rgba(0,0,0,.1);
+  //background-color: white;
+}
+
+.btn-white:active:not(.disabled) {
+  //background-color: #d6d6d6;
+  //border-color: #cdcdcd;
+  //outline: 0;
+  //-moz-box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+  //-webkit-box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+  //box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.1), 0 6px 7px 1px rgba(0,0,0,.1), 0 3px 10px 2px rgba(0,0,0,.1);
+  transform: translateY(-1px);
+}
+
+
+
+
+.btn-white.disabled {
+  color: #999;
+  background-color: rgba(240, 240, 240, .125);
+  border-color: #dddddd;
+  box-shadow: none;
+  cursor: default;
+}
+
+.btn-black {
+  color: #fff;
+  background-color: #000;
+  border-color: #333;
+  //transform: scale(1);
+  transition: transform linear .2s, transform linear .2s;
+}
+
+.btn-black:hover:not(.disabled) {
+  //background-color: #3e3e3e;
+  //border-color: #5e5e5e;
+  box-shadow: 0 2px 3px -1px rgba(0,0,0,.1), 0 4px 4px 0 rgba(0,0,0,.1), 0 1px 6px 0 rgba(0,0,0,.1);
+}
+
+.btn-black:active:not(.disabled) {
+  //background-color: #7e7e7e;
+  //border-color: #9e9e9e;
+  //-moz-box-shadow: inset 0 3px 5px rgba(180, 180, 180, .5);
+  //-webkit-box-shadow: inset 0 3px 5px rgba(180, 180, 180,.5);
+  //box-shadow: inset 0 3px 5px rgba(180, 180, 180,.5);
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.1), 0 6px 7px 1px rgba(0,0,0,.1), 0 3px 10px 2px rgba(0,0,0,.1);
+  transform: translateY(-1px);
+}
+
+.btn-black.disabled {
+  color: #efefef;
+  background-color: rgba(10, 10, 10, .5);
+  border-color: #9e9e9e;
+  box-shadow: none;
+  cursor: default;
+}
+
+
+.btn-black.mdc-ripple-surface::after{
+  background-color: white;
+}
+
+.btn-black.mdc-ripple-surface::before{
+  background-color: white;
+}
+
+.btn-black.disabled.mdc-ripple-surface::before{
+  background: none;
+}
+
+.btn-black.disabled.mdc-ripple-surface::after{
+  background: none;
+}
+
+.btn-white.disabled.mdc-ripple-surface::before{
+  background:none;
+}
+
+.btn-white.disabled.mdc-ripple-surface::after{
+  background:none;
+}
+

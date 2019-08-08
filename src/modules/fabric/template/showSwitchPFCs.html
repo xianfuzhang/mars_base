@@ -1,0 +1,11 @@
+<div class="column-manipulation-field">
+  <div class="column-manipulation-field__header">
+    <span class="column-manipulation-field__title"
+          ng-bind="'MODULES.TOPO.SWITCH.PFC.TITLE'|translate"></span>
+  </div>
+  <section class="tab-content">
+        <mdl-table row-click="onTableRowClick($event)"
+                   provider="pfcModel.provider" api-ready="onApiReady($api)">
+        </mdl-table>
+    </section>
+</div>

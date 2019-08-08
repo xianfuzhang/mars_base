@@ -1,0 +1,124 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+@include block(topo){
+  //background-image: url("../../assets/images/graphback.png") ;
+  //background-repeat: repeat-y;
+
+
+	@include element(node-outline){
+		//fill: rgb(255, 255, 255);
+		stroke-width: 2;
+		//stroke: rgb(0, 0, 0);
+
+		stroke: #5694E3;
+		fill: #5694E3;
+	}
+
+	@include element(node-normal){
+		//fill: rgb(255, 255, 255);
+		fill: #5694E3;
+	}
+
+	@include element(node-error){
+		stroke: rgb(177, 48, 7);
+		fill: rgb(177, 48, 7);
+	}
+}
+.topo-container text.center,
+.topo-container g.searchPaths{
+	fill: #333;
+}
+.topo-container use.host{
+	fill: #323638;
+}
+.topo-container .outerLabels > text, 
+.topo-container .tooltips > text{
+	user-select: none;
+	fill: #333;
+	pointer-events: none;
+	text-anchor: middle;
+}
+.topo-container g.outer, 
+.topo-container g.inner, 
+.topo-container g.links, 
+.topo-container g.searchPaths > path{
+	cursor: pointer;
+}
+.topo-container g.outer > path {
+	stroke: #1B4A78;
+	fill: #388FB8;
+	transition: transform 0.3s ease-out;
+}
+.topo-container g.inner > path{
+	stroke: none;
+	fill: #51A7CD;
+	transition: transform 0.3s ease-out;
+}
+.topo-container g.outer > path:hover{
+	stroke-width: 2;
+	transform: scale(1.01);
+}
+.topo-container g.inner > path:hover{
+	stroke-width: 2;
+	transform: scale(1.01);
+}
+.topo-container g.searchPaths > path{
+	stroke-dasharray: 15 5;
+  animation: dashoffset 2s infinite;
+}
+@keyframes dashoffset {
+	to {
+		stroke-dashoffset: -100;
+	}
+}
+
+
+
+.topo_line{
+	fill: none;
+	stroke: green;
+	stroke-width: 1;
+}
+
+.line_select{
+	stroke-width: 2;
+	stroke-opacity: 1;
+}
+
+.line_unselect{
+	stroke-width: 1;
+	stroke-opacity: 0.1;
+}
+
+.line_change_color{
+	stroke-width: 2;
+}
+
+.line_unselect.line_change_color{
+	stroke-width: 1;
+}
+
+.topo__node-outline:hover{
+ stroke-width: 3;
+}
+
+.topo__node-outline.node_select{
+	stroke-width: 4;
+	//stroke: rgb(255,124,9);
+	stroke: black;
+}
+
+.topo__node-outline.host-select{
+	//fill: rgb(255,124,9)
+	stroke: black;
+}
+
+.status_normal{
+	fill: white;
+}
+
+.status_error{
+	fill: red;
+}

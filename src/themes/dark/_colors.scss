@@ -1,0 +1,107 @@
+$colors :(
+  // common style
+  base_color: gray,
+  header_color: #000000,
+  
+  body_background_color: #282828,
+  body_color:#d8d9da,
+  
+  table_border_color: #FFF,
+
+  input_background_color: #000,
+  second_color: #00D3FF,
+  white: #fff,
+  black: #000,
+
+  grey: grey,
+  grey-primary: #9D9D9D,
+  grey-secondary: #ccc,
+  grey-complementary: #767676,
+  grey-basic: #4D4D4D,
+  grey-fill: #212121,
+  grey-system: #808080,
+  border:      #808080,
+  blue-selection: #38a0cc,
+  blue-active: #005EC2,
+  blue-info: #005EC2,
+  red-alert: #D1232F,
+  yellow-warning: #D6B12E,
+  green-ok: #009E2A,
+
+  red-highlight-border-hover: rgba(249, 255, 253, 0.2),
+  log-alert-hover-background: #9B3231,
+  log-info-hover-background: #4a4a4a,
+  log-warning-hover-background: #998822,
+  log-alert-active-background: #750C0B,
+  log-info-active-background: #242424,
+  log-warning-active-background: #6b5e1b,
+
+// TODO: NEW COLOR IN STYLESHEET
+  grey-background: #1D1D1D,
+  grey-input: #262626,
+  border-light: #404040,
+  grey-hover: #333,
+  grey-login: #111,
+  grey-login-border: #585858,
+  grey-zone-label: #b3b3b3,
+  grey-checkbox-border: #85888D, // Login page
+  grey-button-border: #A6AAA9,
+  blue-metatable-highlight: #208BF6,
+  grey-metatable-even-row-background: #444444,
+  grey-arrow: #BFBFBF,
+  grey-pause-button: #545454,
+  grey-text-selectbox-modalheader: #B7BBC0,
+  grey-modal-header-background: #303030,
+  grey-modal-body-background: #353535,
+
+  grey-simple: grey,
+  grey-temp1: #B1B5B9,
+  grey-temp2: #707070,
+  grey-temp3: #515151,
+  grey-temp4: #3D3D3D,
+  grey-temp5: #B6BABF,
+  grey-temp6: #898989,
+  grey-temp7: #3A3C41,
+  grey-temp8: #2e2e2e,
+  grey-temp9: #636060,
+  grey-temp10: hsla(0, 0%, 55%, 1.0), // used in txrx-chart
+  grey-temp11: hsla(0, 0%, 80%, 1.0), // used in txrx-chart
+  grey-temp12: #363A3E,  // used in txrx-chart
+  grey-temp13: rgba(136, 151, 180, 1), // used in txrx-chart
+  grey-temp14: rgba(87, 88, 91, 1), // used in txrx-chart
+  grey-temp15: rgba(56, 58, 62, 1), // used in txrx-chart
+  grey-temp16: rgba(29, 29, 29, 1), // used in txrx-chart
+  grey-temp17: #383A3E, // used in txrx-chart
+  grey-temp18: #919191, // used in txrx-chart
+  grey-temp19: #222222, // used in txrx-chart
+  grey-temp20: rgb(235,235,244), // used in txrx-chart
+  grey-temp21: #303131, // used in txrx-chart
+  grey-temp22: rgb(128,128,128), // used in memory-chart
+  grey-temp23: #222222,
+  grey-temp24: hsla(0, 0%, 100%, 1), // used in custom tooltip
+  grey-temp25: hsla(160, 2%, 66%, 1), // used in custom tooltip
+  grey-temp26: rgba(0, 0, 0, .5), // used in custom tooltip
+  grey-temp27: hsla(0, 0%, 22%, .8), //used in custom tooptip
+  grey-temp28: #ddd,
+  grey-temp29: hsla(0, 0%, 30%, 1), //used in resource Map Menu
+  grey-temp30: hsla(0, 0%, 70%, 1), //used in resource Map Menu
+  grey-temp31: #4C4C4C, //used in resource Map Menu
+  grey-temp32: hsla(0, 1%, 34%, .7), // used in custom tooltip
+  grey-temp33: #555, // used in custom tooltip
+  grey-temp34: #333, // used in custom tooltip
+  grey-temp35: #B1B1B1, // used in custom tooltip
+  grey-temp36: #222427,
+  grey-temp37: #2f2f2f, // used in settingsTable, spinner bg
+  grey-temp38: #232323,
+  grey-temp39: #C1C1C1,
+  blue-temp1: #1167BD,
+  blue-temp2: #0365C0,
+  yellow-temp1: #8b7113,
+  yellow-temp2: #483a0a,
+  yellow-temp3: #a28316,
+  yellow-temp4: rgb(255,212,72),
+  red-temp1: #8a0f0f,
+  red-temp2: #450707,
+  red-temp3: #a21111,
+  red-temp4: rgb(229,10,29),
+)

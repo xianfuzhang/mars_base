@@ -1,0 +1,428 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+//@import 'framework_layout';
+
+
+.dhcp_table{
+
+}
+
+.dhcp_table tr td:first-child {
+  //text-align: right;
+  padding-right: 4px;
+  //background-color: red;
+  //padding-top: 4px;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.dhcp_table td{
+  height:45px;
+
+}
+
+.dhcp_table tr td:last-child {
+  text-align: left;
+  padding-left: 4px;
+  //padding-top: 4px;
+  font-weight: 400;
+  font-size: 16px;
+  width:210px;
+}
+
+.dhcp_table tr {
+  margin-top: 4px;
+}
+.dhcp_table .valid_input{
+  //height:45px;
+}
+
+.dhcp_table .valid_input input{
+  width:250px;
+  //height:45px;
+}
+
+.dhcp .mar_section__body{
+  background: #fbfbfb;
+}
+
+.dhcp .mdc-card{
+  box-shadow: none;
+}
+
+.dhcp .valid_input__message{
+  top:0;
+  right:-40px;
+}
+.sysinfo_table tr td:first-child {
+  text-align: right;
+  padding-right: 4px;
+  min-width: 120px;
+  //background-color: red;
+  //padding-top: 4px;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.sysinfo_table tr td:last-child {
+  text-align: left;
+  padding-left: 4px;
+  //padding-top: 4px;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.sysinfo_table tr {
+  margin-top: 4px;
+}
+
+.sysinfo_table {
+  border-spacing: 38px 8px;
+  width: 800px;
+}
+.elasticsearch-form {
+  height:150px;
+  padding:10px;
+}
+.elasticsearch-form .conditions {
+  margin:0 auto;
+  width: 65%;
+  padding:10px 5px;
+  border-raduis: 5px;
+}
+
+.elasticsearch-form .conditions .label {
+  margin-right: 15px;
+  font-size:14px;
+  font-weight:bold;
+  color: #000;
+}
+.elasticsearch-form .conditions .date-input {
+  width:90%;
+  border-radius:5px;
+  font-size:14px;
+}
+
+.elasticsearch-csv-file {
+  height: 200px;
+  padding: 10px;
+}
+.elasticsearch-csv-file .conditions {
+  margin:0 auto;
+  width: 80%;
+}
+
+.elasticsearch-csv-file .conditions .label {
+  margin-right: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+}
+
+.elasticsearch-csv-file .conditions .label .must{
+  font-size: 18px;
+  font-weight: bold;
+  color: red;
+}
+
+.elasticsearch-csv-file .conditions .query {
+  height: 300px;
+  border-radius:5px;
+  font-size:14px;
+}
+
+.license {
+  //padding: 10px 5px;
+}
+.license .license__detail {
+  padding-bottom: 20px;
+}
+.license .license__row {
+  display: flex;
+  margin-bottom: 10px;
+}
+.license .license__item {
+  margin-right: 20px;
+  width: 210px;
+  align-items: center;
+}
+.license .license__item .license__item-label {
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.6;
+}
+.license .license__item .license__item-value {
+  margin-left: 10px;
+}
+
+.license .license__item .available {
+  height: 16px;
+  width: 16px;
+  background-image: url('../../assets/images/status-icons.png');
+  background-repeat: no-repeat;
+  background-size: 64px auto;
+  background-position: -48px 0;
+}
+
+.license .license__item .inavailable {
+  height: 16px;
+  width: 16px;
+  background-image: url('../../assets/images/status-icons.png');
+  background-repeat: no-repeat;
+  background-size: 64px auto;
+  background-position: -48px -15px;
+}
+
+.license .license__app {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 80px);
+}
+
+.license .license__upload {
+  display: flex;
+  position: absolute;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  margin: 8px;
+  //top: -20px;
+}
+.license .license__upload .save {
+  margin-left: 0;
+  //margin-top: 10px;
+}
+.license .license__upload .label {
+  font-weight: 700;
+  opacity: .6;
+  //margin-top: 25px;
+  font-size:16px;
+  display: inline;
+}
+.license .license__app__label {
+  padding: 5px 0;
+  opacity: .6;
+  font-weight: 700;
+  width: 100px;
+}
+.license .mdl-table-field{
+  padding-top: 50px;
+  box-sizing: border-box;
+}
+
+.elasticsearch .setting-group {
+  position:absolute;
+  top: -3px !important;
+  right: 10px !important;
+}
+.elasticsearch .setting-group .item {
+  float: right;
+  cursor: pointer;
+  margin-left: 20px;
+  margin-top: 10px;
+
+  @include state(disable) {
+    cursor: default;
+    background-color: #a1a1a1;
+  }
+}
+.elasticsearch .setting-group .item:hover {
+  color: #a1a1a1;
+}
+
+.show-download-modal {
+  width: 500px;
+}
+
+.show-download-modal .content {
+  width: 200px;
+  height: auto;
+  margin: 10px auto;
+  padding: 10px 30px;
+}
+
+.show-download-modal .content .text{
+  font-size: 14px;
+}
+
+.show-download-modal .content .text .indice{
+  font-weight: bold;
+}
+
+.show-download-modal .content .text .size{
+  font-size: 16px;
+}
+
+.show-input-filename-modal {
+  width: 350px;
+}
+
+
+@include block(timerange) {
+  padding: 32px 0 0 32px;
+
+  @include element(row) {
+    display: flex;
+    height: 38px;
+    //justify-items: center;
+    align-items: flex-end;
+    padding-left: 5%;
+    width: 100%;
+
+    .first {
+      font-size: 20px;
+      line-height: 38px;
+      //padding-left: 16px;
+      min-width: 150px;
+    }
+
+    .second {
+      padding-left: 16px;
+    }
+
+    .button {
+      line-height: 38px;
+      padding-left: 16px;
+    }
+  }
+
+  & .mdl-table-field {
+    background: none;
+  }
+  & .mdl-table-field:hover {
+    box-shadow: none;
+  }
+}
+
+@include block(timerange_establish) {
+
+  & .stepForm__input__label .mdc-checkbox-label{
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+  }
+
+
+  & .md-datepicker-input::-webkit-input-placeholder {
+    color: #606060;
+  }
+  & .md-datepicker-input:-moz-placeholder {
+    color: #606060;
+  }
+  & .md-datepicker-input:-ms-input-placeholder {
+    color: #606060;
+  }
+
+
+  @include element(label) {
+    padding: 8px 0;
+    font-size: 16px;
+    color: #7b7b7b;
+  }
+
+  @include element(ab_item) {
+    display: flex;
+    height: 50px;
+    margin-left: -10px;
+    padding-top: 5px;
+  }
+
+  @include element(ab_time){
+    display: flex;
+    @include element(icon){
+      line-height: 50px;
+      padding: 0 8px;
+      margin-top: -5px;
+    }
+
+    @include element(label){
+      padding: 0 8px;
+      line-height: 50px;
+      margin-top: -5px;
+    }
+
+    @include element(input){
+      display: inline-block;
+      width: 30px;
+      margin-top: -7px;
+      vertical-align: middle;
+    }
+  }
+
+  @include element(per_item){
+    display: flex;
+    height: 50px;
+    padding-top: 5px;
+  }
+
+  @include element(per_time){
+    display: flex;
+    @include element(icon){
+      line-height: 50px;
+      padding: 0 8px;
+      margin-top: -5px
+    }
+
+    @include element(label){
+      padding: 0 8px;
+      line-height: 50px;
+      margin-top: -5px;
+    }
+
+    @include element(input){
+      display: inline-block;
+      width: 30px;
+      margin-top: -4px;
+      vertical-align: middle;
+    }
+  }
+
+  @include element(ab_err_msg){
+    color: red;
+    margin-top: -13px;
+    font-size: 11px;
+    margin-left: 5px;
+  }
+
+
+  & md-icon {
+    color: black;
+  }
+
+  & .md-datepicker-expand-triangle {
+    border-top-color: black;
+  }
+  & .md-datepicker-input {
+    color: black;
+  }
+
+  & .md-datepicker-open .md-datepicker-input {
+    color: black;
+  }
+
+  & .md-datepicker-input-container {
+    border-bottom-color: black;
+  }
+
+  & .md-datepicker-input-container.md-datepicker-focused {
+    border-bottom-color: black;
+  }
+
+  & .md-icon-button + .md-datepicker-input-container {
+    margin-left: 0px;
+  }
+}
+
+.timerange_name_establish__label{
+  padding: 8px 0;
+  font-size: 16px;
+  color: #7b7b7b;
+}
+
+.md-datepicker-calendar-pane {
+  z-index: 2000;
+}

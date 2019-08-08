@@ -15,6 +15,7 @@ export class mdlCheckbox {
       data: '=ngModel',
       displayLabel: '=',
       disable: '=',
+      onClick : '&'
     };
     this.link = (...args) => this._link.apply(this, args);
   }
@@ -22,18 +23,25 @@ export class mdlCheckbox {
   _link (scope, element, attrs, ngModel) {
     scope.label = scope.displayLabel && scope.displayLabel.label;
     scope.id = scope.displayLabel && scope.displayLabel.id;
+    scope.onClick = scope.onClick || angular.noop;
 
-    if (scope.disable) {   //scope.$eval(attrs.status)
-      element.addClass('mdc-checkbox--disabled');
+    if (scope.disable) {
       element.find('input').attr('disabled', true);
     }
     if (scope.data) {
       element.find('input').attr('checked' ,true);
     }
+    if (attrs.size && attrs.size === 'small') {
+      let checkboxElm = element.children().eq(0);
+      checkboxElm.addClass('mdc-checkbox__small');
+      checkboxElm.children().eq(1).addClass('mdc-checkbox__background-small');
+    }
 
     scope.clicked = (event) => {
       scope.data = !scope.data;
       ngModel.$setViewValue(scope.data);
+
+      scope.onClick({'$value': scope.data});
       event.stopPropagation();
     };
   }

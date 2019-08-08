@@ -1,0 +1,115 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+
+//@include block(topo){
+//  //background-image: url("../../assets/images/graphback.png") ;
+//  //background-repeat: repeat-y;
+//}
+
+@include block(force-topo) {
+
+  @include element(node-normal) {
+    stroke: #fff;
+    stroke-width: 1.5;
+    fill: #565656;
+  }
+
+  @include element(text) {
+    stroke: whitesmoke;
+    fill: whitesmoke;
+    stroke-width: 1;
+    user-select: none;
+  }
+
+  @include element(host) {
+    stroke: whitesmoke;
+    //fill: white;
+  }
+
+  @include element(path-normal) {
+    stroke: white;
+    //stroke-width: 1.5;
+    fill: gray;
+  }
+
+  @include element(path-error) {
+    stroke: red;
+    //stroke-width: 1.5;
+    fill: red;
+  }
+
+  @include element(node-outline) {
+    fill: #5694E3;
+    stroke-width: 2;
+    stroke: #5694E3;
+  }
+
+  @include element(line-normal) {
+    stroke: whitesmoke;
+    //stroke-width: 2;
+  }
+
+}
+.force-topo__node-outline.node-select {
+  //fill: #3D9CBD;
+  fill: #5694E3;
+  //stroke: rgb(255, 124, 9)
+  stroke: whitesmoke
+}
+.force-topo__node-outline.node-unselect {
+  //fill: #292929;
+  fill: #5694E3;
+}
+
+.force-topo__node-outline.host-select {
+  //fill: rgb(255,124,9)
+  stroke: whitesmoke
+}
+.force-topo__node-outline.host-unselect {
+  //fill: rgb(255, 255, 255);
+  fill: #5694E3;
+}
+
+.svg_revert {
+  z-index: 90;
+  background-color: #a7a7a7;
+  position: absolute;
+  //box-shadow: 1px 2px 3px gray;
+  border:0;
+  //left: 16px;
+  //top: 16px;
+  //border: 1px solid lightgray;
+  border-radius: 4px;
+  user-select: none;
+}
+
+.svg_revert_p_1{
+  padding: 8px;
+}
+
+.svg_revert_p_2{
+  padding: 2px;
+}
+
+.svg_revert i{
+  color: black;
+}
+.no_vlan_port {
+  fill: #a7a7a7;
+  stroke: #a7a7a7;
+}
+
+.no_vlan_port.port_vlan_untag {
+  fill: #26ec26;
+  stroke: #26ec26;
+}
+
+.no_vlan_port.port_vlan_tag {
+  fill: #fff506;
+  stroke: #fff506;
+}

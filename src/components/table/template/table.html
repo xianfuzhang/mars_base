@@ -1,70 +1,73 @@
 <div class="mdl-table-field">
-  <div class="mdl-card mdl-table-field">
-    <!--<table-action></table-action>-->
     <div class="mdl-table-field__actions">
-      <mdl-button ng-click="_menu($event)" ng-if="actionsShow.menu" icon-name="menu"></mdl-button>
-      <mdl-button ng-click="_add($event)" ng-if="actionsShow.add" icon-name="add"></mdl-button>
-      <mdl-button ng-click="_remove($event)"
+      <mdl-button ng-click="_menu($event)" size="tableSize" 
+                  ng-if="actionsShow.menu.enable && 
+                    (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.menu.role)" 
+                  icon-name="menu"></mdl-button>
+      <mdl-button ng-click="_add($event)" size="tableSize" 
+                  ng-if="actionsShow.add.enable && 
+                    (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.add.role)" 
+                  icon-name="add"></mdl-button>
+      <mdl-button ng-click="_remove($event)" size="tableSize"
                   disabled="tableModel.removeItems.length === 0"
-                  ng-if="actionsShow.remove" icon-name="remove"></mdl-button>
-      <mdl-button ng-click="_refresh($event)" ng-if="actionsShow.refresh" icon-name="refresh"></mdl-button>
-      <div class="mdl-table-action__search" ng-if="actionsShow.search">
+                  ng-if="actionsShow.remove.enable && 
+                    (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.remove.role)" 
+                  icon-name="remove"></mdl-button>
+      <mdl-button ng-click="_refresh($event)" size="tableSize" 
+                  ng-if="actionsShow.refresh.enable && 
+                    (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.refresh.role)"
+                  icon-name="refresh"></mdl-button>
+      <div class="mdl-table-action__search" size="tableSize" 
+            ng-if="actionsShow.search.enable && 
+                    (!tableModel.authManageSupport || tableModel.authManageSupport && tableModel.currentRole >= actionsShow.search.role)">
         <div class="mdl-table-action__search-body">
-          <input type="text" placeholder="{{placeholder}}"
+          <div class="chips-list" ng-class="{true: 'hide', false: 'show'}[tableModel.globalSearch === true]">
+            <div class="chip" ng-repeat="item in tableModel.columnFilterConditions track by $index">
+              <span>{{item.display}}</span>
+              <span class="remove" ng-click="_deletecolumnCondition($event, $index)"></span>
+            </div>
+          </div>
+          <input ng-class="{true: 'show', false: 'hide'}[tableModel.globalSearch === true]" type="text" placeholder="{{placeholder}}"
                  ng-model="tableModel.searchResult" ng-model-options="{debounce: 1000}"
-                 ng-change="_search()"
+                 ng-change="_search(true)" ng-readonly="!tableModel.globalSearch"
                  class="mdc-text-field__input mdl-table-action__search-body__input">
         </div>
-        <mdl-button ng-click="_clearSearch($event)" ng-show="tableModel.searchResult" icon-name="close"></mdl-button>
-        <div class="mdl-table-action__search-filter">
-          <mdl-button ng-click="_filter($event)" icon-name="filter_list" class_list="search-filter-button"></mdl-button>
-          <!--<div class="mdc-menu search-filter-list">
-            <ul class="mdc-menu__items mdc-list" role="menu">
-              <li class="mdc-list-item" role="menuitem"
-                  ng-repeat="item in filterItems track by $index"
-                  tabindex="{{$index}}">
-                <div class="mdc-radio">
-                  <input class="mdc-radio__native-control" type="radio"
-                         ng-click="_select(item, $event)"
-                         ng-checked="{{item.checked}}"
-                         id="{{item.id}}" name="{{item.name}}">
-                  <div class="mdc-radio__background">
-                    <div class="mdc-radio__outer-circle"></div>
-                    <div class="mdc-radio__inner-circle"></div>
-                  </div>
-                </div>
-                <label for="{{item.id}}" >{{item.label}}</label>
-              </li>
-            </ul>
-          </div>-->
-        </div>
+        <mdl-button ng-click="_clearSearch($event)" size="tableSize"
+                    ng-show="tableModel.globalSearch && tableModel.searchResult" icon-name="close"></mdl-button>
+        <column-filter  columns="tableModel.columnsByField"
+                        on-filter-action="_search(false, $value)"
+                       table-size="tableSize"></column-filter>            
       </div>
     </div>
 
-    <div class="mdl-table-field__content">
+    <div class="mdl-table-field__content" update-table-cols>
       <div class="mdl-table-header">
-        <table>
+        <table class="mdl-table">
           <thead>
           <tr class="mdl-table-header__row">
-            <th ng-if="tableModel.rowCheckboxSupport" style="width: 5%;">
-              <div class="mdc-checkbox" ng-click="_selectAll($event)">
+            <th ng-if="tableModel.rowCheckboxSupport" class="control-th" style="width: 60px;">
+              <div class="mdc-checkbox mdc-checkbox__normal"
+                   ng-class="{'mdc-checkbox__small': tableSize === 'small'}"
+                   ng-click="_selectAll($event)">
                 <input type="checkbox"
                        ng-checked="_isSelectedAll()"
                        class="mdc-checkbox__native-control"/>
-                <div class="mdc-checkbox__background">
+                <div class="mdc-checkbox__background mdc-checkbox__background-normal"
+                     ng-class="{'mdc-checkbox__background-small': tableSize === 'small'}">
                   <svg class="mdc-checkbox__checkmark"
                        viewBox="0 0 24 24">
                     <path class="mdc-checkbox__checkmark-path"
                           fill="none"
-                          stroke="white"
                           d="M1.73,12.91 8.1,19.28 22.79,4.59"/>
                   </svg>
                   <div class="mdc-checkbox__mixedmark"></div>
                 </div>
               </div>
             </th>
-            <th ng-if="tableModel.rowActionsSupport"  style="width: 5%;">
-              <span><button class="mdc-icon-button material-icons" disabled>menu</button></span>
+            <th ng-if="tableModel.rowActionsSupport" class="control-th" style="width: 60px;">
+              <span><button class="mdc-icon-button material-icons mdc-icon-button__normal"
+                            ng-class="{'mdc-icon-button__small': tableSize === 'small'}"
+                            disabled>menu</button></span>
             </th>
             <th ng-repeat="$col in tableModel.columns track by $index"
                 ng-click="_onHeaderClick($col, $event)"
@@ -73,34 +76,51 @@
                   'sortable': $col.sortable,
                   'sort-asc': $col.sortable && (_getColumnSortMode($col) === tableModel.CONST_SORT_ASC),
                   'sort-desc': $col.sortable && (_getColumnSortMode($col) === tableModel.CONST_SORT_DESC)
-                 }"
-            >
+                 }" th-drag-event>
               <span ng-bind="$col.def.label"></span>
-              <span ng-class="{
-                    'icon-sort': !(_getColumnSortMode($col) === tableModel.CONST_SORT_ASC
-                      || _getColumnSortMode($col) === tableModel.CONST_SORT_DESC),
-                    'icon-sort-asc': (_getColumnSortMode($col) === tableModel.CONST_SORT_ASC),
-                    'icon-sort-desc': (_getColumnSortMode($col) === tableModel.CONST_SORT_DESC)
-                  }">&nbsp;&nbsp;&nbsp;</span>
+              <div class="icon-sort">
+                <div class="arrow-left"></div>
+                <div class="arrow-middle"></div>
+                <div class="arrow-right"></div>
+              </div>
             </th>
           </tr>
           </thead>
         </table>
       </div>
-      <div class="mdl-table-body">
-        <table>
-          <tbody ng-if="tableModel.filteredData.length===0">
-            <tr class="mdl-table-body__row"><td class="text-center" ng-bind="'MODULES.TABLE.RESULT.NODATA'|translate"></td></tr>
+      <div class="mdl-table-body" ng-class="{true: 'pagination-table', false: 'all-table'}[_isNeedPagination]">
+        <table class="mdl-table">
+          <tbody ng-if="tableModel.loading">
+            <tr class="mdl-table-body__row">
+              <td class="text-center">
+                <!--<span class="loading"></span>-->
+                <!--<span style="position: relative;">-->
+                <!--<div style="height:20px;position: relative;">-->
+                  <loading is-loading="tableModel.loading" png-size="50" style="height:70px;"></loading>
+                <!--</div>-->
+                <!--</span>-->
+              </td>
+            </tr>
           </tbody>
-          <tbody ng-if="tableModel.filteredData.length>0">
+          <tbody ng-if="!tableModel.loading && tableModel.filteredData.length===0">
+            <tr class="mdl-table-body__row">
+              <td class="text-center" ng-bind="'MODULES.TABLE.RESULT.NODATA'|translate"></td>
+            </tr>
+          </tbody>
+          <tbody ng-if="!tableModel.loading && tableModel.filteredData.length>0">
             <tr class="mdl-table-body__row"
                 ng-repeat="$data in tableModel.filteredData track by $index"
-                ng-class="{'mdl-table-body__row__highlight': _isSelected($data[tableModel.index_name])}"
+                ng-class="{'mdl-table-body__row__highlight': _isSelected($data[tableModel.index_name]),
+                            'mdl-table-body__row__small': tableSize === 'small'
+                          }"
                 ng-click="_onRowClick($data, $index, $event)"
+                table-render-ready
                 metarow>
-              <td ng-if="tableModel.rowCheckboxSupport" style="width: 5%;" data="$data" row-checkbox></td>
-              <td ng-if="tableModel.rowActionsSupport"  style="width: 5%;"
-                  action-items="tableModel.rowActions"
+              <td ng-if="tableModel.rowCheckboxSupport" style="width: 5%;" size="tableSize"
+                  data="$data" row-checkbox></td>
+              <td class="td-row-actions" ng-if="tableModel.rowActionsSupport"  style="width: 5%;"
+                  action-items="actions"
+                  size="tableSize"
                   data="$data"
                   row-actions></td>
             </tr>
@@ -108,7 +128,7 @@
         </table>
       </div>
       <div class="mdl-table-footer">
-        <table>
+        <table class="mdl-table">
           <tfoot>
             <tr>
               <td>
@@ -119,5 +139,5 @@
         </table>
       </div>
     </div>
-  </div>
+ <!-- </div>-->
 </div>

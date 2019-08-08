@@ -1,0 +1,25 @@
+<div class="toggleMenu">
+  <div ng-repeat="display in displayLabel">
+    <div class="toggleMenu__button mdc-ripple-surface mdc-ripple-upgraded"
+         ng-class="{'isSelect': display.value == value.value}" ng-click="menu_click(display.value, display.type)">
+      <div>
+        {{display.label}}
+      </div>
+
+      <div ng-if="display.type && display.type=='menu_list'" class="toggleMenu__button__icon"
+           ng-class="{'isExpand':display.isExpand}">
+        <i class="material-icons">expand_more</i>
+      </div>
+    </div>
+
+    <ul ng-if="display.type && display.type=='menu_list'" ng-style="display.style" class="toggleMenu__children"
+        ng-class="{'isExpand':display.isExpand}">
+      <li ng-repeat="item in display.list">
+        <div ng-click="menu_click(item.value, item.type)" ng-class="{'isSelect': item.value == value.value}"
+             class="toggleMenu__button mdc-ripple-surface mdc-ripple-upgraded toggleMenu__children__button">
+          {{item.label}}
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -4,7 +4,8 @@ export class marDrawer{
   static getDI () {
     return [
       '$rootScope',
-      '$log'
+      '$log',
+      '_'
     ];
   }
 
@@ -28,7 +29,7 @@ export class marDrawer{
 
   _link (scope, element) {
     (function init() {
-      let ele =
+      // let ele =
       scope.drawerModel = {
         isRight: scope.isRight,
       };
@@ -50,7 +51,6 @@ export class marDrawer{
         });
         // element[0].removeEventListener('click', clickEvent);
         // angular.element(this.di.$window).unbind('resize', onResize);
-        this.di.$log.info(this.__NAME__, 'Destroyed');
       });
 
     }).call(this);

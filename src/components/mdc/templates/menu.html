@@ -1,0 +1,7 @@
+<div class="mdc-menu menu-fixed" tabindex="-1">
+  <ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">
+    <li ng-repeat="row in data" class="mdc-list-item" tabindex="{{row.isEnabled==true?0:-1}}" aria-disabled="{{!row.isEnabled}}" role="menuitem" tabindex="0" msg="{{row.msg}}">
+      {{row.label}}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,29 @@
+<div class="flex_entirety">
+  <!--<mar-header></mar-header>-->
+  <mdl-header></mdl-header>
+  <div class="configuration__body flex_entirety__body">
+
+    <content-header big-title="{{'MODULE.HEADER.ALERT.HEALTHYCHECK'|translate}}">
+      <a href="/">Mars Cloud</a>
+      <span>•</span>
+      <span>{{"MODULE.HEADER.ALERT.HEALTHYCHECK"|translate}}</span>
+    </content-header>
+    <div class="alert-rules flex_entirety__body__body" style="display:flex;flex-direction: row">
+      <!--<div class="section-3-2">-->
+        <div class="main__content">
+          <mdl-table actions-show="healthyCheckModel.actionsShow"
+                     actions="healthyCheckModel.rowActions"
+                     row-click="onTableRowClick($event)"
+                     row-select-action="onHCTableRowSelectAction($event)"
+                     provider="healthyCheckModel.healthTableProvider" api-ready="onHealthyAPIReady($api)"
+                     on-add="addHealthyCheck()" >
+          </mdl-table>
+        </div>
+      </div>  
+    <!--</div>-->
+  </div>
+
+    <ng-controller ng-controller="AddHealthyCheckController">
+        <wizard steps="steps" title="title" show-wizard="showWizard" next-step="" before-cancel="cancel(formData)" before-submit="submit(formData)"></wizard>
+    </ng-controller>
+</div>

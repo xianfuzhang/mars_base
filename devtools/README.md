@@ -124,6 +124,7 @@ Options
 template 引入
 ```
 <mdl-table actions-show="dashModel.actionsShow"
+           table-size="small"
             row-click="onTableRowClick($event)"
              provider="dashModel.provider" api-ready="onApiReady($api)"
              on-add="addSwitch()" on-remove="removeSwitch($value)"></mdl-table>
@@ -136,7 +137,8 @@ Options 可参考test.html以及controller使用说明
     provider    数据准备的provider table根据provider获取数据
     api-ready   table 提供给外部使用接口   
     on-add      增加数据
-    on-remove    删除数据          
+    on-remove    删除数据  
+    table-size   默认为normal，可是设置small显示
 ```
 
 
@@ -231,4 +233,15 @@ $scope.steps = [
 
 **``before-cancel:``** 点击``wizard``对话框中**``取消``**按钮，会先调用这个方法，并将表单内容传递给此方法。当此方法返回**``true``**时，``wizard``对话框才会关闭，否则不会关闭。**``注意：``**``cancel(formData)``参数名``formData``不能修改。  
 
-**``before-submit:``** 点击``wizard``对话框中**``确定``**按钮，会先调用这个方法，并将表单内容传递给此方法。当此方法返回**``true``**时，``wizard``对话框才会关闭，否则不会关闭。**``注意：``**``submit(formData)``参数名``formData``不能修改。  
+**``before-submit:``** 点击``wizard``对话框中**``确定``**按钮，会先调用这个方法，并将表单内容传递给此方法。当此方法返回**``true``**时，``wizard``对话框才会关闭，否则不会关闭。**``注意：``**``submit(formData)``参数名``formData``不能修改。
+  
+  
+### mar-section
+```
+<mar-section title="Topo Settings" class="topo_setting">
+...    
+</mar-section>
+```
+
+**title**: head部分的名字
+另外section里面的内容根据实际使用添加

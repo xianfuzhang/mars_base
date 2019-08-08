@@ -1,0 +1,219 @@
+//@import 'xbem';
+//@import 'default';
+//@import 'shared';
+//@import 'framework_layout';
+
+@include block(actions){
+  margin: 0 auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #eff3f6;
+  padding: 5px 10px;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 6px;
+  z-index:80;
+
+  @include element(input) {
+    height: 20px;
+    width: 150px;
+    padding: 7px 0 9px 15px;
+    font-size: 16px;
+  }
+}
+
+@include block(realtime-log-actions) {
+  position: relative;
+  display: flex;
+  float: right;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  align-items: center;
+  
+  @include element(action) {
+    display: inline-block;
+    margin-left: 15px;
+  }
+  
+  @include element(input) {
+    width: 150px;
+    height: 30px;
+    font-size: 16px;
+    border: 2px solid #000;
+    border-radius: 3px;
+    box-sizing: border-box;
+  }
+  
+  @include element(select) {
+    width: 150px;
+    padding: 0 3px;
+    border-radius: 3px;
+  }
+}
+.realtime-log-actions__select .mdc-select {
+  width: 150px;
+}
+@include block(configuration){
+  display:flex;
+  flex-direction: row;
+  
+  @include element(content){
+    height:90%;
+    width:90%;
+    margin:8px;
+    flex-shrink: 1;
+    flex-grow: 1;
+    background-color: white;
+  
+    @include  element(codepre){
+      height:90%;
+      overflow: auto;
+      border:1px solid lightgray;
+    
+      @include state(edit){
+        border: 2px solid red;
+        
+        animation: codepre-edit 1s 2;
+        -webkit-animation: codepre-edit 1s 2;
+        -moz-animation: codepre-edit 1s 2;
+      }
+  
+      @include state(add){
+        border: 2px solid red;
+    
+        animation: codepre-add 1s 2;
+        -webkit-animation: codepre-add 1s 2;
+        -moz-animation: codepre-add 1s 2;
+      }
+    }
+  }
+  
+  @include element(operation){
+    display: flex;
+    height:100%;
+    margin: 8px 20px;
+    flex-direction: column;
+    flex-basis: 500px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    
+    @include element(form){
+      padding: 15px;
+      border: 1px solid #d8d9da;
+      background-color: #FFF;
+      color: #000;
+      border-radius: 5px;
+      
+      @include state(disable) {
+        border: 1px solid #dfdfdf;
+      }
+      
+      @include element(input){
+        margin-bottom: 20px;
+        
+        @include element(label){
+          font-size: 14px;
+          font-weight: bold;
+          text-decoration: underline;
+        }
+        
+        @include element(text) {
+          border: 1px solid #000;
+          border-radius: 5px;
+          color: #000;
+          @include element(disabled) {
+            border: 1px solid #ddd;
+            color: #ddd;
+          }
+        }
+        
+        @include element(error) {
+          color: red;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes codepre-edit {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@-webkit-keyframes codepre-edit {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@-moz-keyframes codepre-edit {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@keyframes codepre-add {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@-webkit-keyframes codepre-add {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+@-moz-keyframes codepre-add {
+  0% {
+    border: 2px solid lightgray;
+  }
+  50% {
+    border: 2px solid red;
+  }
+  100% {
+    border: 2px solid lightgray;
+  }
+}
+
+.configuration__content div.jsoneditor {
+  border: thin solid #d8d9da;
+}
+
+.configuration__content div.jsoneditor-menu {
+  background-color: #010101;
+  border-bottom: 1px solid #d8d9da;
+}

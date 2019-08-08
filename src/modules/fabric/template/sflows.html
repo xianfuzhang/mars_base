@@ -1,0 +1,25 @@
+<mdl-header></mdl-header>
+<div class="app-main">
+  <content-header big-title="sFlow">
+    <a href="/">Mars Cloud</a>
+    <span>•</span>
+    <span>sFlow</span>
+  </content-header>
+  <section class="app-body" >
+    <div class="mars-col-24">
+    	<div class="main__content">
+        <mdl-table actions-show="model.actionsShow"
+                   actions="model.rowActions"
+                   row-click="onTableRowClick($event)"
+                   row-select-action="onTableRowSelectAction($event)"
+                   provider="model.provider" api-ready="onAPIReady($api)"
+                   on-add="addFlow()"
+                   on-remove="batchRemove($value)">
+        </mdl-table>
+      </div>  
+    </div>
+  </section>
+  <ng-controller class="sflow-wizard" ng-controller="sflowCtrl">
+    <wizard></wizard>
+  </ng-controller>
+</div>  

@@ -1,0 +1,56 @@
+<div class="flex_entirety">
+    <!--<mar-header></mar-header>-->
+    <mdl-header></mdl-header>
+    <div class="flex_entirety__body">
+
+        <content-header big-title="{{pageTitle}}">
+            <a href="/">Mars Cloud</a>
+            <span>•</span>
+            <span>{{pageTitle}}</span>
+        </content-header>
+        <section class="app-body">
+
+            <div class="main__content">
+                <!--<div class="actions">-->
+                    <!--From: <input class="actions__input" type="date" name="date-from" ng-model="dateFrom" ng-disabled="loading"> &nbsp;&nbsp;To: <input class="actions__input" type="date" name="date-to" ng-model="dateTo" ng-disabled="loading" max="::dateTo">-->
+                    <!--<button class="actions__button actions__search-btn" ng-click="search()" ng-class="{'+disabled': dateFrom.valueOf() > dateTo.valueOf() || loading || dateTo.valueOf() > today.valueOf()}" ng-disabled="dateFrom.valueOf() > dateTo.valueOf() || loading || dateTo.valueOf() > today.valueOf()"><icon></icon>搜索</button>-->
+                    <!--<button class="actions__button actions__file-btn" ng-click="file()" ng-class="{'+disabled': !hasData}" ng-disabled="!hasData"><icon></icon>导出文件</button>-->
+                <!--</div>-->
+                <!--<div class="actions">-->
+                    <!--<div style="display:inline-block;line-height: 40px;vertical-align: middle;">-->
+                        <!--<span>From: </span>-->
+                        <!--<input class="actions__input" type="date" name="date-from" ng-model="dateFrom" ng-disabled="loading"> &nbsp;&nbsp;-->
+                    <!--</div>-->
+                    <!--<div style="display:inline-block;line-height: 40px;vertical-align: middle;">-->
+                        <!--<span>To: </span><input class="actions__input" type="date" name="date-to" ng-model="dateTo" ng-disabled="loading" max="::dateTo">-->
+                    <!--</div>-->
+                    <!--<div style="display:inline-block;margin-left: 15px;">-->
+                        <!--<mar-button btn-text="::'MODULE.LOG.BUTTON.SEARCH' | translate" btn-class="'btn-black btn-md'" btn-icon="'search'" btn-click="search()" btn-disabled="dateFrom > dateTo || loading || dateTo > today" />-->
+                    <!--</div>-->
+                    <!--<div style="display:inline-block;float:right;">-->
+                        <!--<mar-button btn-text="::'MODULE.LOG.BUTTON.DOWNLOAD' | translate" btn-class="'btn-black btn-md'" btn-icon="'cloud_download'" btn-click="file()" btn-disabled="!hasData" />-->
+                    <!--</div>-->
+                <!--</div>-->
+            <section class="tab-content">
+                <!--<div class="actions">-->
+                    <!--<div style="display:inline-block;vertical-align: bottom;">-->
+                        <!--<mdl-select ng-model="historyFileSelected"-->
+                                    <!--display-label="fileList">-->
+                        <!--</mdl-select>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <mdl-table actions-show="configurationHistoryModel.actionsShow"
+                           provider="configurationHistoryModel.provider" api-ready="onAPIReady($api)"
+                           need-pagination="true">
+                </mdl-table>
+            </section>
+            
+
+                
+            </div>
+        </section>
+        <!--<section class="column__1__3 +hasscroll +hasborder">
+        </section>-->
+    </div>
+    <loading default-closed="true"></loading>
+</div>
