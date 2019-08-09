@@ -100,11 +100,11 @@ export class AclController {
           });
       }
     };
-    
+
     this.scope.addAcl = () => {
-      this.di.$rootScope.$emit('acl-wizard-show');
+      this.di.$rootScope.$emit('acl-wizard-show', 'add');
     }
-    
+
     this.init();
 
     this.unsubscribers.push(this.di.$rootScope.$on('clickabletext', (event, params) => {
@@ -114,7 +114,7 @@ export class AclController {
         this.di.$location.path('/devices/' + params.object.id);
       }
     }));
-  
+
     this.unsubscribers.push(this.di.$rootScope.$on('device-list-refresh', (event, params) => {
       this.scope.model.API.queryUpdate();
     }));
