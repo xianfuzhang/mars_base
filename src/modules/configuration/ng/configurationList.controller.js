@@ -24,7 +24,7 @@ export class ConfigurationListController {
     let unSubscribers = [];
     let scope = this.di.$scope;
     this.translate = this.di.$filter('translate');
-  
+
     // filename regex expression
     const fileNameRegex = /^[\w\-.]+$/i;
     const DEFAULT_FILENAME = this.di.appService.CONST.DEFAULT_FILENAME;
@@ -39,7 +39,7 @@ export class ConfigurationListController {
       globalInvalid: false,
       saveBtnInvalid: false
     };
-  
+
     scope.configurationListModel = this.di._.cloneDeep(initConfig);
     scope.checkDisLab = {id: 'check_edit_config', label: this.translate('MODULES.CONFIGURATION.OPTION.START_CHECK')};
     // scope.fileNameSelectedDisLab = {hint: this.translate('MODULES.CONFIGURATION.FILENAME'),options:[]};
@@ -59,7 +59,7 @@ export class ConfigurationListController {
         scope.configurationListModel.globalInvalid = true;
       }
     }
-    
+
     // check if the filename is valid
     const filenameIsValid = (filename) => {
       if(filename == null || filename == undefined || filename == "" || !fileNameRegex.test(filename) || filename == DEFAULT_FILENAME){
@@ -68,7 +68,7 @@ export class ConfigurationListController {
         let index = scope.fileNameSelectedDisLab.options.findIndex((option) => {
           return option.value == filename && filename != 'default';
         })
-    
+
         if(index != -1) {
           return false;
         } else {
@@ -76,7 +76,7 @@ export class ConfigurationListController {
         }
       }
     }
-    
+
     // json editor options
     scope.options = {
       mode: 'view',
@@ -90,11 +90,11 @@ export class ConfigurationListController {
       },
       language: 'zh-cn'
     }
-    
+
     scope.saveConfigFile = (evt) => {
       let filename = this.fileNameInput.value.trim(' ');
       let config;
-  
+
       // check if the file name has existed
       if(scope.configurationListModel.mode == 'add') {
         if(!filenameIsValid(filename)) {
@@ -104,15 +104,15 @@ export class ConfigurationListController {
             },(res)=>{
               // error
             })
-    
+
           return
         }
       }
-      
+
       if(scope.configurationListModel.mode == 'start_up'){
         filename = DEFAULT_FILENAME
       }
-  
+
       this.di.dialogService.createDialog('confirm', this.translate('MODULES.CONFIGURATION.UPDATE.CONFORM'))
         .then((data)=>{
           saveConfiguration(filename)
@@ -124,16 +124,35 @@ export class ConfigurationListController {
     scope.downloadFile = () => {
       if (scope.configurationListModel.fileNameSelected.value == '') return false;
 
-      this.di.$window.location.href = this.di.appService.getConfigurationHistoryFilesUrl() + `/${scope.configurationListModel.fileNameSelected.value}`;
+      if(['default', DEFAULT_FILENAME].indexOf(scope.configurationListModel.fileNameSelected.value) > -1) {
+        _downloadFile(this.di.$scope.configurationListModel.configurationShow, scope.configurationListModel.fileNameSelected.value + '.json')
+      } else {
+        this.di.$window.location.href = this.di.appService.getConfigurationHistoryFilesUrl() + `/${scope.configurationListModel.fileNameSelected.value}`;
+      }
     }
+
+    // download file
+    const _downloadFile = function(content, filename) {
+      let eleLink = document.createElement('a');
+      eleLink.download = filename;
+      eleLink.style.display = 'none';
+      // transform to Blob
+      let blob = new Blob([JSON.stringify(content,null,2)], {type:'text/json'});
+      eleLink.href = URL.createObjectURL(blob);
+      // trigger click
+      document.body.appendChild(eleLink);
+      eleLink.click();
+      // remove Dom
+      document.body.removeChild(eleLink);
+    };
 
     let saveConfiguration = (filename) => {
       let config = scope.configurationListModel.configurationShow;
       console.log(config);
-      
+
       // invalid save button
       scope.saveBtnInvalid = true;
-      
+
       // save the config to file
       // if(filename == 'default') { // save the config file
       //   this.di.configurationDataManager.updateConfiguration(null, null, config).then(
@@ -166,7 +185,7 @@ export class ConfigurationListController {
       //     }
       //   )
       // }
-  
+
       this.di.configurationDataManager.setConfigurationFile(filename, config).then(
         (res) => { // success to save
           this.di.dialogService.createDialog('success', this.translate('MODULES.CONFIGURATION_LIST.SUCCESS.SAVE'))
@@ -182,7 +201,7 @@ export class ConfigurationListController {
         }
       )
     }
-    
+
     let getConfigurationList = ()=>{
       this.di.configurationDataManager.getConfigurationFileList()
         .then((res)=>{
@@ -198,7 +217,7 @@ export class ConfigurationListController {
               }
             });
           }
-          
+
           if(startUpFile != ''){
             opts.splice(1, 0, {label:this.translate('MODUELS.CONFIGURATION.BOOT_CONFIG'), value:DEFAULT_FILENAME})
           }
@@ -210,6 +229,7 @@ export class ConfigurationListController {
 
     let getConfigurationByName = (name) =>{
       this.di.$scope.configurationListModel.configurationShow = '';
+      this.di.$scope.downloadBtnDisable = true;
       if(name === '' || name === null|| name === undefined){
         return ;
       }
@@ -218,11 +238,13 @@ export class ConfigurationListController {
         this.di.configurationDataManager.getConfiguration()
           .then((res)=>{
             this.di.$scope.configurationListModel.configurationShow = res.data
+            this.di.$scope.downloadBtnDisable = false;
           });
       } else { // get other config files
         this.di.configurationDataManager.getConfigurationByFileName(name)
           .then((res)=>{
             this.di.$scope.configurationListModel.configurationShow = res['data'];
+            this.di.$scope.downloadBtnDisable = false;
           });
       }
     };
@@ -263,14 +285,14 @@ export class ConfigurationListController {
         scope.configurationListModel.saveBtnInvalid = false;
         getConfigurationByName(newValue.value);
 
-        if(newValue.value == 'default' || newValue.value == DEFAULT_FILENAME) {
-          scope.downloadBtnDisable = true;
-        } else {
-          scope.downloadBtnDisable = false;
-        }
+        // if(newValue.value == 'default' || newValue.value == DEFAULT_FILENAME) {
+        //   scope.downloadBtnDisable = true;
+        // } else {
+        //   scope.downloadBtnDisable = false;
+        // }
       }
     }));
-  
+
     unSubscribers.push(this.di.$scope.$watch('configurationListModel.fileName',(newValue, oldValue)=>{
       if(newValue === oldValue) return;
       if(scope.configurationListModel.mode === 'add') {
