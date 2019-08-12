@@ -252,7 +252,7 @@ export class FunctionDataManager{
     return defer.promise;
   }
 
-  postAcl(deviceId, params){
+  postAcl(params, deviceId){
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getAclUrl(deviceId), params).then(
       (res) => {
