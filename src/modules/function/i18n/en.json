@@ -83,5 +83,8 @@
   "MODULE.FUNCTIONS.TRAFFIC.CREATE.VLAN.HELP": "The VLAN max number 8, seperated by comma",
   "MODULE.FUNCTIONS.TRAFFIC.CREATE.NEED_EXCLUDE_VLAN": "Need to add exclude vlan",
   "MODULE.FUNCTIONS.TRAFFIC.CREATE.NEED_DOWNLINK_PORT": "Need to add downlink port",
-  "MODULE.FUNCTIONS.TRAFFIC.DELETE.SUCCESS": "Delete switch {{deviceName}} traffic segment success."
+  "MODULE.FUNCTIONS.TRAFFIC.DELETE.SUCCESS": "Delete switch {{deviceName}} traffic segment success.",
+  "MODULES.FUNCTIONS.PFC.COLUMN.DEVICE_NAME":"Switch",
+  "MODULES.FUNCTIONS.PFC.COLUMN.PORT":"Port",
+  "MODULES.FUNCTIONS.PFC.COLUMN.QUEUE":"Queues"
 }

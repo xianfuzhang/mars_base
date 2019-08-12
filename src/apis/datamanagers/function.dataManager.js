@@ -252,7 +252,7 @@ export class FunctionDataManager{
     return defer.promise;
   }
 
-  postAcl(deviceId, params){
+  postAcl(params, deviceId){
     let defer = this.di.$q.defer();
     this.di.$http.post(this.di.appService.getAclUrl(deviceId), params).then(
       (res) => {
@@ -281,6 +281,19 @@ export class FunctionDataManager{
   deleteAcl(deviceId){
     let defer = this.di.$q.defer();
     this.di.$http.delete(this.di.appService.getAclUrl(deviceId)).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (err) => {
+        defer.reject(err);
+      }
+    );
+    return defer.promise;
+  }
+
+  getPfc(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getAllPFCUrl()).then(
       (res) => {
         defer.resolve(res);
       },

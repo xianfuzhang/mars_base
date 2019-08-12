@@ -29,8 +29,10 @@ export class PfcEstablishController {
     scope.queue_regex = '^[0-7]$';
     scope.deviceId = null;
     scope.isEdit = false;
+    scope.isPfcAllPage = false;
 
-    scope.wizardHeight = {"height":'200px'};
+    scope.wizardHeight = {"height":'300px'};
+    scope.isWizardCenter = true;
 
     scope.showWizard = false;
     scope.title = this.translate("MODULES.SWITCH.DETAIL.PFC.CREATE");
@@ -46,8 +48,12 @@ export class PfcEstablishController {
     this.scope.pfcModel = {
       port:'',
       singleQueue: '',
-      queue:[]
+      queue:[],
+      deviceSelect:null,
+      display: {options:[]}
     };
+
+    // 'deviceDisplay': {'options': [{'label': this.translate('MODULES.TIMERANGES.DISPLAY.SELECT_DEVICE'), 'value': null}]},
 
 
     scope.addQueue = () => {
@@ -74,14 +80,18 @@ export class PfcEstablishController {
       });
     };
 
+    let translate = this.translate;
     scope.submit = function() {
       let inValidJson_Copy = angular.copy(inValidJson);
 
       let params = {};
       params['port'] = parseInt(scope.pfcModel.port);
+      if(!scope.deviceId){
+        scope.deviceId = scope.pfcModel.deviceSelect.value;
+      }
 
       if(scope.pfcModel.queue.length === 0){
-        inValidJson_Copy['errorMessage'] = this.translate("MODULES.FABRIC.PFC.ERROR_MESSAGE");
+        inValidJson_Copy['errorMessage'] = translate("MODULES.FABRIC.PFC.ERROR_MESSAGE");
         return new Promise((resolve, reject) => {
           resolve(inValidJson_Copy);
         });
@@ -106,20 +116,51 @@ export class PfcEstablishController {
       scope.pfcModel.singleQueue = '';
       scope.pfcModel.queue = [];
       scope.pfcModel.port = '';
+      scope.pfcModel.deviceSelect = '';
+      scope.pfcModel.display = {options:[]};
       // scope.title = '添加PFC';
       scope.title = this.translate("MODULES.SWITCH.DETAIL.PFC.CREATE");
       scope.isEdit = false;
+      scope.isPfcAllPage =  false;
+      scope.deviceId = null;
     };
 
-    scope.open = (deviceId, port) => {
+    //deviceName for pfc—all edit
+    //deviceId for pfc-device add/edit | pfc-all edit
+    //port for edit all/device
+    //pfc-all : add - (null, null , null)      -- device list
+    //pfc-dev : add - (deviceId, null , null)
+
+    //pfc-all : edit - (deviceId, port , deviceName)  -pfc get
+    //pfc-dev : edit - (deviceId, port , null)        -pfc get
+
+    scope.open = (deviceId,port, deviceName) => {
       if(scope.showWizard) return;
 
       reset();
-      scope.deviceId = deviceId;
-
-      if(port) {
+      // let isPfcAllPage = false;
+      // let isPfcAllPage = false;
+      if(port){
         scope.isEdit = true;
+      } else {
+        scope.isEdit = false;
+      }
+      if(deviceName||!deviceId){
+        scope.isPfcAllPage = true;
+      }
+      if(deviceName){
+        scope.device_name = deviceName;
+      }
+
+
+      // let allPromise = [];
+      // let pfcDefer = this.di.$q.defer();
+      // let deviceListDefer = this.di.$q.defer();
+      if(scope.isEdit) {
+
+        scope.deviceId = deviceId;
         scope.title = this.translate("MODULES.SWITCH.DETAIL.PFC.UPDATE");
+
         deviceDataManager.getPFCListByDeviceId(scope.deviceId).then(
           (res) => {
             let pfcs =  res.data['pfcs'];
@@ -136,18 +177,29 @@ export class PfcEstablishController {
               });
             }
             scope.pfcModel.port = port + '';
-          }, (error) => {
-            console.error(error)
-          })
-      }
 
-      this.di.$timeout(() => {
-        scope.showWizard = true;
-      });
+            scope.showWizard = true;
+          }, (error) => {
+            // this.not
+          })
+      } else {
+        if(scope.isPfcAllPage){
+          this.di.deviceDataManager.getDeviceConfigs().then((devices) => {
+            devices.forEach((device) => {
+              // this.di.$scope.deviceMap[device['id']] = device['name'];
+              scope.pfcModel.display.options.push({'label': device['name'], 'value': device['id']})
+            });
+            scope.showWizard = true;
+          });
+        } else {
+          scope.deviceId = deviceId;
+          scope.showWizard = true;
+        }
+      }
     };
 
-    unsubscribes.push(this.di.$rootScope.$on('pfc-wizard-show', ($event,deviceId, port) => {
-      scope.open(deviceId, port);
+    unsubscribes.push(this.di.$rootScope.$on('pfc-wizard-show', ($event,deviceId, port, deviceName) => {
+      scope.open(deviceId, port, deviceName);
     }));
 
     scope.$on('$destroy', () => {

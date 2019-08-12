@@ -354,6 +354,7 @@ export class SegmentMemberEstablishController {
             scope.vlanDeviceDisplayLabel.options = this.di._.sortBy(this.di._.map(scope._phyPorts[scope.selected.vlanDevice.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
               return {'label': String(portNum), 'value': String(portNum)}
             });
+            scope.vlanDeviceDisplayLabel.options.unshift({'label':this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ALL_PORTS'), 'value':'any'})
           } else if(param.type === 'vxlan'){
             if(data){
               if(data['name']){
@@ -539,6 +540,16 @@ export class SegmentMemberEstablishController {
     };
 
     scope.addVlanPorts = () => {
+      let isContainAllPorts = false;
+      scope.memberModel.vlanPorts.forEach(port=>{
+        if(port.port.value === 'any'){
+          isContainAllPorts = true;
+        }
+      })
+      if(isContainAllPorts){
+        scope.errorMessage = this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.MSG.ALREADY_HAS_ALL_PORTS');
+        return;
+      }
       scope.memberModel.vlanPorts.push({'port':scope.vlanDeviceDisplayLabel.options[0], 'tagValue': scope.tagDisplayLabel.options[0]})
     };
 
@@ -601,6 +612,7 @@ export class SegmentMemberEstablishController {
       scope.vlanDeviceDisplayLabel.options = this.di._.sortBy(this.di._.map(scope._phyPorts[$value.value], (v)=>{return parseInt(v['port'])})).map((portNum)=>{
         return {'label': String(portNum), 'value': String(portNum)}
       })
+      scope.vlanDeviceDisplayLabel.options.unshift({'label':this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ALL_PORTS'), 'value':'any'})
 
     };
 
@@ -636,10 +648,22 @@ export class SegmentMemberEstablishController {
 
     let _formatVlanPorts = () =>{
       let ports = [];
+      let isContainsAny = false;
+      let anyPorts = [];
       this.di._.forEach(scope.memberModel.vlanPorts,(port)=>{
         ports.push(port.port.value + '/' + port.tagValue.value)
+        if(port.port.value === 'any'){
+          isContainsAny = true;
+          anyPorts.push(port.port.value + '/' + port.tagValue.value)
+          // anyPorts.push(port)
+        }
       });
-      return ports;
+
+      if(isContainsAny){
+        return anyPorts;
+      } else {
+        return ports;
+      }
     };
 
 
@@ -751,6 +775,13 @@ export class SegmentMemberEstablishController {
               }
             }
           });
+
+          let filterPorts =  scope.memberModel.vlanPorts.filter(p=>{return p.port.value === 'any'});
+          if(filterPorts.length > 1){
+            validJson_Copy.valid = false;
+            validJson_Copy.errorMessage = this.translate("MODULES.LOGICAL.SEGMENT_MEMBER.MSG.ALREADY_HAS_MORE_ALL_PORTS");
+          }
+
         } else if(scope.memberModel.vlanPorts.length === 0 && scope.memberModel.vlanLogicalPorts.length === 0 && scope.memberModel.vlanMacBased.length === 0){
           validJson_Copy.valid = false;
           validJson_Copy.errorMessage =  this.translate('MODULES.LOGICAL.SEGMENT_MEMBER.ERROR_HAVE_MEMBER');
