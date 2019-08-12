@@ -14,11 +14,7 @@ router.get('/', function (req, res) {
 });
 
 router.get('/segments', function(req, res) {
-<<<<<<< HEAD
-	let segments = _.cloneDeep(cloudModel.segments).map((segment, index) => {
-=======
   let segments = _.cloneDeep(cloudModel.segments).map((segment, index) => {
->>>>>>> temp_master
     return segment.toJson();
   });
 
@@ -26,32 +22,15 @@ router.get('/segments', function(req, res) {
 });
 
 router.get('/:tenantName/segments', function (req, res) {
-<<<<<<< HEAD
-	if (!req.params.tenantName) {
-    return res.status(404).json('tenant name is required!');
-  }
-  let segments = _.filter(cloudModel.segments, (segment) =>{
-  	return segment.toJson().tenant_name === req.params.tenantName; 
-=======
   if (!req.params.tenantName) {
     return res.status(404).json('tenant name is required!');
   }
   let segments = _.filter(cloudModel.segments, (segment) =>{
     return segment.toJson().tenant_name === req.params.tenantName; 
->>>>>>> temp_master
   });
 
   let arr = [];
   segments.forEach((item) =>{
-<<<<<<< HEAD
-  	let obj = item.toJson();
-  	arr.push({
-  		'name': obj.segment_name,
-  		'type': obj.segment_type,
-  		'ip_address': obj.ip_address,
-  		'value': obj.value
-  	});
-=======
     let obj = item.toJson();
     arr.push({
       'name': obj.segment_name,
@@ -59,7 +38,6 @@ router.get('/:tenantName/segments', function (req, res) {
       'ip_address': obj.ip_address,
       'value': obj.value
     });
->>>>>>> temp_master
   })
 
   return res.json({tenantSegments: arr});
