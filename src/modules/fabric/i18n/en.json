@@ -402,6 +402,7 @@
   "MODULES.FABRIC.MONITOR.SELECT_SRC_DEVICE": "Please select a source deivce",
   "MODULES.FABRIC.MONITOR.SELECT_DST_DEVICE": "Please select a destination deivce",
   "MODULES.FABRIC.PFC.ERROR_MESSAGE": "Please add at least one Queue!",
+  "MODULES.FABRIC.PFC.DEVICE": "Switch",
   "MODULES.FABRIC.PFC.PORT": "Port",
   "MODULES.FABRIC.TRUNK.CREATE_TRUNK": "Create Trunk",
   "MODULES.FABRIC.TRUNK.UPDATE_TRUNK": "Update Trunk",

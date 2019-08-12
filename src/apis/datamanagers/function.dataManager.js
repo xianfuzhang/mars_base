@@ -290,6 +290,19 @@ export class FunctionDataManager{
     );
     return defer.promise;
   }
+
+  getPfc(){
+    let defer = this.di.$q.defer();
+    this.di.$http.get(this.di.appService.getAllPFCUrl()).then(
+      (res) => {
+        defer.resolve(res);
+      },
+      (err) => {
+        defer.reject(err);
+      }
+    );
+    return defer.promise;
+  }
 }
 
 FunctionDataManager.$inject = FunctionDataManager.getDI();

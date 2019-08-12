@@ -105,7 +105,8 @@ export class appService {
           {'label': this.translate('MODULE.HEADER.FUNCTIONS.POE'), 'url': '/poe', 'role': 3},
           {'label': this.translate('MODULE.HEADER.FABRIC.SNOOPING'), 'url': '/dhcp_snoop', 'role': 2},
           {'label': 'Traffic Segment', url: '/traffic_segment', 'role': 2},
-          {'label': this.translate('MODULE.HEADER.FABRIC.ACL'), 'url': '/acl', 'role': 2}
+          {'label': this.translate('MODULE.HEADER.FABRIC.ACL'), 'url': '/acl', 'role': 2},
+          {'label': this.translate('MODULE.HEADER.FUNCTIONS.PFC'), 'url': '/pfc', 'role': 3},
         ]
       },
       {
@@ -325,6 +326,7 @@ export class appService {
       '/system_info': ['com.nocsys.utility'],
       '/time_range':['com.nocsys.timerange'],
       '/poe':['com.nocsys.poe'],
+      '/pfc':['com.nocsys.qos'],
     };
   }
 
@@ -797,6 +799,10 @@ export class appService {
     let password = JSON.parse(decodeData).password;
     
     return this.di.$location.protocol() + `://${username}:${password}@` + this.di.$location.host() + ":" + this.di.$location.port() + `/download/${filename}`;
+  }
+
+  getAllPFCUrl(){
+    return this.getZoneEndpoint(true) + `/qos/pfc/v1`;
   }
 
   getPFCUrl(deviceId){

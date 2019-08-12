@@ -413,6 +413,13 @@ function configRouterfunction ($routeProvider,
         loggedin: checkLoggedIn
       }
     })
+    .when('/pfc', {
+      template: require('./modules/function/template/pfc.html'),
+      controller: 'pfcController',
+      resolve: {
+        loggedin: checkLoggedIn
+      }
+    })
     .otherwise({ redirectTo: '/' });
 }
 

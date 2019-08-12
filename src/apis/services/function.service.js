@@ -202,6 +202,52 @@ export class functionService {
     return this.getPoePriorityMap()[priority + ''];
   }
 
+  getPFCSchema() {
+    return [
+      {
+        'label': this.translate('MODULES.FUNCTIONS.PFC.COLUMN.DEVICE_NAME'),
+        'field': 'device_name',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FUNCTIONS.PFC.COLUMN.PORT'),
+        'field': 'port',
+        'layout': {'visible': true, 'sortable': true}
+      },
+      {
+        'label': this.translate('MODULES.FUNCTIONS.PFC.COLUMN.QUEUE'),
+        'field': 'queues',
+        'layout': {'visible': true, 'sortable': true}
+      }
+    ];
+  }
+
+  getPFCTableRowActions() {
+    return [
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.EDIT'),
+        'role': 2,
+        'value': 'edit'
+      },
+      {
+        'label': this.translate('MODULES.SWITCHES.SWITCH.ROW.ACTION.DELETE'),
+        'role': 2,
+        'value': 'delete'
+      }
+    ];
+  }
+
+
+  getPFCActionsShow() {
+    return {
+      'menu': {'enable': false, 'role': 2},
+      'add': {'enable': true, 'role': 2},
+      'remove': {'enable': true, 'role': 2},
+      'refresh': {'enable': true, 'role': 2},
+      'search': {'enable': false, 'role': 2}
+    };
+  }
+
 
   //
   //
