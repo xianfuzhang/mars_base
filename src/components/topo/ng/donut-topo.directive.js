@@ -312,7 +312,7 @@ export class DonutTopo {
         .selectAll('path')
         .attr('stroke', function(ld){
           if (scope.topoSetting.show_links === 2) {
-            return ld.source.device === d.data.id || ld.target.device === d.data.id ? '#1B4A78' : '#51A7CD';  
+            return ld.source.device === d.data.id || ld.target.device === d.data.id ? '#008000' : '#51A7CD';  
           }
           else if (scope.topoSetting.show_links === 1) {
             return ld.source.device === d.data.id || ld.target.device === d.data.id ? '#51A7CD' : 'none';    
@@ -349,7 +349,7 @@ export class DonutTopo {
           if (scope.topoSetting.show_links === 2) {
             return (ld.source.device === d.data.device && ld.source.port === d.data.port) 
               || (ld.target.device === d.data.device && ld.target.port === d.data.port) 
-              ? '#1B4A78' : '#51A7CD';  
+              ? '#008000' : '#51A7CD';  
           }
           else if (scope.topoSetting.show_links === 1) {
             return (ld.source.device === d.data.device && ld.source.port === d.data.port) 
@@ -568,7 +568,7 @@ export class DonutTopo {
       search_g.append('path')
         .attr('class', 'link')
         .attr('d', drawDPath)
-        .attr('stroke', '#1B4A78')
+        .attr('stroke', '#008000')
         .attr('stroke-width', 4)
         .attr('fill', 'none')
         .on('mouseover', mouseoverSearchPaths)
